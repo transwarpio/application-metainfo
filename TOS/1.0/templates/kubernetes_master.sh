@@ -1,0 +1,1 @@
+export KUBERNETES_MASTER="http://${service.roles['TOS_MASTER'].hostname}:${service['tos.master.apiserver.port']}"

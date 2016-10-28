@@ -1,0 +1,111 @@
+---
+name: HDFS
+version: 2.5.2-tdh50
+global: false
+namePrefix: HDFS
+friendlyName: HDFS
+dependencies:
+  - name: LICENSE_SERVICE
+    minVersion: 1.0
+    maxVersion: 1.0
+    optional: false
+  - name: ZOOKEEPER
+    minVersion: 3.4.5-tdh50
+    maxVersion: 3.4.5-tdh50
+    optional: false
+roles:
+  - name: HDFS_DATANODE
+    friendlyName: "Data Node"
+    summaryPolicy: SOME
+    autoAssign:
+      - advice: !<EachNode> {}
+    suggestion:
+      - criteria: !<Range>
+          min: 3
+    validation:
+      - criteria: !<Range>
+          min: 1
+    operations: []
+  - name: HDFS_NAMENODE
+    friendlyName: "Name Node (non-HA)"
+    summaryPolicy: SOME
+    autoAssign: []
+    suggestion:
+      - criteria: !<Range>
+          min: 0
+          max: 0
+    validation:
+      - when: !<WhenRoleGroup>
+          fieldName: nameservices
+          inRange: {"min": 0, "max": 0}
+        criteria: !<Range>
+          min: 1
+          max: 1
+      - when: !<WhenRoleGroup>
+          fieldName: nameservices
+          inRange: {"min": 1}
+        criteria: !<Range>
+          min: 0,
+          max: 0
+    operations: []
+roleGroups:
+  - fieldName: nameservices
+    namePrefix: nameservice
+    friendlyName: "Name Service"
+    autoAssign:
+      - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+      - criteria: !<Range> {"min": 1}
+    validation:
+      - when: !<WhenRoleType>
+          roleType: HDFS_NAMENODE
+          inRange: {"min": 0, "max": 0}
+        criteria: !<Range> {"min": 1}
+      - when: !<WhenRoleType>
+          roleType: HDFS_NAMENODE
+          inRange: {"min": 1}
+        criteria: !<Range>
+          min: 0
+          max: 0
+    roles:
+      - name: HDFS_NAMENODE
+        friendlyName: "Name Node"
+        summaryPolicy: ALL
+        autoAssign:
+          - advice: !<NumSeq>
+              numSeq: [2, 1]
+              mates: ["LICENSE_NODE"]
+        suggestion:
+          - criteria: !<Range> {"min": 2, "max": 2}
+        validation:
+          - criteria: !<Range> {"min": 1, "max": 2}
+        operations: []
+      - name: HDFS_JOURNALNODE
+        friendlyName: "Journal Node"
+        summaryPolicy: MAJOR
+        autoAssign:
+          - when: !<WhenRoleType>
+              roleType: HDFS_NAMENODE
+              inRange: {"min": 2}
+            advice: !<NumSeq>
+              numSeq: [3, 1]
+              mates: ["HDFS_NAMENODE"]
+        suggestion:
+          - when: !<WhenRoleType>
+              roleType: HDFS_NAMENODE
+              inRange: {"min": 2}
+            criteria: !<Range>
+              min: 3
+              oddity: true
+        validation:
+          - when: !<WhenRoleType>
+              roleType: HDFS_NAMENODE
+              inRange: {"min": 1, "max": 1}
+            criteria: !<Range>
+              min: 0
+              max: 0
+          - when: !<WhenRoleType>
+              roleType: HDFS_NAMENODE
+              inRange: {"min": 2}
+            criteria: !<Range> {"min": 1}
+        operations: []

@@ -1,0 +1,51 @@
+---
+name: REGISTRY
+version: 1.0
+global: true
+namePrefix: Registry
+friendlyName: "Registry"
+dependencies: []
+user: root
+roles:
+- name: REGISTRY_SERVER
+  friendlyName: "Registry Server"
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1, "max": 1}
+  validation:
+  - criteria: !<Range> {"min": 1, "max": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf"]
+        mode: "755"
+    - directive: !<download>
+        url: "${repoRoot}/registry/registry.tar.gz"
+        targetPath: "/etc/${service.sid}/registry.tar.gz"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "bootstrap.sh"
+        targetPath: "/etc/${service.sid}/bootstrap.sh"
+        mode: "755"
+    - directive: !<shell>
+        script: "/etc/${service.sid}/bootstrap.sh"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "docker-registry.yml"
+        targetPath: "/etc/${service.sid}/docker-registry.yml"
+        mode: "755"
+  - type: Start
+    directives:
+    - directive: !<docker-compose>
+        action: Start
+        file: "/etc/${service.sid}/docker-registry.yml"
+  - type: Stop
+    directives:
+    - directive: !<docker-compose>
+        action: Stop
+        file: "/etc/${service.sid}/docker-registry.yml"

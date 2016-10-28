@@ -1,0 +1,119 @@
+###needed context:
+# sid        service identifier
+# memBytes   total size of physical memory in Bytes
+# rcmdMounts array of sorted recommended mounts (array of string)
+#             e.g. rcmdMounts = ["/mnt/disk1","/mnt/disk2","/mnt/disk3"]
+# disks      array of all mounts, each mount has fields "fs", "mountPoint", "size"
+#             e.g. disks = [
+#                     {"fs":"/dev/mapper/centos-root", "mountPoint":"/", "size":53660876800},
+#                     {"fs":"tmpfs", "mountPoint":"/dev/shm", "size":8363089920},
+#                     {"fs":"/dev/sdc1", "mountPoint":"/mnt/disk1", "size":1968872734720},
+#                     {"fs":"/dev/sdd1", "mountPoint":"/mnt/disk2", "size":1968872734720},
+#                     {"fs":"/dev/sdd1", "mountPoint":"/mnt/disk3", "size":492123668480},
+#                     {"fs":"/dev/sdb1", "mountPoint":"/var/log", "size":21136797696}
+#                   ]
+
+- name: dfs.datanode.data.dir
+  recommendExpression: |
+    <#function localDir suffix>
+      <#if rcmdMounts?size == 0>
+        <#return suffix>
+      <#else>
+        <#local dirs = []>
+        <#list rcmdMounts?sort as mnt>
+         <#local dirs = dirs + [mnt + suffix]>
+        </#list>
+        <#return dirs?join(",")>
+      </#if>
+    </#function>
+    ${localDir("/hadoop/data")}
+  defaultValue: file://${hadoop.tmp.dir}/dfs/data
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes:
+    - HDFS_DATANODE
+  onDeps: []
+  groups:
+  - hdfs_site
+  visibility: READ_WRITE
+- name: dfs.datanode.failed.volumes.tolerated
+  recommendExpression: ${(rcmdMounts?size / 3)?int}
+  defaultValue: 0
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes:
+    - HDFS_DATANODE
+  onDeps: []
+  groups:
+  - hdfs_site
+  visibility: READ_WRITE
+- name: dfs.namenode.name.dir
+  recommendExpression: |
+    <#assign sorted = rcmdMounts?sort>
+    <#if sorted?size == 0>
+    /hadoop/hadoop_image,/hadoop/namenode_dir
+    <#elseif sorted?size == 1>
+    /hadoop/namenode_dir,${sorted?first}/hadoop/namenode_dir
+    <#else>
+    ${sorted[0]}/hadoop/namenode_dir,${sorted[1]}/hadoop/namenode_dir
+    </#if>
+  defaultValue: file://${hadoop.tmp.dir}/dfs/name
+  valueType: STRING
+  scope: !<RoleTypes>
+      roleTypes:
+      - HDFS_NAMENODE
+  onDeps: []
+  groups:
+  - hdfs_site
+  visibility: READ_WRITE
+- name: namenode.memory
+  recommendExpression: |
+    <#assign halfMemMB = (memBytes/1048576/2)?int>
+    <#if halfMemMB <= 24000>
+    ${halfMemMB?c}
+    <#else>
+    24000
+    </#if>
+  defaultValue: null
+  valueType: MB
+  scope: !<RoleTypes>
+        roleTypes:
+        - HDFS_NAMENODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: ha.zookeeper.parent-znode
+  recommendExpression: /${sid}-ha
+  defaultValue: /hadoop-ha
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups:
+  - core_site
+  visibility: "READ_WRITE"
+- name: dfs.datanode.du.reserved
+  recommendExpression: |
+    <#function diskSizeByMnt mnt>
+      <#list disks?reverse as disk>
+        <#if mnt?contains(disk.mountPoint)>
+         <#return disk.size>
+        </#if>
+      </#list>
+    </#function>
+    <#assign reserved=10737418240>
+    <#list rcmdMounts as mnt>
+     <#assign curRsv = diskSizeByMnt(mnt) / 5>
+     <#if curRsv gt reserved>
+      <#assign reserved=curRsv>
+     </#if>
+    </#list>
+    ${reserved?c}
+  defaultValue: 0
+  valueType: BYTES
+  scope: !<RoleTypes>
+       roleTypes:
+       - HDFS_DATANODE
+  onDeps: []
+  groups:
+  - hdfs_site
+  visibility: READ_WRITE

@@ -1,0 +1,30 @@
+registryui:
+  image: konradkleine/docker-registry-frontend:v2
+  restart: always
+  environment:
+    - ENV_DOCKER_REGISTRY_HOST=registry
+    - ENV_DOCKER_REGISTRY_PORT=${service['registry.port']}
+    - ENV_DOCKER_REGISTRY_USE_SSL=1
+  ports:
+    - ${service['registry.ui.port']}:80
+  links:
+    - registry
+
+registry:
+  image: registry:2.4.1
+  restart: always
+  volumes:
+    - /srv/registry:/certs
+    - /var/lib/registry_data:/var/lib/registry
+  environment:
+    - REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY=/var/lib/registry
+    - REGISTRY_HTTP_TLS_CERTIFICATE=/certs/server.cert
+    - REGISTRY_HTTP_TLS_KEY=/certs/server.key
+  ports:
+    - ${service['registry.port']}:5000
+
+generatecerts:
+  image: gencerts:live
+  net: host
+  volumes:
+    - /srv/registry:/srv/kubernetes

@@ -1,0 +1,49 @@
+<#assign
+  registryServer=dependencies.REGISTRY.roles['REGISTRY_SERVER'][0].hostname
+  registryPort=dependencies.REGISTRY['registry.port']
+  >
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    name: zookeeper-server-${service.sid}-${localhostname}
+  name: zookeeper-server-${service.sid}-${localhostname}
+  namespace: default
+spec:
+    containers:
+    - args:
+      - bootstrap.sh
+      - zookeeper
+      env:
+        - name: USE_EXTERNAL_CONFIG
+          value: "true"
+        - name: TRANSWARP_DATA_HOME
+          value: /var/${service.sid}
+        - name: HEAP_SIZE
+          value: ${service['zookeeper.server.memory']}m
+      image: ${registryServer}:${registryPort}/jenkins/zookeeper
+      imagePullPolicy: Always
+      name: zookeeper-server-${service.sid}
+      volumeMounts:
+       - mountPath: /var/transwarp/logs
+         name: log
+       - mountPath: /etc/zookeeper/conf
+         name: zookeeper
+       - mountPath: /var/${service.sid}
+         name: data
+   #   resources:
+   #     limits:
+   #       cpu: "1"
+   #       memory: 1Gi
+    volumes:
+    - hostPath:
+        path: /var/log/${service.sid}
+      name: log
+    - hostPath:
+        path: /etc/${service.sid}/conf
+      name: zookeeper
+    - hostPath:
+        path: /var/${service.sid}
+      name: data
+    hostNetwork: true
+    nodeName: ${localhostname}

@@ -1,0 +1,89 @@
+- name: zookeeper.client.port
+  recommendExpression: 2291
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.peer.communicate.port
+  recommendExpression: 2988
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.leader.elect.port
+  recommendExpression: 3988
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.jmxremote.port
+  recommendExpression: 9922
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tickTime
+  recommendExpression: 9000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: initLimit
+  recommendExpression: 10
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: syncLimit
+  recommendExpression: 5
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: maxClientCnxns
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.server.memory
+  recommendExpression: 256
+  defaultValue: null
+  valueType: MB
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

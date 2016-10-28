@@ -1,0 +1,86 @@
+<#assign
+  registryServer=dependencies.REGISTRY.roles['REGISTRY_SERVER'][0].hostname
+  registryPort=dependencies.REGISTRY['registry.port']
+>
+etcd:
+  image: ${registryServer}:${registryPort}/jenkins/etcd:live
+  net: host
+  restart: always
+  command:
+    - etcd
+    - --listen-client-urls=http://0.0.0.0:${service['tos.master.etcd.port']}
+    - --advertise-client-urls=http://${localhostname}:${service['tos.master.etcd.port']}
+    - --data-dir=/var/etcd/data
+  volumes:
+    - /k8s/data/etcd:/var/etcd
+
+apiserver:
+  image: ${registryServer}:${registryPort}/jenkins/hyperkube
+  net: host
+  restart: always
+  command:
+    - hyperkube
+    - apiserver
+    - --v=4
+    - --etcd_servers=http://${localhostname}:${service['tos.master.etcd.port']}
+    - --insecure-bind-address=0.0.0.0
+    - --insecure-port=${service['tos.master.apiserver.port']}
+    - --bind-address=0.0.0.0
+    - --secure-port=443
+    - --runtime_config=api/v1
+    - --allow_privileged=true
+    - --cors_allowed_origins=.*
+    - --admission_control=ServiceAccount,ResourceQuota
+    - --service-cluster-ip-range=10.10.10.0/24
+    - --client_ca_file=/srv/kubernetes/ca.crt
+    - --tls_cert_file=/srv/kubernetes/server.cert
+    - --tls_private_key_file=/srv/kubernetes/server.key
+    - --alsologtostderr=true
+    - --logtostderr=false
+    - --log_dir=/var/log/kubernetes/
+  volumes:
+    - /k8s/log/apiserver:/var/log/kubernetes/
+    - /srv/kubernetes:/srv/kubernetes
+
+controller:
+  image: ${registryServer}:${registryPort}/jenkins/hyperkube
+  net: host
+  restart: always
+  command:
+    - hyperkube
+    - controller-manager
+    - --v=4
+    - --master=127.0.0.1:${service['tos.master.apiserver.port']}
+    - --root-ca-file=/srv/kubernetes/ca.crt
+    - --service-account-private-key-file=/srv/kubernetes/server.key
+    - --alsologtostderr=true
+    - --logtostderr=false
+    - --log_dir=/var/log/kubernetes/
+    - --address=0.0.0.0
+    - --port=${service['tos.master.controller.port']}
+  volumes:
+    - /k8s/log/controller:/var/log/kubernetes/
+    - /srv/kubernetes:/srv/kubernetes
+
+scheduler:
+  image: ${registryServer}:${registryPort}/jenkins/hyperkube
+  net: host
+  restart: always
+  command:
+    - hyperkube
+    - scheduler
+    - --master=127.0.0.1:${service['tos.master.apiserver.port']}
+    - --alsologtostderr=true
+    - --logtostderr=false
+    - --log_dir=/var/log/kubernetes/
+    - --address=0.0.0.0
+    - --port=${service['tos.master.scheduler.port']}
+  volumes:
+    - /k8s/log/sheduler:/var/log/kubernetes/
+    - /srv/kubernetes:/srv/kubernetes
+
+generatecerts:
+  image: ${registryServer}:${registryPort}/jenkins/gencerts:live
+  net: host
+  volumes:
+    - /srv/kubernetes:/srv/kubernetes

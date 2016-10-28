@@ -1,0 +1,60 @@
+---
+- name: tos.master.etcd.port
+  recommendExpression: 4001
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tos.master.apiserver.port
+  recommendExpression: 8080
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tos.master.scheduler.port
+  recommendExpression: 10251
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tos.master.controller.port
+  recommendExpression: 10252
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tos.slave.kubelet.port
+  recommendExpression: 10250
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_SLAVE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tos.slave.kubelet.healthzport
+  recommendExpression: 10248
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_SLAVE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

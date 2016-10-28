@@ -1,0 +1,41 @@
+<#assign
+  registryServer=dependencies.REGISTRY.roles['REGISTRY_SERVER'][0].hostname
+  registryPort=dependencies.REGISTRY['registry.port']
+>
+kubelet:
+  image: ${registryServer}:${registryPort}/jenkins/hyperkube
+  net: host
+  pid: host
+  privileged: true
+  restart: always
+  command:
+    - hyperkube
+    - kubelet
+    - --logtostderr=false
+    - --alsologtostderr=true
+    - --v=4
+    - --address=0.0.0.0
+    - --cluster_dns=10.10.10.10
+    - --cluster_domain=transwarp.local
+    - --port=${service['tos.slave.kubelet.port']}
+    - --healthz-port=${service['tos.slave.kubelet.healthzport']}
+    - --api_servers=http://${service.roles['TOS_MASTER'][0].hostname}:${service['tos.master.apiserver.port']}
+#    - --hostname_override={{ inventory_hostname }}
+    - --log_dir=/var/log/
+    - --containerized=true
+#    - --config=/etc/kubernetes/manifests-multi
+    - --pod-infra-container-image=${registryServer}:${registryPort}/google_containers/pause:0.8.0
+    - --disk_mount_dirs=/mnt/.*
+    - --max-pods=200
+    - --resolv-conf=/dev/null
+    - --allow_privileged=true
+    - --host-network-sources=*
+  volumes:
+    - /var/lib/docker:/var/lib/docker
+    - /var/lib/kubelet:/var/lib/kubelet
+    - /etc/kubernetes/manifests-multi:/etc/kubernetes/manifests-multi
+    - /mnt:/mnt
+    - /:/rootfs:ro
+    - /sys:/sys
+    - /var/run:/var/run
+    - /k8s/log/kubelet:/var/log

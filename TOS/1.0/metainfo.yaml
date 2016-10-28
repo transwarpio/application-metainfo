@@ -1,0 +1,105 @@
+---
+name: TOS
+version: 1.0
+global: false
+namePrefix: TOS
+friendlyName: TOS
+dependencies: #TODO consider external registry
+- name: REGISTRY
+  minVersion: 1.0
+  maxVersion: 1.0
+  optional: false
+user: root
+roles:
+- name: TOS_MASTER
+  friendlyName: "TOS Master"
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/log/${service.sid}" ,"/var/run/${service.sid}", "/etc/${service.sid}/conf"]
+        mode: "775"
+        owner: "root"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "docker-compose-master.yml"
+        targetPath: "/etc/${service.sid}/tos-master-${service.sid}.yaml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "health_check.sh"
+        targetPath: "/etc/${service.sid}/health_check.sh"
+        mode: "755"
+    - directive: !<docker-compose>
+        action: Pull
+        file: "/etc/${service.sid}/tos-master-${service.sid}.yaml"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "docker-compose-master.yml"
+        targetPath: "/etc/${service.sid}/tos-master-${service.sid}.yaml"
+        mode: "755"
+  - type: Start
+    directives:
+    - directive: !<docker-compose>
+        action: Start
+        file: "/etc/${service.sid}/tos-master-${service.sid}.yaml"
+  - type: Stop
+    directives:
+    - directive: !<docker-compose>
+        action: Stop
+        file: "/etc/${service.sid}/tos-master-${service.sid}.yaml"
+- name: TOS_SLAVE
+  friendlyName: "TOS Slave"
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<EachNode> {}
+  suggestion:
+  - criteria: !<EachNode> {}
+  validation:
+  - criteria: !<EachNode> {}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/log/${service.sid}", "/var/run/${service.sid}", "/etc/${service.sid}/conf"]
+        mode: "775"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "docker-compose-slave.yml"
+        targetPath: "/etc/${service.sid}/tos-slave-${service.sid}.yaml"
+        mode: "755"
+    - directive: !<docker-compose>
+        action: Pull
+        file: "/etc/${service.sid}/tos-slave-${service.sid}.yaml"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "docker-compose-slave.yml"
+        targetPath: "/etc/${service.sid}/tos-slave-${service.sid}.yaml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "kubernetes_master.sh"
+        targetPath: "/etc/profile.d/kubernetes_master.sh"
+        mode: "755"
+  - type: Start
+    directives:
+    - directive: !<docker-compose>
+        action: Start
+        file: "/etc/${service.sid}/tos-slave-${service.sid}.yaml"
+  - type: Stop
+    directives:
+    - directive: !<docker-compose>
+        action: Stop
+        file: "/etc/${service.sid}/tos-slave-${service.sid}.yaml"
+

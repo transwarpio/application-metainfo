@@ -1,0 +1,20 @@
+---
+- name: registry.ui.port
+  recommendExpression: 8081
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [REGISTRY_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: registry.port
+  recommendExpression: 5000
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [REGISTRY_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
