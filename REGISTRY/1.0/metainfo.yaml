@@ -45,7 +45,7 @@ roles:
   - type: Start
     directives:
     - directive: !<docker-compose>
-        action: Start
+        action: Up
         file: "/etc/${service.sid}/docker-registry.yml"
   - type: Stop
     directives:

@@ -34,5 +34,5 @@ else
 fi
 
 # 4. start registry
-echo "docker-compose -f $CURRENTPATH/docker-registry.yml up -d"
-docker-compose -f $CURRENTPATH/docker-registry.yml up -d
+#echo "docker-compose -f $CURRENTPATH/docker-registry.yml up -d"
+#docker-compose -f $CURRENTPATH/docker-registry.yml up -d

@@ -50,7 +50,7 @@ roles:
   - type: Start
     directives:
     - directive: !<docker-compose>
-        action: Start
+        action: Up
         file: "/etc/${service.sid}/tos-master-${service.sid}.yaml"
   - type: Stop
     directives:
@@ -95,7 +95,7 @@ roles:
   - type: Start
     directives:
     - directive: !<docker-compose>
-        action: Start
+        action: Up
         file: "/etc/${service.sid}/tos-slave-${service.sid}.yaml"
   - type: Stop
     directives:
