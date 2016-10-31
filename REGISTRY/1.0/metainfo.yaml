@@ -25,6 +25,9 @@ roles:
     - directive: !<download>
         url: "${repoRoot}/registry/registry.tar.gz"
         targetPath: "/etc/${service.sid}/registry.tar.gz"
+    - directive: !<download>
+        url: "${repoRoot}/registry/registry.data.tar.gz"
+        targetPath: "/etc/${service.sid}/registry.data.tar.gz"
     - directive: !<resource>
         templateType: Raw
         templatePath: "bootstrap.sh"
