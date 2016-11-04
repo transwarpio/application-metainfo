@@ -1,6 +1,6 @@
 <#assign
   registryServer=dependencies.REGISTRY.roles['REGISTRY_SERVER'][0].hostname
-  registryPort=dependencies.REGISTRY['registry.port']
+  registryPort=dependencies.REGISTRY[registryServer]['registry.port']
 >
 etcd:
   image: ${registryServer}:${registryPort}/jenkins/etcd:live
