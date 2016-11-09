@@ -36,9 +36,9 @@ roles:
         templatePath: "zookeeper.yaml"
         targetPath: "/etc/${service.sid}/zookeeper-server-${service.sid}.yaml"
         mode: "755"
-    - directive: !<docker-compose>
-        action: Pull
-        file: "/etc/${service.sid}/zookeeper-server-${service.sid}.yaml"
+#    - directive: !<docker-compose>
+#        action: Pull
+#        file: "/etc/${service.sid}/zookeeper-server-${service.sid}.yaml"
   - type: Config
     directives:
     - directive: !<resource>
@@ -49,7 +49,7 @@ roles:
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "zoo_conf.ftlp"
-        targetPath: "/etc/${servicesid}/conf/zoo.cfg"
+        targetPath: "/etc/${service.sid}/conf/zoo.cfg"
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker

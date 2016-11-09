@@ -45,7 +45,7 @@
   scope: !<RoleTypes>
     roleTypes: [ZOOKEEPER]
   onDeps: []
-  groups: []
+  groups: [zoo_cfg]
   visibility: READ_WRITE
 
 - name: initLimit
@@ -55,7 +55,7 @@
   scope: !<RoleTypes>
     roleTypes: [ZOOKEEPER]
   onDeps: []
-  groups: []
+  groups: [zoo_cfg]
   visibility: READ_WRITE
 
 - name: syncLimit
@@ -65,7 +65,7 @@
   scope: !<RoleTypes>
     roleTypes: [ZOOKEEPER]
   onDeps: []
-  groups: []
+  groups: [zoo_cfg]
   visibility: READ_WRITE
 
 - name: maxClientCnxns
@@ -75,7 +75,7 @@
   scope: !<RoleTypes>
     roleTypes: [ZOOKEEPER]
   onDeps: []
-  groups: []
+  groups: [zoo_cfg]
   visibility: READ_WRITE
 
 - name: zookeeper.server.memory
