@@ -99,6 +99,7 @@
          <#return disk.size>
         </#if>
       </#list>
+      <#return 0>
     </#function>
     <#assign reserved=10737418240>
     <#list rcmdMounts as mnt>
@@ -116,4 +117,147 @@
   onDeps: []
   groups:
   - hdfs_site
+  visibility: READ_WRITE
+
+- name: namenode.rpc-port
+  recommendExpression: 8020
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel>
+    roleTypes:
+    - HDFS_NAMENODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: namenode.http-port
+  recommendExpression: 50070
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel>
+    roleTypes:
+    - HDFS_NAMENODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: namenode.use.wildcard
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel>
+    roleTypes:
+    - HDFS_NAMENODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: journalnode.use.wildcard
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel>
+    roleTypes:
+    - HDFS_NAMENODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: journalnode.rpc-port
+  recommendExpression: 8485
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel>
+    roleTypes:
+    - HDFS_NAMENODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: journalnode.http-port
+  recommendExpression: 8480
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel>
+    roleTypes:
+    - HDFS_NAMENODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: datanode.use.wildcard
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel>
+    roleTypes:
+    - HDFS_NAMENODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: datanode.ipc-port
+  recommendExpression: 50020
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel>
+    roleTypes:
+    - HDFS_NAMENODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: secure.datanode.port
+  recommendExpression: 1002
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel>
+    roleTypes:
+    - HDFS_NAMENODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: datanode.port
+  recommendExpression: 50010
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel>
+    roleTypes:
+    - HDFS_NAMENODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: secure.datanode.http-port
+  recommendExpression: 1004
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel>
+    roleTypes:
+    - HDFS_NAMENODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: datanode.http-port
+  recommendExpression: 50075
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel>
+    roleTypes:
+    - HDFS_NAMENODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: datanode.ipc-port
+  recommendExpression: 50020
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel>
+    roleTypes:
+    - HDFS_NAMENODE
+  onDeps: []
+  groups: []
   visibility: READ_WRITE
