@@ -26,9 +26,7 @@
     <@property "dfs.web.authentication.kerberos.keytab" "/etc/" + sid + "/hdfs.keytab"/>
 </#if>
 <#--handle federation-->
-<#assign default_nn_rpc_port=service['namenode.rpc-port']
-         default_nn_http_port=service['namenode.http-port']
-         namenode_use_wildcard=service['namenode.use.wildcard']>
+<#assign namenode_use_wildcard=service['namenode.use.wildcard']>
 <#--federation is true-->
 <#if service.nameservices?? && service.nameservices?size gt 0>
     <@property "dfs.nameservices" service.nameservices?join(",")/>
@@ -39,15 +37,16 @@
     <#assign
         nn1=service[ns]['HDFS_NAMENODE'][0].hostname
         nn2=service[ns]['HDFS_NAMENODE'][1].hostname
-        nn1_rpc_port=service[nn1]['namenode.rpc-port']!default_nn_rpc_port
-        nn2_rpc_port=service[nn2]['namenode.rpc-port']!default_nn_rpc_port
-        nn1_http_port=service[nn1]['namenode.http-port']!default_nn_http_port
-        nn2_http_port=service[nn2]['namenode.http-port']!default_nn_http_port
+        nn1_rpc_port=service[nn1]['namenode.rpc-port']
+        nn2_rpc_port=service[nn2]['namenode.rpc-port']
+        nn1_http_port=service[nn1]['namenode.http-port']
+        nn2_http_port=service[nn2]['namenode.http-port']
     >
-    <@property "dfs.namenode.rpc-address." + ns + ".nn1" nn1_rpc_port/>
-    <@property "dfs.namenode.rpc-address." + ns + ".nn2" nn2_rpc_port/>
-    <@property "dfs.namenode.http-address." + ns + ".nn1" nn1_http_port/>
-    <@property "dfs.namenode.http-address." + ns + ".nn2" nn2_http_port/>
+    <@property "dfs.namenode.rpc-address." + ns + ".nn1" nn1 + ":" + nn1_rpc_port/>
+    <@property "dfs.namenode.rpc-address." + ns + ".nn2" nn2 + ":" + nn2_rpc_port/>
+    <@property "dfs.namenode.http-address." + ns + ".nn1" nn1 + ":" + nn1_http_port/>
+    <@property "dfs.namenode.http-address." + ns + ".nn2" nn2 + ":" + nn2_http_port/>
+    <@property "dfs.ha.automatic-failover.enabled." + ns "true"/>
     <#assign
         default_jn_rpc_port=service['journalnode.rpc-port']
         journalnodes=service[ns]['HDFS_JOURNALNODE']
@@ -59,8 +58,8 @@
     <@property "dfs.namenode.shared.edits.dir." + ns "qjournal://" + jn_withport?join(";") + "/" + ns/>
     <#else>
     <#assign nn=service[ns]['HDFS_NAMENODE'][0].hostname
-             nn_rpc_port=service[nn1]['namenode.rpc-port']!default_nn_rpc_port
-             nn_http_port=service[nn1]['namenode.http-port']!default_nn_http_port>
+             nn_rpc_port=service[nn1]['namenode.rpc-port']
+             nn_http_port=service[nn1]['namenode.http-port']>
     <@property "dfs.namenode.rpc-address." + ns nn_rpc_port/>
     <@property "dfs.namenode.http-address." + ns nn_http_port/>
     </#if>
@@ -101,6 +100,8 @@
     </#if>
     <@property "dfs.journalnode.edits.dir" "/hadoop/journal"/>
     <@property "dfs.client.socket-timeout" "120000"/>
+    <@property "dfs.datanode.data.dir.perm" "755"/>
+    <@property "license.zookeeper.quorum" "172.16.1.41:2181"/>
 <#--Take properties from the context-->
 <#list service['hdfs_site'] as key, value>
     <@property key value/>

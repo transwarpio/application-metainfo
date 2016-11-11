@@ -4,11 +4,12 @@ version: 2.5.2-tdh50
 global: false
 namePrefix: HDFS
 friendlyName: HDFS
+user: hdfs
 dependencies:
-  - name: LICENSE_SERVICE
-    minVersion: 1.0
-    maxVersion: 1.0
-    optional: false
+#  - name: LICENSE_SERVICE
+#    minVersion: 1.0
+#    maxVersion: 1.0
+#    optional: false
   - name: ZOOKEEPER
     minVersion: 3.4.5-tdh50
     maxVersion: 3.4.5-tdh50
@@ -25,7 +26,56 @@ roles:
     validation:
       - criteria: !<Range>
           min: 1
-    operations: []
+    operations:
+    - type: Install
+      directives:
+      - directive: !<mkdirs>
+          paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf"]
+          mode: "755"
+      - directive: !<mkdirs>
+          paths: ["/var/${service.sid}", "/var/log/${service.sid}"]
+          mode: "755"
+          owner: "hdfs"
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "hdfs-datanode.yaml"
+          targetPath: "/etc/${service.sid}/hadoop-hdfs-datanode-${service.sid}.yaml"
+          mode: "755"
+#      - directive: !<docker-compose>
+#          action: Pull
+#          file: "/etc/${service.sid}/hadoop-hdfs-datanode-${service.sid}.yaml"
+    - type: Config
+      directives:
+      - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "core-site.ftlx"
+            targetPath: "/etc/${service.sid}/conf/core-site.xml"
+            mode: "755"
+      - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "hdfs-site.ftlx"
+            targetPath: "/etc/${service.sid}/conf/hdfs-site.xml"
+            mode: "755"
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "hadoop-env.sh"
+          targetPath: "/etc/${service.sid}/conf/hadoop-env.sh"
+          mode: "755"
+      - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "hdfs-datanode.yaml"
+            targetPath: "/etc/${service.sid}/hadoop-hdfs-datanode-${service.sid}.yaml"
+            mode: "755"
+    - type: Start
+      directives:
+      - directive: !<kubectl>
+            action: Start
+            file: "/etc/${service.sid}/hadoop-hdfs-datanode-${service.sid}.yaml"
+    - type: Stop
+      directives:
+      - directive: !<kubectl>
+            action: Stop
+            file: "/etc/${service.sid}/hadoop-hdfs-datanode-${service.sid}.yaml"
   - name: HDFS_NAMENODE
     friendlyName: "Name Node (non-HA)"
     summaryPolicy: SOME
@@ -47,7 +97,66 @@ roles:
         criteria: !<Range>
           min: 0,
           max: 0
-    operations: []
+    operations:
+      - type: Install
+        directives:
+        - directive: !<mkdirs>
+            paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf"]
+            mode: "755"
+        - directive: !<mkdirs>
+            paths: ["/var/${service.sid}", "/var/log/${service.sid}"]
+            mode: "755"
+            owner: "hdfs"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "hdfs-namenode.yaml"
+            targetPath: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
+            mode: "755"
+#        - directive: !<docker-compose>
+#            action: Pull
+#            file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
+      - type: Config
+        directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "core-site.ftlx"
+            targetPath: "/etc/${service.sid}/conf/core-site.xml"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "hdfs-site.ftlx"
+            targetPath: "/etc/${service.sid}/conf/hdfs-site.xml"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "exclude-list.txt"
+            targetPath: "/etc/${service.sid}/conf/exclude-list.txt"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "exclude-list.txt"
+            targetPath: "/etc/${service.sid}/conf/exclude-list.txt"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "hadoop-env.sh"
+            targetPath: "/etc/${service.sid}/conf/hadoop-env.sh"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "hdfs-namenode.yaml"
+            targetPath: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
+            mode: "755"
+      - type: Start
+        directives:
+        - directive: !<kubectl>
+            action: Start
+            file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
+      - type: Stop
+        directives:
+        - directive: !<kubectl>
+            action: Stop
+            file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
 roleGroups:
   - fieldName: nameservices
     namePrefix: nameservice
@@ -79,7 +188,74 @@ roleGroups:
           - criteria: !<Range> {"min": 2, "max": 2}
         validation:
           - criteria: !<Range> {"min": 1, "max": 2}
-        operations: []
+        operations:
+          - type: Install
+            directives:
+            - directive: !<mkdirs>
+                paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf"]
+                mode: "755"
+            - directive: !<mkdirs>
+                paths: ["/var/${service.sid}", "/var/log/${service.sid}"]
+                mode: "755"
+                owner: "hdfs"
+            - directive: !<resource>
+                templateType: FreeMarker
+                templatePath: "hdfs-namenode.yaml"
+                targetPath: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
+                mode: "755"
+#            - directive: !<docker-compose>
+#                action: Pull
+#                file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
+#            - directive: !<resource>
+#                templateType: FreeMarker
+#                templatePath: "hdfs-namenode-format.yaml"
+#                targetPath: "/etc/${service.sid}/hadoop-hdfs-namenode-format-${service.sid}.yaml"
+#                mode: "755"
+#            - directive: !<docker-compose>
+#                action: Pull
+#                file: "/etc/${service.sid}/hadoop-hdfs-namenode-format-${service.sid}.yaml"
+          - type: Config
+            directives:
+            - directive: !<resource>
+                templateType: FreeMarker
+                templatePath: "core-site.ftlx"
+                targetPath: "/etc/${service.sid}/conf/core-site.xml"
+                mode: "755"
+            - directive: !<resource>
+                templateType: FreeMarker
+                templatePath: "hdfs-site.ftlx"
+                targetPath: "/etc/${service.sid}/conf/hdfs-site.xml"
+                mode: "755"
+            - directive: !<resource>
+                templateType: FreeMarker
+                templatePath: "exclude-list.txt"
+                targetPath: "/etc/${service.sid}/conf/exclude-list.txt"
+                mode: "755"
+            - directive: !<resource>
+                templateType: FreeMarker
+                templatePath: "hadoop-env.sh"
+                targetPath: "/etc/${service.sid}/conf/hadoop-env.sh"
+                mode: "755"
+            - directive: !<resource>
+                templateType: FreeMarker
+                templatePath: "hdfs-namenode.yaml"
+                targetPath: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
+                mode: "755"
+#            - directive: !<resource>
+#                templateType: FreeMarker
+#                templatePath: "hdfs-namenode-format.yaml"
+#                targetPath: "/etc/${service.sid}/hadoop-hdfs-namenode-format-${service.sid}.yaml"
+#                mode: "755"
+          - type: Start
+            directives:
+            - directive: !<kubectl>
+                action: Start
+                file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
+          - type: Stop
+            directives:
+            - directive: !<kubectl>
+                action: Stop
+                file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
       - name: HDFS_JOURNALNODE
         friendlyName: "Journal Node"
         summaryPolicy: MAJOR
@@ -108,4 +284,48 @@ roleGroups:
               roleType: HDFS_NAMENODE
               inRange: {"min": 2}
             criteria: !<Range> {"min": 1}
-        operations: []
+        operations:
+          - type: Install
+            directives:
+            - directive: !<mkdirs>
+                paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf"]
+                mode: "755"
+            - directive: !<mkdirs>
+                paths: ["/var/${service.sid}", "/var/log/${service.sid}"]
+                mode: "755"
+                owner: "hdfs"
+            - directive: !<resource>
+                templateType: FreeMarker
+                templatePath: "hdfs-journalnode.yaml"
+                targetPath: "/etc/${service.sid}/hadoop-hdfs-journalnode-${service.sid}.yaml"
+                mode: "755"
+#            - directive: !<docker-compose>
+#                action: Pull
+#                file: "/etc/${service.sid}/hadoop-hdfs-journalnode-${service.sid}.yaml"
+          - type: Config
+            directives:
+            - directive: !<resource>
+                templateType: FreeMarker
+                templatePath: "core-site.ftlx"
+                targetPath: "/etc/${service.sid}/conf/core-site.xml"
+                mode: "755"
+            - directive: !<resource>
+                templateType: FreeMarker
+                templatePath: "hdfs-site.ftlx"
+                targetPath: "/etc/${service.sid}/conf/hdfs-site.xml"
+                mode: "755"
+            - directive: !<resource>
+                templateType: FreeMarker
+                templatePath: "hdfs-journalnode.yaml"
+                targetPath: "/etc/${service.sid}/hadoop-hdfs-journalnode-${service.sid}.yaml"
+                mode: "755"
+          - type: Start
+            directives:
+            - directive: !<kubectl>
+                action: Start
+                file: "/etc/${service.sid}/hadoop-hdfs-journalnode-${service.sid}.yaml"
+          - type: Stop
+            directives:
+            - directive: !<kubectl>
+                action: Stop
+                file: "/etc/${service.sid}/hadoop-hdfs-journalnode-${service.sid}.yaml"

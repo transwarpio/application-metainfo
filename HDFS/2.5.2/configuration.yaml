@@ -123,7 +123,7 @@
   recommendExpression: 8020
   defaultValue: null
   valueType: PORT
-  scope: !<ServiceLevel>
+  scope: !<RoleTypes>
     roleTypes:
     - HDFS_NAMENODE
   onDeps: []
@@ -134,7 +134,7 @@
   recommendExpression: 50070
   defaultValue: null
   valueType: PORT
-  scope: !<ServiceLevel>
+  scope: !<RoleTypes>
     roleTypes:
     - HDFS_NAMENODE
   onDeps: []
@@ -145,9 +145,7 @@
   recommendExpression: false
   defaultValue: null
   valueType: BOOL
-  scope: !<ServiceLevel>
-    roleTypes:
-    - HDFS_NAMENODE
+  scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -156,9 +154,7 @@
   recommendExpression: true
   defaultValue: null
   valueType: BOOL
-  scope: !<ServiceLevel>
-    roleTypes:
-    - HDFS_NAMENODE
+  scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -167,9 +163,9 @@
   recommendExpression: 8485
   defaultValue: null
   valueType: PORT
-  scope: !<ServiceLevel>
+  scope: !<RoleTypes>
     roleTypes:
-    - HDFS_NAMENODE
+    - HDFS_JOURNALNODE
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -178,9 +174,9 @@
   recommendExpression: 8480
   defaultValue: null
   valueType: PORT
-  scope: !<ServiceLevel>
+  scope: !<RoleTypes>
     roleTypes:
-    - HDFS_NAMENODE
+    - HDFS_JOURNALNODE
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -189,9 +185,7 @@
   recommendExpression: true
   defaultValue: null
   valueType: BOOL
-  scope: !<ServiceLevel>
-    roleTypes:
-    - HDFS_NAMENODE
+  scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -200,9 +194,9 @@
   recommendExpression: 50020
   defaultValue: null
   valueType: PORT
-  scope: !<ServiceLevel>
+  scope: !<RoleTypes>
     roleTypes:
-    - HDFS_NAMENODE
+    - HDFS_DATANODE
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -211,9 +205,9 @@
   recommendExpression: 1002
   defaultValue: null
   valueType: PORT
-  scope: !<ServiceLevel>
+  scope: !<RoleTypes>
     roleTypes:
-    - HDFS_NAMENODE
+    - HDFS_DATANODE
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -222,9 +216,9 @@
   recommendExpression: 50010
   defaultValue: null
   valueType: PORT
-  scope: !<ServiceLevel>
+  scope: !<RoleTypes>
     roleTypes:
-    - HDFS_NAMENODE
+    - HDFS_DATANODE
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -233,9 +227,9 @@
   recommendExpression: 1004
   defaultValue: null
   valueType: PORT
-  scope: !<ServiceLevel>
+  scope: !<RoleTypes>
     roleTypes:
-    - HDFS_NAMENODE
+    - HDFS_DATANODE
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -244,9 +238,9 @@
   recommendExpression: 50075
   defaultValue: null
   valueType: PORT
-  scope: !<ServiceLevel>
+  scope: !<RoleTypes>
     roleTypes:
-    - HDFS_NAMENODE
+    - HDFS_DATANODE
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -255,9 +249,60 @@
   recommendExpression: 50020
   defaultValue: null
   valueType: PORT
-  scope: !<ServiceLevel>
+  scope: !<RoleTypes>
+    roleTypes:
+    - HDFS_DATANODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: journalnode.memory
+  recommendExpression: 4096
+  defaultValue: null
+  valueType: MB
+  scope: !<RoleTypes>
+    roleTypes:
+    - HDFS_JOURNALNODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: namenode.memory
+  recommendExpression: 6120
+  defaultValue: null
+  valueType: MB
+  scope: !<RoleTypes>
     roleTypes:
     - HDFS_NAMENODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: datanode.memory
+  recommendExpression: 4096
+  defaultValue: null
+  valueType: MB
+  scope: !<RoleTypes>
+    roleTypes:
+    - HDFS_DATANODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: default.heap.size
+  recommendExpression: 4096
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: dfs.ha.fencing.methods
+  recommendExpression: shell(/bin/true)
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
   visibility: READ_WRITE
