@@ -19,7 +19,6 @@
     <@property role + ".kerberos.principal" "hdfs/_HOST@" + realm/>
     <@property role + ".kerberos.internal.spnego.principal" "HTTP/_HOST@" + realm/>
 </#list>
-    <@property "dfs.datanode.data.dir.perm" "700"/>
     <@property "dfs.datanode.kerberos.principal" "/etc/" + sid + "/hdfs.keytab"/>
     <@property "dfs.datanode.kerberos.principal" "hdfs/_HOST@" + realm/>
     <@property "dfs.web.authentication.kerberos.principal" "HTTP/_HOST@" + realm/>
@@ -100,7 +99,6 @@
     </#if>
     <@property "dfs.journalnode.edits.dir" "/hadoop/journal"/>
     <@property "dfs.client.socket-timeout" "120000"/>
-    <@property "dfs.datanode.data.dir.perm" "755"/>
     <@property "license.zookeeper.quorum" "172.16.1.41:2181"/>
 <#--Take properties from the context-->
 <#list service['hdfs_site'] as key, value>

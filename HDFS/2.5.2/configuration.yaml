@@ -304,5 +304,14 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: []
+  groups: [core_site]
+  visibility: READ_WRITE
+
+- name: dfs.datanode.data.dir.perm
+  recommendExpression: 700
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hdfs_site]
   visibility: READ_WRITE
