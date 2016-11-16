@@ -32,6 +32,21 @@ roles:
       - directive: !<mkdirs>
           paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf"]
           mode: "755"
+      - directive: !<resource>
+          templateType: Raw
+          templatePath: "log4j.properties"
+          targetPath: "/etc/${service.sid}/conf/log4j.properties"
+          mode: "755"
+      - directive: !<resource>
+          templateType: Raw
+          templatePath: "hadoop-metrics2-datanode.properties"
+          targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-datanode.properties"
+          mode: "755"
+      - directive: !<resource>
+          templateType: Raw
+          templatePath: "hadoop-metrics2-namenode.properties"
+          targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-namenode.properties"
+          mode: "755"
       - directive: !<mkdirs>
           paths: ["/var/${service.sid}", "/var/log/${service.sid}"]
           mode: "755"
@@ -108,6 +123,21 @@ roles:
             mode: "755"
             owner: "hdfs"
         - directive: !<resource>
+            templateType: Raw
+            templatePath: "log4j.properties"
+            targetPath: "/etc/${service.sid}/conf/log4j.properties"
+            mode: "755"
+        - directive: !<resource>
+            templateType: Raw
+            templatePath: "hadoop-metrics2-datanode.properties"
+            targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-datanode.properties"
+            mode: "755"
+        - directive: !<resource>
+            templateType: Raw
+            templatePath: "hadoop-metrics2-namenode.properties"
+            targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-namenode.properties"
+            mode: "755"
+        - directive: !<resource>
             templateType: FreeMarker
             templatePath: "hdfs-namenode.yaml"
             targetPath: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
@@ -126,11 +156,6 @@ roles:
             templateType: FreeMarker
             templatePath: "hdfs-site.ftlx"
             targetPath: "/etc/${service.sid}/conf/hdfs-site.xml"
-            mode: "755"
-        - directive: !<resource>
-            templateType: FreeMarker
-            templatePath: "exclude-list.txt"
-            targetPath: "/etc/${service.sid}/conf/exclude-list.txt"
             mode: "755"
         - directive: !<resource>
             templateType: FreeMarker
@@ -193,6 +218,21 @@ roleGroups:
             directives:
             - directive: !<mkdirs>
                 paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf"]
+                mode: "755"
+            - directive: !<resource>
+                templateType: Raw
+                templatePath: "log4j.properties"
+                targetPath: "/etc/${service.sid}/conf/log4j.properties"
+                mode: "755"
+            - directive: !<resource>
+                templateType: Raw
+                templatePath: "hadoop-metrics2-datanode.properties"
+                targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-datanode.properties"
+                mode: "755"
+            - directive: !<resource>
+                templateType: Raw
+                templatePath: "hadoop-metrics2-namenode.properties"
+                targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-namenode.properties"
                 mode: "755"
             - directive: !<mkdirs>
                 paths: ["/var/${service.sid}", "/var/log/${service.sid}"]
@@ -289,6 +329,21 @@ roleGroups:
             directives:
             - directive: !<mkdirs>
                 paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf"]
+                mode: "755"
+            - directive: !<resource>
+                templateType: Raw
+                templatePath: "log4j.properties"
+                targetPath: "/etc/${service.sid}/conf/log4j.properties"
+                mode: "755"
+            - directive: !<resource>
+                templateType: Raw
+                templatePath: "hadoop-metrics2-datanode.properties"
+                targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-datanode.properties"
+                mode: "755"
+            - directive: !<resource>
+                templateType: Raw
+                templatePath: "hadoop-metrics2-namenode.properties"
+                targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-namenode.properties"
                 mode: "755"
             - directive: !<mkdirs>
                 paths: ["/var/${service.sid}", "/var/log/${service.sid}"]

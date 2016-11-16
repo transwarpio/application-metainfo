@@ -23,69 +23,91 @@
 <#else>
 <#--federation is false-->
 </#if>
-apiVersion: v1
-kind: Pod
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
   labels:
     name: hadoop-hdfs-datanode-${service.sid}-${localhostname}
   name: hadoop-hdfs-datanode-${service.sid}-${localhostname}
   namespace: default
 spec:
-  containers:
-  - args:
-    - bootstrap.sh
-    - datanode
-    env:
-    - name: KRB_ENABLE
-      value: 'false'
-    - name: HADOOP_HA_NAMENODE_SERVICE
-      value: ${namenode1hostname},${namenode2hostname}
-    - name: HDFS_JOURNAL_NODE_SPEC
-      value: valid
-    - name: HDFS_HA
-      value: 'true'
-    - name: SPEC
-      value: ${minhostname}
-    - name: HADOOP_CONF_DIR
-      value: /etc/${service.sid}/conf
-    - name: DATA_DIRS
-      value: ${service['dfs.datanode.data.dir']}
-    - name: HEAP_SIZE
-      value: ${service['datanode.memory']}m
-    image: ${registryServer}:${registryPort}/jenkins/hdfs
-    imagePullPolicy: Always
-    name: hadoop-hdfs-datanode-${service.sid}-${localhostname}
-    volumeMounts:
-    - mountPath: /etc/${service.sid}/conf
-      name: hdfs
-    - mountPath: /var/run/hadoop-common
-      name: socketdir
-    - mountPath: /var/transwarp/logs
-      name: log
-    - mountPath: /var/run/${service.sid}
-      name: hdfssocketdir
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        name: hadoop-hdfs-datanode-${service.sid}-${localhostname}
+    spec:
+      containers:
+      - args:
+        - bootstrap.sh
+        - datanode
+        env:
+        - name: KRB_ENABLE
+          value: 'false'
+        - name: HADOOP_HA_NAMENODE_SERVICE
+          value: ${namenode1hostname},${namenode2hostname}
+        - name: HDFS_JOURNAL_NODE_SPEC
+          value: valid
+        - name: HDFS_HA
+          value: 'true'
+        - name: SPEC
+          value: ${minhostname}
+        - name: HADOOP_CONF_DIR
+          value: /etc/${service.sid}/conf
+        - name: DATA_DIRS
+          value: ${service['dfs.datanode.data.dir']}
+        - name: HEAP_SIZE
+          value: ${service['datanode.memory']}m
+        image: ${registryServer}:${registryPort}/jenkins/hdfs
+        imagePullPolicy: Always
+        name: hadoop-hdfs-datanode-${service.sid}-${localhostname}
+        volumeMounts:
+        - mountPath: /etc/${service.sid}/conf
+          name: hdfs
+        - mountPath: /var/run/hadoop-common
+          name: socketdir
+        - mountPath: /var/transwarp/logs
+          name: log
+        - mountPath: /var/run/${service.sid}
+          name: hdfssocketdir
 <#list service['dfs.datanode.data.dir']?split(",") as datadir>
-    - mountPath: ${datadir?trim}
-      name: datanodedir${datadir_index}
+        - mountPath: ${datadir?trim}
+          name: datanodedir${datadir_index}
 </#list>
-  hostNetwork: true
-  nodeName: ${localhostname}
-  volumes:
-  - hostPath:
-      path: /var/log/${service.sid}
-    name: log
-  - hostPath:
-      path: /etc/${service.sid}/conf
-    name: hdfs
-  - hostPath:
-      path: /root/docker/common
-    name: socketdir
-  - hostPath:
-      path: /var/run/${service.sid}
-    name: hdfssocketdir
+      hostNetwork: true
+#      podConflictSelectors:
+#       - matchExpressions:
+#         - key: name
+#           operator: "="
+#           values:
+#           - "inceptorexecutor3"
+#      nodeSelector:
+#         inceptorexecutor3: "true"
+#         resources:
+#           limits:
+#             cpu: "4"
+#             memory: 8Gi
+      volumes:
+      - hostPath:
+          path: /var/log/${service.sid}
+        name: log
+      - hostPath:
+          path: /etc/${service.sid}/conf
+        name: hdfs
+      - hostPath:
+          path: /root/docker/common
+        name: socketdir
+      - hostPath:
+          path: /var/run/${service.sid}
+        name: hdfssocketdir
 <#list service['dfs.datanode.data.dir']?split(",") as datadir>
-  - hostPath:
-      path: ${datadir?trim}
-    name: datanodedir${datadir_index}
+      - hostPath:
+          path: ${datadir?trim}
+        name: datanodedir${datadir_index}
 </#list>
 

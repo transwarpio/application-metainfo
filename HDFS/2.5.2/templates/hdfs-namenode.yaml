@@ -12,6 +12,7 @@
         namenode2hostname=service[ns]['HDFS_NAMENODE'][1].hostname
         namenode1nodeid=service[ns]['HDFS_NAMENODE'][0].id
         namenode2nodeid=service[ns]['HDFS_NAMENODE'][1].id
+        namenode_http_port=service['namenode.http-port']
     >
     </#if>
     <#if namenode2nodeid gt namenode1nodeid>
@@ -20,116 +21,138 @@
         <#assign minhostname=namenode2hostname >
     </#if>
     <#if minhostname == localhostname>
-        <#assign replication_job_id="'0'" >
+        <#assign namenode_id="'0'" >
     <#else>
-        <#assign replication_job_id="'1'" >
+        <#assign namenode_id="'1'" >
     </#if>
 </#list>
 <#else>
 <#--federation is false-->
 </#if>
-apiVersion: v1
-kind: Pod
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
   labels:
     name: hadoop-hdfs-namenode-${service.sid}-${localhostname}
   name: hadoop-hdfs-namenode-${service.sid}-${localhostname}
   namespace: default
 spec:
-  containers:
-  - args:
-    - bootstrap.sh
-    - namenode
-    env:
-    - name: KRB_ENABLE
-      value: 'false'
-    - name: HADOOP_HA_NAMENODE_SERVICE
-      value: ${namenode1hostname},${namenode2hostname}
-    - name: HDFS_JOURNAL_NODE_SPEC
-      value: valid
-    - name: HDFS_HA
-      value: 'true'
-    - name: REPLICATION_JOB_ID
-      value: ${replication_job_id}
-    - name: SPEC
-      value: ${localhostname}
-    - name: HADOOP_CONF_DIR
-      value: /etc/${service.sid}/conf
-    - name: DATA_DIRS
-      value: ${service['dfs.namenode.name.dir']}
-    - name: HEAP_SIZE
-      value: ${service['namenode.memory']}m
-    - name: SOCKETDIR
-      value: /var/run/${service.sid}
-    image: ${registryServer}:${registryPort}/jenkins/hdfs
-    imagePullPolicy: Always
-    name: hadoop-hdfs-namenode-${service.sid}-${localhostname}
-    volumeMounts:
-    - mountPath: /etc/${service.sid}/conf
-      name: hdfs
-    - mountPath: /var/run/hadoop-common
-      name: socketdir
-    - mountPath: /var/transwarp/logs
-      name: log
-    - mountPath: /var/transwarp/data
-      name: format
-    - mountPath: /etc/transwarp/conf/
-      name: topology
-    - mountPath: /var/run/${service.sid}
-      name: hdfssocketdir
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        name: hadoop-hdfs-namenode-${service.sid}-${localhostname}
+    spec:
+      containers:
+      - args:
+        - bootstrap.sh
+        - namenode
+        env:
+        - name: KRB_ENABLE
+          value: 'false'
+        - name: HADOOP_HA_NAMENODE_SERVICE
+          value: ${namenode1hostname},${namenode2hostname}
+        - name: HDFS_JOURNAL_NODE_SPEC
+          value: valid
+        - name: HDFS_HA
+          value: 'true'
+        - name: NAMENODE_ID
+          value: ${namenode_id}
+        - name: SPEC
+          value: ${localhostname}
+        - name: HADOOP_CONF_DIR
+          value: /etc/${service.sid}/conf
+        - name: DATA_DIRS
+          value: ${service['dfs.namenode.name.dir']}
+        - name: HEAP_SIZE
+          value: ${service['namenode.memory']}m
+        - name: SOCKETDIR
+          value: /var/run/${service.sid}
+        image: ${registryServer}:${registryPort}/jenkins/hdfs
+        imagePullPolicy: Always
+#        readinessProbe:
+#          httpGet:
+#            port: ${namenode_http_port}
+#            path: /dfshealth.html
+#          initialDelaySeconds: 60
+        name: hadoop-hdfs-namenode-${service.sid}-${localhostname}
+        volumeMounts:
+        - mountPath: /etc/${service.sid}/conf
+          name: hdfs
+        - mountPath: /var/run/hadoop-common
+          name: socketdir
+        - mountPath: /var/transwarp/logs
+          name: log
+        - mountPath: /var/transwarp/data
+          name: format
+        - mountPath: /etc/transwarp/conf/
+          name: topology
+        - mountPath: /var/run/${service.sid}
+          name: hdfssocketdir
 <#list service['dfs.namenode.name.dir']?split(",") as datadir>
-    - mountPath: ${datadir?trim}
-      name: namenodedir${datadir_index}
+        - mountPath: ${datadir?trim}
+          name: namenodedir${datadir_index}
 </#list>
-  - args:
-    - bootstrap.sh
-    - zkfc
-    env:
-    - name: HDFS_HA
-      value: 'true'
-    - name: KRB_ENABLE
-      value: 'false'
-    - name: HADOOP_HA_NAMENODE_SERVICE
-      value: ${namenode1hostname},${namenode2hostname}
-    - name: CLUSTER
-      value: ${service.sid}
-    - name: HDFS_JOURNAL_NODE_SPEC
-      value: valid
-    - name: HADOOP_CONF_DIR
-      value: /etc/${service.sid}/conf
-    image: ${registryServer}:${registryPort}/jenkins/hdfs
-    imagePullPolicy: Always
-    name: zkfc
-    volumeMounts:
-    - mountPath: /etc/${service.sid}/conf
-      name: hdfs
-    - mountPath: /var/run/hadoop-common
-      name: socketdir
-    - mountPath: /var/transwarp/logs
-      name: log
-  hostNetwork: true
-  nodeName: ${localhostname}
-  volumes:
-  - hostPath:
-      path: /var/log/${service.sid}
-    name: log
-  - hostPath:
-      path: /etc/${service.sid}/conf
-    name: hdfs
-  - hostPath:
-      path: /root/docker/common
-    name: socketdir
-  - hostPath:
-      path: /var/namenode_format/
-    name: format
-  - hostPath:
-      path: /etc/transwarp/conf/
-    name: topology
-  - hostPath:
-      path: /var/run/${service.sid}
-    name: hdfssocketdir
+      - args:
+        - bootstrap.sh
+        - zkfc
+        env:
+        - name: HDFS_HA
+          value: 'true'
+        - name: KRB_ENABLE
+          value: 'false'
+        - name: HADOOP_HA_NAMENODE_SERVICE
+          value: ${namenode1hostname},${namenode2hostname}
+        - name: CLUSTER
+          value: ${service.sid}
+        - name: HDFS_JOURNAL_NODE_SPEC
+          value: valid
+        - name: HADOOP_CONF_DIR
+          value: /etc/${service.sid}/conf
+        image: ${registryServer}:${registryPort}/jenkins/hdfs
+        imagePullPolicy: Always
+        name: zkfc
+        volumeMounts:
+        - mountPath: /etc/${service.sid}/conf
+          name: hdfs
+        - mountPath: /var/run/hadoop-common
+          name: socketdir
+        - mountPath: /var/transwarp/logs
+          name: log
+      hostNetwork: true
+<#if minhostname == localhostname>
+      nodeSelector:
+        namenode: "true"
+<#else>
+      nodeSelector:
+        secondarynamenode: "true"
+</#if>
+      volumes:
+      - hostPath:
+          path: /var/log/${service.sid}
+        name: log
+      - hostPath:
+          path: /etc/${service.sid}/conf
+        name: hdfs
+      - hostPath:
+          path: /root/docker/common
+        name: socketdir
+      - hostPath:
+          path: /var/namenode_format/
+        name: format
+      - hostPath:
+          path: /etc/transwarp/conf/
+        name: topology
+      - hostPath:
+          path: /var/run/${service.sid}
+        name: hdfssocketdir
 <#list service['dfs.namenode.name.dir']?split(",") as datadir>
-  - hostPath:
-      path: ${datadir?trim}
-    name: namenodedir${datadir_index}
+      - hostPath:
+          path: ${datadir?trim}
+        name: namenodedir${datadir_index}
 </#list>
