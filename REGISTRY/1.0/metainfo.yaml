@@ -23,10 +23,10 @@ roles:
         paths: ["/etc/${service.sid}/conf"]
         mode: "755"
     - directive: !<download>
-        url: "${repoRoot}/registry/registry.tar.gz"
+        url: "${transwarpRepo}/registry/registry.tar.gz"
         targetPath: "/etc/${service.sid}/registry.tar.gz"
     - directive: !<download>
-        url: "${repoRoot}/registry/registry.data.tar.gz"
+        url: "${transwarpRepo}/registry/registry.data.tar.gz"
         targetPath: "/etc/${service.sid}/registry.data.tar.gz"
     - directive: !<resource>
         templateType: Raw
