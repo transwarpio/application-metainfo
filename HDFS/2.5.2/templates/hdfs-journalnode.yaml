@@ -41,6 +41,7 @@ spec:
         image: ${registryServer}:${registryPort}/jenkins/hdfs
         imagePullPolicy: Always
         name: hadoop-hdfs-journalnode-${service.sid}-${localhostname}
+        # The path mounts on docker
         volumeMounts:
         - mountPath: /etc/${service.sid}/conf
           name: hdfs
@@ -50,6 +51,17 @@ spec:
           name: log
         - mountPath: /hadoop/journal
           name: journaldir
+      # Ensure that a node can have one hdfs-journalnode at most
+      podConflictSelectors:
+      - matchExpressions:
+        - key: podConflictName
+          operator: "="
+          values:
+          - "hdfs-journalnode"
+      # Ensure that only the node labeled "hdfs-journalnode=true" can start a hdfs-journalnode role (i.e., a pod)
+      nodeSelector:
+        hdfs-journalnode: "true"
+      # The path on real node
       volumes:
       - hostPath:
           path: /var/log/${service.sid}

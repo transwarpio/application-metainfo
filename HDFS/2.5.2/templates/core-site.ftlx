@@ -14,10 +14,10 @@
     federation=service.nameservices?? && service.nameservices?size gt 0
 >
 <configuration>
-<#assign fs_default_uri = "viewfs://" + fsid >
+<#assign fs_default_uri = "hdfs://" + fsid >
 <#if federation>
     <#if service.nameservices?size == 1>
-        <#assign fs_default_uri = "viewfs://" + service.nameservices[0]>
+        <#assign fs_default_uri = "hdfs://" + service.nameservices[0]>
     </#if>
 <#else>
     <#assign
@@ -68,7 +68,7 @@
 <@property "hadoop.proxyuser." + user + ".hosts" "*"/>
 <@property "hadoop.proxyuser." + user + ".groups" "*"/>
 <@property "net.topology.node.switch.mapping.impl" "org.apache.hadoop.net.TableMapping"/>
-<@property "net.topology.table.file.name" "/etc/transwarp/conf/topology.data"/>
+<@property "hadoop.security.group.mapping" "org.apache.hadoop.security.ShellBasedUnixGroupsMapping"/>
 <#--Take properties from the context-->
 <#list service['core_site'] as key, value>
     <@property key value/>

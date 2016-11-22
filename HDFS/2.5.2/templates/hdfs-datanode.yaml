@@ -60,12 +60,13 @@ spec:
         - name: HADOOP_CONF_DIR
           value: /etc/${service.sid}/conf
         - name: DATA_DIRS
-          value: ${service['dfs.datanode.data.dir']}
+          value: ${service['dfs.datanode.data.dir']?trim}
         - name: HEAP_SIZE
-          value: ${service['datanode.memory']}m
+          value: ${service['datanode.memory']?trim}m
         image: ${registryServer}:${registryPort}/jenkins/hdfs
         imagePullPolicy: Always
         name: hadoop-hdfs-datanode-${service.sid}-${localhostname}
+        # The path mounts on docker
         volumeMounts:
         - mountPath: /etc/${service.sid}/conf
           name: hdfs
@@ -80,18 +81,17 @@ spec:
           name: datanodedir${datadir_index}
 </#list>
       hostNetwork: true
-#      podConflictSelectors:
-#       - matchExpressions:
-#         - key: name
-#           operator: "="
-#           values:
-#           - "inceptorexecutor3"
-#      nodeSelector:
-#         inceptorexecutor3: "true"
-#         resources:
-#           limits:
-#             cpu: "4"
-#             memory: 8Gi
+      # Ensure that a node can have one hdfs-datanode at most
+      podConflictSelectors:
+      - matchExpressions:
+        - key: podConflictName
+          operator: "="
+          values:
+          - "hdfs-datanode"
+      # Ensure that only the node labeled "hdfs-datanode" can start a hdfs-datanode role (i.e., a pod)
+      nodeSelector:
+        hdfs-datanode: "true"
+      # The path on real node
       volumes:
       - hostPath:
           path: /var/log/${service.sid}

@@ -68,9 +68,9 @@ spec:
         - name: HADOOP_CONF_DIR
           value: /etc/${service.sid}/conf
         - name: DATA_DIRS
-          value: ${service['dfs.namenode.name.dir']}
+          value: ${service['dfs.namenode.name.dir']?trim}
         - name: HEAP_SIZE
-          value: ${service['namenode.memory']}m
+          value: ${service['namenode.memory']?trim}m
         - name: SOCKETDIR
           value: /var/run/${service.sid}
         image: ${registryServer}:${registryPort}/jenkins/hdfs
@@ -81,6 +81,7 @@ spec:
 #            path: /dfshealth.html
 #          initialDelaySeconds: 60
         name: hadoop-hdfs-namenode-${service.sid}-${localhostname}
+        # The path mounts on docker
         volumeMounts:
         - mountPath: /etc/${service.sid}/conf
           name: hdfs
@@ -117,6 +118,7 @@ spec:
         image: ${registryServer}:${registryPort}/jenkins/hdfs
         imagePullPolicy: Always
         name: zkfc
+        # The path mounts on docker
         volumeMounts:
         - mountPath: /etc/${service.sid}/conf
           name: hdfs
@@ -125,13 +127,17 @@ spec:
         - mountPath: /var/transwarp/logs
           name: log
       hostNetwork: true
-<#if minhostname == localhostname>
+      # Ensure that a node can have one hdfs-namenode at most
+      podConflictSelectors:
+      - matchExpressions:
+        - key: podConflictName
+          operator: "="
+          values:
+          - "hdfs-namenode"
+      # Ensure that only the node labeled "hdfs-namenode" can start a hdfs-namenode role (i.e., a pod)
       nodeSelector:
-        namenode: "true"
-<#else>
-      nodeSelector:
-        secondarynamenode: "true"
-</#if>
+        hdfs-namenode: "true"
+      # The path on real node
       volumes:
       - hostPath:
           path: /var/log/${service.sid}

@@ -267,17 +267,6 @@
   groups: []
   visibility: READ_WRITE
 
-- name: namenode.memory
-  recommendExpression: 6120
-  defaultValue: null
-  valueType: MB
-  scope: !<RoleTypes>
-    roleTypes:
-    - HDFS_NAMENODE
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
 - name: datanode.memory
   recommendExpression: 4096
   defaultValue: null
@@ -308,10 +297,28 @@
   visibility: READ_WRITE
 
 - name: dfs.datanode.data.dir.perm
-  recommendExpression: 700
+  recommendExpression: 755
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: [hdfs_site]
+  visibility: READ_WRITE
+
+- name: fs.trash.interval
+  recommendExpression: 1440
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [core_site]
+  visibility: READ_WRITE
+
+- name: net.topology.table.file.name
+  recommendExpression: /etc/transwarp/conf/topology.data
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [core_site]
   visibility: READ_WRITE

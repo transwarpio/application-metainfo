@@ -56,9 +56,6 @@ roles:
           templatePath: "hdfs-datanode.yaml"
           targetPath: "/etc/${service.sid}/hadoop-hdfs-datanode-${service.sid}.yaml"
           mode: "755"
-#      - directive: !<docker-compose>
-#          action: Pull
-#          file: "/etc/${service.sid}/hadoop-hdfs-datanode-${service.sid}.yaml"
     - type: Config
       directives:
       - directive: !<resource>
@@ -83,6 +80,11 @@ roles:
             mode: "755"
     - type: Start
       directives:
+      # Add labelKey "hdfs-datanode" for node ${localhostname}
+      - directive: !<kubectl-label>
+            action: AddLabel
+            hostname: ${localhostname}
+            labelKey: "hdfs-datanode"
       - directive: !<kubectl>
             action: Start
             file: "/etc/${service.sid}/hadoop-hdfs-datanode-${service.sid}.yaml"
@@ -174,6 +176,11 @@ roles:
             mode: "755"
       - type: Start
         directives:
+        # Add labelKey "hdfs-namenode" for node ${localhostname}
+        - directive: !<kubectl-label>
+            action: AddLabel
+            hostname: ${localhostname}
+            labelKey: "hdfs-namenode"
         - directive: !<kubectl>
             action: Start
             file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
@@ -246,14 +253,6 @@ roleGroups:
 #            - directive: !<docker-compose>
 #                action: Pull
 #                file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
-#            - directive: !<resource>
-#                templateType: FreeMarker
-#                templatePath: "hdfs-namenode-format.yaml"
-#                targetPath: "/etc/${service.sid}/hadoop-hdfs-namenode-format-${service.sid}.yaml"
-#                mode: "755"
-#            - directive: !<docker-compose>
-#                action: Pull
-#                file: "/etc/${service.sid}/hadoop-hdfs-namenode-format-${service.sid}.yaml"
           - type: Config
             directives:
             - directive: !<resource>
@@ -281,13 +280,13 @@ roleGroups:
                 templatePath: "hdfs-namenode.yaml"
                 targetPath: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
                 mode: "755"
-#            - directive: !<resource>
-#                templateType: FreeMarker
-#                templatePath: "hdfs-namenode-format.yaml"
-#                targetPath: "/etc/${service.sid}/hadoop-hdfs-namenode-format-${service.sid}.yaml"
-#                mode: "755"
           - type: Start
             directives:
+            # Add labelKey "hdfs-namenode" for node ${localhostname}
+            - directive: !<kubectl-label>
+                action: AddLabel
+                hostname: ${localhostname}
+                labelKey: "hdfs-namenode"
             - directive: !<kubectl>
                 action: Start
                 file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
@@ -376,6 +375,11 @@ roleGroups:
                 mode: "755"
           - type: Start
             directives:
+            # Add labelKey "hdfs-journalnode" for node ${localhostname}
+            - directive: !<kubectl-label>
+                action: AddLabel
+                hostname: ${localhostname}
+                labelKey: "hdfs-journalnode"
             - directive: !<kubectl>
                 action: Start
                 file: "/etc/${service.sid}/hadoop-hdfs-journalnode-${service.sid}.yaml"
