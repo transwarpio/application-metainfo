@@ -63,6 +63,12 @@ roles:
         mode: "755"
   - type: Start
     directives:
+    # Add labelKey "zookeeper-server" for node ${localhostname}
+    - directive: !<kubectl-label>
+        action: AddLabel
+        hostname: ${localhostname}
+        labelKey: "zookeeper-server"
+    # Start zookeeper using zookeeper-server-${service.sid}.yaml
     - directive: !<kubectl>
         action: Start
         file: "/etc/${service.sid}/zookeeper-server-${service.sid}.yaml"

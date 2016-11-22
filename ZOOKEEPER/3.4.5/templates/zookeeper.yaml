@@ -3,7 +3,7 @@
   registryPort=dependencies.REGISTRY[registryServer]['registry.port']
   >
 apiVersion: v1
-kind: Pod
+kind: Pod # TODO Zookeeper can surport RC ?
 metadata:
   labels:
     name: zookeeper-server-${service.sid}-${localhostname}
@@ -24,6 +24,7 @@ spec:
       image: ${registryServer}:${registryPort}/jenkins/zookeeper
       imagePullPolicy: Always
       name: zookeeper-server-${service.sid}
+      # The path mounts on docker
       volumeMounts:
        - mountPath: /var/transwarp/logs
          name: log
@@ -31,10 +32,17 @@ spec:
          name: zookeeper
        - mountPath: /var/${service.sid}
          name: data
-   #   resources:
-   #     limits:
-   #       cpu: "1"
-   #       memory: 1Gi
+    # Ensure that a node can have one zookeeper-server at most
+    podConflictSelectors:
+    - matchExpressions:
+      - key: podConflictName
+        operator: "="
+        values:
+        - "zookeeper-server"
+    # Ensure that only the node labeled "zookeeper-server=true" can start a zookeeper role (i.e., a pod)
+    nodeSelector:
+      zookeeper-server: "true"
+    # The path on real node
     volumes:
     - hostPath:
         path: /var/log/${service.sid}
