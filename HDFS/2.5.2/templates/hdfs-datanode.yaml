@@ -27,8 +27,8 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    name: hadoop-hdfs-datanode-${service.sid}-${localhostname}
-  name: hadoop-hdfs-datanode-${service.sid}-${localhostname}
+    name: hadoop-hdfs-datanode-${service.sid}
+  name: hadoop-hdfs-datanode-${service.sid}
   namespace: default
 spec:
   replicas: 3
@@ -40,7 +40,7 @@ spec:
   template:
     metadata:
       labels:
-        name: hadoop-hdfs-datanode-${service.sid}-${localhostname}
+        name: hadoop-hdfs-datanode-${service.sid}
     spec:
       containers:
       - args:
@@ -65,7 +65,7 @@ spec:
           value: ${service['datanode.memory']?trim}m
         image: ${registryServer}:${registryPort}/jenkins/hdfs
         imagePullPolicy: Always
-        name: hadoop-hdfs-datanode-${service.sid}-${localhostname}
+        name: hadoop-hdfs-datanode-${service.sid}
         # The path mounts on docker
         volumeMounts:
         - mountPath: /etc/${service.sid}/conf
