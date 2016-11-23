@@ -1,0 +1,459 @@
+- name: hbase.regionserver.replication.handler.count
+  recommendExpression: 10
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.partition.ignore.unavailable.clusters
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.hstore.blockingStoreFiles
+  recommendExpression: 30
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.sservice.search.poolsize
+  recommendExpression: 25
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.sservice.handler.count
+  recommendExpression: 25
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.sservice.local.cacheinterval
+  recommendExpression: 600000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+
+- name: hbase.regionserver.fileSplitTimeout
+  recommendExpression: 300000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.hregion.max.filesize
+  recommendExpression: 3758096384
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.client.scanner.caching
+  recommendExpression: 200
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.sservice.scheduler.poolsize
+  recommendExpression: 5
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.abort.disconected.batchmutate
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.coprocessor.master.classes
+  recommendExpression: org.apache.hadoop.hbase.master.TransactionMasterObserver
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.master.distributed.log.replay
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.assignment.timeout.management
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.zookeeper.leaderport
+  recommendExpression: 3888
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.balancer.period
+  recommendExpression: 300000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.regionserver.handler.count
+  recommendExpression: 100
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.client.operation.timeout
+  recommendExpression: 60000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.zookeeper.property.maxClientCnxns
+  recommendExpression: 2000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.sservice.scheduler.frequency
+  recommendExpression: 300000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.regionserver.info.port
+  recommendExpression: 60030
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.sservice.port
+  recommendExpression: 61000
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.regionserver.lease.period
+  recommendExpression: 600000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: zookeeper.session.timeout
+  recommendExpression: 180000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: dfs.support.append
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.rpc.timeout
+  recommendExpression: 120000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.sservice.table.localrate
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.sservice.local.mergeinterval
+  recommendExpression: 600000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.zookeeper.peerport
+  recommendExpression: 2888
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.hregion.memstore.mslab.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.regionserver.global.memstore.upperLimit
+  recommendExpression: 0.3
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.zookeeper.property.clientPort
+  recommendExpression: 2181
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.hregion.memstore.chunkpool.maxsize
+  recommendExpression: 0.3
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.sservice.tolerable.timediff
+  recommendExpression: 60000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.lightweight.snapshotmanager.enable
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.master.info.port
+  recommendExpression: 60010
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.master.assignment.timeoutmonitor.period
+  recommendExpression: 600000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.hregion.memstore.flush.size
+  recommendExpression: 67108864
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.coprocessor.region.classes
+  recommendExpression: org.apache.hadoop.hbase.transaction.cp.TransactionServiceImpl,org.apache.hadoop.hbase.transaction.cp.TransactionScanObserver,org.apache.hadoop.hbase.regionserver.TransactionRegionObserver,org.apache.hadoop.hyperbase.coprocessor.LocalIndexerCoprocessor,org.apache.hadoop.hyperbase.secondaryindex.coprocessor.Indexer
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.client.meta.operation.timeout
+  recommendExpression: 60000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.sservice.scan.pagesize
+  recommendExpression: 50
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.use.partition.table
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.client.scanner.timeout.period
+  recommendExpression: 60000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.regionserver.info.bindAddress
+  recommendExpression: 0.0.0.0
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hfile.block.cache.size
+  recommendExpression: 0.1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.regions.slop
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.cluster.distributed
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.regionserver.global.memstore.lowerLimit
+  recommendExpression: 0.25
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.master.port
+  recommendExpression: 60000
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.regionserver.port
+  recommendExpression: 60020
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.hregion.majorcompaction.cron
+  recommendExpression: 0 0 1 * * ?
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE

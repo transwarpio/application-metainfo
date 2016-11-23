@@ -1,0 +1,243 @@
+---
+name: HYPERBASE
+version: 1.0-tdh50
+global: false
+namePrefix: Hyperbase
+friendlyName: "Hyperbase"
+dependencies:
+#  - name: LICENSE_SERVICE
+#    minVersion: 1.0
+#    maxVersion: 1.0
+#    optional: false
+  - name: ZOOKEEPER
+    minVersion: 3.4.5-tdh50
+    maxVersion: 3.4.5-tdh50
+    optional: false
+  - name: HDFS
+    minVersion: 2.5.2-tdh50
+    maxVersion: 2.5.2-tdh50
+    optional: false
+user: hbase
+roles:
+- name: HYEPRBASE_MASTER
+  friendlyName: "Hyperbase Master"
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
+        mode: "775"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hyperbase-master.yaml"
+        targetPath: "/etc/${service.sid}/hyperbase-master-${service.sid}.yaml"
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/log4j.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hbase-site.ftlx"
+        targetPath: "/etc/${service.sid}/conf/hbase-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hbase-env.sh"
+        targetPath: "/etc/${service.sid}/conf/hbase-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "jmxremote.access"
+        targetPath: "/etc/${service.sid}/conf/jmxremote.access"
+        mode: "600"
+        owner: "hbase"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "jmxremote.passwd"
+        targetPath: "/etc/${service.sid}/conf/jmxremote.passwd"
+        mode: "600"
+        owner: "hbase"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-hbase.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-hbase.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hyperbase-master.yaml"
+        targetPath: "/etc/${service.sid}/hyperbase-master-${service.sid}.yaml"
+        mode: "755"
+  - type: Start
+    directives:
+    # Add labelKey "hyperbase-master" for node ${localhostname}
+    - directive: !<kubectl-label>
+        action: AddLabel
+        hostname: ${localhostname}
+        labelKey: "hyperbase-master"
+    - directive: !<kubectl>
+        action: Start
+        file: "/etc/${service.sid}/hyperbase-master-${service.sid}.yaml"
+  - type: Stop
+    directives:
+    - directive: !<kubectl>
+        action: Stop
+        file: "/etc/${service.sid}/hyperbase-master-${service.sid}.yaml"
+- name: HYEPRBASE_REGIONSERVER
+  friendlyName: "Hyperbase Regionserver"
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<EachNode> {}
+  suggestion:
+  - criteria: !<EachNode> {}
+  validation:
+  - criteria: !<EachNode> {}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
+        mode: "775"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hyperbase-regionserver.yaml"
+        targetPath: "/etc/${service.sid}/hyperbase-regionserver-${service.sid}.yaml"
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/log4j.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hbase-site.ftlx"
+        targetPath: "/etc/${service.sid}/conf/hbase-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hbase-env.sh"
+        targetPath: "/etc/${service.sid}/conf/hbase-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "jmxremote.access"
+        targetPath: "/etc/${service.sid}/conf/jmxremote.access"
+        mode: "600"
+        owner: "hbase"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "jmxremote.passwd"
+        targetPath: "/etc/${service.sid}/conf/jmxremote.passwd"
+        mode: "600"
+        owner: "hbase"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-hbase.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-hbase.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hyperbase-regionserver.yaml"
+        targetPath: "/etc/${service.sid}/hyperbase-regionserver-${service.sid}.yaml"
+        mode: "755"
+  - type: Start
+    directives:
+    # Add labelKey "hyperbase-regionserver" for node ${localhostname}
+    - directive: !<kubectl-label>
+        action: AddLabel
+        hostname: ${localhostname}
+        labelKey: "hyperbase-regionserver"
+    - directive: !<kubectl>
+        action: Start
+        file: "/etc/${service.sid}/hyperbase-regionserver-${service.sid}.yaml"
+  - type: Stop
+    directives:
+    - directive: !<kubectl>
+        action: Stop
+        file: "/etc/${service.sid}/hyperbase-regionserver-${service.sid}.yaml"
+- name: HYEPRBASE_THRIFT
+  friendlyName: "Hyperbase Thrift"
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
+        mode: "775"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hyperbase-thrift.yaml"
+        targetPath: "/etc/${service.sid}/hyperbase-thrift-${service.sid}.yaml"
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/log4j.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hbase-site.ftlx"
+        targetPath: "/etc/${service.sid}/conf/hbase-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hbase-env.sh"
+        targetPath: "/etc/${service.sid}/conf/hbase-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "jmxremote.access"
+        targetPath: "/etc/${service.sid}/conf/jmxremote.access"
+        mode: "600"
+        owner: "hbase"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "jmxremote.passwd"
+        targetPath: "/etc/${service.sid}/conf/jmxremote.passwd"
+        mode: "600"
+        owner: "hbase"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-hbase.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-hbase.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hyperbase-thrift.yaml"
+        targetPath: "/etc/${service.sid}/hyperbase-thrift-${service.sid}.yaml"
+        mode: "755"
+  - type: Start
+    directives:
+    # Add labelKey "hyperbase-thrift" for node ${localhostname}
+    - directive: !<kubectl-label>
+        action: AddLabel
+        hostname: ${localhostname}
+        labelKey: "hyperbase-thrift"
+    - directive: !<kubectl>
+        action: Start
+        file: "/etc/${service.sid}/hyperbase-thrift-${service.sid}.yaml"
+  - type: Stop
+    directives:
+    - directive: !<kubectl>
+        action: Stop
+        file: "/etc/${service.sid}/hyperbase-thrift-${service.sid}.yaml"

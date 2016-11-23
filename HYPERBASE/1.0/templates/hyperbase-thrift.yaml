@@ -1,0 +1,69 @@
+<#assign
+  registryServer=dependencies.REGISTRY.roles['REGISTRY_SERVER'][0].hostname
+  registryPort=dependencies.REGISTRY[registryServer]['registry.port']
+  >
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    name: hyperbase-thrift-${service.sid}
+  name: hyperbase-thrift-${service.sid}
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        name: hyperbase-thrift-${service.sid}
+    spec:
+      hostNetwork: true 
+      containers:
+      - args:
+        - bootstrap.sh
+        - thrift
+        env:
+        image: ${registryServer}:${registryPort}/jenkins/hbase
+        imagePullPolicy: Always
+        name: hyperbase-thrift-${service.sid}
+        volumeMounts:
+        - mountPath: /etc/hyperbase/conf
+          name: hyperbase
+        - mountPath: /etc/hadoop/conf
+          name: hdfs
+        - mountPath: /var/run/hadoop-common
+          name: socketdir
+        - mountPath: /var/transwarp/logs
+          name: log
+        - mountPath: /var/run/${dependencies.HDFS.sid}
+          name: hdfssocketdir
+      # Ensure that a node can have one hyperbase-thrift at most
+      podConflictSelectors:
+      - matchExpressions:
+        - key: podConflictName
+          operator: "="
+          values:
+          - "hyperbase-thrift"
+      # Ensure that only the node labeled "hyperbase-thrift=true" can start a hyperbase-thrift role (i.e., a pod)
+      nodeSelector:
+        hyperbase-thrift: "true"
+      # The path on real node
+      volumes:
+      - hostPath:
+          path: /var/log/${service.sid}
+        name: log
+      - hostPath:
+          path: /etc/${service.sid}/conf
+        name: hyperbase
+      - hostPath:
+          path: /etc/${dependencies.HDFS.sid}/conf
+        name: hdfs
+      - hostPath:
+          path: /root/docker/common
+        name: socketdir
+      - hostPath:
+          path: /var/run/${dependencies.HDFS.sid}
+        name: hdfssocketdir

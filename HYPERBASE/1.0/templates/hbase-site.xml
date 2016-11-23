@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<configuration>
+
+    <property>
+        <name>hregion.index.path</name>
+        <value>hdfs://nameservice1/hyperbase1_hregionindex</value>
+    </property>
+    <property>
+        <name>hbase.rootdir</name>
+        <value>hdfs://nameservice1/hyperbase1</value>
+    </property>
+    <property>
+        <name>hbase.sservice.hdfs.dir</name>
+        <value>hdfs://nameservice1/hyperbase1/hbase_timediff</value>
+    </property>
+
+</configuration>
