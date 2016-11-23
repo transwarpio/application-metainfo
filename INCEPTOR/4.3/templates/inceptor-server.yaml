@@ -1,0 +1,120 @@
+<#assign
+  registryServer=dependencies.REGISTRY.roles['REGISTRY_SERVER'][0].hostname
+  registryPort=dependencies.REGISTRY[registryServer]['registry.port']
+  >
+<#--handle dependent.zookeeper-->
+<#if dependencies.ZOOKEEPER??>
+  <#assign zookeeper=dependencies.ZOOKEEPER quorums=[]>
+  <#list zookeeper.roles.ZOOKEEPER as role>
+    <#assign quorums += [role.hostname]>
+  </#list>
+  <#assign quorum = quorums?join(",")>
+</#if>
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    name: inceptor-server-${service.sid}
+  name: inceptor-server-${service.sid}
+  namespace: default
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        name: inceptor-service-${service.sid}
+    spec:
+      hostNetwork: true
+      containers:
+      - args:
+        - bootstrap.sh
+        - inceptor
+        env:
+        - name: TRANSWARP_ZOOKEEPER_QUORUM
+          value: ${quorum}
+        - name: JAVAX_JDO_OPTION_CONNECTION_USERNAME
+          value: ${service['hive.metastore.username']}
+        - name: JAVAX_JDO_OPTION_CONNECTION_PASSWORD
+          value: ${service['hive.metastore.password']}
+        - name: MYSQL_SERVER
+          value: ${service.roles.INCEPTOR_MYSQL[0]['hostname']}
+        - name: HIVE_METASTORE_SERVER
+          value: ${service.roles.INCEPTOR_METASTORE[0]['hostname']}
+        - name: SPARK_DRIVER_PORT
+          value: "51888"
+        - name: SPARK_DRIVER_ADDR
+          value: ${service.roles.INCEPTOR_SERVER[0]['hostname']}
+        - name: EXECUTOR_ID_PATH
+          value: /${service.sid}/executorID
+        - name: DATADIR
+          value: /var/transwarp/data0/
+        - name: INCEPTOR_LOG_DIR
+          value: /var/transwarp/logs
+        - name: SPARK_FASTDISK_DIR
+          value: /var/transwarp/data0/fastdisk
+        - name: SPARK_LOCAL_DIR
+          value: /var/transwarp/data0/disk
+        - name: HIVE_SERVER2
+          value: "true"
+        image: ${registryServer}:${registryPort}/jenkins/inceptor:testing-latest
+        imagePullPolicy: Always
+        name: inceptor-service-${service.sid}
+        # The path mounts on docker
+        volumeMounts:
+        - mountPath: /var/run/${dependencies.HDFS.sid}
+          name: hdfssocketdir
+        - mountPath: /var/run/hadoop-common
+          name: socketdir
+        - mountPath: /etc/inceptor/conf
+          name: inceptor
+        - mountPath: /etc/hyperbase/conf
+          name: hyperbase
+        - mountPath: /etc/hadoop/conf
+          name: hdfs
+        - mountPath: /var/transwarp/logs
+          name: log
+        - mountPath: /var/transwarp/data0/fastdisk
+          name: fastdir
+        - mountPath: /var/transwarp/data0/disk
+          name: localdir
+      # Ensure that a node can have one inceptor-server at most
+      podConflictSelectors:
+      - matchExpressions:
+        - key: podConflictName
+          operator: "="
+          values:
+          - "inceptor-server"
+      # Ensure that only the node labeled "inceptor-server=true" can start a inceptor-server role (i.e., a pod)
+      nodeSelector:
+        inceptor-server: "true"
+      # The path on real node
+      volumes:
+      - hostPath:
+          path: /var/run/${dependencies.HDFS.sid}
+        name: hdfssocketdir
+      - hostPath:
+          path: /root/docker/common
+        name: socketdir
+      - hostPath:
+          path: /etc/${service.sid}/conf
+        name: inceptor
+      - hostPath:
+          path: /etc/hyperbase1/conf
+        name: hyperbase
+      - hostPath:
+          path: /etc/${dependencies.HDFS.sid}/conf
+        name: hdfs
+      - hostPath:
+          path: /var/log/${service.sid}
+        name: log
+      - hostPath:
+          path: /mnt/ramdisk/ngmr
+        name: fastdir
+      - hostPath:
+          path: /hadoop/ngmr/${service.sid}
+        name: localdir

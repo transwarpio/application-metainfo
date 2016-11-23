@@ -1,0 +1,321 @@
+---
+name: INCEPTOR
+version: 4.3-tdh50
+global: false
+namePrefix: Inceptor
+friendlyName: "Inceptor"
+dependencies: #TODO consider external registry
+#  - name: LICENSE_SERVICE
+#    minVersion: 1.0
+#    maxVersion: 1.0
+#    optional: false
+  - name: ZOOKEEPER
+    minVersion: 3.4.5-tdh50
+    maxVersion: 3.4.5-tdh50
+    optional: false
+  - name: HDFS
+    minVersion: 2.5.2-tdh50
+    maxVersion: 2.5.2-tdh50
+    optional: false
+user: hive
+roles:
+- name: INCEPTOR_SERVER
+  friendlyName: "Inceptor Server"
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
+        mode: "775"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hive-log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/hive-log4j.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hive-log4j.properties.server"
+        targetPath: "/etc/${service.sid}/conf/hive-log4j.properties.server"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "inceptor-server.yaml"
+        targetPath: "/etc/${service.sid}/inceptor-server-${service.sid}.yaml"
+        mode: "755"
+#    - directive: !<docker-compose>
+#        action: Pull
+#        file: "/etc/${service.sid}/inceptor-server-${service.sid}.yaml"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "ngmr-context-env.sh"
+        targetPath: "/etc/${service.sid}/conf/ngmr-context-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "ngmr-env.sh"
+        targetPath: "/etc/${service.sid}/conf/ngmr-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hive-env.sh"
+        targetPath: "/etc/${service.sid}/conf/hive-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hive-site.ftlx"
+        targetPath: "/etc/${service.sid}/conf/hive-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "inceptor-server.yaml"
+        targetPath: "/etc/${service.sid}/inceptor-server-${service.sid}.yaml"
+        mode: "755"
+  - type: Start
+    directives:
+    # Add labelKey "inceptor-server" for node ${localhostname}
+    - directive: !<kubectl-label>
+        action: AddLabel
+        hostname: ${localhostname}
+        labelKey: "inceptor-server"
+    - directive: !<kubectl>
+        action: Start
+        file: "/etc/${service.sid}/inceptor-server-${service.sid}.yaml"
+  - type: Stop
+    directives:
+    - directive: !<kubectl>
+        action: Stop
+        file: "/etc/${service.sid}/inceptor-server-${service.sid}.yaml"
+- name: INCEPTOR_MYSQL
+  friendlyName: "Inceptor Mysql"
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/log/${service.sid}" ,"/var/run/${service.sid}", "/etc/${service.sid}/conf"]
+        mode: "775"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hive-log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/hive-log4j.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hive-log4j.properties.server"
+        targetPath: "/etc/${service.sid}/conf/hive-log4j.properties.server"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "inceptor-mysql.yaml"
+        targetPath: "/etc/${service.sid}/inceptor-mysql-${service.sid}.yaml"
+        mode: "755"
+#    - directive: !<docker-compose>
+#        action: Pull
+#        file: "/etc/${service.sid}/inceptor-mysql-${service.sid}.yaml"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "ngmr-context-env.sh"
+        targetPath: "/etc/${service.sid}/conf/ngmr-context-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "ngmr-env.sh"
+        targetPath: "/etc/${service.sid}/conf/ngmr-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hive-env.sh"
+        targetPath: "/etc/${service.sid}/conf/hive-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hive-site.ftlx"
+        targetPath: "/etc/${service.sid}/conf/hive-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "inceptor-mysql.yaml"
+        targetPath: "/etc/${service.sid}/inceptor-mysql-${service.sid}.yaml"
+        mode: "755"
+  - type: Start
+    directives:
+    # Add labelKey "inceptor-mysql" for node ${localhostname}
+    - directive: !<kubectl-label>
+        action: AddLabel
+        hostname: ${localhostname}
+        labelKey: "inceptor-mysql"
+    - directive: !<kubectl>
+        action: Start
+        file: "/etc/${service.sid}/inceptor-mysql-${service.sid}.yaml"
+  - type: Stop
+    directives:
+    - directive: !<kubectl>
+        action: Stop
+        file: "/etc/${service.sid}/inceptor-mysql-${service.sid}.yaml"
+- name: INCEPTOR_METASTORE
+  friendlyName: "Inceptor Metastore"
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/log/${service.sid}" ,"/var/run/${service.sid}", "/etc/${service.sid}/conf"]
+        mode: "775"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hive-log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/hive-log4j.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hive-log4j.properties.server"
+        targetPath: "/etc/${service.sid}/conf/hive-log4j.properties.server"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "inceptor-metastore.yaml"
+        targetPath: "/etc/${service.sid}/inceptor-metastore-${service.sid}.yaml"
+        mode: "755"
+#    - directive: !<docker-compose>
+#        action: Pull
+#        file: "/etc/${service.sid}/inceptor-metastore-${service.sid}.yaml"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "ngmr-context-env.sh"
+        targetPath: "/etc/${service.sid}/conf/ngmr-context-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "ngmr-env.sh"
+        targetPath: "/etc/${service.sid}/conf/ngmr-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hive-env.sh"
+        targetPath: "/etc/${service.sid}/conf/hive-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hive-site.ftlx"
+        targetPath: "/etc/${service.sid}/conf/hive-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "inceptor-metastore.yaml"
+        targetPath: "/etc/${service.sid}/inceptor-metastore-${service.sid}.yaml"
+        mode: "755"
+  - type: Start
+    directives:
+    # Add labelKey "inceptor-metastore" for node ${localhostname}
+    - directive: !<kubectl-label>
+        action: AddLabel
+        hostname: ${localhostname}
+        labelKey: "inceptor-metastore"
+    - directive: !<kubectl>
+        action: Start
+        file: "/etc/${service.sid}/inceptor-metastore-${service.sid}.yaml"
+  - type: Stop
+    directives:
+    - directive: !<kubectl>
+        action: Stop
+        file: "/etc/${service.sid}/inceptor-metastore-${service.sid}.yaml"
+- name: INCEPTOR_EXECUTOR
+  friendlyName: "Inceptor Executor"
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<EachNode> {}
+  suggestion:
+  - criteria: !<EachNode> {}
+  validation:
+  - criteria: !<EachNode> {}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/log/${service.sid}", "/var/run/${service.sid}", "/etc/${service.sid}/conf"]
+        mode: "775"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hive-log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/hive-log4j.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hive-log4j.properties.server"
+        targetPath: "/etc/${service.sid}/conf/hive-log4j.properties.server"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "inceptor-executor.yaml"
+        targetPath: "/etc/${service.sid}/inceptor-executor-${service.sid}.yaml"
+        mode: "755"
+#    - directive: !<docker-compose>
+#        action: Pull
+#        file: "/etc/${service.sid}/inceptor-executor-${service.sid}.yaml"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "ngmr-context-env.sh"
+        targetPath: "/etc/${service.sid}/conf/ngmr-context-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "ngmr-env.sh"
+        targetPath: "/etc/${service.sid}/conf/ngmr-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hive-env.sh"
+        targetPath: "/etc/${service.sid}/conf/hive-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hive-site.ftlx"
+        targetPath: "/etc/${service.sid}/conf/hive-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "inceptor-executor.yaml"
+        targetPath: "/etc/${service.sid}/inceptor-executor-${service.sid}.yaml"
+        mode: "755"
+  - type: Start
+    directives:
+    # Add labelKey "inceptor-executor" for node ${localhostname}
+    - directive: !<kubectl-label>
+        action: AddLabel
+        hostname: ${localhostname}
+        labelKey: "inceptor-executor"
+    - directive: !<kubectl>
+        action: Start
+        file: "/etc/${service.sid}/inceptor-executor-${service.sid}.yaml"
+  - type: Stop
+    directives:
+    - directive: !<kubectl>
+        action: Stop
+        file: "/etc/${service.sid}/inceptor-executor-${service.sid}.yaml"

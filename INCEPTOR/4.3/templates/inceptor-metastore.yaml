@@ -1,0 +1,67 @@
+<#assign
+  registryServer=dependencies.REGISTRY.roles['REGISTRY_SERVER'][0].hostname
+  registryPort=dependencies.REGISTRY[registryServer]['registry.port']
+  >
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    name: inceptor-metastore-${service.sid}
+  name: inceptor-metastore-${service.sid}
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        name: inceptor-metastore-${service.sid}
+    spec:
+      hostNetwork: true
+      containers:
+      - args:
+        - bootstrap.sh
+        - metastore
+        env:
+        - name: MYSQL_SERVER
+          value: ${service.roles.INCEPTOR_MYSQL[0]['hostname']}
+        image: ${registryServer}:${registryPort}/jenkins/inceptor:testing-latest
+        imagePullPolicy: Always
+        name: inceptor-metastore-${service.sid}
+        # The path mounts on docker
+        volumeMounts:
+        - mountPath: /var/run/hadoop-common
+          name: socketdir
+        - mountPath: /etc/inceptor/conf
+          name: inceptor
+        - mountPath: /etc/hyperbase/conf
+          name: hyperbase
+        - mountPath: /etc/hadoop/conf
+          name: hdfs
+      # Ensure that a node can have one inceptor-metastore at most
+      podConflictSelectors:
+      - matchExpressions:
+        - key: podConflictName
+          operator: "="
+          values:
+          - "inceptor-metastore"
+      # Ensure that only the node labeled "inceptor-metastore=true" can start a inceptor-metastore role (i.e., a pod)
+      nodeSelector:
+        inceptor-metastore: "true"
+      # The path on real node
+      volumes:
+      - hostPath:
+          path: /root/docker/common
+        name: socketdir
+      - hostPath:
+          path: /etc/${service.sid}/conf
+        name: inceptor
+      - hostPath:
+          path: /etc/hyperbase1/conf
+        name: hyperbase
+      - hostPath:
+          path: /etc/${dependencies.HDFS.sid}/conf
+        name: hdfs
