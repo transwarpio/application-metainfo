@@ -20,6 +20,7 @@ spec:
     metadata:
       labels:
         name: hyperbase-master-${service.sid}
+        podConflictName: hyperbase-master
     spec:
       hostNetwork: true 
       containers:

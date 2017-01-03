@@ -47,6 +47,7 @@ spec:
     metadata:
       labels:
         name: hadoop-hdfs-namenode-${service.sid}-${localhostname}
+        podConflictName: hdfs-namenode
     spec:
       containers:
       - args:

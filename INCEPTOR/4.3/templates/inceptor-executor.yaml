@@ -27,6 +27,7 @@ spec:
     metadata:
       labels:
         name: inceptor-executor-${service.sid}
+        podConflictName: inceptor-executor
     spec:
       hostNetwork: true 
       containers:

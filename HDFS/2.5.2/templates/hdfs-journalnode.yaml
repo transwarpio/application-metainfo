@@ -20,6 +20,7 @@ spec:
     metadata:
       labels:
         name: hadoop-hdfs-journalnode-${service.sid}
+        podConflictName: hdfs-journalnode
     spec:
       containers:
       - args:

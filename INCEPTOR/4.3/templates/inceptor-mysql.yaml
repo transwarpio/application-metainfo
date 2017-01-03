@@ -19,6 +19,7 @@ spec:
     metadata:
       labels:
         name: inceptor-mysql-${service.sid}
+        podConflictName: inceptor-mysql
     spec:
       hostNetwork: true
       containers:

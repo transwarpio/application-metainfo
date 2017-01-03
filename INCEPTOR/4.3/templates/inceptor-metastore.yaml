@@ -19,6 +19,7 @@ spec:
     metadata:
       labels:
         name: inceptor-metastore-${service.sid}
+        podConflictName: inceptor-metastore
     spec:
       hostNetwork: true
       containers:

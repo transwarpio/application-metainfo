@@ -30,8 +30,10 @@ roles:
     - type: Install
       directives:
       - directive: !<mkdirs>
-          paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf"]
+          paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
           mode: "755"
+    - type: Config
+      directives:
       - directive: !<resource>
           templateType: Raw
           templatePath: "log4j.properties"
@@ -47,17 +49,6 @@ roles:
           templatePath: "hadoop-metrics2-namenode.properties"
           targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-namenode.properties"
           mode: "755"
-      - directive: !<mkdirs>
-          paths: ["/var/${service.sid}", "/var/log/${service.sid}"]
-          mode: "755"
-          owner: "hdfs"
-      - directive: !<resource>
-          templateType: FreeMarker
-          templatePath: "hdfs-datanode.yaml"
-          targetPath: "/etc/${service.sid}/hadoop-hdfs-datanode-${service.sid}.yaml"
-          mode: "755"
-    - type: Config
-      directives:
       - directive: !<resource>
             templateType: FreeMarker
             templatePath: "core-site.ftlx"
@@ -118,12 +109,10 @@ roles:
       - type: Install
         directives:
         - directive: !<mkdirs>
-            paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf"]
+            paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
             mode: "755"
-        - directive: !<mkdirs>
-            paths: ["/var/${service.sid}", "/var/log/${service.sid}"]
-            mode: "755"
-            owner: "hdfs"
+      - type: Config
+        directives:
         - directive: !<resource>
             templateType: Raw
             templatePath: "log4j.properties"
@@ -139,16 +128,6 @@ roles:
             templatePath: "hadoop-metrics2-namenode.properties"
             targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-namenode.properties"
             mode: "755"
-        - directive: !<resource>
-            templateType: FreeMarker
-            templatePath: "hdfs-namenode.yaml"
-            targetPath: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
-            mode: "755"
-#        - directive: !<docker-compose>
-#            action: Pull
-#            file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
-      - type: Config
-        directives:
         - directive: !<resource>
             templateType: FreeMarker
             templatePath: "core-site.ftlx"
@@ -224,8 +203,10 @@ roleGroups:
           - type: Install
             directives:
             - directive: !<mkdirs>
-                paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf"]
+                paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
                 mode: "755"
+          - type: Config
+            directives:
             - directive: !<resource>
                 templateType: Raw
                 templatePath: "log4j.properties"
@@ -241,20 +222,6 @@ roleGroups:
                 templatePath: "hadoop-metrics2-namenode.properties"
                 targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-namenode.properties"
                 mode: "755"
-            - directive: !<mkdirs>
-                paths: ["/var/${service.sid}", "/var/log/${service.sid}"]
-                mode: "755"
-                owner: "hdfs"
-            - directive: !<resource>
-                templateType: FreeMarker
-                templatePath: "hdfs-namenode.yaml"
-                targetPath: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
-                mode: "755"
-#            - directive: !<docker-compose>
-#                action: Pull
-#                file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
-          - type: Config
-            directives:
             - directive: !<resource>
                 templateType: FreeMarker
                 templatePath: "core-site.ftlx"
@@ -327,8 +294,10 @@ roleGroups:
           - type: Install
             directives:
             - directive: !<mkdirs>
-                paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf"]
+                paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
                 mode: "755"
+          - type: Config
+            directives:
             - directive: !<resource>
                 templateType: Raw
                 templatePath: "log4j.properties"
@@ -344,20 +313,6 @@ roleGroups:
                 templatePath: "hadoop-metrics2-namenode.properties"
                 targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-namenode.properties"
                 mode: "755"
-            - directive: !<mkdirs>
-                paths: ["/var/${service.sid}", "/var/log/${service.sid}"]
-                mode: "755"
-                owner: "hdfs"
-            - directive: !<resource>
-                templateType: FreeMarker
-                templatePath: "hdfs-journalnode.yaml"
-                targetPath: "/etc/${service.sid}/hadoop-hdfs-journalnode-${service.sid}.yaml"
-                mode: "755"
-#            - directive: !<docker-compose>
-#                action: Pull
-#                file: "/etc/${service.sid}/hadoop-hdfs-journalnode-${service.sid}.yaml"
-          - type: Config
-            directives:
             - directive: !<resource>
                 templateType: FreeMarker
                 templatePath: "core-site.ftlx"

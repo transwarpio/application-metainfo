@@ -19,6 +19,7 @@ spec:
     metadata:
       labels:
         name: hyperbase-thrift-${service.sid}
+        podConflictName: hyperbase-thrift
     spec:
       hostNetwork: true 
       containers:

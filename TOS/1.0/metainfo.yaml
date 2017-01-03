@@ -25,17 +25,16 @@ roles:
     directives:
     - directive: !<mkdirs>
         paths: ["/var/log/${service.sid}" ,"/var/run/${service.sid}", "/etc/${service.sid}/conf"]
-        mode: "775"
-        owner: "root"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "docker-compose-master.yml"
-        targetPath: "/etc/${service.sid}/tos-master-${service.sid}.yaml"
         mode: "755"
     - directive: !<resource>
         templateType: Raw
         templatePath: "health_check.sh"
         targetPath: "/etc/${service.sid}/health_check.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "docker-compose-master.yml"
+        targetPath: "/etc/${service.sid}/tos-master-${service.sid}.yaml"
         mode: "755"
     - directive: !<docker-compose>
         action: Pull
@@ -102,4 +101,3 @@ roles:
     - directive: !<docker-compose>
         action: Stop
         file: "/etc/${service.sid}/tos-slave-${service.sid}.yaml"
-

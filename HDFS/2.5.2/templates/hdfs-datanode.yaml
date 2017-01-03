@@ -41,6 +41,7 @@ spec:
     metadata:
       labels:
         name: hadoop-hdfs-datanode-${service.sid}
+        podConflictName: hdfs-datanode
     spec:
       containers:
       - args:
@@ -63,6 +64,8 @@ spec:
           value: ${service['dfs.datanode.data.dir']?trim}
         - name: HEAP_SIZE
           value: ${service['datanode.memory']?trim}m
+        - name: SOCKETDIR
+          value: /var/run/${service.sid}
         image: ${registryServer}:${registryPort}/jenkins/hdfs
         imagePullPolicy: Always
         name: hadoop-hdfs-datanode-${service.sid}

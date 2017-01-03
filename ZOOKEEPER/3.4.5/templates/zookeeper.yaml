@@ -7,6 +7,7 @@ kind: Pod # TODO Zookeeper can surport RC ?
 metadata:
   labels:
     name: zookeeper-server-${service.sid}-${localhostname}
+    podConflictName: zookeeper-server
   name: zookeeper-server-${service.sid}-${localhostname}
   namespace: default
 spec:

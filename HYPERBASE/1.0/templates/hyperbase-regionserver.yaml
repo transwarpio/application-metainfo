@@ -19,6 +19,7 @@ spec:
     metadata:
       labels:
         name: hyperbase-regionserver-${service.sid}
+        podConflictName: hyperbase-regionserver
     spec:
       hostNetwork: true 
       containers:

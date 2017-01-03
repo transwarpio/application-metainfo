@@ -33,11 +33,6 @@ roles:
     directives:
     - directive: !<mkdirs>
         paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
-        mode: "775"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hyperbase-master.yaml"
-        targetPath: "/etc/${service.sid}/hyperbase-master-${service.sid}.yaml"
         mode: "755"
   - type: Config
     directives:
@@ -61,13 +56,11 @@ roles:
         templatePath: "jmxremote.access"
         targetPath: "/etc/${service.sid}/conf/jmxremote.access"
         mode: "600"
-        owner: "hbase"
     - directive: !<resource>
         templateType: Raw
         templatePath: "jmxremote.passwd"
         targetPath: "/etc/${service.sid}/conf/jmxremote.passwd"
         mode: "600"
-        owner: "hbase"
     - directive: !<resource>
         templateType: Raw
         templatePath: "hadoop-metrics2-hbase.properties"
@@ -107,11 +100,6 @@ roles:
     directives:
     - directive: !<mkdirs>
         paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
-        mode: "775"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hyperbase-regionserver.yaml"
-        targetPath: "/etc/${service.sid}/hyperbase-regionserver-${service.sid}.yaml"
         mode: "755"
   - type: Config
     directives:
@@ -135,13 +123,11 @@ roles:
         templatePath: "jmxremote.access"
         targetPath: "/etc/${service.sid}/conf/jmxremote.access"
         mode: "600"
-        owner: "hbase"
     - directive: !<resource>
         templateType: Raw
         templatePath: "jmxremote.passwd"
         targetPath: "/etc/${service.sid}/conf/jmxremote.passwd"
         mode: "600"
-        owner: "hbase"
     - directive: !<resource>
         templateType: Raw
         templatePath: "hadoop-metrics2-hbase.properties"
@@ -181,11 +167,6 @@ roles:
     directives:
     - directive: !<mkdirs>
         paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
-        mode: "775"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hyperbase-thrift.yaml"
-        targetPath: "/etc/${service.sid}/hyperbase-thrift-${service.sid}.yaml"
         mode: "755"
   - type: Config
     directives:
@@ -209,13 +190,11 @@ roles:
         templatePath: "jmxremote.access"
         targetPath: "/etc/${service.sid}/conf/jmxremote.access"
         mode: "600"
-        owner: "hbase"
     - directive: !<resource>
         templateType: Raw
         templatePath: "jmxremote.passwd"
         targetPath: "/etc/${service.sid}/conf/jmxremote.passwd"
         mode: "600"
-        owner: "hbase"
     - directive: !<resource>
         templateType: Raw
         templatePath: "hadoop-metrics2-hbase.properties"

@@ -33,7 +33,9 @@ roles:
     directives:
     - directive: !<mkdirs>
         paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
-        mode: "775"
+        mode: "755"
+  - type: Config
+    directives:
     - directive: !<resource>
         templateType: Raw
         templatePath: "hive-log4j.properties"
@@ -44,16 +46,6 @@ roles:
         templatePath: "hive-log4j.properties.server"
         targetPath: "/etc/${service.sid}/conf/hive-log4j.properties.server"
         mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "inceptor-server.yaml"
-        targetPath: "/etc/${service.sid}/inceptor-server-${service.sid}.yaml"
-        mode: "755"
-#    - directive: !<docker-compose>
-#        action: Pull
-#        file: "/etc/${service.sid}/inceptor-server-${service.sid}.yaml"
-  - type: Config
-    directives:
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "ngmr-context-env.sh"
@@ -108,7 +100,9 @@ roles:
     directives:
     - directive: !<mkdirs>
         paths: ["/var/log/${service.sid}" ,"/var/run/${service.sid}", "/etc/${service.sid}/conf"]
-        mode: "775"
+        mode: "755"
+  - type: Config
+    directives:
     - directive: !<resource>
         templateType: Raw
         templatePath: "hive-log4j.properties"
@@ -119,16 +113,6 @@ roles:
         templatePath: "hive-log4j.properties.server"
         targetPath: "/etc/${service.sid}/conf/hive-log4j.properties.server"
         mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "inceptor-mysql.yaml"
-        targetPath: "/etc/${service.sid}/inceptor-mysql-${service.sid}.yaml"
-        mode: "755"
-#    - directive: !<docker-compose>
-#        action: Pull
-#        file: "/etc/${service.sid}/inceptor-mysql-${service.sid}.yaml"
-  - type: Config
-    directives:
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "ngmr-context-env.sh"
@@ -183,7 +167,9 @@ roles:
     directives:
     - directive: !<mkdirs>
         paths: ["/var/log/${service.sid}" ,"/var/run/${service.sid}", "/etc/${service.sid}/conf"]
-        mode: "775"
+        mode: "755"
+  - type: Config
+    directives:
     - directive: !<resource>
         templateType: Raw
         templatePath: "hive-log4j.properties"
@@ -194,16 +180,6 @@ roles:
         templatePath: "hive-log4j.properties.server"
         targetPath: "/etc/${service.sid}/conf/hive-log4j.properties.server"
         mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "inceptor-metastore.yaml"
-        targetPath: "/etc/${service.sid}/inceptor-metastore-${service.sid}.yaml"
-        mode: "755"
-#    - directive: !<docker-compose>
-#        action: Pull
-#        file: "/etc/${service.sid}/inceptor-metastore-${service.sid}.yaml"
-  - type: Config
-    directives:
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "ngmr-context-env.sh"
@@ -258,7 +234,9 @@ roles:
     directives:
     - directive: !<mkdirs>
         paths: ["/var/log/${service.sid}", "/var/run/${service.sid}", "/etc/${service.sid}/conf"]
-        mode: "775"
+        mode: "755"
+  - type: Config
+    directives:
     - directive: !<resource>
         templateType: Raw
         templatePath: "hive-log4j.properties"
@@ -269,16 +247,6 @@ roles:
         templatePath: "hive-log4j.properties.server"
         targetPath: "/etc/${service.sid}/conf/hive-log4j.properties.server"
         mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "inceptor-executor.yaml"
-        targetPath: "/etc/${service.sid}/inceptor-executor-${service.sid}.yaml"
-        mode: "755"
-#    - directive: !<docker-compose>
-#        action: Pull
-#        file: "/etc/${service.sid}/inceptor-executor-${service.sid}.yaml"
-  - type: Config
-    directives:
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "ngmr-context-env.sh"
