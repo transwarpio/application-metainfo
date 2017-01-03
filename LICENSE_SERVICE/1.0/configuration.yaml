@@ -3,7 +3,7 @@
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
-    roleTypes: [ZOOKEEPER]
+    roleTypes: [LICENSE_NODE]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -13,7 +13,7 @@
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
-    roleTypes: [ZOOKEEPER]
+    roleTypes: [LICENSE_NODE]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -23,7 +23,7 @@
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
-    roleTypes: [ZOOKEEPER]
+    roleTypes: [LICENSE_NODE]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -33,7 +33,7 @@
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
-    roleTypes: [ZOOKEEPER]
+    roleTypes: [LICENSE_NODE]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -43,9 +43,9 @@
   defaultValue: null
   valueType: MILLISECONDS
   scope: !<RoleTypes>
-    roleTypes: [ZOOKEEPER]
+    roleTypes: [LICENSE_NODE]
   onDeps: []
-  groups: []
+  groups: [zoo_cfg]
   visibility: READ_WRITE
 
 - name: initLimit
@@ -53,9 +53,9 @@
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [ZOOKEEPER]
+    roleTypes: [LICENSE_NODE]
   onDeps: []
-  groups: []
+  groups: [zoo_cfg]
   visibility: READ_WRITE
 
 - name: syncLimit
@@ -63,9 +63,9 @@
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [ZOOKEEPER]
+    roleTypes: [LICENSE_NODE]
   onDeps: []
-  groups: []
+  groups: [zoo_cfg]
   visibility: READ_WRITE
 
 - name: maxClientCnxns
@@ -73,9 +73,9 @@
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [ZOOKEEPER]
+    roleTypes: [LICENSE_NODE]
   onDeps: []
-  groups: []
+  groups: [zoo_cfg]
   visibility: READ_WRITE
 
 - name: zookeeper.server.memory
@@ -83,7 +83,7 @@
   defaultValue: null
   valueType: MB
   scope: !<RoleTypes>
-    roleTypes: [ZOOKEEPER]
+    roleTypes: [LICENSE_NODE]
   onDeps: []
   groups: []
   visibility: READ_WRITE

@@ -20,27 +20,15 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf"]
+        paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/run/${service.sid}", "/var/log/${service.sid}"]
         mode: "755"
+  - type: Config
+    directives:
     - directive: !<resource>
         templateType: Raw
         templatePath: "log4j.properties"
         targetPath: "/etc/${service.sid}/conf/log4j.properties"
         mode: "755"
-    - directive: !<mkdirs>
-        paths: ["/var/${service.sid}", "/var/run/${service.sid}", "/var/log/${service.sid}"]
-        mode: "755"
-        owner: "zookeeper"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "zookeeper.yaml"
-        targetPath: "/etc/${service.sid}/zookeeper-server-${service.sid}.yaml"
-        mode: "755"
-#    - directive: !<docker-compose>
-#        action: Pull
-#        file: "/etc/${service.sid}/zookeeper-server-${service.sid}.yaml"
-  - type: Config
-    directives:
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "zoo-env.sh"
@@ -80,7 +68,11 @@ roles:
 stages:
   - type: Start
     taskGroups:
-    - <Role>
+    - !<Role>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 10
       roleType: LICENSE_NODE
       operation: Start
-    - <Upload-License> {}
+    - !<Upload-License>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
