@@ -36,9 +36,9 @@ roles:
         templatePath: "zookeeper.yaml"
         targetPath: "/etc/${service.sid}/zookeeper-server-${service.sid}.yaml"
         mode: "755"
-    - directive: !<docker-compose>
-        action: Pull
-        file: "/etc/${service.sid}/zookeeper-server-${service.sid}.yaml"
+#    - directive: !<docker-compose>
+#        action: Pull
+#        file: "/etc/${service.sid}/zookeeper-server-${service.sid}.yaml"
   - type: Config
     directives:
     - directive: !<resource>
@@ -49,7 +49,7 @@ roles:
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "zoo_conf.ftlp"
-        targetPath: "/etc/${servicesid}/conf/zoo.cfg"
+        targetPath: "/etc/${service.sid}/conf/zoo.cfg"
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
@@ -63,6 +63,12 @@ roles:
         mode: "755"
   - type: Start
     directives:
+    # Add labelKey "zookeeper-server" for node ${localhostname}
+    - directive: !<kubectl-label>
+        action: AddLabel
+        hostname: ${localhostname}
+        labelKey: "zookeeper-server"
+    # Start zookeeper using zookeeper-server-${service.sid}.yaml
     - directive: !<kubectl>
         action: Start
         file: "/etc/${service.sid}/zookeeper-server-${service.sid}.yaml"
@@ -77,4 +83,4 @@ stages:
     - <Role>
       roleType: LICENSE_NODE
       operation: Start
-    - <UploadLicense> {}
+    - <Upload-License> {}
