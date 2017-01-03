@@ -71,3 +71,10 @@ roles:
     - directive: !<kubectl>
         action: Stop
         file: "/etc/${service.sid}/zookeeper-server-${service.sid}.yaml"
+stages:
+  - type: Start
+    taskGroups:
+    - <Role>
+      roleType: LICENSE_NODE
+      operation: Start
+    - <UploadLicense> {}
