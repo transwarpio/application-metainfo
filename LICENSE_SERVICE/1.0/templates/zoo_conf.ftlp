@@ -3,7 +3,7 @@ dataDir=/var/${service.sid}/
 clientPort=${service['zookeeper.client.port']}
 
 <#--Generate all server properties-->
-<#assign hosts=service['roles']['ZOOKEEPER'] size=hosts?size>
+<#assign hosts=service['roles']['LICENSE_NODE'] size=hosts?size>
 <#list 1..size as n>
     <#assign host=hosts[n_index] port=service[host.hostname]
     commu_port=port['zookeeper.peer.communicate.port']
