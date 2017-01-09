@@ -24,6 +24,9 @@ roles:
     - directive: !<mkdirs>
         paths: ["/etc/${service.sid}/conf"]
         mode: "755"
+    - directive: !<mkdirs>
+        paths: ["/srv/kubernetes"]
+        mode: "700"
     - directive: !<download>
         url: "${transwarpRepo}/registry/registry.tar.gz"
         targetPath: "/etc/${service.sid}/registry.tar.gz"

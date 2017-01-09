@@ -8,6 +8,7 @@ metadata:
   labels:
     name: hyperbase-regionserver-${service.sid}
   name: hyperbase-regionserver-${service.sid}
+  namespace: default
 spec:
   replicas: 3
   strategy:

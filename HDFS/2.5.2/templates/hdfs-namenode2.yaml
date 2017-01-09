@@ -33,8 +33,8 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    name: hadoop-hdfs-namenode-${service.sid}-${namenode1hostname}
-  name: hadoop-hdfs-namenode-${service.sid}-${namenode1hostname}
+    name: hadoop-hdfs-namenode-${service.sid}-${namenode2hostname}
+  name: hadoop-hdfs-namenode-${service.sid}-${namenode2hostname}
   namespace: default
 spec:
   replicas: 1
@@ -46,7 +46,7 @@ spec:
   template:
     metadata:
       labels:
-        name: hadoop-hdfs-namenode-${service.sid}-${namenode1hostname}
+        name: hadoop-hdfs-namenode-${service.sid}-${namenode2hostname}
         podConflictName: hdfs-namenode
     spec:
       containers:
@@ -63,7 +63,7 @@ spec:
         - name: HDFS_HA
           value: 'true'
         - name: NAMENODE_ID
-          value: ${namenode_id}
+          value: '1'
         - name: SPEC
           value: ${localhostname}
         - name: HADOOP_CONF_DIR
@@ -81,7 +81,7 @@ spec:
 #            port: ${namenode_http_port}
 #            path: /dfshealth.html
 #          initialDelaySeconds: 60
-        name: hadoop-hdfs-namenode-${service.sid}-${namenode1hostname}
+        name: hadoop-hdfs-namenode-${service.sid}-${namenode2hostname}
         # The path mounts on docker
         volumeMounts:
         - mountPath: /etc/${service.sid}/conf

@@ -71,21 +71,21 @@ roles:
         templatePath: "hyperbase-master.yaml"
         targetPath: "/etc/${service.sid}/hyperbase-master-${service.sid}.yaml"
         mode: "755"
-  - type: Start
-    directives:
-    # Add labelKey "hyperbase-master" for node ${localhostname}
-    - directive: !<kubectl-label>
-        action: AddLabel
-        hostname: ${localhostname}
-        labelKey: "hyperbase-master"
-    - directive: !<kubectl>
-        action: Start
-        file: "/etc/${service.sid}/hyperbase-master-${service.sid}.yaml"
-  - type: Stop
-    directives:
-    - directive: !<kubectl>
-        action: Stop
-        file: "/etc/${service.sid}/hyperbase-master-${service.sid}.yaml"
+#  - type: Start
+#    directives:
+#    # Add labelKey "hyperbase-master" for node ${localhostname}
+#    - directive: !<kubectl-label>
+#        action: AddLabel
+#        hostname: ${localhostname}
+#        labelKey: "hyperbase-master"
+#    #- directive: !<kubectl>
+#    #    action: Start
+#    #    file: "/etc/${service.sid}/hyperbase-master-${service.sid}.yaml"
+#  - type: Stop
+#    directives:
+#    - directive: !<kubectl>
+#        action: Stop
+#        file: "/etc/${service.sid}/hyperbase-master-${service.sid}.yaml"
 - name: HYEPRBASE_REGIONSERVER
   friendlyName: "Hyperbase Regionserver"
   summaryPolicy: SOME
@@ -138,21 +138,21 @@ roles:
         templatePath: "hyperbase-regionserver.yaml"
         targetPath: "/etc/${service.sid}/hyperbase-regionserver-${service.sid}.yaml"
         mode: "755"
-  - type: Start
-    directives:
-    # Add labelKey "hyperbase-regionserver" for node ${localhostname}
-    - directive: !<kubectl-label>
-        action: AddLabel
-        hostname: ${localhostname}
-        labelKey: "hyperbase-regionserver"
-    - directive: !<kubectl>
-        action: Start
-        file: "/etc/${service.sid}/hyperbase-regionserver-${service.sid}.yaml"
-  - type: Stop
-    directives:
-    - directive: !<kubectl>
-        action: Stop
-        file: "/etc/${service.sid}/hyperbase-regionserver-${service.sid}.yaml"
+#  - type: Start
+#    directives:
+#    # Add labelKey "hyperbase-regionserver" for node ${localhostname}
+#    - directive: !<kubectl-label>
+#        action: AddLabel
+#        hostname: ${localhostname}
+#        labelKey: "hyperbase-regionserver"
+#    #- directive: !<kubectl>
+#    #    action: Start
+#    #    file: "/etc/${service.sid}/hyperbase-regionserver-${service.sid}.yaml"
+#  - type: Stop
+#    directives:
+#    - directive: !<kubectl>
+#        action: Stop
+#        file: "/etc/${service.sid}/hyperbase-regionserver-${service.sid}.yaml"
 - name: HYEPRBASE_THRIFT
   friendlyName: "Hyperbase Thrift"
   summaryPolicy: SOME
@@ -205,18 +205,101 @@ roles:
         templatePath: "hyperbase-thrift.yaml"
         targetPath: "/etc/${service.sid}/hyperbase-thrift-${service.sid}.yaml"
         mode: "755"
+#  - type: Start
+#    directives:
+#    # Add labelKey "hyperbase-thrift" for node ${localhostname}
+#    - directive: !<kubectl-label>
+#        action: AddLabel
+#        hostname: ${localhostname}
+#        labelKey: "hyperbase-thrift"
+#    #- directive: !<kubectl>
+#    #    action: Start
+#    #    file: "/etc/${service.sid}/hyperbase-thrift-${service.sid}.yaml"
+#  - type: Stop
+#    directives:
+#    - directive: !<kubectl>
+#        action: Stop
+#        file: "/etc/${service.sid}/hyperbase-thrift-${service.sid}.yaml"
+stages:
   - type: Start
-    directives:
-    # Add labelKey "hyperbase-thrift" for node ${localhostname}
-    - directive: !<kubectl-label>
-        action: AddLabel
-        hostname: ${localhostname}
-        labelKey: "hyperbase-thrift"
-    - directive: !<kubectl>
-        action: Start
-        file: "/etc/${service.sid}/hyperbase-thrift-${service.sid}.yaml"
+    taskGroups:
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: HYEPRBASE_MASTER
+      action: AddLabel
+      labelKey: "hyperbase-master"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: HYEPRBASE_MASTER
+      action: Start
+      file: "hyperbase-master.yaml"
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: HYEPRBASE_REGIONSERVER
+      action: AddLabel
+      labelKey: "hyperbase-regionserver"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: HYEPRBASE_REGIONSERVER
+      action: Start
+      file: "hyperbase-regionserver.yaml"
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: HYEPRBASE_THRIFT
+      action: AddLabel
+      labelKey: "hyperbase-thrift"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: HYEPRBASE_THRIFT
+      action: Start
+      file: "hyperbase-thrift.yaml"
   - type: Stop
-    directives:
-    - directive: !<kubectl>
-        action: Stop
-        file: "/etc/${service.sid}/hyperbase-thrift-${service.sid}.yaml"
+    taskGroups:
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: HYEPRBASE_MASTER
+      action: RemoveLabel
+      labelKey: "hyperbase-master"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: HYEPRBASE_MASTER
+      action: Stop
+      file: "hyperbase-master.yaml"
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: HYEPRBASE_REGIONSERVER
+      action: RemoveLabel
+      labelKey: "hyperbase-regionserver"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: HYEPRBASE_REGIONSERVER
+      action: Stop
+      file: "hyperbase-regionserver.yaml"
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: HYEPRBASE_THRIFT
+      action: RemoveLabel
+      labelKey: "hyperbase-thrift"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: HYEPRBASE_THRIFT
+      action: Stop
+      file: "hyperbase-thrift.yaml"

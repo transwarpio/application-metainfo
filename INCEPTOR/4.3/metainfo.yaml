@@ -71,21 +71,21 @@ roles:
         templatePath: "inceptor-server.yaml"
         targetPath: "/etc/${service.sid}/inceptor-server-${service.sid}.yaml"
         mode: "755"
-  - type: Start
-    directives:
-    # Add labelKey "inceptor-server" for node ${localhostname}
-    - directive: !<kubectl-label>
-        action: AddLabel
-        hostname: ${localhostname}
-        labelKey: "inceptor-server"
-    - directive: !<kubectl>
-        action: Start
-        file: "/etc/${service.sid}/inceptor-server-${service.sid}.yaml"
-  - type: Stop
-    directives:
-    - directive: !<kubectl>
-        action: Stop
-        file: "/etc/${service.sid}/inceptor-server-${service.sid}.yaml"
+#  - type: Start
+#    directives:
+#    # Add labelKey "inceptor-server" for node ${localhostname}
+#    - directive: !<kubectl-label>
+#        action: AddLabel
+#        hostname: ${localhostname}
+#        labelKey: "inceptor-server"
+#    - directive: !<kubectl>
+#        action: Start
+#        file: "/etc/${service.sid}/inceptor-server-${service.sid}.yaml"
+#  - type: Stop
+#    directives:
+#    - directive: !<kubectl>
+#        action: Stop
+#        file: "/etc/${service.sid}/inceptor-server-${service.sid}.yaml"
 - name: INCEPTOR_MYSQL
   friendlyName: "Inceptor Mysql"
   summaryPolicy: SOME
@@ -138,21 +138,21 @@ roles:
         templatePath: "inceptor-mysql.yaml"
         targetPath: "/etc/${service.sid}/inceptor-mysql-${service.sid}.yaml"
         mode: "755"
-  - type: Start
-    directives:
-    # Add labelKey "inceptor-mysql" for node ${localhostname}
-    - directive: !<kubectl-label>
-        action: AddLabel
-        hostname: ${localhostname}
-        labelKey: "inceptor-mysql"
-    - directive: !<kubectl>
-        action: Start
-        file: "/etc/${service.sid}/inceptor-mysql-${service.sid}.yaml"
-  - type: Stop
-    directives:
-    - directive: !<kubectl>
-        action: Stop
-        file: "/etc/${service.sid}/inceptor-mysql-${service.sid}.yaml"
+#  - type: Start
+#    directives:
+#    # Add labelKey "inceptor-mysql" for node ${localhostname}
+#    - directive: !<kubectl-label>
+#        action: AddLabel
+#        hostname: ${localhostname}
+#        labelKey: "inceptor-mysql"
+#    - directive: !<kubectl>
+#        action: Start
+#        file: "/etc/${service.sid}/inceptor-mysql-${service.sid}.yaml"
+#  - type: Stop
+#    directives:
+#    - directive: !<kubectl>
+#        action: Stop
+#        file: "/etc/${service.sid}/inceptor-mysql-${service.sid}.yaml"
 - name: INCEPTOR_METASTORE
   friendlyName: "Inceptor Metastore"
   summaryPolicy: SOME
@@ -205,21 +205,21 @@ roles:
         templatePath: "inceptor-metastore.yaml"
         targetPath: "/etc/${service.sid}/inceptor-metastore-${service.sid}.yaml"
         mode: "755"
-  - type: Start
-    directives:
-    # Add labelKey "inceptor-metastore" for node ${localhostname}
-    - directive: !<kubectl-label>
-        action: AddLabel
-        hostname: ${localhostname}
-        labelKey: "inceptor-metastore"
-    - directive: !<kubectl>
-        action: Start
-        file: "/etc/${service.sid}/inceptor-metastore-${service.sid}.yaml"
-  - type: Stop
-    directives:
-    - directive: !<kubectl>
-        action: Stop
-        file: "/etc/${service.sid}/inceptor-metastore-${service.sid}.yaml"
+#  - type: Start
+#    directives:
+#    # Add labelKey "inceptor-metastore" for node ${localhostname}
+#    - directive: !<kubectl-label>
+#        action: AddLabel
+#        hostname: ${localhostname}
+#        labelKey: "inceptor-metastore"
+#    - directive: !<kubectl>
+#        action: Start
+#        file: "/etc/${service.sid}/inceptor-metastore-${service.sid}.yaml"
+#  - type: Stop
+#    directives:
+#    - directive: !<kubectl>
+#        action: Stop
+#        file: "/etc/${service.sid}/inceptor-metastore-${service.sid}.yaml"
 - name: INCEPTOR_EXECUTOR
   friendlyName: "Inceptor Executor"
   summaryPolicy: SOME
@@ -272,18 +272,127 @@ roles:
         templatePath: "inceptor-executor.yaml"
         targetPath: "/etc/${service.sid}/inceptor-executor-${service.sid}.yaml"
         mode: "755"
+#  - type: Start
+#    directives:
+#    # Add labelKey "inceptor-executor" for node ${localhostname}
+#    - directive: !<kubectl-label>
+#        action: AddLabel
+#        hostname: ${localhostname}
+#        labelKey: "inceptor-executor"
+#    - directive: !<kubectl>
+#        action: Start
+#        file: "/etc/${service.sid}/inceptor-executor-${service.sid}.yaml"
+#  - type: Stop
+#    directives:
+#    - directive: !<kubectl>
+#        action: Stop
+#        file: "/etc/${service.sid}/inceptor-executor-${service.sid}.yaml"
+stages:
   - type: Start
-    directives:
-    # Add labelKey "inceptor-executor" for node ${localhostname}
-    - directive: !<kubectl-label>
-        action: AddLabel
-        hostname: ${localhostname}
-        labelKey: "inceptor-executor"
-    - directive: !<kubectl>
-        action: Start
-        file: "/etc/${service.sid}/inceptor-executor-${service.sid}.yaml"
+    taskGroups:
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: INCEPTOR_SERVER
+      action: AddLabel
+      labelKey: "inceptor-server"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: INCEPTOR_SERVER
+      action: Start
+      file: "inceptor-server.yaml"
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: INCEPTOR_METASTORE
+      action: AddLabel
+      labelKey: "inceptor-metastore"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: INCEPTOR_METASTORE
+      action: Start
+      file: "inceptor-metastore.yaml"
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: INCEPTOR_MYSQL
+      action: AddLabel
+      labelKey: "inceptor-mysql"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: INCEPTOR_MYSQL
+      action: Start
+      file: "inceptor-mysql.yaml"
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: INCEPTOR_EXECUTOR
+      action: AddLabel
+      labelKey: "inceptor-executor"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: INCEPTOR_EXECUTOR
+      action: Start
+      file: "inceptor-executor.yaml"
   - type: Stop
-    directives:
-    - directive: !<kubectl>
-        action: Stop
-        file: "/etc/${service.sid}/inceptor-executor-${service.sid}.yaml"
+    taskGroups:
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: INCEPTOR_SERVER
+      action: RemoveLabel
+      labelKey: "inceptor-server"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: INCEPTOR_SERVER
+      action: Stop
+      file: "inceptor-server.yaml"
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: INCEPTOR_METASTORE
+      action: RemoveLabel
+      labelKey: "inceptor-metastore"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: INCEPTOR_METASTORE
+      action: Stop
+      file: "inceptor-metastore.yaml"
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: INCEPTOR_MYSQL
+      action: RemoveLabel
+      labelKey: "inceptor-mysql"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: INCEPTOR_MYSQL
+      action: Stop
+      file: "inceptor-mysql.yaml"
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: INCEPTOR_EXECUTOR
+      action: RemoveLabel
+      labelKey: "inceptor-executor"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: INCEPTOR_EXECUTOR
+      action: Stop
+      file: "inceptor-executor.yaml"

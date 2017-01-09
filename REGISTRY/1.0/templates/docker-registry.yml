@@ -1,9 +1,10 @@
 registryui:
   image: konradkleine/docker-registry-frontend:v2
   net: host
+  command: /root/start-apache.sh
   restart: always
   environment:
-    - ENV_DOCKER_REGISTRY_HOST=registry
+    - ENV_DOCKER_REGISTRY_HOST=127.0.0.1
     - ENV_DOCKER_REGISTRY_PORT=${service['registry.port']}
     - ENV_DOCKER_REGISTRY_USE_SSL=1
 #  ports:
@@ -13,6 +14,7 @@ registryui:
 
 registry:
   image: registry:2.4.1
+  net: host
   restart: always
   volumes:
     - /srv/registry:/certs

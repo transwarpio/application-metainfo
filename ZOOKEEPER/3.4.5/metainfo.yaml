@@ -7,7 +7,7 @@ friendlyName: "ZooKeeper"
 dependencies: []
 user: zookeeper
 roles:
-- name: ZOOKEEPER
+- name: ZOOKEEPER_SERVER
   friendlyName: "ZooKeeper Server"
   summaryPolicy: MAJOR
   autoAssign:
@@ -49,19 +49,50 @@ roles:
         templatePath: "zookeeper.yaml"
         targetPath: "/etc/${service.sid}/zookeeper-server-${service.sid}.yaml"
         mode: "755"
+#  - type: Start
+#    directives:
+#    # Add labelKey "zookeeper-server" for node ${localhostname}
+#    - directive: !<kubectl-label>
+#        action: AddLabel
+#        hostname: ${localhostname}
+#        labelKey: "zookeeper-server"
+#    # Start zookeeper using zookeeper-server-${service.sid}.yaml
+#    - directive: !<kubectl>
+#        action: Start
+#        file: "/etc/${service.sid}/zookeeper-server-${service.sid}.yaml"
+#  - type: Stop
+#    directives:
+#    - directive: !<kubectl>
+#        action: Stop
+#        file: "/etc/${service.sid}/zookeeper-server-${service.sid}.yaml"
+stages:
   - type: Start
-    directives:
-    # Add labelKey "zookeeper-server" for node ${localhostname}
-    - directive: !<kubectl-label>
-        action: AddLabel
-        hostname: ${localhostname}
-        labelKey: "zookeeper-server"
-    # Start zookeeper using zookeeper-server-${service.sid}.yaml
-    - directive: !<kubectl>
-        action: Start
-        file: "/etc/${service.sid}/zookeeper-server-${service.sid}.yaml"
+    taskGroups:
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: ZOOKEEPER_SERVER
+      action: AddLabel
+      labelKey: "zookeeper-server"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: ZOOKEEPER_SERVER
+      action: Start
+      file: "zookeeper.yaml"
   - type: Stop
-    directives:
-    - directive: !<kubectl>
-        action: Stop
-        file: "/etc/${service.sid}/zookeeper-server-${service.sid}.yaml"
+    taskGroups:
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: ZOOKEEPER_SERVER
+      action: RemoveLabel
+      labelKey: "zookeeper-server"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: ZOOKEEPER_SERVER
+      action: Stop
+      file: "zookeeper.yaml"

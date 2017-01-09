@@ -5,7 +5,7 @@
 <#--handle dependent.zookeeper-->
 <#if dependencies.ZOOKEEPER??>
   <#assign zookeeper=dependencies.ZOOKEEPER quorums=[]>
-  <#list zookeeper.roles.ZOOKEEPER as role>
+  <#list zookeeper.roles.ZOOKEEPER_SERVER as role>
     <#assign quorums += [role.hostname]>
   </#list>
   <#assign quorum = quorums?join(",")>
@@ -16,6 +16,7 @@ metadata:
   labels:
     name: inceptor-executor-${service.sid}
   name: inceptor-executor-${service.sid}
+  namespace: default
 spec:
   replicas: 3
   strategy:

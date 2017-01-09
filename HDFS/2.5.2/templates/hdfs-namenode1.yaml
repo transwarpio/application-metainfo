@@ -63,7 +63,7 @@ spec:
         - name: HDFS_HA
           value: 'true'
         - name: NAMENODE_ID
-          value: ${namenode_id}
+          value: '0'
         - name: SPEC
           value: ${localhostname}
         - name: HADOOP_CONF_DIR

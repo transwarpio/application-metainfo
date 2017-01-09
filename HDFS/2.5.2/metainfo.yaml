@@ -69,21 +69,21 @@ roles:
             templatePath: "hdfs-datanode.yaml"
             targetPath: "/etc/${service.sid}/hadoop-hdfs-datanode-${service.sid}.yaml"
             mode: "755"
-    - type: Start
-      directives:
-      # Add labelKey "hdfs-datanode" for node ${localhostname}
-      - directive: !<kubectl-label>
-            action: AddLabel
-            hostname: ${localhostname}
-            labelKey: "hdfs-datanode"
-      - directive: !<kubectl>
-            action: Start
-            file: "/etc/${service.sid}/hadoop-hdfs-datanode-${service.sid}.yaml"
-    - type: Stop
-      directives:
-      - directive: !<kubectl>
-            action: Stop
-            file: "/etc/${service.sid}/hadoop-hdfs-datanode-${service.sid}.yaml"
+#    - type: Start
+#      directives:
+#      # Add labelKey "hdfs-datanode" for node ${localhostname}
+#      - directive: !<kubectl-label>
+#            action: AddLabel
+#            hostname: ${localhostname}
+#            labelKey: "hdfs-datanode"
+#      - directive: !<kubectl>
+#            action: Start
+#            file: "/etc/${service.sid}/hadoop-hdfs-datanode-${service.sid}.yaml"
+#    - type: Stop
+#      directives:
+#      - directive: !<kubectl>
+#            action: Stop
+#            file: "/etc/${service.sid}/hadoop-hdfs-datanode-${service.sid}.yaml"
   - name: HDFS_NAMENODE
     friendlyName: "Name Node (non-HA)"
     summaryPolicy: SOME
@@ -153,21 +153,21 @@ roles:
             templatePath: "hdfs-namenode.yaml"
             targetPath: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
             mode: "755"
-      - type: Start
-        directives:
-        # Add labelKey "hdfs-namenode" for node ${localhostname}
-        - directive: !<kubectl-label>
-            action: AddLabel
-            hostname: ${localhostname}
-            labelKey: "hdfs-namenode"
-        - directive: !<kubectl>
-            action: Start
-            file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
-      - type: Stop
-        directives:
-        - directive: !<kubectl>
-            action: Stop
-            file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
+#      - type: Start
+#        directives:
+#        # Add labelKey "hdfs-namenode" for node ${localhostname}
+#        - directive: !<kubectl-label>
+#            action: AddLabel
+#            hostname: ${localhostname}
+#            labelKey: "hdfs-namenode"
+#        - directive: !<kubectl>
+#            action: Start
+#            file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
+#      - type: Stop
+#        directives:
+#        - directive: !<kubectl>
+#            action: Stop
+#            file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
 roleGroups:
   - fieldName: nameservices
     namePrefix: nameservice
@@ -247,21 +247,21 @@ roleGroups:
                 templatePath: "hdfs-namenode.yaml"
                 targetPath: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
                 mode: "755"
-          - type: Start
-            directives:
-            # Add labelKey "hdfs-namenode" for node ${localhostname}
-            - directive: !<kubectl-label>
-                action: AddLabel
-                hostname: ${localhostname}
-                labelKey: "hdfs-namenode"
-            - directive: !<kubectl>
-                action: Start
-                file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
-          - type: Stop
-            directives:
-            - directive: !<kubectl>
-                action: Stop
-                file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
+#          - type: Start
+#            directives:
+#            # Add labelKey "hdfs-namenode" for node ${localhostname}
+#            - directive: !<kubectl-label>
+#                action: AddLabel
+#                hostname: ${localhostname}
+#                labelKey: "hdfs-namenode"
+#            - directive: !<kubectl>
+#                action: Start
+#                file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
+#          - type: Stop
+#            directives:
+#            - directive: !<kubectl>
+#                action: Stop
+#                file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
       - name: HDFS_JOURNALNODE
         friendlyName: "Journal Node"
         summaryPolicy: MAJOR
@@ -328,18 +328,113 @@ roleGroups:
                 templatePath: "hdfs-journalnode.yaml"
                 targetPath: "/etc/${service.sid}/hadoop-hdfs-journalnode-${service.sid}.yaml"
                 mode: "755"
-          - type: Start
-            directives:
-            # Add labelKey "hdfs-journalnode" for node ${localhostname}
-            - directive: !<kubectl-label>
-                action: AddLabel
-                hostname: ${localhostname}
-                labelKey: "hdfs-journalnode"
-            - directive: !<kubectl>
-                action: Start
-                file: "/etc/${service.sid}/hadoop-hdfs-journalnode-${service.sid}.yaml"
-          - type: Stop
-            directives:
-            - directive: !<kubectl>
-                action: Stop
-                file: "/etc/${service.sid}/hadoop-hdfs-journalnode-${service.sid}.yaml"
+#          - type: Start
+#            directives:
+#            # Add labelKey "hdfs-journalnode" for node ${localhostname}
+#            - directive: !<kubectl-label>
+#                action: AddLabel
+#                hostname: ${localhostname}
+#                labelKey: "hdfs-journalnode"
+#            - directive: !<kubectl>
+#                action: Start
+#                file: "/etc/${service.sid}/hadoop-hdfs-journalnode-${service.sid}.yaml"
+#          - type: Stop
+#            directives:
+#            - directive: !<kubectl>
+#                action: Stop
+#                file: "/etc/${service.sid}/hadoop-hdfs-journalnode-${service.sid}.yaml"
+stages:
+  - type: Start
+    taskGroups:
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: HDFS_DATANODE
+      action: AddLabel
+      labelKey: "hdfs-datanode"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: HDFS_DATANODE
+      action: Start
+      file: "hdfs-datanode.yaml"
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: HDFS_JOURNALNODE
+      action: AddLabel
+      labelKey: "hdfs-journalnode"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: HDFS_JOURNALNODE
+      action: Start
+      file: "hdfs-journalnode.yaml"
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: HDFS_NAMENODE
+      action: AddLabel
+      labelKey: "hdfs-namenode"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: HDFS_NAMENODE
+      action: Start
+      file: "hdfs-namenode1.yaml"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: HDFS_NAMENODE
+      action: Start
+      file: "hdfs-namenode2.yaml"
+  - type: Stop
+    taskGroups:
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: HDFS_DATANODE
+      action: RemoveLabel
+      labelKey: "hdfs-datanode"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: HDFS_DATANODE
+      action: Stop
+      file: "hdfs-datanode.yaml"
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: HDFS_JOURNALNODE
+      action: RemoveLabel
+      labelKey: "hdfs-journalnode"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: HDFS_JOURNALNODE
+      action: Stop
+      file: "hdfs-journalnode.yaml"
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: HDFS_NAMENODE
+      action: RemoveLabel
+      labelKey: "hdfs-namenode"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: HDFS_NAMENODE
+      action: Stop
+      file: "hdfs-namenode1.yaml"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      roleType: HDFS_NAMENODE
+      action: Stop
+      file: "hdfs-namenode2.yaml"

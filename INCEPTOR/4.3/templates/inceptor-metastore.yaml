@@ -8,6 +8,7 @@ metadata:
   labels:
     name: inceptor-metastore-${service.sid}
   name: inceptor-metastore-${service.sid}
+  namespace: default
 spec:
   replicas: 1
   strategy:
