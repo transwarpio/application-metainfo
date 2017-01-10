@@ -70,16 +70,16 @@
   - hdfs_site
   visibility: READ_WRITE
 - name: namenode.memory
-  recommendExpression: |
-    <#assign halfMemMB = (memBytes/1048576/2)?int>
-    <#if halfMemMB <= 24000>
-    ${halfMemMB?c}
-    <#else>
-    24000
-    </#if>
+#  recommendExpression: |
+#    <#assign halfMemMB = (memBytes/1048576/2)?int>
+#    <#if halfMemMB <= 24000>
+#    ${halfMemMB?c}
+#    <#else>
+#    24000
+#    </#if>
+  recommendExpression: 32768
   defaultValue: null
   valueType: MB
-  isNodeSpecific: true
   scope: !<RoleTypes>
         roleTypes:
         - HDFS_NAMENODE
@@ -265,6 +265,7 @@
   recommendExpression: 4096
   defaultValue: null
   valueType: MB
+  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes:
     - HDFS_JOURNALNODE
@@ -276,6 +277,7 @@
   recommendExpression: 4096
   defaultValue: null
   valueType: MB
+  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes:
     - HDFS_DATANODE
