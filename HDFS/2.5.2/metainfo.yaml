@@ -356,20 +356,17 @@ stages:
     - !<Kubectl>
       summaryPolicy: MAJOR
       timeoutMinutes: 2
-      roleType: HDFS_DATANODE
       action: Start
       file: "hdfs-datanode.yaml"
     - !<Kubectl-Label>
       summaryPolicy: SOME
       timeoutMinutes: 2
-      roleType: HDFS_JOURNALNODE
       action: AddLabel
       labelKey: "hdfs-journalnode"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR
       timeoutMinutes: 2
-      roleType: HDFS_JOURNALNODE
       action: Start
       file: "hdfs-journalnode.yaml"
     - !<Kubectl-Label>
@@ -382,13 +379,11 @@ stages:
     - !<Kubectl>
       summaryPolicy: MAJOR
       timeoutMinutes: 2
-      roleType: HDFS_NAMENODE
       action: Start
       file: "hdfs-namenode1.yaml"
     - !<Kubectl>
       summaryPolicy: MAJOR
       timeoutMinutes: 2
-      roleType: HDFS_NAMENODE
       action: Start
       file: "hdfs-namenode2.yaml"
   - type: Stop
@@ -403,7 +398,6 @@ stages:
     - !<Kubectl>
       summaryPolicy: MAJOR
       timeoutMinutes: 2
-      roleType: HDFS_DATANODE
       action: Stop
       file: "hdfs-datanode.yaml"
     - !<Kubectl-Label>
@@ -416,7 +410,6 @@ stages:
     - !<Kubectl>
       summaryPolicy: MAJOR
       timeoutMinutes: 2
-      roleType: HDFS_JOURNALNODE
       action: Stop
       file: "hdfs-journalnode.yaml"
     - !<Kubectl-Label>
@@ -429,12 +422,10 @@ stages:
     - !<Kubectl>
       summaryPolicy: MAJOR
       timeoutMinutes: 2
-      roleType: HDFS_NAMENODE
       action: Stop
       file: "hdfs-namenode1.yaml"
     - !<Kubectl>
       summaryPolicy: MAJOR
       timeoutMinutes: 2
-      roleType: HDFS_NAMENODE
       action: Stop
       file: "hdfs-namenode2.yaml"

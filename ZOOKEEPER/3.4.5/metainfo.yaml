@@ -78,7 +78,6 @@ stages:
     - !<Kubectl>
       summaryPolicy: MAJOR
       timeoutMinutes: 2
-      roleType: ZOOKEEPER_SERVER
       action: Start
       file: "zookeeper.yaml"
   - type: Stop
@@ -93,6 +92,5 @@ stages:
     - !<Kubectl>
       summaryPolicy: MAJOR
       timeoutMinutes: 2
-      roleType: ZOOKEEPER_SERVER
       action: Stop
       file: "zookeeper.yaml"

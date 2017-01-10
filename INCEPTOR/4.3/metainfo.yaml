@@ -300,7 +300,6 @@ stages:
     - !<Kubectl>
       summaryPolicy: MAJOR
       timeoutMinutes: 2
-      roleType: INCEPTOR_SERVER
       action: Start
       file: "inceptor-server.yaml"
     - !<Kubectl-Label>
@@ -313,7 +312,6 @@ stages:
     - !<Kubectl>
       summaryPolicy: MAJOR
       timeoutMinutes: 2
-      roleType: INCEPTOR_METASTORE
       action: Start
       file: "inceptor-metastore.yaml"
     - !<Kubectl-Label>
@@ -326,7 +324,6 @@ stages:
     - !<Kubectl>
       summaryPolicy: MAJOR
       timeoutMinutes: 2
-      roleType: INCEPTOR_MYSQL
       action: Start
       file: "inceptor-mysql.yaml"
     - !<Kubectl-Label>
@@ -339,7 +336,6 @@ stages:
     - !<Kubectl>
       summaryPolicy: MAJOR
       timeoutMinutes: 2
-      roleType: INCEPTOR_EXECUTOR
       action: Start
       file: "inceptor-executor.yaml"
   - type: Stop
@@ -354,7 +350,6 @@ stages:
     - !<Kubectl>
       summaryPolicy: MAJOR
       timeoutMinutes: 2
-      roleType: INCEPTOR_SERVER
       action: Stop
       file: "inceptor-server.yaml"
     - !<Kubectl-Label>
@@ -367,7 +362,6 @@ stages:
     - !<Kubectl>
       summaryPolicy: MAJOR
       timeoutMinutes: 2
-      roleType: INCEPTOR_METASTORE
       action: Stop
       file: "inceptor-metastore.yaml"
     - !<Kubectl-Label>
@@ -380,7 +374,6 @@ stages:
     - !<Kubectl>
       summaryPolicy: MAJOR
       timeoutMinutes: 2
-      roleType: INCEPTOR_MYSQL
       action: Stop
       file: "inceptor-mysql.yaml"
     - !<Kubectl-Label>
@@ -393,6 +386,5 @@ stages:
     - !<Kubectl>
       summaryPolicy: MAJOR
       timeoutMinutes: 2
-      roleType: INCEPTOR_EXECUTOR
       action: Stop
       file: "inceptor-executor.yaml"
