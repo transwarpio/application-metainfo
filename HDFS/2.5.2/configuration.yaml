@@ -29,6 +29,7 @@
     ${localDir("/hadoop/data")}
   defaultValue: file://${hadoop.tmp.dir}/dfs/data
   valueType: STRING
+  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes:
     - HDFS_DATANODE
@@ -40,6 +41,7 @@
   recommendExpression: ${(rcmdMounts?size / 3)?int}
   defaultValue: 0
   valueType: NON_NEG_INT
+  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes:
     - HDFS_DATANODE
@@ -59,6 +61,7 @@
     </#if>
   defaultValue: file://${hadoop.tmp.dir}/dfs/name
   valueType: STRING
+  isNodeSpecific: true
   scope: !<RoleTypes>
       roleTypes:
       - HDFS_NAMENODE
@@ -76,6 +79,7 @@
     </#if>
   defaultValue: null
   valueType: MB
+  isNodeSpecific: true
   scope: !<RoleTypes>
         roleTypes:
         - HDFS_NAMENODE
@@ -111,6 +115,7 @@
     ${reserved?c}
   defaultValue: 0
   valueType: BYTES
+  isNodeSpecific: true
   scope: !<RoleTypes>
        roleTypes:
        - HDFS_DATANODE
