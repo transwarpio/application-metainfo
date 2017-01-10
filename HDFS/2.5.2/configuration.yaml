@@ -128,6 +128,7 @@
   recommendExpression: 8020
   defaultValue: null
   valueType: PORT
+  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes:
     - HDFS_NAMENODE
@@ -139,6 +140,7 @@
   recommendExpression: 50070
   defaultValue: null
   valueType: PORT
+  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes:
     - HDFS_NAMENODE
@@ -168,6 +170,7 @@
   recommendExpression: 8485
   defaultValue: null
   valueType: PORT
+  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes:
     - HDFS_JOURNALNODE
@@ -179,6 +182,7 @@
   recommendExpression: 8480
   defaultValue: null
   valueType: PORT
+  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes:
     - HDFS_JOURNALNODE
