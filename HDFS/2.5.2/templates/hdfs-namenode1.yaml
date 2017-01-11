@@ -15,16 +15,6 @@
         namenode_http_port=service['namenode.http-port']
     >
     </#if>
-    <#if namenode2nodeid gt namenode1nodeid>
-        <#assign minhostname=namenode1hostname >
-    <#else>
-        <#assign minhostname=namenode2hostname >
-    </#if>
-    <#if minhostname == localhostname>
-        <#assign namenode_id="'0'" >
-    <#else>
-        <#assign namenode_id="'1'" >
-    </#if>
 </#list>
 <#else>
 <#--federation is false-->
@@ -65,7 +55,7 @@ spec:
         - name: NAMENODE_ID
           value: '0'
         - name: SPEC
-          value: ${localhostname}
+          value: ${namenode1hostname}
         - name: HADOOP_CONF_DIR
           value: /etc/${service.sid}/conf
         - name: DATA_DIRS

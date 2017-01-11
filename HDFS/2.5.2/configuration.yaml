@@ -14,22 +14,23 @@
 #                   ]
 
 - name: dfs.datanode.data.dir
-  recommendExpression: |
-    <#function localDir suffix>
-      <#if rcmdMounts?size == 0>
-        <#return suffix>
-      <#else>
-        <#local dirs = []>
-        <#list rcmdMounts?sort as mnt>
-         <#local dirs = dirs + [mnt + suffix]>
-        </#list>
-        <#return dirs?join(",")>
-      </#if>
-    </#function>
-    ${localDir("/hadoop/data")}
+#  recommendExpression: |
+#    <#function localDir suffix>
+#      <#if rcmdMounts?size == 0>
+#        <#return suffix>
+#      <#else>
+#        <#local dirs = []>
+#        <#list rcmdMounts?sort as mnt>
+#         <#local dirs = dirs + [mnt + suffix]>
+#        </#list>
+#        <#return dirs?join(",")>
+#      </#if>
+#    </#function>
+#    ${localDir("/hadoop/data")}
+  recommendExpression: /hadoop/data # TODO work around before WARP-11503
   defaultValue: file://${hadoop.tmp.dir}/dfs/data
   valueType: STRING
-  isNodeSpecific: true
+#  isNodeSpecific: true  # TODO work around before WARP-11503
   scope: !<RoleTypes>
     roleTypes:
     - HDFS_DATANODE
@@ -50,18 +51,19 @@
   - hdfs_site
   visibility: READ_WRITE
 - name: dfs.namenode.name.dir
-  recommendExpression: |
-    <#assign sorted = rcmdMounts?sort>
-    <#if sorted?size == 0>
-    /hadoop/hadoop_image,/hadoop/namenode_dir
-    <#elseif sorted?size == 1>
-    /hadoop/namenode_dir,${sorted?first}/hadoop/namenode_dir
-    <#else>
-    ${sorted[0]}/hadoop/namenode_dir,${sorted[1]}/hadoop/namenode_dir
-    </#if>
+#  recommendExpression: |
+#    <#assign sorted = rcmdMounts?sort>
+#    <#if sorted?size == 0>
+#    /hadoop/hadoop_image,/hadoop/namenode_dir
+#    <#elseif sorted?size == 1>
+#    /hadoop/namenode_dir,${sorted?first}/hadoop/namenode_dir
+#    <#else>
+#    ${sorted[0]}/hadoop/namenode_dir,${sorted[1]}/hadoop/namenode_dir
+#    </#if>
+  recommendExpression: /hadoop/hadoop_image,/hadoop/namenode_dir
   defaultValue: file://${hadoop.tmp.dir}/dfs/name
   valueType: STRING
-  isNodeSpecific: true
+#  isNodeSpecific: true # TODO work around before WARP-11503
   scope: !<RoleTypes>
       roleTypes:
       - HDFS_NAMENODE
@@ -140,7 +142,7 @@
   recommendExpression: 50070
   defaultValue: null
   valueType: PORT
-  isNodeSpecific: true
+  isNodeSpecific: false #used in deployment yaml
   scope: !<RoleTypes>
     roleTypes:
     - HDFS_NAMENODE
@@ -269,7 +271,7 @@
   recommendExpression: 4096
   defaultValue: null
   valueType: MB
-  isNodeSpecific: true
+#  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes:
     - HDFS_JOURNALNODE
@@ -281,7 +283,7 @@
   recommendExpression: 4096
   defaultValue: null
   valueType: MB
-  isNodeSpecific: true
+#  isNodeSpecific: true #
   scope: !<RoleTypes>
     roleTypes:
     - HDFS_DATANODE
