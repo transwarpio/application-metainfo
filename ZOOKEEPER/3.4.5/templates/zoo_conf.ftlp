@@ -3,12 +3,12 @@ dataDir=/var/${service.sid}/
 clientPort=${service['zookeeper.client.port']}
 
 <#--Generate all server properties-->
-<#assign hosts=service['roles']['ZOOKEEPER_SERVER'] size=hosts?size>
+<#assign roles=service['roles']['ZOOKEEPER_SERVER'] size=roles?size>
 <#list 1..size as n>
-    <#assign host=hosts[n_index] port=service[host.hostname]
-    commu_port=port['zookeeper.peer.communicate.port']
-    elect_port=port['zookeeper.leader.elect.port']>
-    server.${host.id}=${host.hostname}:${commu_port}:${elect_port}
+    <#assign role=roles[n_index]
+    commu_port=service['zookeeper.peer.communicate.port']
+    elect_port=service['zookeeper.leader.elect.port']>
+    server.${role.id}=${role.hostname}:${commu_port}:${elect_port}
 </#list>
 
 <#--The following properties only appear when enable kerberos-->

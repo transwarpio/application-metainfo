@@ -1,0 +1,83 @@
+<#assign
+  registryServer=dependencies.REGISTRY.roles['REGISTRY_SERVER'][0].hostname
+  registryPort=dependencies.REGISTRY['registry.port']
+  >
+<#--handle dependent.zookeeper-->
+<#if dependencies.ZOOKEEPER??>
+  <#assign zookeeper=dependencies.ZOOKEEPER quorums=[]>
+  <#list zookeeper.roles.ZOOKEEPER_SERVER as role>
+    <#assign quorums += [role.hostname]>
+  </#list>
+  <#assign quorum = quorums?join(",")>
+</#if>
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    name: kafka-server-${service.sid}
+  name: kafka-server-${service.sid}
+  namespace: default
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        k8s-app: kafka-server-${service.sid}
+        name: kafka-server-${service.sid}
+        podConflictName: kafka-server-${service.sid}
+    spec:
+      #priority: {{ kafka_priority }}
+      hostNetwork: true
+      containers:
+      - args:
+        - bootstrap.sh
+        - broker
+        env:
+        - name: TRANSWARP_ZOOKEEPER_QUORUM
+          value: ${quorum}
+        - name: KAFKA_DATA_DIRS
+          value: "/data"
+        - name: ZOOKEEPER_CONNECTION_TIMEOUT
+          value: ${"'" + service['kmq.zookeeper.connection.timeout.ms'] + "'"}
+        - name: MESSAGE_MAX_BYTES
+          value: ${"'" + service['kmq.message.max.bytes'] + "'"}
+        - name: REPLICA_FETCH_MAX_BYTES
+          value: ${"'" + service['kmq.replica.fetch.max.bytes'] + "'"}
+        - name: BROKER_ID_EQUALS_TO_DND_ID
+          value: ${"'" + service['brokerid.equalsto.dndid'] + "'"}
+        image: ${registryServer}:${registryPort}/tos/kafka-server:rb463
+        imagePullPolicy: Always
+        name: kafka-server-${service.sid}
+        volumeMounts:
+        - mountPath: /data
+          name: data
+        - mountPath: /var/transwarp/logs
+          name: log
+        - mountPath: /etc/kafka/conf
+          name: conf
+        resources:
+          requests:
+            cpu: "1"
+          limits:
+            memory: 1Gi
+        ports:
+          - hostPort: 9092
+            containerPort: 9092
+      podConflictSelectors:
+      - matchExpressions:
+        - key: podConflictName
+          operator: "="
+          values:
+          - "kafka-server-${service.sid}"
+      nodeSelector:
+        kafka-server-${service.sid}: "true"
+      volumes:
+      - hostPath:
+          path: /etc/${service.sid}/data
+        name: data
+      - hostPath:
+          path: /var/log/${service.sid}
+        name: log
+      - hostPath:
+          path: /etc/${service.sid}/conf
+        name: conf

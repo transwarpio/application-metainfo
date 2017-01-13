@@ -41,7 +41,7 @@ spec:
     metadata:
       labels:
         name: hadoop-hdfs-datanode-${service.sid}
-        podConflictName: hdfs-datanode
+        podConflictName: hdfs-datanode-${service.sid}
     spec:
       containers:
       - args:
@@ -90,10 +90,10 @@ spec:
         - key: podConflictName
           operator: "="
           values:
-          - "hdfs-datanode"
+          - "hdfs-datanode-${service.sid}"
       # Ensure that only the node labeled "hdfs-datanode" can start a hdfs-datanode role (i.e., a pod)
       nodeSelector:
-        hdfs-datanode: "true"
+        hdfs-datanode-${service.sid}: "true"
       # The path on real node
       volumes:
       - hostPath:

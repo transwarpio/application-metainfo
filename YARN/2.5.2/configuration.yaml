@@ -1,0 +1,413 @@
+- name: yarn.scheduler.capacity.root.default.acl_submit_applications
+  recommendExpression: ${"*"}
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [capacity_scheduler]
+  visibility: READ_WRITE
+
+- name: yarn.scheduler.capacity.maximum-applications
+  recommendExpression: 10000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [capacity_scheduler]
+  visibility: READ_WRITE
+
+- name: yarn.scheduler.capacity.root.maximum-capacity
+  recommendExpression: 100
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [capacity_scheduler]
+  visibility: READ_WRITE
+
+- name: yarn.scheduler.capacity.root.maximum-am-resource-percent
+  recommendExpression: 0.1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [capacity_scheduler]
+  visibility: READ_WRITE
+
+- name: yarn.scheduler.capacity.root.user-limit-factor
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [capacity_scheduler]
+  visibility: READ_WRITE
+
+- name: yarn.scheduler.capacity.root.state
+  recommendExpression: RUNNING
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [capacity_scheduler]
+  visibility: READ_WRITE
+
+- name: yarn.scheduler.capacity.root.acl_administer_queue
+  recommendExpression: ${"*"}
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [capacity_scheduler]
+  visibility: READ_WRITE
+
+- name: yarn.scheduler.capacity.node-locality-delay
+  recommendExpression: -1
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [capacity_scheduler]
+  visibility: READ_WRITE
+
+- name: yarn.scheduler.capacity.root.queues
+  recommendExpression: default
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [capacity_scheduler]
+  visibility: READ_WRITE
+
+- name: yarn.scheduler.capacity.resource-calculator
+  recommendExpression: org.apache.hadoop.yarn.util.resource.DominantResourceCalculator
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [capacity_scheduler]
+  visibility: READ_WRITE
+
+- name: yarn.scheduler.capacity.root.default.user-limit-factor
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [capacity_scheduler]
+  visibility: READ_WRITE
+
+- name: yarn.scheduler.capacity.root.default.maximum-capacity
+  recommendExpression: 100
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [capacity_scheduler]
+  visibility: READ_WRITE
+
+- name: yarn.scheduler.capacity.root.default.capacity
+  recommendExpression: 100
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [capacity_scheduler]
+  visibility: READ_WRITE
+
+- name: yarn.scheduler.capacity.root.default.state
+  recommendExpression: RUNNING
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [capacity_scheduler]
+  visibility: READ_WRITE
+
+- name: yarn.scheduler.capacity.root.maximum-applications
+  recommendExpression: 10000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [capacity_scheduler]
+  visibility: READ_WRITE
+
+- name: yarn.scheduler.capacity.maximum-am-resource-percent
+  recommendExpression: 0.1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [capacity_scheduler]
+  visibility: READ_WRITE
+
+- name: yarn.scheduler.capacity.root.acl_submit_applications
+  recommendExpression: ${"*"}
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [capacity_scheduler]
+  visibility: READ_WRITE
+
+- name: yarn.scheduler.capacity.root.default.acl_administer_queue
+  recommendExpression: ${"*"}
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [capacity_scheduler]
+  visibility: READ_WRITE
+
+- name: yarn.scheduler.capacity.root.capacity
+  recommendExpression: 100
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [capacity_scheduler]
+  visibility: READ_WRITE
+
+- name: mapreduce.job.max.split.locations
+  recommendExpression: 500
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [mapred_site]
+  visibility: READ_WRITE
+
+- name: yarn.app.mapreduce.am.command-opts
+  recommendExpression: -agentpath:/usr/lib/hadoop/bin/libagent.so -Xmx2048m
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [mapred_site]
+  visibility: READ_WRITE
+
+- name: mapreduce.framework.name
+  recommendExpression: yarn
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [mapred_site]
+  visibility: READ_WRITE
+
+- name: mapreduce.map.speculative
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [mapred_site]
+  visibility: READ_WRITE
+
+- name: raid.distraid.max.files
+  recommendExpression: 300
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [mapred_site]
+  visibility: READ_WRITE
+
+- name: mapred.child.java.opts
+  recommendExpression: -agentpath:/usr/lib/hadoop/bin/libagent.so -Xmx2048m
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [mapred_site]
+  visibility: READ_WRITE
+
+- name: raidnode.files.fix.per.job
+  recommendExpression: 500
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [mapred_site]
+  visibility: READ_WRITE
+
+- name: mapreduce.job.reduce.slowstart.completedmaps
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [mapred_site]
+  visibility: READ_WRITE
+
+- name: mapreduce.job.maps
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [mapred_site]
+  visibility: READ_WRITE
+
+- name: mapreduce.shuffle.port
+  recommendExpression: 13562
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [mapred_site]
+  visibility: READ_WRITE
+
+- name: mapreduce.reduce.speculative
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [mapred_site]
+  visibility: READ_WRITE
+
+- name: raid.distraid.max.jobs
+  recommendExpression: 10
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [mapred_site]
+  visibility: READ_WRITE
+
+- name: yarn.scheduler.maximum-allocation-mb
+  recommendExpression: 98304
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [yarn_site]
+  visibility: READ_WRITE
+
+- name: yarn.nodemanager.vmem-check-enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [yarn_site]
+  visibility: READ_WRITE
+
+- name: yarn.resourcemanager.scheduler.class
+  recommendExpression: org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacityScheduler
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [yarn_site]
+  visibility: READ_WRITE
+
+- name: yarn.nodemanager.aux-services.mapreduce_shuffle.class
+  recommendExpression: org.apache.hadoop.mapred.ShuffleHandler
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [yarn_site]
+  visibility: READ_WRITE
+
+- name: yarn.nodemanager.pmem-check-enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [yarn_site]
+  visibility: READ_WRITE
+
+- name: yarn.application.classpath
+  recommendExpression: $HADOOP_CONF_DIR,$HADOOP_COMMON_HOME/*,$HADOOP_COMMON_HOME/lib/*,$HADOOP_HDFS_HOME/*,$HADOOP_HDFS_HOME/lib/*,$HADOOP_MAPRED_HOME/*,$HADOOP_MAPRED_HOME/lib/*,$YARN_HOME/*,$YARN_HOME/lib/*
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [yarn_site]
+  visibility: READ_WRITE
+
+- name: yarn.scheduler.maximum-allocation-vcores
+  recommendExpression: 96
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [yarn_site]
+  visibility: READ_WRITE
+
+- name: yarn.nodemanager.aux-services
+  recommendExpression: mapreduce_shuffle
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [yarn_site]
+  visibility: READ_WRITE
+
+- name: yarn.nodemanager.resource.cpu-vcores
+  recommendExpression: 6
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [yarn_site]
+  visibility: READ_WRITE
+
+- name: yarn.nodemanager.local-dirs
+  recommendExpression: /hadoop/yarn/local
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [yarn_site]
+  visibility: READ_WRITE
+
+- name: yarn.nodemanager.log-dirs
+  recommendExpression: /hadoop/yarn/logs
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [yarn_site]
+  visibility: READ_WRITE
+
+- name: yarn.nodemanager.log-dirs
+  recommendExpression: /hadoop/yarn/logs
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [yarn_site]
+  visibility: READ_WRITE
+
+- name: yarn.nodemanager.delete.debug-delay-sec
+  recommendExpression: 86400
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [yarn_site]
+  visibility: READ_WRITE
+
+- name: yarn.nodemanager.resource.memory-mb
+  recommendExpression: 7974
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [yarn_site]
+  visibility: READ_WRITE
+
+- name: yarn.log-aggregation-enable
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [yarn_site]
+  visibility: READ_WRITE

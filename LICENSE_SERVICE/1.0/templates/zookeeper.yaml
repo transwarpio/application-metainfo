@@ -6,16 +6,16 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    name: zookeeper-server-${service.sid}
-  name: zookeeper-server-${service.sid}
+    name: license-node-${service.sid}
+  name: license-node-${service.sid}
   namespace: default
 spec:
   replicas: 3
   template:
     metadata:
       labels:
-        name: zookeeper-server-${service.sid}
-        podConflictName: zookeeper-server-${service.sid}
+        name: license-node-${service.sid}
+        podConflictName: license-node-${service.sid}
     spec:
       hostNetwork: true
       containers:
@@ -31,7 +31,7 @@ spec:
           value: ${service['zookeeper.server.memory']}m
         image: ${registryServer}:${registryPort}/jenkins/zookeeper
         imagePullPolicy: Always
-        name: zookeeper-server-${service.sid}
+        name: license-node-${service.sid}
         # The path mounts on docker
         volumeMounts:
           - mountPath: /var/transwarp/logs
@@ -46,10 +46,10 @@ spec:
         - key: podConflictName
           operator: "="
           values:
-          - "zookeeper-server-${service.sid}"
+          - "license-node-${service.sid}"
       # Ensure that only the node labeled "zookeeper-server=true" can start a zookeeper role (i.e., a pod)
       nodeSelector:
-        zookeeper-server-${service.sid}: "true"
+        license-node-${service.sid}: "true"
       # The path on real node
       volumes:
       - hostPath:

@@ -64,11 +64,11 @@ roles:
           templatePath: "hadoop-env.sh"
           targetPath: "/etc/${service.sid}/conf/hadoop-env.sh"
           mode: "755"
-      - directive: !<resource>
-            templateType: FreeMarker
-            templatePath: "hdfs-datanode.yaml"
-            targetPath: "/etc/${service.sid}/hadoop-hdfs-datanode-${service.sid}.yaml"
-            mode: "755"
+#      - directive: !<resource>
+#            templateType: FreeMarker
+#            templatePath: "hdfs-datanode.yaml"
+#            targetPath: "/etc/${service.sid}/hadoop-hdfs-datanode-${service.sid}.yaml"
+#            mode: "755"
 #    - type: Start
 #      directives:
 #      # Add labelKey "hdfs-datanode" for node ${localhostname}
@@ -148,11 +148,11 @@ roles:
             templatePath: "hadoop-env.sh"
             targetPath: "/etc/${service.sid}/conf/hadoop-env.sh"
             mode: "755"
-        - directive: !<resource>
-            templateType: FreeMarker
-            templatePath: "hdfs-namenode.yaml"
-            targetPath: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
-            mode: "755"
+#        - directive: !<resource>
+#            templateType: FreeMarker
+#            templatePath: "hdfs-namenode.yaml"
+#            targetPath: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
+#            mode: "755"
 #      - type: Start
 #        directives:
 #        # Add labelKey "hdfs-namenode" for node ${localhostname}
@@ -242,11 +242,11 @@ roleGroups:
                 templatePath: "hadoop-env.sh"
                 targetPath: "/etc/${service.sid}/conf/hadoop-env.sh"
                 mode: "755"
-            - directive: !<resource>
-                templateType: FreeMarker
-                templatePath: "hdfs-namenode.yaml"
-                targetPath: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
-                mode: "755"
+#            - directive: !<resource>
+#                templateType: FreeMarker
+#                templatePath: "hdfs-namenode.yaml"
+#                targetPath: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
+#                mode: "755"
 #          - type: Start
 #            directives:
 #            # Add labelKey "hdfs-namenode" for node ${localhostname}
@@ -323,11 +323,11 @@ roleGroups:
                 templatePath: "hdfs-site.ftlx"
                 targetPath: "/etc/${service.sid}/conf/hdfs-site.xml"
                 mode: "755"
-            - directive: !<resource>
-                templateType: FreeMarker
-                templatePath: "hdfs-journalnode.yaml"
-                targetPath: "/etc/${service.sid}/hadoop-hdfs-journalnode-${service.sid}.yaml"
-                mode: "755"
+#            - directive: !<resource>
+#                templateType: FreeMarker
+#                templatePath: "hdfs-journalnode.yaml"
+#                targetPath: "/etc/${service.sid}/hadoop-hdfs-journalnode-${service.sid}.yaml"
+#                mode: "755"
 #          - type: Start
 #            directives:
 #            # Add labelKey "hdfs-journalnode" for node ${localhostname}
@@ -361,6 +361,7 @@ stages:
     - !<Kubectl-Label>
       summaryPolicy: SOME
       timeoutMinutes: 2
+      roleType: HDFS_JOURNALNODE
       action: AddLabel
       labelKey: "hdfs-journalnode"
       labelValue: "true"

@@ -1,0 +1,91 @@
+<#assign
+  registryServer=dependencies.REGISTRY.roles['REGISTRY_SERVER'][0].hostname
+  registryPort=dependencies.REGISTRY['registry.port']
+  >
+<#--handle dependent.zookeeper-->
+<#if dependencies.ZOOKEEPER??>
+  <#assign zookeeper=dependencies.ZOOKEEPER quorums=[]>
+  <#list zookeeper.roles.ZOOKEEPER_SERVER as role>
+    <#assign quorums += [role.hostname]>
+  </#list>
+  <#assign quorum = quorums?join(",")>
+</#if>
+<#--federation is true-->
+<#if dependencies.HDFS.nameservices?? && dependencies.HDFS.nameservices?size gt 0>
+<#list dependencies.HDFS.nameservices as ns>
+<#--ha is enabled-->
+    <#if dependencies.HDFS[ns]['HDFS_NAMENODE']?size gt 1>
+    <#assign
+        namenode1hostname=dependencies.HDFS[ns]['HDFS_NAMENODE'][0].hostname
+        namenode2hostname=dependencies.HDFS[ns]['HDFS_NAMENODE'][1].hostname
+    >
+    </#if>
+</#list>
+<#else>
+<#--federation is false-->
+</#if>
+<#--handle dependent.yarn-->
+<#if dependencies.YARN??>
+  <#assign yarn=dependencies.YARN rms=[]>
+  <#list yarn.roles.YARN_RESOURCEMANAGER as role>
+    <#assign rms += [role.hostname]>
+  </#list>
+  <#assign resourcemanager = rms?join(",")>
+</#if>
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    name: discover-${service.sid}
+  name: discover-${service.sid}
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: discover-${service.sid}
+        podConflictName: discover-${service.sid}
+    spec:
+      #priority: {{ descovery_priority }}
+      hostNetwork: true
+      containers:
+#      - args:
+#        - bootstrap.sh
+#        - discover
+      - env:
+        - name: YARN_RESOURCEMANAGER_ADDRRESS
+          value: ${resourcemanager}
+        - name: YARN_TIMELINE_SERVICE_HOSTNAME
+          value: ${dependencies.YARN.roles.YARN_TIMELINESERVER[0].hostname}
+        - name: HDFS_HA_NAMENODE_SERVICE
+          value: ${namenode1hostname},${namenode2hostname}
+        - name: TRANSWARP_LICENSE_ZOOKEEPER_QUORUM
+          value: ${quorum}
+        - name: HADOOP_SECURITY_AUTHENTICATION
+          value: "simpale"
+        - name: KRB_ENABLE
+          value: "false"
+        image: ${registryServer}:${registryPort}/tos/discover:rb463
+        imagePullPolicy: Always
+        name: discover-${service.sid}
+        volumeMounts:
+        - mountPath: /home
+          name: data
+        resources:
+          requests:
+            cpu: "1"
+          limits:
+            memory: ${service['discover.memory']}Gi
+      podConflictSelectors:
+      - matchExpressions:
+        - key: podConflictName
+          operator: "="
+          values:
+          - "discover-${service.sid}"
+      nodeSelector:
+        discover-${service.sid}: "true"
+      volumes:
+      - hostPath:
+          path: /etc/${service.sid}/data
+        name: data

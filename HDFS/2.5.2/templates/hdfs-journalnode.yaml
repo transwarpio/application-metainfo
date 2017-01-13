@@ -20,7 +20,7 @@ spec:
     metadata:
       labels:
         name: hadoop-hdfs-journalnode-${service.sid}
-        podConflictName: hdfs-journalnode
+        podConflictName: hdfs-journalnode-${service.sid}
     spec:
       containers:
       - args:
@@ -58,10 +58,10 @@ spec:
         - key: podConflictName
           operator: "="
           values:
-          - "hdfs-journalnode"
+          - "hdfs-journalnode-${service.sid}"
       # Ensure that only the node labeled "hdfs-journalnode=true" can start a hdfs-journalnode role (i.e., a pod)
       nodeSelector:
-        hdfs-journalnode: "true"
+        hdfs-journalnode-${service.sid}: "true"
       # The path on real node
       volumes:
       - hostPath:

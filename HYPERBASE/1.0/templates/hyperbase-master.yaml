@@ -20,7 +20,7 @@ spec:
     metadata:
       labels:
         name: hyperbase-master-${service.sid}
-        podConflictName: hyperbase-master
+        podConflictName: hyperbase-master-${service.sid}
     spec:
       hostNetwork: true 
       containers:
@@ -29,7 +29,7 @@ spec:
         - master
         env:
         - name: HEAP_SIZE
-          value: 4096m
+          value: ${service['hbase.master.memory']}m
         image: ${registryServer}:${registryPort}/jenkins/hbase
         imagePullPolicy: Always
         name: hyperbase-master-${service.sid}
@@ -50,10 +50,10 @@ spec:
         - key: podConflictName
           operator: "="
           values:
-          - "hyperbase-master"
+          - "hyperbase-master-${service.sid}"
       # Ensure that only the node labeled "hyperbase-master=true" can start a hyperbase-master role (i.e., a pod)
       nodeSelector:
-        hyperbase-master: "true"
+        hyperbase-master-${service.sid}: "true"
       # The path on real node
       volumes:
       - hostPath:

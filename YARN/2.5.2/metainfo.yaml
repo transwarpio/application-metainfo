@@ -1,0 +1,582 @@
+---
+name: YARN
+version: 2.5.2-tdh50
+global: false
+namePrefix: Yarn
+friendlyName: "Yarn"
+dependencies:
+#  - name: LICENSE_SERVICE
+#    minVersion: 1.0
+#    maxVersion: 1.0
+#    optional: false
+  - name: ZOOKEEPER
+    minVersion: 3.4.5-tdh50
+    maxVersion: 3.4.5-tdh50
+    optional: false
+  - name: HDFS
+    minVersion: 2.5.2-tdh50
+    maxVersion: 2.5.2-tdh50
+    optional: false
+user: yarn
+roles:
+- name: YARN_RESOURCEMANAGER
+  friendlyName: "Yarn Resourcemanager"
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/log4j.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "yarn-site.ftlx"
+        targetPath: "/etc/${service.sid}/conf/yarn-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "yarn-env.sh"
+        targetPath: "/etc/${service.sid}/conf/yarn-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hadoop-env.sh"
+        targetPath: "/etc/${service.sid}/conf/hadoop-env.sh"
+        mode: "755"
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
+        to: "/etc/${service.sid}/conf/hdfs-site.xml"
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
+        to: "/etc/${service.sid}/conf/core-site.xml"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-historyserver.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-historyserver.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-maptask.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-maptask.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-nodemanager.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-nodemanager.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-reducetask.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-reducetask.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-resourcemanager.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-resourcemanager.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "yarn.exclude"
+        targetPath: "/etc/${service.sid}/conf/yarn.exclude"
+        mode: "644"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "mapred-env.sh"
+        targetPath: "/etc/${service.sid}/conf/mapred-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "mapred-site.ftlx"
+        targetPath: "/etc/${service.sid}/conf/mapred-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "taskcontroller.cfg"
+        targetPath: "/etc/${service.sid}/conf/taskcontroller.cfg"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "capacity-scheduler.ftlx"
+        targetPath: "/etc/${service.sid}/conf/capacity-scheduler.xml"
+        mode: "755"
+#    - directive: !<resource>
+#        templateType: FreeMarker
+#        templatePath: "yarn-resourcemanager.yaml"
+#        targetPath: "/etc/${service.sid}/hadoop-yarn-resourcemanager-${service.sid}.yaml"
+#        mode: "755"
+#  - type: Start
+#    directives:
+#    # Add labelKey "yarn-resourcemanager" for node ${localhostname}
+#    - directive: !<kubectl-label>
+#        action: AddLabel
+#        hostname: ${localhostname}
+#        labelKey: "yarn-resourcemanager"
+#    - directive: !<kubectl>
+#        action: Start
+#        file: "/etc/${service.sid}/hadoop-yarn-resourcemanager-${service.sid}.yaml"
+#  - type: Stop
+#    directives:
+#    - directive: !<kubectl>
+#        action: Stop
+#        file: "/etc/${service.sid}/hadoop-yarn-resourcemanager-${service.sid}.yaml"
+- name: YARN_NODEMANAGER
+  friendlyName: "Yarn Nodemanager"
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<EachNode> {}
+  suggestion:
+  - criteria: !<EachNode> {}
+  validation:
+  - criteria: !<EachNode> {}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/log4j.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "yarn-site.ftlx"
+        targetPath: "/etc/${service.sid}/conf/yarn-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "yarn-env.sh"
+        targetPath: "/etc/${service.sid}/conf/yarn-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hadoop-env.sh"
+        targetPath: "/etc/${service.sid}/conf/hadoop-env.sh"
+        mode: "755"
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
+        to: "/etc/${service.sid}/conf/hdfs-site.xml"
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
+        to: "/etc/${service.sid}/conf/core-site.xml"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-historyserver.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-historyserver.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-maptask.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-maptask.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-nodemanager.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-nodemanager.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-reducetask.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-reducetask.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-resourcemanager.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-resourcemanager.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "yarn.exclude"
+        targetPath: "/etc/${service.sid}/conf/yarn.exclude"
+        mode: "644"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "mapred-env.sh"
+        targetPath: "/etc/${service.sid}/conf/mapred-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "mapred-site.ftlx"
+        targetPath: "/etc/${service.sid}/conf/mapred-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "taskcontroller.cfg"
+        targetPath: "/etc/${service.sid}/conf/taskcontroller.cfg"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "capacity-scheduler.ftlx"
+        targetPath: "/etc/${service.sid}/conf/capacity-scheduler.xml"
+        mode: "755"
+#    - directive: !<resource>
+#        templateType: FreeMarker
+#        templatePath: "yarn-nodemanager.yaml"
+#        targetPath: "/etc/${service.sid}/hadoop-yarn-nodemanager-${service.sid}.yaml"
+#        mode: "755"
+#  - type: Start
+#    directives:
+#    # Add labelKey "yarn-nodemanager" for node ${localhostname}
+#    - directive: !<kubectl-label>
+#        action: AddLabel
+#        hostname: ${localhostname}
+#        labelKey: "yarn-nodemanager"
+#    - directive: !<kubectl>
+#        action: Start
+#        file: "/etc/${service.sid}/hadoop-yarn-nodemanager-${service.sid}.yaml"
+#  - type: Stop
+#    directives:
+#    - directive: !<kubectl>
+#        action: Stop
+#        file: "/etc/${service.sid}hadoop-yarn-nodemanager-${service.sid}.yaml"
+- name: YARN_HISTORYSERVER
+  friendlyName: "Yarn Historyserver"
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/log4j.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "yarn-site.ftlx"
+        targetPath: "/etc/${service.sid}/conf/yarn-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "yarn-env.sh"
+        targetPath: "/etc/${service.sid}/conf/yarn-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hadoop-env.sh"
+        targetPath: "/etc/${service.sid}/conf/hadoop-env.sh"
+        mode: "755"
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
+        to: "/etc/${service.sid}/conf/hdfs-site.xml"
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
+        to: "/etc/${service.sid}/conf/core-site.xml"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-historyserver.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-historyserver.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-maptask.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-maptask.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-nodemanager.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-nodemanager.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-reducetask.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-reducetask.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-resourcemanager.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-resourcemanager.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "yarn.exclude"
+        targetPath: "/etc/${service.sid}/conf/yarn.exclude"
+        mode: "644"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "mapred-env.sh"
+        targetPath: "/etc/${service.sid}/conf/mapred-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "mapred-site.ftlx"
+        targetPath: "/etc/${service.sid}/conf/mapred-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "taskcontroller.cfg"
+        targetPath: "/etc/${service.sid}/conf/taskcontroller.cfg"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "capacity-scheduler.ftlx"
+        targetPath: "/etc/${service.sid}/conf/capacity-scheduler.xml"
+        mode: "755"
+#    - directive: !<resource>
+#        templateType: FreeMarker
+#        templatePath: "yarn-historyserver.yaml"
+#        targetPath: "/etc/${service.sid}/hadoop-yarn-historyserver-${service.sid}.yaml"
+#        mode: "755"
+#  - type: Start
+#    directives:
+#    # Add labelKey "yarn-historyserver" for node ${localhostname}
+#    - directive: !<kubectl-label>
+#        action: AddLabel
+#        hostname: ${localhostname}
+#        labelKey: "yarn-historyserver"
+#    - directive: !<kubectl>
+#        action: Start
+#        file: "/etc/${service.sid}/hadoop-yarn-historyserver-${service.sid}.yaml"
+#  - type: Stop
+#    directives:
+#    - directive: !<kubectl>
+#        action: Stop
+#        file: "/etc/${service.sid}/hadoop-yarn-historyserver-${service.sid}.yaml"
+- name: YARN_TIMELINESERVER
+  friendlyName: "Yarn Timelineserver"
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/log4j.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "yarn-site.ftlx"
+        targetPath: "/etc/${service.sid}/conf/yarn-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "yarn-env.sh"
+        targetPath: "/etc/${service.sid}/conf/yarn-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hadoop-env.sh"
+        targetPath: "/etc/${service.sid}/conf/hadoop-env.sh"
+        mode: "755"
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
+        to: "/etc/${service.sid}/conf/hdfs-site.xml"
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
+        to: "/etc/${service.sid}/conf/core-site.xml"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-historyserver.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-historyserver.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-maptask.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-maptask.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-nodemanager.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-nodemanager.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-reducetask.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-reducetask.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "hadoop-metrics2-resourcemanager.properties"
+        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-resourcemanager.properties"
+        mode: "644"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "yarn.exclude"
+        targetPath: "/etc/${service.sid}/conf/yarn.exclude"
+        mode: "644"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "mapred-env.sh"
+        targetPath: "/etc/${service.sid}/conf/mapred-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "mapred-site.ftlx"
+        targetPath: "/etc/${service.sid}/conf/mapred-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "taskcontroller.cfg"
+        targetPath: "/etc/${service.sid}/conf/taskcontroller.cfg"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "capacity-scheduler.ftlx"
+        targetPath: "/etc/${service.sid}/conf/capacity-scheduler.xml"
+        mode: "755"
+#    - directive: !<resource>
+#        templateType: FreeMarker
+#        templatePath: "yarn-timelineserver.yaml"
+#        targetPath: "/etc/${service.sid}/hadoop-yarn-timelineserver-${service.sid}.yaml"
+#        mode: "755"
+#  - type: Start
+#    directives:
+#    # Add labelKey "yarn-timelineserver" for node ${localhostname}
+#    - directive: !<kubectl-label>
+#        action: AddLabel
+#        hostname: ${localhostname}
+#        labelKey: "yarn-timelineserver"
+#    - directive: !<kubectl>
+#        action: Start
+#        file: "/etc/${service.sid}/hadoop-yarn-timelineserver-${service.sid}.yaml"
+#  - type: Stop
+#    directives:
+#    - directive: !<kubectl>
+#        action: Stop
+#        file: "/etc/${service.sid}/hadoop-yarn-timelineserver-${service.sid}.yaml"
+stages:
+  - type: Start
+    taskGroups:
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: YARN_RESOURCEMANAGER
+      action: AddLabel
+      labelKey: "yarn-resourcemanager"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      action: Start
+      file: "yarn-resourcemanager.yaml"
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: YARN_NODEMANAGER
+      action: AddLabel
+      labelKey: "yarn-nodemanager"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      action: Start
+      file: "yarn-nodemanager.yaml"
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: YARN_HISTORYSERVER
+      action: AddLabel
+      labelKey: "yarn-historyserver"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      action: Start
+      file: "yarn-historyserver.yaml"
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: YARN_TIMELINESERVER
+      action: AddLabel
+      labelKey: "yarn-timelineserver"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      action: Start
+      file: "yarn-timelineserver.yaml"
+  - type: Stop
+    taskGroups:
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: YARN_RESOURCEMANAGER
+      action: RemoveLabel
+      labelKey: "yarn-resourcemanager"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      action: Stop
+      file: "yarn-resourcemanager.yaml"
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: YARN_NODEMANAGER
+      action: RemoveLabel
+      labelKey: "yarn-nodemanager"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      action: Stop
+      file: "yarn-nodemanager.yaml"
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: YARN_HISTORYSERVER
+      action: RemoveLabel
+      labelKey: "yarn-historyserver"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      action: Stop
+      file: "yarn-historyserver.yaml"
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: YARN_TIMELINESERVER
+      action: RemoveLabel
+      labelKey: "yarn-timelineserver"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      action: Stop
+      file: "yarn-timelineserver.yaml"

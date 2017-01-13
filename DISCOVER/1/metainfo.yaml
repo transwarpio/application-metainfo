@@ -1,0 +1,79 @@
+---
+name: DISCOVER
+version: 1-tdh50
+global: false
+namePrefix: DISCOVER
+friendlyName: DISCOVER
+user: transwarpr
+dependencies:
+#  - name: LICENSE_SERVICE
+#    minVersion: 1.0
+#    maxVersion: 1.0
+#    optional: false
+  - name: ZOOKEEPER
+    minVersion: 3.4.5-tdh50
+    maxVersion: 3.4.5-tdh50
+    optional: false
+  - name: HDFS
+    minVersion: 2.5.2-tdh50
+    maxVersion: 2.5.2-tdh50
+    optional: false
+  - name: YARN
+    minVersion: 2.5.2-tdh50
+    maxVersion: 2.5.2-tdh50
+    optional: false
+roles:
+- name: DISCOVER
+  friendlyName: "Discover"
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}", "/var/run/${service.sid}"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/usr/lib/discover/conf/"]
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "discover-context-env.properties"
+        targetPath: "/usr/lib/discover/conf/discover-context-env.properties"
+        mode: "755"
+stages:
+  - type: Start
+    taskGroups:
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: DISCOVER
+      action: AddLabel
+      labelKey: "discover"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      action: Start
+      file: "discover.yaml"
+  - type: Stop
+    taskGroups:
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: DISCOVER
+      action: RemoveLabel
+      labelKey: "discover"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      action: Stop
+      file: "discover.yaml"

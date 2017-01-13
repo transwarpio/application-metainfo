@@ -44,11 +44,11 @@ roles:
         templatePath: "myid"
         targetPath: "/var/${service.sid}/myid"
         mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "zookeeper.yaml"
-        targetPath: "/etc/${service.sid}/zookeeper-server-${service.sid}.yaml"
-        mode: "755"
+#    - directive: !<resource>
+#        templateType: FreeMarker
+#        templatePath: "zookeeper.yaml"
+#        targetPath: "/etc/${service.sid}/zookeeper-server-${service.sid}.yaml"
+#        mode: "755"
 #  - type: Start
 #    directives:
 #    # Add labelKey "zookeeper-server" for node ${localhostname}

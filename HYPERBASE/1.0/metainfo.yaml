@@ -66,11 +66,11 @@ roles:
         templatePath: "hadoop-metrics2-hbase.properties"
         targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-hbase.properties"
         mode: "644"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hyperbase-master.yaml"
-        targetPath: "/etc/${service.sid}/hyperbase-master-${service.sid}.yaml"
-        mode: "755"
+#    - directive: !<resource>
+#        templateType: FreeMarker
+#        templatePath: "hyperbase-master.yaml"
+#        targetPath: "/etc/${service.sid}/hyperbase-master-${service.sid}.yaml"
+#        mode: "755"
 #  - type: Start
 #    directives:
 #    # Add labelKey "hyperbase-master" for node ${localhostname}
@@ -133,11 +133,11 @@ roles:
         templatePath: "hadoop-metrics2-hbase.properties"
         targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-hbase.properties"
         mode: "644"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hyperbase-regionserver.yaml"
-        targetPath: "/etc/${service.sid}/hyperbase-regionserver-${service.sid}.yaml"
-        mode: "755"
+#    - directive: !<resource>
+#        templateType: FreeMarker
+#        templatePath: "hyperbase-regionserver.yaml"
+#        targetPath: "/etc/${service.sid}/hyperbase-regionserver-${service.sid}.yaml"
+#        mode: "755"
 #  - type: Start
 #    directives:
 #    # Add labelKey "hyperbase-regionserver" for node ${localhostname}
@@ -200,11 +200,11 @@ roles:
         templatePath: "hadoop-metrics2-hbase.properties"
         targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-hbase.properties"
         mode: "644"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hyperbase-thrift.yaml"
-        targetPath: "/etc/${service.sid}/hyperbase-thrift-${service.sid}.yaml"
-        mode: "755"
+#    - directive: !<resource>
+#        templateType: FreeMarker
+#        templatePath: "hyperbase-thrift.yaml"
+#        targetPath: "/etc/${service.sid}/hyperbase-thrift-${service.sid}.yaml"
+#        mode: "755"
 #  - type: Start
 #    directives:
 #    # Add labelKey "hyperbase-thrift" for node ${localhostname}

@@ -15,7 +15,7 @@ spec:
     metadata:
       labels:
         name: zookeeper-server-${service.sid}
-        podConflictName: zookeeper-server
+        podConflictName: zookeeper-server-${service.sid}
     spec:
       hostNetwork: true
       containers:
@@ -46,10 +46,10 @@ spec:
         - key: podConflictName
           operator: "="
           values:
-          - "zookeeper-server"
+          - "zookeeper-server-${service.sid}"
       # Ensure that only the node labeled "zookeeper-server=true" can start a zookeeper role (i.e., a pod)
       nodeSelector:
-        zookeeper-server: "true"
+        zookeeper-server-${service.sid}: "true"
       # The path on real node
       volumes:
       - hostPath:

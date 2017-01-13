@@ -66,11 +66,11 @@ roles:
         templatePath: "hive-site.ftlx"
         targetPath: "/etc/${service.sid}/conf/hive-site.xml"
         mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "inceptor-server.yaml"
-        targetPath: "/etc/${service.sid}/inceptor-server-${service.sid}.yaml"
-        mode: "755"
+#    - directive: !<resource>
+#        templateType: FreeMarker
+#        templatePath: "inceptor-server.yaml"
+#        targetPath: "/etc/${service.sid}/inceptor-server-${service.sid}.yaml"
+#        mode: "755"
 #  - type: Start
 #    directives:
 #    # Add labelKey "inceptor-server" for node ${localhostname}
@@ -133,11 +133,11 @@ roles:
         templatePath: "hive-site.ftlx"
         targetPath: "/etc/${service.sid}/conf/hive-site.xml"
         mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "inceptor-mysql.yaml"
-        targetPath: "/etc/${service.sid}/inceptor-mysql-${service.sid}.yaml"
-        mode: "755"
+#    - directive: !<resource>
+#        templateType: FreeMarker
+#        templatePath: "inceptor-mysql.yaml"
+#        targetPath: "/etc/${service.sid}/inceptor-mysql-${service.sid}.yaml"
+#        mode: "755"
 #  - type: Start
 #    directives:
 #    # Add labelKey "inceptor-mysql" for node ${localhostname}
@@ -200,11 +200,11 @@ roles:
         templatePath: "hive-site.ftlx"
         targetPath: "/etc/${service.sid}/conf/hive-site.xml"
         mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "inceptor-metastore.yaml"
-        targetPath: "/etc/${service.sid}/inceptor-metastore-${service.sid}.yaml"
-        mode: "755"
+#    - directive: !<resource>
+#        templateType: FreeMarker
+#        templatePath: "inceptor-metastore.yaml"
+#        targetPath: "/etc/${service.sid}/inceptor-metastore-${service.sid}.yaml"
+#        mode: "755"
 #  - type: Start
 #    directives:
 #    # Add labelKey "inceptor-metastore" for node ${localhostname}
@@ -267,11 +267,11 @@ roles:
         templatePath: "hive-site.ftlx"
         targetPath: "/etc/${service.sid}/conf/hive-site.xml"
         mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "inceptor-executor.yaml"
-        targetPath: "/etc/${service.sid}/inceptor-executor-${service.sid}.yaml"
-        mode: "755"
+#    - directive: !<resource>
+#        templateType: FreeMarker
+#        templatePath: "inceptor-executor.yaml"
+#        targetPath: "/etc/${service.sid}/inceptor-executor-${service.sid}.yaml"
+#        mode: "755"
 #  - type: Start
 #    directives:
 #    # Add labelKey "inceptor-executor" for node ${localhostname}

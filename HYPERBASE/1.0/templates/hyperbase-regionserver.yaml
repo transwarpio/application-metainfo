@@ -20,7 +20,7 @@ spec:
     metadata:
       labels:
         name: hyperbase-regionserver-${service.sid}
-        podConflictName: hyperbase-regionserver
+        podConflictName: hyperbase-regionserver-${service.sid}
     spec:
       hostNetwork: true 
       containers:
@@ -29,7 +29,7 @@ spec:
         - regionserver
         env:
         - name: HEAP_SIZE
-          value: 4096m
+          value: ${service['hbase.regionserver.memory']}m
         image: ${registryServer}:${registryPort}/jenkins/hbase
         imagePullPolicy: Always
         name: hyperbase-regionserver-${service.sid}
@@ -48,10 +48,10 @@ spec:
         - key: podConflictName
           operator: "="
           values:
-          - "hyperbase-regionserver"
+          - "hyperbase-regionserver-${service.sid}"
       # Ensure that only the node labeled "hyperbase-regionserver=true" can start a hyperbase-regionserver role (i.e., a pod)
       nodeSelector:
-        hyperbase-regionserver: "true"
+        hyperbase-regionserver-${service.sid}: "true"
       # The path on real node
       volumes:
       - hostPath:

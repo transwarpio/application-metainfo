@@ -1,0 +1,89 @@
+<#assign
+  registryServer=dependencies.REGISTRY.roles['REGISTRY_SERVER'][0].hostname
+  registryPort=dependencies.REGISTRY['registry.port']
+  >
+<#--federation is true-->
+<#if dependencies.HDFS.nameservices?? && dependencies.HDFS.nameservices?size gt 0>
+<#list dependencies.HDFS.nameservices as ns>
+<#--ha is enabled-->
+    <#if dependencies.HDFS[ns]['HDFS_NAMENODE']?size gt 1>
+    <#assign
+        namenode1hostname=dependencies.HDFS[ns]['HDFS_NAMENODE'][0].hostname
+        namenode2hostname=dependencies.HDFS[ns]['HDFS_NAMENODE'][1].hostname
+    >
+    </#if>
+</#list>
+<#else>
+<#--federation is false-->
+</#if>
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    name: hadoop-yarn-timelineserver-${service.sid}
+  name: hadoop-yarn-timelineserver-${service.sid}
+  namespace: default
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        name: hadoop-yarn-timelineserver-${service.sid}
+        podConflictName: yarn-timelineserver-${service.sid}
+    spec: 
+      containers:
+      - args:
+        - bootstrap.sh
+        - timelineserver
+        env:
+        - name: KRB_ENABLE
+          value: 'false'
+        - name: YARN_TIMELINE_SERVICE_HOSTNAME
+          value: ${service.roles.YARN_TIMELINESERVER[0]['hostname']}
+        - name: YARN_RESOURCEMANAGER_ADDRRESS
+          value: ${service.roles.YARN_RESOURCEMANAGER[0]['hostname']}
+        - name: HDFS_HA_NAMENODE_SERVICE
+          value: ${namenode1hostname},${namenode2hostname}
+        image: ${registryServer}:${registryPort}/tos/yarn:rb463
+        imagePullPolicy: Always
+        readinessProbe:
+          httpGet:
+            port: 8188
+            path: /
+          initialDelaySeconds: 60
+        name: hadoop-yarn-timelineserver-${service.sid}
+        # The path mounts on docker
+        volumeMounts:
+        - mountPath: /etc/hadoop/conf
+          name: yarn
+        - mountPath: /var/run/hadoop-common
+          name: socketdir
+        - mountPath: /var/transwarp
+          name: transwarp
+      hostNetwork: true
+      # Ensure that a node can have one yarn-resourcemanager at most
+      podConflictSelectors:
+      - matchExpressions:
+        - key: podConflictName
+          operator: "="
+          values:
+          - "yarn-timelineserver-${service.sid}"
+      # Ensure that only the node labeled "yarn-resourcemanager" can start a yarn-resourcemanager role (i.e., a pod)
+      nodeSelector:
+        yarn-timelineserver-${service.sid}: "true"
+      # The path on real node
+      volumes:
+      - hostPath:
+          path: /var/${service.sid}
+        name: transwarp
+      - hostPath:
+          path: /etc/${service.sid}/conf
+        name: yarn
+      - hostPath:
+          path: /root/docker/common
+        name: socketdir

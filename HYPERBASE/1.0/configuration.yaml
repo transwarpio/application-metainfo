@@ -457,3 +457,30 @@
   onDeps: []
   groups: [hbase_site]
   visibility: READ_WRITE
+
+- name: hbase.regionserver.memory
+  recommendExpression: 32000
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.master.memory
+  recommendExpression: 4096
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hbase.thriftserver.memory
+  recommendExpression: 32000
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [hbase_site]
+  visibility: READ_WRITE

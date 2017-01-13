@@ -1,0 +1,73 @@
+---
+name: KAFKA
+version: 0.8-tdh50
+global: false
+namePrefix: Kafka
+friendlyName: "Kafka"
+dependencies:
+#  - name: LICENSE_SERVICE
+#    minVersion: 1.0
+#    maxVersion: 1.0
+#    optional: false
+  - name: ZOOKEEPER
+    minVersion: 3.4.5-tdh50
+    maxVersion: 3.4.5-tdh50
+    optional: false
+user: kafka
+roles:
+- name: KAFKA_SERVER
+  friendlyName: "Kafka Server"
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<EachNode> {}
+  suggestion:
+  - criteria: !<EachNode> {}
+  validation:
+  - criteria: !<EachNode> {}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/run/${service.sid}", "/var/log/${service.sid}"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/log4j.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "server.properties"
+        targetPath: "/etc/${service.sid}/conf/server.properties"
+        mode: "755"
+stages:
+  - type: Start
+    taskGroups:
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: KAFKA_SERVER
+      action: AddLabel
+      labelKey: "kafka-server"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      action: Start
+      file: "kafka.yaml"
+  - type: Stop
+    taskGroups:
+    - !<Kubectl-Label>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: KAFKA_SERVER
+      action: RemoveLabel
+      labelKey: "kafka-server"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: MAJOR
+      timeoutMinutes: 2
+      action: Stop
+      file: "kafka.yaml"

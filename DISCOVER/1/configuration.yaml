@@ -1,0 +1,71 @@
+- name: discover.ui.port
+  recommendExpression: 4088
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: discover.spark.classpath
+  recommendExpression: /usr/lib/hive/lib/guava-14.0.1.jar:/usr/lib/hive/lib/hive-common.jar:/usr/lib/hive/lib/hive-jdbc.jar:/usr/lib/hive/lib/hive-metastore.jar:/usr/lib/hive/lib/hive-service.jar:/usr/lib/hive/lib/hive-shims.jar:/usr/lib/hive/lib/libthrift-0.9.2.jar:/usr/lib/hive/lib/libfb303-0.9.2.jar:/usr/lib/hive/lib/hive-exec.jar:/usr/lib/discover/lib/spark-assembly.jar
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: discover.executor.memory
+  recommendExpression: 512
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: discover.executor.cores
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: discover.number.executors
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: discover.yarn.queue
+  recommendExpression: default
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: license.zookeeper.quorum
+  recommendExpression: 172.16.1.41:2181
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: discover.memory
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

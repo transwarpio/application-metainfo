@@ -1,0 +1,75 @@
+<#assign
+  registryServer=dependencies.REGISTRY.roles['REGISTRY_SERVER'][0].hostname
+  registryPort=dependencies.REGISTRY['registry.port']
+  >
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    name: hadoop-yarn-nodemanager-${service.sid}
+  name: hadoop-yarn-nodemanager-${service.sid}
+  namespace: default
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        name: hadoop-yarn-nodemanager-${service.sid}
+        podConflictName: yarn-nodemanager-${service.sid}
+    spec: 
+      containers:
+      - args:
+        - bootstrap.sh
+        - nodemanager
+        env:
+        - name: KRB_ENABLE
+          value: 'false'
+        - name: NODEMANAGER_RESOURCE_MEMORY_MB
+          value: ${"'" + service['yarn.nodemanager.resource.memory-mb'] + "'"}
+        - name: YARN_RESOURCEMANAGER_ADDRRESS
+          value: ${service.roles.YARN_RESOURCEMANAGER[0]['hostname']}
+        - name: NODEMANAGER_RESOURCE_CPU_VCORES
+          value: ${"'" + service['yarn.nodemanager.resource.cpu-vcores'] + "'"}
+        image: ${registryServer}:${registryPort}/tos/yarn:rb463
+        imagePullPolicy: Always
+        readinessProbe:
+          httpGet:
+            port: 8042
+            path: /
+          initialDelaySeconds: 60
+        name: hadoop-yarn-nodemanager-${service.sid}
+        # The path mounts on docker
+        volumeMounts:
+        - mountPath: /etc/yarn/conf
+          name: yarn
+        - mountPath: /var/run/hadoop-common
+          name: socketdir
+        - mountPath: /var/transwarp
+          name: transwarp
+      hostNetwork: true
+      # Ensure that a node can have one yarn-nodemanager at most
+      podConflictSelectors:
+      - matchExpressions:
+        - key: podConflictName
+          operator: "="
+          values:
+          - "yarn-nodemanager-${service.sid}"
+      # Ensure that only the node labeled "yarn-nodemanager" can start a yarn-nodemanager role (i.e., a pod)
+      nodeSelector:
+        yarn-nodemanager-${service.sid}: "true"
+      # The path on real node
+      volumes:
+      - hostPath:
+          path: /var/${service.sid}
+        name: transwarp
+      - hostPath:
+          path: /etc/${service.sid}/conf
+        name: yarn
+      - hostPath:
+          path: /root/docker/common
+        name: socketdir

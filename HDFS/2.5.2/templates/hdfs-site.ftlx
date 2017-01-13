@@ -51,7 +51,7 @@
         jn_withport=[]
     >
     <#list journalnodes as jn>
-        <#assign jn_withport += [(jn.hostname + ":" + service[jn.hostname]['journalnode.rpc-port']!default_jn_rpc_port)]>
+        <#assign jn_withport += [(jn.hostname + ":" + service['journalnode.rpc-port']!default_jn_rpc_port)]>
     </#list>
     <@property "dfs.namenode.shared.edits.dir." + ns "qjournal://" + jn_withport?join(";") + "/" + ns/>
     <#else>
