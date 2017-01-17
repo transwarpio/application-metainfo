@@ -73,11 +73,11 @@ roles:
 #        mode: "755"
 #  - type: Start
 #    directives:
-#    # Add labelKey "hyperbase-master" for node ${localhostname}
+#    # Add labelPrefix "hyperbase-master" for node ${localhostname}
 #    - directive: !<kubectl-label>
 #        action: AddLabel
 #        hostname: ${localhostname}
-#        labelKey: "hyperbase-master"
+#        labelPrefix: "hyperbase-master"
 #    #- directive: !<kubectl>
 #    #    action: Start
 #    #    file: "/etc/${service.sid}/hyperbase-master-${service.sid}.yaml"
@@ -140,11 +140,11 @@ roles:
 #        mode: "755"
 #  - type: Start
 #    directives:
-#    # Add labelKey "hyperbase-regionserver" for node ${localhostname}
+#    # Add labelPrefix "hyperbase-regionserver" for node ${localhostname}
 #    - directive: !<kubectl-label>
 #        action: AddLabel
 #        hostname: ${localhostname}
-#        labelKey: "hyperbase-regionserver"
+#        labelPrefix: "hyperbase-regionserver"
 #    #- directive: !<kubectl>
 #    #    action: Start
 #    #    file: "/etc/${service.sid}/hyperbase-regionserver-${service.sid}.yaml"
@@ -207,11 +207,11 @@ roles:
 #        mode: "755"
 #  - type: Start
 #    directives:
-#    # Add labelKey "hyperbase-thrift" for node ${localhostname}
+#    # Add labelPrefix "hyperbase-thrift" for node ${localhostname}
 #    - directive: !<kubectl-label>
 #        action: AddLabel
 #        hostname: ${localhostname}
-#        labelKey: "hyperbase-thrift"
+#        labelPrefix: "hyperbase-thrift"
 #    #- directive: !<kubectl>
 #    #    action: Start
 #    #    file: "/etc/${service.sid}/hyperbase-thrift-${service.sid}.yaml"
@@ -228,7 +228,7 @@ stages:
       timeoutMinutes: 2
       roleType: HYEPRBASE_MASTER
       action: AddLabel
-      labelKey: "hyperbase-master"
+      labelPrefix: "hyperbase-master"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR
@@ -240,7 +240,7 @@ stages:
       timeoutMinutes: 2
       roleType: HYEPRBASE_REGIONSERVER
       action: AddLabel
-      labelKey: "hyperbase-regionserver"
+      labelPrefix: "hyperbase-regionserver"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR
@@ -252,7 +252,7 @@ stages:
       timeoutMinutes: 2
       roleType: HYEPRBASE_THRIFT
       action: AddLabel
-      labelKey: "hyperbase-thrift"
+      labelPrefix: "hyperbase-thrift"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR
@@ -266,7 +266,7 @@ stages:
       timeoutMinutes: 2
       roleType: HYEPRBASE_MASTER
       action: RemoveLabel
-      labelKey: "hyperbase-master"
+      labelPrefix: "hyperbase-master"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR
@@ -278,7 +278,7 @@ stages:
       timeoutMinutes: 2
       roleType: HYEPRBASE_REGIONSERVER
       action: RemoveLabel
-      labelKey: "hyperbase-regionserver"
+      labelPrefix: "hyperbase-regionserver"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR
@@ -290,7 +290,7 @@ stages:
       timeoutMinutes: 2
       roleType: HYEPRBASE_THRIFT
       action: RemoveLabel
-      labelKey: "hyperbase-thrift"
+      labelPrefix: "hyperbase-thrift"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR

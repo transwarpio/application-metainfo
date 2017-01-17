@@ -50,7 +50,7 @@ stages:
       timeoutMinutes: 2
       roleType: KAFKA_SERVER
       action: AddLabel
-      labelKey: "kafka-server"
+      labelPrefix: "kafka-server"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR
@@ -64,7 +64,7 @@ stages:
       timeoutMinutes: 2
       roleType: KAFKA_SERVER
       action: RemoveLabel
-      labelKey: "kafka-server"
+      labelPrefix: "kafka-server"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR

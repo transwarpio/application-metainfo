@@ -1,4 +1,6 @@
 <#assign
+  processedSid=service.sid?replace("_", "")
+  label="zookeeper-server-${processedSid}"
   registryServer=dependencies.REGISTRY.roles['REGISTRY_SERVER'][0].hostname
   registryPort=dependencies.REGISTRY['registry.port']
   >
@@ -6,16 +8,16 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    name: license-node-${service.sid}
-  name: license-node-${service.sid}
+    name: ${label}
+  name: ${label}
   namespace: default
 spec:
   replicas: 3
   template:
     metadata:
       labels:
-        name: license-node-${service.sid}
-        podConflictName: license-node-${service.sid}
+        name: ${label}
+        podConflictName: ${label}
     spec:
       hostNetwork: true
       containers:
@@ -31,7 +33,7 @@ spec:
           value: ${service['zookeeper.server.memory']}m
         image: ${registryServer}:${registryPort}/jenkins/zookeeper
         imagePullPolicy: Always
-        name: license-node-${service.sid}
+        name: ${label}
         # The path mounts on docker
         volumeMounts:
           - mountPath: /var/transwarp/logs
@@ -46,10 +48,10 @@ spec:
         - key: podConflictName
           operator: "="
           values:
-          - "license-node-${service.sid}"
+          - "${label}"
       # Ensure that only the node labeled "zookeeper-server=true" can start a zookeeper role (i.e., a pod)
       nodeSelector:
-        license-node-${service.sid}: "true"
+        ${label}: "true"
       # The path on real node
       volumes:
       - hostPath:

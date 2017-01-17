@@ -73,11 +73,11 @@ roles:
 #        mode: "755"
 #  - type: Start
 #    directives:
-#    # Add labelKey "inceptor-server" for node ${localhostname}
+#    # Add labelPrefix "inceptor-server" for node ${localhostname}
 #    - directive: !<kubectl-label>
 #        action: AddLabel
 #        hostname: ${localhostname}
-#        labelKey: "inceptor-server"
+#        labelPrefix: "inceptor-server"
 #    - directive: !<kubectl>
 #        action: Start
 #        file: "/etc/${service.sid}/inceptor-server-${service.sid}.yaml"
@@ -140,11 +140,11 @@ roles:
 #        mode: "755"
 #  - type: Start
 #    directives:
-#    # Add labelKey "inceptor-mysql" for node ${localhostname}
+#    # Add labelPrefix "inceptor-mysql" for node ${localhostname}
 #    - directive: !<kubectl-label>
 #        action: AddLabel
 #        hostname: ${localhostname}
-#        labelKey: "inceptor-mysql"
+#        labelPrefix: "inceptor-mysql"
 #    - directive: !<kubectl>
 #        action: Start
 #        file: "/etc/${service.sid}/inceptor-mysql-${service.sid}.yaml"
@@ -207,11 +207,11 @@ roles:
 #        mode: "755"
 #  - type: Start
 #    directives:
-#    # Add labelKey "inceptor-metastore" for node ${localhostname}
+#    # Add labelPrefix "inceptor-metastore" for node ${localhostname}
 #    - directive: !<kubectl-label>
 #        action: AddLabel
 #        hostname: ${localhostname}
-#        labelKey: "inceptor-metastore"
+#        labelPrefix: "inceptor-metastore"
 #    - directive: !<kubectl>
 #        action: Start
 #        file: "/etc/${service.sid}/inceptor-metastore-${service.sid}.yaml"
@@ -274,11 +274,11 @@ roles:
 #        mode: "755"
 #  - type: Start
 #    directives:
-#    # Add labelKey "inceptor-executor" for node ${localhostname}
+#    # Add labelPrefix "inceptor-executor" for node ${localhostname}
 #    - directive: !<kubectl-label>
 #        action: AddLabel
 #        hostname: ${localhostname}
-#        labelKey: "inceptor-executor"
+#        labelPrefix: "inceptor-executor"
 #    - directive: !<kubectl>
 #        action: Start
 #        file: "/etc/${service.sid}/inceptor-executor-${service.sid}.yaml"
@@ -295,7 +295,7 @@ stages:
       timeoutMinutes: 2
       roleType: INCEPTOR_SERVER
       action: AddLabel
-      labelKey: "inceptor-server"
+      labelPrefix: "inceptor-server"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR
@@ -307,7 +307,7 @@ stages:
       timeoutMinutes: 2
       roleType: INCEPTOR_METASTORE
       action: AddLabel
-      labelKey: "inceptor-metastore"
+      labelPrefix: "inceptor-metastore"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR
@@ -319,7 +319,7 @@ stages:
       timeoutMinutes: 2
       roleType: INCEPTOR_MYSQL
       action: AddLabel
-      labelKey: "inceptor-mysql"
+      labelPrefix: "inceptor-mysql"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR
@@ -331,7 +331,7 @@ stages:
       timeoutMinutes: 2
       roleType: INCEPTOR_EXECUTOR
       action: AddLabel
-      labelKey: "inceptor-executor"
+      labelPrefix: "inceptor-executor"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR
@@ -345,7 +345,7 @@ stages:
       timeoutMinutes: 2
       roleType: INCEPTOR_SERVER
       action: RemoveLabel
-      labelKey: "inceptor-server"
+      labelPrefix: "inceptor-server"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR
@@ -357,7 +357,7 @@ stages:
       timeoutMinutes: 2
       roleType: INCEPTOR_METASTORE
       action: RemoveLabel
-      labelKey: "inceptor-metastore"
+      labelPrefix: "inceptor-metastore"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR
@@ -369,7 +369,7 @@ stages:
       timeoutMinutes: 2
       roleType: INCEPTOR_MYSQL
       action: RemoveLabel
-      labelKey: "inceptor-mysql"
+      labelPrefix: "inceptor-mysql"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR
@@ -381,7 +381,7 @@ stages:
       timeoutMinutes: 2
       roleType: INCEPTOR_EXECUTOR
       action: RemoveLabel
-      labelKey: "inceptor-executor"
+      labelPrefix: "inceptor-executor"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR

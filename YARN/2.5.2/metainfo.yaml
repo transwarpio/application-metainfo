@@ -121,11 +121,11 @@ roles:
 #        mode: "755"
 #  - type: Start
 #    directives:
-#    # Add labelKey "yarn-resourcemanager" for node ${localhostname}
+#    # Add labelPrefix "yarn-resourcemanager" for node ${localhostname}
 #    - directive: !<kubectl-label>
 #        action: AddLabel
 #        hostname: ${localhostname}
-#        labelKey: "yarn-resourcemanager"
+#        labelPrefix: "yarn-resourcemanager"
 #    - directive: !<kubectl>
 #        action: Start
 #        file: "/etc/${service.sid}/hadoop-yarn-resourcemanager-${service.sid}.yaml"
@@ -236,11 +236,11 @@ roles:
 #        mode: "755"
 #  - type: Start
 #    directives:
-#    # Add labelKey "yarn-nodemanager" for node ${localhostname}
+#    # Add labelPrefix "yarn-nodemanager" for node ${localhostname}
 #    - directive: !<kubectl-label>
 #        action: AddLabel
 #        hostname: ${localhostname}
-#        labelKey: "yarn-nodemanager"
+#        labelPrefix: "yarn-nodemanager"
 #    - directive: !<kubectl>
 #        action: Start
 #        file: "/etc/${service.sid}/hadoop-yarn-nodemanager-${service.sid}.yaml"
@@ -351,11 +351,11 @@ roles:
 #        mode: "755"
 #  - type: Start
 #    directives:
-#    # Add labelKey "yarn-historyserver" for node ${localhostname}
+#    # Add labelPrefix "yarn-historyserver" for node ${localhostname}
 #    - directive: !<kubectl-label>
 #        action: AddLabel
 #        hostname: ${localhostname}
-#        labelKey: "yarn-historyserver"
+#        labelPrefix: "yarn-historyserver"
 #    - directive: !<kubectl>
 #        action: Start
 #        file: "/etc/${service.sid}/hadoop-yarn-historyserver-${service.sid}.yaml"
@@ -466,11 +466,11 @@ roles:
 #        mode: "755"
 #  - type: Start
 #    directives:
-#    # Add labelKey "yarn-timelineserver" for node ${localhostname}
+#    # Add labelPrefix "yarn-timelineserver" for node ${localhostname}
 #    - directive: !<kubectl-label>
 #        action: AddLabel
 #        hostname: ${localhostname}
-#        labelKey: "yarn-timelineserver"
+#        labelPrefix: "yarn-timelineserver"
 #    - directive: !<kubectl>
 #        action: Start
 #        file: "/etc/${service.sid}/hadoop-yarn-timelineserver-${service.sid}.yaml"
@@ -487,7 +487,7 @@ stages:
       timeoutMinutes: 2
       roleType: YARN_RESOURCEMANAGER
       action: AddLabel
-      labelKey: "yarn-resourcemanager"
+      labelPrefix: "yarn-resourcemanager"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR
@@ -499,7 +499,7 @@ stages:
       timeoutMinutes: 2
       roleType: YARN_NODEMANAGER
       action: AddLabel
-      labelKey: "yarn-nodemanager"
+      labelPrefix: "yarn-nodemanager"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR
@@ -511,7 +511,7 @@ stages:
       timeoutMinutes: 2
       roleType: YARN_HISTORYSERVER
       action: AddLabel
-      labelKey: "yarn-historyserver"
+      labelPrefix: "yarn-historyserver"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR
@@ -523,7 +523,7 @@ stages:
       timeoutMinutes: 2
       roleType: YARN_TIMELINESERVER
       action: AddLabel
-      labelKey: "yarn-timelineserver"
+      labelPrefix: "yarn-timelineserver"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR
@@ -537,7 +537,7 @@ stages:
       timeoutMinutes: 2
       roleType: YARN_RESOURCEMANAGER
       action: RemoveLabel
-      labelKey: "yarn-resourcemanager"
+      labelPrefix: "yarn-resourcemanager"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR
@@ -549,7 +549,7 @@ stages:
       timeoutMinutes: 2
       roleType: YARN_NODEMANAGER
       action: RemoveLabel
-      labelKey: "yarn-nodemanager"
+      labelPrefix: "yarn-nodemanager"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR
@@ -561,7 +561,7 @@ stages:
       timeoutMinutes: 2
       roleType: YARN_HISTORYSERVER
       action: RemoveLabel
-      labelKey: "yarn-historyserver"
+      labelPrefix: "yarn-historyserver"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR
@@ -573,7 +573,7 @@ stages:
       timeoutMinutes: 2
       roleType: YARN_TIMELINESERVER
       action: RemoveLabel
-      labelKey: "yarn-timelineserver"
+      labelPrefix: "yarn-timelineserver"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: MAJOR
