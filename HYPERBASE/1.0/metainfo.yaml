@@ -19,7 +19,7 @@ dependencies:
     optional: false
 user: hbase
 roles:
-- name: HYEPRBASE_MASTER
+- name: HYPERBASE_MASTER
   friendlyName: "Hyperbase Master"
   summaryPolicy: SOME
   autoAssign:
@@ -86,7 +86,7 @@ roles:
 #    - directive: !<kubectl>
 #        action: Stop
 #        file: "/etc/${service.sid}/hyperbase-master-${service.sid}.yaml"
-- name: HYEPRBASE_REGIONSERVER
+- name: HYPERBASE_REGIONSERVER
   friendlyName: "Hyperbase Regionserver"
   summaryPolicy: SOME
   autoAssign:
@@ -153,7 +153,7 @@ roles:
 #    - directive: !<kubectl>
 #        action: Stop
 #        file: "/etc/${service.sid}/hyperbase-regionserver-${service.sid}.yaml"
-- name: HYEPRBASE_THRIFT
+- name: HYPERBASE_THRIFT
   friendlyName: "Hyperbase Thrift"
   summaryPolicy: SOME
   autoAssign:
@@ -226,7 +226,7 @@ stages:
     - !<Kubectl-Label>
       summaryPolicy: SOME
       timeoutMinutes: 2
-      roleType: HYEPRBASE_MASTER
+      roleType: HYPERBASE_MASTER
       action: AddLabel
       labelPrefix: "hyperbase-master"
       labelValue: "true"
@@ -238,7 +238,7 @@ stages:
     - !<Kubectl-Label>
       summaryPolicy: SOME
       timeoutMinutes: 2
-      roleType: HYEPRBASE_REGIONSERVER
+      roleType: HYPERBASE_REGIONSERVER
       action: AddLabel
       labelPrefix: "hyperbase-regionserver"
       labelValue: "true"
@@ -250,7 +250,7 @@ stages:
     - !<Kubectl-Label>
       summaryPolicy: SOME
       timeoutMinutes: 2
-      roleType: HYEPRBASE_THRIFT
+      roleType: HYPERBASE_THRIFT
       action: AddLabel
       labelPrefix: "hyperbase-thrift"
       labelValue: "true"
@@ -264,7 +264,7 @@ stages:
     - !<Kubectl-Label>
       summaryPolicy: SOME
       timeoutMinutes: 2
-      roleType: HYEPRBASE_MASTER
+      roleType: HYPERBASE_MASTER
       action: RemoveLabel
       labelPrefix: "hyperbase-master"
       labelValue: "true"
@@ -276,7 +276,7 @@ stages:
     - !<Kubectl-Label>
       summaryPolicy: SOME
       timeoutMinutes: 2
-      roleType: HYEPRBASE_REGIONSERVER
+      roleType: HYPERBASE_REGIONSERVER
       action: RemoveLabel
       labelPrefix: "hyperbase-regionserver"
       labelValue: "true"
@@ -288,7 +288,7 @@ stages:
     - !<Kubectl-Label>
       summaryPolicy: SOME
       timeoutMinutes: 2
-      roleType: HYEPRBASE_THRIFT
+      roleType: HYPERBASE_THRIFT
       action: RemoveLabel
       labelPrefix: "hyperbase-thrift"
       labelValue: "true"

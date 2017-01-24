@@ -4,7 +4,7 @@
   valueType: PORT
   isNodeSpecific: true
   scope: !<RoleTypes>
-    roleTypes: [ZOOKEEPER_SERVER]
+    roleTypes: [ZOOKEEPER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -15,7 +15,7 @@
   valueType: PORT
   isNodeSpecific: true
   scope: !<RoleTypes>
-    roleTypes: [ZOOKEEPER_SERVER]
+    roleTypes: [ZOOKEEPER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -26,7 +26,7 @@
   valueType: PORT
   isNodeSpecific: true
   scope: !<RoleTypes>
-    roleTypes: [ZOOKEEPER_SERVER]
+    roleTypes: [ZOOKEEPER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -36,7 +36,7 @@
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
-    roleTypes: [ZOOKEEPER_SERVER]
+    roleTypes: [ZOOKEEPER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -46,7 +46,7 @@
   defaultValue: null
   valueType: MILLISECONDS
   scope: !<RoleTypes>
-    roleTypes: [ZOOKEEPER_SERVER]
+    roleTypes: [ZOOKEEPER]
   onDeps: []
   groups: [zoo_cfg]
   visibility: READ_WRITE
@@ -56,7 +56,7 @@
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [ZOOKEEPER_SERVER]
+    roleTypes: [ZOOKEEPER]
   onDeps: []
   groups: [zoo_cfg]
   visibility: READ_WRITE
@@ -66,7 +66,7 @@
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [ZOOKEEPER_SERVER]
+    roleTypes: [ZOOKEEPER]
   onDeps: []
   groups: [zoo_cfg]
   visibility: READ_WRITE
@@ -76,7 +76,7 @@
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [ZOOKEEPER_SERVER]
+    roleTypes: [ZOOKEEPER]
   onDeps: []
   groups: [zoo_cfg]
   visibility: READ_WRITE
@@ -86,7 +86,7 @@
   defaultValue: null
   valueType: MB
   scope: !<RoleTypes>
-    roleTypes: [ZOOKEEPER_SERVER]
+    roleTypes: [ZOOKEEPER]
   onDeps: []
   groups: []
   visibility: READ_WRITE

@@ -1,7 +1,7 @@
 <#--handle dependent.zookeeper-->
 <#if dependencies.ZOOKEEPER??>
   <#assign zookeeper=dependencies.ZOOKEEPER quorums=[]>
-  <#list zookeeper.roles.ZOOKEEPER_SERVER as role>
+  <#list zookeeper.roles.ZOOKEEPER as role>
     <#assign quorums += [role.hostname + ":" + zookeeper["zookeeper.client.port"]]>
   </#list>
   <#assign quorum = quorums?join(",")>

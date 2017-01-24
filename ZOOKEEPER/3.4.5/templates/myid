@@ -1,4 +1,4 @@
-<#assign hosts=service['roles']['ZOOKEEPER_SERVER']>
+<#assign hosts=service['roles']['ZOOKEEPER']>
 <#list hosts as host>
 <#if host.hostname == localhostname>
 ${host.id}

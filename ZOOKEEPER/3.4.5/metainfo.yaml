@@ -8,7 +8,7 @@ dependencies: []
 packages: ["zookeeper"]
 user: zookeeper
 roles:
-- name: ZOOKEEPER_SERVER
+- name: ZOOKEEPER
   friendlyName: "ZooKeeper Server"
   labelPrefix: "zookeeper-server"
   summaryPolicy: MAJOR
