@@ -16,7 +16,7 @@
 <#--handle dependent.zookeeper-->
 <#if dependencies.ZOOKEEPER??>
     <#assign zookeeper=dependencies.ZOOKEEPER quorum=[]>
-    <#list zookeeper.roles.ZOOKEEPER_SERVER as role>
+    <#list zookeeper.roles.ZOOKEEPER as role>
         <#assign quorum += [role.hostname]>
     </#list>
     <@property "hive.zookeeper.quorum" quorum?join(",")/>
