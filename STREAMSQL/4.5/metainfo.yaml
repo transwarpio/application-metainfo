@@ -5,15 +5,15 @@ global: false
 namePrefix: StreamSQL
 friendlyName: "StreamSQL"
 dependencies:
-#  - name: LICENSE_SERVICE
-#    minVersion: 1.0
-#    maxVersion: 1.0
-#    optional: false
   - name: ZOOKEEPER
     minVersion: 3.4.5-tdh50
     maxVersion: 3.4.5-tdh50
     optional: false
   - name: HDFS
+    minVersion: 2.5.2-tdh50
+    maxVersion: 2.5.2-tdh50
+    optional: false
+  - name: YARN
     minVersion: 2.5.2-tdh50
     maxVersion: 2.5.2-tdh50
     optional: false
@@ -388,3 +388,4 @@ stages:
       timeoutMinutes: 2
       action: Stop
       file: "inceptor-executor.yaml"
+product: "Stream"

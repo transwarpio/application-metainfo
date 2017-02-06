@@ -5,10 +5,6 @@ global: false
 namePrefix: Yarn
 friendlyName: "Yarn"
 dependencies:
-#  - name: LICENSE_SERVICE
-#    minVersion: 1.0
-#    maxVersion: 1.0
-#    optional: false
   - name: ZOOKEEPER
     minVersion: 3.4.5-tdh50
     maxVersion: 3.4.5-tdh50
@@ -344,26 +340,6 @@ roles:
         templatePath: "capacity-scheduler.ftlx"
         targetPath: "/etc/${service.sid}/conf/capacity-scheduler.xml"
         mode: "755"
-#    - directive: !<resource>
-#        templateType: FreeMarker
-#        templatePath: "yarn-historyserver.yaml"
-#        targetPath: "/etc/${service.sid}/hadoop-yarn-historyserver-${service.sid}.yaml"
-#        mode: "755"
-#  - type: Start
-#    directives:
-#    # Add labelPrefix "yarn-historyserver" for node ${localhostname}
-#    - directive: !<kubectl-label>
-#        action: AddLabel
-#        hostname: ${localhostname}
-#        labelPrefix: "yarn-historyserver"
-#    - directive: !<kubectl>
-#        action: Start
-#        file: "/etc/${service.sid}/hadoop-yarn-historyserver-${service.sid}.yaml"
-#  - type: Stop
-#    directives:
-#    - directive: !<kubectl>
-#        action: Stop
-#        file: "/etc/${service.sid}/hadoop-yarn-historyserver-${service.sid}.yaml"
 - name: YARN_TIMELINESERVER
   friendlyName: "Yarn Timelineserver"
   summaryPolicy: SOME
@@ -459,26 +435,6 @@ roles:
         templatePath: "capacity-scheduler.ftlx"
         targetPath: "/etc/${service.sid}/conf/capacity-scheduler.xml"
         mode: "755"
-#    - directive: !<resource>
-#        templateType: FreeMarker
-#        templatePath: "yarn-timelineserver.yaml"
-#        targetPath: "/etc/${service.sid}/hadoop-yarn-timelineserver-${service.sid}.yaml"
-#        mode: "755"
-#  - type: Start
-#    directives:
-#    # Add labelPrefix "yarn-timelineserver" for node ${localhostname}
-#    - directive: !<kubectl-label>
-#        action: AddLabel
-#        hostname: ${localhostname}
-#        labelPrefix: "yarn-timelineserver"
-#    - directive: !<kubectl>
-#        action: Start
-#        file: "/etc/${service.sid}/hadoop-yarn-timelineserver-${service.sid}.yaml"
-#  - type: Stop
-#    directives:
-#    - directive: !<kubectl>
-#        action: Stop
-#        file: "/etc/${service.sid}/hadoop-yarn-timelineserver-${service.sid}.yaml"
 stages:
   - type: Start
     taskGroups:
@@ -580,3 +536,4 @@ stages:
       timeoutMinutes: 2
       action: Stop
       file: "yarn-timelineserver.yaml"
+product: "Hadoop"

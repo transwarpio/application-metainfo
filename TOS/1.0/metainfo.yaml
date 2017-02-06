@@ -4,11 +4,7 @@ version: 1.0
 global: false
 namePrefix: TOS
 friendlyName: TOS
-dependencies: #TODO consider external registry
-- name: REGISTRY
-  minVersion: 1.0
-  maxVersion: 1.0
-  optional: false
+dependencies: []
 user: root
 roles:
 - name: TOS_MASTER
@@ -101,3 +97,4 @@ roles:
     - directive: !<docker-compose>
         action: Stop
         file: "/etc/${service.sid}/tos-slave-${service.sid}.yaml"
+product: "TOS"
