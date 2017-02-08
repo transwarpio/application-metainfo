@@ -4,6 +4,7 @@ version: 1.0-tdh50
 global: false
 namePrefix: Hyperbase
 friendlyName: "Hyperbase"
+dockerImage: "tos/hbase:rb465-final"
 dependencies:
   - name: ZOOKEEPER
     minVersion: 3.4.5-tdh50
@@ -21,6 +22,27 @@ user: hbase
 roles:
 - name: HYPERBASE_MASTER
   friendlyName: "Hyperbase Master"
+  labelPrefix: "hyperbase-master"
+  env:
+  - name: HEAP_SIZE
+    value: ${service['hbase.master.memory']}m
+  mountPath:
+  - mountPath: /etc/hyperbase/conf
+    hostPath: /etc/${service.sid}/conf
+    name: hyperbase
+  - mountPath: /etc/hadoop/conf
+    hostPath: /etc/${dependencies.HDFS.sid}/conf
+    name: hdfs
+  - mountPath: /var/run/hadoop-common
+    hostPath: /root/docker/common
+    name: socketdir
+  - mountPath: /var/transwarp/logs
+    hostPath: /var/log/${service.sid}
+    name: log
+  - mountPath: /var/run/${dependencies.HDFS.sid}
+    hostPath: /var/run/${dependencies.HDFS.sid}
+    name: hdfssocketdir
+  bootstrapParam: "master"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -66,28 +88,26 @@ roles:
         templatePath: "hadoop-metrics2-hbase.properties"
         targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-hbase.properties"
         mode: "644"
-#    - directive: !<resource>
-#        templateType: FreeMarker
-#        templatePath: "hyperbase-master.yaml"
-#        targetPath: "/etc/${service.sid}/hyperbase-master-${service.sid}.yaml"
-#        mode: "755"
-#  - type: Start
-#    directives:
-#    # Add labelPrefix "hyperbase-master" for node ${localhostname}
-#    - directive: !<kubectl-label>
-#        action: AddLabel
-#        hostname: ${localhostname}
-#        labelPrefix: "hyperbase-master"
-#    #- directive: !<kubectl>
-#    #    action: Start
-#    #    file: "/etc/${service.sid}/hyperbase-master-${service.sid}.yaml"
-#  - type: Stop
-#    directives:
-#    - directive: !<kubectl>
-#        action: Stop
-#        file: "/etc/${service.sid}/hyperbase-master-${service.sid}.yaml"
 - name: HYPERBASE_REGIONSERVER
   friendlyName: "Hyperbase Regionserver"
+  labelPrefix: "hyperbase-regionserver"
+  env:
+  - name: HEAP_SIZE
+    value: ${service['hbase.regionserver.memory']}m
+  mountPath:
+  - mountPath: /etc/hyperbase/conf
+    hostPath: /etc/${service.sid}/conf
+    name: hyperbase
+  - mountPath: /etc/hadoop/conf
+    hostPath: /etc/${dependencies.HDFS.sid}/conf
+    name: hdfs
+  - mountPath: /var/run/hadoop-common
+    hostPath: /root/docker/common
+    name: socketdir
+  - mountPath: /var/transwarp/logs
+    hostPath: /var/log/${service.sid}
+    name: log
+  bootstrapParam: "regionserver"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}
@@ -133,28 +153,29 @@ roles:
         templatePath: "hadoop-metrics2-hbase.properties"
         targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-hbase.properties"
         mode: "644"
-#    - directive: !<resource>
-#        templateType: FreeMarker
-#        templatePath: "hyperbase-regionserver.yaml"
-#        targetPath: "/etc/${service.sid}/hyperbase-regionserver-${service.sid}.yaml"
-#        mode: "755"
-#  - type: Start
-#    directives:
-#    # Add labelPrefix "hyperbase-regionserver" for node ${localhostname}
-#    - directive: !<kubectl-label>
-#        action: AddLabel
-#        hostname: ${localhostname}
-#        labelPrefix: "hyperbase-regionserver"
-#    #- directive: !<kubectl>
-#    #    action: Start
-#    #    file: "/etc/${service.sid}/hyperbase-regionserver-${service.sid}.yaml"
-#  - type: Stop
-#    directives:
-#    - directive: !<kubectl>
-#        action: Stop
-#        file: "/etc/${service.sid}/hyperbase-regionserver-${service.sid}.yaml"
 - name: HYPERBASE_THRIFT
   friendlyName: "Hyperbase Thrift"
+  labelPrefix: "hyperbase-thrift"
+  env:
+  - name: HEAP_SIZE
+    value: ${service['hbase.regionserver.memory']}m
+  mountPath:
+  - mountPath: /etc/hyperbase/conf
+    hostPath: /etc/${service.sid}/conf
+    name: hyperbase
+  - mountPath: /etc/hadoop/conf
+    hostPath: /etc/${dependencies.HDFS.sid}/conf
+    name: hdfs
+  - mountPath: /var/run/hadoop-common
+    hostPath: /root/docker/common
+    name: socketdir
+  - mountPath: /var/transwarp/logs
+    hostPath: /var/log/${service.sid}
+    name: log
+  - mountPath: /var/run/${dependencies.HDFS.sid}
+    hostPath: /var/run/${dependencies.HDFS.sid}
+    name: hdfssocketdir
+  bootstrapParam: "thrift"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -200,101 +221,3 @@ roles:
         templatePath: "hadoop-metrics2-hbase.properties"
         targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-hbase.properties"
         mode: "644"
-#    - directive: !<resource>
-#        templateType: FreeMarker
-#        templatePath: "hyperbase-thrift.yaml"
-#        targetPath: "/etc/${service.sid}/hyperbase-thrift-${service.sid}.yaml"
-#        mode: "755"
-#  - type: Start
-#    directives:
-#    # Add labelPrefix "hyperbase-thrift" for node ${localhostname}
-#    - directive: !<kubectl-label>
-#        action: AddLabel
-#        hostname: ${localhostname}
-#        labelPrefix: "hyperbase-thrift"
-#    #- directive: !<kubectl>
-#    #    action: Start
-#    #    file: "/etc/${service.sid}/hyperbase-thrift-${service.sid}.yaml"
-#  - type: Stop
-#    directives:
-#    - directive: !<kubectl>
-#        action: Stop
-#        file: "/etc/${service.sid}/hyperbase-thrift-${service.sid}.yaml"
-stages:
-  - type: Start
-    taskGroups:
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: HYPERBASE_MASTER
-      action: AddLabel
-      labelPrefix: "hyperbase-master"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Start
-      file: "hyperbase-master.yaml"
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: HYPERBASE_REGIONSERVER
-      action: AddLabel
-      labelPrefix: "hyperbase-regionserver"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Start
-      file: "hyperbase-regionserver.yaml"
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: HYPERBASE_THRIFT
-      action: AddLabel
-      labelPrefix: "hyperbase-thrift"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Start
-      file: "hyperbase-thrift.yaml"
-  - type: Stop
-    taskGroups:
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: HYPERBASE_MASTER
-      action: RemoveLabel
-      labelPrefix: "hyperbase-master"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Stop
-      file: "hyperbase-master.yaml"
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: HYPERBASE_REGIONSERVER
-      action: RemoveLabel
-      labelPrefix: "hyperbase-regionserver"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Stop
-      file: "hyperbase-regionserver.yaml"
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: HYPERBASE_THRIFT
-      action: RemoveLabel
-      labelPrefix: "hyperbase-thrift"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Stop
-      file: "hyperbase-thrift.yaml"
-product: "Hyperbase"

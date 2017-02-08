@@ -9,10 +9,36 @@ dependencies:
     minVersion: 3.4.5-tdh50
     maxVersion: 3.4.5-tdh50
     optional: false
+dockerImage: "tos/kafka-server:rb465-final"
 user: kafka
 roles:
 - name: KAFKA_SERVER
   friendlyName: "Kafka Server"
+  labelPrefix: "kafka-server"
+  env:
+  - name: TRANSWARP_ZOOKEEPER_QUORUM
+    value: ${dependencies.ZOOKEEPER.roles.ZOOKEEPER[0]['hostname']},${dependencies.ZOOKEEPER.roles.ZOOKEEPER[1]['hostname']},${dependencies.ZOOKEEPER.roles.ZOOKEEPER[2]['hostname']}
+  - name: KAFKA_DATA_DIRS
+    value: "/data"
+  - name: ZOOKEEPER_CONNECTION_TIMEOUT
+    value: ${service['kmq.zookeeper.connection.timeout.ms']}
+  - name: MESSAGE_MAX_BYTES
+    value: ${service['kmq.message.max.bytes']}
+  - name: REPLICA_FETCH_MAX_BYTES
+    value: ${service['kmq.replica.fetch.max.bytes']}
+  - name: BROKER_ID_EQUALS_TO_DND_ID
+    value: ${service['brokerid.equalsto.dndid']}
+  mountPath:
+  - mountPath: /data
+    hostPath: /etc/${service.sid}/data
+    name: data
+  - mountPath: /var/transwarp/logs
+    hostPath: /var/log/${service.sid}
+    name: log
+  - mountPath: /etc/kafka/conf
+    hostPath: /etc/${service.sid}/conf
+    name: conf
+  bootstrapParam: "broker"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}
@@ -38,32 +64,3 @@ roles:
         templatePath: "server.properties"
         targetPath: "/etc/${service.sid}/conf/server.properties"
         mode: "755"
-stages:
-  - type: Start
-    taskGroups:
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: KAFKA_SERVER
-      action: AddLabel
-      labelPrefix: "kafka-server"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Start
-      file: "kafka.yaml"
-  - type: Stop
-    taskGroups:
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: KAFKA_SERVER
-      action: RemoveLabel
-      labelPrefix: "kafka-server"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Stop
-      file: "kafka.yaml"

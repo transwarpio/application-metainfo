@@ -26,8 +26,9 @@ export JAVA_HOME=${r"${JAVA_HOME}"}
 # The jsvc implementation to use. Jsvc is required to run secure datanodes.
 #export JSVC_HOME=${r"${JSVC_HOME}"}
 
-export HADOOP_CONF_DIR=/etc/${service.sid}/conf:/etc/${dependencies.HDFS.sid}/conf:/etc/hbase/conf
+# export HADOOP_CONF_DIR=/etc/${service.sid}/conf:/etc/${dependencies.HDFS.sid}/conf:/etc/hbase/conf
 
+export HADOOP_CONF_DIR=/etc/${service.sid}/conf
 
 # Extra Java CLASSPATH elements.  Automatically insert capacity-scheduler.
 for f in $HADOOP_HOME/contrib/capacity-scheduler/*.jar; do

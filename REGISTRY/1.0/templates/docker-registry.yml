@@ -17,6 +17,7 @@ registry:
   net: host
   restart: always
   volumes:
+#    - /etc/registry:/etc/docker/registry # enable it for deleting images
     - /srv/registry:/certs
     - /var/lib/registry_data:/var/lib/registry
   environment:

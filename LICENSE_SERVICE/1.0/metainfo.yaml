@@ -6,12 +6,32 @@ global: true
 namePrefix: Transwarp_License_Cluster
 friendlyName: "License Service"
 dependencies: []
+packages: ["zookeeper"]
+dockerImage: "tos/zookeeper:rb465-final-tdh"
 user: zookeeper
 roles:
 - name: LICENSE_NODE
   friendlyName: "License Node"
   # compatible with legacy init.d script name "zookeeper-server-transwarp_license_cluster"
   labelPrefix: "zookeeper-server"
+  env:
+  - name: USE_EXTERNAL_CONFIG
+    value: "true"
+  - name: TRANSWARP_DATA_HOME
+    value: /var/${service.sid}
+  - name: HEAP_SIZE
+    value: ${service['zookeeper.server.memory']}m
+  mountPath:
+  - mountPath: /var/transwarp/logs
+    hostPath: /var/log/${service.sid}
+    name: log
+  - mountPath: /etc/zookeeper/conf
+    hostPath: /etc/${service.sid}/conf
+    name: zookeeper
+  - mountPath: /var/${service.sid}
+    hostPath: /var/${service.sid}
+    name: data
+  bootstrapParam: "zookeeper"
   summaryPolicy: MAJOR
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [5, 3, 1]}

@@ -4,6 +4,7 @@ version: 2.5.2-tdh50
 global: false
 namePrefix: Yarn
 friendlyName: "Yarn"
+dockerImage: "tos/yarn:rb465-final-tdh"
 dependencies:
   - name: ZOOKEEPER
     minVersion: 3.4.5-tdh50
@@ -17,6 +18,29 @@ user: yarn
 roles:
 - name: YARN_RESOURCEMANAGER
   friendlyName: "Yarn Resourcemanager"
+  labelPrefix: "hadoop-yarn-resourcemanager"
+  env:
+  - name: USE_EXTERNAL_CONFIG
+    value: "true"
+  - name: KRB_ENABLE
+    value: 'false'
+  - name: YARN_RESOURCEMANAGER_ADDRRESS
+    value: ${service.roles.YARN_RESOURCEMANAGER[0]['hostname']}
+  - name: HADOOP_CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: DATA_DIRS
+    value: ${service['yarn.nodemanager.local-dirs']},${service['yarn.nodemanager.log-dirs']}
+  mountPath:
+  - mountPath: /etc/${service.sid}/conf
+    hostPath: /etc/${service.sid}/conf
+    name: yarn
+  - mountPath: /var/run/hadoop-common
+    hostPath: /root/docker/common
+    name: socketdir
+  - mountPath: /var/transwarp
+    hostPath: /var/${service.sid}
+    name: transwarp
+  bootstrapParam: "resourcemanager"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -110,28 +134,41 @@ roles:
         templatePath: "capacity-scheduler.ftlx"
         targetPath: "/etc/${service.sid}/conf/capacity-scheduler.xml"
         mode: "755"
-#    - directive: !<resource>
-#        templateType: FreeMarker
-#        templatePath: "yarn-resourcemanager.yaml"
-#        targetPath: "/etc/${service.sid}/hadoop-yarn-resourcemanager-${service.sid}.yaml"
-#        mode: "755"
-#  - type: Start
-#    directives:
-#    # Add labelPrefix "yarn-resourcemanager" for node ${localhostname}
-#    - directive: !<kubectl-label>
-#        action: AddLabel
-#        hostname: ${localhostname}
-#        labelPrefix: "yarn-resourcemanager"
-#    - directive: !<kubectl>
-#        action: Start
-#        file: "/etc/${service.sid}/hadoop-yarn-resourcemanager-${service.sid}.yaml"
-#  - type: Stop
-#    directives:
-#    - directive: !<kubectl>
-#        action: Stop
-#        file: "/etc/${service.sid}/hadoop-yarn-resourcemanager-${service.sid}.yaml"
 - name: YARN_NODEMANAGER
   friendlyName: "Yarn Nodemanager"
+  labelPrefix: "hadoop-yarn-nodemanager"
+  env:
+  - name: USE_EXTERNAL_CONFIG
+    value: "true"
+  - name: KRB_ENABLE
+    value: 'false'
+  - name: NODEMANAGER_RESOURCE_MEMORY_MB
+    value: ${service['yarn.nodemanager.resource.memory-mb']}
+  - name: YARN_RESOURCEMANAGER_ADDRRESS
+    value: ${service.roles.YARN_RESOURCEMANAGER[0]['hostname']}
+  - name: NODEMANAGER_RESOURCE_CPU_VCORES
+    value: ${service['yarn.nodemanager.resource.cpu-vcores']}
+  - name: HADOOP_CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: DATA_DIRS
+    value: ${service['yarn.nodemanager.local-dirs']},${service['yarn.nodemanager.log-dirs']}
+  mountPath:
+  - mountPath: /etc/${service.sid}/conf
+    hostPath: /etc/${service.sid}/conf
+    name: yarn
+  - mountPath: /var/run/hadoop-common
+    hostPath: /root/docker/common
+    name: socketdir
+  - mountPath: /var/transwarp
+    hostPath: /var/${service.sid}
+    name: transwarp
+  - mountPath: ${service['yarn.nodemanager.local-dirs']}
+    hostPath: ${service['yarn.nodemanager.local-dirs']}
+    name: localdirs
+  - mountPath: ${service['yarn.nodemanager.log-dirs']}
+    hostPath: ${service['yarn.nodemanager.log-dirs']}
+    name: logdirs
+  bootstrapParam: "nodemanager"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}
@@ -225,28 +262,29 @@ roles:
         templatePath: "capacity-scheduler.ftlx"
         targetPath: "/etc/${service.sid}/conf/capacity-scheduler.xml"
         mode: "755"
-#    - directive: !<resource>
-#        templateType: FreeMarker
-#        templatePath: "yarn-nodemanager.yaml"
-#        targetPath: "/etc/${service.sid}/hadoop-yarn-nodemanager-${service.sid}.yaml"
-#        mode: "755"
-#  - type: Start
-#    directives:
-#    # Add labelPrefix "yarn-nodemanager" for node ${localhostname}
-#    - directive: !<kubectl-label>
-#        action: AddLabel
-#        hostname: ${localhostname}
-#        labelPrefix: "yarn-nodemanager"
-#    - directive: !<kubectl>
-#        action: Start
-#        file: "/etc/${service.sid}/hadoop-yarn-nodemanager-${service.sid}.yaml"
-#  - type: Stop
-#    directives:
-#    - directive: !<kubectl>
-#        action: Stop
-#        file: "/etc/${service.sid}hadoop-yarn-nodemanager-${service.sid}.yaml"
 - name: YARN_HISTORYSERVER
   friendlyName: "Yarn Historyserver"
+  labelPrefix: "hadoop-yarn-historyserver"
+  env:
+  - name: USE_EXTERNAL_CONFIG
+    value: "true"
+  - name: KRB_ENABLE
+    value: 'false'
+  - name: HDFS_HA_NAMENODE_SERVICE
+    value: ${dependencies.HDFS.roles.HDFS_NAMENODE[0]['hostname']},${dependencies.HDFS.roles.HDFS_NAMENODE[1]['hostname']}
+  - name: YARN_RESOURCEMANAGER_ADDRRESS
+    value: ${service.roles.YARN_RESOURCEMANAGER[0]['hostname']}
+  mountPath:
+  - mountPath: /etc/hadoop/conf
+    hostPath: /etc/${service.sid}/conf
+    name: yarn
+  - mountPath: /var/run/hadoop-common
+    hostPath: /root/docker/common
+    name: socketdir
+  - mountPath: /var/transwarp
+    hostPath: /var/${service.sid}
+    name: transwarp
+  bootstrapParam: "historyserver"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -342,6 +380,29 @@ roles:
         mode: "755"
 - name: YARN_TIMELINESERVER
   friendlyName: "Yarn Timelineserver"
+  labelPrefix: "hadoop-yarn-timelineserver"
+  env:
+  - name: USE_EXTERNAL_CONFIG
+    value: "true"
+  - name: KRB_ENABLE
+    value: 'false'
+  - name: YARN_TIMELINE_SERVICE_HOSTNAME
+    value: ${service.roles.YARN_TIMELINESERVER[0]['hostname']}
+  - name: YARN_RESOURCEMANAGER_ADDRRESS
+    value: ${service.roles.YARN_RESOURCEMANAGER[0]['hostname']}
+  - name: HDFS_HA_NAMENODE_SERVICE
+    value: ${dependencies.HDFS.roles.HDFS_NAMENODE[0]['hostname']},${dependencies.HDFS.roles.HDFS_NAMENODE[1]['hostname']}
+  mountPath:
+  - mountPath: /etc/hadoop/conf
+    hostPath: /etc/${service.sid}/conf
+    name: yarn
+  - mountPath: /var/run/hadoop-common
+    hostPath: /root/docker/common
+    name: socketdir
+  - mountPath: /var/transwarp
+    hostPath: /var/${service.sid}
+    name: transwarp
+  bootstrapParam: "timelineserver"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -435,105 +496,3 @@ roles:
         templatePath: "capacity-scheduler.ftlx"
         targetPath: "/etc/${service.sid}/conf/capacity-scheduler.xml"
         mode: "755"
-stages:
-  - type: Start
-    taskGroups:
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: YARN_RESOURCEMANAGER
-      action: AddLabel
-      labelPrefix: "yarn-resourcemanager"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Start
-      file: "yarn-resourcemanager.yaml"
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: YARN_NODEMANAGER
-      action: AddLabel
-      labelPrefix: "yarn-nodemanager"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Start
-      file: "yarn-nodemanager.yaml"
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: YARN_HISTORYSERVER
-      action: AddLabel
-      labelPrefix: "yarn-historyserver"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Start
-      file: "yarn-historyserver.yaml"
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: YARN_TIMELINESERVER
-      action: AddLabel
-      labelPrefix: "yarn-timelineserver"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Start
-      file: "yarn-timelineserver.yaml"
-  - type: Stop
-    taskGroups:
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: YARN_RESOURCEMANAGER
-      action: RemoveLabel
-      labelPrefix: "yarn-resourcemanager"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Stop
-      file: "yarn-resourcemanager.yaml"
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: YARN_NODEMANAGER
-      action: RemoveLabel
-      labelPrefix: "yarn-nodemanager"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Stop
-      file: "yarn-nodemanager.yaml"
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: YARN_HISTORYSERVER
-      action: RemoveLabel
-      labelPrefix: "yarn-historyserver"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Stop
-      file: "yarn-historyserver.yaml"
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: YARN_TIMELINESERVER
-      action: RemoveLabel
-      labelPrefix: "yarn-timelineserver"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Stop
-      file: "yarn-timelineserver.yaml"
-product: "Hadoop"

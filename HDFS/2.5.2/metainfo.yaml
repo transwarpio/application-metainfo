@@ -4,6 +4,7 @@ version: 2.5.2-tdh50
 global: false
 namePrefix: HDFS
 friendlyName: HDFS
+dockerImage: "tos/hdfs:rb465-final-tdh-2"
 user: hdfs
 dependencies:
   - name: ZOOKEEPER
@@ -13,6 +14,39 @@ dependencies:
 roles:
   - name: HDFS_DATANODE
     friendlyName: "Data Node"
+    labelPrefix: "hadoop-hdfs-datanode"
+    env:
+    - name: KRB_ENABLE
+      value: 'false'
+    - name: HDFS_HA_NAMENODE_SERVICE
+      value: ${service.roles.HDFS_NAMENODE[0]['hostname']},${service.roles.HDFS_NAMENODE[1]['hostname']}
+    - name: HDFS_JOURNAL_NODE_SPEC
+      value: ${service.roles.HDFS_JOURNALNODE[0]['hostname']}
+    - name: HADOOP_CONF_DIR
+      value: /etc/${service.sid}/conf
+    - name: DATA_DIRS
+      value: ${service['dfs.datanode.data.dir']?trim}
+    - name: HEAP_SIZE
+      value: ${service['datanode.memory']?trim}m
+    - name: SOCKETDIR
+      value: /var/run/${service.sid}
+    mountPath:
+    - mountPath: /etc/${service.sid}/conf
+      hostPath: /etc/${service.sid}/conf
+      name: hdfs
+    - mountPath: /var/run/hadoop-common
+      hostPath: /root/docker/common
+      name: socketdir
+    - mountPath: /var/transwarp/logs
+      hostPath: /var/log/${service.sid}
+      name: log
+    - mountPath: /var/run/${service.sid}
+      hostPath: /var/run/${service.sid}
+      name: hdfssocketdir
+    - mountPath: /hadoop/data
+      hostPath: /hadoop/data
+      name: datanodedir
+    bootstrapParam: "datanode"
     summaryPolicy: SOME
     autoAssign:
       - advice: !<EachNode> {}
@@ -60,28 +94,52 @@ roles:
           templatePath: "hadoop-env.sh"
           targetPath: "/etc/${service.sid}/conf/hadoop-env.sh"
           mode: "755"
-#      - directive: !<resource>
-#            templateType: FreeMarker
-#            templatePath: "hdfs-datanode.yaml"
-#            targetPath: "/etc/${service.sid}/hadoop-hdfs-datanode-${service.sid}.yaml"
-#            mode: "755"
-#    - type: Start
-#      directives:
-#      # Add labelPrefix "hdfs-datanode" for node ${localhostname}
-#      - directive: !<kubectl-label>
-#            action: AddLabel
-#            hostname: ${localhostname}
-#            labelPrefix: "hdfs-datanode"
-#      - directive: !<kubectl>
-#            action: Start
-#            file: "/etc/${service.sid}/hadoop-hdfs-datanode-${service.sid}.yaml"
-#    - type: Stop
-#      directives:
-#      - directive: !<kubectl>
-#            action: Stop
-#            file: "/etc/${service.sid}/hadoop-hdfs-datanode-${service.sid}.yaml"
   - name: HDFS_NAMENODE
     friendlyName: "Name Node (non-HA)"
+    labelPrefix: "hadoop-hdfs-namenode"
+    env:
+    - name: KRB_ENABLE
+      value: 'false'
+    - name: HDFS_HA_NAMENODE_SERVICE
+      value: ${service.roles.HDFS_NAMENODE[0]['hostname']},${service.roles.HDFS_NAMENODE[1]['hostname']}
+    - name: HDFS_JOURNAL_NODE_SPEC
+      value: ${service.roles.HDFS_JOURNALNODE[0]['hostname']}
+    - name: HADOOP_CONF_DIR
+      value: /etc/${service.sid}/conf
+    - name: DATA_DIRS
+      value: ${service['dfs.namenode.name.dir']?trim}
+    - name: HEAP_SIZE
+      value: ${service['namenode.memory']?trim}m
+    - name: SOCKETDIR
+      value: /var/run/${service.sid}
+    - name: CLUSTER
+      value: ${service.sid}
+    mountPath:
+    - mountPath: /var/transwarp/logs
+      hostPath: /var/log/${service.sid}
+      name: log
+    - mountPath: /etc/${service.sid}/conf
+      hostPath: /etc/${service.sid}/conf
+      name: hdfs
+    - mountPath: /var/run/hadoop-common
+      hostPath: /root/docker/common
+      name: socketdir
+    - mountPath: /var/transwarp/data
+      hostPath: /var/namenode_format/
+      name: format
+    - mountPath: /etc/transwarp/conf/
+      hostPath: /etc/transwarp/conf/
+      name: topology
+    - mountPath: /var/run/${service.sid}
+      hostPath: /var/run/${service.sid}
+      name: hdfssocketdir
+    - mountPath: /hadoop/namenode_dir
+      hostPath: /hadoop/namenode_dir
+      name: namenodedir1
+    - mountPath: /hadoop/hadoop_image
+      hostPath: /hadoop/hadoop_image
+      name: namenodedir2
+    bootstrapParam: "namenode"
     summaryPolicy: SOME
     autoAssign: []
     suggestion:
@@ -144,26 +202,11 @@ roles:
             templatePath: "hadoop-env.sh"
             targetPath: "/etc/${service.sid}/conf/hadoop-env.sh"
             mode: "755"
-#        - directive: !<resource>
-#            templateType: FreeMarker
-#            templatePath: "hdfs-namenode.yaml"
-#            targetPath: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
-#            mode: "755"
-#      - type: Start
-#        directives:
-#        # Add labelPrefix "hdfs-namenode" for node ${localhostname}
-#        - directive: !<kubectl-label>
-#            action: AddLabel
-#            hostname: ${localhostname}
-#            labelPrefix: "hdfs-namenode"
-#        - directive: !<kubectl>
-#            action: Start
-#            file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
-#      - type: Stop
-#        directives:
-#        - directive: !<kubectl>
-#            action: Stop
-#            file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "hadoop-hdfs-namenode-env.ftlsh"
+            targetPath: "/etc/${service.sid}/conf/hadoop-hdfs-namenode-env.sh"
+            mode: "755"
 roleGroups:
   - fieldName: nameservices
     namePrefix: nameservice
@@ -186,6 +229,50 @@ roleGroups:
     roles:
       - name: HDFS_NAMENODE
         friendlyName: "Name Node"
+        labelPrefix: "hadoop-hdfs-namenode"
+        env:
+        - name: KRB_ENABLE
+          value: 'false'
+        - name: HDFS_HA_NAMENODE_SERVICE
+          value: ${service.roles.HDFS_NAMENODE[0]['hostname']},${service.roles.HDFS_NAMENODE[1]['hostname']}
+        - name: HDFS_JOURNAL_NODE_SPEC
+          value: ${service.roles.HDFS_JOURNALNODE[0]['hostname']}
+        - name: HADOOP_CONF_DIR
+          value: /etc/${service.sid}/conf
+        - name: DATA_DIRS
+          value: ${service['dfs.namenode.name.dir']?trim}
+        - name: HEAP_SIZE
+          value: ${service['namenode.memory']?trim}m
+        - name: SOCKETDIR
+          value: /var/run/${service.sid}
+        - name: CLUSTER
+          value: ${service.sid}
+        mountPath:
+        - mountPath: /var/transwarp/logs
+          hostPath: /var/log/${service.sid}
+          name: log
+        - mountPath: /etc/${service.sid}/conf
+          hostPath: /etc/${service.sid}/conf
+          name: hdfs
+        - mountPath: /var/run/hadoop-common
+          hostPath: /root/docker/common
+          name: socketdir
+        - mountPath: /var/transwarp/data
+          hostPath: /var/namenode_format/
+          name: format
+        - mountPath: /etc/transwarp/conf/
+          hostPath: /etc/transwarp/conf/
+          name: topology
+        - mountPath: /var/run/${service.sid}
+          hostPath: /var/run/${service.sid}
+          name: hdfssocketdir
+        - mountPath: /hadoop/namenode_dir
+          hostPath: /hadoop/namenode_dir
+          name: namenodedir1
+        - mountPath: /hadoop/hadoop_image
+          hostPath: /hadoop/hadoop_image
+          name: namenodedir2
+        bootstrapParam: "namenode"
         summaryPolicy: ALL
         autoAssign:
           - advice: !<NumSeq>
@@ -238,28 +325,39 @@ roleGroups:
                 templatePath: "hadoop-env.sh"
                 targetPath: "/etc/${service.sid}/conf/hadoop-env.sh"
                 mode: "755"
-#            - directive: !<resource>
-#                templateType: FreeMarker
-#                templatePath: "hdfs-namenode.yaml"
-#                targetPath: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
-#                mode: "755"
-#          - type: Start
-#            directives:
-#            # Add labelPrefix "hdfs-namenode" for node ${localhostname}
-#            - directive: !<kubectl-label>
-#                action: AddLabel
-#                hostname: ${localhostname}
-#                labelPrefix: "hdfs-namenode"
-#            - directive: !<kubectl>
-#                action: Start
-#                file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
-#          - type: Stop
-#            directives:
-#            - directive: !<kubectl>
-#                action: Stop
-#                file: "/etc/${service.sid}/hadoop-hdfs-namenode-${service.sid}.yaml"
+            - directive: !<resource>
+                templateType: FreeMarker
+                templatePath: "hadoop-hdfs-namenode-env.ftlsh"
+                targetPath: "/etc/${service.sid}/conf/hadoop-hdfs-namenode-env.sh"
+                mode: "755"
       - name: HDFS_JOURNALNODE
         friendlyName: "Journal Node"
+        labelPrefix: "hadoop-hdfs-journalnode"
+        env:
+        - name: KRB_ENABLE
+          value: "false"
+        - name: HADOOP_PID_DIR
+          value: /var/run/${service.sid}/
+        - name: HADOOP_CONF_DIR
+          value: /etc/${service.sid}/conf
+        - name: DATA_DIRS
+          value: /hadoop/journal
+        - name: HEAP_SIZE
+          value: ${service['journalnode.memory']}m
+        mountPath:
+        - mountPath: /etc/${service.sid}/conf
+          hostPath: /etc/${service.sid}/conf
+          name: hdfs
+        - mountPath: /var/run/hadoop-common
+          hostPath: /root/docker/common
+          name: socketdir
+        - mountPath: /var/transwarp/logs
+          hostPath: /var/log/${service.sid}
+          name: log
+        - mountPath: /hadoop/journal
+          hostPath: /hadoop/journal
+          name: journaldir
+        bootstrapParam: "journalnode"
         summaryPolicy: MAJOR
         autoAssign:
           - when: !<WhenRoleType>
@@ -319,111 +417,3 @@ roleGroups:
                 templatePath: "hdfs-site.ftlx"
                 targetPath: "/etc/${service.sid}/conf/hdfs-site.xml"
                 mode: "755"
-#            - directive: !<resource>
-#                templateType: FreeMarker
-#                templatePath: "hdfs-journalnode.yaml"
-#                targetPath: "/etc/${service.sid}/hadoop-hdfs-journalnode-${service.sid}.yaml"
-#                mode: "755"
-#          - type: Start
-#            directives:
-#            # Add labelPrefix "hdfs-journalnode" for node ${localhostname}
-#            - directive: !<kubectl-label>
-#                action: AddLabel
-#                hostname: ${localhostname}
-#                labelPrefix: "hdfs-journalnode"
-#            - directive: !<kubectl>
-#                action: Start
-#                file: "/etc/${service.sid}/hadoop-hdfs-journalnode-${service.sid}.yaml"
-#          - type: Stop
-#            directives:
-#            - directive: !<kubectl>
-#                action: Stop
-#                file: "/etc/${service.sid}/hadoop-hdfs-journalnode-${service.sid}.yaml"
-stages:
-  - type: Start
-    taskGroups:
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: HDFS_DATANODE
-      action: AddLabel
-      labelPrefix: "hdfs-datanode"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Start
-      file: "hdfs-datanode.yaml"
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: HDFS_JOURNALNODE
-      action: AddLabel
-      labelPrefix: "hdfs-journalnode"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Start
-      file: "hdfs-journalnode.yaml"
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: HDFS_NAMENODE
-      action: AddLabel
-      labelPrefix: "hdfs-namenode"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Start
-      file: "hdfs-namenode1.yaml"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Start
-      file: "hdfs-namenode2.yaml"
-  - type: Stop
-    taskGroups:
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: HDFS_DATANODE
-      action: RemoveLabel
-      labelPrefix: "hdfs-datanode"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Stop
-      file: "hdfs-datanode.yaml"
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: HDFS_JOURNALNODE
-      action: RemoveLabel
-      labelPrefix: "hdfs-journalnode"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Stop
-      file: "hdfs-journalnode.yaml"
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: HDFS_NAMENODE
-      action: RemoveLabel
-      labelPrefix: "hdfs-namenode"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Stop
-      file: "hdfs-namenode1.yaml"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Stop
-      file: "hdfs-namenode2.yaml"
-product: "Hadoop"

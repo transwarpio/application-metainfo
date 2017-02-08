@@ -20,7 +20,7 @@ export HADOOP_YARN_USER=${r"${HADOOP_YARN_USER:-yarn}"}
 export YARN_CONF_DIR=/etc/${service.sid}/conf
 export YARN_LOG_DIR=/var/log/${service.sid}
 export YARN_PID_DIR=/var/run/${service.sid}
-export HADOOP_CONF_DIR=/etc/${dependencies.HDFS.sid}/conf
+export HADOOP_CONF_DIR=/etc/${service.sid}/conf
 
 # some Java parameters
 # export JAVA_HOME=/home/y/libexec/jdk1.6.0/

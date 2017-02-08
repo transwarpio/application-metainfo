@@ -27,6 +27,11 @@ roles:
     - directive: !<mkdirs>
         paths: ["/srv/kubernetes"]
         mode: "700"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "config.yml"
+        targetPath: "/etc/${service.sid}/config.yml"
+        mode: "755"
     - directive: !<download>
         url: "${transwarpRepo}/registry/registry.tar.gz"
         targetPath: "/etc/${service.sid}/registry.tar.gz"

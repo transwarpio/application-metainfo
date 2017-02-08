@@ -4,6 +4,7 @@ version: 1-tdh50
 global: false
 namePrefix: DISCOVER
 friendlyName: DISCOVER
+dockerImage: "tos/discover:rb463"
 user: transwarpr
 dependencies:
   - name: ZOOKEEPER
@@ -25,6 +26,25 @@ dependencies:
 roles:
 - name: DISCOVER
   friendlyName: "Discover"
+  labelPrefix: "discover"
+  env:
+  - name: YARN_RESOURCEMANAGER_ADDRRESS
+    value: ${dependencies.YARN.roles.YARN_RESOURCEMANAGER[0]['hostname']}
+  - name: YARN_TIMELINE_SERVICE_HOSTNAME
+    value: ${dependencies.YARN.roles.YARN_TIMELINESERVER[0].hostname}
+  - name: HDFS_HA_NAMENODE_SERVICE
+    value: ${dependencies.HDFS.roles.HDFS_NAMENODE[0]['hostname']},${dependencies.HDFS.roles.HDFS_NAMENODE[1]['hostname']}
+  - name: TRANSWARP_LICENSE_ZOOKEEPER_QUORUM
+    value: ${dependencies.ZOOKEEPER.roles.ZOOKEEPER[0]['hostname']},${dependencies.ZOOKEEPER.roles.ZOOKEEPER[1]['hostname']},${dependencies.ZOOKEEPER.roles.ZOOKEEPER[2]['hostname']}
+  - name: HADOOP_SECURITY_AUTHENTICATION
+    value: "simpale"
+  - name: KRB_ENABLE
+    value: "false"
+  mountPath:
+  - mountPath: /home
+    hostPath: /etc/${service.sid}/data
+    name: data
+  bootstrapParam: "discover"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -48,33 +68,3 @@ roles:
         templatePath: "discover-context-env.properties"
         targetPath: "/usr/lib/discover/conf/discover-context-env.properties"
         mode: "755"
-stages:
-  - type: Start
-    taskGroups:
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: DISCOVER
-      action: AddLabel
-      labelPrefix: "discover"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Start
-      file: "discover.yaml"
-  - type: Stop
-    taskGroups:
-    - !<Kubectl-Label>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: DISCOVER
-      action: RemoveLabel
-      labelPrefix: "discover"
-      labelValue: "true"
-    - !<Kubectl>
-      summaryPolicy: MAJOR
-      timeoutMinutes: 2
-      action: Stop
-      file: "discover.yaml"
-product: "Discover"
