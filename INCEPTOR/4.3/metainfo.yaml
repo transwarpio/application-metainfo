@@ -305,7 +305,7 @@ roles:
     hostPath: /etc/${service.sid}/conf
     name: inceptor
   - mountPath: /etc/hyperbase/conf
-    hostPath: /etc/hyperbase1/conf
+    hostPath: /etc/${dependencies.HYPERBASE.sid}/conf
     name: hyperbase
   - mountPath: /etc/hadoop/conf
     hostPath: /etc/${dependencies.HDFS.sid}/conf

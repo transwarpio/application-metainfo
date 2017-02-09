@@ -6,6 +6,10 @@ namePrefix: StreamSQL
 friendlyName: "StreamSQL"
 dockerImage: "tos/inceptor:rb465-final"
 dependencies:
+#  - name: LICENSE_SERVICE
+#    minVersion: 1.0
+#    maxVersion: 1.0
+#    optional: false
   - name: ZOOKEEPER
     minVersion: 3.4.5-tdh50
     maxVersion: 3.4.5-tdh50
@@ -18,6 +22,10 @@ dependencies:
     minVersion: 2.5.2-tdh50
     maxVersion: 2.5.2-tdh50
     optional: false
+  - name: HYPERBASE
+    minVersion: 1.0-tdh50
+    maxVersion: 1.0-tdh50
+    optional: true
 user: hive
 roles:
 - name: INCEPTOR_SERVER
@@ -211,7 +219,7 @@ roles:
     hostPath: /etc/${service.sid}/conf
     name: inceptor
   - mountPath: /etc/hyperbase/conf
-    hostPath: /etc/hyperbase1/conf
+    hostPath: /etc/${dependencies.HYPERBASE.sid}/conf
     name: hyperbase
   - mountPath: /etc/hadoop/conf
     hostPath: /etc/${dependencies.HDFS.sid}/conf
@@ -297,7 +305,7 @@ roles:
     hostPath: /etc/${service.sid}/conf
     name: inceptor
   - mountPath: /etc/hyperbase/conf
-    hostPath: /etc/hyperbase1/conf
+    hostPath: /etc/${dependencies.HYPERBASE.sid}/conf
     name: hyperbase
   - mountPath: /etc/hadoop/conf
     hostPath: /etc/${dependencies.HDFS.sid}/conf
