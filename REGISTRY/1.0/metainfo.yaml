@@ -54,3 +54,10 @@ roles:
     - directive: !<docker-compose>
         action: Stop
         file: "/etc/${service.sid}/docker-registry.yml"
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<DockerPs>
+    imageMap:
+      REGISTRY_SERVER: ["docker-registry-frontend", "registry:"]

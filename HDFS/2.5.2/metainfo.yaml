@@ -95,7 +95,7 @@ roles:
           targetPath: "/etc/${service.sid}/conf/hadoop-env.sh"
           mode: "755"
   - name: HDFS_NAMENODE
-    friendlyName: "Name Node (non-HA)"
+    friendlyName: "Name Node"
     labelPrefix: "hadoop-hdfs-namenode"
     env:
     - name: KRB_ENABLE

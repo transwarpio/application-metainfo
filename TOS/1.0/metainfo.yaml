@@ -98,3 +98,11 @@ roles:
         action: Stop
         file: "/etc/${service.sid}/tos-slave-${service.sid}.yaml"
 product: "TOS"
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<DockerPs>
+    imageMap:
+      TOS_MASTER: ["etcd", "hyperkube apiserver", "hyperkube controller", "hyperkube scheduler"]
+      TOS_SLAVE: ["kubelet"]
