@@ -4,7 +4,7 @@ version: 2.5.2-tdh50
 global: false
 namePrefix: HDFS
 friendlyName: HDFS
-dockerImage: "tos/hdfs:rb465-final-tdh-2"
+dockerImage: "tos/hdfs:rb465-final-tdh-3"
 user: hdfs
 dependencies:
   - name: ZOOKEEPER
@@ -19,9 +19,27 @@ roles:
     - name: KRB_ENABLE
       value: 'false'
     - name: HDFS_HA_NAMENODE_SERVICE
-      value: ${service.roles.HDFS_NAMENODE[0]['hostname']},${service.roles.HDFS_NAMENODE[1]['hostname']}
+      value: |
+        <#assign namenodes=[]>
+        <#if service.nameservices?? && service.nameservices?size gt 0>
+          <#list service.nameservices as ns>
+            <#list service[ns]['HDFS_NAMENODE'] as namenode>
+              <#assign namenodes += [namenode.hostname]>
+            </#list>
+          </#list>
+        <#else>
+          <#assign namenodes += service.roles.HDFS_NAMENODE[0]['hostname']>
+        </#if>
+        ${namenodes?join(",")}
     - name: HDFS_JOURNAL_NODE_SPEC
-      value: ${service.roles.HDFS_JOURNALNODE[0]['hostname']}
+      value: |
+        <#assign journalnodes=[]>
+        <#if service.roles.HDFS_JOURNALNODE?? && service.roles.HDFS_JOURNALNODE?size gt 0>
+          <#list service.roles.HDFS_JOURNALNODE as journalnode>
+            <#assign journalnodes += [journalnode.hostname]>
+          </#list>
+        </#if>
+        ${service.roles.HDFS_JOURNALNODE[0]['hostname']}
     - name: HADOOP_CONF_DIR
       value: /etc/${service.sid}/conf
     - name: DATA_DIRS
@@ -46,7 +64,6 @@ roles:
     - mountPath: /hadoop/data
       hostPath: /hadoop/data
       name: datanodedir
-    bootstrapParam: "datanode"
     summaryPolicy: SOME
     autoAssign:
       - advice: !<EachNode> {}
@@ -101,9 +118,27 @@ roles:
     - name: KRB_ENABLE
       value: 'false'
     - name: HDFS_HA_NAMENODE_SERVICE
-      value: ${service.roles.HDFS_NAMENODE[0]['hostname']},${service.roles.HDFS_NAMENODE[1]['hostname']}
+      value: |
+        <#assign namenodes=[]>
+        <#if service.nameservices?? && service.nameservices?size gt 0>
+          <#list service.nameservices as ns>
+            <#list service[ns]['HDFS_NAMENODE'] as namenode>
+              <#assign namenodes += [namenode.hostname]>
+            </#list>
+          </#list>
+        <#else>
+          <#assign namenodes += service.roles.HDFS_NAMENODE[0]['hostname']>
+        </#if>
+        ${namenodes?join(",")}
     - name: HDFS_JOURNAL_NODE_SPEC
-      value: ${service.roles.HDFS_JOURNALNODE[0]['hostname']}
+      value: |
+        <#assign journalnodes=[]>
+        <#if service.roles.HDFS_JOURNALNODE?? && service.roles.HDFS_JOURNALNODE?size gt 0>
+          <#list service.roles.HDFS_JOURNALNODE as journalnode>
+            <#assign journalnodes += [journalnode.hostname]>
+          </#list>
+        </#if>
+        ${service.roles.HDFS_JOURNALNODE[0]['hostname']}
     - name: HADOOP_CONF_DIR
       value: /etc/${service.sid}/conf
     - name: DATA_DIRS
@@ -139,7 +174,6 @@ roles:
     - mountPath: /hadoop/hadoop_image
       hostPath: /hadoop/hadoop_image
       name: namenodedir2
-    bootstrapParam: "namenode"
     summaryPolicy: SOME
     autoAssign: []
     suggestion:
@@ -204,8 +238,8 @@ roles:
             mode: "755"
         - directive: !<resource>
             templateType: FreeMarker
-            templatePath: "hadoop-hdfs-namenode-env.ftlsh"
-            targetPath: "/etc/${service.sid}/conf/hadoop-hdfs-namenode-env.sh"
+            templatePath: "hadoop-hdfs-env.ftlsh"
+            targetPath: "/etc/${service.sid}/conf/hadoop-hdfs-env.sh"
             mode: "755"
 roleGroups:
   - fieldName: nameservices
@@ -234,15 +268,33 @@ roleGroups:
         - name: KRB_ENABLE
           value: 'false'
         - name: HDFS_HA_NAMENODE_SERVICE
-          value: ${service.roles.HDFS_NAMENODE[0]['hostname']},${service.roles.HDFS_NAMENODE[1]['hostname']}
+          value: |
+            <#assign namenodes=[]>
+            <#if service.nameservices?? && service.nameservices?size gt 0>
+              <#list service.nameservices as ns>
+                <#list service[ns]['HDFS_NAMENODE'] as namenode>
+                  <#assign namenodes += [namenode.hostname]>
+                </#list>
+              </#list>
+            <#else>
+              <#assign namenodes += service.roles.HDFS_NAMENODE[0]['hostname']>
+            </#if>
+            ${namenodes?join(",")}
         - name: HDFS_JOURNAL_NODE_SPEC
-          value: ${service.roles.HDFS_JOURNALNODE[0]['hostname']}
+          value: |
+            <#assign journalnodes=[]>
+            <#if service.roles.HDFS_JOURNALNODE?? && service.roles.HDFS_JOURNALNODE?size gt 0>
+              <#list service.roles.HDFS_JOURNALNODE as journalnode>
+                <#assign journalnodes += [journalnode.hostname]>
+              </#list>
+            </#if>
+            ${service.roles.HDFS_JOURNALNODE[0]['hostname']}
         - name: HADOOP_CONF_DIR
           value: /etc/${service.sid}/conf
         - name: DATA_DIRS
-          value: ${service['dfs.namenode.name.dir']?trim}
+          value: ${service['dfs.namenode.name.dir']}
         - name: HEAP_SIZE
-          value: ${service['namenode.memory']?trim}m
+          value: ${service['namenode.memory']}m
         - name: SOCKETDIR
           value: /var/run/${service.sid}
         - name: CLUSTER
@@ -272,7 +324,7 @@ roleGroups:
         - mountPath: /hadoop/hadoop_image
           hostPath: /hadoop/hadoop_image
           name: namenodedir2
-        bootstrapParam: "namenode"
+        containers: ["HDFS_NAMENODE", "HDFS_ZKFC"]
         summaryPolicy: ALL
         autoAssign:
           - advice: !<NumSeq>
@@ -327,8 +379,8 @@ roleGroups:
                 mode: "755"
             - directive: !<resource>
                 templateType: FreeMarker
-                templatePath: "hadoop-hdfs-namenode-env.ftlsh"
-                targetPath: "/etc/${service.sid}/conf/hadoop-hdfs-namenode-env.sh"
+                templatePath: "hadoop-hdfs-env.ftlsh"
+                targetPath: "/etc/${service.sid}/conf/hadoop-hdfs-env.sh"
                 mode: "755"
       - name: HDFS_JOURNALNODE
         friendlyName: "Journal Node"
@@ -357,7 +409,6 @@ roleGroups:
         - mountPath: /hadoop/journal
           hostPath: /hadoop/journal
           name: journaldir
-        bootstrapParam: "journalnode"
         summaryPolicy: MAJOR
         autoAssign:
           - when: !<WhenRoleType>

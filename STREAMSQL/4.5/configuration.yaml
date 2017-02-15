@@ -394,3 +394,30 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: hive.metastore.port
+  recommendExpression: 9083
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: mysql.port
+  recommendExpression: 3306
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: hive.cores
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

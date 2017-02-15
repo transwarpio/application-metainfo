@@ -4,7 +4,7 @@ version: 4.3-tdh50
 global: false
 namePrefix: Inceptor
 friendlyName: "Inceptor"
-dockerImage: "tos/inceptor:rb465-final"
+dockerImage: "tos/inceptor:rb465-final-tdh-2"
 dependencies: #TODO consider external registry
 #  - name: LICENSE_SERVICE
 #    minVersion: 1.0
@@ -32,8 +32,17 @@ roles:
   friendlyName: "Inceptor Server"
   labelPrefix: "inceptor-server"
   env:
+  - name: KRB_ENABLE
+    value: 'false'
   - name: TRANSWARP_ZOOKEEPER_QUORUM
-    value: ${dependencies.ZOOKEEPER.roles.ZOOKEEPER[0]['hostname']},${dependencies.ZOOKEEPER.roles.ZOOKEEPER[1]['hostname']},${dependencies.ZOOKEEPER.roles.ZOOKEEPER[2]['hostname']}
+    value: |
+      <#assign zookeepers=[]>
+      <#if dependencies.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?size gt 0>
+        <#list dependencies.ZOOKEEPER.roles.ZOOKEEPER as zookeeper>
+          <#assign zookeepers += [zookeeper.hostname]>
+        </#list>
+      </#if>
+      ${zookeepers?join(",")}
   - name: JAVAX_JDO_OPTION_CONNECTION_USERNAME
     value: ${service['hive.metastore.username']}
   - name: JAVAX_JDO_OPTION_CONNECTION_PASSWORD
@@ -58,6 +67,16 @@ roles:
     value: /var/transwarp/data0/disk
   - name: HIVE_SERVER2
     value: "true"
+  - name: INCEPTOR_CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: METASTORE_PORT
+    value: ${service['hive.metastore.port']}
+  - name: MYSQL_PORT
+    value: ${service['mysql.port']}
+  - name: INCEPTOR_UI_PORT
+    value: ${service['inceptor.ui.port']}
+  - name: HBASE_CONF_DIR
+    value: /etc/${dependencies.HYPERBASE.sid}/conf
   mountPath:
   - mountPath: /var/run/${dependencies.HDFS.sid}
     hostPath: /var/run/${dependencies.HDFS.sid}
@@ -65,11 +84,11 @@ roles:
   - mountPath: /var/run/hadoop-common
     hostPath: /root/docker/common
     name: socketdir
-  - mountPath: /etc/inceptor/conf
+  - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: inceptor
-  - mountPath: /etc/hyperbase/conf
-    hostPath: /etc/hyperbase1/conf
+  - mountPath: /etc/${dependencies.HYPERBASE.sid}/conf
+    hostPath: /etc/${dependencies.HYPERBASE.sid}/conf
     name: hyperbase
   - mountPath: /etc/hadoop/conf
     hostPath: /etc/${dependencies.HDFS.sid}/conf
@@ -83,7 +102,6 @@ roles:
   - mountPath: /var/transwarp/data0/disk
     hostPath: /hadoop/ngmr/${service.sid}
     name: localdir
-  bootstrapParam: "inceptor"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -129,29 +147,45 @@ roles:
         templatePath: "hive-site.ftlx"
         targetPath: "/etc/${service.sid}/conf/hive-site.xml"
         mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "inceptor-env.ftlsh"
+        targetPath: "/etc/${service.sid}/conf/inceptor-env.sh"
+        mode: "755"
 - name: INCEPTOR_MYSQL
   friendlyName: "Inceptor Mysql"
   labelPrefix: "inceptor-mysql"
   env:
+  - name: KRB_ENABLE
+    value: 'false'
   - name: METASTORE_ID
     value: metastore_${service.sid}
   - name: JAVAX_JDO_OPTION_CONNECTIONURL
-    value: jdbc:mysql://0.0.0.0:3306/metastore_${service.sid}
+    value: jdbc:mysql://0.0.0.0:${service['mysql.port']}/metastore_${service.sid}
   - name: JAVAX_JDO_OPTION_CONNECTION_USERNAME
     value: ${service['hive.metastore.username']}
   - name: JAVAX_JDO_OPTION_CONNECTION_PASSWORD
     value: ${service['hive.metastore.password']}
+  - name: INCEPTOR_CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: METASTORE_PORT
+    value: ${service['hive.metastore.port']}
+  - name: MYSQL_PORT
+    value: ${service['mysql.port']}
+  - name: INCEPTOR_UI_PORT
+    value: ${service['inceptor.ui.port']}
+  - name: HBASE_CONF_DIR
+    value: /etc/${dependencies.HYPERBASE.sid}/conf
   mountPath:
   - mountPath: /var/transwarp
     hostPath: /var/lib/mysql
     name: mysql
-  - mountPath: /etc/inceptor/conf
+  - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: inceptor
   - mountPath: /etc/hadoop/conf
     hostPath: /etc/${dependencies.HDFS.sid}/conf
     name: hdfs
-  bootstrapParam: "mysql"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -201,30 +235,41 @@ roles:
   friendlyName: "Inceptor Metastore"
   labelPrefix: "inceptor-metastore"
   env:
+  - name: KRB_ENABLE
+    value: 'false'
   - name: MYSQL_SERVER
     value: ${service.roles.INCEPTOR_MYSQL[0]['hostname']}
   - name: METASTORE_ID
     value: metastore_${service.sid}
   - name: JAVAX_JDO_OPTION_CONNECTIONURL
-    value: jdbc:mysql://0.0.0.0:3306/metastore_${service.sid}
+    value: jdbc:mysql://0.0.0.0:${service['mysql.port']}/metastore_${service.sid}
   - name: JAVAX_JDO_OPTION_CONNECTION_USERNAME
     value: ${service['hive.metastore.username']}
   - name: JAVAX_JDO_OPTION_CONNECTION_PASSWORD
     value: ${service['hive.metastore.password']}
+  - name: INCEPTOR_CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: METASTORE_PORT
+    value: ${service['hive.metastore.port']}
+  - name: MYSQL_PORT
+    value: ${service['mysql.port']}
+  - name: INCEPTOR_UI_PORT
+    value: ${service['inceptor.ui.port']}
+  - name: HBASE_CONF_DIR
+    value: /etc/${dependencies.HYPERBASE.sid}/conf
   mountPath:
   - mountPath: /var/run/hadoop-common
     hostPath: /root/docker/common
     name: socketdir
-  - mountPath: /etc/inceptor/conf
+  - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: inceptor
-  - mountPath: /etc/hyperbase/conf
-    hostPath: /etc/hyperbase1/conf
+  - mountPath: /etc/${dependencies.HYPERBASE.sid}/conf
+    hostPath: /etc/${dependencies.HYPERBASE.sid}/conf
     name: hyperbase
   - mountPath: /etc/hadoop/conf
     hostPath: /etc/${dependencies.HDFS.sid}/conf
     name: hdfs
-  bootstrapParam: "metastore"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -274,8 +319,17 @@ roles:
   friendlyName: "Inceptor Executor"
   labelPrefix: "inceptor-executor"
   env:
+  - name: KRB_ENABLE
+    value: 'false'
   - name: TRANSWARP_ZOOKEEPER_QUORUM
-    value: ${dependencies.ZOOKEEPER.roles.ZOOKEEPER[0]['hostname']},${dependencies.ZOOKEEPER.roles.ZOOKEEPER[1]['hostname']},${dependencies.ZOOKEEPER.roles.ZOOKEEPER[2]['hostname']}
+    value: |
+      <#assign zookeepers=[]>
+      <#if dependencies.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?size gt 0>
+        <#list dependencies.ZOOKEEPER.roles.ZOOKEEPER as zookeeper>
+          <#assign zookeepers += [zookeeper.hostname]>
+        </#list>
+      </#if>
+      ${zookeepers?join(",")}
   - name: EXECUTOR_ID_PATH
     value: /${service.sid}/executorID
   - name: SPARK_DRIVER_PORT
@@ -283,9 +337,9 @@ roles:
   - name: SPARK_DRIVER_ADDR
     value: ${service.roles.INCEPTOR_SERVER[0]['hostname']}
   - name: SPARK_MEM
-    value: 4g
+    value: ${service['hive.memory']}m
   - name: SPARK_CORES
-    value: "1"
+    value: ${service['hive.cores']}
   - name: DATADIR
     value: /var/transwarp/data0/
   - name: INCEPTOR_LOG_DIR
@@ -294,6 +348,16 @@ roles:
     value: /var/transwarp/data0/fastdisk
   - name: SPARK_LOCAL_DIR
     value: /var/transwarp/data0/disk
+  - name: INCEPTOR_CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: METASTORE_PORT
+    value: ${service['hive.metastore.port']}
+  - name: MYSQL_PORT
+    value: ${service['mysql.port']}
+  - name: INCEPTOR_UI_PORT
+    value: ${service['inceptor.ui.port']}
+  - name: HBASE_CONF_DIR
+    value: /etc/${dependencies.HYPERBASE.sid}/conf
   mountPath:
   - mountPath: /var/run/${dependencies.HDFS.sid}
     hostPath: /var/run/hdfs
@@ -301,10 +365,10 @@ roles:
   - mountPath: /var/run/hadoop-common
     hostPath: /root/docker/common
     name: socketdir
-  - mountPath: /etc/inceptor/conf
+  - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: inceptor
-  - mountPath: /etc/hyperbase/conf
+  - mountPath: /etc/${dependencies.HYPERBASE.sid}/conf
     hostPath: /etc/${dependencies.HYPERBASE.sid}/conf
     name: hyperbase
   - mountPath: /etc/hadoop/conf
@@ -313,7 +377,6 @@ roles:
   - mountPath: /var/transwarp/logs
     hostPath: /var/log/${service.sid}
     name: log
-  bootstrapParam: "inceptor-executor"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}

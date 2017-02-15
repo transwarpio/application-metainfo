@@ -4,7 +4,7 @@ version: 2.5.2-tdh50
 global: false
 namePrefix: Yarn
 friendlyName: "Yarn"
-dockerImage: "tos/yarn:rb465-final-tdh"
+dockerImage: "tos/yarn:rb465-final-tdh-1"
 dependencies:
   - name: ZOOKEEPER
     minVersion: 3.4.5-tdh50
@@ -30,6 +30,8 @@ roles:
     value: /etc/${service.sid}/conf
   - name: DATA_DIRS
     value: ${service['yarn.nodemanager.local-dirs']},${service['yarn.nodemanager.log-dirs']}
+  - name: HEAP_SIZE
+    value: ${service['resourcemanager.memory']}m
   mountPath:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
@@ -40,7 +42,6 @@ roles:
   - mountPath: /var/transwarp
     hostPath: /var/${service.sid}
     name: transwarp
-  bootstrapParam: "resourcemanager"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -152,6 +153,8 @@ roles:
     value: /etc/${service.sid}/conf
   - name: DATA_DIRS
     value: ${service['yarn.nodemanager.local-dirs']},${service['yarn.nodemanager.log-dirs']}
+  - name: HEAP_SIZE
+    value: ${service['nodemanager.memory']}m
   mountPath:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
@@ -168,7 +171,6 @@ roles:
   - mountPath: ${service['yarn.nodemanager.log-dirs']}
     hostPath: ${service['yarn.nodemanager.log-dirs']}
     name: logdirs
-  bootstrapParam: "nodemanager"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}
@@ -271,9 +273,22 @@ roles:
   - name: KRB_ENABLE
     value: 'false'
   - name: HDFS_HA_NAMENODE_SERVICE
-    value: ${dependencies.HDFS.roles.HDFS_NAMENODE[0]['hostname']},${dependencies.HDFS.roles.HDFS_NAMENODE[1]['hostname']}
+    value: |
+      <#assign namenodes=[]>
+      <#if dependencies.HDFS.nameservices?? && dependencies.HDFS.nameservices?size gt 0>
+        <#list dependencies.HDFS.nameservices as ns>
+          <#list dependencies.HDFS[ns]['HDFS_NAMENODE'] as namenode>
+            <#assign namenodes += [namenode.hostname]>
+          </#list>
+        </#list>
+      <#else>
+        <#assign namenodes += dependencies.HDFS.roles.HDFS_NAMENODE[0]['hostname']>
+      </#if>
+      ${namenodes?join(",")}
   - name: YARN_RESOURCEMANAGER_ADDRRESS
     value: ${service.roles.YARN_RESOURCEMANAGER[0]['hostname']}
+  - name: HEAP_SIZE
+    value: ${service['historyserver.memory']}m
   mountPath:
   - mountPath: /etc/hadoop/conf
     hostPath: /etc/${service.sid}/conf
@@ -284,7 +299,6 @@ roles:
   - mountPath: /var/transwarp
     hostPath: /var/${service.sid}
     name: transwarp
-  bootstrapParam: "historyserver"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -391,7 +405,20 @@ roles:
   - name: YARN_RESOURCEMANAGER_ADDRRESS
     value: ${service.roles.YARN_RESOURCEMANAGER[0]['hostname']}
   - name: HDFS_HA_NAMENODE_SERVICE
-    value: ${dependencies.HDFS.roles.HDFS_NAMENODE[0]['hostname']},${dependencies.HDFS.roles.HDFS_NAMENODE[1]['hostname']}
+    value: |
+      <#assign namenodes=[]>
+      <#if dependencies.HDFS.nameservices?? && dependencies.HDFS.nameservices?size gt 0>
+        <#list dependencies.HDFS.nameservices as ns>
+          <#list dependencies.HDFS[ns]['HDFS_NAMENODE'] as namenode>
+            <#assign namenodes += [namenode.hostname]>
+          </#list>
+        </#list>
+      <#else>
+        <#assign namenodes += dependencies.HDFS.roles.HDFS_NAMENODE[0]['hostname']>
+      </#if>
+      ${namenodes?join(",")}
+  - name: HEAP_SIZE
+    value: ${service['timelineserver.memory']}m
   mountPath:
   - mountPath: /etc/hadoop/conf
     hostPath: /etc/${service.sid}/conf
@@ -402,7 +429,6 @@ roles:
   - mountPath: /var/transwarp
     hostPath: /var/${service.sid}
     name: transwarp
-  bootstrapParam: "timelineserver"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}

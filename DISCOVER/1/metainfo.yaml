@@ -44,7 +44,6 @@ roles:
   - mountPath: /home
     hostPath: /etc/${service.sid}/data
     name: data
-  bootstrapParam: "discover"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}

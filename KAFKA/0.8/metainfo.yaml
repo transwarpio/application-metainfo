@@ -9,15 +9,24 @@ dependencies:
     minVersion: 3.4.5-tdh50
     maxVersion: 3.4.5-tdh50
     optional: false
-dockerImage: "tos/kafka-server:rb465-final"
+dockerImage: "tos/kafka-server:rb465-final-tdh"
 user: kafka
 roles:
 - name: KAFKA_SERVER
   friendlyName: "Kafka Server"
   labelPrefix: "kafka-server"
   env:
+  - name: KRB_ENABLE
+    value: 'false'
   - name: TRANSWARP_ZOOKEEPER_QUORUM
-    value: ${dependencies.ZOOKEEPER.roles.ZOOKEEPER[0]['hostname']},${dependencies.ZOOKEEPER.roles.ZOOKEEPER[1]['hostname']},${dependencies.ZOOKEEPER.roles.ZOOKEEPER[2]['hostname']}
+    value: |
+      <#assign zookeepers=[]>
+      <#if dependencies.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?size gt 0>
+        <#list dependencies.ZOOKEEPER.roles.ZOOKEEPER as zookeeper>
+          <#assign zookeepers += [zookeeper.hostname]>
+        </#list>
+      </#if>
+      ${zookeepers?join(",")}
   - name: KAFKA_DATA_DIRS
     value: "/data"
   - name: ZOOKEEPER_CONNECTION_TIMEOUT
@@ -28,6 +37,8 @@ roles:
     value: ${service['kmq.replica.fetch.max.bytes']}
   - name: BROKER_ID_EQUALS_TO_DND_ID
     value: ${service['brokerid.equalsto.dndid']}
+  - name: KAFKA_CONF_DIR
+    value: /etc/${service.sid}/conf
   mountPath:
   - mountPath: /data
     hostPath: /etc/${service.sid}/data
@@ -35,10 +46,9 @@ roles:
   - mountPath: /var/transwarp/logs
     hostPath: /var/log/${service.sid}
     name: log
-  - mountPath: /etc/kafka/conf
+  - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: conf
-  bootstrapParam: "broker"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}

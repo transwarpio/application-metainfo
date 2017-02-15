@@ -4,7 +4,7 @@ version: 1.0-tdh50
 global: false
 namePrefix: Hyperbase
 friendlyName: "Hyperbase"
-dockerImage: "tos/hbase:rb465-final"
+dockerImage: "tos/hbase:rb465-final-tdh"
 dependencies:
   - name: ZOOKEEPER
     minVersion: 3.4.5-tdh50
@@ -24,10 +24,16 @@ roles:
   friendlyName: "Hyperbase Master"
   labelPrefix: "hyperbase-master"
   env:
+  - name: KRB_ENABLE
+    value: 'false'
   - name: HEAP_SIZE
     value: ${service['hbase.master.memory']}m
+  - name: HBASE_CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: HBASE_ZOOKEEPER_ZNODE_PARENT
+    value: /${service.sid}
   mountPath:
-  - mountPath: /etc/hyperbase/conf
+  - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: hyperbase
   - mountPath: /etc/hadoop/conf
@@ -42,7 +48,6 @@ roles:
   - mountPath: /var/run/${dependencies.HDFS.sid}
     hostPath: /var/run/${dependencies.HDFS.sid}
     name: hdfssocketdir
-  bootstrapParam: "master"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -92,10 +97,16 @@ roles:
   friendlyName: "Hyperbase Regionserver"
   labelPrefix: "hyperbase-regionserver"
   env:
+  - name: KRB_ENABLE
+    value: 'false'
   - name: HEAP_SIZE
     value: ${service['hbase.regionserver.memory']}m
+  - name: HBASE_CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: HBASE_ZOOKEEPER_ZNODE_PARENT
+    value: /${service.sid}
   mountPath:
-  - mountPath: /etc/hyperbase/conf
+  - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: hyperbase
   - mountPath: /etc/hadoop/conf
@@ -107,7 +118,6 @@ roles:
   - mountPath: /var/transwarp/logs
     hostPath: /var/log/${service.sid}
     name: log
-  bootstrapParam: "regionserver"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}
@@ -157,10 +167,16 @@ roles:
   friendlyName: "Hyperbase Thrift"
   labelPrefix: "hyperbase-thrift"
   env:
+  - name: KRB_ENABLE
+    value: 'false'
   - name: HEAP_SIZE
     value: ${service['hbase.regionserver.memory']}m
+  - name: HBASE_CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: HBASE_ZOOKEEPER_ZNODE_PARENT
+    value: /${service.sid}
   mountPath:
-  - mountPath: /etc/hyperbase/conf
+  - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: hyperbase
   - mountPath: /etc/hadoop/conf
@@ -175,7 +191,6 @@ roles:
   - mountPath: /var/run/${dependencies.HDFS.sid}
     hostPath: /var/run/${dependencies.HDFS.sid}
     name: hdfssocketdir
-  bootstrapParam: "thrift"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}

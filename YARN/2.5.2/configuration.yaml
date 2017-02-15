@@ -411,3 +411,47 @@
   onDeps: []
   groups: [yarn_site]
   visibility: READ_WRITE
+
+- name: nodemanager.memory
+  recommendExpression: 4096
+  defaultValue: null
+  valueType: MB
+  scope: !<RoleTypes>
+    roleTypes:
+    - HDFS_JOURNALNODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: resourcemanager.memory
+  recommendExpression: 4096
+  defaultValue: null
+  valueType: MB
+  scope: !<RoleTypes>
+    roleTypes:
+    - HDFS_JOURNALNODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: historyserver.memory
+  recommendExpression: 4096
+  defaultValue: null
+  valueType: MB
+  scope: !<RoleTypes>
+    roleTypes:
+    - HDFS_JOURNALNODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: timelineserver.memory
+  recommendExpression: 4096
+  defaultValue: null
+  valueType: MB
+  scope: !<RoleTypes>
+    roleTypes:
+    - HDFS_JOURNALNODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

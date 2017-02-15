@@ -31,7 +31,6 @@ roles:
   - mountPath: /var/${service.sid}
     hostPath: /var/${service.sid}
     name: data
-  bootstrapParam: "zookeeper"
   summaryPolicy: MAJOR
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [5, 3, 1]}

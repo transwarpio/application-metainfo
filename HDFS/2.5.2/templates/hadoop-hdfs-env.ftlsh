@@ -7,7 +7,7 @@ export NAMENODE_CLUSTER_ID=${service.sid}
     <#if namenodes?size == 1>
       <#if namenodes[0].id == .data_model["role.id"]>
 export NAMENODE_NAMESERVICE=${nameservice}
-export NAMENODE_HA=false
+export HDFS_HA=false
       </#if>
     <#elseif namenodes?size == 2>
       <#if namenodes[0].id lt namenodes[1].id>
@@ -20,11 +20,11 @@ export NAMENODE_HA=false
 
       <#if nn1.id == .data_model["role.id"]>
 export NAMENODE_NAMESERVICE=${nameservice}
-export NAMENODE_HA=true
+export HDFS_HA=true
 export NAMENODE_ORDINAL=0
       <#elseif nn2.id == .data_model["role.id"]>
 export NAMENODE_NAMESERVICE=${nameservice}
-export NAMENODE_HA=true
+export HDFS_HA=true
 export NAMENODE_ORDINAL=1
         <#if service[nn1.hostname]?? && service[nn1.hostname]["namenode.http-port"]??>
           <#assign nn1HttpPort=service[nn1.hostname]["namenode.http-port"]>
@@ -42,7 +42,13 @@ export NAMENODE_PRIMARY_JMX_URL=http://${nn1.hostname}:${nn1HttpPort}/jmx
 <#if service["HDFS_NAMENODE"]??>
   <#list service["HDFS_NAMENODE"] as namenode>
     <#if namenode.id == .data_model["role.id"]>
-export NAMENODE_HA=false
+export HDFS_HA=false
     </#if>
   </#list>
+</#if>
+
+<#if service[.data_model["localhostname"]]['journalnode.http-port']??>
+export JOURNALNODE_HTTP_PORT=${service[.data_model["localhostname"]]['journalnode.http-port']}
+export JOURNALNODE_RPC_PORT=${service[.data_model["localhostname"]]['journalnode.rpc-port']}
+export HDFS_JOURNAL_NODE_COUNT=${service.roles.HDFS_JOURNALNODE?size}
 </#if>

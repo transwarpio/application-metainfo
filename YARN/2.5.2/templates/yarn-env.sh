@@ -38,10 +38,11 @@ JAVA=$JAVA_HOME/bin/java
 JAVA_HEAP_MAX=-Xmx4000m
 
 # Specify the heap memory setting for yarn roles which will overwrite the JAVA_HEAP_MAX setting
-export YARN_NODEMANAGER_HEAPSIZE=1000
-export YARN_RESOURCEMANAGER_HEAPSIZE=1000
-export YARN_HISTORYSERVER_HEAPSIZE=1000
-export YARN_TIMELINESERVER_HEAPSIZE=1000
+
+export YARN_NODEMANAGER_HEAPSIZE=${service['nodemanager.memory']}
+export YARN_RESOURCEMANAGER_HEAPSIZE=${service['resourcemanager.memory']}
+export YARN_HISTORYSERVER_HEAPSIZE=${service['historyserver.memory']}
+export YARN_TIMELINESERVER_HEAPSIZE=${service['timelineserver.memory']}
 
 # check envvars which might override default args
 if [ "$YARN_HEAPSIZE" != "" ]; then

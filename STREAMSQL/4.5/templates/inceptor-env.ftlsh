@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+<#if dependencies.ZOOKEEPER[.data_model["localhostname"]]['zookeeper.client.port']??>
+export TRANSWARP_ZOOKEEPER_PORT=${dependencies.ZOOKEEPER[.data_model["localhostname"]]['zookeeper.client.port']}
+</#if>
