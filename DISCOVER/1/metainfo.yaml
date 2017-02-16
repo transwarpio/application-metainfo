@@ -67,3 +67,5 @@ roles:
         templatePath: "discover-context-env.properties"
         targetPath: "/usr/lib/discover/conf/discover-context-env.properties"
         mode: "755"
+
+product: Discover

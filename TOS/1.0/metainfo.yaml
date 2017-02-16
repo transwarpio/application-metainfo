@@ -97,6 +97,7 @@ roles:
     - directive: !<docker-compose>
         action: Stop
         file: "/etc/${service.sid}/tos-slave-${service.sid}.yaml"
+
 product: "TOS"
 
 healthChecks:

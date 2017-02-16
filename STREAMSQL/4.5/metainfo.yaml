@@ -422,3 +422,5 @@ roles:
         templatePath: "hive-site.ftlx"
         targetPath: "/etc/${service.sid}/conf/hive-site.xml"
         mode: "755"
+
+product: Stream

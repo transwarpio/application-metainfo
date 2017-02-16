@@ -522,3 +522,5 @@ roles:
         templatePath: "capacity-scheduler.ftlx"
         targetPath: "/etc/${service.sid}/conf/capacity-scheduler.xml"
         mode: "755"
+
+product: Hadoop

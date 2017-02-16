@@ -236,3 +236,5 @@ roles:
         templatePath: "hadoop-metrics2-hbase.properties"
         targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-hbase.properties"
         mode: "644"
+
+product: Hyperbase

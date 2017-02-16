@@ -468,3 +468,5 @@ roleGroups:
                 templatePath: "hdfs-site.ftlx"
                 targetPath: "/etc/${service.sid}/conf/hdfs-site.xml"
                 mode: "755"
+
+product: Hadoop
