@@ -469,4 +469,8 @@ roleGroups:
                 targetPath: "/etc/${service.sid}/conf/hdfs-site.xml"
                 mode: "755"
 
+    others:
+    - key: mountPoints
+      optional: true
+
 product: Hadoop

@@ -6,10 +6,6 @@ namePrefix: StreamSQL
 friendlyName: "StreamSQL"
 dockerImage: "tos/inceptor:rb465-final-tdh-2"
 dependencies:
-#  - name: LICENSE_SERVICE
-#    minVersion: 1.0
-#    maxVersion: 1.0
-#    optional: false
   - name: ZOOKEEPER
     minVersion: 3.4.5-tdh50
     maxVersion: 3.4.5-tdh50
