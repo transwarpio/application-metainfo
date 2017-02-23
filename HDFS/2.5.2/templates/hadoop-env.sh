@@ -47,11 +47,11 @@ done
 export HADOOP_OPTS="$HADOOP_OPTS -Djava.net.preferIPv4Stack=true $HADOOP_CLIENT_OPTS"
 
 # Command specific options appended to HADOOP_OPTS when specified
-export HADOOP_NAMENODE_OPTS="-Xmx4096m -XX:+UseConcMarkSweepGC -XX:+ExplicitGCInvokesConcurrent -Dcom.sun.management.jmxremote $HADOOP_NAMENODE_OPTS"
-export HADOOP_SECONDARYNAMENODE_OPTS="-Xmx4096m -Dcom.sun.management.jmxremote $HADOOP_SECONDARYNAMENODE_OPTS"
-export HADOOP_DATANODE_OPTS="-Xmx4096m -Dcom.sun.management.jmxremote $HADOOP_DATANODE_OPTS"
+export HADOOP_NAMENODE_OPTS="-Xmx${service['namenode.memory']}m -XX:+UseConcMarkSweepGC -XX:+ExplicitGCInvokesConcurrent -Dcom.sun.management.jmxremote $HADOOP_NAMENODE_OPTS"
+export HADOOP_SECONDARYNAMENODE_OPTS="-Xmx${service['namenode.memory']}m -Dcom.sun.management.jmxremote $HADOOP_SECONDARYNAMENODE_OPTS"
+export HADOOP_DATANODE_OPTS="-Xmx${service['datanode.memory']}m -Dcom.sun.management.jmxremote $HADOOP_DATANODE_OPTS"
 export HADOOP_BALANCER_OPTS="-Xmx4096m -Dcom.sun.management.jmxremote $HADOOP_BALANCER_OPTS"
-export HADOOP_JOURNALNODE_OPTS="-Xmx4096m $HADOOP_JOURNALNODE_OPTS"
+export HADOOP_JOURNALNODE_OPTS="-Xmx${service['journalnode.memory']}m $HADOOP_JOURNALNODE_OPTS"
 
 
 # The ZKFC does not need a large heap, and keeping it small avoids
