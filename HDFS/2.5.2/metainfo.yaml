@@ -472,5 +472,9 @@ roleGroups:
     others:
     - key: mountPoints
       optional: true
-
+jobs:
+  - type: Stop
+    stages:
+    - Checkpoint
+    - Stop
 product: Hadoop
