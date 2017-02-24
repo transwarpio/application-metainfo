@@ -17,7 +17,7 @@ dependencies:
 user: yarn
 roles:
 - name: YARN_RESOURCEMANAGER
-  friendlyName: "Yarn Resourcemanager"
+  friendlyName: "Resource Manager"
   labelPrefix: "hadoop-yarn-resourcemanager"
   env:
   - name: USE_EXTERNAL_CONFIG
@@ -136,7 +136,7 @@ roles:
         targetPath: "/etc/${service.sid}/conf/capacity-scheduler.xml"
         mode: "755"
 - name: YARN_NODEMANAGER
-  friendlyName: "Yarn Nodemanager"
+  friendlyName: "Node Manager"
   labelPrefix: "hadoop-yarn-nodemanager"
   env:
   - name: USE_EXTERNAL_CONFIG
@@ -265,7 +265,7 @@ roles:
         targetPath: "/etc/${service.sid}/conf/capacity-scheduler.xml"
         mode: "755"
 - name: YARN_HISTORYSERVER
-  friendlyName: "Yarn Historyserver"
+  friendlyName: "History Server"
   labelPrefix: "hadoop-yarn-historyserver"
   env:
   - name: USE_EXTERNAL_CONFIG
@@ -393,7 +393,7 @@ roles:
         targetPath: "/etc/${service.sid}/conf/capacity-scheduler.xml"
         mode: "755"
 - name: YARN_TIMELINESERVER
-  friendlyName: "Yarn Timelineserver"
+  friendlyName: "Timeline Server"
   labelPrefix: "hadoop-yarn-timelineserver"
   env:
   - name: USE_EXTERNAL_CONFIG

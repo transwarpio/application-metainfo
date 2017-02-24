@@ -94,7 +94,7 @@ roles:
         targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-hbase.properties"
         mode: "644"
 - name: HYPERBASE_REGIONSERVER
-  friendlyName: "Hyperbase Regionserver"
+  friendlyName: "Region Server"
   labelPrefix: "hyperbase-regionserver"
   env:
   - name: KRB_ENABLE
