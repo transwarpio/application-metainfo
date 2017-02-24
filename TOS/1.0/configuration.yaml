@@ -19,6 +19,16 @@
   groups: []
   visibility: READ_WRITE
 
+- name: tos.master.apiserver.secure.port
+  recommendExpression: 443
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: tos.master.scheduler.port
   recommendExpression: 10251
   defaultValue: null

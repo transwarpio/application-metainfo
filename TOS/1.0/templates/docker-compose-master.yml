@@ -26,7 +26,7 @@ apiserver:
     - --insecure-bind-address=0.0.0.0
     - --insecure-port=${service['tos.master.apiserver.port']}
     - --bind-address=0.0.0.0
-    - --secure-port=443
+    - --secure-port=${service['tos.master.apiserver.secure.port']}
     - --runtime_config=api/v1
     - --allow_privileged=true
     - --cors_allowed_origins=.*
