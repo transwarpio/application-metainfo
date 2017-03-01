@@ -362,7 +362,7 @@
   valueType: MB
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [yarn_site]
+  groups: ["yarn-site.xml"]
   visibility: READ_WRITE
 
 - name: yarn.nodemanager.vmem-check-enabled
@@ -371,7 +371,7 @@
   valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [yarn_site]
+  groups: ["yarn-site.xml"]
   visibility: READ_WRITE
 
 - name: yarn.resourcemanager.scheduler.class
@@ -380,7 +380,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [yarn_site]
+  groups: ["yarn-site.xml"]
   visibility: READ_WRITE
 
 - name: yarn.nodemanager.aux-services.mapreduce_shuffle.class
@@ -389,7 +389,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [yarn_site]
+  groups: ["yarn-site.xml"]
   visibility: READ_WRITE
 
 - name: yarn.nodemanager.pmem-check-enabled
@@ -398,7 +398,7 @@
   valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [yarn_site]
+  groups: ["yarn-site.xml"]
   visibility: READ_WRITE
 
 - name: yarn.application.classpath
@@ -407,7 +407,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [yarn_site]
+  groups: ["yarn-site.xml"]
   visibility: READ_WRITE
 
 - name: yarn.scheduler.maximum-allocation-vcores
@@ -416,7 +416,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [yarn_site]
+  groups: ["yarn-site.xml"]
   visibility: READ_WRITE
 
 - name: yarn.nodemanager.aux-services
@@ -425,7 +425,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [yarn_site]
+  groups: ["yarn-site.xml"]
   visibility: READ_WRITE
 
 - name: yarn.nodemanager.resource.cpu-vcores
@@ -442,7 +442,7 @@
     roleTypes: [YARN_NODEMANAGER]
 # isNodeSpecific : true
   onDeps: []
-  groups: [yarn_site]
+  groups: ["yarn-site.xml"]
   visibility: READ_WRITE
 
 - name: yarn.nodemanager.resource.memory-mb
@@ -454,7 +454,7 @@
     roleTypes: [YARN_NODEMANAGER]
 # isNodeSpecific : true
   onDeps: []
-  groups: [yarn_site]
+  groups: ["yarn-site.xml"]
   visibility: READ_WRITE
 
 - name: yarn.nodemanager.local-dirs
@@ -478,7 +478,7 @@
     roleTypes: [YARN_NODEMANAGER]
 # isNodeSpecific: true
   onDeps: []
-  groups: [yarn_site]
+  groups: ["yarn-site.xml"]
   visibility: READ_WRITE
 
 - name: yarn.nodemanager.log-dirs
@@ -502,7 +502,7 @@
     roleTypes: [YARN_NODEMANAGER]
 # isNodeSpecific: true
   onDeps: []
-  groups: [yarn_site]
+  groups: ["yarn-site.xml"]
   visibility: READ_WRITE
 
 - name: yarn.nodemanager.remote-app-log-dir
@@ -527,7 +527,7 @@
   scope: !<RoleTypes>
     roleTypes: [YARN_NODEMANAGER]
   onDeps: [HDFS]
-  groups: [yarn_site]
+  groups: ["yarn-site.xml"]
   visibility: READ_WRITE
 
 - name: yarn.app.mapreduce.am.staging-dir
@@ -551,7 +551,7 @@
   valueType: ABSOLUTE_PATH
   scope: !<ServiceLevel> {}
   onDeps: [HDFS]
-  groups: [yarn_site]
+  groups: ["yarn-site.xml"]
   visibility: READ_WRITE
 
 - name: yarn.nodemanager.delete.debug-delay-sec
@@ -560,7 +560,7 @@
   valueType: SECONDS
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [yarn_site]
+  groups: ["yarn-site.xml"]
   visibility: READ_WRITE
 
 - name: yarn.nodemanager.resource.memory-mb
@@ -569,7 +569,7 @@
   valueType: MB
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [yarn_site]
+  groups: ["yarn-site.xml"]
   visibility: READ_WRITE
 
 - name: yarn.log-aggregation-enable
@@ -578,7 +578,7 @@
   valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [yarn_site]
+  groups: ["yarn-site.xml"]
   visibility: READ_WRITE
 
 - name: nodemanager.memory

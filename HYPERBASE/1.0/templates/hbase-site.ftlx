@@ -49,7 +49,7 @@
     <@property "hbase.regionserver.info.port" service['regionserver.info.port']/>
 
 <#--Take properties from the context-->
-<#list service['hbase_site'] as key, value>
+<#list service['hbase-site.xml'] as key, value>
     <@property key value/>
 </#list>
 </configuration>

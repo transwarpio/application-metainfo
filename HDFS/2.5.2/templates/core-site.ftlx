@@ -70,7 +70,7 @@
 <@property "net.topology.node.switch.mapping.impl" "org.apache.hadoop.net.TableMapping"/>
 <@property "hadoop.security.group.mapping" "org.apache.hadoop.security.ShellBasedUnixGroupsMapping"/>
 <#--Take properties from the context-->
-<#list service['core_site'] as key, value>
+<#list service['core-site.xml'] as key, value>
     <@property key value/>
 </#list>
 </configuration>

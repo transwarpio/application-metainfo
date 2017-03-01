@@ -27,7 +27,7 @@
     <@property "yarn.timeline-service.webapp.address" timelineServer + ":8188"/>
     <@property "yarn.resourcemanager.nodes.exclude-path" "/etc/" + sid + "/conf/yarn.exclude"/>
 <#--Take properties from the context-->
-<#list service['yarn_site'] as key, value>
+<#list service['yarn-site.xml'] as key, value>
     <@property key value/>
 </#list>
 </configuration>

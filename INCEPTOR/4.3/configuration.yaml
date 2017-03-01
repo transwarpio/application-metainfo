@@ -21,7 +21,7 @@
   valueType: URI
   scope: !<ServiceLevel> {}
   onDeps: ['HDFS']
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: hive.metastore.warehouse.dir
@@ -48,7 +48,7 @@
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_METASTORE]
   onDeps: ['HDFS']
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: hive.metastore.execute.setugi
@@ -57,7 +57,7 @@
   valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: hive.hwi.war.file
@@ -66,7 +66,7 @@
   valueType: ABSOLUTE_PATH
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: plsql.compile.dml.check.semantic
@@ -75,7 +75,7 @@
   valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: javax.jdo.option.ConnectionPassword
@@ -84,7 +84,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: hive.server2.session.check.interval
@@ -93,7 +93,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: hive.users.in.admin.role
@@ -102,7 +102,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: mapreduce.framework.name
@@ -111,7 +111,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: hbase.client.scanner.caching
@@ -120,7 +120,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: datanucleus.autoStartMechanism
@@ -129,7 +129,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: hive.input.format
@@ -138,7 +138,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: hive.aux.jars.path
@@ -147,7 +147,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: hive.server2.idle.session.timeout
@@ -156,7 +156,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: datanucleus.fixedDatastore
@@ -165,7 +165,7 @@
   valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: javax.jdo.option.ConnectionDriverName
@@ -174,7 +174,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: javax.jdo.option.ConnectionUserName
@@ -183,7 +183,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: hive.exec.dynamic.partition
@@ -192,7 +192,7 @@
   valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: hbase.zookeeper.property.clientPort
@@ -201,7 +201,7 @@
   valueType: PORT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: hive.exec.compress.output
@@ -210,7 +210,7 @@
   valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: hive.server2.authentication
@@ -219,7 +219,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: hive.server2.idle.operation.timeout
@@ -228,7 +228,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: datanucleus.autoCreateSchema
@@ -237,7 +237,7 @@
   valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: hive.exec.compress.intermediate
@@ -246,7 +246,7 @@
   valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: hive.server2.logging.operation.enabled
@@ -255,7 +255,7 @@
   valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: transwarp.docker.network.interfaces
@@ -264,7 +264,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: transwarp.docker.network.hypervisor-subnetmask
@@ -273,7 +273,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: transwarp.docker.enable
@@ -282,7 +282,7 @@
   valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: transwarp.docker.network.policy
@@ -291,7 +291,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hive_site]
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: hive.metastore.password

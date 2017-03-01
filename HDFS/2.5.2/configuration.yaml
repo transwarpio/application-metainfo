@@ -36,7 +36,7 @@
     - HDFS_DATANODE
   onDeps: []
   groups:
-  - hdfs_site
+  - "hdfs-site.xml"
   visibility: READ_WRITE
 - name: dfs.datanode.failed.volumes.tolerated
   recommendExpression: ${(rcmdMounts?size / 3)?int}
@@ -48,7 +48,7 @@
     - HDFS_DATANODE
   onDeps: []
   groups:
-  - hdfs_site
+  - "hdfs-site.xml"
   visibility: READ_WRITE
 - name: dfs.namenode.name.dir
 #  recommendExpression: |
@@ -69,7 +69,7 @@
       - HDFS_NAMENODE
   onDeps: []
   groups:
-  - hdfs_site
+  - "hdfs-site.xml"
   visibility: READ_WRITE
 - name: namenode.memory
 #  recommendExpression: |
@@ -95,7 +95,7 @@
   scope: !<ServiceLevel> {}
   onDeps: []
   groups:
-  - core_site
+  - "core-site.xml"
   visibility: "READ_WRITE"
 - name: dfs.datanode.du.reserved
   recommendExpression: |
@@ -123,7 +123,7 @@
        - HDFS_DATANODE
   onDeps: []
   groups:
-  - hdfs_site
+  - "hdfs-site.xml"
   visibility: READ_WRITE
 
 - name: namenode.rpc-port
@@ -306,7 +306,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [core_site]
+  groups: ["core-site.xml"]
   visibility: READ_WRITE
 
 - name: dfs.datanode.data.dir.perm
@@ -315,7 +315,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [hdfs_site]
+  groups: ["hdfs-site.xml"]
   visibility: READ_WRITE
 
 - name: fs.trash.interval
@@ -324,7 +324,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [core_site]
+  groups: ["core-site.xml"]
   visibility: READ_WRITE
 
 - name: net.topology.table.file.name
@@ -333,7 +333,7 @@
   valueType: ABSOLUTE_PATH
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [core_site]
+  groups: ["core-site.xml"]
   visibility: READ_WRITE
 
 - name: transwarp.docker.enable
@@ -342,7 +342,7 @@
   valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [core_site]
+  groups: ["core-site.xml"]
   visibility: READ_WRITE
 
 - name: transwarp.docker.network.policy
@@ -351,7 +351,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [core_site]
+  groups: ["core-site.xml"]
   visibility: READ_WRITE
 
 - name: transwarp.docker.network.interfaces
@@ -360,7 +360,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [core_site]
+  groups: ["core-site.xml"]
   visibility: READ_WRITE
 
 - name: transwarp.docker.network.hypervisor-subnetmask
@@ -369,5 +369,5 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: [core_site]
+  groups: ["core-site.xml"]
   visibility: READ_WRITE

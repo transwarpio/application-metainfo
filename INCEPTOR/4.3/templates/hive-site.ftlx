@@ -55,7 +55,7 @@
     <@property "transwarp.docker.inceptor" inceptor/>
 
 <#--Take properties from the context-->
-<#list service['hive_site'] as key, value>
+<#list service['hive-site.xml'] as key, value>
     <@property key value/>
 </#list>
 </configuration>
