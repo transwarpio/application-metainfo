@@ -51,7 +51,7 @@
     <#assign connectionURL="jdbc:mysql://" + service.roles.INCEPTOR_MYSQL[0]['hostname'] + ":" + service['mysql.port'] + "/metastore_" + service.sid + "?createDatabaseIfNotExist=false&amp;characterEncoding=UTF-8">
     <@property "javax.jdo.option.ConnectionURL" connectionURL/>
     <@property "license.zookeeper.quorum" "172.16.1.41:2181"/>
-    <#assign inceptor=service.roles.INCEPTOR_SERVER[0]['hostname'] + ":" + service['hive.thrift.port']>
+    <#assign inceptor=service.roles.INCEPTOR_SERVER[0]['hostname'] + ":" + service['hive.server2.thrift.port']>
     <@property "transwarp.docker.inceptor" inceptor/>
 
 <#--Take properties from the context-->

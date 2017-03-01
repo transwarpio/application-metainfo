@@ -74,3 +74,8 @@ roles:
         templatePath: "server.properties"
         targetPath: "/etc/${service.sid}/conf/server.properties"
         mode: "755"
+
+firstWizardConfigs:
+- kmq.log.dirs
+- kmq.port
+- kmq.zookeeper.connection.timeout.ms

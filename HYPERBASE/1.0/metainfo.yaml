@@ -27,7 +27,7 @@ roles:
   - name: KRB_ENABLE
     value: 'false'
   - name: HEAP_SIZE
-    value: ${service['hbase.master.memory']}m
+    value: ${service['master.memory']}m
   - name: HBASE_CONF_DIR
     value: /etc/${service.sid}/conf
   - name: HBASE_ZOOKEEPER_ZNODE_PARENT
@@ -100,7 +100,7 @@ roles:
   - name: KRB_ENABLE
     value: 'false'
   - name: HEAP_SIZE
-    value: ${service['hbase.regionserver.memory']}m
+    value: ${service['regionserver.memory']}m
   - name: HBASE_CONF_DIR
     value: /etc/${service.sid}/conf
   - name: HBASE_ZOOKEEPER_ZNODE_PARENT
@@ -170,7 +170,7 @@ roles:
   - name: KRB_ENABLE
     value: 'false'
   - name: HEAP_SIZE
-    value: ${service['hbase.regionserver.memory']}m
+    value: ${service['thrift.server.memory']}m
   - name: HBASE_CONF_DIR
     value: /etc/${service.sid}/conf
   - name: HBASE_ZOOKEEPER_ZNODE_PARENT
@@ -238,3 +238,17 @@ roles:
         mode: "644"
 
 product: Hyperbase
+
+firstWizardConfigs:
+- hbase.rootdir
+- hregion.index.path
+- master.port
+- master.info.port
+- master.jmx.port
+- master.memory
+- regionserver.port
+- regionserver.info.port
+- regionserver.jmx.port
+- regionserver.memory
+- thrift.server.memory
+- zookeeper.session.timeout

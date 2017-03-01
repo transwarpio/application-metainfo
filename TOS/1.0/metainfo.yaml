@@ -107,3 +107,12 @@ healthChecks:
     imageMap:
       TOS_MASTER: ["etcd", "hyperkube apiserver", "hyperkube controller", "hyperkube scheduler"]
       TOS_SLAVE: ["kubelet"]
+
+firstWizardConfigs:
+- tos.master.etcd.port
+- tos.master.apiserver.port
+- tos.master.apiserver.secure.port
+- tos.master.scheduler.port
+- tos.master.controller.port
+- tos.slave.kubelet.port
+- tos.slave.kubelet.healthzport

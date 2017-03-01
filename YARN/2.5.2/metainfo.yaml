@@ -524,3 +524,19 @@ roles:
         mode: "755"
 
 product: Hadoop
+
+firstWizardConfigs:
+- yarn.nodemanager.local-dirs
+- yarn.nodemanager.log-dirs
+- yarn.nodemanager.remote-app-log-dir
+- yarn.app.mapreduce.am.staging-dir
+- resourcemanager.admin.port
+- resourcemanager.port
+- resourcemanager.resource-tracker.port
+- resourcemanager.scheduler.port
+- resourcemanager.webapp.port
+- yarn.nodemanager.resource.cpu-vcores
+- yarn.nodemanager.resource.memory-mb
+- timelineserver.port
+- timelineserver.http.port
+- mapred.child.heapsize

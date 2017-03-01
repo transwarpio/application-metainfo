@@ -74,3 +74,11 @@ roles:
         targetPath: "/var/${service.sid}/myid"
         mode: "755"
     # TODO if Kerberos is enabled, generate jaas.conf and jaas.env; otherwise generate empty ones
+
+firstWizardConfigs:
+- tickTime
+- initLimit
+- syncLimit
+- zookeeper.client.port
+- zookeeper.peer.communicate.port
+- zookeeper.leader.elect.port

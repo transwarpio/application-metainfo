@@ -1,8 +1,23 @@
 - name: kmq.log.dirs
-  recommendExpression: hadoop/kmp
+#  recommendExpression: |
+#    <#function localDir suffix>
+#      <#if rcmdMounts?size == 0>
+#        <#return suffix>
+#      <#else>
+#        <#local dirs = []>
+#        <#list rcmdMounts?sort as mnt>
+#         <#local dirs = dirs + [mnt + suffix]>
+#        </#list>
+#        <#return dirs?join(",")>
+#      </#if>
+#    </#function>
+#    ${localDir("/hadoop/kmq")}
+  recommendExpression: /hadoop/kmq
   defaultValue: null
   valueType: ABSOLUTE_PATH
-  scope: !<ServiceLevel> {}
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+# isNodeSpecific: true
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -11,7 +26,8 @@
   recommendExpression: 9092
   defaultValue: null
   valueType: PORT
-  scope: !<ServiceLevel> {}
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE

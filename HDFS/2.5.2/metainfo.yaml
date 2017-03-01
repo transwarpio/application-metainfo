@@ -478,3 +478,13 @@ jobs:
     - Checkpoint
     - Stop
 product: Hadoop
+
+firstWizardConfigs:
+- dfs.namenode.name.dir
+- dfs.datanode.data.dir
+- dfs.datanode.failed.volumes.tolerated
+- namenode.http-port
+- namenode.rpc-port
+- datanode.http-port
+- datanode.port
+- journalnode.http-port

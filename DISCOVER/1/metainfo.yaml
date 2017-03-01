@@ -69,3 +69,6 @@ roles:
         mode: "755"
 
 product: Discover
+
+firstWizardConfigs:
+- discover.ui.port

@@ -1,3 +1,55 @@
+- name: hbase.rootdir
+  recommendExpression: |
+    <#function hdfsUri path>
+      <#local hdfs=dependencies['HDFS']>
+      <#if hdfs['nameservices']?? && hdfs['nameservices']?size gt 0>
+        <#local hostPort=hdfs['nameservices'][0]>
+      <#else>
+        <#local host=hdfs['roles']['HDFS_NAMENODE'][0]['hostname']>
+        <#if hdfs['namenode.rpc-port']??>
+          <#local port=hdfs['namenode.rpc-port']>
+        </#if>
+        <#if hdfs[host]?? && hdfs[host]['namenode.rpc-port']??>
+          <#local port=hdfs[host]['namenode.rpc-port']>
+        </#if>
+        <#local hostPort=host + ':' + port>
+      </#if>
+      <#return 'hdfs://' + hostPort + path>
+    </#function>
+    ${hdfsUri("/" + service['sid'])}
+  defaultValue: "file:///tmp/hbase-${user.name}/hbase"
+  valueType: URI
+  scope: !<ServiceLevel> {}
+  onDeps: ['HDFS']
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: hregion.index.path
+  recommendExpression: |
+    <#function hdfsUri path>
+      <#local hdfs=dependencies['HDFS']>
+      <#if hdfs['nameservices']?? && hdfs['nameservices']?size gt 0>
+        <#local hostPort=hdfs['nameservices'][0]>
+      <#else>
+        <#local host=hdfs['roles']['HDFS_NAMENODE'][0]['hostname']>
+        <#if hdfs['namenode.rpc-port']??>
+          <#local port=hdfs['namenode.rpc-port']>
+        </#if>
+        <#if hdfs[host]?? && hdfs[host]['namenode.rpc-port']??>
+          <#local port=hdfs[host]['namenode.rpc-port']>
+        </#if>
+        <#local hostPort=host + ':' + port>
+      </#if>
+      <#return 'hdfs://' + hostPort + path>
+    </#function>
+    ${hdfsUri('/' + service['sid'] + '_hregionindex')}
+  defaultValue: ""
+  valueType: URI
+  scope: !<ServiceLevel> {}
+  onDeps: ['HDFS']
+  groups: [hbase_site]
+  visibility: READ_WRITE
+
 - name: hbase.regionserver.replication.handler.count
   recommendExpression: 10
   defaultValue: null
@@ -179,13 +231,24 @@
   groups: [hbase_site]
   visibility: READ_WRITE
 
-- name: hbase.regionserver.info.port
+- name: regionserver.info.port
   recommendExpression: 60030
   defaultValue: null
   valueType: PORT
-  scope: !<ServiceLevel> {}
+  scope: !<RoleTypes>
+    roleTypes: [HYPERBASE_REGIONSERVER]
   onDeps: []
   groups: [hbase_site]
+  visibility: READ_WRITE
+
+- name: regionserver.jmx.port
+  recommendExpression: 10102
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [HYPERBASE_REGIONSERVER]
+  onDeps: []
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.sservice.port
@@ -209,7 +272,7 @@
 - name: zookeeper.session.timeout
   recommendExpression: 180000
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: MILLISECONDS
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: [hbase_site]
@@ -314,13 +377,24 @@
   groups: [hbase_site]
   visibility: READ_WRITE
 
-- name: hbase.master.info.port
+- name: master.info.port
   recommendExpression: 60010
   defaultValue: null
   valueType: PORT
-  scope: !<ServiceLevel> {}
+  scope: !<RoleTypes>
+    roleTypes: [HYPERBASE_MASTER]
   onDeps: []
-  groups: [hbase_site]
+  groups: []
+  visibility: READ_WRITE
+
+- name: master.jmx.port
+  recommendExpression: 10101
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [HYPERBASE_MASTER]
+  onDeps: []
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.master.assignment.timeoutmonitor.period
@@ -431,20 +505,22 @@
   groups: [hbase_site]
   visibility: READ_WRITE
 
-- name: hbase.master.port
+- name: master.port
   recommendExpression: 60000
   defaultValue: null
   valueType: PORT
-  scope: !<ServiceLevel> {}
+  scope: !<RoleTypes>
+    roleTypes: [HYPERBASE_MASTER]
   onDeps: []
-  groups: [hbase_site]
+  groups: []
   visibility: READ_WRITE
 
-- name: hbase.regionserver.port
+- name: regionserver.port
   recommendExpression: 60020
   defaultValue: null
   valueType: PORT
-  scope: !<ServiceLevel> {}
+  scope: !<RoleTypes>
+    roleTypes: [HYPERBASE_REGIONSERVER]
   onDeps: []
   groups: [hbase_site]
   visibility: READ_WRITE
@@ -458,29 +534,42 @@
   groups: [hbase_site]
   visibility: READ_WRITE
 
-- name: hbase.regionserver.memory
+- name: regionserver.memory
+#  recommendExpression: |
+#    <#assign halfMemMB = (memBytes/1048576/2)?int>
+#    <#if halfMemMB <= 24000>
+#    ${halfMemMB?c}
+#    <#else>
+#    24000
+#    </#if>
   recommendExpression: 32000
   defaultValue: null
   valueType: MB
-  scope: !<ServiceLevel> {}
+  scope: !<RoleTypes>
+    roleTypes: [HYPERBASE_REGIONSERVER]
+#  isNodeSpecific: true
   onDeps: []
-  groups: [hbase_site]
+  groups: []
   visibility: READ_WRITE
 
-- name: hbase.master.memory
+- name: master.memory
   recommendExpression: 4096
   defaultValue: null
   valueType: MB
-  scope: !<ServiceLevel> {}
+  scope: !<RoleTypes>
+    roleTypes: [HYPERBASE_MASTER]
+#  isNodeSpecific: true
   onDeps: []
-  groups: [hbase_site]
+  groups: []
   visibility: READ_WRITE
 
-- name: hbase.thriftserver.memory
+- name: thrift.server.memory
   recommendExpression: 32000
   defaultValue: null
   valueType: MB
-  scope: !<ServiceLevel> {}
+  scope: !<RoleTypes>
+    roleTypes: [HYPERBASE_THRIFT]
+#  isNodeSpecific: true
   onDeps: []
   groups: [hbase_site]
   visibility: READ_WRITE

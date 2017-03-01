@@ -55,6 +55,6 @@
 
 export HADOOP_HEAPSIZE=${service['hive.memory']}
 export INCEPTOR_SERVER_MEMORY=${service['hive.memory']}
-export HIVE_PORT=${service['hive.thrift.port']}
+export HIVE_PORT=${service['hive.server2.thrift.port']}
 export HADOOP_CONF_DIR=/etc/hadoop/conf
 export HBASE_CONF_DIR=/etc/${dependencies.HYPERBASE.sid}/conf

@@ -61,3 +61,7 @@ healthChecks:
   method: !<DockerPs>
     imageMap:
       REGISTRY_SERVER: ["docker-registry-frontend", "registry:"]
+
+firstWizardConfigs:
+- registry.ui.port
+- registry.port

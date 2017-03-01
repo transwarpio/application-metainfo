@@ -84,3 +84,11 @@ stages:
     - !<Upload-License>
       summaryPolicy: ALL
       timeoutMinutes: 10
+
+firstWizardConfigs:
+- tickTime
+- initLimit
+- syncLimit
+- zookeeper.client.port
+- zookeeper.peer.communicate.port
+- zookeeper.leader.elect.port

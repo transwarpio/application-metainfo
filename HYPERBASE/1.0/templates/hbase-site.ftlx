@@ -43,6 +43,11 @@
     <@property "hbase.sservice.hdfs.dir" dir/>
     <@property "license.zookeeper.quorum" "172.16.1.41:2181"/>
 
+    <@property "hbase.master.port" service['master.port']/>
+    <@property "hbase.master.info.port" service['master.info.port']/>
+    <@property "hbase.regionserver.port" service['regionserver.port']/>
+    <@property "hbase.regionserver.info.port" service['regionserver.info.port']/>
+
 <#--Take properties from the context-->
 <#list service['hbase_site'] as key, value>
     <@property key value/>

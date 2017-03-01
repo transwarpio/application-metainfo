@@ -424,3 +424,14 @@ roles:
         mode: "755"
 
 product: Inceptor
+
+firstWizardConfigs:
+- hive.exec.scratchdir
+- hive.metastore.warehouse.dir
+- ngmr.fastdisk.dir
+- ngmr.localdir
+- inceptor.ui.port
+- hive.server2.thrift.port
+- hive.metastore.port
+- ngmr.cache.size
+- ngmr.fastdisk.size

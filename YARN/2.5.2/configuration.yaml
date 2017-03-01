@@ -223,6 +223,15 @@
   groups: [mapred_site]
   visibility: READ_WRITE
 
+- name: mapred.child.heapsize
+  recommendExpression: 2048
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: raidnode.files.fix.per.job
   recommendExpression: 500
   defaultValue: null
@@ -248,6 +257,76 @@
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: [mapred_site]
+  visibility: READ_WRITE
+
+- name: resourcemanager.admin.port
+  recommendExpression: 8033
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [YARN_RESOURCEMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: resourcemanager.port
+  recommendExpression: 8032
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [YARN_RESOURCEMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: resourcemanager.resource-tracker.port
+  recommendExpression: 8031
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [YARN_RESOURCEMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: resourcemanager.scheduler.port
+  recommendExpression: 8030
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [YARN_RESOURCEMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: resourcemanager.webapp.port
+  recommendExpression: 8088
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [YARN_RESOURCEMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: timelineserver.port
+  recommendExpression: 10021
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [YARN_RESOURCEMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: timelineserver.http.port
+  recommendExpression: 8188
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [YARN_RESOURCEMANAGER]
+  onDeps: []
+  groups: []
   visibility: READ_WRITE
 
 - name: mapreduce.shuffle.port
@@ -350,38 +429,128 @@
   visibility: READ_WRITE
 
 - name: yarn.nodemanager.resource.cpu-vcores
+#  recommendExpression: |
+#    <#if numCores gt 6>
+#    ${numCores}
+#    <#else>
+#    6
+#    </#if>
   recommendExpression: 6
   defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
+  valueType: "NON_NEG_INT"
+  scope: !<RoleTypes>
+    roleTypes: [YARN_NODEMANAGER]
+# isNodeSpecific : true
+  onDeps: []
+  groups: [yarn_site]
+  visibility: READ_WRITE
+
+- name: yarn.nodemanager.resource.memory-mb
+#  recommendExpression: ${(memBytes / 1024 / 1024 / 2)?floor?c}
+  recommendExpression: 6
+  defaultValue: null
+  valueType: "MB"
+  scope: !<RoleTypes>
+    roleTypes: [YARN_NODEMANAGER]
+# isNodeSpecific : true
   onDeps: []
   groups: [yarn_site]
   visibility: READ_WRITE
 
 - name: yarn.nodemanager.local-dirs
+#  recommendExpression: |
+#    <#function localDir suffix>
+#      <#if rcmdMounts?size == 0>
+#        <#return suffix>
+#      <#else>
+#        <#local dirs = []>
+#        <#list rcmdMounts?sort as mnt>
+#         <#local dirs = dirs + [mnt + suffix]>
+#        </#list>
+#        <#return dirs?join(",")>
+#      </#if>
+#    </#function>
+#    ${localDir("/hadoop/yarn/local")}
   recommendExpression: /hadoop/yarn/local
   defaultValue: null
   valueType: STRING
-  scope: !<ServiceLevel> {}
+  scope: !<RoleTypes>
+    roleTypes: [YARN_NODEMANAGER]
+# isNodeSpecific: true
   onDeps: []
   groups: [yarn_site]
   visibility: READ_WRITE
 
 - name: yarn.nodemanager.log-dirs
+#  recommendExpression: |
+#    <#function localDir suffix>
+#      <#if rcmdMounts?size == 0>
+#        <#return suffix>
+#      <#else>
+#        <#local dirs = []>
+#        <#list rcmdMounts?sort as mnt>
+#         <#local dirs = dirs + [mnt + suffix]>
+#        </#list>
+#        <#return dirs?join(",")>
+#      </#if>
+#    </#function>
+#    ${localDir("/hadoop/yarn/logs")}
   recommendExpression: /hadoop/yarn/logs
   defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [YARN_NODEMANAGER]
+# isNodeSpecific: true
   onDeps: []
   groups: [yarn_site]
   visibility: READ_WRITE
 
-- name: yarn.nodemanager.log-dirs
-  recommendExpression: /hadoop/yarn/logs
-  defaultValue: null
-  valueType: STRING
+- name: yarn.nodemanager.remote-app-log-dir
+  recommendExpression: |
+    <#function hdfsPath suffix>
+      <#local hdfs=dependencies['HDFS']>
+      <#if hdfs['nameservices']?? && hdfs['nameservices']?size gt 0>
+        <#local firstNS=hdfs[hdfs['nameservices'][0]]>
+        <#if firstNS['mountPoints']?? && firstNS['mountPoints']?length gt 0>
+          <#local prefix=firstNS['mountPoints']?split(',')[0] + '/' + service['sid']>
+        <#else>
+          <#local prefix='/' + service['sid']>
+        </#if>
+      <#else>
+        <#local prefix='/' + service['sid']>
+      </#if>
+      <#return prefix + suffix>
+    </#function>
+    ${hdfsPath('/var/log/hadoop-yarn/apps')}
+  defaultValue: "/tmp/logs"
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [YARN_NODEMANAGER]
+  onDeps: [HDFS]
+  groups: [yarn_site]
+  visibility: READ_WRITE
+
+- name: yarn.app.mapreduce.am.staging-dir
+  recommendExpression: |
+    <#function hdfsPath suffix>
+      <#local hdfs=dependencies['HDFS']>
+      <#if hdfs['nameservices']?? && hdfs['nameservices']?size gt 0>
+        <#local firstNS=hdfs[hdfs['nameservices'][0]]>
+        <#if firstNS['mountPoints']?? && firstNS['mountPoints']?length gt 0>
+          <#local prefix=firstNS['mountPoints']?split(',')[0] + '/' + service['sid']>
+        <#else>
+          <#local prefix='/' + service['sid']>
+        </#if>
+      <#else>
+        <#local prefix='/' + service['sid']>
+      </#if>
+      <#return prefix + suffix>
+    </#function>
+    ${hdfsPath('/var/log/hadoop-yarn/apps')}
+  defaultValue: "/tmp/hadoop-yarn/staging"
+  valueType: ABSOLUTE_PATH
   scope: !<ServiceLevel> {}
-  onDeps: []
+  onDeps: [HDFS]
   groups: [yarn_site]
   visibility: READ_WRITE
 

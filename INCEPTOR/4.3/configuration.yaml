@@ -1,3 +1,56 @@
+- name: hive.exec.scratchdir
+  recommendExpression: |
+    <#function hdfsUri path>
+      <#local hdfs=dependencies['HDFS']>
+      <#if hdfs['nameservices']?? && hdfs['nameservices']?size gt 0>
+        <#local hostPort=hdfs['nameservices'][0]>
+      <#else>
+        <#local host=hdfs['roles']['HDFS_NAMENODE'][0]['hostname']>
+        <#if hdfs['namenode.rpc-port']??>
+          <#local port=hdfs['namenode.rpc-port']>
+        </#if>
+        <#if hdfs[host]?? && hdfs[host]['namenode.rpc-port']??>
+          <#local port=hdfs[host]['namenode.rpc-port']>
+        </#if>
+        <#local hostPort=host + ':' + port>
+      </#if>
+      <#return 'hdfs://' + hostPort + path>
+    </#function>
+    ${hdfsUri("/" + service['sid'] + '/tmp/hive')}
+  defaultValue: "/tmp/hive-${user.name}"
+  valueType: URI
+  scope: !<ServiceLevel> {}
+  onDeps: ['HDFS']
+  groups: [hive_site]
+  visibility: READ_WRITE
+
+- name: hive.metastore.warehouse.dir
+  recommendExpression: |
+    <#function hdfsUri path>
+      <#local hdfs=dependencies['HDFS']>
+      <#if hdfs['nameservices']?? && hdfs['nameservices']?size gt 0>
+        <#local hostPort=hdfs['nameservices'][0]>
+      <#else>
+        <#local host=hdfs['roles']['HDFS_NAMENODE'][0]['hostname']>
+        <#if hdfs['namenode.rpc-port']??>
+          <#local port=hdfs['namenode.rpc-port']>
+        </#if>
+        <#if hdfs[host]?? && hdfs[host]['namenode.rpc-port']??>
+          <#local port=hdfs[host]['namenode.rpc-port']>
+        </#if>
+        <#local hostPort=host + ':' + port>
+      </#if>
+      <#return 'hdfs://' + hostPort + path>
+    </#function>
+    ${hdfsUri("/" + service['sid'] + '/user/hive/warehouse')}
+  defaultValue: "/user/hive/warehouse"
+  valueType: URI
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: ['HDFS']
+  groups: [hive_site]
+  visibility: READ_WRITE
+
 - name: hive.metastore.execute.setugi
   recommendExpression: true
   defaultValue: null
@@ -263,17 +316,32 @@
   recommendExpression: /mnt/ramdisk/ngmr
   defaultValue: null
   valueType: ABSOLUTE_PATH
-  scope: !<ServiceLevel> {}
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER, INCEPTOR_EXECUTOR]
   onDeps: []
   groups: []
   visibility: READ_WRITE
 
 - name: ngmr.localdir
-  recommendExpression: /hadoop/ngmr/${sid}
+#  recommendExpression: |
+#    <#function localDir suffix>
+#      <#if rcmdMounts?size == 0>
+#        <#return suffix>
+#      <#else>
+#        <#local dirs = []>
+#        <#list rcmdMounts?sort as mnt>
+#         <#local dirs = dirs + [mnt + suffix]>
+#        </#list>
+#        <#return dirs?join(",")>
+#      </#if>
+#    </#function>
+#    ${localDir("/hadoop/ngmr/" + service['sid'])}
+  recommendExpression: /hadoop/ngmr/${service['sid']}
 #  isNodeSpecific: true
   defaultValue: null
   valueType: ABSOLUTE_PATH
-  scope: !<ServiceLevel> {}
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER, INCEPTOR_EXECUTOR]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -282,7 +350,8 @@
   recommendExpression: 0.5
   defaultValue: null
   valueType: FLOAT
-  scope: !<ServiceLevel> {}
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER, INCEPTOR_EXECUTOR]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -291,7 +360,8 @@
   recommendExpression: 0.5
   defaultValue: null
   valueType: FLOAT
-  scope: !<ServiceLevel> {}
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER, INCEPTOR_EXECUTOR]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -372,7 +442,8 @@
   recommendExpression: 4040
   defaultValue: null
   valueType: PORT
-  scope: !<ServiceLevel> {}
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -386,11 +457,12 @@
   groups: []
   visibility: READ_WRITE
 
-- name: hive.thrift.port
+- name: hive.server2.thrift.port
   recommendExpression: 10000
   defaultValue: null
   valueType: PORT
-  scope: !<ServiceLevel> {}
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -399,7 +471,8 @@
   recommendExpression: 9083
   defaultValue: null
   valueType: PORT
-  scope: !<ServiceLevel> {}
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
   onDeps: []
   groups: []
   visibility: READ_WRITE
