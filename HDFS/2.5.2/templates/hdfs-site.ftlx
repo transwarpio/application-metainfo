@@ -101,7 +101,7 @@
     <@property "license.zookeeper.quorum" "172.16.1.41:2181"/>
     <@property "dfs.permissions" "false"/>
 <#--Take properties from the context-->
-<#list service['hdfs_site'] as key, value>
+<#list service['hdfs-site.xml'] as key, value>
     <@property key value/>
 </#list>
 </configuration>
