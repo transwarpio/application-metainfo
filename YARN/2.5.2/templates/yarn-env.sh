@@ -35,14 +35,33 @@ if [ "$JAVA_HOME" = "" ]; then
 fi
 
 JAVA=$JAVA_HOME/bin/java
-JAVA_HEAP_MAX=-Xmx4000m
+JAVA_HEAP_MAX=-Xmx4096m
 
 # Specify the heap memory setting for yarn roles which will overwrite the JAVA_HEAP_MAX setting
-
-export YARN_NODEMANAGER_HEAPSIZE=${service['nodemanager.memory']}
-export YARN_RESOURCEMANAGER_HEAPSIZE=${service['resourcemanager.memory']}
-export YARN_HISTORYSERVER_HEAPSIZE=${service['historyserver.memory']}
-export YARN_TIMELINESERVER_HEAPSIZE=${service['timelineserver.memory']}
+<#if service[.data_model["localhostname"]]['nodemanager.memory']??>
+<#assign YARN_NODEMANAGER_HEAPSIZE=service[.data_model["localhostname"]]['nodemanager.memory']?trim>
+<#else>
+<#assign YARN_NODEMANAGER_HEAPSIZE=4096>
+</#if>
+<#if service[.data_model["localhostname"]]['resourcemanager.memory']??>
+<#assign YARN_RESOURCEMANAGER_HEAPSIZE=service[.data_model["localhostname"]]['resourcemanager.memory']>
+<#else>
+<#assign YARN_RESOURCEMANAGER_HEAPSIZE=4096>
+</#if>
+<#if service[.data_model["localhostname"]]['historyserver.memory']??>
+<#assign YARN_HISTORYSERVER_HEAPSIZE=service[.data_model["localhostname"]]['historyserver.memory']>
+<#else>
+<#assign YARN_HISTORYSERVER_HEAPSIZE=4096>
+</#if>
+<#if service[.data_model["localhostname"]]['timelineserver.memory']??>
+<#assign YARN_TIMELINESERVER_HEAPSIZE=service[.data_model["localhostname"]]['timelineserver.memory']>
+<#else>
+<#assign YARN_TIMELINESERVER_HEAPSIZE=4096>
+</#if>
+export YARN_NODEMANAGER_HEAPSIZE=${YARN_NODEMANAGER_HEAPSIZE}m
+export YARN_RESOURCEMANAGER_HEAPSIZE=${YARN_RESOURCEMANAGER_HEAPSIZE}m
+export YARN_HISTORYSERVER_HEAPSIZE=${YARN_HISTORYSERVER_HEAPSIZE}m
+export YARN_TIMELINESERVER_HEAPSIZE=${YARN_TIMELINESERVER_HEAPSIZE}m
 
 # check envvars which might override default args
 if [ "$YARN_HEAPSIZE" != "" ]; then
@@ -70,19 +89,3 @@ fi
 
 # restore ordinary behaviour
 unset IFS
-
-
-YARN_OPTS="$YARN_OPTS -Dhadoop.log.dir=$YARN_LOG_DIR"
-YARN_OPTS="$YARN_OPTS -Dyarn.log.dir=$YARN_LOG_DIR"
-YARN_OPTS="$YARN_OPTS -Dhadoop.log.file=$YARN_LOGFILE"p
-YARN_OPTS="$YARN_OPTS -Dyarn.log.file=$YARN_LOGFILE"
-YARN_OPTS="$YARN_OPTS -Dyarn.home.dir=$YARN_COMMON_HOME"
-YARN_OPTS="$YARN_OPTS -Dyarn.id.str=$YARN_IDENT_STRING"
-YARN_OPTS=${r"$YARN_OPTS -Dhadoop.root.logger=${YARN_ROOT_LOGGER:-INFO,console}"}
-YARN_OPTS=${r"$YARN_OPTS -Dyarn.root.logger=${YARN_ROOT_LOGGER:-INFO,console}"}
-if [ "x$JAVA_LIBRARY_PATH" != "x" ]; then
-  YARN_OPTS="$YARN_OPTS -Djava.library.path=$JAVA_LIBRARY_PATH"
-fi
-YARN_OPTS="$YARN_OPTS -Dyarn.policy.file=$YARN_POLICYFILE"
-
-

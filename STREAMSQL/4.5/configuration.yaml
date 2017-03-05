@@ -449,7 +449,7 @@
   visibility: READ_WRITE
 
 - name: hive.memory
-  recommendExpression: 4096
+  recommendExpression: 8192
   defaultValue: null
   valueType: MB
   scope: !<ServiceLevel> {}
@@ -464,7 +464,7 @@
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_SERVER]
   onDeps: []
-  groups: []
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
 - name: hive.metastore.port

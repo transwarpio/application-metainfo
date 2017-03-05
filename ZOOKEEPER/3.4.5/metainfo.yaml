@@ -6,7 +6,7 @@ namePrefix: ZooKeeper
 friendlyName: "ZooKeeper"
 dependencies: []
 packages: ["zookeeper"]
-dockerImage: "tos/zookeeper:rb465-final-tdh"
+dockerImage: "tos/zookeeper:rb465-final-tdh-2"
 user: zookeeper
 roles:
 - name: ZOOKEEPER
@@ -22,7 +22,7 @@ roles:
   - name: ZOOKEEPER_CONF
     value: /etc/${service.sid}/conf
   mountPath:
-  - mountPath: /var/transwarp/logs
+  - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
   - mountPath: /etc/${service.sid}/conf
@@ -72,6 +72,11 @@ roles:
         templateType: FreeMarker
         templatePath: "myid"
         targetPath: "/var/${service.sid}/myid"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "zookeeper-env.ftlsh"
+        targetPath: "/etc/${service.sid}/conf/zookeeper-env.sh"
         mode: "755"
     # TODO if Kerberos is enabled, generate jaas.conf and jaas.env; otherwise generate empty ones
 

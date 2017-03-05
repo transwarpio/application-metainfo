@@ -47,8 +47,14 @@ export HDFS_HA=false
   </#list>
 </#if>
 
+# Export journalnode config
 <#if service[.data_model["localhostname"]]['journalnode.http-port']??>
 export JOURNALNODE_HTTP_PORT=${service[.data_model["localhostname"]]['journalnode.http-port']}
 export JOURNALNODE_RPC_PORT=${service[.data_model["localhostname"]]['journalnode.rpc-port']}
 export HDFS_JOURNAL_NODE_COUNT=${service.roles.HDFS_JOURNALNODE?size}
 </#if>
+
+# Export role memory
+export NAMENODE_MEMORY=${service[.data_model["localhostname"]]['namenode.memory']?trim}m
+export DATANODE_MEMORY=${service[.data_model["localhostname"]]['datanode.memory']}m
+export JOURNALNODE_MEMORY=${service[.data_model["localhostname"]]['journalnode.memory']}m

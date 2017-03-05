@@ -7,7 +7,7 @@ namePrefix: Transwarp_License_Cluster
 friendlyName: "License Service"
 dependencies: []
 packages: ["zookeeper"]
-dockerImage: "tos/zookeeper:rb465-final-tdh"
+dockerImage: "tos/zookeeper:rb465-final-tdh-2"
 user: zookeeper
 roles:
 - name: LICENSE_NODE
@@ -22,7 +22,7 @@ roles:
   - name: HEAP_SIZE
     value: ${service['zookeeper.server.memory']}m
   mountPath:
-  - mountPath: /var/transwarp/logs
+  - mountPath:  /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
   - mountPath: /etc/zookeeper/conf
@@ -72,6 +72,11 @@ roles:
         templateType: FreeMarker
         templatePath: "myid"
         targetPath: "/var/${service.sid}/myid"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "zookeeper-env.ftlsh"
+        targetPath: "/etc/${service.sid}/conf/zookeeper-env.sh"
         mode: "755"
 stages:
   - type: Start

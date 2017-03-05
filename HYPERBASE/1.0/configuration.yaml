@@ -535,16 +535,17 @@
   visibility: READ_WRITE
 
 - name: regionserver.memory
-#  recommendExpression: |
-#    <#assign halfMemMB = (memBytes/1048576/2)?int>
-#    <#if halfMemMB <= 24000>
-#    ${halfMemMB?c}
-#    <#else>
-#    24000
-#    </#if>
-  recommendExpression: 32000
+  recommendExpression: |
+    <#assign halfMemMB = (memBytes/1048576/2)?floor>
+    <#if halfMemMB <= 24000>
+    ${halfMemMB?floor?c}
+    <#else>
+    24000
+    </#if>
+#  recommendExpression: 32000
   defaultValue: null
   valueType: MB
+  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes: [HYPERBASE_REGIONSERVER]
 #  isNodeSpecific: true
@@ -556,6 +557,7 @@
   recommendExpression: 4096
   defaultValue: null
   valueType: MB
+  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes: [HYPERBASE_MASTER]
 #  isNodeSpecific: true
@@ -564,12 +566,15 @@
   visibility: READ_WRITE
 
 - name: thrift.server.memory
-  recommendExpression: 32000
+  recommendExpression: 4096
   defaultValue: null
   valueType: MB
+  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes: [HYPERBASE_THRIFT]
 #  isNodeSpecific: true
   onDeps: []
   groups: ["hbase-site.xml"]
   visibility: READ_WRITE
+
+

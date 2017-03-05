@@ -7,7 +7,7 @@
   <#assign quorum = quorums?join(",")>
 </#if>
 
-export NGMR_YARN=true
+export NGMR_YARN=false
 
 export INCEPTOR_YARN_MASTER_MEMORY=${service['inceptor.yarn.master.memory']}M
 export INCEPTOR_YARN_EXECUTOR_MEMORY=${service['inceptor.yarn.executor.memory']}M
@@ -22,3 +22,5 @@ export SPARK_YARN_APP_NAME=${service.sid}-${localhostname}-inceptorserver
 export SPARK_YARN_QUEUE=${service['spark.yarn.queue']}
 export INCEPTOR_LICENSE_ZOOKEEPER_QUORUM=${quorum}
 export INCEPTOR_UI_PORT=${service['inceptor.ui.port']}
+export METASTORE_PORT=${service['hive.metastore.port']}
+export MYSQL_PORT=${service['mysql.port']}

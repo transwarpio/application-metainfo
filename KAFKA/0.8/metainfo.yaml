@@ -9,7 +9,7 @@ dependencies:
     minVersion: 3.4.5-tdh50
     maxVersion: 3.4.5-tdh50
     optional: false
-dockerImage: "tos/kafka-server:rb465-final-tdh"
+dockerImage: "tos/kafka-server:rb465-final-tdh-3"
 user: kafka
 roles:
 - name: KAFKA_SERVER
@@ -27,23 +27,13 @@ roles:
         </#list>
       </#if>
       ${zookeepers?join(",")}
-  - name: KAFKA_DATA_DIRS
-    value: "/data"
-  - name: ZOOKEEPER_CONNECTION_TIMEOUT
-    value: ${service['kmq.zookeeper.connection.timeout.ms']}
-  - name: MESSAGE_MAX_BYTES
-    value: ${service['kmq.message.max.bytes']}
-  - name: REPLICA_FETCH_MAX_BYTES
-    value: ${service['kmq.replica.fetch.max.bytes']}
-  - name: BROKER_ID_EQUALS_TO_DND_ID
-    value: ${service['brokerid.equalsto.dndid']}
   - name: KAFKA_CONF_DIR
     value: /etc/${service.sid}/conf
   mountPath:
-  - mountPath: /data
-    hostPath: /etc/${service.sid}/data
+  - mountPath: /hadoop/kmq
+    hostPath: /hadoop/kmq
     name: data
-  - mountPath: /var/transwarp/logs
+  - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
   - mountPath: /etc/${service.sid}/conf
@@ -64,15 +54,20 @@ roles:
         mode: "755"
   - type: Config
     directives:
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "log4j.properties"
-        targetPath: "/etc/${service.sid}/conf/log4j.properties"
-        mode: "755"
+#    - directive: !<resource>
+#        templateType: Raw
+#        templatePath: "log4j.properties"
+#        targetPath: "/etc/${service.sid}/conf/log4j.properties"
+#        mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "server.properties"
         targetPath: "/etc/${service.sid}/conf/server.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "kafka-env.ftlsh"
+        targetPath: "/etc/${service.sid}/conf/kafka-env.sh"
         mode: "755"
 
 firstWizardConfigs:

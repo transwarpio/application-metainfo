@@ -4,7 +4,7 @@ version: 2.5.2-tdh50
 global: false
 namePrefix: HDFS
 friendlyName: HDFS
-dockerImage: "tos/hdfs:rb465-final-tdh-3"
+dockerImage: "tos/hdfs:rb465-final-tdh-5"
 user: hdfs
 dependencies:
   - name: ZOOKEEPER
@@ -44,8 +44,6 @@ roles:
       value: /etc/${service.sid}/conf
     - name: DATA_DIRS
       value: ${service['dfs.datanode.data.dir']?trim}
-    - name: HEAP_SIZE
-      value: ${service['datanode.memory']?trim}m
     - name: SOCKETDIR
       value: /var/run/${service.sid}
     mountPath:
@@ -55,7 +53,7 @@ roles:
     - mountPath: /var/run/hadoop-common
       hostPath: /root/docker/common
       name: socketdir
-    - mountPath: /var/transwarp/logs
+    - mountPath: /var/log/${service.sid}
       hostPath: /var/log/${service.sid}
       name: log
     - mountPath: /var/run/${service.sid}
@@ -143,14 +141,12 @@ roles:
       value: /etc/${service.sid}/conf
     - name: DATA_DIRS
       value: ${service['dfs.namenode.name.dir']?trim}
-    - name: HEAP_SIZE
-      value: ${service['namenode.memory']?trim}m
     - name: SOCKETDIR
       value: /var/run/${service.sid}
     - name: CLUSTER
       value: ${service.sid}
     mountPath:
-    - mountPath: /var/transwarp/logs
+    - mountPath: /var/log/${service.sid}
       hostPath: /var/log/${service.sid}
       name: log
     - mountPath: /etc/${service.sid}/conf
@@ -293,14 +289,12 @@ roleGroups:
           value: /etc/${service.sid}/conf
         - name: DATA_DIRS
           value: ${service['dfs.namenode.name.dir']}
-        - name: HEAP_SIZE
-          value: ${service['namenode.memory']}m
         - name: SOCKETDIR
           value: /var/run/${service.sid}
         - name: CLUSTER
           value: ${service.sid}
         mountPath:
-        - mountPath: /var/transwarp/logs
+        - mountPath: /var/log/${service.sid}
           hostPath: /var/log/${service.sid}
           name: log
         - mountPath: /etc/${service.sid}/conf
@@ -394,8 +388,6 @@ roleGroups:
           value: /etc/${service.sid}/conf
         - name: DATA_DIRS
           value: /hadoop/journal
-        - name: HEAP_SIZE
-          value: ${service['journalnode.memory']}m
         mountPath:
         - mountPath: /etc/${service.sid}/conf
           hostPath: /etc/${service.sid}/conf
@@ -403,7 +395,7 @@ roleGroups:
         - mountPath: /var/run/hadoop-common
           hostPath: /root/docker/common
           name: socketdir
-        - mountPath: /var/transwarp/logs
+        - mountPath: /var/log/${service.sid}
           hostPath: /var/log/${service.sid}
           name: log
         - mountPath: /hadoop/journal

@@ -4,7 +4,7 @@ version: 2.5.2-tdh50
 global: false
 namePrefix: Yarn
 friendlyName: "Yarn"
-dockerImage: "tos/yarn:rb465-final-tdh-1"
+dockerImage: "tos/yarn:rb465-final-tdh-5"
 dependencies:
   - name: ZOOKEEPER
     minVersion: 3.4.5-tdh50
@@ -30,18 +30,28 @@ roles:
     value: /etc/${service.sid}/conf
   - name: DATA_DIRS
     value: ${service['yarn.nodemanager.local-dirs']},${service['yarn.nodemanager.log-dirs']}
-  - name: HEAP_SIZE
-    value: ${service['resourcemanager.memory']}m
   mountPath:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: yarn
+  - mountPath: /var/log/${service.sid}
+    hostPath: /var/log/${service.sid}
+    name: log
   - mountPath: /var/run/hadoop-common
     hostPath: /root/docker/common
     name: socketdir
+  - mountPath: ${service['yarn.nodemanager.local-dirs']}
+    hostPath: ${service['yarn.nodemanager.local-dirs']}
+    name: datadir1
+  - mountPath: ${service['yarn.nodemanager.log-dirs']}
+    hostPath: ${service['yarn.nodemanager.log-dirs']}
+    name: datadir2
   - mountPath: /var/transwarp
     hostPath: /var/${service.sid}
     name: transwarp
+  - mountPath: /etc/${dependencies.HDFS.sid}/conf
+    hostPath: /etc/${dependencies.HDFS.sid}/conf
+    name: hdfs
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -87,18 +97,8 @@ roles:
         to: "/etc/${service.sid}/conf/core-site.xml"
     - directive: !<resource>
         templateType: Raw
-        templatePath: "hadoop-metrics2-historyserver.properties"
-        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-historyserver.properties"
-        mode: "644"
-    - directive: !<resource>
-        templateType: Raw
         templatePath: "hadoop-metrics2-maptask.properties"
         targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-maptask.properties"
-        mode: "644"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "hadoop-metrics2-nodemanager.properties"
-        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-nodemanager.properties"
         mode: "644"
     - directive: !<resource>
         templateType: Raw
@@ -153,12 +153,13 @@ roles:
     value: /etc/${service.sid}/conf
   - name: DATA_DIRS
     value: ${service['yarn.nodemanager.local-dirs']},${service['yarn.nodemanager.log-dirs']}
-  - name: HEAP_SIZE
-    value: ${service['nodemanager.memory']}m
   mountPath:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: yarn
+  - mountPath: /var/log/${service.sid}
+    hostPath: /var/log/${service.sid}
+    name: log
   - mountPath: /var/run/hadoop-common
     hostPath: /root/docker/common
     name: socketdir
@@ -171,6 +172,9 @@ roles:
   - mountPath: ${service['yarn.nodemanager.log-dirs']}
     hostPath: ${service['yarn.nodemanager.log-dirs']}
     name: logdirs
+  - mountPath: /etc/${dependencies.HDFS.sid}/conf
+    hostPath: /etc/${dependencies.HDFS.sid}/conf
+    name: hdfs
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}
@@ -216,11 +220,6 @@ roles:
         to: "/etc/${service.sid}/conf/core-site.xml"
     - directive: !<resource>
         templateType: Raw
-        templatePath: "hadoop-metrics2-historyserver.properties"
-        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-historyserver.properties"
-        mode: "644"
-    - directive: !<resource>
-        templateType: Raw
         templatePath: "hadoop-metrics2-maptask.properties"
         targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-maptask.properties"
         mode: "644"
@@ -233,11 +232,6 @@ roles:
         templateType: Raw
         templatePath: "hadoop-metrics2-reducetask.properties"
         targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-reducetask.properties"
-        mode: "644"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "hadoop-metrics2-resourcemanager.properties"
-        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-resourcemanager.properties"
         mode: "644"
     - directive: !<resource>
         templateType: Raw
@@ -287,18 +281,24 @@ roles:
       ${namenodes?join(",")}
   - name: YARN_RESOURCEMANAGER_ADDRRESS
     value: ${service.roles.YARN_RESOURCEMANAGER[0]['hostname']}
-  - name: HEAP_SIZE
-    value: ${service['historyserver.memory']}m
+  - name: HADOOP_CONF_DIR
+    value: /etc/${service.sid}/conf
   mountPath:
-  - mountPath: /etc/hadoop/conf
+  - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: yarn
+  - mountPath: /var/log/${service.sid}
+    hostPath: /var/log/${service.sid}
+    name: log
   - mountPath: /var/run/hadoop-common
     hostPath: /root/docker/common
     name: socketdir
   - mountPath: /var/transwarp
     hostPath: /var/${service.sid}
     name: transwarp
+  - mountPath: /etc/${dependencies.HDFS.sid}/conf
+    hostPath: /etc/${dependencies.HDFS.sid}/conf
+    name: hdfs
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -354,18 +354,8 @@ roles:
         mode: "644"
     - directive: !<resource>
         templateType: Raw
-        templatePath: "hadoop-metrics2-nodemanager.properties"
-        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-nodemanager.properties"
-        mode: "644"
-    - directive: !<resource>
-        templateType: Raw
         templatePath: "hadoop-metrics2-reducetask.properties"
         targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-reducetask.properties"
-        mode: "644"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "hadoop-metrics2-resourcemanager.properties"
-        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-resourcemanager.properties"
         mode: "644"
     - directive: !<resource>
         templateType: Raw
@@ -404,6 +394,8 @@ roles:
     value: ${service.roles.YARN_TIMELINESERVER[0]['hostname']}
   - name: YARN_RESOURCEMANAGER_ADDRRESS
     value: ${service.roles.YARN_RESOURCEMANAGER[0]['hostname']}
+  - name: HADOOP_CONF_DIR
+    value: /etc/${service.sid}/conf
   - name: HDFS_HA_NAMENODE_SERVICE
     value: |
       <#assign namenodes=[]>
@@ -417,18 +409,22 @@ roles:
         <#assign namenodes += dependencies.HDFS.roles.HDFS_NAMENODE[0]['hostname']>
       </#if>
       ${namenodes?join(",")}
-  - name: HEAP_SIZE
-    value: ${service['timelineserver.memory']}m
   mountPath:
-  - mountPath: /etc/hadoop/conf
+  - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: yarn
+  - mountPath: /var/log/${service.sid}
+    hostPath: /var/log/${service.sid}
+    name: log
   - mountPath: /var/run/hadoop-common
     hostPath: /root/docker/common
     name: socketdir
   - mountPath: /var/transwarp
     hostPath: /var/${service.sid}
     name: transwarp
+  - mountPath: /etc/${dependencies.HDFS.sid}/conf
+    hostPath: /etc/${dependencies.HDFS.sid}/conf
+    name: hdfs
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -474,28 +470,13 @@ roles:
         to: "/etc/${service.sid}/conf/core-site.xml"
     - directive: !<resource>
         templateType: Raw
-        templatePath: "hadoop-metrics2-historyserver.properties"
-        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-historyserver.properties"
-        mode: "644"
-    - directive: !<resource>
-        templateType: Raw
         templatePath: "hadoop-metrics2-maptask.properties"
         targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-maptask.properties"
         mode: "644"
     - directive: !<resource>
         templateType: Raw
-        templatePath: "hadoop-metrics2-nodemanager.properties"
-        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-nodemanager.properties"
-        mode: "644"
-    - directive: !<resource>
-        templateType: Raw
         templatePath: "hadoop-metrics2-reducetask.properties"
         targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-reducetask.properties"
-        mode: "644"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "hadoop-metrics2-resourcemanager.properties"
-        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-resourcemanager.properties"
         mode: "644"
     - directive: !<resource>
         templateType: Raw
@@ -522,6 +503,23 @@ roles:
         templatePath: "capacity-scheduler.ftlx"
         targetPath: "/etc/${service.sid}/conf/capacity-scheduler.xml"
         mode: "755"
+stages:
+  - type: Bootstrap
+    taskGroups:
+    - !<Create-Dir-in-HDFS>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      dirs: ["/tmp" , "/user"]
+      user: "hdfs"
+      group: "hadoop"
+      mod: 777
+    - !<Create-Dir-in-HDFS>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      dirs: ["/${service.sid}/user" , "/${service.sid}/user/history", "/${service.sid}/var/log/hadoop-yarn/apps"]
+      user: "yarn"
+      group: "hadoop"
+      mod: 777
 
 product: Hadoop
 

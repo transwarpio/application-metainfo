@@ -21,7 +21,7 @@
 
 # Set environment variables here.
 export HBASE_CONF_DIR=/etc/${service.sid}/conf
-export HADOOP_CONF_DIR=/etc/yarn1/conf
+export HADOOP_CONF_DIR=/etc/${dependencies.YARN.sid}/conf
 # export HADOOP_CONF_DIR=/etc/hadoop/conf
 
 # The java implementation to use.  Java 1.6 required.
@@ -61,14 +61,36 @@ export HBASE_OPTS="$HBASE_OPTS -XX:+UseParNewGC -XX:NewRatio=3 -XX:NewSize=512m"
 HBASE_JMX_OPTS="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false"
 HBASE_JMX_OPTS="$HBASE_JMX_OPTS -Dcom.sun.management.jmxremote.password.file=$HBASE_CONF_DIR/jmxremote.passwd"
 HBASE_JMX_OPTS="$HBASE_JMX_OPTS -Dcom.sun.management.jmxremote.access.file=$HBASE_CONF_DIR/jmxremote.access"
-export HBASE_MASTER_OPTS="$HBASE_JMX_OPTS -Dcom.sun.management.jmxremote.port=10101"
-export HBASE_REGIONSERVER_OPTS="$HBASE_JMX_OPTS -Dcom.sun.management.jmxremote.port=10102"
+export HBASE_MASTER_OPTS="$HBASE_JMX_OPTS -Dcom.sun.management.jmxremote.port=${service['master.jmx.port']}"
+export HBASE_REGIONSERVER_OPTS="$HBASE_JMX_OPTS -Dcom.sun.management.jmxremote.port=${service['regionserver.jmx.port']}"
 
-export HBASE_MASTER_OPTS="$HBASE_MASTER_OPTS -Xmx4096m"
+<#if service[.data_model["localhostname"]]['master.memory']??>
+<#assign MASTER_MEMORY=service[.data_model["localhostname"]]['master.memory']?trim>
+<#else>
+<#assign MASTER_MEMORY=4096>
+</#if>
+<#if service[.data_model["localhostname"]]['regionserver.memory']??>
+<#assign REGIONSERVER_MEMORY=service[.data_model["localhostname"]]['regionserver.memory']?trim>
+<#assign HALF_REGIONSERVER_MEMORY=((REGIONSERVER_MEMORY?number)/2)?floor?c>
+<#else>
+<#assign REGIONSERVER_MEMORY=24000>
+<#assign HALF_REGIONSERVER_MEMORY=12000>
+</#if>
+<#if service[.data_model["localhostname"]]['thrift.server.memory']??>
+<#assign THRIFT_SERVER_MEMORY=service[.data_model["localhostname"]]['thrift.server.memory']>
+<#else>
+<#assign THRIFT_SERVER_MEMORY=4096>
+</#if>
 
-export HBASE_REGIONSERVER_OPTS="$HBASE_REGIONSERVER_OPTS -Xms3971m -Xmx7943m -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps"
+export HBASE_MASTER_MEMORY=${MASTER_MEMORY}m
+export HBASE_REGIONSERVER_MEMORY=${REGIONSERVER_MEMORY}m
+export HBASE_THRIFT_SERVER_MEMORY=${THRIFT_SERVER_MEMORY}m
 
-export HBASE_THRIFT_OPTS="$HBASE_THRIFT_OPTS -Xmx(...)m"
+export HBASE_MASTER_OPTS="$HBASE_MASTER_OPTS -Xmx${MASTER_MEMORY}m"
+
+export HBASE_REGIONSERVER_OPTS="$HBASE_REGIONSERVER_OPTS -Xms${HALF_REGIONSERVER_MEMORY}m -Xmx${REGIONSERVER_MEMORY}m -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps"
+
+export HBASE_THRIFT_OPTS="$HBASE_THRIFT_OPTS -Xmx${THRIFT_SERVER_MEMORY}m"
 
 #other roles heap size has been set in opts, chronos server do not set specific the java opts, use hbase heapsize instead.
 export HBASE_HEAPSIZE="1024m"

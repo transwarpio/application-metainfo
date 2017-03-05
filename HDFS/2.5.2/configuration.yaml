@@ -72,16 +72,17 @@
   - "hdfs-site.xml"
   visibility: READ_WRITE
 - name: namenode.memory
-#  recommendExpression: |
-#    <#assign halfMemMB = (memBytes/1048576/2)?int>
-#    <#if halfMemMB <= 24000>
-#    ${halfMemMB?c}
-#    <#else>
-#    24000
-#    </#if>
-  recommendExpression: 32768
+  recommendExpression: |
+    <#assign halfMemMB = (memBytes/1048576/2)?int>
+    <#if halfMemMB <= 24000>
+    ${halfMemMB?c}
+    <#else>
+    24000
+    </#if>
+#  recommendExpression: 32768
   defaultValue: null
   valueType: MB
+  isNodeSpecific: true
   scope: !<RoleTypes>
         roleTypes:
         - HDFS_NAMENODE
@@ -98,23 +99,24 @@
   - "core-site.xml"
   visibility: "READ_WRITE"
 - name: dfs.datanode.du.reserved
-  recommendExpression: |
-    <#function diskSizeByMnt mnt>
-      <#list disks?reverse as disk>
-        <#if mnt?contains(disk.mountPoint)>
-         <#return disk.size>
-        </#if>
-      </#list>
-      <#return 0>
-    </#function>
-    <#assign reserved=10737418240>
-    <#list rcmdMounts as mnt>
-     <#assign curRsv = diskSizeByMnt(mnt) / 5>
-     <#if curRsv gt reserved>
-      <#assign reserved=curRsv>
-     </#if>
-    </#list>
-    ${reserved?int?c}
+#  recommendExpression: |
+#    <#function diskSizeByMnt mnt>
+#      <#list disks?reverse as disk>
+#        <#if mnt?contains(disk.mountPoint)>
+#         <#return disk.size>
+#        </#if>
+#      </#list>
+#      <#return 0>
+#    </#function>
+#    <#assign reserved=10737418240>
+#    <#list rcmdMounts as mnt>
+#     <#assign curRsv = diskSizeByMnt(mnt) / 5>
+#     <#if curRsv gt reserved>
+#      <#assign reserved=curRsv>
+#     </#if>
+#    </#list>
+#    ${reserved?floor?c}
+  recommendExpression: 10737418240
   defaultValue: 0
   valueType: BYTES
   isNodeSpecific: true
@@ -271,7 +273,7 @@
   recommendExpression: 4096
   defaultValue: null
   valueType: MB
-#  isNodeSpecific: true
+  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes:
     - HDFS_JOURNALNODE
@@ -283,7 +285,7 @@
   recommendExpression: 4096
   defaultValue: null
   valueType: MB
-#  isNodeSpecific: true #
+  isNodeSpecific: true #
   scope: !<RoleTypes>
     roleTypes:
     - HDFS_DATANODE

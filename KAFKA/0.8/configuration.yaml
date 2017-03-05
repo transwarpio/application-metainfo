@@ -454,3 +454,13 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: kafka.jmx.remote.port
+  recommendExpression: 9999
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

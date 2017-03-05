@@ -4,7 +4,7 @@ version: 4.3-tdh50
 global: false
 namePrefix: Inceptor
 friendlyName: "Inceptor"
-dockerImage: "tos/inceptor:rb465-final-tdh-2"
+dockerImage: "tos/inceptor:rb465-final-tdh-6"
 dependencies: #TODO consider external registry
 #  - name: LICENSE_SERVICE
 #    minVersion: 1.0
@@ -51,32 +51,12 @@ roles:
     value: ${service.roles.INCEPTOR_MYSQL[0]['hostname']}
   - name: HIVE_METASTORE_SERVER
     value: ${service.roles.INCEPTOR_METASTORE[0]['hostname']}
-  - name: SPARK_DRIVER_PORT
-    value: "51888"
   - name: SPARK_DRIVER_ADDR
     value: ${service.roles.INCEPTOR_SERVER[0]['hostname']}
   - name: EXECUTOR_ID_PATH
     value: /${service.sid}/executorID
-  - name: DATADIR
-    value: /var/transwarp/data0/
-  - name: INCEPTOR_LOG_DIR
-    value: /var/transwarp/logs
-  - name: SPARK_FASTDISK_DIR
-    value: /var/transwarp/data0/fastdisk
-  - name: SPARK_LOCAL_DIR
-    value: /var/transwarp/data0/disk
-  - name: HIVE_SERVER2
-    value: "true"
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
-  - name: METASTORE_PORT
-    value: ${service['hive.metastore.port']}
-  - name: MYSQL_PORT
-    value: ${service['mysql.port']}
-  - name: INCEPTOR_UI_PORT
-    value: ${service['inceptor.ui.port']}
-  - name: HBASE_CONF_DIR
-    value: /etc/${dependencies.HYPERBASE.sid}/conf
   mountPath:
   - mountPath: /var/run/${dependencies.HDFS.sid}
     hostPath: /var/run/${dependencies.HDFS.sid}
@@ -90,17 +70,17 @@ roles:
   - mountPath: /etc/${dependencies.HYPERBASE.sid}/conf
     hostPath: /etc/${dependencies.HYPERBASE.sid}/conf
     name: hyperbase
-  - mountPath: /etc/hadoop/conf
+  - mountPath: /etc/${dependencies.HDFS.sid}/conf
     hostPath: /etc/${dependencies.HDFS.sid}/conf
     name: hdfs
-  - mountPath: /var/transwarp/logs
+  - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
-  - mountPath: /var/transwarp/data0/fastdisk
-    hostPath: /mnt/ramdisk/ngmr
+  - mountPath: ${service['ngmr.fastdisk.dir']}/fastdisk
+    hostPath: ${service['ngmr.fastdisk.dir']}/fastdisk
     name: fastdir
-  - mountPath: /var/transwarp/data0/disk
-    hostPath: /hadoop/ngmr/${service.sid}
+  - mountPath: ${service['ngmr.localdir']}
+    hostPath: ${service['ngmr.localdir']}
     name: localdir
   summaryPolicy: SOME
   autoAssign:
@@ -168,14 +148,6 @@ roles:
     value: ${service['hive.metastore.password']}
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
-  - name: METASTORE_PORT
-    value: ${service['hive.metastore.port']}
-  - name: MYSQL_PORT
-    value: ${service['mysql.port']}
-  - name: INCEPTOR_UI_PORT
-    value: ${service['inceptor.ui.port']}
-  - name: HBASE_CONF_DIR
-    value: /etc/${dependencies.HYPERBASE.sid}/conf
   mountPath:
   - mountPath: /var/transwarp
     hostPath: /var/lib/mysql
@@ -183,9 +155,15 @@ roles:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: inceptor
-  - mountPath: /etc/hadoop/conf
+  - mountPath: /etc/${dependencies.HYPERBASE.sid}/conf
+    hostPath: /etc/${dependencies.HYPERBASE.sid}/conf
+    name: hyperbase
+  - mountPath: /etc/${dependencies.HDFS.sid}/conf
     hostPath: /etc/${dependencies.HDFS.sid}/conf
     name: hdfs
+  - mountPath: /var/log/${service.sid}
+    hostPath: /var/log/${service.sid}
+    name: log
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -249,14 +227,6 @@ roles:
     value: ${service['hive.metastore.password']}
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
-  - name: METASTORE_PORT
-    value: ${service['hive.metastore.port']}
-  - name: MYSQL_PORT
-    value: ${service['mysql.port']}
-  - name: INCEPTOR_UI_PORT
-    value: ${service['inceptor.ui.port']}
-  - name: HBASE_CONF_DIR
-    value: /etc/${dependencies.HYPERBASE.sid}/conf
   mountPath:
   - mountPath: /var/run/hadoop-common
     hostPath: /root/docker/common
@@ -267,9 +237,12 @@ roles:
   - mountPath: /etc/${dependencies.HYPERBASE.sid}/conf
     hostPath: /etc/${dependencies.HYPERBASE.sid}/conf
     name: hyperbase
-  - mountPath: /etc/hadoop/conf
+  - mountPath: /etc/${dependencies.HDFS.sid}/conf
     hostPath: /etc/${dependencies.HDFS.sid}/conf
     name: hdfs
+  - mountPath: /var/log/${service.sid}
+    hostPath: /var/log/${service.sid}
+    name: log
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -332,35 +305,13 @@ roles:
       ${zookeepers?join(",")}
   - name: EXECUTOR_ID_PATH
     value: /${service.sid}/executorID
-  - name: SPARK_DRIVER_PORT
-    value: "51888"
   - name: SPARK_DRIVER_ADDR
     value: ${service.roles.INCEPTOR_SERVER[0]['hostname']}
-  - name: SPARK_MEM
-    value: ${service['hive.memory']}m
-  - name: SPARK_CORES
-    value: ${service['hive.cores']}
-  - name: DATADIR
-    value: /var/transwarp/data0/
-  - name: INCEPTOR_LOG_DIR
-    value: /var/transwarp/logs
-  - name: SPARK_FASTDISK_DIR
-    value: /var/transwarp/data0/fastdisk
-  - name: SPARK_LOCAL_DIR
-    value: /var/transwarp/data0/disk
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
-  - name: METASTORE_PORT
-    value: ${service['hive.metastore.port']}
-  - name: MYSQL_PORT
-    value: ${service['mysql.port']}
-  - name: INCEPTOR_UI_PORT
-    value: ${service['inceptor.ui.port']}
-  - name: HBASE_CONF_DIR
-    value: /etc/${dependencies.HYPERBASE.sid}/conf
   mountPath:
   - mountPath: /var/run/${dependencies.HDFS.sid}
-    hostPath: /var/run/hdfs
+    hostPath: /var/run/${dependencies.HDFS.sid}
     name: hdfssocketdir
   - mountPath: /var/run/hadoop-common
     hostPath: /root/docker/common
@@ -371,10 +322,10 @@ roles:
   - mountPath: /etc/${dependencies.HYPERBASE.sid}/conf
     hostPath: /etc/${dependencies.HYPERBASE.sid}/conf
     name: hyperbase
-  - mountPath: /etc/hadoop/conf
+  - mountPath: /etc/${dependencies.HDFS.sid}/conf
     hostPath: /etc/${dependencies.HDFS.sid}/conf
     name: hdfs
-  - mountPath: /var/transwarp/logs
+  - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
   summaryPolicy: SOME

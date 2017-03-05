@@ -585,9 +585,10 @@
   recommendExpression: 4096
   defaultValue: null
   valueType: MB
+  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes:
-    - HDFS_JOURNALNODE
+    - YARN_NODEMANAGER
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -596,9 +597,10 @@
   recommendExpression: 4096
   defaultValue: null
   valueType: MB
+  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes:
-    - HDFS_JOURNALNODE
+    - YARN_RESOURCEMANAGER
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -607,9 +609,10 @@
   recommendExpression: 4096
   defaultValue: null
   valueType: MB
+  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes:
-    - HDFS_JOURNALNODE
+    - YARN_HISTORYSERVER
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -618,9 +621,10 @@
   recommendExpression: 4096
   defaultValue: null
   valueType: MB
+  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes:
-    - HDFS_JOURNALNODE
+    - YARN_TIMELINESERVER
   onDeps: []
   groups: []
   visibility: READ_WRITE

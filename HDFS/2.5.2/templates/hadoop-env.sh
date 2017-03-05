@@ -47,11 +47,26 @@ done
 export HADOOP_OPTS="$HADOOP_OPTS -Djava.net.preferIPv4Stack=true $HADOOP_CLIENT_OPTS"
 
 # Command specific options appended to HADOOP_OPTS when specified
-export HADOOP_NAMENODE_OPTS="-Xmx${service['namenode.memory']}m -XX:+UseConcMarkSweepGC -XX:+ExplicitGCInvokesConcurrent -Dcom.sun.management.jmxremote $HADOOP_NAMENODE_OPTS"
-export HADOOP_SECONDARYNAMENODE_OPTS="-Xmx${service['namenode.memory']}m -Dcom.sun.management.jmxremote $HADOOP_SECONDARYNAMENODE_OPTS"
-export HADOOP_DATANODE_OPTS="-Xmx${service['datanode.memory']}m -Dcom.sun.management.jmxremote $HADOOP_DATANODE_OPTS"
+<#if service[.data_model["localhostname"]]['namenode.memory']??>
+<#assign NAMENODE_MEMORY=service[.data_model["localhostname"]]['namenode.memory']?trim>
+<#else>
+<#assign NAMENODE_MEMORY=24000>
+</#if>
+<#if service[.data_model["localhostname"]]['datanode.memory']??>
+<#assign DATANODE_MEMORY=service[.data_model["localhostname"]]['datanode.memory']>
+<#else>
+<#assign DATANODE_MEMORY=4096>
+</#if>
+<#if service[.data_model["localhostname"]]['journalnode.memory']??>
+<#assign JOURNALNODE_MEMORY=service[.data_model["localhostname"]]['journalnode.memory']>
+<#else>
+<#assign JOURNALNODE_MEMORY=4096>
+</#if>
+export HADOOP_NAMENODE_OPTS="-Xmx${NAMENODE_MEMORY}m -XX:+UseConcMarkSweepGC -XX:+ExplicitGCInvokesConcurrent -Dcom.sun.management.jmxremote $HADOOP_NAMENODE_OPTS"
+export HADOOP_SECONDARYNAMENODE_OPTS="-Xmx${NAMENODE_MEMORY}m -Dcom.sun.management.jmxremote $HADOOP_SECONDARYNAMENODE_OPTS"
+export HADOOP_DATANODE_OPTS="-Xmx${DATANODE_MEMORY}m -Dcom.sun.management.jmxremote $HADOOP_DATANODE_OPTS"
 export HADOOP_BALANCER_OPTS="-Xmx4096m -Dcom.sun.management.jmxremote $HADOOP_BALANCER_OPTS"
-export HADOOP_JOURNALNODE_OPTS="-Xmx${service['journalnode.memory']}m $HADOOP_JOURNALNODE_OPTS"
+export HADOOP_JOURNALNODE_OPTS="-Xmx${JOURNALNODE_MEMORY}m $HADOOP_JOURNALNODE_OPTS"
 
 
 # The ZKFC does not need a large heap, and keeping it small avoids
