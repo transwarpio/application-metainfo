@@ -55,6 +55,7 @@
 
 export HADOOP_HEAPSIZE=${service['hive.memory']}
 export INCEPTOR_SERVER_MEMORY=${service['hive.memory']}
+# TODO get executor memory from resource configuration
 export INCEPTOR_EXECUTOR_MEMORY=${service['hive.memory']}
 export SPARK_CORES=${service['hive.cores']}
 export HIVE_PORT=${service['hive.server2.thrift.port']}

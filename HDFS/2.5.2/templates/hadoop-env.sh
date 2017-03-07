@@ -62,6 +62,10 @@ export HADOOP_OPTS="$HADOOP_OPTS -Djava.net.preferIPv4Stack=true $HADOOP_CLIENT_
 <#else>
 <#assign JOURNALNODE_MEMORY=4096>
 </#if>
+# Export role memory
+export NAMENODE_MEMORY=${NAMENODE_MEMORY}m
+export DATANODE_MEMORY=${DATANODE_MEMORY}m
+export JOURNALNODE_MEMORY=${JOURNALNODE_MEMORY}m
 export HADOOP_NAMENODE_OPTS="-Xmx${NAMENODE_MEMORY}m -XX:+UseConcMarkSweepGC -XX:+ExplicitGCInvokesConcurrent -Dcom.sun.management.jmxremote $HADOOP_NAMENODE_OPTS"
 export HADOOP_SECONDARYNAMENODE_OPTS="-Xmx${NAMENODE_MEMORY}m -Dcom.sun.management.jmxremote $HADOOP_SECONDARYNAMENODE_OPTS"
 export HADOOP_DATANODE_OPTS="-Xmx${DATANODE_MEMORY}m -Dcom.sun.management.jmxremote $HADOOP_DATANODE_OPTS"
