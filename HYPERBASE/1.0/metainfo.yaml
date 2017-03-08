@@ -255,3 +255,8 @@ firstWizardConfigs:
 - regionserver.memory
 - thrift.server.memory
 - zookeeper.session.timeout
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}

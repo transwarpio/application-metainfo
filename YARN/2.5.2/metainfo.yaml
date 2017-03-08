@@ -2,8 +2,8 @@
 name: YARN
 version: 2.5.2-tdh50
 global: false
-namePrefix: Yarn
-friendlyName: "Yarn"
+namePrefix: YARN
+friendlyName: "YARN"
 dockerImage: "tos/yarn:rb465-final-tdh-5"
 dependencies:
   - name: ZOOKEEPER
@@ -538,3 +538,8 @@ firstWizardConfigs:
 - timelineserver.port
 - timelineserver.http.port
 - mapred.child.heapsize
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}

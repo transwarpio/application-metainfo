@@ -2,8 +2,8 @@
 name: DISCOVER
 version: 1-tdh50
 global: false
-namePrefix: DISCOVER
-friendlyName: DISCOVER
+namePrefix: Discover
+friendlyName: Discover
 dockerImage: "tos/discover:rb463"
 user: transwarpr
 dependencies:
@@ -72,3 +72,8 @@ product: Discover
 
 firstWizardConfigs:
 - discover.ui.port
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}

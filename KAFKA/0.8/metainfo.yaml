@@ -74,3 +74,8 @@ firstWizardConfigs:
 - kmq.log.dirs
 - kmq.port
 - kmq.zookeeper.connection.timeout.ms
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}

@@ -61,6 +61,9 @@ healthChecks:
   method: !<DockerPs>
     imageMap:
       REGISTRY_SERVER: ["docker-registry-frontend", "registry:"]
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 10
+  method: !<Builtin> {}
 
 firstWizardConfigs:
 - registry.ui.port

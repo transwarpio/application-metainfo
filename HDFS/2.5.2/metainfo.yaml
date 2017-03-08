@@ -480,3 +480,8 @@ firstWizardConfigs:
 - datanode.http-port
 - datanode.port
 - journalnode.http-port
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
