@@ -7,6 +7,7 @@ registryui:
     - ENV_DOCKER_REGISTRY_HOST=127.0.0.1
     - ENV_DOCKER_REGISTRY_PORT=${service['registry.port']}
     - ENV_DOCKER_REGISTRY_USE_SSL=1
+    - ENV_DOCKER_REGISTRY_UI_PORT=${service['registry.ui.port']}
 #  ports:
 #    - ${service['registry.ui.port']}:80
 #  links:
