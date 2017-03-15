@@ -5,11 +5,7 @@ global: false
 namePrefix: Inceptor
 friendlyName: "Inceptor"
 dockerImage: "tos/inceptor:rb465-final-tdh-6"
-dependencies: #TODO consider external registry
-#  - name: LICENSE_SERVICE
-#    minVersion: 1.0
-#    maxVersion: 1.0
-#    optional: false
+dependencies:
   - name: ZOOKEEPER
     minVersion: 3.4.5-tdh50
     maxVersion: 3.4.5-tdh50
@@ -26,6 +22,11 @@ dependencies: #TODO consider external registry
     minVersion: 1.0-tdh50
     maxVersion: 1.0-tdh50
     optional: true
+  - name: INCEPTOR
+    minVersion: 4.3-tdh50
+    maxVersion: 4.3-tdh50
+    optional: true
+    preferred: false
 user: hive
 roles:
 - name: INCEPTOR_SERVER
