@@ -329,15 +329,6 @@
   groups: ["core-site.xml"]
   visibility: READ_WRITE
 
-- name: net.topology.table.file.name
-  recommendExpression: /etc/transwarp/conf/topology.data
-  defaultValue: null
-  valueType: ABSOLUTE_PATH
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: ["core-site.xml"]
-  visibility: READ_WRITE
-
 - name: transwarp.docker.enable
   recommendExpression: true
   defaultValue: null
