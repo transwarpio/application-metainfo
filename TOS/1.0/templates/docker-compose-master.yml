@@ -12,7 +12,7 @@ etcd:
     - --advertise-client-urls=http://${localhostname}:${service['tos.master.etcd.port']}
     - --data-dir=/var/etcd/data
   volumes:
-    - /k8s/data/etcd:/var/etcd
+    - /var/etcd/data:/var/etcd/data
 
 apiserver:
   image: ${registryServer}:${registryPort}/jenkins/hyperkube
@@ -37,9 +37,9 @@ apiserver:
     - --tls_private_key_file=/srv/kubernetes/server.key
     - --alsologtostderr=true
     - --logtostderr=false
-    - --log_dir=/var/log/kubernetes/
+    - --log_dir=/var/log/kubernetes/apiserver
   volumes:
-    - /k8s/log/apiserver:/var/log/kubernetes/
+    - /var/log/kubernetes/apiserver:/var/log/kubernetes/apiserver
     - /srv/kubernetes:/srv/kubernetes
 
 controller:
@@ -55,11 +55,11 @@ controller:
     - --service-account-private-key-file=/srv/kubernetes/server.key
     - --alsologtostderr=true
     - --logtostderr=false
-    - --log_dir=/var/log/kubernetes/
+    - --log_dir=/var/log/kubernetes/controller
     - --address=0.0.0.0
     - --port=${service['tos.master.controller.port']}
   volumes:
-    - /k8s/log/controller:/var/log/kubernetes/
+    - /var/log/kubernetes/controller:/var/log/kubernetes/controller
     - /srv/kubernetes:/srv/kubernetes
 
 scheduler:
@@ -72,11 +72,11 @@ scheduler:
     - --master=127.0.0.1:${service['tos.master.apiserver.port']}
     - --alsologtostderr=true
     - --logtostderr=false
-    - --log_dir=/var/log/kubernetes/
+    - --log_dir=/var/log/kubernetes/scheduler
     - --address=0.0.0.0
     - --port=${service['tos.master.scheduler.port']}
   volumes:
-    - /k8s/log/sheduler:/var/log/kubernetes/
+    - /var/log/kubernetes/scheduler:/var/log/kubernetes/scheduler
     - /srv/kubernetes:/srv/kubernetes
 
 generatecerts:

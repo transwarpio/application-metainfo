@@ -22,7 +22,7 @@ kubelet:
     - --healthz-port=${service['tos.slave.kubelet.healthzport']}
     - --api_servers=http://${tosMaster}:${service['tos.master.apiserver.port']}
 #    - --hostname_override={{ inventory_hostname }}
-    - --log_dir=/var/log/
+    - --log_dir=/var/log/kubernetes/kubelet
     - --containerized=true
 #    - --config=/etc/kubernetes/manifests-multi
     - --pod-infra-container-image=${registryServer}:${registryPort}/google_containers/pause:0.8.0
@@ -39,4 +39,4 @@ kubelet:
     - /:/rootfs:ro
     - /sys:/sys
     - /var/run:/var/run
-    - /k8s/log/kubelet:/var/log
+    - /var/log/kubernetes/kubelet:/var/log/kubernetes/kubelet
