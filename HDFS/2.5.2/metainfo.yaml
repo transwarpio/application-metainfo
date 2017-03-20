@@ -4,7 +4,7 @@ version: 2.5.2-tdh50
 global: false
 namePrefix: HDFS
 friendlyName: HDFS
-dockerImage: "tos/hdfs:rb465-final-tdh-5"
+dockerImage: "tos/hdfs:rb465-final-tdh-8"
 user: hdfs
 dependencies:
   - name: ZOOKEEPER
@@ -43,8 +43,6 @@ roles:
         ${service.roles.HDFS_JOURNALNODE[0]['hostname']}
     - name: HADOOP_CONF_DIR
       value: /etc/${service.sid}/conf
-    - name: DATA_DIRS
-      value: ${service['dfs.datanode.data.dir']?trim}
     - name: SOCKETDIR
       value: /var/run/${service.sid}
     mountPath:
@@ -60,9 +58,14 @@ roles:
     - mountPath: /var/run/${service.sid}
       hostPath: /var/run/${service.sid}
       name: hdfssocketdir
-    - mountPath: /hadoop/data
-      hostPath: /hadoop/data
+     #/hadoop/data
+    - mountPath: /hadoop/mounts/${service.sid}/datadir
+      hostPath: /hadoop/mounts/${service.sid}/datadir
       name: datanodedir
+    nodeSpecificMounts:
+    - configKey: dfs.datanode.data.dir
+      targetDir: /hadoop/mounts/${service.sid}/datadir
+      name: datadir
     summaryPolicy: SOME
     autoAssign:
       - advice: !<EachNode> {}
@@ -96,19 +99,24 @@ roles:
           targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-namenode.properties"
           mode: "755"
       - directive: !<resource>
-            templateType: FreeMarker
-            templatePath: "core-site.ftlx"
-            targetPath: "/etc/${service.sid}/conf/core-site.xml"
-            mode: "755"
+          templateType: FreeMarker
+          templatePath: "core-site.ftlx"
+          targetPath: "/etc/${service.sid}/conf/core-site.xml"
+          mode: "755"
       - directive: !<resource>
-            templateType: FreeMarker
-            templatePath: "hdfs-site.ftlx"
-            targetPath: "/etc/${service.sid}/conf/hdfs-site.xml"
-            mode: "755"
+          templateType: FreeMarker
+          templatePath: "hdfs-site.ftlx"
+          targetPath: "/etc/${service.sid}/conf/hdfs-site.xml"
+          mode: "755"
       - directive: !<resource>
           templateType: FreeMarker
           templatePath: "hadoop-env.sh"
           targetPath: "/etc/${service.sid}/conf/hadoop-env.sh"
+          mode: "755"
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "hadoop-hdfs-env.ftlsh"
+          targetPath: "/etc/${service.sid}/conf/hadoop-hdfs-env.sh"
           mode: "755"
   - name: HDFS_NAMENODE
     friendlyName: "Name Node"
@@ -141,8 +149,6 @@ roles:
         ${service.roles.HDFS_JOURNALNODE[0]['hostname']}
     - name: HADOOP_CONF_DIR
       value: /etc/${service.sid}/conf
-    - name: DATA_DIRS
-      value: ${service['dfs.namenode.name.dir']?trim}
     - name: SOCKETDIR
       value: /var/run/${service.sid}
     - name: CLUSTER
@@ -290,8 +296,6 @@ roleGroups:
             ${service.roles.HDFS_JOURNALNODE[0]['hostname']}
         - name: HADOOP_CONF_DIR
           value: /etc/${service.sid}/conf
-        - name: DATA_DIRS
-          value: ${service['dfs.namenode.name.dir']}
         - name: SOCKETDIR
           value: /var/run/${service.sid}
         - name: CLUSTER
@@ -390,7 +394,7 @@ roleGroups:
           value: /var/run/${service.sid}/
         - name: HADOOP_CONF_DIR
           value: /etc/${service.sid}/conf
-        - name: DATA_DIRS
+        - name: JOURNALNODE_DATA_DIRS
           value: /hadoop/journal
         mountPath:
         - mountPath: /etc/${service.sid}/conf
@@ -463,6 +467,11 @@ roleGroups:
                 templateType: FreeMarker
                 templatePath: "hdfs-site.ftlx"
                 targetPath: "/etc/${service.sid}/conf/hdfs-site.xml"
+                mode: "755"
+            - directive: !<resource>
+                templateType: FreeMarker
+                templatePath: "hadoop-hdfs-env.ftlsh"
+                targetPath: "/etc/${service.sid}/conf/hadoop-hdfs-env.sh"
                 mode: "755"
 
     others:

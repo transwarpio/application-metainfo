@@ -26,9 +26,7 @@ export NAMENODE_ORDINAL=0
 export NAMENODE_NAMESERVICE=${nameservice}
 export HDFS_HA=true
 export NAMENODE_ORDINAL=1
-        <#if service[nn1.hostname]?? && service[nn1.hostname]["namenode.http-port"]??>
-          <#assign nn1HttpPort=service[nn1.hostname]["namenode.http-port"]>
-        <#else>
+        <#if service["namenode.http-port"]??>
           <#assign nn1HttpPort=service["namenode.http-port"]>
         </#if>
 export NAMENODE_PRIMARY_JMX_URL=http://${nn1.hostname}:${nn1HttpPort}/jmx
@@ -48,8 +46,16 @@ export HDFS_HA=false
 </#if>
 
 # Export journalnode config
-<#if service[.data_model["localhostname"]]['journalnode.http-port']??>
-export JOURNALNODE_HTTP_PORT=${service[.data_model["localhostname"]]['journalnode.http-port']}
-export JOURNALNODE_RPC_PORT=${service[.data_model["localhostname"]]['journalnode.rpc-port']}
+<#if service['journalnode.http-port']??>
+export JOURNALNODE_HTTP_PORT=${service['journalnode.http-port']}
+export JOURNALNODE_RPC_PORT=${service['journalnode.rpc-port']}
 export HDFS_JOURNAL_NODE_COUNT=${service.roles.HDFS_JOURNALNODE?size}
 </#if>
+
+# Export dfs.datanode.data.dir
+<#if service[.data_model["localhostname"]]['dfs.datanode.data.dir']??>
+export DATA_DIRS=${service[.data_model["localhostname"]]['dfs.datanode.data.dir']}
+<#else>
+export DATA_DIRS=/hadoop/data
+</#if>
+export DATA_DIRS_PARENT=/hadoop/mounts/${service.sid}/datadir

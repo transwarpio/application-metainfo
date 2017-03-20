@@ -36,12 +36,11 @@
     <#assign
         nn1=service[ns]['HDFS_NAMENODE'][0].hostname
         nn2=service[ns]['HDFS_NAMENODE'][1].hostname
-        nn1_rpc_port=service[nn1]['namenode.rpc-port']
-        nn2_rpc_port=service[nn2]['namenode.rpc-port']
+        nn_rpc_port=service['namenode.rpc-port']
         nn_http_port=service['namenode.http-port']
     >
-    <@property "dfs.namenode.rpc-address." + ns + ".nn1" nn1 + ":" + nn1_rpc_port/>
-    <@property "dfs.namenode.rpc-address." + ns + ".nn2" nn2 + ":" + nn2_rpc_port/>
+    <@property "dfs.namenode.rpc-address." + ns + ".nn1" nn1 + ":" + nn_rpc_port/>
+    <@property "dfs.namenode.rpc-address." + ns + ".nn2" nn2 + ":" + nn_rpc_port/>
     <@property "dfs.namenode.http-address." + ns + ".nn1" nn1 + ":" + nn_http_port/>
     <@property "dfs.namenode.http-address." + ns + ".nn2" nn2 + ":" + nn_http_port/>
     <@property "dfs.ha.automatic-failover.enabled." + ns "true"/>
@@ -56,7 +55,7 @@
     <@property "dfs.namenode.shared.edits.dir." + ns "qjournal://" + jn_withport?join(";") + "/" + ns/>
     <#else>
     <#assign nn=service[ns]['HDFS_NAMENODE'][0].hostname
-             nn_rpc_port=service[nn1]['namenode.rpc-port']
+             nn_rpc_port=service['namenode.rpc-port']
              nn_http_port=service['namenode.http-port']>
     <@property "dfs.namenode.rpc-address." + ns nn_rpc_port/>
     <@property "dfs.namenode.http-address." + ns nn_http_port/>

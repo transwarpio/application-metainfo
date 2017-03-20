@@ -14,23 +14,23 @@
 #                   ]
 
 - name: dfs.datanode.data.dir
-#  recommendExpression: |
-#    <#function localDir suffix>
-#      <#if rcmdMounts?size == 0>
-#        <#return suffix>
-#      <#else>
-#        <#local dirs = []>
-#        <#list rcmdMounts?sort as mnt>
-#         <#local dirs = dirs + [mnt + suffix]>
-#        </#list>
-#        <#return dirs?join(",")>
-#      </#if>
-#    </#function>
-#    ${localDir("/hadoop/data")}
-  recommendExpression: /hadoop/data # TODO work around before WARP-11503
+  recommendExpression: |
+    <#function localDir suffix>
+      <#if rcmdMounts?size == 0>
+        <#return suffix>
+      <#else>
+        <#local dirs = []>
+        <#list rcmdMounts?sort as mnt>
+         <#local dirs = dirs + [mnt + suffix]>
+        </#list>
+        <#return dirs?join(",")>
+      </#if>
+    </#function>
+    ${localDir("/hadoop/data")}
+#  recommendExpression: /hadoop/data # TODO work around before WARP-11503
   defaultValue: file://${hadoop.tmp.dir}/dfs/data
   valueType: STRING
-#  isNodeSpecific: true  # TODO work around before WARP-11503
+  isNodeSpecific: true  # TODO work around before WARP-11503
   scope: !<RoleTypes>
     roleTypes:
     - HDFS_DATANODE
@@ -132,7 +132,6 @@
   recommendExpression: 8020
   defaultValue: null
   valueType: PORT
-  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes:
     - HDFS_NAMENODE
@@ -144,7 +143,6 @@
   recommendExpression: 50070
   defaultValue: null
   valueType: PORT
-  isNodeSpecific: false #used in deployment yaml
   scope: !<RoleTypes>
     roleTypes:
     - HDFS_NAMENODE
@@ -174,7 +172,6 @@
   recommendExpression: 8485
   defaultValue: null
   valueType: PORT
-  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes:
     - HDFS_JOURNALNODE
@@ -186,7 +183,6 @@
   recommendExpression: 8480
   defaultValue: null
   valueType: PORT
-  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes:
     - HDFS_JOURNALNODE
@@ -285,7 +281,7 @@
   recommendExpression: 4096
   defaultValue: null
   valueType: MB
-  isNodeSpecific: true #
+  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes:
     - HDFS_DATANODE
