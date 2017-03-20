@@ -14,6 +14,7 @@ roles:
   friendlyName: "License Node"
   # compatible with legacy init.d script name "zookeeper-server-transwarp_license_cluster"
   labelPrefix: "zookeeper-server"
+  category: MASTER
   env:
   - name: USE_EXTERNAL_CONFIG
     value: "true"

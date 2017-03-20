@@ -9,6 +9,7 @@ user: root
 roles:
 - name: REGISTRY_SERVER
   friendlyName: "Registry Server"
+  category: MASTER
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq>

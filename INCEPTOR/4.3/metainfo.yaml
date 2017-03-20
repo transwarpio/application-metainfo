@@ -32,6 +32,7 @@ roles:
 - name: INCEPTOR_SERVER
   friendlyName: "Inceptor Server"
   labelPrefix: "inceptor-server"
+  category: MASTER
   env:
   - name: KRB_ENABLE
     value: 'false'
@@ -136,6 +137,7 @@ roles:
 - name: INCEPTOR_MYSQL
   friendlyName: "MySQL Server"
   labelPrefix: "inceptor-mysql"
+  category: MASTER
   env:
   - name: KRB_ENABLE
     value: 'false'
@@ -213,6 +215,7 @@ roles:
 - name: INCEPTOR_METASTORE
   friendlyName: "Inceptor Metastore"
   labelPrefix: "inceptor-metastore"
+  category: MASTER
   env:
   - name: KRB_ENABLE
     value: 'false'
@@ -292,6 +295,7 @@ roles:
 - name: INCEPTOR_EXECUTOR
   friendlyName: "Inceptor Executor"
   labelPrefix: "inceptor-executor"
+  category: SLAVE
   env:
   - name: KRB_ENABLE
     value: 'false'

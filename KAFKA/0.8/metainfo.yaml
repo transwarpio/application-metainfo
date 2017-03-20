@@ -15,6 +15,7 @@ roles:
 - name: KAFKA_SERVER
   friendlyName: "Kafka Server"
   labelPrefix: "kafka-server"
+  category: SLAVE
   env:
   - name: KRB_ENABLE
     value: 'false'

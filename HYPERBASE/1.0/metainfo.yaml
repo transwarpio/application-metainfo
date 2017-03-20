@@ -23,6 +23,7 @@ roles:
 - name: HYPERBASE_MASTER
   friendlyName: "Hyperbase Master"
   labelPrefix: "hyperbase-master"
+  category: MASTER
   env:
   - name: KRB_ENABLE
     value: 'false'
@@ -97,6 +98,7 @@ roles:
 - name: HYPERBASE_REGIONSERVER
   friendlyName: "Region Server"
   labelPrefix: "hyperbase-regionserver"
+  category: SLAVE
   env:
   - name: KRB_ENABLE
     value: 'false'
@@ -168,6 +170,7 @@ roles:
 - name: HYPERBASE_THRIFT
   friendlyName: "Hyperbase Thrift"
   labelPrefix: "hyperbase-thrift"
+  category: MASTER
   env:
   - name: KRB_ENABLE
     value: 'false'

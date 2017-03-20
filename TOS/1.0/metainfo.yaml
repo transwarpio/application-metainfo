@@ -9,6 +9,7 @@ user: root
 roles:
 - name: TOS_MASTER
   friendlyName: "TOS Master"
+  category: MASTER
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -52,8 +53,14 @@ roles:
     - directive: !<docker-compose>
         action: Stop
         file: "/etc/${service.sid}/tos-master-${service.sid}.yaml"
+#  - type: Scaleout
+#    directives:
+#    - directive: !<docker-compose>
+#        action: Up
+#        file: "/etc/${service.sid}/tos-master-${service.sid}.yaml"
 - name: TOS_SLAVE
   friendlyName: "TOS Slave"
+  category: SLAVE
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}
@@ -96,6 +103,11 @@ roles:
     directives:
     - directive: !<docker-compose>
         action: Stop
+        file: "/etc/${service.sid}/tos-slave-${service.sid}.yaml"
+  - type: Scaleout
+    directives:
+    - directive: !<docker-compose>
+        action: Up
         file: "/etc/${service.sid}/tos-slave-${service.sid}.yaml"
 
 product: "TOS"

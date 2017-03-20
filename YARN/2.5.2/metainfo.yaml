@@ -19,6 +19,7 @@ roles:
 - name: YARN_RESOURCEMANAGER
   friendlyName: "Resource Manager"
   labelPrefix: "hadoop-yarn-resourcemanager"
+  category: MASTER
   env:
   - name: USE_EXTERNAL_CONFIG
     value: "true"
@@ -138,6 +139,7 @@ roles:
 - name: YARN_NODEMANAGER
   friendlyName: "Node Manager"
   labelPrefix: "hadoop-yarn-nodemanager"
+  category: SLAVE
   env:
   - name: USE_EXTERNAL_CONFIG
     value: "true"
@@ -261,6 +263,7 @@ roles:
 - name: YARN_HISTORYSERVER
   friendlyName: "History Server"
   labelPrefix: "hadoop-yarn-historyserver"
+  category: MASTER
   env:
   - name: USE_EXTERNAL_CONFIG
     value: "true"
@@ -385,6 +388,7 @@ roles:
 - name: YARN_TIMELINESERVER
   friendlyName: "Timeline Server"
   labelPrefix: "hadoop-yarn-timelineserver"
+  category: MASTER
   env:
   - name: USE_EXTERNAL_CONFIG
     value: "true"

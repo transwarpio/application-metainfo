@@ -12,6 +12,7 @@ roles:
 - name: ZOOKEEPER
   friendlyName: "ZooKeeper Server"
   labelPrefix: "zookeeper-server"
+  category: MASTER
   env:
   - name: USE_EXTERNAL_CONFIG
     value: "true"

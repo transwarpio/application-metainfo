@@ -27,6 +27,7 @@ roles:
 - name: DISCOVER
   friendlyName: "Discover"
   labelPrefix: "discover"
+  category: MASTER
   env:
   - name: YARN_RESOURCEMANAGER_ADDRRESS
     value: ${dependencies.YARN.roles.YARN_RESOURCEMANAGER[0]['hostname']}

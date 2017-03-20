@@ -15,6 +15,7 @@ roles:
   - name: HDFS_DATANODE
     friendlyName: "Data Node"
     labelPrefix: "hadoop-hdfs-datanode"
+    category: SLAVE
     env:
     - name: KRB_ENABLE
       value: 'false'
@@ -112,6 +113,7 @@ roles:
   - name: HDFS_NAMENODE
     friendlyName: "Name Node"
     labelPrefix: "hadoop-hdfs-namenode"
+    category: MASTER
     env:
     - name: KRB_ENABLE
       value: 'false'
@@ -260,6 +262,7 @@ roleGroups:
       - name: HDFS_NAMENODE
         friendlyName: "Name Node"
         labelPrefix: "hadoop-hdfs-namenode"
+        category: MASTER
         env:
         - name: KRB_ENABLE
           value: 'false'
@@ -379,6 +382,7 @@ roleGroups:
       - name: HDFS_JOURNALNODE
         friendlyName: "Journal Node"
         labelPrefix: "hadoop-hdfs-journalnode"
+        category: MASTER
         env:
         - name: KRB_ENABLE
           value: "false"

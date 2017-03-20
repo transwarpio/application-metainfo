@@ -9,6 +9,7 @@ user: root
 roles:
 - name: TRANSWARP_MANAGER_MASTER
   friendlyName: "Manager"
+  category: MASTER
   summaryPolicy: MAJOR
   autoAssign: []
   suggestion:
