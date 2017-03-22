@@ -345,3 +345,6 @@ healthChecks:
 - category: DAEMON_CHECK
   intervalSeconds: 5
   method: !<K8sPod> {}
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 10
+  method: !<Builtin> {}
