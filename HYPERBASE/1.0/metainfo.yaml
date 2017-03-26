@@ -67,21 +67,6 @@ roles:
     directives:
     - directive: !<resource>
         templateType: Raw
-        templatePath: "log4j.properties"
-        targetPath: "/etc/${service.sid}/conf/log4j.properties"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hbase-site.ftlx"
-        targetPath: "/etc/${service.sid}/conf/hbase-site.xml"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hbase-env.sh"
-        targetPath: "/etc/${service.sid}/conf/hbase-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: Raw
         templatePath: "jmxremote.access"
         targetPath: "/etc/${service.sid}/conf/jmxremote.access"
         mode: "600"
@@ -90,11 +75,6 @@ roles:
         templatePath: "jmxremote.passwd"
         targetPath: "/etc/${service.sid}/conf/jmxremote.passwd"
         mode: "600"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "hadoop-metrics2-hbase.properties"
-        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-hbase.properties"
-        mode: "644"
 - name: HYPERBASE_REGIONSERVER
   friendlyName: "Region Server"
   labelPrefix: "hyperbase-regionserver"
@@ -139,21 +119,6 @@ roles:
     directives:
     - directive: !<resource>
         templateType: Raw
-        templatePath: "log4j.properties"
-        targetPath: "/etc/${service.sid}/conf/log4j.properties"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hbase-site.ftlx"
-        targetPath: "/etc/${service.sid}/conf/hbase-site.xml"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hbase-env.sh"
-        targetPath: "/etc/${service.sid}/conf/hbase-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: Raw
         templatePath: "jmxremote.access"
         targetPath: "/etc/${service.sid}/conf/jmxremote.access"
         mode: "600"
@@ -162,11 +127,6 @@ roles:
         templatePath: "jmxremote.passwd"
         targetPath: "/etc/${service.sid}/conf/jmxremote.passwd"
         mode: "600"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "hadoop-metrics2-hbase.properties"
-        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-hbase.properties"
-        mode: "644"
 - name: HYPERBASE_THRIFT
   friendlyName: "Hyperbase Thrift"
   labelPrefix: "hyperbase-thrift"
@@ -214,21 +174,6 @@ roles:
     directives:
     - directive: !<resource>
         templateType: Raw
-        templatePath: "log4j.properties"
-        targetPath: "/etc/${service.sid}/conf/log4j.properties"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hbase-site.ftlx"
-        targetPath: "/etc/${service.sid}/conf/hbase-site.xml"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hbase-env.sh"
-        targetPath: "/etc/${service.sid}/conf/hbase-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: Raw
         templatePath: "jmxremote.access"
         targetPath: "/etc/${service.sid}/conf/jmxremote.access"
         mode: "600"
@@ -237,11 +182,6 @@ roles:
         templatePath: "jmxremote.passwd"
         targetPath: "/etc/${service.sid}/conf/jmxremote.passwd"
         mode: "600"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "hadoop-metrics2-hbase.properties"
-        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-hbase.properties"
-        mode: "644"
 
 product: Hyperbase
 

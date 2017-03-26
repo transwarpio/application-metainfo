@@ -55,29 +55,9 @@ roles:
   - type: Config
     directives:
     - directive: !<resource>
-        templateType: Raw
-        templatePath: "log4j.properties"
-        targetPath: "/etc/${service.sid}/conf/log4j.properties"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "zoo-env.sh"
-        targetPath: "/etc/${service.sid}/conf/zoo-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "zoo_conf.ftlp"
-        targetPath: "/etc/${service.sid}/conf/zoo.cfg"
-        mode: "755"
-    - directive: !<resource>
         templateType: FreeMarker
         templatePath: "myid"
         targetPath: "/var/${service.sid}/myid"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "zookeeper-env.ftlsh"
-        targetPath: "/etc/${service.sid}/conf/zookeeper-env.sh"
         mode: "755"
     # TODO if Kerberos is enabled, generate jaas.conf and jaas.env; otherwise generate empty ones
 

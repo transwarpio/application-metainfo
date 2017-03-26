@@ -54,22 +54,12 @@ roles:
         paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/run/${service.sid}", "/var/log/${service.sid}"]
         mode: "755"
   - type: Config
-    directives:
+    directives: []
 #    - directive: !<resource>
 #        templateType: Raw
 #        templatePath: "log4j.properties"
 #        targetPath: "/etc/${service.sid}/conf/log4j.properties"
 #        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "server.properties"
-        targetPath: "/etc/${service.sid}/conf/server.properties"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "kafka-env.ftlsh"
-        targetPath: "/etc/${service.sid}/conf/kafka-env.sh"
-        mode: "755"
 
 firstWizardConfigs:
 - kmq.log.dirs

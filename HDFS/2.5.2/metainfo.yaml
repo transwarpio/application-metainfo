@@ -85,11 +85,6 @@ roles:
       directives:
       - directive: !<resource>
           templateType: Raw
-          templatePath: "log4j.properties"
-          targetPath: "/etc/${service.sid}/conf/log4j.properties"
-          mode: "755"
-      - directive: !<resource>
-          templateType: Raw
           templatePath: "hadoop-metrics2-datanode.properties"
           targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-datanode.properties"
           mode: "755"
@@ -97,26 +92,6 @@ roles:
           templateType: Raw
           templatePath: "hadoop-metrics2-namenode.properties"
           targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-namenode.properties"
-          mode: "755"
-      - directive: !<resource>
-          templateType: FreeMarker
-          templatePath: "core-site.ftlx"
-          targetPath: "/etc/${service.sid}/conf/core-site.xml"
-          mode: "755"
-      - directive: !<resource>
-          templateType: FreeMarker
-          templatePath: "hdfs-site.ftlx"
-          targetPath: "/etc/${service.sid}/conf/hdfs-site.xml"
-          mode: "755"
-      - directive: !<resource>
-          templateType: FreeMarker
-          templatePath: "hadoop-env.sh"
-          targetPath: "/etc/${service.sid}/conf/hadoop-env.sh"
-          mode: "755"
-      - directive: !<resource>
-          templateType: FreeMarker
-          templatePath: "hadoop-hdfs-env.ftlsh"
-          targetPath: "/etc/${service.sid}/conf/hadoop-hdfs-env.sh"
           mode: "755"
   - name: HDFS_NAMENODE
     friendlyName: "Name Node"
@@ -207,11 +182,6 @@ roles:
         directives:
         - directive: !<resource>
             templateType: Raw
-            templatePath: "log4j.properties"
-            targetPath: "/etc/${service.sid}/conf/log4j.properties"
-            mode: "755"
-        - directive: !<resource>
-            templateType: Raw
             templatePath: "hadoop-metrics2-datanode.properties"
             targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-datanode.properties"
             mode: "755"
@@ -222,28 +192,8 @@ roles:
             mode: "755"
         - directive: !<resource>
             templateType: FreeMarker
-            templatePath: "core-site.ftlx"
-            targetPath: "/etc/${service.sid}/conf/core-site.xml"
-            mode: "755"
-        - directive: !<resource>
-            templateType: FreeMarker
-            templatePath: "hdfs-site.ftlx"
-            targetPath: "/etc/${service.sid}/conf/hdfs-site.xml"
-            mode: "755"
-        - directive: !<resource>
-            templateType: FreeMarker
             templatePath: "exclude-list.txt"
             targetPath: "/etc/${service.sid}/conf/exclude-list.txt"
-            mode: "755"
-        - directive: !<resource>
-            templateType: FreeMarker
-            templatePath: "hadoop-env.sh"
-            targetPath: "/etc/${service.sid}/conf/hadoop-env.sh"
-            mode: "755"
-        - directive: !<resource>
-            templateType: FreeMarker
-            templatePath: "hadoop-hdfs-env.ftlsh"
-            targetPath: "/etc/${service.sid}/conf/hadoop-hdfs-env.sh"
             mode: "755"
 roleGroups:
   - fieldName: nameservices
@@ -345,11 +295,6 @@ roleGroups:
             directives:
             - directive: !<resource>
                 templateType: Raw
-                templatePath: "log4j.properties"
-                targetPath: "/etc/${service.sid}/conf/log4j.properties"
-                mode: "755"
-            - directive: !<resource>
-                templateType: Raw
                 templatePath: "hadoop-metrics2-datanode.properties"
                 targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-datanode.properties"
                 mode: "755"
@@ -360,28 +305,8 @@ roleGroups:
                 mode: "755"
             - directive: !<resource>
                 templateType: FreeMarker
-                templatePath: "core-site.ftlx"
-                targetPath: "/etc/${service.sid}/conf/core-site.xml"
-                mode: "755"
-            - directive: !<resource>
-                templateType: FreeMarker
-                templatePath: "hdfs-site.ftlx"
-                targetPath: "/etc/${service.sid}/conf/hdfs-site.xml"
-                mode: "755"
-            - directive: !<resource>
-                templateType: FreeMarker
                 templatePath: "exclude-list.txt"
                 targetPath: "/etc/${service.sid}/conf/exclude-list.txt"
-                mode: "755"
-            - directive: !<resource>
-                templateType: FreeMarker
-                templatePath: "hadoop-env.sh"
-                targetPath: "/etc/${service.sid}/conf/hadoop-env.sh"
-                mode: "755"
-            - directive: !<resource>
-                templateType: FreeMarker
-                templatePath: "hadoop-hdfs-env.ftlsh"
-                targetPath: "/etc/${service.sid}/conf/hadoop-hdfs-env.sh"
                 mode: "755"
       - name: HDFS_JOURNALNODE
         friendlyName: "Journal Node"
@@ -445,11 +370,6 @@ roleGroups:
             directives:
             - directive: !<resource>
                 templateType: Raw
-                templatePath: "log4j.properties"
-                targetPath: "/etc/${service.sid}/conf/log4j.properties"
-                mode: "755"
-            - directive: !<resource>
-                templateType: Raw
                 templatePath: "hadoop-metrics2-datanode.properties"
                 targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-datanode.properties"
                 mode: "755"
@@ -457,21 +377,6 @@ roleGroups:
                 templateType: Raw
                 templatePath: "hadoop-metrics2-namenode.properties"
                 targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-namenode.properties"
-                mode: "755"
-            - directive: !<resource>
-                templateType: FreeMarker
-                templatePath: "core-site.ftlx"
-                targetPath: "/etc/${service.sid}/conf/core-site.xml"
-                mode: "755"
-            - directive: !<resource>
-                templateType: FreeMarker
-                templatePath: "hdfs-site.ftlx"
-                targetPath: "/etc/${service.sid}/conf/hdfs-site.xml"
-                mode: "755"
-            - directive: !<resource>
-                templateType: FreeMarker
-                templatePath: "hadoop-hdfs-env.ftlsh"
-                targetPath: "/etc/${service.sid}/conf/hadoop-hdfs-env.sh"
                 mode: "755"
 
     others:

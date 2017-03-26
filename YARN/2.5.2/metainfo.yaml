@@ -68,26 +68,6 @@ roles:
         mode: "755"
   - type: Config
     directives:
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "log4j.properties"
-        targetPath: "/etc/${service.sid}/conf/log4j.properties"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "yarn-site.ftlx"
-        targetPath: "/etc/${service.sid}/conf/yarn-site.xml"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "yarn-env.sh"
-        targetPath: "/etc/${service.sid}/conf/yarn-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hadoop-env.sh"
-        targetPath: "/etc/${service.sid}/conf/hadoop-env.sh"
-        mode: "755"
     - directive: !<link>
         action: Link
         from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
@@ -98,44 +78,9 @@ roles:
         to: "/etc/${service.sid}/conf/core-site.xml"
     - directive: !<resource>
         templateType: Raw
-        templatePath: "hadoop-metrics2-maptask.properties"
-        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-maptask.properties"
-        mode: "644"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "hadoop-metrics2-reducetask.properties"
-        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-reducetask.properties"
-        mode: "644"
-    - directive: !<resource>
-        templateType: Raw
         templatePath: "hadoop-metrics2-resourcemanager.properties"
         targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-resourcemanager.properties"
         mode: "644"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "yarn.exclude"
-        targetPath: "/etc/${service.sid}/conf/yarn.exclude"
-        mode: "644"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "mapred-env.sh"
-        targetPath: "/etc/${service.sid}/conf/mapred-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "mapred-site.ftlx"
-        targetPath: "/etc/${service.sid}/conf/mapred-site.xml"
-        mode: "755"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "taskcontroller.cfg"
-        targetPath: "/etc/${service.sid}/conf/taskcontroller.cfg"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "capacity-scheduler.ftlx"
-        targetPath: "/etc/${service.sid}/conf/capacity-scheduler.xml"
-        mode: "755"
 - name: YARN_NODEMANAGER
   friendlyName: "Node Manager"
   labelPrefix: "hadoop-yarn-nodemanager"
@@ -192,26 +137,6 @@ roles:
         mode: "755"
   - type: Config
     directives:
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "log4j.properties"
-        targetPath: "/etc/${service.sid}/conf/log4j.properties"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "yarn-site.ftlx"
-        targetPath: "/etc/${service.sid}/conf/yarn-site.xml"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "yarn-env.sh"
-        targetPath: "/etc/${service.sid}/conf/yarn-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hadoop-env.sh"
-        targetPath: "/etc/${service.sid}/conf/hadoop-env.sh"
-        mode: "755"
     - directive: !<link>
         action: Link
         from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
@@ -222,44 +147,9 @@ roles:
         to: "/etc/${service.sid}/conf/core-site.xml"
     - directive: !<resource>
         templateType: Raw
-        templatePath: "hadoop-metrics2-maptask.properties"
-        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-maptask.properties"
-        mode: "644"
-    - directive: !<resource>
-        templateType: Raw
         templatePath: "hadoop-metrics2-nodemanager.properties"
         targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-nodemanager.properties"
         mode: "644"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "hadoop-metrics2-reducetask.properties"
-        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-reducetask.properties"
-        mode: "644"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "yarn.exclude"
-        targetPath: "/etc/${service.sid}/conf/yarn.exclude"
-        mode: "644"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "mapred-env.sh"
-        targetPath: "/etc/${service.sid}/conf/mapred-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "mapred-site.ftlx"
-        targetPath: "/etc/${service.sid}/conf/mapred-site.xml"
-        mode: "755"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "taskcontroller.cfg"
-        targetPath: "/etc/${service.sid}/conf/taskcontroller.cfg"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "capacity-scheduler.ftlx"
-        targetPath: "/etc/${service.sid}/conf/capacity-scheduler.xml"
-        mode: "755"
 - name: YARN_HISTORYSERVER
   friendlyName: "History Server"
   labelPrefix: "hadoop-yarn-historyserver"
@@ -317,26 +207,6 @@ roles:
         mode: "755"
   - type: Config
     directives:
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "log4j.properties"
-        targetPath: "/etc/${service.sid}/conf/log4j.properties"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "yarn-site.ftlx"
-        targetPath: "/etc/${service.sid}/conf/yarn-site.xml"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "yarn-env.sh"
-        targetPath: "/etc/${service.sid}/conf/yarn-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hadoop-env.sh"
-        targetPath: "/etc/${service.sid}/conf/hadoop-env.sh"
-        mode: "755"
     - directive: !<link>
         action: Link
         from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
@@ -350,41 +220,6 @@ roles:
         templatePath: "hadoop-metrics2-historyserver.properties"
         targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-historyserver.properties"
         mode: "644"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "hadoop-metrics2-maptask.properties"
-        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-maptask.properties"
-        mode: "644"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "hadoop-metrics2-reducetask.properties"
-        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-reducetask.properties"
-        mode: "644"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "yarn.exclude"
-        targetPath: "/etc/${service.sid}/conf/yarn.exclude"
-        mode: "644"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "mapred-env.sh"
-        targetPath: "/etc/${service.sid}/conf/mapred-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "mapred-site.ftlx"
-        targetPath: "/etc/${service.sid}/conf/mapred-site.xml"
-        mode: "755"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "taskcontroller.cfg"
-        targetPath: "/etc/${service.sid}/conf/taskcontroller.cfg"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "capacity-scheduler.ftlx"
-        targetPath: "/etc/${service.sid}/conf/capacity-scheduler.xml"
-        mode: "755"
 - name: YARN_TIMELINESERVER
   friendlyName: "Timeline Server"
   labelPrefix: "hadoop-yarn-timelineserver"
@@ -444,26 +279,6 @@ roles:
         mode: "755"
   - type: Config
     directives:
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "log4j.properties"
-        targetPath: "/etc/${service.sid}/conf/log4j.properties"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "yarn-site.ftlx"
-        targetPath: "/etc/${service.sid}/conf/yarn-site.xml"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "yarn-env.sh"
-        targetPath: "/etc/${service.sid}/conf/yarn-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hadoop-env.sh"
-        targetPath: "/etc/${service.sid}/conf/hadoop-env.sh"
-        mode: "755"
     - directive: !<link>
         action: Link
         from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
@@ -472,41 +287,6 @@ roles:
         action: Link
         from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
         to: "/etc/${service.sid}/conf/core-site.xml"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "hadoop-metrics2-maptask.properties"
-        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-maptask.properties"
-        mode: "644"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "hadoop-metrics2-reducetask.properties"
-        targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-reducetask.properties"
-        mode: "644"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "yarn.exclude"
-        targetPath: "/etc/${service.sid}/conf/yarn.exclude"
-        mode: "644"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "mapred-env.sh"
-        targetPath: "/etc/${service.sid}/conf/mapred-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "mapred-site.ftlx"
-        targetPath: "/etc/${service.sid}/conf/mapred-site.xml"
-        mode: "755"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "taskcontroller.cfg"
-        targetPath: "/etc/${service.sid}/conf/taskcontroller.cfg"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "capacity-scheduler.ftlx"
-        targetPath: "/etc/${service.sid}/conf/capacity-scheduler.xml"
-        mode: "755"
 stages:
   - type: Bootstrap
     taskGroups:

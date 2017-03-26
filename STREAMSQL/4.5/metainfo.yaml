@@ -100,34 +100,9 @@ roles:
   - type: Config
     directives:
     - directive: !<resource>
-        templateType: Raw
-        templatePath: "hive-log4j.properties"
-        targetPath: "/etc/${service.sid}/conf/hive-log4j.properties"
-        mode: "755"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "hive-log4j.properties.server"
-        targetPath: "/etc/${service.sid}/conf/hive-log4j.properties.server"
-        mode: "755"
-    - directive: !<resource>
         templateType: FreeMarker
         templatePath: "ngmr-context-env.sh"
         targetPath: "/etc/${service.sid}/conf/ngmr-context-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "ngmr-env.sh"
-        targetPath: "/etc/${service.sid}/conf/ngmr-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hive-env.sh"
-        targetPath: "/etc/${service.sid}/conf/hive-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hive-site.ftlx"
-        targetPath: "/etc/${service.sid}/conf/hive-site.xml"
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
@@ -180,38 +155,6 @@ roles:
     - directive: !<mkdirs>
         paths: ["/var/log/${service.sid}" ,"/var/run/${service.sid}", "/etc/${service.sid}/conf"]
         mode: "755"
-  - type: Config
-    directives:
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "hive-log4j.properties"
-        targetPath: "/etc/${service.sid}/conf/hive-log4j.properties"
-        mode: "755"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "hive-log4j.properties.server"
-        targetPath: "/etc/${service.sid}/conf/hive-log4j.properties.server"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "ngmr-context-env.sh"
-        targetPath: "/etc/${service.sid}/conf/ngmr-context-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "ngmr-env.sh"
-        targetPath: "/etc/${service.sid}/conf/ngmr-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hive-env.sh"
-        targetPath: "/etc/${service.sid}/conf/hive-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hive-site.ftlx"
-        targetPath: "/etc/${service.sid}/conf/hive-site.xml"
-        mode: "755"
 - name: INCEPTOR_METASTORE
   friendlyName: "Inceptor Metastore"
   labelPrefix: "inceptor-metastore"
@@ -259,38 +202,6 @@ roles:
     directives:
     - directive: !<mkdirs>
         paths: ["/var/log/${service.sid}" ,"/var/run/${service.sid}", "/etc/${service.sid}/conf"]
-        mode: "755"
-  - type: Config
-    directives:
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "hive-log4j.properties"
-        targetPath: "/etc/${service.sid}/conf/hive-log4j.properties"
-        mode: "755"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "hive-log4j.properties.server"
-        targetPath: "/etc/${service.sid}/conf/hive-log4j.properties.server"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "ngmr-context-env.sh"
-        targetPath: "/etc/${service.sid}/conf/ngmr-context-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "ngmr-env.sh"
-        targetPath: "/etc/${service.sid}/conf/ngmr-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hive-env.sh"
-        targetPath: "/etc/${service.sid}/conf/hive-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hive-site.ftlx"
-        targetPath: "/etc/${service.sid}/conf/hive-site.xml"
         mode: "755"
 - name: INCEPTOR_EXECUTOR
   friendlyName: "Inceptor Executor"
@@ -345,38 +256,6 @@ roles:
     directives:
     - directive: !<mkdirs>
         paths: ["/var/log/${service.sid}", "/var/run/${service.sid}", "/etc/${service.sid}/conf"]
-        mode: "755"
-  - type: Config
-    directives:
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "hive-log4j.properties"
-        targetPath: "/etc/${service.sid}/conf/hive-log4j.properties"
-        mode: "755"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "hive-log4j.properties.server"
-        targetPath: "/etc/${service.sid}/conf/hive-log4j.properties.server"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "ngmr-context-env.sh"
-        targetPath: "/etc/${service.sid}/conf/ngmr-context-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "ngmr-env.sh"
-        targetPath: "/etc/${service.sid}/conf/ngmr-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hive-env.sh"
-        targetPath: "/etc/${service.sid}/conf/hive-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "hive-site.ftlx"
-        targetPath: "/etc/${service.sid}/conf/hive-site.xml"
         mode: "755"
 
 product: Stream
