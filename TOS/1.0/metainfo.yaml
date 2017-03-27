@@ -24,40 +24,35 @@ roles:
         paths: ["/var/log/${service.sid}" ,"/var/run/${service.sid}", "/etc/${service.sid}/conf"]
         mode: "755"
     - directive: !<resource>
-        templateType: Raw
-        templatePath: "health_check.sh"
-        targetPath: "/etc/${service.sid}/health_check.sh"
-        mode: "755"
-    - directive: !<resource>
         templateType: FreeMarker
         templatePath: "docker-compose-master.yml"
-        targetPath: "/etc/${service.sid}/tos-master-${service.sid}.yaml"
+        targetPath: "/etc/${service.sid}/conf/tos-master-${service.sid}.yaml"
         mode: "755"
     - directive: !<docker-compose>
         action: Pull
-        file: "/etc/${service.sid}/tos-master-${service.sid}.yaml"
+        file: "/etc/${service.sid}/conf/tos-master-${service.sid}.yaml"
   - type: Config
     directives:
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "docker-compose-master.yml"
-        targetPath: "/etc/${service.sid}/tos-master-${service.sid}.yaml"
+        targetPath: "/etc/${service.sid}/conf/tos-master-${service.sid}.yaml"
         mode: "755"
   - type: Start
     directives:
     - directive: !<docker-compose>
         action: Up
-        file: "/etc/${service.sid}/tos-master-${service.sid}.yaml"
+        file: "/etc/${service.sid}/conf/tos-master-${service.sid}.yaml"
   - type: Stop
     directives:
     - directive: !<docker-compose>
         action: Stop
-        file: "/etc/${service.sid}/tos-master-${service.sid}.yaml"
+        file: "/etc/${service.sid}/conf/tos-master-${service.sid}.yaml"
 #  - type: Scaleout
 #    directives:
 #    - directive: !<docker-compose>
 #        action: Up
-#        file: "/etc/${service.sid}/tos-master-${service.sid}.yaml"
+#        file: "/etc/${service.sid}/conf/tos-master-${service.sid}.yaml"
 - name: TOS_SLAVE
   friendlyName: "TOS Slave"
   category: SLAVE
@@ -74,41 +69,44 @@ roles:
     - directive: !<mkdirs>
         paths: ["/var/log/${service.sid}", "/var/run/${service.sid}", "/etc/${service.sid}/conf"]
         mode: "775"
+    - directive: !<mkdirs>
+        paths: ["/srv/kubernetes"]
+        mode: "700"
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "docker-compose-slave.yml"
-        targetPath: "/etc/${service.sid}/tos-slave-${service.sid}.yaml"
+        targetPath: "/etc/${service.sid}/conf/tos-slave-${service.sid}.yaml"
         mode: "755"
     - directive: !<docker-compose>
         action: Pull
-        file: "/etc/${service.sid}/tos-slave-${service.sid}.yaml"
+        file: "/etc/${service.sid}/conf/tos-slave-${service.sid}.yaml"
   - type: Config
     directives:
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "docker-compose-slave.yml"
-        targetPath: "/etc/${service.sid}/tos-slave-${service.sid}.yaml"
-        mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "kubernetes_master.sh"
         targetPath: "/etc/profile.d/kubernetes_master.sh"
         mode: "755"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "kubeconfig"
+        targetPath: "/srv/kubernetes/kubeconfig"
+        mode: "755"
   - type: Start
     directives:
     - directive: !<docker-compose>
         action: Up
-        file: "/etc/${service.sid}/tos-slave-${service.sid}.yaml"
+        file: "/etc/${service.sid}/conf/tos-slave-${service.sid}.yaml"
   - type: Stop
     directives:
     - directive: !<docker-compose>
         action: Stop
-        file: "/etc/${service.sid}/tos-slave-${service.sid}.yaml"
+        file: "/etc/${service.sid}/conf/tos-slave-${service.sid}.yaml"
   - type: Scaleout
     directives:
     - directive: !<docker-compose>
         action: Up
-        file: "/etc/${service.sid}/tos-slave-${service.sid}.yaml"
+        file: "/etc/${service.sid}/conf/tos-slave-${service.sid}.yaml"
 
 product: "TOS"
 
@@ -125,6 +123,7 @@ healthChecks:
 
 firstWizardConfigs:
 - tos.master.etcd.port
+- tos.master.leader.elect.port
 - tos.master.apiserver.port
 - tos.master.apiserver.secure.port
 - tos.master.scheduler.port

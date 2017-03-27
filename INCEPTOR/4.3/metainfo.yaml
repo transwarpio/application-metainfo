@@ -101,11 +101,6 @@ roles:
     directives:
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "ngmr-context-env.sh"
-        targetPath: "/etc/${service.sid}/conf/ngmr-context-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
         templatePath: "inceptor-env.ftlsh"
         targetPath: "/etc/${service.sid}/conf/inceptor-env.sh"
         mode: "755"

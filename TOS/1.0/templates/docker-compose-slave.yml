@@ -1,8 +1,13 @@
 <#assign
   registryServer=dependencies.REGISTRY.roles['REGISTRY_SERVER'][0].hostname
   registryPort=dependencies.REGISTRY['registry.port']
-  tosMaster=service.roles['TOS_MASTER'][0].hostname
 >
+generatecerts:
+  image: ${registryServer}:${registryPort}/jenkins/gencerts:live
+  net: host
+  volumes:
+    - /srv/kubernetes:/srv/kubernetes
+
 kubelet:
   image: ${registryServer}:${registryPort}/jenkins/hyperkube
   net: host
@@ -20,7 +25,8 @@ kubelet:
     - --cluster_domain=transwarp.local
     - --port=${service['tos.slave.kubelet.port']}
     - --healthz-port=${service['tos.slave.kubelet.healthzport']}
-    - --api_servers=http://${tosMaster}:${service['tos.master.apiserver.port']}
+    - --api_servers=https://127.0.0.1:6443 #TODO 6443 should be configured
+    - --kubeconfig=/srv/kubernetes/kubeconfig
 #    - --hostname_override={{ inventory_hostname }}
     - --log_dir=/var/log/kubernetes/kubelet
     - --containerized=true
@@ -40,3 +46,17 @@ kubelet:
     - /sys:/sys
     - /var/run:/var/run
     - /var/log/kubernetes/kubelet:/var/log/kubernetes/kubelet
+    - /srv/kubernetes:/srv/kubernetes
+# for tos ha
+haproxy:
+  image: ${registryServer}:${registryPort}/jenkins/haproxy:live
+  net: host
+  pid: host
+  privileged: true
+  restart: always
+  command:
+    - /entrypoint.sh
+  environment:
+  <#list service.roles.TOS_MASTER as master>
+    - HAPROXY_APISERVERS_S${master_index+1}=${master.hostname}:${service['tos.master.apiserver.secure.port']}
+  </#list>

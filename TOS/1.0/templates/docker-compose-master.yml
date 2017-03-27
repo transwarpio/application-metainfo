@@ -1,18 +1,31 @@
 <#assign
   registryServer=dependencies.REGISTRY.roles['REGISTRY_SERVER'][0].hostname
   registryPort=dependencies.REGISTRY['registry.port']
+  etcd_initial_servers=[] etcd_servers=[]
 >
+<#list service.roles.TOS_MASTER as tos_master>
+<#assign etcd_servers+=["http://" + tos_master.hostname + ":" + service['tos.master.etcd.port']]>
+<#assign etcd_initial_servers+=["ETCD"+ tos_master.id + "=http://" + tos_master.hostname + ":" + service['tos.master.leader.elect.port']]>
+</#list>
 etcd:
   image: ${registryServer}:${registryPort}/jenkins/etcd:live
   net: host
   restart: always
   command:
     - etcd
-    - --listen-client-urls=http://0.0.0.0:${service['tos.master.etcd.port']}
-    - --advertise-client-urls=http://${localhostname}:${service['tos.master.etcd.port']}
     - --data-dir=/var/etcd/data
   volumes:
     - /var/etcd/data:/var/etcd/data
+  environment:
+# for tos ha
+  - ETCD_NAME=ETCD${.data_model['role.id']}
+  - ETCD_INITIAL_CLUSTER_STATE=new
+  - ETCD_INITIAL_CLUSTER_TOKEN=etcd-cluster
+  - ETCD_INITIAL_ADVERTISE_PEER_URLS=http://${localhostname}:${service['tos.master.leader.elect.port']}
+  - ETCD_INITIAL_CLUSTER=${etcd_initial_servers?join(",")}
+  - ETCD_LISTEN_PEER_URLS=http://0.0.0.0:${service['tos.master.leader.elect.port']}
+  - ETCD_ADVERTISE_CLIENT_URLS=http://${localhostname}:${service['tos.master.etcd.port']}
+  - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:${service['tos.master.etcd.port']}
 
 apiserver:
   image: ${registryServer}:${registryPort}/jenkins/hyperkube
@@ -22,7 +35,8 @@ apiserver:
     - hyperkube
     - apiserver
     - --v=4
-    - --etcd_servers=http://${localhostname}:${service['tos.master.etcd.port']}
+    - --etcd_servers=${etcd_servers?join(',')}
+    - --apiserver-count=${service.roles.TOS_MASTER?size}
     - --insecure-bind-address=0.0.0.0
     - --insecure-port=${service['tos.master.apiserver.port']}
     - --bind-address=0.0.0.0
@@ -50,6 +64,7 @@ controller:
     - hyperkube
     - controller-manager
     - --v=4
+    - --leader-elect=true
     - --master=127.0.0.1:${service['tos.master.apiserver.port']}
     - --root-ca-file=/srv/kubernetes/ca.crt
     - --service-account-private-key-file=/srv/kubernetes/server.key
@@ -77,10 +92,4 @@ scheduler:
     - --port=${service['tos.master.scheduler.port']}
   volumes:
     - /var/log/kubernetes/scheduler:/var/log/kubernetes/scheduler
-    - /srv/kubernetes:/srv/kubernetes
-
-generatecerts:
-  image: ${registryServer}:${registryPort}/jenkins/gencerts:live
-  net: host
-  volumes:
     - /srv/kubernetes:/srv/kubernetes

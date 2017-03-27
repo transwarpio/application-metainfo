@@ -8,6 +8,16 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+# for tos ha
+- name: tos.master.leader.elect.port
+  recommendExpression: 4002
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
 
 - name: tos.master.apiserver.port
   recommendExpression: 8080
@@ -68,3 +78,4 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+# TODO tos.haproxy.port
