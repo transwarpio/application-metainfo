@@ -89,6 +89,11 @@ firstWizardConfigs:
 - zookeeper.peer.communicate.port
 - zookeeper.leader.elect.port
 
+dashboardMetrics:
+- MaxZookeeperRequestLatency
+- MinZookeeperRequestLatency
+- AvgZookeeperRequestLatency
+
 healthChecks:
 - category: DAEMON_CHECK
   intervalSeconds: 5
