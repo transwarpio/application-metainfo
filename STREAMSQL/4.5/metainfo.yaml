@@ -271,6 +271,15 @@ firstWizardConfigs:
 - ngmr.cache.size
 - ngmr.fastdisk.size
 
+pages:
+- summary
+- roles
+- configuration
+- operation
+- resource_allocation
+- security
+- holodesk
+
 healthChecks:
 - category: DAEMON_CHECK
   intervalSeconds: 5

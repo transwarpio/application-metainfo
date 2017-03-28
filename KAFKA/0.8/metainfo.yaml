@@ -66,6 +66,13 @@ firstWizardConfigs:
 - kmq.port
 - kmq.zookeeper.connection.timeout.ms
 
+pages:
+- summary
+- roles
+- configuration
+- operation
+- security
+
 healthChecks:
 - category: DAEMON_CHECK
   intervalSeconds: 5

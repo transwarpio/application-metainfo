@@ -323,6 +323,18 @@ firstWizardConfigs:
 - timelineserver.http.port
 - mapred.child.heapsize
 
+dashboardMetrics:
+- YarnVCoreUsage
+- YarnMemoryUsage
+
+pages:
+- summary
+- roles
+- configuration
+- operation
+- resource_management
+- security
+
 healthChecks:
 - category: DAEMON_CHECK
   intervalSeconds: 5

@@ -74,6 +74,13 @@ product: Discover
 firstWizardConfigs:
 - discover.ui.port
 
+pages:
+- summary
+- roles
+- configuration
+- operation
+- resource_allocation_discover
+
 healthChecks:
 - category: DAEMON_CHECK
   intervalSeconds: 5

@@ -199,6 +199,17 @@ firstWizardConfigs:
 - thrift.server.memory
 - zookeeper.session.timeout
 
+dashboardMetrics:
+- HyperBaseReadRequestsRate
+- HyperBaseWriteRequestsRate
+
+pages:
+- summary
+- roles
+- configuration
+- operation
+- security
+
 healthChecks:
 - category: DAEMON_CHECK
   intervalSeconds: 5
