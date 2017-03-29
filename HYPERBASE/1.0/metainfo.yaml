@@ -23,6 +23,7 @@ roles:
 - name: HYPERBASE_MASTER
   friendlyName: "Hyperbase Master"
   labelPrefix: "hyperbase-master"
+  linkExpression: "http://${localhostname}:${service['master.info.port']}/"
   category: MASTER
   env:
   - name: KRB_ENABLE
@@ -78,6 +79,7 @@ roles:
 - name: HYPERBASE_REGIONSERVER
   friendlyName: "Region Server"
   labelPrefix: "hyperbase-regionserver"
+  linkExpression: "http://${localhostname}:${service['regionserver.info.port']}/"
   category: SLAVE
   env:
   - name: KRB_ENABLE

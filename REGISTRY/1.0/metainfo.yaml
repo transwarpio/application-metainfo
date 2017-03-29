@@ -9,6 +9,7 @@ user: root
 roles:
 - name: REGISTRY_SERVER
   friendlyName: "Registry Server"
+  linkExpression: "http://${localhostname}:${service['registry.ui.port']}/"
   category: MASTER
   summaryPolicy: SOME
   autoAssign:
