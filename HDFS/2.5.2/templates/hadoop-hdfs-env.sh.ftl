@@ -59,3 +59,6 @@ export DATA_DIRS=${service[.data_model["localhostname"]]['dfs.datanode.data.dir'
 export DATA_DIRS=/hadoop/data
 </#if>
 export DATA_DIRS_PARENT=/hadoop/mounts/${service.sid}/datadir
+<#if service['dfs.namenode.name.dir']??>
+export NAMENODE_DATA_DIRS=${service['dfs.namenode.name.dir']?trim}
+</#if>
