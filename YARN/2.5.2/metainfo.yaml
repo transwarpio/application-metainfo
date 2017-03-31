@@ -19,6 +19,7 @@ roles:
 - name: YARN_RESOURCEMANAGER
   friendlyName: "Resource Manager"
   labelPrefix: "hadoop-yarn-resourcemanager"
+  linkExpression: "http://${localhostname}:${service['resourcemanager.webapp.port']}/"
   category: MASTER
   env:
   - name: USE_EXTERNAL_CONFIG
@@ -84,6 +85,7 @@ roles:
 - name: YARN_NODEMANAGER
   friendlyName: "Node Manager"
   labelPrefix: "hadoop-yarn-nodemanager"
+  linkExpression: "http://${service['yarn.nodemanager.webapp.address']?replace(r'${yarn.nodemanager.hostname}', localhostname)}/"
   category: SLAVE
   env:
   - name: USE_EXTERNAL_CONFIG

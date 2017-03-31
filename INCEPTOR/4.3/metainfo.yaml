@@ -32,6 +32,7 @@ roles:
 - name: INCEPTOR_SERVER
   friendlyName: "Inceptor Server"
   labelPrefix: "inceptor-server"
+  linkExpression: "http://${localhostname}:${service['inceptor.ui.port']}/"
   category: MASTER
   env:
   - name: KRB_ENABLE

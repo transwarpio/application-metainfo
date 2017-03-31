@@ -309,6 +309,16 @@
   groups: []
   visibility: READ_WRITE
 
+- name: yarn.nodemanager.webapp.address
+  defaultValue: ${r"${yarn.nodemanager.hostname}:8042"}
+  recommendExpression: ${r"${yarn.nodemanager.hostname}:8042"}
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [YARN_NODEMANAGER]
+  onDeps: []
+  groups: ["yarn-site.xml"]
+  visibility: READ_WRITE
+
 - name: timelineserver.port
   recommendExpression: 10021
   defaultValue: null

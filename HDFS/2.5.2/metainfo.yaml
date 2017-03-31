@@ -15,6 +15,7 @@ roles:
   - name: HDFS_DATANODE
     friendlyName: "Data Node"
     labelPrefix: "hadoop-hdfs-datanode"
+    linkExpression: "http://${localhostname}:${service[(service.auth=='kerberos')?then('secure.datanode.http-port','datanode.http-port')]}/"
     category: SLAVE
     env:
     - name: KRB_ENABLE
@@ -96,6 +97,7 @@ roles:
   - name: HDFS_NAMENODE
     friendlyName: "Name Node"
     labelPrefix: "hadoop-hdfs-namenode"
+    linkExpression: "http://${localhostname}:${service['namenode.http-port']}/"
     category: MASTER
     env:
     - name: KRB_ENABLE
@@ -218,6 +220,7 @@ roleGroups:
       - name: HDFS_NAMENODE
         friendlyName: "Name Node"
         labelPrefix: "hadoop-hdfs-namenode"
+        linkExpression: "http://${localhostname}:${service['namenode.http-port']}/"
         category: MASTER
         env:
         - name: KRB_ENABLE
