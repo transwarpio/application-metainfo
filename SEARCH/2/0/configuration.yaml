@@ -147,7 +147,7 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
-# es.heap.size/2
+# es.heap.size/4
 - name: es.heap.newsize
   recommendExpression: |
     <#assign  thirdMemMB = (memBytes/1048576/3)?int>
