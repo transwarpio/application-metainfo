@@ -1,0 +1,53 @@
+---
+name: SEARCH
+version: 1.0-tdh50
+global: false
+namePrefix: Search
+friendlyName: "Search"
+dependencies: []
+dockerImage: "tos/search:rb50"
+roles:
+- name: SEARCH_SERVER
+  friendlyName: "Search Server"
+  labelPrefix: "search-server"
+  category: SLAVE
+  env:
+  - name: LOG_DIR
+    value: /var/log/${service.sid}
+  - name: CONF_DIR
+    value: /etc/${service.sid}/conf
+  summaryPolicy: ALL
+  mountPath:
+  - mountPath: /etc/${service.sid}/conf
+    hostPath: /etc/${service.sid}/conf
+    name: conf
+  - mountPath: /var/log/${service.sid}
+    hostPath: /var/log/${service.sid}
+    name: log
+  nodeSpecificMounts:
+  - configKey: path.data
+  autoAssign:
+  - advice: !<EachNode> {}
+  suggestion:
+  - criteria: !<EachNode> {}
+  validation:
+  - criteria: !<EachNode> {}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}", "/hadoop/mounts/${service.sid}/"]
+        mode: "755"
+
+firstWizardConfigs:
+- path.data
+- node.master
+- node.data
+- network.host
+- es.heap.size
+- es.heap.newsize
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 30
+  method: !<K8sPod> {}

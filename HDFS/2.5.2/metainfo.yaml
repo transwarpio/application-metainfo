@@ -59,14 +59,8 @@ roles:
     - mountPath: /var/run/${service.sid}
       hostPath: /var/run/${service.sid}
       name: hdfssocketdir
-     #/hadoop/data
-    - mountPath: /hadoop/mounts/${service.sid}/datadir
-      hostPath: /hadoop/mounts/${service.sid}/datadir
-      name: datanodedir
     nodeSpecificMounts:
     - configKey: dfs.datanode.data.dir
-      targetDir: /hadoop/mounts/${service.sid}/datadir
-      name: datadir
     summaryPolicy: SOME
     autoAssign:
       - advice: !<EachNode> {}
