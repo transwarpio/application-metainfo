@@ -494,3 +494,12 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: inceptor.ngmr.yarn
+  recommendExpression: false
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

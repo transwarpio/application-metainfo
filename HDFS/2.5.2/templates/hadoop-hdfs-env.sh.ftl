@@ -62,3 +62,8 @@ export DATA_DIRS_PARENT=/hadoop/mounts/${service.sid}/datadir
 <#if service['dfs.namenode.name.dir']??>
 export NAMENODE_DATA_DIRS=${service['dfs.namenode.name.dir']?trim}
 </#if>
+
+# Export dfs.namenode.name.dir
+<#if service['dfs.namenode.name.dir']??>
+export NAMENODE_DATA_DIRS=${service['dfs.namenode.name.dir']?trim}
+</#if>

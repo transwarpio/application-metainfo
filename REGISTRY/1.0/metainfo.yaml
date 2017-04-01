@@ -11,6 +11,7 @@ roles:
   friendlyName: "Registry Server"
   linkExpression: "http://${localhostname}:${service['registry.ui.port']}/"
   category: MASTER
+  frontendOperations: ["Start", "Stop"]
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq>

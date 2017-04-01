@@ -62,3 +62,16 @@ export HIVE_PORT=${service['hive.server2.thrift.port']}
 export HADOOP_CONF_DIR=/etc/${dependencies.HDFS.sid}/conf:/etc/${dependencies.YARN.sid}/conf
 export HBASE_CONF_DIR=/etc/${dependencies.HYPERBASE.sid}/conf
 export HIVE_SERVER2="true"
+
+<#--handle dependent.zookeeper-->
+<#if dependencies.ZOOKEEPER??>
+    <#assign zookeeper=dependencies.ZOOKEEPER quorums=[]>
+    <#list zookeeper.roles.ZOOKEEPER as role>
+        <#assign quorums += [role.hostname + ":" + zookeeper[role.hostname]["zookeeper.client.port"]]>
+    </#list>
+    <#assign quorum = quorums?join(",")>
+</#if>
+export INCEPTOR_LICENSE_ZOOKEEPER_QUORUM=${quorum}
+export INCEPTOR_UI_PORT=${service['inceptor.ui.port']}
+export METASTORE_PORT=${service['hive.metastore.port']}
+export MYSQL_PORT=${service['mysql.port']}

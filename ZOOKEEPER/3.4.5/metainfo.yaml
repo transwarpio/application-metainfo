@@ -6,23 +6,22 @@ namePrefix: ZooKeeper
 friendlyName: "ZooKeeper"
 dependencies: []
 packages: ["zookeeper"]
-dockerImage: "tos/zookeeper:rb465-final-tdh-2"
+dockerImage: "tos/zookeeper:trunk"
 user: zookeeper
 roles:
 - name: ZOOKEEPER
   friendlyName: "ZooKeeper Server"
   labelPrefix: "zookeeper-server"
   category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   env:
-  - name: USE_EXTERNAL_CONFIG
-    value: "true"
-  - name: TRANSWARP_DATA_HOME
+  - name: ZOOKEEPER_DATA_DIR
     value: /var/${service.sid}
   - name: HEAP_SIZE
     value: ${service['zookeeper.server.memory']}m
   - name: ZOOKEEPER_CONF
     value: /etc/${service.sid}/conf
-  mountPath:
+  mountPaths:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log

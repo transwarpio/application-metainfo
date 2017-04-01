@@ -16,6 +16,7 @@ roles:
   friendlyName: "Kafka Server"
   labelPrefix: "kafka-server"
   category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
   - name: KRB_ENABLE
     value: 'false'
@@ -30,7 +31,7 @@ roles:
       ${zookeepers?join(",")}
   - name: KAFKA_CONF_DIR
     value: /etc/${service.sid}/conf
-  mountPath:
+  mountPaths:
   - mountPath: /hadoop/kmq
     hostPath: /hadoop/kmq
     name: data

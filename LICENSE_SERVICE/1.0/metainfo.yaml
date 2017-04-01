@@ -7,7 +7,7 @@ namePrefix: Transwarp_License_Cluster
 friendlyName: "License Service"
 dependencies: []
 packages: ["zookeeper"]
-dockerImage: "tos/zookeeper:rb465-final-tdh-2"
+dockerImage: "tos/zookeeper:trunk"
 user: zookeeper
 roles:
 - name: LICENSE_NODE
@@ -15,18 +15,23 @@ roles:
   # compatible with legacy init.d script name "zookeeper-server-transwarp_license_cluster"
   labelPrefix: "zookeeper-server"
   category: MASTER
+  frontendOperations: ["Start", "Stop"]
   env:
   - name: USE_EXTERNAL_CONFIG
     value: "true"
-  - name: TRANSWARP_DATA_HOME
+  - name: ZOOKEEPER_DATA_DIR
     value: /var/${service.sid}
   - name: HEAP_SIZE
     value: ${service['zookeeper.server.memory']}m
-  mountPath:
+  - name: ZOOKEEPER_CONF
+    value: /etc/${service.sid}/conf
+  - name: JMXEXPORTER_PORT
+    value: 5557
+  mountPaths:
   - mountPath:  /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
-  - mountPath: /etc/zookeeper/conf
+  - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: zookeeper
   - mountPath: /var/${service.sid}

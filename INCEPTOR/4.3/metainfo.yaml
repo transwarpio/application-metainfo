@@ -4,7 +4,7 @@ version: 4.3-tdh50
 global: false
 namePrefix: Inceptor
 friendlyName: "Inceptor"
-dockerImage: "tos/inceptor:rb465-final-tdh-6"
+dockerImage: "tos/inceptor:trunk"
 dependencies:
   - name: ZOOKEEPER
     minVersion: 3.4.5-tdh50
@@ -34,6 +34,7 @@ roles:
   labelPrefix: "inceptor-server"
   linkExpression: "http://${localhostname}:${service['inceptor.ui.port']}/"
   category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
   - name: KRB_ENABLE
     value: 'false'
@@ -60,7 +61,7 @@ roles:
     value: /${service.sid}/executorID
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
-  mountPath:
+  mountPaths:
   - mountPath: /var/run/${dependencies.HDFS.sid}
     hostPath: /var/run/${dependencies.HDFS.sid}
     name: hdfssocketdir
@@ -109,6 +110,7 @@ roles:
   friendlyName: "MySQL Server"
   labelPrefix: "inceptor-mysql"
   category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
   - name: KRB_ENABLE
     value: 'false'
@@ -122,7 +124,7 @@ roles:
     value: ${service['hive.metastore.password']}
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
-  mountPath:
+  mountPaths:
   - mountPath: /var/transwarp
     hostPath: /var/lib/mysql
     name: mysql
@@ -155,6 +157,7 @@ roles:
   friendlyName: "Inceptor Metastore"
   labelPrefix: "inceptor-metastore"
   category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
   - name: KRB_ENABLE
     value: 'false'
@@ -170,7 +173,7 @@ roles:
     value: ${service['hive.metastore.password']}
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
-  mountPath:
+  mountPaths:
   - mountPath: /var/run/hadoop-common
     hostPath: /root/docker/common
     name: socketdir
@@ -203,6 +206,7 @@ roles:
   friendlyName: "Inceptor Executor"
   labelPrefix: "inceptor-executor"
   category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
   - name: KRB_ENABLE
     value: 'false'
@@ -221,7 +225,7 @@ roles:
     value: ${service.roles.INCEPTOR_SERVER[0]['hostname']}
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
-  mountPath:
+  mountPaths:
   - mountPath: /var/run/${dependencies.HDFS.sid}
     hostPath: /var/run/${dependencies.HDFS.sid}
     name: hdfssocketdir

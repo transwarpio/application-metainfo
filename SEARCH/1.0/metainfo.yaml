@@ -17,7 +17,7 @@ roles:
   - name: CONF_DIR
     value: /etc/${service.sid}/conf
   summaryPolicy: ALL
-  mountPath:
+  mountPaths:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: conf

@@ -21,7 +21,7 @@
 
 # Set environment variables here.
 export HBASE_CONF_DIR=/etc/${service.sid}/conf
-export HADOOP_CONF_DIR=/etc/${dependencies.YARN.sid}/conf
+export HADOOP_CONF_DIR=/etc/${dependencies.HDFS.sid}/conf:/etc/${dependencies.YARN.sid}/conf
 # export HADOOP_CONF_DIR=/etc/hadoop/conf
 
 # The java implementation to use.  Java 1.6 required.
@@ -120,3 +120,11 @@ export HBASE_PID_DIR=/var/run/${service.sid}
 
 # Tell HBase whether it should manage it's own instance of Zookeeper or not.
 export HBASE_MANAGES_ZK=false
+
+<#if dependencies.SEARCH??>
+export DEPEND_ON_ES=true
+export DISCOVERY_ZEN_PINT_UNICAST_HOSTS=
+export ES_PORT=
+<#else>
+export DEPEND_ON_ES=false
+</#if>

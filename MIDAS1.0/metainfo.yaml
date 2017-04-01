@@ -1,0 +1,150 @@
+---
+name: MIDAS
+version: 1.0
+global: false
+namePrefix: Midas
+friendlyName: "Midas"
+user: midas
+dependencies:
+  - name: HDFS
+    minVersion: 2.5.2-tdh50
+    maxVersion: 2.5.2-tdh50
+    optional: false
+  - name: YARN
+    minVersion: 2.5.2-tdh50
+    maxVersion: 2.5.2-tdh50
+    optional: false
+roles:
+- name: MIDAS_SERVER
+  dockerImage: "tos/midas-server:rb50"
+  friendlyName: "Midas Server"
+  labelPrefix: "midas-server"
+  category: MASTER
+  env:
+  - name: KRB_ENABLE
+    value: ${service['kerberos.enabled']}
+  - name: MIDAS_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths:
+  - mountPath: /etc/${dependencies.HDFS.sid}/conf
+    hostPath: /etc/${dependencies.HDFS.sid}/conf
+    name: hdfs
+  - mountPath: /etc/${dependencies.YARN.sid}/conf
+    hostPath: /etc/${dependencies.YARN.sid}/conf
+    name: yarn
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: topology
+  - mountPath: /etc/${service.sid}/conf
+    hostPath: /etc/${service.sid}/conf
+    name: conf
+  - mountPath: /var/log/${service.sid}
+    hostPath: /var/log/${service.sid}
+    name: log
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "midas.conf"
+        targetPath: "/etc/${service.sid}/conf/midas.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "dieu.conf"
+        targetPath: "/etc/${service.sid}/conf/dieu.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "midas-env.ftlsh"
+        targetPath: "/etc/${service.sid}/conf/midas-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "spark-defaults.conf"
+        targetPath: "/etc/${service.sid}/conf/spark-defaults.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/log4j.properties"
+        mode: "755"
+- name: MIDAS_REDIS
+  dockerImage: "tos/midas-redis:rb50"
+  friendlyName: "Midas Redis"
+  labelPrefix: "midas-redis"
+  category: MASTER
+  env:
+  - name: MIDAS_REDIS_PORT
+    value: ${service['midas.redis.port']}
+  mountPaths: []
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives: []
+  - type: Config
+    directives: []
+- name: MIDAS_SCHEDULER
+  dockerImage: "tos/midas-scheduler:rb50"
+  friendlyName: "Midas Scheduler"
+  labelPrefix: "midas-scheduler"
+  category: MASTER
+  env:
+  - name: SCHEDULER_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths:
+    - mountPath: /etc/${service.sid}/conf
+      hostPath: /etc/${service.sid}/conf
+      name: conf
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives: []
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "service.conf"
+        targetPath: "/etc/${service.sid}/conf/service.conf"
+        mode: "755"
+
+firstWizardConfigs:
+- midas.server.heapsize
+- midas.server.permsize
+- spark.executor.heapsize
+- spark.executor.permsize
+- spark.executor.max_permsize
+- spark.driver.heapsize
+- spark.driver.permsize
+- spark.driver.max_permsize
+- midas.redis.port
+- livy.scheduler.port
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 30
+  method: !<K8sPod> {}

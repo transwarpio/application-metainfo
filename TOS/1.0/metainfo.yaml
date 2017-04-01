@@ -10,9 +10,10 @@ roles:
 - name: TOS_MASTER
   friendlyName: "TOS Master"
   category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   summaryPolicy: SOME
   autoAssign:
-  - advice: !<NumSeq> {"numSeq": [1]}
+  - advice: !<NumSeq> {"numSeq": [3, 2, 1]}
   suggestion:
   - criteria: !<Range> {"min": 1}
   validation:
@@ -48,14 +49,15 @@ roles:
     - directive: !<docker-compose>
         action: Stop
         file: "/etc/${service.sid}/conf/tos-master-${service.sid}.yaml"
-#  - type: Scaleout
-#    directives:
-#    - directive: !<docker-compose>
-#        action: Up
-#        file: "/etc/${service.sid}/conf/tos-master-${service.sid}.yaml"
+  - type: Scaleout
+    directives:
+    - directive: !<docker-compose>
+        action: Up
+        file: "/etc/${service.sid}/conf/tos-master-${service.sid}.yaml"
 - name: TOS_SLAVE
   friendlyName: "TOS Slave"
   category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}

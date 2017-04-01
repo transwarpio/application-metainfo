@@ -4,7 +4,7 @@ version: 1.0-tdh50
 global: false
 namePrefix: Hyperbase
 friendlyName: "Hyperbase"
-dockerImage: "tos/hbase:rb465-final-tdh-5"
+dockerImage: "tos/hbase:trunk"
 dependencies:
   - name: ZOOKEEPER
     minVersion: 3.4.5-tdh50
@@ -25,6 +25,7 @@ roles:
   labelPrefix: "hyperbase-master"
   linkExpression: "http://${localhostname}:${service['master.info.port']}/"
   category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   env:
   - name: KRB_ENABLE
     value: 'false'
@@ -32,7 +33,7 @@ roles:
     value: /etc/${service.sid}/conf
   - name: HBASE_ZOOKEEPER_ZNODE_PARENT
     value: /${service.sid}
-  mountPath:
+  mountPaths:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: hyperbase
@@ -81,6 +82,7 @@ roles:
   labelPrefix: "hyperbase-regionserver"
   linkExpression: "http://${localhostname}:${service['regionserver.info.port']}/"
   category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
   - name: KRB_ENABLE
     value: 'false'
@@ -88,7 +90,7 @@ roles:
     value: /etc/${service.sid}/conf
   - name: HBASE_ZOOKEEPER_ZNODE_PARENT
     value: /${service.sid}
-  mountPath:
+  mountPaths:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: hyperbase
@@ -133,6 +135,7 @@ roles:
   friendlyName: "Hyperbase Thrift"
   labelPrefix: "hyperbase-thrift"
   category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
   - name: KRB_ENABLE
     value: 'false'
@@ -140,7 +143,7 @@ roles:
     value: /etc/${service.sid}/conf
   - name: HBASE_ZOOKEEPER_ZNODE_PARENT
     value: /${service.sid}
-  mountPath:
+  mountPaths:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: hyperbase

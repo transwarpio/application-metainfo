@@ -7,10 +7,7 @@
 </property>
 </#macro>
 <#--------------------------->
-<#assign
-    sid=service.sid
-    auth=service.auth
->
+<#assign auth=service.auth>
 <configuration>
 
 <#--handle dependent.zookeeper-->
@@ -22,7 +19,7 @@
     <@property "hive.zookeeper.quorum" quorum?join(",")/>
     <@property "hbase.zookeeper.quorum" quorum?join(",")/>
     <@property "holodesk.zookeeper.quorum" quorum?join(",")/>
-    <@property "zookeeper.znode.parent" "/" + sid/>
+    <@property "zookeeper.znode.parent" "/" + (dependencies.HYPERBASE??)?then(dependencies.HYPERBASE.sid, service.sid)/>
 </#if>
 
 <#-- TODO handle the kerberos-->

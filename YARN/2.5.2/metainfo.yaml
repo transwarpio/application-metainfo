@@ -4,7 +4,7 @@ version: 2.5.2-tdh50
 global: false
 namePrefix: YARN
 friendlyName: "YARN"
-dockerImage: "tos/yarn:rb465-final-tdh-5"
+dockerImage: "tos/yarn:trunk"
 dependencies:
   - name: ZOOKEEPER
     minVersion: 3.4.5-tdh50
@@ -21,6 +21,7 @@ roles:
   labelPrefix: "hadoop-yarn-resourcemanager"
   linkExpression: "http://${localhostname}:${service['resourcemanager.webapp.port']}/"
   category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   env:
   - name: USE_EXTERNAL_CONFIG
     value: "true"
@@ -32,7 +33,7 @@ roles:
     value: /etc/${service.sid}/conf
   - name: DATA_DIRS
     value: ${service['yarn.nodemanager.local-dirs']},${service['yarn.nodemanager.log-dirs']}
-  mountPath:
+  mountPaths:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: yarn
@@ -87,6 +88,7 @@ roles:
   labelPrefix: "hadoop-yarn-nodemanager"
   linkExpression: "http://${service['yarn.nodemanager.webapp.address']?replace(r'${yarn.nodemanager.hostname}', localhostname)}/"
   category: SLAVE
+  frontendOperations: ["Start", "Stop", "Commission", "Decommission", "Delete", "Scaleout"]
   env:
   - name: USE_EXTERNAL_CONFIG
     value: "true"
@@ -102,7 +104,7 @@ roles:
     value: /etc/${service.sid}/conf
   - name: DATA_DIRS
     value: ${service['yarn.nodemanager.local-dirs']},${service['yarn.nodemanager.log-dirs']}
-  mountPath:
+  mountPaths:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: yarn
@@ -156,6 +158,7 @@ roles:
   friendlyName: "History Server"
   labelPrefix: "hadoop-yarn-historyserver"
   category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
   - name: USE_EXTERNAL_CONFIG
     value: "true"
@@ -178,7 +181,7 @@ roles:
     value: ${service.roles.YARN_RESOURCEMANAGER[0]['hostname']}
   - name: HADOOP_CONF_DIR
     value: /etc/${service.sid}/conf
-  mountPath:
+  mountPaths:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: yarn
@@ -226,6 +229,7 @@ roles:
   friendlyName: "Timeline Server"
   labelPrefix: "hadoop-yarn-timelineserver"
   category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
   - name: USE_EXTERNAL_CONFIG
     value: "true"
@@ -250,7 +254,7 @@ roles:
         <#assign namenodes += dependencies.HDFS.roles.HDFS_NAMENODE[0]['hostname']>
       </#if>
       ${namenodes?join(",")}
-  mountPath:
+  mountPaths:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: yarn

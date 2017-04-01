@@ -4,7 +4,7 @@ version: 2.5.2-tdh50
 global: false
 namePrefix: HDFS
 friendlyName: HDFS
-dockerImage: "tos/hdfs:rb465-final-tdh-8"
+dockerImage: "tos/hdfs:trunk"
 user: hdfs
 dependencies:
   - name: ZOOKEEPER
@@ -17,6 +17,7 @@ roles:
     labelPrefix: "hadoop-hdfs-datanode"
     linkExpression: "http://${localhostname}:${service[(service.auth=='kerberos')?then('secure.datanode.http-port','datanode.http-port')]}/"
     category: SLAVE
+    frontendOperations: ["Start", "Stop", "Commission", "Decommission", "Delete", "Scaleout"]
     env:
     - name: KRB_ENABLE
       value: 'false'
@@ -46,7 +47,7 @@ roles:
       value: /etc/${service.sid}/conf
     - name: SOCKETDIR
       value: /var/run/${service.sid}
-    mountPath:
+    mountPaths:
     - mountPath: /etc/${service.sid}/conf
       hostPath: /etc/${service.sid}/conf
       name: hdfs
@@ -93,6 +94,7 @@ roles:
     labelPrefix: "hadoop-hdfs-namenode"
     linkExpression: "http://${localhostname}:${service['namenode.http-port']}/"
     category: MASTER
+    frontendOperations: ["Start", "Stop"]
     env:
     - name: KRB_ENABLE
       value: 'false'
@@ -124,7 +126,7 @@ roles:
       value: /var/run/${service.sid}
     - name: CLUSTER
       value: ${service.sid}
-    mountPath:
+    mountPaths:
     - mountPath: /var/log/${service.sid}
       hostPath: /var/log/${service.sid}
       name: log
@@ -216,6 +218,7 @@ roleGroups:
         labelPrefix: "hadoop-hdfs-namenode"
         linkExpression: "http://${localhostname}:${service['namenode.http-port']}/"
         category: MASTER
+        frontendOperations: ["Start", "Stop", "Move"]
         env:
         - name: KRB_ENABLE
           value: 'false'
@@ -247,7 +250,7 @@ roleGroups:
           value: /var/run/${service.sid}
         - name: CLUSTER
           value: ${service.sid}
-        mountPath:
+        mountPaths:
         - mountPath: /var/log/${service.sid}
           hostPath: /var/log/${service.sid}
           name: log
@@ -309,6 +312,7 @@ roleGroups:
         friendlyName: "Journal Node"
         labelPrefix: "hadoop-hdfs-journalnode"
         category: MASTER
+        frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
         env:
         - name: KRB_ENABLE
           value: "false"
@@ -318,7 +322,7 @@ roleGroups:
           value: /etc/${service.sid}/conf
         - name: JOURNALNODE_DATA_DIRS
           value: /hadoop/journal
-        mountPath:
+        mountPaths:
         - mountPath: /etc/${service.sid}/conf
           hostPath: /etc/${service.sid}/conf
           name: hdfs

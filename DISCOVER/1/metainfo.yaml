@@ -28,6 +28,7 @@ roles:
   friendlyName: "Discover"
   labelPrefix: "discover"
   category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete"]
   env:
   - name: YARN_RESOURCEMANAGER_ADDRRESS
     value: ${dependencies.YARN.roles.YARN_RESOURCEMANAGER[0]['hostname']}
@@ -41,7 +42,7 @@ roles:
     value: "simpale"
   - name: KRB_ENABLE
     value: "false"
-  mountPath:
+  mountPaths:
   - mountPath: /home
     hostPath: /etc/${service.sid}/data
     name: data
