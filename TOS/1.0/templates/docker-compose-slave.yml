@@ -2,12 +2,6 @@
   registryServer=dependencies.REGISTRY.roles['REGISTRY_SERVER'][0].hostname
   registryPort=dependencies.REGISTRY['registry.port']
 >
-generatecerts:
-  image: ${registryServer}:${registryPort}/jenkins/gencerts:live
-  net: host
-  volumes:
-    - /srv/kubernetes:/srv/kubernetes
-
 kubelet:
   image: ${registryServer}:${registryPort}/jenkins/hyperkube
   net: host

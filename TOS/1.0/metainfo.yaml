@@ -79,9 +79,20 @@ roles:
         templatePath: "docker-compose-slave.yml"
         targetPath: "/etc/${service.sid}/conf/tos-slave-${service.sid}.yaml"
         mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "docker-compose-gencerts.yml"
+        targetPath: "/etc/${service.sid}/conf/docker-compose-gencerts.yml"
+        mode: "755"
     - directive: !<docker-compose>
         action: Pull
         file: "/etc/${service.sid}/conf/tos-slave-${service.sid}.yaml"
+    - directive: !<docker-compose>
+        action: Pull
+        file: "/etc/${service.sid}/conf/docker-compose-gencerts.yml"
+    - directive: !<docker-compose>
+        action: Up
+        file: "/etc/${service.sid}/conf/docker-compose-gencerts.yaml"
   - type: Config
     directives:
     - directive: !<resource>
