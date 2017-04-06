@@ -29,6 +29,17 @@ roles:
         templatePath: "docker-compose-master.yml"
         targetPath: "/etc/${service.sid}/conf/tos-master-${service.sid}.yaml"
         mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "docker-compose-gencerts.yml"
+        targetPath: "/etc/${service.sid}/conf/docker-compose-gencerts.yaml"
+        mode: "755"
+    - directive: !<docker-compose>
+        action: Pull
+        file: "/etc/${service.sid}/conf/docker-compose-gencerts.yaml"
+    - directive: !<docker-compose>
+        action: Up
+        file: "/etc/${service.sid}/conf/docker-compose-gencerts.yaml"
     - directive: !<docker-compose>
         action: Pull
         file: "/etc/${service.sid}/conf/tos-master-${service.sid}.yaml"
@@ -82,17 +93,17 @@ roles:
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "docker-compose-gencerts.yml"
-        targetPath: "/etc/${service.sid}/conf/docker-compose-gencerts.yml"
+        targetPath: "/etc/${service.sid}/conf/docker-compose-gencerts.yaml"
         mode: "755"
     - directive: !<docker-compose>
         action: Pull
-        file: "/etc/${service.sid}/conf/tos-slave-${service.sid}.yaml"
-    - directive: !<docker-compose>
-        action: Pull
-        file: "/etc/${service.sid}/conf/docker-compose-gencerts.yml"
+        file: "/etc/${service.sid}/conf/docker-compose-gencerts.yaml"
     - directive: !<docker-compose>
         action: Up
         file: "/etc/${service.sid}/conf/docker-compose-gencerts.yaml"
+    - directive: !<docker-compose>
+        action: Pull
+        file: "/etc/${service.sid}/conf/tos-slave-${service.sid}.yaml"
   - type: Config
     directives:
     - directive: !<resource>
@@ -128,7 +139,7 @@ healthChecks:
   intervalSeconds: 5
   method: !<DockerPs>
     imageMap:
-      TOS_MASTER: ["etcd", "hyperkube apiserver", "hyperkube controller", "hyperkube scheduler"]
+      TOS_MASTER: ["etcd", "boot.sh apiserver", "boot.sh controller", "boot.sh scheduler"]
       TOS_SLAVE: ["kubelet"]
 - category: VITAL_SIGN_CHECK
   intervalSeconds: 10

@@ -10,6 +10,7 @@
 etcd:
   image: ${registryServer}:${registryPort}/jenkins/etcd:live
   net: host
+  privileged: true
   restart: always
   command:
     - etcd
@@ -26,70 +27,81 @@ etcd:
   - ETCD_LISTEN_PEER_URLS=http://0.0.0.0:${service['tos.master.leader.elect.port']}
   - ETCD_ADVERTISE_CLIENT_URLS=http://${localhostname}:${service['tos.master.etcd.port']}
   - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:${service['tos.master.etcd.port']}
+  - DATA_DIR=/var/etcd/data
 
 apiserver:
   image: ${registryServer}:${registryPort}/jenkins/hyperkube
   net: host
+  privileged: true
   restart: always
   command:
-    - hyperkube
+    - boot.sh
     - apiserver
-    - --v=4
-    - --etcd_servers=${etcd_servers?join(',')}
-    - --apiserver-count=${service.roles.TOS_MASTER?size}
-    - --insecure-bind-address=0.0.0.0
-    - --insecure-port=${service['tos.master.apiserver.port']}
-    - --bind-address=0.0.0.0
-    - --secure-port=${service['tos.master.apiserver.secure.port']}
-    - --runtime_config=api/v1
-    - --allow_privileged=true
-    - --cors_allowed_origins=.*
-    - --admission_control=ServiceAccount,ResourceQuota
-    - --service-cluster-ip-range=10.10.10.0/24
-    - --client_ca_file=/srv/kubernetes/ca.crt
-    - --tls_cert_file=/srv/kubernetes/server.cert
-    - --tls_private_key_file=/srv/kubernetes/server.key
-    - --alsologtostderr=true
-    - --logtostderr=false
-    - --log_dir=/var/log/kubernetes/apiserver
   volumes:
     - /var/log/kubernetes/apiserver:/var/log/kubernetes/apiserver
     - /srv/kubernetes:/srv/kubernetes
+    - /etc/transwarp/conf:/etc/transwarp/conf
+  environment:
+  - V=4
+  - ETCD_SERVERS=${etcd_servers?join(',')}
+  - APISERVER_COUNT=${service.roles.TOS_MASTER?size}
+  - INSECURE_BIND_ADDRESS=0.0.0.0
+  - INSECURE_PORT=${service['tos.master.apiserver.port']}
+  - BIND_ADDRESS=0.0.0.0
+  - SECURE_PORT=${service['tos.master.apiserver.secure.port']}
+  - RUNTIME_CONFIG=api/v1
+  - ALLOW_PRIVILEGED=true
+  - CORS_ALLOWED_ORIGINS=.*
+  - ADMISSION_CONTROL=ServiceAccount,ResourceQuota
+  - SERVICE_CLUSTER_IP_RANGE=10.10.10.0/24
+  - CLIENT_CA_FILE=/srv/kubernetes/ca.crt
+  - TLS_CERT_FILE=/srv/kubernetes/server.cert
+  - TLS_PRIVATE_KEY_FILE=/srv/kubernetes/server.key
+  - ALSOLOGTOSTDERR=true
+  - LOGTOSTDERR=false
+  - LOG_DIR=/var/log/kubernetes/apiserver
 
 controller:
   image: ${registryServer}:${registryPort}/jenkins/hyperkube
   net: host
+  privileged: true
   restart: always
   command:
-    - hyperkube
+    - boot.sh
     - controller-manager
-    - --v=4
-    - --leader-elect=true
-    - --master=127.0.0.1:${service['tos.master.apiserver.port']}
-    - --root-ca-file=/srv/kubernetes/ca.crt
-    - --service-account-private-key-file=/srv/kubernetes/server.key
-    - --alsologtostderr=true
-    - --logtostderr=false
-    - --log_dir=/var/log/kubernetes/controller
-    - --address=0.0.0.0
-    - --port=${service['tos.master.controller.port']}
   volumes:
     - /var/log/kubernetes/controller:/var/log/kubernetes/controller
     - /srv/kubernetes:/srv/kubernetes
+    - /etc/transwarp/conf:/etc/transwarp/conf
+  environment:
+  - V=4
+  - LEADER_ELECT=true
+  - MASTER=127.0.0.1:${service['tos.master.apiserver.port']}
+  - ROOT_CA_FILE=/srv/kubernetes/ca.crt
+  - SERVICE_ACCOUNT_PRIVATE_KEY_FILE=/srv/kubernetes/server.key
+  - ALSOLOGTOSTDERR=true
+  - LOGTOSTDERR=false
+  - LOG_DIR=/var/log/kubernetes/controller
+  - ADDRESS=0.0.0.0
+  - PORT=${service['tos.master.controller.port']}
 
 scheduler:
   image: ${registryServer}:${registryPort}/jenkins/hyperkube
   net: host
+  privileged: true
   restart: always
   command:
-    - hyperkube
+    - boot.sh
     - scheduler
-    - --master=127.0.0.1:${service['tos.master.apiserver.port']}
-    - --alsologtostderr=true
-    - --logtostderr=false
-    - --log_dir=/var/log/kubernetes/scheduler
-    - --address=0.0.0.0
-    - --port=${service['tos.master.scheduler.port']}
   volumes:
     - /var/log/kubernetes/scheduler:/var/log/kubernetes/scheduler
     - /srv/kubernetes:/srv/kubernetes
+    - /etc/transwarp/conf:/etc/transwarp/conf
+  environment:
+  - MASTER=127.0.0.1:${service['tos.master.apiserver.port']}
+  - LEADER_ELECT=true
+  - ALSOLOGTOSTDERR=true
+  - LOGTOSTDERR=false
+  - LOG_DIR=/var/log/kubernetes/scheduler
+  - ADDRESS=0.0.0.0
+  - PORT=${service['tos.master.scheduler.port']}

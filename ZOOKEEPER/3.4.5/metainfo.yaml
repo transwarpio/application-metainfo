@@ -15,11 +15,7 @@ roles:
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   env:
-  - name: ZOOKEEPER_DATA_DIR
-    value: /var/${service.sid}
-  - name: HEAP_SIZE
-    value: ${service['zookeeper.server.memory']}m
-  - name: ZOOKEEPER_CONF
+  - name: ZOOKEEPER_CONF_DIR
     value: /etc/${service.sid}/conf
   mountPaths:
   - mountPath: /var/log/${service.sid}
@@ -31,6 +27,9 @@ roles:
   - mountPath: /var/${service.sid}
     hostPath: /var/${service.sid}
     name: data
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
   summaryPolicy: MAJOR
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [5, 3, 1]}
