@@ -1,0 +1,18 @@
+---
+- name: transpedia.host
+  recommendExpression: "0.0.0.0"
+  defaultValue: null
+  valueType: HOST
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: transpedia.port
+  recommendExpression: 8099
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

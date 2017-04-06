@@ -4,11 +4,12 @@ version: 1.0-tdh50
 global: false
 namePrefix: Transpedia
 friendlyName: "Transpedia"
-dependencies: [] #TODO depend on es
-#- name: SEARCH
-#  minVersion: 3.4.5-tdh50
-#  maxVersion: 3.4.5-tdh50
-#  optional: true
+dependencies:
+- name: SEARCH
+  minVersion: 1.0-tdh50
+  maxVersion: 1.0-tdh50
+  optional: true
+  preferred: false
 dockerImage: "tos/transpedia:rb50"
 roles:
 - name: TRANSPEDIA_SERVER
@@ -22,10 +23,10 @@ roles:
     value: ${service['transpedia.port']}
   - name: ES_ENABLE
     value: <#if dependencies.SEARCH??>false<#else>true</#if>
-  - name: ELASTICSEARCH_HOSTS #TODO depend on es
-    value: <#if dependencies.SEARCH??>dependencies.SEARCH.roles.SEARCH_SERVER[0].hostname<#else>0.0.0.0</#if>
+  - name: ELASTICSEARCH_HOSTS
+    value: <#if dependencies.SEARCH??>${dependencies.SEARCH.roles.SEARCH_SERVER[0].hostname}<#else>0.0.0.0</#if>
   - name: ELASTICSEARCH_PORT
-    value: <#if dependencies.SEARCH??>dependencies.SEARCH['es.port']<#else>9200</#if>
+    value: 9200
   summaryPolicy: ALL
   mountPaths: []
   autoAssign:
@@ -34,11 +35,7 @@ roles:
   - criteria: !<Range> {"min": 1}
   validation:
   - criteria: !<Range> {"min": 1}
-  operations:
-  - type: Install
-    directives: []
-  - type: Config
-    directives: []
+  operations: []
 
 firstWizardConfigs:
 - transpedia.host
