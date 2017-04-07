@@ -4,8 +4,6 @@ version: 1-tdh50
 global: false
 namePrefix: Discover
 friendlyName: Discover
-dockerImage: "tos/discover:rb463"
-user: transwarpr
 dependencies:
   - name: ZOOKEEPER
     minVersion: 3.4.5-tdh50
@@ -19,34 +17,35 @@ dependencies:
     minVersion: 2.5.2-tdh50
     maxVersion: 2.5.2-tdh50
     optional: false
-  - name: HYPERBASE
-    minVersion: 1.0-tdh50
-    maxVersion: 1.0-tdh50
-    optional: true
 roles:
-- name: DISCOVER
-  friendlyName: "Discover"
-  labelPrefix: "discover"
+- name: DISCOVER_RSTUDIO
+  friendlyName: "Discover Rstudio"
+  labelPrefix: "discover-rstudio"
+  dockerImage: "tos/rstudio:rb50"
+  linkExpression: "http://${localhostname}:8787/"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete"]
   env:
-  - name: YARN_RESOURCEMANAGER_ADDRRESS
-    value: ${dependencies.YARN.roles.YARN_RESOURCEMANAGER[0]['hostname']}
-  - name: YARN_TIMELINE_SERVICE_HOSTNAME
-    value: ${dependencies.YARN.roles.YARN_TIMELINESERVER[0].hostname}
-  - name: HDFS_HA_NAMENODE_SERVICE
-    value: ${dependencies.HDFS.roles.HDFS_NAMENODE[0]['hostname']},${dependencies.HDFS.roles.HDFS_NAMENODE[1]['hostname']}
-  - name: TRANSWARP_LICENSE_ZOOKEEPER_QUORUM
-    value: ${dependencies.ZOOKEEPER.roles.ZOOKEEPER[0]['hostname']},${dependencies.ZOOKEEPER.roles.ZOOKEEPER[1]['hostname']},${dependencies.ZOOKEEPER.roles.ZOOKEEPER[2]['hostname']}
-  - name: HADOOP_SECURITY_AUTHENTICATION
-    value: "simpale"
-  - name: KRB_ENABLE
-    value: "false"
+  - name: DISCOVER_CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: DISCOVER_LOG_DIR
+    value: /var/log/${service.sid}
+  - name: HADOOP_CONF_DIR
+    value: /etc/${dependencies.HDFS.sid}/conf:/etc/${dependencies.YARN.sid}/conf
   mountPaths:
-  - mountPath: /home
-    hostPath: /etc/${service.sid}/data
-    name: data
-  summaryPolicy: SOME
+  - mountPath: /etc/${service.sid}/conf
+    hostPath: /etc/${service.sid}/conf
+    name: conf
+  - mountPath: /var/log/${service.sid}
+    hostPath: /var/log/${service.sid}
+    name: log
+  - mountPath: /etc/${dependencies.HDFS.sid}/conf
+    hostPath: /etc/${dependencies.HDFS.sid}/conf
+    name: hdfs
+  - mountPath: /etc/${dependencies.YARN.sid}/conf
+    hostPath: /etc/${dependencies.YARN.sid}/conf
+    name: yarn
+  summaryPolicy: ALL
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
   suggestion:
@@ -57,26 +56,88 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}", "/var/run/${service.sid}"]
+        paths: ["/etc/${service.sid}/conf/spark", "/var/log/${service.sid}", "/var/run/${service.sid}"]
         mode: "755"
   - type: Config
     directives:
-    - directive: !<mkdirs>
-        paths: ["/usr/lib/discover/conf/"]
-        mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "discover-context-env.properties"
-        targetPath: "/usr/lib/discover/conf/discover-context-env.properties"
+        targetPath: "/etc/${service.sid}/conf/spark/discover-context-env.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "spark-defaults.conf"
+        targetPath: "/etc/${service.sid}/conf/spark/spark-defaults.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "spark-env.sh"
+        targetPath: "/etc/${service.sid}/conf/spark/spark-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "guardian-site.xml"
+        targetPath: "/etc/${service.sid}/conf/spark/guardian-site.xml"
+        mode: "755"
+- name: DISCOVER_NOTEBOOK
+  friendlyName: "Discover Notebook"
+  labelPrefix: "discover-notebook"
+  dockerImage: "tos/notebook:rb50"
+  category: MASTER
+  linkExpression: "http://${localhostname}:${service['zeppelin.server.port']}/"
+  env:
+  - name: DISCOVER_CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: DISCOVER_LOG_DIR
+    value: /var/log/${service.sid}
+  - name: HADOOP_CONF_DIR
+    value: /etc/${dependencies.HDFS.sid}/conf:/etc/${dependencies.YARN.sid}/conf
+  mountPaths:
+  - mountPath: /etc/${service.sid}/conf
+    hostPath: /etc/${service.sid}/conf
+    name: conf
+  - mountPath: /var/log/${service.sid}
+    hostPath: /var/log/${service.sid}
+    name: log
+  - mountPath: ${service['zeppelin.notebook.dir']}
+    hostPath: ${service['zeppelin.notebook.dir']}
+    name: data
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf/notebook", "/var/log/${service.sid}", "${service['zeppelin.notebook.dir']}}"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "zeppelin-env.sh"
+        targetPath: "/etc/${service.sid}/conf/notebook/zeppelin-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "zeppelin-site.xml"
+        targetPath: "/etc/${service.sid}/conf/notebook/zeppelin-site.xml"
         mode: "755"
 
 product: Discover
 
 firstWizardConfigs:
-- discover.ui.port
+- spark.master.webui.port
+- spark.worker.webui.port
+- zeppelin.server.port
+- zeppelin.server.ssl.port
 
 pages:
-- summary
 - roles
 - configuration
 - operation

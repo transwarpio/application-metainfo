@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <property>
+        <name>guardian.server.address</name>
+        <value>172.16.1.190:8080</value>
+    </property>
+    <property>
+        <name>guardian.connection.username</name>
+        <value>admin</value>
+    </property>
+    <property>
+        <name>guardian.connection.password</name>
+        <value>123</value>
+    </property>
+    <property>
+        <name>guardian.connection.client.impl</name>
+        <value>REST</value>
+    </property>
+    <!--
+    <property>
+        <name>guardian.client.cache.enabled</name>
+        <value>true</value>
+    </property>
+    -->
+    <property>
+        <name>guardian.permission.component</name>
+        <value>workflow1</value>
+    </property>
+</configuration>
