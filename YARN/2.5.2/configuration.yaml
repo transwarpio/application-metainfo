@@ -468,49 +468,49 @@
   visibility: READ_WRITE
 
 - name: yarn.nodemanager.local-dirs
-#  recommendExpression: |
-#    <#function localDir suffix>
-#      <#if rcmdMounts?size == 0>
-#        <#return suffix>
-#      <#else>
-#        <#local dirs = []>
-#        <#list rcmdMounts?sort as mnt>
-#         <#local dirs = dirs + [mnt + suffix]>
-#        </#list>
-#        <#return dirs?join(",")>
-#      </#if>
-#    </#function>
-#    ${localDir("/hadoop/yarn/local")}
-  recommendExpression: /hadoop/yarn/local
+  recommendExpression: |
+    <#function localDir suffix>
+      <#if rcmdMounts?size == 0>
+        <#return suffix>
+      <#else>
+        <#local dirs = []>
+        <#list rcmdMounts?sort as mnt>
+         <#local dirs = dirs + [mnt + suffix]>
+        </#list>
+        <#return dirs?join(",")>
+      </#if>
+    </#function>
+    ${localDir("/hadoop/yarn/local")}
+#  recommendExpression: /hadoop/yarn/local
   defaultValue: null
   valueType: STRING
   scope: !<RoleTypes>
     roleTypes: [YARN_NODEMANAGER]
-# isNodeSpecific: true
+  isNodeSpecific: true
   onDeps: []
   groups: ["yarn-site.xml"]
   visibility: READ_WRITE
 
 - name: yarn.nodemanager.log-dirs
-#  recommendExpression: |
-#    <#function localDir suffix>
-#      <#if rcmdMounts?size == 0>
-#        <#return suffix>
-#      <#else>
-#        <#local dirs = []>
-#        <#list rcmdMounts?sort as mnt>
-#         <#local dirs = dirs + [mnt + suffix]>
-#        </#list>
-#        <#return dirs?join(",")>
-#      </#if>
-#    </#function>
-#    ${localDir("/hadoop/yarn/logs")}
-  recommendExpression: /hadoop/yarn/logs
+  recommendExpression: |
+    <#function localDir suffix>
+      <#if rcmdMounts?size == 0>
+        <#return suffix>
+      <#else>
+        <#local dirs = []>
+        <#list rcmdMounts?sort as mnt>
+         <#local dirs = dirs + [mnt + suffix]>
+        </#list>
+        <#return dirs?join(",")>
+      </#if>
+    </#function>
+    ${localDir("/hadoop/yarn/logs")}
+#  recommendExpression: /hadoop/yarn/logs
   defaultValue: null
   valueType: ABSOLUTE_PATH
   scope: !<RoleTypes>
     roleTypes: [YARN_NODEMANAGER]
-# isNodeSpecific: true
+  isNodeSpecific: true
   onDeps: []
   groups: ["yarn-site.xml"]
   visibility: READ_WRITE

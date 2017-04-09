@@ -23,16 +23,8 @@ roles:
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   env:
-  - name: USE_EXTERNAL_CONFIG
-    value: "true"
-  - name: KRB_ENABLE
-    value: 'false'
-  - name: YARN_RESOURCEMANAGER_ADDRRESS
-    value: ${service.roles.YARN_RESOURCEMANAGER[0]['hostname']}
   - name: HADOOP_CONF_DIR
     value: /etc/${service.sid}/conf
-  - name: DATA_DIRS
-    value: ${service['yarn.nodemanager.local-dirs']},${service['yarn.nodemanager.log-dirs']}
   mountPaths:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
@@ -40,21 +32,15 @@ roles:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
-  - mountPath: /var/run/hadoop-common
-    hostPath: /root/docker/common
-    name: socketdir
-  - mountPath: ${service['yarn.nodemanager.local-dirs']}
-    hostPath: ${service['yarn.nodemanager.local-dirs']}
-    name: datadir1
-  - mountPath: ${service['yarn.nodemanager.log-dirs']}
-    hostPath: ${service['yarn.nodemanager.log-dirs']}
-    name: datadir2
   - mountPath: /var/transwarp
     hostPath: /var/${service.sid}
     name: transwarp
   - mountPath: /etc/${dependencies.HDFS.sid}/conf
     hostPath: /etc/${dependencies.HDFS.sid}/conf
     name: hdfs
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -70,14 +56,14 @@ roles:
         mode: "755"
   - type: Config
     directives:
-    - directive: !<link>
-        action: Link
-        from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
-        to: "/etc/${service.sid}/conf/hdfs-site.xml"
-    - directive: !<link>
-        action: Link
-        from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
-        to: "/etc/${service.sid}/conf/core-site.xml"
+#    - directive: !<link>
+#        action: Link
+#        from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
+#        to: "/etc/${service.sid}/conf/hdfs-site.xml"
+#    - directive: !<link>
+#        action: Link
+#        from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
+#        to: "/etc/${service.sid}/conf/core-site.xml"
     - directive: !<resource>
         templateType: Raw
         templatePath: "hadoop-metrics2-resourcemanager.properties"
@@ -90,20 +76,8 @@ roles:
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Commission", "Decommission", "Delete", "Scaleout"]
   env:
-  - name: USE_EXTERNAL_CONFIG
-    value: "true"
-  - name: KRB_ENABLE
-    value: 'false'
-  - name: NODEMANAGER_RESOURCE_MEMORY_MB
-    value: ${service['yarn.nodemanager.resource.memory-mb']}
-  - name: YARN_RESOURCEMANAGER_ADDRRESS
-    value: ${service.roles.YARN_RESOURCEMANAGER[0]['hostname']}
-  - name: NODEMANAGER_RESOURCE_CPU_VCORES
-    value: ${service['yarn.nodemanager.resource.cpu-vcores']}
   - name: HADOOP_CONF_DIR
     value: /etc/${service.sid}/conf
-  - name: DATA_DIRS
-    value: ${service['yarn.nodemanager.local-dirs']},${service['yarn.nodemanager.log-dirs']}
   mountPaths:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
@@ -111,21 +85,18 @@ roles:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
-  - mountPath: /var/run/hadoop-common
-    hostPath: /root/docker/common
-    name: socketdir
   - mountPath: /var/transwarp
     hostPath: /var/${service.sid}
     name: transwarp
-  - mountPath: ${service['yarn.nodemanager.local-dirs']}
-    hostPath: ${service['yarn.nodemanager.local-dirs']}
-    name: localdirs
-  - mountPath: ${service['yarn.nodemanager.log-dirs']}
-    hostPath: ${service['yarn.nodemanager.log-dirs']}
-    name: logdirs
   - mountPath: /etc/${dependencies.HDFS.sid}/conf
     hostPath: /etc/${dependencies.HDFS.sid}/conf
     name: hdfs
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
+  nodeSpecificMounts:
+  - configKey: yarn.nodemanager.local-dirs
+  - configKey: yarn.nodemanager.log-dirs
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}
@@ -141,14 +112,6 @@ roles:
         mode: "755"
   - type: Config
     directives:
-    - directive: !<link>
-        action: Link
-        from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
-        to: "/etc/${service.sid}/conf/hdfs-site.xml"
-    - directive: !<link>
-        action: Link
-        from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
-        to: "/etc/${service.sid}/conf/core-site.xml"
     - directive: !<resource>
         templateType: Raw
         templatePath: "hadoop-metrics2-nodemanager.properties"
@@ -160,10 +123,6 @@ roles:
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
-  - name: USE_EXTERNAL_CONFIG
-    value: "true"
-  - name: KRB_ENABLE
-    value: 'false'
   - name: HDFS_HA_NAMENODE_SERVICE
     value: |
       <#assign namenodes=[]>
@@ -177,8 +136,6 @@ roles:
         <#assign namenodes += dependencies.HDFS.roles.HDFS_NAMENODE[0]['hostname']>
       </#if>
       ${namenodes?join(",")}
-  - name: YARN_RESOURCEMANAGER_ADDRRESS
-    value: ${service.roles.YARN_RESOURCEMANAGER[0]['hostname']}
   - name: HADOOP_CONF_DIR
     value: /etc/${service.sid}/conf
   mountPaths:
@@ -188,15 +145,15 @@ roles:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
-  - mountPath: /var/run/hadoop-common
-    hostPath: /root/docker/common
-    name: socketdir
   - mountPath: /var/transwarp
     hostPath: /var/${service.sid}
     name: transwarp
   - mountPath: /etc/${dependencies.HDFS.sid}/conf
     hostPath: /etc/${dependencies.HDFS.sid}/conf
     name: hdfs
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -212,14 +169,6 @@ roles:
         mode: "755"
   - type: Config
     directives:
-    - directive: !<link>
-        action: Link
-        from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
-        to: "/etc/${service.sid}/conf/hdfs-site.xml"
-    - directive: !<link>
-        action: Link
-        from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
-        to: "/etc/${service.sid}/conf/core-site.xml"
     - directive: !<resource>
         templateType: Raw
         templatePath: "hadoop-metrics2-historyserver.properties"
@@ -231,14 +180,6 @@ roles:
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
-  - name: USE_EXTERNAL_CONFIG
-    value: "true"
-  - name: KRB_ENABLE
-    value: 'false'
-  - name: YARN_TIMELINE_SERVICE_HOSTNAME
-    value: ${service.roles.YARN_TIMELINESERVER[0]['hostname']}
-  - name: YARN_RESOURCEMANAGER_ADDRRESS
-    value: ${service.roles.YARN_RESOURCEMANAGER[0]['hostname']}
   - name: HADOOP_CONF_DIR
     value: /etc/${service.sid}/conf
   - name: HDFS_HA_NAMENODE_SERVICE
@@ -261,15 +202,15 @@ roles:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
-  - mountPath: /var/run/hadoop-common
-    hostPath: /root/docker/common
-    name: socketdir
   - mountPath: /var/transwarp
     hostPath: /var/${service.sid}
     name: transwarp
   - mountPath: /etc/${dependencies.HDFS.sid}/conf
     hostPath: /etc/${dependencies.HDFS.sid}/conf
     name: hdfs
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -283,16 +224,6 @@ roles:
     - directive: !<mkdirs>
         paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
         mode: "755"
-  - type: Config
-    directives:
-    - directive: !<link>
-        action: Link
-        from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
-        to: "/etc/${service.sid}/conf/hdfs-site.xml"
-    - directive: !<link>
-        action: Link
-        from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
-        to: "/etc/${service.sid}/conf/core-site.xml"
 stages:
   - type: Bootstrap
     taskGroups:
