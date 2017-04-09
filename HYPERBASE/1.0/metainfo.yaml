@@ -27,31 +27,24 @@ roles:
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   env:
-  - name: KRB_ENABLE
-    value: 'false'
   - name: HBASE_CONF_DIR
     value: /etc/${service.sid}/conf
-  - name: HBASE_ZOOKEEPER_ZNODE_PARENT
-    value: /${service.sid}
   mountPaths:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: hyperbase
-  - mountPath: /var/run/hadoop-common
-    hostPath: /root/docker/common
-    name: socketdir
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
-  - mountPath: /var/run/${dependencies.HDFS.sid}
-    hostPath: /var/run/${dependencies.HDFS.sid}
-    name: hdfssocketdir
   - mountPath: /etc/${dependencies.HDFS.sid}/conf
     hostPath: /etc/${dependencies.HDFS.sid}/conf
     name: hdfs
   - mountPath: /etc/${dependencies.YARN.sid}/conf
     hostPath: /etc/${dependencies.YARN.sid}/conf
     name: yarn
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -63,7 +56,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
+        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}"]
         mode: "755"
   - type: Config
     directives:
@@ -84,19 +77,12 @@ roles:
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
-  - name: KRB_ENABLE
-    value: 'false'
   - name: HBASE_CONF_DIR
     value: /etc/${service.sid}/conf
-  - name: HBASE_ZOOKEEPER_ZNODE_PARENT
-    value: /${service.sid}
   mountPaths:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: hyperbase
-  - mountPath: /var/run/hadoop-common
-    hostPath: /root/docker/common
-    name: socketdir
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
@@ -106,6 +92,9 @@ roles:
   - mountPath: /etc/${dependencies.YARN.sid}/conf
     hostPath: /etc/${dependencies.YARN.sid}/conf
     name: yarn
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}
@@ -117,7 +106,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
+        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}"]
         mode: "755"
   - type: Config
     directives:
@@ -137,19 +126,12 @@ roles:
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
-  - name: KRB_ENABLE
-    value: 'false'
   - name: HBASE_CONF_DIR
     value: /etc/${service.sid}/conf
-  - name: HBASE_ZOOKEEPER_ZNODE_PARENT
-    value: /${service.sid}
   mountPaths:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: hyperbase
-  - mountPath: /var/run/hadoop-common
-    hostPath: /root/docker/common
-    name: socketdir
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
@@ -162,6 +144,9 @@ roles:
   - mountPath: /etc/${dependencies.YARN.sid}/conf
     hostPath: /etc/${dependencies.YARN.sid}/conf
     name: yarn
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -173,7 +158,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
+        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}"]
         mode: "755"
   - type: Config
     directives:

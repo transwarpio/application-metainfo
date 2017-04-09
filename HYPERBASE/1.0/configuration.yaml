@@ -548,7 +548,6 @@
   isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes: [HYPERBASE_REGIONSERVER]
-#  isNodeSpecific: true
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -576,5 +575,3 @@
   onDeps: []
   groups: ["hbase-site.xml"]
   visibility: READ_WRITE
-
-
