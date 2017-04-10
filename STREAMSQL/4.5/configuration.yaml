@@ -323,21 +323,21 @@
   visibility: READ_WRITE
 
 - name: ngmr.localdir
-#  recommendExpression: |
-#    <#function localDir suffix>
-#      <#if rcmdMounts?size == 0>
-#        <#return suffix>
-#      <#else>
-#        <#local dirs = []>
-#        <#list rcmdMounts?sort as mnt>
-#         <#local dirs = dirs + [mnt + suffix]>
-#        </#list>
-#        <#return dirs?join(",")>
-#      </#if>
-#    </#function>
-#    ${localDir("/hadoop/ngmr/" + service['sid'])}
-  recommendExpression: /hadoop/ngmr/${service['sid']}
-#  isNodeSpecific: true
+  recommendExpression: |
+    <#function localDir suffix>
+      <#if rcmdMounts?size == 0>
+        <#return suffix>
+      <#else>
+        <#local dirs = []>
+        <#list rcmdMounts?sort as mnt>
+         <#local dirs = dirs + [mnt + suffix]>
+        </#list>
+        <#return dirs?join(",")>
+      </#if>
+    </#function>
+    ${localDir("/hadoop/ngmr/" + service['sid'])}
+#  recommendExpression: /hadoop/ngmr/${service['sid']}
+  isNodeSpecific: true
   defaultValue: null
   valueType: ABSOLUTE_PATH
   scope: !<RoleTypes>
