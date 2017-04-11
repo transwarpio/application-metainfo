@@ -197,7 +197,7 @@
   visibility: READ_WRITE
 
 - name: mapreduce.map.speculative
-  recommendExpression: false
+  recommendExpression: true
   defaultValue: null
   valueType: BOOL
   scope: !<ServiceLevel> {}
