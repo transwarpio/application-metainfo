@@ -74,3 +74,25 @@ export INCEPTOR_LICENSE_ZOOKEEPER_QUORUM=${quorum}
 export INCEPTOR_UI_PORT=${service['inceptor.ui.port']}
 export METASTORE_PORT=${service['hive.metastore.port']}
 export MYSQL_PORT=${service['mysql.port']}
+
+<#if dependencies.ZOOKEEPER[.data_model["localhostname"]]??>
+    <#if dependencies.ZOOKEEPER[.data_model["localhostname"]]['zookeeper.client.port']??>
+    export TRANSWARP_ZOOKEEPER_PORT=${dependencies.ZOOKEEPER[.data_model["localhostname"]]['zookeeper.client.port']}
+    </#if>
+</#if>
+
+exportJAVAX_JDO_OPTION_CONNECTIONURL=jdbc:mysql://0.0.0.0:${service['mysql.port']}/metastore_${service.sid}
+export JAVAX_JDO_OPTION_CONNECTION_USERNAME=${service['hive.metastore.username']}
+export JAVAX_JDO_OPTION_CONNECTION_PASSWORD=${service['hive.metastore.password']}
+export MYSQL_SERVER=${service.roles.INCEPTOR_MYSQL[0]['hostname']}
+export HIVE_METASTORE_SERVER=${service.roles.INCEPTOR_METASTORE[0]['hostname']}
+export SPARK_DRIVER_ADDR=${service.roles.INCEPTOR_SERVER[0]['hostname']}
+export EXECUTOR_ID_PATH=/${service.sid}/executorID
+export METASTORE_ID=metastore_${service.sid}
+
+# Export ngmr.localdir
+<#if service[.data_model["localhostname"]]['ngmr.localdir']??>
+export NGMR_LOCAL_DIR=${service[.data_model["localhostname"]]['ngmr.localdir']}
+<#else>
+export NGMR_LOCAL_DIR=/hadoop/ngmr/${service.sid}
+</#if>

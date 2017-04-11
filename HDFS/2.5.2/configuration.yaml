@@ -51,19 +51,19 @@
   - "hdfs-site.xml"
   visibility: READ_WRITE
 - name: dfs.namenode.name.dir
-#  recommendExpression: |
-#    <#assign sorted = rcmdMounts?sort>
-#    <#if sorted?size == 0>
-#    /hadoop/hadoop_image,/hadoop/namenode_dir
-#    <#elseif sorted?size == 1>
-#    /hadoop/namenode_dir,${sorted?first}/hadoop/namenode_dir
-#    <#else>
-#    ${sorted[0]}/hadoop/namenode_dir,${sorted[1]}/hadoop/namenode_dir
-#    </#if>
-  recommendExpression: /hadoop/hadoop_image,/hadoop/namenode_dir
+  recommendExpression: |
+    <#assign sorted = rcmdMounts?sort>
+    <#if sorted?size == 0>
+    /hadoop/hadoop_image,/hadoop/namenode_dir
+    <#elseif sorted?size == 1>
+    /hadoop/namenode_dir,${sorted?first}/hadoop/namenode_dir
+    <#else>
+    ${sorted[0]}/hadoop/namenode_dir,${sorted[1]}/hadoop/namenode_dir
+    </#if>
+#  recommendExpression: /hadoop/hadoop_image,/hadoop/namenode_dir
   defaultValue: file://${hadoop.tmp.dir}/dfs/name
   valueType: STRING
-#  isNodeSpecific: true # TODO work around before WARP-11503
+  isNodeSpecific: true # TODO work around before WARP-11503
   scope: !<RoleTypes>
       roleTypes:
       - HDFS_NAMENODE
@@ -99,24 +99,24 @@
   - "core-site.xml"
   visibility: "READ_WRITE"
 - name: dfs.datanode.du.reserved
-#  recommendExpression: |
-#    <#function diskSizeByMnt mnt>
-#      <#list disks?reverse as disk>
-#        <#if mnt?contains(disk.mountPoint)>
-#         <#return disk.size>
-#        </#if>
-#      </#list>
-#      <#return 0>
-#    </#function>
-#    <#assign reserved=10737418240>
-#    <#list rcmdMounts as mnt>
-#     <#assign curRsv = diskSizeByMnt(mnt) / 5>
-#     <#if curRsv gt reserved>
-#      <#assign reserved=curRsv>
-#     </#if>
-#    </#list>
-#    ${reserved?floor?c}
-  recommendExpression: 10737418240
+  recommendExpression: |
+    <#function diskSizeByMnt mnt>
+      <#list disks?reverse as disk>
+        <#if mnt?contains(disk.mountPoint)>
+         <#return disk.size>
+        </#if>
+      </#list>
+      <#return 0>
+    </#function>
+    <#assign reserved=10737418240>
+    <#list rcmdMounts as mnt>
+     <#assign curRsv = diskSizeByMnt(mnt) / 5>
+     <#if curRsv gt reserved>
+      <#assign reserved=curRsv>
+     </#if>
+    </#list>
+    ${reserved?floor?c}
+#  recommendExpression: 10737418240
   defaultValue: 0
   valueType: BYTES
   isNodeSpecific: true

@@ -36,8 +36,6 @@ roles:
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
-  - name: KRB_ENABLE
-    value: 'false'
   - name: TRANSWARP_ZOOKEEPER_QUORUM
     value: |
       <#assign zookeepers=[]>
@@ -47,27 +45,12 @@ roles:
         </#list>
       </#if>
       ${zookeepers?join(",")}
-  - name: JAVAX_JDO_OPTION_CONNECTION_USERNAME
-    value: ${service['hive.metastore.username']}
-  - name: JAVAX_JDO_OPTION_CONNECTION_PASSWORD
-    value: ${service['hive.metastore.password']}
-  - name: MYSQL_SERVER
-    value: ${service.roles.INCEPTOR_MYSQL[0]['hostname']}
-  - name: HIVE_METASTORE_SERVER
-    value: ${service.roles.INCEPTOR_METASTORE[0]['hostname']}
-  - name: SPARK_DRIVER_ADDR
-    value: ${service.roles.INCEPTOR_SERVER[0]['hostname']}
-  - name: EXECUTOR_ID_PATH
-    value: /${service.sid}/executorID
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
   mountPaths:
   - mountPath: /var/run/${dependencies.HDFS.sid}
     hostPath: /var/run/${dependencies.HDFS.sid}
     name: hdfssocketdir
-  - mountPath: /var/run/hadoop-common
-    hostPath: /root/docker/common
-    name: socketdir
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: inceptor
@@ -83,9 +66,9 @@ roles:
   - mountPath: ${service['ngmr.fastdisk.dir']}/fastdisk
     hostPath: ${service['ngmr.fastdisk.dir']}/fastdisk
     name: fastdir
-  - mountPath: ${service['ngmr.localdir']}
-    hostPath: ${service['ngmr.localdir']}
-    name: localdir
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -97,14 +80,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
-        mode: "755"
-  - type: Config
-    directives:
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "inceptor-env.ftlsh"
-        targetPath: "/etc/${service.sid}/conf/inceptor-env.sh"
+        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}"]
         mode: "755"
 - name: INCEPTOR_MYSQL
   friendlyName: "Inceptor Mysql"
@@ -112,16 +88,6 @@ roles:
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
-  - name: KRB_ENABLE
-    value: 'false'
-  - name: METASTORE_ID
-    value: metastore_${service.sid}
-  - name: JAVAX_JDO_OPTION_CONNECTIONURL
-    value: jdbc:mysql://0.0.0.0:${service['mysql.port']}/metastore_${service.sid}
-  - name: JAVAX_JDO_OPTION_CONNECTION_USERNAME
-    value: ${service['hive.metastore.username']}
-  - name: JAVAX_JDO_OPTION_CONNECTION_PASSWORD
-    value: ${service['hive.metastore.password']}
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
   mountPaths:
@@ -140,6 +106,9 @@ roles:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -151,7 +120,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/var/log/${service.sid}" ,"/var/run/${service.sid}", "/etc/${service.sid}/conf"]
+        paths: ["/var/log/${service.sid}", "/etc/${service.sid}/conf"]
         mode: "755"
 - name: INCEPTOR_METASTORE
   friendlyName: "Inceptor Metastore"
@@ -159,24 +128,9 @@ roles:
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
-  - name: KRB_ENABLE
-    value: 'false'
-  - name: MYSQL_SERVER
-    value: ${service.roles.INCEPTOR_MYSQL[0]['hostname']}
-  - name: METASTORE_ID
-    value: metastore_${service.sid}
-  - name: JAVAX_JDO_OPTION_CONNECTIONURL
-    value: jdbc:mysql://0.0.0.0:${service['mysql.port']}/metastore_${service.sid}
-  - name: JAVAX_JDO_OPTION_CONNECTION_USERNAME
-    value: ${service['hive.metastore.username']}
-  - name: JAVAX_JDO_OPTION_CONNECTION_PASSWORD
-    value: ${service['hive.metastore.password']}
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
   mountPaths:
-  - mountPath: /var/run/hadoop-common
-    hostPath: /root/docker/common
-    name: socketdir
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: inceptor
@@ -189,6 +143,9 @@ roles:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -200,7 +157,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/var/log/${service.sid}" ,"/var/run/${service.sid}", "/etc/${service.sid}/conf"]
+        paths: ["/var/log/${service.sid}", "/etc/${service.sid}/conf"]
         mode: "755"
 - name: INCEPTOR_EXECUTOR
   friendlyName: "Inceptor Executor"
@@ -208,8 +165,6 @@ roles:
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
-  - name: KRB_ENABLE
-    value: 'false'
   - name: TRANSWARP_ZOOKEEPER_QUORUM
     value: |
       <#assign zookeepers=[]>
@@ -219,19 +174,12 @@ roles:
         </#list>
       </#if>
       ${zookeepers?join(",")}
-  - name: EXECUTOR_ID_PATH
-    value: /${service.sid}/executorID
-  - name: SPARK_DRIVER_ADDR
-    value: ${service.roles.INCEPTOR_SERVER[0]['hostname']}
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
   mountPaths:
   - mountPath: /var/run/${dependencies.HDFS.sid}
     hostPath: /var/run/${dependencies.HDFS.sid}
     name: hdfssocketdir
-  - mountPath: /var/run/hadoop-common
-    hostPath: /root/docker/common
-    name: socketdir
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: inceptor
@@ -244,6 +192,9 @@ roles:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}
@@ -255,7 +206,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/var/log/${service.sid}", "/var/run/${service.sid}", "/etc/${service.sid}/conf"]
+        paths: ["/var/log/${service.sid}", "/etc/${service.sid}/conf"]
         mode: "755"
 
 product: Stream

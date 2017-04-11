@@ -22,7 +22,6 @@
 # Set environment variables here.
 export HBASE_CONF_DIR=/etc/${service.sid}/conf
 export HADOOP_CONF_DIR=/etc/${dependencies.HDFS.sid}/conf:/etc/${dependencies.YARN.sid}/conf
-# export HADOOP_CONF_DIR=/etc/hadoop/conf
 
 # The java implementation to use.  Java 1.6 required.
 # export JAVA_HOME=/usr/java/jdk1.6.0/
@@ -128,3 +127,5 @@ export ES_PORT=
 <#else>
 export DEPEND_ON_ES=false
 </#if>
+
+export HBASE_ZOOKEEPER_ZNODE_PARENT=/${service.sid}

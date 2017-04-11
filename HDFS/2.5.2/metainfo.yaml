@@ -19,8 +19,6 @@ roles:
     category: SLAVE
     frontendOperations: ["Start", "Stop", "Commission", "Decommission", "Delete", "Scaleout"]
     env:
-    - name: KRB_ENABLE
-      value: 'false'
     - name: HDFS_HA_NAMENODE_SERVICE
       value: |
         <#assign namenodes=[]>
@@ -51,15 +49,15 @@ roles:
     - mountPath: /etc/${service.sid}/conf
       hostPath: /etc/${service.sid}/conf
       name: hdfs
-    - mountPath: /var/run/hadoop-common
-      hostPath: /root/docker/common
-      name: socketdir
     - mountPath: /var/log/${service.sid}
       hostPath: /var/log/${service.sid}
       name: log
     - mountPath: /var/run/${service.sid}
       hostPath: /var/run/${service.sid}
       name: hdfssocketdir
+    - mountPath: /etc/transwarp/conf
+      hostPath: /etc/transwarp/conf
+      name: hosts
     nodeSpecificMounts:
     - configKey: dfs.datanode.data.dir
     summaryPolicy: SOME
@@ -75,7 +73,7 @@ roles:
     - type: Install
       directives:
       - directive: !<mkdirs>
-          paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
+          paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}", "/hadoop/mounts/${service.sid}"]
           mode: "755"
     - type: Config
       directives:
@@ -96,8 +94,6 @@ roles:
     category: MASTER
     frontendOperations: ["Start", "Stop"]
     env:
-    - name: KRB_ENABLE
-      value: 'false'
     - name: HDFS_HA_NAMENODE_SERVICE
       value: |
         <#assign namenodes=[]>
@@ -124,8 +120,6 @@ roles:
       value: /etc/${service.sid}/conf
     - name: SOCKETDIR
       value: /var/run/${service.sid}
-    - name: CLUSTER
-      value: ${service.sid}
     mountPaths:
     - mountPath: /var/log/${service.sid}
       hostPath: /var/log/${service.sid}
@@ -133,9 +127,6 @@ roles:
     - mountPath: /etc/${service.sid}/conf
       hostPath: /etc/${service.sid}/conf
       name: hdfs
-    - mountPath: /var/run/hadoop-common
-      hostPath: /root/docker/common
-      name: socketdir
     - mountPath: /var/transwarp/data
       hostPath: /var/namenode_format/
       name: format
@@ -145,12 +136,8 @@ roles:
     - mountPath: /var/run/${service.sid}
       hostPath: /var/run/${service.sid}
       name: hdfssocketdir
-    - mountPath: /hadoop/namenode_dir
-      hostPath: /hadoop/namenode_dir
-      name: namenodedir1
-    - mountPath: /hadoop/hadoop_image
-      hostPath: /hadoop/hadoop_image
-      name: namenodedir2
+    nodeSpecificMounts:
+    - configKey: dfs.namenode.name.dir
     summaryPolicy: SOME
     autoAssign: []
     suggestion:
@@ -174,7 +161,7 @@ roles:
       - type: Install
         directives:
         - directive: !<mkdirs>
-            paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
+            paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}", "/hadoop/mounts/${service.sid}"]
             mode: "755"
       - type: Config
         directives:
@@ -220,8 +207,6 @@ roleGroups:
         category: MASTER
         frontendOperations: ["Start", "Stop", "Move"]
         env:
-        - name: KRB_ENABLE
-          value: 'false'
         - name: HDFS_HA_NAMENODE_SERVICE
           value: |
             <#assign namenodes=[]>
@@ -248,8 +233,6 @@ roleGroups:
           value: /etc/${service.sid}/conf
         - name: SOCKETDIR
           value: /var/run/${service.sid}
-        - name: CLUSTER
-          value: ${service.sid}
         mountPaths:
         - mountPath: /var/log/${service.sid}
           hostPath: /var/log/${service.sid}
@@ -257,9 +240,6 @@ roleGroups:
         - mountPath: /etc/${service.sid}/conf
           hostPath: /etc/${service.sid}/conf
           name: hdfs
-        - mountPath: /var/run/hadoop-common
-          hostPath: /root/docker/common
-          name: socketdir
         - mountPath: /var/transwarp/data
           hostPath: /var/namenode_format/
           name: format
@@ -269,12 +249,8 @@ roleGroups:
         - mountPath: /var/run/${service.sid}
           hostPath: /var/run/${service.sid}
           name: hdfssocketdir
-        - mountPath: /hadoop/namenode_dir
-          hostPath: /hadoop/namenode_dir
-          name: namenodedir1
-        - mountPath: /hadoop/hadoop_image
-          hostPath: /hadoop/hadoop_image
-          name: namenodedir2
+        nodeSpecificMounts:
+        - configKey: dfs.namenode.name.dir
         containers: ["HDFS_NAMENODE", "HDFS_ZKFC"]
         summaryPolicy: ALL
         autoAssign:
@@ -289,7 +265,7 @@ roleGroups:
           - type: Install
             directives:
             - directive: !<mkdirs>
-                paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
+                paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}", "/hadoop/mounts/${service.sid}"]
                 mode: "755"
           - type: Config
             directives:
@@ -314,8 +290,6 @@ roleGroups:
         category: MASTER
         frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
         env:
-        - name: KRB_ENABLE
-          value: "false"
         - name: HADOOP_PID_DIR
           value: /var/run/${service.sid}/
         - name: HADOOP_CONF_DIR
@@ -326,15 +300,15 @@ roleGroups:
         - mountPath: /etc/${service.sid}/conf
           hostPath: /etc/${service.sid}/conf
           name: hdfs
-        - mountPath: /var/run/hadoop-common
-          hostPath: /root/docker/common
-          name: socketdir
         - mountPath: /var/log/${service.sid}
           hostPath: /var/log/${service.sid}
           name: log
         - mountPath: /hadoop/journal
           hostPath: /hadoop/journal
           name: journaldir
+        - mountPath: /etc/transwarp/conf
+          hostPath: /etc/transwarp/conf
+          name: hosts
         summaryPolicy: MAJOR
         autoAssign:
           - when: !<WhenRoleType>
@@ -365,7 +339,7 @@ roleGroups:
           - type: Install
             directives:
             - directive: !<mkdirs>
-                paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
+                paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}", "/hadoop/mounts/${service.sid}"]
                 mode: "755"
           - type: Config
             directives:

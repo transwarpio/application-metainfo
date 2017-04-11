@@ -88,16 +88,15 @@
     <@property "dfs.hosts.exclude" "/etc/${sid}/conf/exclude-list.txt"/>
     <@property "dfs.client.read.shortcircuit", "true"/>
     <@property "dfs.domain.socket.path" "/var/run/${sid}/dn_socket"/>
-    <#if dependencies["LicenseService"]??>
-    <#assign  license_servers=[]>
-    <#list dependencies["LicenseService"].roles["ZOOKEEPER"] as server>
-        <#assign license_servers += [(server.hostname + ":" + dependencies["LicenseService"][server.hostname]["zookeeper.client.port"])]>
+    <#if dependencies.LICENSE_SERVICE??>
+    <#assign  license=dependencies.LICENSE_SERVICE license_servers=[]>
+    <#list license.roles["LICENSE_NODE"] as role>
+        <#assign license_servers += [(role.hostname + ":" + license[role.hostname]["zookeeper.client.port"])]>
     </#list>
     <@property "license.zookeeper.quorum" license_servers?join(",")/>
     </#if>
     <@property "dfs.journalnode.edits.dir" "/hadoop/journal"/>
     <@property "dfs.client.socket-timeout" "120000"/>
-    <@property "license.zookeeper.quorum" "172.16.1.41:2181"/>
     <@property "dfs.permissions" "false"/>
 <#--Take properties from the context-->
 <#list service['hdfs-site.xml'] as key, value>
