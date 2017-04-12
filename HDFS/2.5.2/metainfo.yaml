@@ -73,7 +73,7 @@ roles:
     - type: Install
       directives:
       - directive: !<mkdirs>
-          paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}", "/hadoop/mounts/${service.sid}"]
+          paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
           mode: "755"
     - type: Config
       directives:
@@ -161,7 +161,7 @@ roles:
       - type: Install
         directives:
         - directive: !<mkdirs>
-            paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}", "/hadoop/mounts/${service.sid}"]
+            paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
             mode: "755"
       - type: Config
         directives:
@@ -265,7 +265,7 @@ roleGroups:
           - type: Install
             directives:
             - directive: !<mkdirs>
-                paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}", "/hadoop/mounts/${service.sid}"]
+                paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
                 mode: "755"
           - type: Config
             directives:
@@ -339,7 +339,7 @@ roleGroups:
           - type: Install
             directives:
             - directive: !<mkdirs>
-                paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}", "/hadoop/mounts/${service.sid}"]
+                paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
                 mode: "755"
           - type: Config
             directives:
