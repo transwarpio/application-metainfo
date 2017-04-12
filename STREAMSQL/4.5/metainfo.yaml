@@ -195,6 +195,8 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
+  nodeSpecificMounts:
+  - configKey: ngmr.localdir
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}
