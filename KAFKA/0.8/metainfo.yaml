@@ -9,7 +9,7 @@ dependencies:
     minVersion: 3.4.5-tdh50
     maxVersion: 3.4.5-tdh50
     optional: false
-dockerImage: "tos/kafka-server:rb465-final-tdh-3"
+dockerImage: "tos/kafka-server:trunk"
 user: kafka
 roles:
 - name: KAFKA_SERVER
@@ -18,8 +18,6 @@ roles:
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
-  - name: KRB_ENABLE
-    value: 'false'
   - name: TRANSWARP_ZOOKEEPER_QUORUM
     value: |
       <#assign zookeepers=[]>
@@ -41,6 +39,11 @@ roles:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: conf
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
+  nodeSpecificMounts:
+  - configKey: kmq.log.dirs
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}
@@ -52,15 +55,8 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/run/${service.sid}", "/var/log/${service.sid}"]
+        paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
         mode: "755"
-  - type: Config
-    directives: []
-#    - directive: !<resource>
-#        templateType: Raw
-#        templatePath: "log4j.properties"
-#        targetPath: "/etc/${service.sid}/conf/log4j.properties"
-#        mode: "755"
 
 firstWizardConfigs:
 - kmq.log.dirs
