@@ -36,7 +36,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}", "/hadoop/mounts/${service.sid}/"]
+        paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}"]
         mode: "755"
 
 firstWizardConfigs:
