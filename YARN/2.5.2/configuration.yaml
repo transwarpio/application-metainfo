@@ -481,7 +481,6 @@
       </#if>
     </#function>
     ${localDir("/hadoop/yarn/local")}
-#  recommendExpression: /hadoop/yarn/local
   defaultValue: null
   valueType: STRING
   scope: !<RoleTypes>
@@ -505,7 +504,6 @@
       </#if>
     </#function>
     ${localDir("/hadoop/yarn/logs")}
-#  recommendExpression: /hadoop/yarn/logs
   defaultValue: null
   valueType: ABSOLUTE_PATH
   scope: !<RoleTypes>

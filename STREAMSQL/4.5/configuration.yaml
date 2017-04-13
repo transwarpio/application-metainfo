@@ -336,7 +336,6 @@
       </#if>
     </#function>
     ${localDir("/hadoop/ngmr/" + service['sid'])}
-#  recommendExpression: /hadoop/ngmr/${service['sid']}
   isNodeSpecific: true
   defaultValue: null
   valueType: ABSOLUTE_PATH

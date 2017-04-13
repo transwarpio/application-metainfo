@@ -27,7 +27,6 @@
       </#if>
     </#function>
     ${localDir("/hadoop/data")}
-#  recommendExpression: /hadoop/data # TODO work around before WARP-11503
   defaultValue: file://${hadoop.tmp.dir}/dfs/data
   valueType: STRING
   isNodeSpecific: true  # TODO work around before WARP-11503
@@ -60,7 +59,6 @@
     <#else>
     ${sorted[0]}/hadoop/namenode_dir,${sorted[1]}/hadoop/namenode_dir
     </#if>
-#  recommendExpression: /hadoop/hadoop_image,/hadoop/namenode_dir
   defaultValue: file://${hadoop.tmp.dir}/dfs/name
   valueType: STRING
   isNodeSpecific: true # TODO work around before WARP-11503
@@ -79,7 +77,6 @@
     <#else>
     24000
     </#if>
-#  recommendExpression: 32768
   defaultValue: null
   valueType: MB
   isNodeSpecific: true
@@ -116,7 +113,6 @@
      </#if>
     </#list>
     ${reserved?floor?c}
-#  recommendExpression: 10737418240
   defaultValue: 0
   valueType: BYTES
   isNodeSpecific: true

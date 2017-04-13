@@ -12,7 +12,6 @@
       </#if>
     </#function>
     ${localDir("/hadoop/kmq")}
-#  recommendExpression: /hadoop/kmq
   defaultValue: null
   valueType: ABSOLUTE_PATH
   scope: !<RoleTypes>

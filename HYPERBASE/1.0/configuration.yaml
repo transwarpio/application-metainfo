@@ -542,7 +542,6 @@
     <#else>
     24000
     </#if>
-#  recommendExpression: 32000
   defaultValue: null
   valueType: MB
   isNodeSpecific: true
