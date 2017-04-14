@@ -47,7 +47,13 @@
     <@property "mapred.job.tracker" tracker/>
     <#assign connectionURL="jdbc:mysql://" + service.roles.INCEPTOR_MYSQL[0]['hostname'] + ":" + service['mysql.port'] + "/metastore_" + service.sid + "?createDatabaseIfNotExist=false&amp;characterEncoding=UTF-8">
     <@property "javax.jdo.option.ConnectionURL" connectionURL/>
-    <@property "license.zookeeper.quorum" "172.16.1.41:2181"/>
+    <#if dependencies.LICENSE_SERVICE??>
+    <#assign  license=dependencies.LICENSE_SERVICE license_servers=[]>
+    <#list license.roles["LICENSE_NODE"] as role>
+        <#assign license_servers += [(role.hostname + ":" + license[role.hostname]["zookeeper.client.port"])]>
+    </#list>
+    <@property "license.zookeeper.quorum" license_servers?join(",")/>
+    </#if>
     <#assign inceptor=service.roles.INCEPTOR_SERVER[0]['hostname'] + ":" + service['hive.server2.thrift.port']>
     <@property "transwarp.docker.inceptor" inceptor/>
 

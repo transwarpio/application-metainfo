@@ -41,8 +41,13 @@
     <@property "hbase.rootdir" rootdir/>
     <#assign dir="hdfs://" + dependencies.HDFS.nameservices[0] + "/" + service.sid + "/hbase_timediff">
     <@property "hbase.sservice.hdfs.dir" dir/>
-    <@property "license.zookeeper.quorum" "172.16.1.41:2181"/>
-
+    <#if dependencies.LICENSE_SERVICE??>
+    <#assign  license=dependencies.LICENSE_SERVICE license_servers=[]>
+    <#list license.roles["LICENSE_NODE"] as role>
+        <#assign license_servers += [(role.hostname + ":" + license[role.hostname]["zookeeper.client.port"])]>
+    </#list>
+    <@property "license.zookeeper.quorum" license_servers?join(",")/>
+    </#if>
     <@property "hbase.master.port" service['master.port']/>
     <@property "hbase.master.info.port" service['master.info.port']/>
     <@property "hbase.regionserver.port" service['regionserver.port']/>
