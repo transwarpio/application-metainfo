@@ -41,7 +41,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/run/${service.sid}", "/var/log/${service.sid}"]
+        paths: ["/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
@@ -57,7 +57,6 @@ roles:
         templatePath: "myid"
         targetPath: "/var/${service.sid}/myid"
         mode: "755"
-    # TODO if Kerberos is enabled, generate jaas.conf and jaas.env; otherwise generate empty ones
 
 firstWizardConfigs:
 - tickTime
@@ -78,6 +77,10 @@ pages:
 - configuration
 - operation
 - security
+
+principals:
+- HTTP
+- zookeeper
 
 healthChecks:
 - category: DAEMON_CHECK
