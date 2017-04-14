@@ -1,11 +1,8 @@
 #NGMR CONF ENVIRONMENT
 export MYSQL_DATADIR=/var/transwarp/mysql/data
-export MYSQL_LOGDIR=/var/log/${service.sid}
-# Export ngmr.localdir
 <#if service[.data_model["localhostname"]]['ngmr.localdir']??>
+# Export ngmr.localdir
 export SPARK_LOCAL_DIR=${service[.data_model["localhostname"]]['ngmr.localdir']}
-<#else>
-export SPARK_LOCAL_DIR=/hadoop/ngmr/${service.sid}
 </#if>
 export SPARK_FASTDISK_DIR=${service['ngmr.fastdisk.dir']}
 export NGMR_CACHE_SIZE=${service['ngmr.cache.size']}

@@ -92,7 +92,7 @@ roles:
     value: /etc/${service.sid}/conf
   mountPaths:
   - mountPath: /var/transwarp
-    hostPath: /var/lib/mysql
+    hostPath: ${service['mysql.datadir']}
     name: mysql
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
