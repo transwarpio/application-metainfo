@@ -1,0 +1,48 @@
+---
+name: GUARDIAN
+version: 1.0-tdh50
+global: false
+namePrefix: Guardian
+friendlyName: Guardian
+dependencies: []
+roles:
+- name: GUARDIAN_SERVER
+  friendlyName: "Guardian Server"
+  labelPrefix: "guardian-server"
+  category: MASTER
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [3, 2, 1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf", "/${service.sid}/data"]
+        mode: "755"
+  - type: Start
+    directives:
+    - directive: !<docker-compose>
+        action: Up
+        file: "/etc/${service.sid}/conf/docker-compose-guardian.yml"
+  - type: Stop
+    directives:
+    - directive: !<docker-compose>
+        action: Stop
+        file: "/etc/${service.sid}/conf/docker-compose-guardian.yml"
+
+firstWizardConfigs:
+- guardian.server.port
+- guardian.apacheds.ldap.port
+- guardian.apacheds.kdc.port
+- guardian.apacheds.data.dir
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<DockerPs>
+    imageMap:
+      GUARNDIAN_SERVER: ["apacheds-backend-master", "guardian-server"]

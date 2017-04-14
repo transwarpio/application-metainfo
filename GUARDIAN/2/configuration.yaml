@@ -1,0 +1,95 @@
+---
+# apacheds
+- name: guardian.apacheds.data.dir
+  recommendExpression: "/${service.sid}/data/"
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.apacheds.ldap.port
+  recommendExpression: 10389
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.apacheds.kdc.port
+  recommendExpression: 6088
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+# guardian-server
+- name: guardian.server.port
+  recommendExpression: 8380
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.admin.username
+  recommendExpression: admin
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.admin.password
+  recommendExpression: 123
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: WRITE_ONLY #TODO PASSWORD
+
+- name: guardian.ds.root.password
+  recommendExpression: Transwarp!
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: WRITE_ONLY
+
+- name: guardian.ds.domain
+  recommendExpression: dc=tdh
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.ds.realm
+  recommendExpression: TDH
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.ds.ldap.tls.enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
