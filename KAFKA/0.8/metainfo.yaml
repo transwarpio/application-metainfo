@@ -70,6 +70,9 @@ pages:
 - operation
 - security
 
+principals:
+- kafka
+
 healthChecks:
 - category: DAEMON_CHECK
   intervalSeconds: 5

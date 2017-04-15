@@ -1,7 +1,7 @@
 ---
 name: GUARDIAN
 version: 1.0-tdh50
-global: false
+global: true
 namePrefix: Guardian
 friendlyName: Guardian
 dependencies: []
