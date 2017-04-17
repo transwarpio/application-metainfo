@@ -30,7 +30,7 @@ etcd:
   - DATA_DIR=/var/etcd/data
 
 apiserver:
-  image: ${registryServer}:${registryPort}/jenkins/hyperkube
+  image: ${registryServer}:${registryPort}/jenkins/hyperkube:tos1.2
   net: host
   privileged: true
   restart: always
@@ -44,6 +44,7 @@ apiserver:
   environment:
   - V=4
   - ETCD_SERVERS=${etcd_servers?join(',')}
+  - ETCD_PORT=${service['tos.master.leader.elect.port']}
   - APISERVER_COUNT=${service.roles.TOS_MASTER?size}
   - INSECURE_BIND_ADDRESS=0.0.0.0
   - INSECURE_PORT=${service['tos.master.apiserver.port']}
@@ -62,13 +63,13 @@ apiserver:
   - LOG_DIR=/var/log/kubernetes/apiserver
 
 controller:
-  image: ${registryServer}:${registryPort}/jenkins/hyperkube
+  image: ${registryServer}:${registryPort}/jenkins/hyperkube:tos1.2
   net: host
   privileged: true
   restart: always
   command:
     - boot.sh
-    - controller-manager
+    - controller
   volumes:
     - /var/log/kubernetes/controller:/var/log/kubernetes/controller
     - /srv/kubernetes:/srv/kubernetes
@@ -86,7 +87,7 @@ controller:
   - PORT=${service['tos.master.controller.port']}
 
 scheduler:
-  image: ${registryServer}:${registryPort}/jenkins/hyperkube
+  image: ${registryServer}:${registryPort}/jenkins/hyperkube:tos1.2
   net: host
   privileged: true
   restart: always
