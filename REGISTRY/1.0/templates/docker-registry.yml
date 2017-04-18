@@ -14,7 +14,7 @@ registryui:
 #    - registry
 
 registry:
-  image: registry:2.4.1
+  image: registry:2.5.1
   net: host
   restart: always
   volumes:

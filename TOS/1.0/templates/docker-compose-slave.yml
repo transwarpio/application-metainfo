@@ -3,7 +3,7 @@
   registryPort=dependencies.REGISTRY['registry.port']
 >
 kubelet:
-  image: ${registryServer}:${registryPort}/jenkins/hyperkube
+  image: ${registryServer}:${registryPort}/jenkins/hyperkube:tos1.2
   net: host
   pid: host
   privileged: true
