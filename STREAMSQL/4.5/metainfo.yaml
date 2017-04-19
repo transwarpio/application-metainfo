@@ -1,9 +1,9 @@
 ---
-name: STREAMSQL
+name: SLIPSTREAM
 version: 4.5-tdh50
 global: false
-namePrefix: StreamSQL
-friendlyName: "StreamSQL"
+namePrefix: SlipStream
+friendlyName: "SlipStream"
 dockerImage: "tos/inceptor:trunk"
 dependencies:
   - name: ZOOKEEPER

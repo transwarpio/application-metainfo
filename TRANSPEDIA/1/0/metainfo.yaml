@@ -8,8 +8,6 @@ dependencies:
 - name: SEARCH
   minVersion: 1.0-tdh50
   maxVersion: 1.0-tdh50
-  optional: true
-  preferred: false
 dockerImage: "tos/transpedia:rb50"
 roles:
 - name: TRANSPEDIA_SERVER
