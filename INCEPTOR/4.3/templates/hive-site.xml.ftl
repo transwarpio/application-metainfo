@@ -35,7 +35,16 @@
     </#if>
 </#if>
 
-    <#assign dbconnectionstring="jdbc:mysql://" + service.roles.INCEPTOR_MYSQL[0]['hostname'] + ":" + service['mysql.port'] + "/metastore_" + service.sid + "?createDatabaseIfNotExist=true&amp;user=hiveuser&amp;password=password&amp;characterEncoding=UTF-8">
+<#if dependencies.TXSQL??>
+    <#assign mysqlHostPorts = []/>
+    <#list dependencies.TXSQL.roles['TXSQL_SERVER'] as role>
+        mysqlHostPorts = mysqlHostPorts + [role.hostname + ':' + dependencies.TXSQL['mysql.rw.port']]
+    </#list>
+<#else>
+    <#assign mysqlHostPorts = [service.roles.INCEPTOR_MYSQL[0]['hostname'] + ":" + service['mysql.port']]/>
+</#if>
+
+    <#assign dbconnectionstring="jdbc:mysql://" + mysqlHostPorts?join(",") + "/metastore_" + service.sid + "?createDatabaseIfNotExist=true&amp;user=hiveuser&amp;password=password&amp;characterEncoding=UTF-8">
     <@property "hive.stats.dbconnectionstring" dbconnectionstring/>
     <#assign scratchdir="hdfs://" + dependencies.HDFS.nameservices[0] + "/" + service.sid + "/tmp/hive">
     <@property "hive.exec.scratchdir" scratchdir/>

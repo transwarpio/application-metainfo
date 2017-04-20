@@ -25,7 +25,7 @@ roles:
     value: <#if dependencies.SEARCH??>${dependencies.SEARCH.roles.SEARCH_SERVER[0].hostname}<#else>0.0.0.0</#if>
   - name: ELASTICSEARCH_PORT
     value: 9200
-  summaryPolicy: ALL
+  summaryPolicy: SOME
   mountPaths: []
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
