@@ -3,7 +3,7 @@
   registryPort=dependencies.REGISTRY['registry.port']
 >
 kubelet:
-  image: ${registryServer}:${registryPort}/jenkins/hyperkube:tos1.2
+  image: ${registryServer}:${registryPort}/transwarp/hyperkube:tdh500
   net: host
   pid: host
   privileged: true
@@ -25,7 +25,7 @@ kubelet:
     - --log_dir=/var/log/kubernetes/kubelet
     - --containerized=true
 #    - --config=/etc/kubernetes/manifests-multi
-    - --pod-infra-container-image=${registryServer}:${registryPort}/google_containers/pause:0.8.0
+    - --pod-infra-container-image=${registryServer}:${registryPort}/transwarp/pause:tdh500
     - --disk_mount_dirs=/mnt/.*
     - --max-pods=200
     - --resolv-conf=/dev/null
@@ -43,7 +43,7 @@ kubelet:
     - /srv/kubernetes:/srv/kubernetes
 # for tos ha
 haproxy:
-  image: ${registryServer}:${registryPort}/jenkins/haproxy:live
+  image: ${registryServer}:${registryPort}/transwarp/haproxy:tdh500
   net: host
   pid: host
   privileged: true

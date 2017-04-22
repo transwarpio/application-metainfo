@@ -8,7 +8,7 @@ dependencies:
 - name: SEARCH
   minVersion: 1.0-tdh50
   maxVersion: 1.0-tdh50
-dockerImage: "tos/transpedia:rb50"
+dockerImage: "transwarp/transpedia:tdh500"
 roles:
 - name: TRANSPEDIA_SERVER
   friendlyName: "Transpedia Server"

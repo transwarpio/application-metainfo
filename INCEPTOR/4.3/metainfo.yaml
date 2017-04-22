@@ -4,7 +4,7 @@ version: 4.3-tdh50
 global: false
 namePrefix: Inceptor
 friendlyName: "Inceptor"
-dockerImage: "tos/inceptor:trunk"
+dockerImage: "transwarp/inceptor:tdh500"
 dependencies:
   - name: ZOOKEEPER
     minVersion: 3.4.5-tdh50

@@ -8,7 +8,7 @@
 <#assign etcd_initial_servers+=["ETCD"+ tos_master.id + "=http://" + tos_master.hostname + ":" + service['tos.master.leader.elect.port']]>
 </#list>
 etcd:
-  image: ${registryServer}:${registryPort}/jenkins/etcd:live
+  image: ${registryServer}:${registryPort}/transwarp/etcd:tdh500
   net: host
   privileged: true
   restart: always
@@ -30,7 +30,7 @@ etcd:
   - DATA_DIR=/var/etcd/data
 
 apiserver:
-  image: ${registryServer}:${registryPort}/jenkins/hyperkube:tos1.2
+  image: ${registryServer}:${registryPort}/transwarp/hyperkube:tdh500
   net: host
   privileged: true
   restart: always
@@ -63,7 +63,7 @@ apiserver:
   - LOG_DIR=/var/log/kubernetes/apiserver
 
 controller:
-  image: ${registryServer}:${registryPort}/jenkins/hyperkube:tos1.2
+  image: ${registryServer}:${registryPort}/transwarp/hyperkube:tdh500
   net: host
   privileged: true
   restart: always
@@ -87,7 +87,7 @@ controller:
   - PORT=${service['tos.master.controller.port']}
 
 scheduler:
-  image: ${registryServer}:${registryPort}/jenkins/hyperkube:tos1.2
+  image: ${registryServer}:${registryPort}/transwarp/hyperkube:tdh500
   net: host
   privileged: true
   restart: always

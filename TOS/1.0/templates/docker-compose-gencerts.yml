@@ -3,7 +3,7 @@
   registryPort=dependencies.REGISTRY['registry.port']
 >
 generatecerts:
-  image: ${registryServer}:${registryPort}/jenkins/gencerts:live
+  image: ${registryServer}:${registryPort}/transwarp/gencerts:tdh500
   net: host
   volumes:
     - /srv/kubernetes:/srv/kubernetes

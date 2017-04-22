@@ -4,7 +4,7 @@ version: 2.5.2-tdh50
 global: false
 namePrefix: HDFS
 friendlyName: HDFS
-dockerImage: "tos/hdfs:trunk"
+dockerImage: "transwarp/hdfs:tdh500"
 user: hdfs
 dependencies:
   - name: ZOOKEEPER

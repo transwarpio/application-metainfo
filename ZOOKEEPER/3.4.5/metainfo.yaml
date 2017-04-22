@@ -6,7 +6,7 @@ namePrefix: ZooKeeper
 friendlyName: "ZooKeeper"
 dependencies: []
 packages: ["zookeeper"]
-dockerImage: "tos/zookeeper:trunk"
+dockerImage: "transwarp/zookeeper:tdh500"
 user: zookeeper
 roles:
 - name: ZOOKEEPER

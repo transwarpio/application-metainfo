@@ -21,7 +21,7 @@ roles:
 - name: DISCOVER_RSTUDIO
   friendlyName: "Discover Rstudio"
   labelPrefix: "discover-rstudio"
-  dockerImage: "tos/rstudio:rb50"
+  dockerImage: "transwarp/rstudio:tdh500"
   linkExpression: "http://${localhostname}:8787/"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete"]
@@ -83,7 +83,7 @@ roles:
 - name: DISCOVER_NOTEBOOK
   friendlyName: "Discover Notebook"
   labelPrefix: "discover-notebook"
-  dockerImage: "tos/notebook:rb50"
+  dockerImage: "transwarp/notebook:tdh500"
   category: MASTER
   linkExpression: "http://${localhostname}:${service['zeppelin.server.port']}/"
   env:

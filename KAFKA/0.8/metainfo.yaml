@@ -9,7 +9,7 @@ dependencies:
     minVersion: 3.4.5-tdh50
     maxVersion: 3.4.5-tdh50
     optional: false
-dockerImage: "tos/kafka-server:trunk"
+dockerImage: "transwarp/kafka:tdh500"
 user: kafka
 roles:
 - name: KAFKA_SERVER
