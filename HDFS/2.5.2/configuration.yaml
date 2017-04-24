@@ -87,8 +87,8 @@
   groups: []
   visibility: READ_WRITE
 - name: ha.zookeeper.parent-znode
-  recommendExpression: /${sid}-ha
-  defaultValue: /hadoop-ha
+  recommendExpression: /${service.sid}-ha
+  defaultValue: null
   valueType: ABSOLUTE_PATH
   scope: !<ServiceLevel> {}
   onDeps: []

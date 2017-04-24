@@ -1,0 +1,72 @@
+---
+name: SQOOP
+version: 2-tdh50
+global: false
+namePrefix: Sqoop
+friendlyName: Sqoop
+dockerImage: "tos/sqoop2:thd500"
+dependencies:
+  - name: HDFS
+    minVersion: 2.5.2-tdh50
+    maxVersion: 2.5.2-tdh50
+    optional: false
+  - name: YARN
+    minVersion: 2.5.2-tdh50
+    maxVersion: 2.5.2-tdh50
+    optional: false
+roles:
+- name: SQOOP
+  friendlyName: "Sqoop"
+  labelPrefix: "sqoop"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete"]
+  env:
+  - name: SQOOP_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths:
+  - mountPath: /etc/${service.sid}/conf
+    hostPath: /etc/${service.sid}/conf
+    name: conf
+  - mountPath: /var/log/${service.sid}
+    hostPath: /var/log/${service.sid}
+    name: log
+  - mountPath: /etc/${dependencies.HDFS.sid}/conf
+    hostPath: /etc/${dependencies.HDFS.sid}/conf
+    name: hdfs
+  - mountPath: /etc/hadoop/conf
+    hostPath: /etc/${dependencies.YARN.sid}/conf
+    name: yarn
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}"]
+        mode: "755"
+
+firstWizardConfigs:
+- sqoop.http.port
+- sqoop.admin.port
+- sqoop.server.memory
+
+pages:
+- roles
+- configuration
+- operation
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 10
+  method: !<Builtin> {}

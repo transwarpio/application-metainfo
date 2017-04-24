@@ -1,0 +1,80 @@
+- name: oozie.service.AuthorizationService.security.enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["oozie-site.xml"]
+  visibility: READ_WRITE
+
+- name: oozie.credentials.credentialclasses
+  recommendExpression: " "
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["oozie-site.xml"]
+  visibility: READ_WRITE
+
+- name: oozie.service.coord.normal.default.timeout
+  recommendExpression: 120
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["oozie-site.xml"]
+  visibility: READ_WRITE
+
+- name: oozie.service.ActionService.executor.ext.classes
+  recommendExpression: org.apache.oozie.action.email.EmailActionExecutor,org.apache.oozie.action.hadoop.HiveActionExecutor,org.apache.oozie.action.hadoop.ShellActionExecutor,org.apache.oozie.action.hadoop.SqoopActionExecutor,org.apache.oozie.action.hadoop.DistcpActionExecutor
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["oozie-site.xml"]
+  visibility: READ_WRITE
+
+- name: oozie.service.SchemaService.wf.ext.schemas
+  recommendExpression: shell-action-0.1.xsd,shell-action-0.2.xsd,shell-action-0.3.xsd,email-action-0.1.xsd,email-action-0.2.xsd,hive-action-0.2.xsd,hive-action-0.3.xsd,hive-action-0.4.xsd,hive-action-0.5.xsd,sqoop-action-0.2.xsd,sqoop-action-0.3.xsd,sqoop-action-0.4.xsd,ssh-action-0.1.xsd,ssh-action-0.2.xsd,distcp-action-0.1.xsd,distcp-action-0.2.xsd,oozie-sla-0.1.xsd,oozie-sla-0.2.xsd
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["oozie-site.xml"]
+  visibility: READ_WRITE
+
+- name: oozie.http.port
+  recommendExpression: 11000
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: oozie.server.memory
+  recommendExpression: 1024
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: oozie.admin.port
+  recommendExpression: 11001
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: oozie.https.port
+  recommendExpression: 11443
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

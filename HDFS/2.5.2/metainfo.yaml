@@ -12,6 +12,56 @@ dependencies:
     maxVersion: 3.4.5-tdh50
     optional: false
 roles:
+  - name: HDFS_HTTPFS
+    friendlyName: "Httpfs"
+    labelPrefix: "hadoop-hdfs-httpfs"
+    dockerImage: "tos/httpfs:trunk"
+    category: SLAVE
+    frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+    env:
+    - name: HDFS_HA_NAMENODE_SERVICE
+      value: |
+        <#assign namenodes=[]>
+        <#if service.nameservices?? && service.nameservices?size gt 0>
+          <#list service.nameservices as ns>
+            <#list service[ns]['HDFS_NAMENODE'] as namenode>
+              <#assign namenodes += [namenode.hostname]>
+            </#list>
+          </#list>
+        <#else>
+          <#assign namenodes += service.roles.HDFS_NAMENODE[0]['hostname']>
+        </#if>
+        ${namenodes?join(",")}
+    - name: HADOOP_CONF_DIR
+      value: /etc/${service.sid}/conf
+    - name: HTTPFS_LOG_DIR
+      value: /var/log/httpfs
+    mountPaths:
+    - mountPath: /etc/${service.sid}/conf
+      hostPath: /etc/${service.sid}/conf
+      name: hdfs
+    - mountPath: /var/log/httpfs
+      hostPath: /var/log/httpfs
+      name: log
+    - mountPath: /var/run/${service.sid}
+      hostPath: /var/run/${service.sid}
+      name: hdfssocketdir
+    - mountPath: /etc/transwarp/conf
+      hostPath: /etc/transwarp/conf
+      name: hosts
+    summaryPolicy: ALL
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations:
+    - type: Install
+      directives:
+      - directive: !<mkdirs>
+          paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
+          mode: "755"
   - name: HDFS_DATANODE
     friendlyName: "Data Node"
     labelPrefix: "hadoop-hdfs-datanode"

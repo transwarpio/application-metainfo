@@ -41,8 +41,6 @@
     <@property "hive.exec.scratchdir" scratchdir/>
     <#assign uris="thrift://" + service.roles.INCEPTOR_METASTORE[0]['hostname'] + ":" + service['hive.metastore.port']>
     <@property "hive.metastore.uris" uris/>
-    <#assign dir="hdfs://" + dependencies.HDFS.nameservices[0] + "/" + service.sid + "/user/hive/warehouse">
-    <@property "hive.metastore.warehouse.dir" dir/>
     <#assign tracker=service.roles.INCEPTOR_METASTORE[0]['hostname'] + ":8031">
     <@property "mapred.job.tracker" tracker/>
     <#assign connectionURL="jdbc:mysql://" + service.roles.INCEPTOR_MYSQL[0]['hostname'] + ":" + service['mysql.port'] + "/metastore_" + service.sid + "?createDatabaseIfNotExist=false&amp;characterEncoding=UTF-8">
