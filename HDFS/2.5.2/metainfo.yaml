@@ -15,7 +15,7 @@ roles:
   - name: HDFS_HTTPFS
     friendlyName: "Httpfs"
     labelPrefix: "hadoop-hdfs-httpfs"
-    dockerImage: "tos/httpfs:trunk"
+    dockerImage: "transwarp/httpfs:tdh500"
     category: SLAVE
     frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
     env:

@@ -4,7 +4,7 @@ version: 3.8.1-tdh50
 global: false
 namePrefix: Hue
 friendlyName: Hue
-dockerImage: "tos/hue:hue"
+dockerImage: "transwarp/hue:tdh500"
 dependencies:
   - name: ZOOKEEPER
     minVersion: 3.4.5-tdh50

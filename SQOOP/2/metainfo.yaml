@@ -4,7 +4,7 @@ version: 2-tdh50
 global: false
 namePrefix: Sqoop
 friendlyName: Sqoop
-dockerImage: "tos/sqoop2:thd500"
+dockerImage: "transwarp/sqoop:tdh500"
 dependencies:
   - name: HDFS
     minVersion: 2.5.2-tdh50
