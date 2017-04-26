@@ -1,0 +1,93 @@
+---
+name: RUBIK
+version: 1.0-tdh50
+global: false
+namePrefix: Rubik
+friendlyName: Rubik
+dockerImage: "transwarp/rubik:tdh500"
+dependencies:
+  - name: TXSQL
+    minVersion: 1.0-tdh500
+    maxVersion: 1.0-tdh500
+    optional: false
+#  - name: GUARDIAN
+#    minVersion: 2.5.2-tdh50
+#    maxVersion: 2.5.2-tdh50
+#    optional: true
+  - name: NOTIFICATION
+    minVersion: 1.0-tdh500
+    maxVersion: 1.0-tdh500
+    preferred: true
+    optional: true
+roles:
+- name: RUBIK_SERVER
+  friendlyName: "Rubik Server"
+  labelPrefix: "rubik-server"
+  linkExpression: "http://${localhostname}:${service['designer.server.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop"]
+  env:
+  - name: RUBIK_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths:
+  - mountPath: /etc/${service.sid}/conf
+    hostPath: /etc/${service.sid}/conf
+    name: conf
+  - mountPath: /var/log/${service.sid}
+    hostPath: /var/log/${service.sid}
+    name: log
+  - mountPath: /var/lib/Rubik
+    hostPath: /var/lib/${service.sid}
+    name: libdir
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}"]
+        mode: "755"
+
+stages:
+  - type: Config
+    taskGroups:
+    - !<Create-Database>
+      dbPrefix: rubik
+      dbUserConfig: javax.jdo.option.ConnectionUserName
+      dbPasswordConfig: javax.jdo.option.ConnectionPassword
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Role>
+      roleType: "RUBIK_SERVER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+
+product: Studio
+
+firstWizardConfigs:
+- designer.server.port
+- max.memory.size
+- javax.jdo.option.ConnectionUserName
+- javax.jdo.option.ConnectionPassword
+
+pages:
+- roles
+- configuration
+- operation
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 10
+  method: !<Builtin> {}

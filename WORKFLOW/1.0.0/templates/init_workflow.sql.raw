@@ -1,0 +1,267 @@
+DROP TABLE IF EXISTS workflow_edit_log;
+DROP TABLE IF EXISTS workflow_execution, workflow_execution_history;
+DROP TABLE IF EXISTS workflow_dim_execution_mode, workflow_dim_execution_status;
+DROP TABLE IF EXISTS workflow_task, workflow_task_history, workflow_task_dependency;
+DROP TABLE IF EXISTS workflow_dim_deploy_type, workflow_dim_task_type;
+DROP TABLE IF EXISTS workflow_domain, workflow_project;
+DROP TABLE IF EXISTS workflow_user_favorite;
+
+SET SESSION SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';
+
+-- EDIT_LOG: 用于记录用户的所有修改信息
+CREATE TABLE workflow_edit_log (
+  id            BIGINT   NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  operationType SMALLINT NOT NULL,
+  objectType    SMALLINT NOT NULL,
+  objectId      BIGINT   NOT NULL,
+  referenceToken varchar(128) not null,
+  content       TEXT,
+  createTime    DATETIME(3) NOT NULL DEFAULT current_timestamp(3)
+) charset=utf8;
+
+CREATE INDEX idx_workflow_edit_log_createTime ON workflow_edit_log (createTime);
+CREATE INDEX idx_workflow_edit_log_object ON workflow_edit_log (objectType, objectId);
+
+-- EXECUTION：用于记录所有任务执行的最新状态
+CREATE TABLE workflow_execution (
+  id               BIGINT   NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  taskId           BIGINT   NOT NULL DEFAULT 0,
+  scheduleTime     DATETIME(3) NOT NULL,
+  taskScheduleTime DATETIME(3),
+  retryNum         INT      NOT NULL,
+  originalExecutionId BIGINT NOT NULL DEFAULT 0,
+  executionMode    SMALLINT NOT NULL DEFAULT 0,
+  executeUser      VARCHAR(100),
+  status           SMALLINT,
+  retValue         INT,
+  retMsg           TEXT,
+  startTime        DATETIME(3),
+  endTime          DATETIME(3),
+  executeHost      varchar(100),
+  logs             TEXT,
+  pluginName       varchar(200),
+  warnTimeout      BIGINT NOT NULL DEFAULT 0,
+  executeTimeout   BIGINT NOT NULL DEFAULT 0,
+  errorName        varchar(200),
+  createTime       DATETIME(3) not null default current_timestamp(3),
+  lastUpdateTime   DATETIME(3) on update current_timestamp(3)
+) charset=utf8;
+
+CREATE INDEX idx_workflow_execution_taskId_scheduleTime ON workflow_execution (taskId, scheduleTime);
+CREATE INDEX idx_workflow_execution_startTime ON workflow_execution (startTime);
+
+-- EXECUTION_HISTORY: 用于记录所有任务执行的历史日志
+CREATE TABLE workflow_execution_history (
+  histId           BIGINT   NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  executionId      BIGINT   NOT NULL,
+  taskId           BIGINT   NOT NULL DEFAULT 0,
+  scheduleTime     DATETIME(3) NOT NULL,
+  taskScheduleTime DATETIME(3),
+  retryNum         INT      NOT NULL,
+  originalExecutionId BIGINT NOT NULL DEFAULT 0,
+  executionMode    SMALLINT NOT NULL DEFAULT 0,
+  executeUser      VARCHAR(100),
+  status           SMALLINT,
+  retValue         INT,
+  retMsg           TEXT,
+  startTime        DATETIME(3),
+  endTime          DATETIME(3),
+  executeHost      varchar(100),
+  logs             TEXT,
+  pluginName       varchar(200),
+  warnTimeout      BIGINT NOT NULL DEFAULT 0,
+  executeTimeout   BIGINT NOT NULL DEFAULT 0,
+  errorName        varchar(200),
+  createTime       DATETIME(3) NOT NULL  DEFAULT current_timestamp(3)
+) charset=utf8;
+
+CREATE INDEX idx_workflow_execution_history_taskId_scheduleTime ON workflow_execution_history (taskId, scheduleTime);
+CREATE INDEX idx_workflow_execution_history_createTime on workflow_execution_history (createTime);
+
+-- DIM_EXECUTION_MODE: 维度表-执行模式
+CREATE TABLE workflow_dim_execution_mode (
+  executionModeId   SMALLINT     NOT NULL PRIMARY KEY,
+  executionModeName VARCHAR(100) NOT NULL,
+  executionModeDesc VARCHAR(500) NOT NULL DEFAULT '',
+  createTime        DATETIME(3)              DEFAULT current_timestamp(3),
+  lastUpdateTime    DATETIME(3) on update current_timestamp(3)
+) charset=utf8;
+
+INSERT INTO workflow_dim_execution_mode (executionModeId, executionModeName, executionModeDesc)
+VALUES
+  (0, 'SYSTEM', 'Automatically triggered by system'),
+  (1, 'MANUAL', 'Manually started.'),
+  (2, 'RECOVER','Recovery'),
+  (3, 'DEBUG', 'Debug');
+
+-- DIM_EXECUTION_STATUS: 维度表-执行状态
+CREATE TABLE workflow_dim_execution_status (
+  executionStatusId   SMALLINT     NOT NULL PRIMARY KEY,
+  executionStatusName VARCHAR(100) NOT NULL,
+  executionStatusDesc VARCHAR(500) NOT NULL DEFAULT '',
+  createTime          DATETIME(3)              DEFAULT current_timestamp(3),
+  lastUpdateTime      DATETIME(3) on update current_timestamp(3)
+) charset=utf8;
+
+INSERT INTO workflow_dim_execution_status (executionStatusId, executionStatusName, executionStatusDesc)
+VALUES
+  (0, 'PENDING',      'Pending, not started'                                    ),
+  (1, 'DISPATCHING',  'Started, dispatching the execution to executor'          ),
+  (2, 'RUNNING',      'Running'                                                 ),
+  (3, 'COMPLETED',    'Ended successfully'                                      ),
+  (4, 'ERROR',        'Failed'                                                  ),
+  (5, 'SKIPPED',      'Skipped because task is not enabled or manually skipped' ),
+  (6, 'CANCELLED',    'Manually cancelled'                                      );
+
+
+-- TASK: 任务表，包含任务类型，任务配置，依赖关系，上级任务，所有者等信息
+CREATE TABLE workflow_task (
+  id             BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name           VARCHAR(50)  NOT NULL DEFAULT '',
+  description    VARCHAR(500),
+  taskType       SMALLINT     NOT NULL DEFAULT 0,
+  configuration  TEXT,
+  precondition   TEXT,
+  cronPattern    VARCHAR(100),
+  parentTaskId   BIGINT       NOT NULL DEFAULT 0,
+  enabled        BOOLEAN      NOT NULL DEFAULT FALSE,
+  graphId        BIGINT       NOT NULL DEFAULT 0,
+  dependencies   VARCHAR(1000),
+  sourceTaskId   BIGINT       NOT NULL DEFAULT 0,
+  owner          VARCHAR(100) NOT NULL DEFAULT 'system',
+  deployType     SMALLINT     NOT NULL DEFAULT 0,
+  priority       SMALLINT     NOT NULL default 0,
+  referenceToken VARCHAR(500),
+  appVersion     varchar(100) NOT NULL default '1.0',
+  pluginName     varchar(100) NOT NULL default '',
+  projectId      BIGINT       NOT NULL default 0,
+  domainId       BIGINT       NOT NULL default 0,
+  parameters     TEXT,
+  createTime     DATETIME(3)              DEFAULT current_timestamp(3),
+  lastUpdateTime DATETIME(3) ON UPDATE current_timestamp(3)
+) charset=utf8;
+
+CREATE INDEX idx_workflow_task_parentTaskId ON workflow_task (parentTaskId);
+CREATE INDEX idx_workflow_task_sourceTaskId ON workflow_task (sourceTaskId);
+CREATE INDEX idx_workflow_task_projectId_taskType ON workflow_task (projectId, taskType);
+
+-- TASK_HISTORY: 任务历史日志表，保存任务所有更新信息
+CREATE TABLE workflow_task_history (
+  histId             BIGINT       NOT NULL         AUTO_INCREMENT PRIMARY KEY,
+  taskId             BIGINT       NOT NULL,
+  name               VARCHAR(50)  NOT NULL         DEFAULT '',
+  description        VARCHAR(500),
+  taskType           SMALLINT     NOT NULL         DEFAULT 0,
+  configuration      TEXT,
+  precondition       TEXT,
+  cronPattern        VARCHAR(100),
+  parentTaskId       BIGINT       NOT NULL         DEFAULT 0,
+  enabled            BOOLEAN      NOT NULL         DEFAULT FALSE,
+  graphId            BIGINT       NOT NULL         DEFAULT 0,
+  dependencies       VARCHAR(1000),
+  sourceTaskId       BIGINT       NOT NULL         DEFAULT 0,
+  owner              VARCHAR(100) NOT NULL         DEFAULT 'system',
+  deployType         SMALLINT     NOT NULL         DEFAULT 0,
+  priority           SMALLINT     NOT NULL         DEFAULT 0,
+  referenceToken     VARCHAR(500),
+  appVersion         VARCHAR(100),
+  pluginName         VARCHAR(100) NOT NULL DEFAULT '',
+  projectId          BIGINT       NOT NULL default 0,
+  domainId       BIGINT       NOT NULL default 0,
+  parameters         TEXT,
+  effectiveStartTime DATETIME(3)                      DEFAULT current_timestamp(3),
+  effectiveEndTime   DATETIME(3)                      DEFAULT '2099-12-31 23:59:59.999'
+) charset=utf8;
+
+CREATE INDEX idx_workflow_task_history_taskId ON workflow_task_history (taskId);
+CREATE INDEX idx_workflow_task_history_parent ON workflow_task_history (parentTaskId, effectiveStartTime, effectiveEndTime);
+CREATE INDEX idx_workflow_task_history_effective ON workflow_task_history (taskId, effectiveStartTime, effectiveEndTime);
+
+-- TASK_DEPENDENCY: 任务依赖关系表，
+CREATE TABLE workflow_task_dependency (
+  id bigint NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+  downstreamTaskId   BIGINT   NOT NULL,
+  upstreamTaskId     BIGINT   NOT NULL,
+  createTime     DATETIME(3)              DEFAULT current_timestamp(3),
+  lastUpdateTime DATETIME(3) ON UPDATE current_timestamp(3)
+) charset=utf8;
+
+CREATE INDEX idx_workflow_task_dependency_downstreamTaskId ON workflow_task_dependency (downstreamTaskId);
+CREATE INDEX idx_workflow_task_dependency_upstreamTaskId ON workflow_task_dependency (upstreamTaskId);
+
+-- DIM_DEPLOY_TYPE: 维度表-发布类型
+CREATE TABLE workflow_dim_deploy_type (
+  deployTypeId   SMALLINT NOT NULL PRIMARY KEY,
+  deployTypeName VARCHAR(50),
+  deployTypeDesc VARCHAR(500),
+  createTime     DATETIME(3) NOT NULL DEFAULT current_timestamp(3),
+  lastUpdateTime DATETIME(3) ON UPDATE current_timestamp(3)
+) charset=utf8;
+
+INSERT INTO workflow_dim_deploy_type (deployTypeId, deployTypeName, deployTypeDesc)
+VALUES
+  (0, 'DEV',  'Development' ),
+  (1, 'PROD', 'Production'  ),
+  (2, 'RETIRED', 'had been in PROD but now retired');
+
+-- DIM_TASK_TYPE: 维度表-任务类型
+CREATE TABLE workflow_dim_task_type (
+  taskTypeId     SMALLINT NOT NULL PRIMARY KEY,
+  taskTypeName   VARCHAR(50),
+  taskTypeDesc   VARCHAR(500),
+  createTime     DATETIME(3) NOT NULL DEFAULT current_timestamp(3),
+  lastUpdateTime DATETIME(3) ON UPDATE current_timestamp(3)
+) charset=utf8;
+
+INSERT INTO workflow_dim_task_type (taskTypeId, taskTypeName, taskTypeDesc)
+VALUES
+  (0, 'NOOP',       'No operation task, default type of new task'                   ),
+  (1, 'WORKFLOW',   'Workflow, container of a set of other tasks'                   ),
+  (2, 'CALENDER',   'Calendar, Time-based trigger containing a valid cronPattern pattern.' ),
+  (3, 'TRIGGER',    'Trigger, hold reference to another task and check progress'    ),
+  (4, 'DECISION',   'Decision, determine how to execute downstream tasks'           ),
+  (5, 'TEMPORARY',  'Temporary task, available for onetime debug and execution'     ),
+  (6, 'PLUGIN',     'Executable all defined as plugin'                              );
+
+-- DOMAIN:
+CREATE TABLE workflow_domain (
+  id  bigint not null AUTO_INCREMENT PRIMARY KEY ,
+  name varchar(50) not null default '',
+  description varchar(500),
+  createTime     DATETIME(3) NOT NULL DEFAULT current_timestamp(3),
+  lastUpdateTime DATETIME(3) ON UPDATE current_timestamp(3),
+  unique key workflow_domain_name (name)
+) charset=utf8;
+
+insert into workflow_domain (id, name, description)
+values
+  (0, 'default', 'default domain');
+
+-- PROJECT:
+CREATE TABLE workflow_project (
+  id bigint not null AUTO_INCREMENT PRIMARY KEY ,
+  domainId bigint not null default 0,
+  name varchar(50) not null default '',
+  description varchar(500),
+  createTime     DATETIME(3) NOT NULL DEFAULT current_timestamp(3),
+  lastUpdateTime DATETIME(3) ON UPDATE current_timestamp(3),
+  unique key workflow_project_domainId_name (domainId, name)
+) charset=utf8;
+
+insert into workflow_project (id, domainId, name, description)
+values
+  (0, 0, 'default', 'default project');
+
+-- USER_FAVORITE
+CREATE TABLE workflow_user_favorite (
+  id bigint not null AUTO_INCREMENT PRIMARY KEY,
+  userName varchar(100) not null default '',
+  favorType smallint not null default 1,
+  favorId bigint not null default 0,
+  createTime DATETIME(3) NOT NULL DEFAULT current_timestamp(3),
+  lastUpdateTime DATETIME(3) ON UPDATE current_timestamp(3)
+);
+
+CREATE INDEX idx_workflow_user_favorite on workflow_user_favorite (userName, favorType);
+
+SET SESSION SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';

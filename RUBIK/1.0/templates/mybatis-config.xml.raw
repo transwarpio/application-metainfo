@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+  <properties resource="db.properties"/>
+
+  <settings>
+    <setting name="mapUnderscoreToCamelCase" value="true"/>
+  </settings>
+
+  <typeAliases>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.common.BasicInfo" alias="BasicInfo"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.reader.generic.GenericReaderType"
+               alias="GenericReaderType"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.reader.generic.GenericReader"
+               alias="GenericReader"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.reader.generic.GenericCSVReader"
+               alias="GenericCSVReaderConfig"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.reader.generic.GenericFWCReader"
+               alias="GenericFWCReaderConfig"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.reader.generic.GenericInceptorReader"
+               alias="GenericInceptorReaderConfig"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.reader.generic.GenericJDBCReader"
+               alias="GenericJDBCReaderConfig"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.reader.generic.GenericStreamReader"
+               alias="GenericStreamReaderConfig"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.reader.dataloop.DataloopReaderType"
+               alias="DataloopReaderType"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.reader.dataloop.DataloopReader"
+               alias="DataloopReader"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.reader.dataloop.DataloopTableDetail"
+               alias="DataloopTableDetail"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.reader.dataloop.DataloopShareplexReader"
+               alias="DataloopShareplexReaderConfig"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.reader.dataloop.DataloopOggReader"
+               alias="DataloopOggReaderConfig"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.reader.dataloop.DataloopDataStageReader"
+               alias="DataloopDataStageReaderConfig"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.common.Encoding" alias="Encoding"/>
+
+
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.writer.generic.GenericWriter"
+               alias="GenericWriter"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.writer.generic.GenericInceptorWriter"
+               alias="GenericInceptorWriter"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.writer.generic.GenericPartitionableAndBucketableWriter"
+               alias="GenericPartitionableAndBucketableWriter"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.writer.generic.GenericWriterType"
+               alias="GenericWriterType"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.writer.generic.CSVWriter"
+               alias="CSVWriter"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.writer.generic.ElasticWriter"
+               alias="ElasticWriter"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.writer.generic.FWCWriter"
+               alias="FWCWriter"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.writer.generic.HbaseWriter"
+               alias="HbaseWriter"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.writer.generic.HyperdriveWriter"
+               alias="HyperdriveWriter"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.writer.generic.HolodeskWriter"
+               alias="HolodeskWriter"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.writer.generic.ORCWriter"
+               alias="ORCWriter"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.writer.generic.ORCTransactionWriter"
+               alias="ORCTransactionWriter"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.writer.generic.ORCTransactionSyncWriter"
+               alias="ORCTransactionSyncWriter"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.writer.generic.TextWriter"
+               alias="TextWriter"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.writer.generic.WriterMode" alias="WriterMode"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.writer.generic.StorageHandlerType"
+               alias="StorageHandlerType"/>
+
+
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.transformer.generic.GenericTransformerType"
+               alias="GenericTransformerType"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.transformer.generic.GenericTransformer"
+               alias="GenericTransformer"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.transformer.generic.JoinType" alias="JoinType"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.transformer.generic.JoinTransformer"
+               alias="JoinTransformerConfig"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.transformer.generic.AggregationTransformer"
+               alias="AggregationTransformerConfig"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.transformer.generic.ColumnMapTransformer"
+               alias="ColumnMapTransformerConfig"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.transformer.generic.ExceptTransformer"
+               alias="ExceptTransformerConfig"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.transformer.generic.FilterTransformer"
+               alias="FilterTransformerConfig"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.transformer.generic.IntersectTransformer"
+               alias="IntersectTransformerConfig"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.transformer.generic.RowSizeLimiterTransformer"
+               alias="RowSizeLimiterTransformerConfig"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.transformer.generic.TableFilterTransformer"
+               alias="TableFilterTransformerConfig"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.transformer.generic.UnionTransformer"
+               alias="UnionTransformerConfig"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.transformer.generic.WindowSlideTransformer"
+               alias="WindowSlideTransformerConfig"/>
+
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.common.Revision" alias="Revision"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.other.Variable" alias="Variable"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.other.JDBCConnection" alias="JDBCConnection"/>
+
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.common.Domain" alias="TDTDomain"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.common.Project" alias="TDTProject"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.common.Position" alias="Position"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.common.Connectable" alias="Connectable"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.common.TDTComponent" alias="TDTComponent"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.connection.Connection" alias="Connection"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.flow.Dataflow" alias="Dataflow"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.transporter.job.DataflowJob" alias="DataflowJob"/>
+
+
+    <typeAlias type="io.transwarp.studio.persistence.model.notification.common.Notification" alias="Notification"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.notification.common.NotificationLevel"
+               alias="NotificationLevel"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.notification.common.Notification"
+               alias="Notification"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.notification.common.RecipientNotification"
+               alias="RecipientNotification"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.tag.common.impl.StandardTag" alias="StandardTag"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.tag.common.impl.StandardTagModel" alias="StandardTagModel"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.ticket.common.Queue" alias="Queue"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.ticket.common.Ticket" alias="Ticket"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.ticket.common.FollowUp" alias="FollowUp"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.ticket.common.TicketChange" alias="TicketChange"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.ticket.common.Attachment" alias="Attachment"/>
+    <typeAlias type="io.transwarp.studio.persistence.model.ticket.common.TicketDependency" alias="TicketDependency"/>
+    <package name="io.transwarp.studio.persistence.model.cubedesigner"/>
+    <package name="io.transwarp.studio.persistence.model.studio"/>
+    <package name="io.transwarp.studio.persistence.model.governor"/>
+  </typeAliases>
+
+  <plugins>
+    <plugin interceptor="com.github.pagehelper.PageHelper">
+      <property name="offsetAsPageNum" value="true"/>
+      <property name="reasonable" value="false"/>
+      <property name="supportMethodArguments" value="true"/>
+    </plugin>
+  </plugins>
+
+  <environments default="dev">
+    <environment id="dev">
+      <transactionManager type="JDBC"></transactionManager>
+      <dataSource type="POOLED">
+        <property name="driver" value="${db.driver}"/>
+        <property name="url" value="${db.url}"/>
+        <property name="username" value="${db.user}"/>
+        <property name="password" value="${db.password}"/>
+      </dataSource>
+    </environment>
+  </environments>
+
+  <mappers>
+    <package name="io.transwarp.studio.persistence.mapper.notification"/>
+    <package name="io.transwarp.studio.persistence.mapper.tag"/>
+    <package name="io.transwarp.studio.persistence.mapper.ticket"/>
+    <package name="io.transwarp.studio.persistence.mapper.transporter"/>
+    <package name="io.transwarp.studio.persistence.mapper.cubedesigner"/>
+    <package name="io.transwarp.studio.persistence.mapper.studio"/>
+    <package name="io.transwarp.studio.persistence.mapper.governor"/>
+  </mappers>
+</configuration>

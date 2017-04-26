@@ -94,7 +94,7 @@ roles:
         to: "/etc/${service.sid}/conf/action-conf/hive-site.xml"
 
 firstWizardConfigs:
-- oozie.hhtp.port
+- oozie.http.port
 
 pages:
 - roles

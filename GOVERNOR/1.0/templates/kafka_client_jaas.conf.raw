@@ -1,0 +1,16 @@
+KafkaClient {
+  com.sun.security.auth.module.Krb5LoginModule required
+  useKeyTab=true
+  storeKey=true
+  keyTab="/etc/kafka1/kafka.keytab"
+  principal="kafka/${hostname}@TDH";
+};
+
+// ZooKeeper client authentication
+Client {
+  com.sun.security.auth.module.Krb5LoginModule required
+  useKeyTab=true
+  storeKey=true
+  keyTab="/etc/kafka1/kafka.keytab"
+  principal="kafka/${hostname}@TDH";
+};

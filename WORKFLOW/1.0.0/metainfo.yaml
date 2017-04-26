@@ -1,0 +1,89 @@
+---
+name: WORKFLOW
+version: 1.0.0-tdh50
+global: false
+namePrefix: Workflow
+friendlyName: Workflow
+dockerImage: "transwarp/workflow:tdh500"
+dependencies:
+  - name: ZOOKEEPER
+    minVersion: 3.4.5-tdh50
+    maxVersion: 3.4.5-tdh50
+    optional: false
+  - name: TXSQL
+    minVersion: 1.0-tdh500
+    maxVersion: 1.0-tdh500
+    optional: false
+#  - name: GUARDIAN
+#    minVersion: 1.0-tdh500
+#    maxVersion: 1.0-tdh500
+#    optional: true
+roles:
+- name: WORKFLOW_SERVER
+  friendlyName: "Workflow Server"
+  labelPrefix: "workflow-server"
+  linkExpression: "http://${localhostname}:${service['workflow.desktop.http.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop"]
+  env:
+  - name: WORKFLOW_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths:
+  - mountPath: /etc/${service.sid}/conf
+    hostPath: /etc/${service.sid}/conf
+    name: conf
+  - mountPath: /var/log/workflow
+    hostPath: /var/log/${service.sid}
+    name: log
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [2]}
+  suggestion:
+  - criteria: !<Range> {"min": 2}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}"]
+        mode: "755"
+
+stages:
+  - type: Config
+    taskGroups:
+    - !<Create-Database>
+      dbPrefix: workflow
+      dbUserConfig: javax.jdo.option.ConnectionUserName
+      dbPasswordConfig: javax.jdo.option.ConnectionPassword
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Role>
+      roleType: "WORKFLOW_SERVER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+
+product: Studio
+
+firstWizardConfigs:
+- workflow.http.port
+- javax.jdo.option.ConnectionUserName
+- javax.jdo.option.ConnectionPassword
+
+pages:
+- roles
+- configuration
+- operation
+- security
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 10
+  method: !<Builtin> {}

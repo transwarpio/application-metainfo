@@ -2,8 +2,8 @@
 name: SLIPSTREAM
 version: 4.5-tdh50
 global: false
-namePrefix: SlipStream
-friendlyName: "SlipStream"
+namePrefix: Slipstream
+friendlyName: "Slipstream"
 dockerImage: "transwarp/inceptor:tdh500"
 dependencies:
   - name: ZOOKEEPER

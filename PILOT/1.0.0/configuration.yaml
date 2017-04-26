@@ -1,0 +1,26 @@
+- name: pilot.desktop.http.port
+  recommendExpression: 8086
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: javax.jdo.option.ConnectionUserName
+  recommendExpression: pilotuser
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: javax.jdo.option.ConnectionPassword
+  recommendExpression: password
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: PASSWORD

@@ -82,7 +82,7 @@ roles:
         mode: "755"
 
 firstWizardConfigs:
-- spark.master.webui.port
+- hue.desktop.http.port
 
 pages:
 - roles

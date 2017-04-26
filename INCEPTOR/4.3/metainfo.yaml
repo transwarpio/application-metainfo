@@ -212,6 +212,8 @@ firstWizardConfigs:
 - hive.metastore.port
 - ngmr.cache.size
 - ngmr.fastdisk.size
+- javax.jdo.option.ConnectionUserName
+- javax.jdo.option.ConnectionPassword
 
 pages:
 - summary

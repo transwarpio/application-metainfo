@@ -33,6 +33,11 @@ roles:
     - directive: !<docker-compose>
         action: Stop
         file: "/etc/${service.sid}/conf/docker-compose-guardian.yml"
+  - type: Delete
+    directives:
+    - directive: !<docker-compose>
+        action: Stop
+        file: "/etc/${service.sid}/conf/docker-compose-guardian.yml"
 
 firstWizardConfigs:
 - guardian.server.port

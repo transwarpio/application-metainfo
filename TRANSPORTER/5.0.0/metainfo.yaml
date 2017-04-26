@@ -1,0 +1,112 @@
+---
+name: TRANSPORTER
+version: 5.0.0-tdh50
+global: false
+namePrefix: Transporter
+friendlyName: Transwarp Data Transporter
+dockerImage: "transwarp/tdt:tdh500"
+dependencies:
+  - name: HDFS
+    minVersion: 2.5.2-tdh50
+    maxVersion: 2.5.2-tdh50
+    optional: false
+  - name: INCEPTOR
+    minVersion: 4.3-tdh50
+    maxVersion: 4.3-tdh50
+    optional: false
+  - name: TXSQL
+    minVersion: 1.0-tdh500
+    maxVersion: 1.0-tdh500
+    optional: false
+roles:
+- name: TDT_SERVER
+  friendlyName: "Transporter Server"
+  labelPrefix: "transporter-server"
+  linkExpression: "http://${localhostname}:${service['tdt.server.thrift.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop"]
+  env:
+  - name: TDT_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths:
+  - mountPath: /etc/${service.sid}/conf
+    hostPath: /etc/${service.sid}/conf
+    name: conf
+  - mountPath: /var/log/${service.sid}
+    hostPath: /var/log/${service.sid}
+    name: log
+  - mountPath: /etc/${dependencies.HDFS.sid}/conf
+    hostPath: /etc/${dependencies.HDFS.sid}/conf
+    name: hdfs
+  - mountPath: /etc/${dependencies.INCEPTOR.sid}/conf
+    hostPath: /etc/${dependencies.INCEPTOR.sid}/conf
+    name: inceptor
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}", "/etc/${service.sid}/conf/hadoop"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
+        to: "/etc/${service.sid}/conf/hadoop/hdfs-site.xml"
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
+        to: "/etc/${service.sid}/conf/hadoop/core-site.xml"
+
+stages:
+  - type: Config
+    taskGroups:
+    - !<Create-Database>
+      dbPrefix: tdt
+      dbUserConfig: tdt.jdbc.user.name
+      dbPasswordConfig: tdt.jdbc.password
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Role>
+      roleType: "TDT_SERVER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+  - type: Bootstrap
+    taskGroups:
+    - !<Create-Database-in-Inceptor>
+      summaryPolicy: ALL
+      timeoutMinutes: 5
+      dbNames: ["tdt", "tdt_results"]
+
+product: Studio
+
+firstWizardConfigs:
+- tdt.server.thrift.port
+- tdt.jdbc.driver.class
+- tdt.server.thrift.bind.host
+- tdt.jdbc.user.name
+- tdt.jdbc.password
+
+pages:
+- roles
+- configuration
+- operation
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 10
+  method: !<Builtin> {}

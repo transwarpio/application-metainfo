@@ -1,0 +1,1780 @@
+-- -----------------------------------------------------
+-- Table `tdt_writer`
+-- -----------------------------------------------------
+SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE IF EXISTS `tdt_writer` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_writer` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `unique_id` VARCHAR(255) NOT NULL,
+  `name` TEXT NULL DEFAULT NULL,
+  `writer_type` VARCHAR(20) NOT NULL,
+  `mode` VARCHAR(20) NOT NULL,
+  `input_column_names` TEXT NULL DEFAULT NULL,
+  `input_column_types` TEXT NULL DEFAULT NULL,
+  `unique_identify_keys` TEXT NULL DEFAULT NULL,
+  `unique_identify_types` TEXT NULL DEFAULT NULL,
+  `create_if_not_exists` TINYINT(1) NULL DEFAULT NULL,
+  `overwrite_if_exists` TINYINT(1) NULL DEFAULT NULL,
+  `description` TEXT NULL DEFAULT NULL,
+  `is_public` TINYINT(1) NOT NULL DEFAULT '0',
+  `owner` VARCHAR(50) NOT NULL,
+  `create_time` DATETIME NOT NULL,
+  `last_update_time` DATETIME NOT NULL,
+  `effective_start_time` DATETIME NOT NULL,
+  `effective_end_time` DATETIME NOT NULL,
+  `revision_id` BIGINT(20) NOT NULL,
+  `previous_revision_id` BIGINT(20) NOT NULL,
+  `input_view_name` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `unique_id` (`unique_id` ASC))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_writer_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_writer_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_writer_history` (
+  `id` BIGINT(20) NOT NULL,
+  `unique_id` VARCHAR(255) NOT NULL,
+  `name` TEXT NULL DEFAULT NULL,
+  `writer_type` VARCHAR(20) NOT NULL,
+  `mode` VARCHAR(20) NOT NULL,
+  `input_column_names` TEXT NULL DEFAULT NULL,
+  `input_column_types` TEXT NULL DEFAULT NULL,
+  `unique_identify_keys` TEXT NULL DEFAULT NULL,
+  `unique_identify_types` TEXT NULL DEFAULT NULL,
+  `create_if_not_exists` TINYINT(1) NULL DEFAULT NULL,
+  `overwrite_if_exists` TINYINT(1) NULL DEFAULT NULL,
+  `description` TEXT NULL DEFAULT NULL,
+  `is_public` TINYINT(1) NOT NULL DEFAULT '0',
+  `owner` VARCHAR(50) NOT NULL,
+  `create_time` DATETIME NOT NULL,
+  `last_update_time` DATETIME NOT NULL,
+  `effective_start_time` DATETIME NOT NULL,
+  `effective_end_time` DATETIME NOT NULL,
+  `revision_id` BIGINT(20) NOT NULL,
+  `previous_revision_id` BIGINT(20) NOT NULL,
+  `input_view_name` VARCHAR(255) NULL DEFAULT NULL,
+  UNIQUE INDEX `unique_id` (`unique_id` ASC))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+-- -----------------------------------------------------
+-- Table `tdt_dataloop_reader`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_dataloop_reader` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_dataloop_reader` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `unique_id` VARCHAR(50) NOT NULL,
+  `name` TEXT NULL DEFAULT NULL,
+  `reader_type` VARCHAR(20) NULL DEFAULT NULL,
+  `input_table_names` TEXT NULL DEFAULT NULL,
+  `description` TEXT NULL DEFAULT NULL,
+  `is_public` TINYINT(1) NOT NULL DEFAULT '0',
+  `owner` VARCHAR(50) NOT NULL,
+  `create_time` DATETIME NOT NULL,
+  `last_update_time` DATETIME NOT NULL,
+  `effective_start_time` DATETIME NOT NULL,
+  `effective_end_time` DATETIME NOT NULL,
+  `revision_id` BIGINT(20) NOT NULL,
+  `previous_revision_id` BIGINT(20) NOT NULL,
+  `location` TEXT NULL DEFAULT NULL,
+  `enable_partition` TINYINT(1) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+-- -----------------------------------------------------
+-- Table `tdt_dataloop_reader_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_dataloop_reader_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_dataloop_reader_history` (
+  `id` BIGINT(20) NOT NULL,
+  `unique_id` VARCHAR(50) NOT NULL,
+  `name` TEXT NULL DEFAULT NULL,
+  `reader_type` VARCHAR(20) NULL DEFAULT NULL,
+  `input_table_names` TEXT NULL DEFAULT NULL,
+  `description` TEXT NULL DEFAULT NULL,
+  `is_public` TINYINT(1) NOT NULL DEFAULT '0',
+  `owner` VARCHAR(50) NOT NULL,
+  `create_time` DATETIME NOT NULL,
+  `last_update_time` DATETIME NOT NULL,
+  `effective_start_time` DATETIME NOT NULL,
+  `effective_end_time` DATETIME NOT NULL,
+  `revision_id` BIGINT(20) NOT NULL,
+  `previous_revision_id` BIGINT(20) NOT NULL,
+  `enable_partition` TINYINT(1) NULL DEFAULT NULL,
+  `location` TEXT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_transformer`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_transformer` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_transformer` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `unique_id` VARCHAR(50) NOT NULL,
+  `name` TEXT NULL DEFAULT NULL,
+  `transformer_type` VARCHAR(20) NOT NULL,
+  `output_column_expressions` TEXT NULL DEFAULT NULL,
+  `output_column_types` TEXT NULL DEFAULT NULL,
+  `output_column_alias` TEXT NULL DEFAULT NULL,
+  `unique_identify_keys` TEXT NULL DEFAULT NULL,
+  `unique_identify_types` TEXT NULL DEFAULT NULL,
+  `description` TEXT NULL DEFAULT NULL,
+  `is_public` TINYINT(1) NOT NULL DEFAULT '0',
+  `owner` VARCHAR(50) NOT NULL,
+  `create_time` DATETIME NOT NULL,
+  `last_update_time` DATETIME NOT NULL,
+  `effective_start_time` DATETIME NOT NULL,
+  `effective_end_time` DATETIME NOT NULL,
+  `revision_id` BIGINT(20) NOT NULL,
+  `previous_revision_id` BIGINT(20) NOT NULL,
+  `output_view_name` VARCHAR(255) NULL DEFAULT NULL,
+  `input_column_types` TEXT NULL DEFAULT NULL,
+  `input_column_names` TEXT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_transformer_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_transformer_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_transformer_history` (
+  `id` BIGINT(20) NOT NULL,
+  `unique_id` VARCHAR(50) NOT NULL,
+  `name` TEXT NULL DEFAULT NULL,
+  `transformer_type` VARCHAR(20) NOT NULL,
+  `output_column_expressions` TEXT NULL DEFAULT NULL,
+  `output_column_types` TEXT NULL DEFAULT NULL,
+  `output_column_alias` TEXT NULL DEFAULT NULL,
+  `unique_identify_keys` TEXT NULL DEFAULT NULL,
+  `unique_identify_types` TEXT NULL DEFAULT NULL,
+  `description` TEXT NULL DEFAULT NULL,
+  `is_public` TINYINT(1) NOT NULL DEFAULT '0',
+  `owner` VARCHAR(50) NOT NULL,
+  `create_time` DATETIME NOT NULL,
+  `last_update_time` DATETIME NOT NULL,
+  `effective_start_time` DATETIME NOT NULL,
+  `effective_end_time` DATETIME NOT NULL,
+  `revision_id` BIGINT(20) NOT NULL,
+  `previous_revision_id` BIGINT(20) NOT NULL,
+  `input_column_names` TEXT NULL DEFAULT NULL,
+  `input_column_types` TEXT NULL DEFAULT NULL,
+  `output_view_name` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_writer`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_writer` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_writer` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `unique_id` VARCHAR(50) NOT NULL,
+  `name` TEXT NULL DEFAULT NULL,
+  `writer_type` VARCHAR(20) NOT NULL,
+  `mode` VARCHAR(20) NOT NULL,
+  `input_column_names` TEXT NULL DEFAULT NULL,
+  `input_column_types` TEXT NULL DEFAULT NULL,
+  `unique_identify_keys` TEXT NULL DEFAULT NULL,
+  `unique_identify_types` TEXT NULL DEFAULT NULL,
+  `create_if_not_exists` TINYINT(1) NULL DEFAULT NULL,
+  `overwrite_if_exists` TINYINT(1) NULL DEFAULT NULL,
+  `description` TEXT NULL DEFAULT NULL,
+  `is_public` TINYINT(1) NOT NULL DEFAULT '0',
+  `owner` VARCHAR(50) NOT NULL,
+  `create_time` DATETIME NOT NULL,
+  `last_update_time` DATETIME NOT NULL,
+  `effective_start_time` DATETIME NOT NULL,
+  `effective_end_time` DATETIME NOT NULL,
+  `revision_id` BIGINT(20) NOT NULL,
+  `previous_revision_id` BIGINT(20) NOT NULL,
+  `input_view_name` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_writer_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_writer_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_writer_history` (
+  `id` BIGINT(20) NOT NULL,
+  `unique_id` VARCHAR(50) NOT NULL,
+  `name` TEXT NULL DEFAULT NULL,
+  `writer_type` VARCHAR(20) NOT NULL,
+  `mode` VARCHAR(20) NOT NULL,
+  `input_column_names` TEXT NULL DEFAULT NULL,
+  `input_column_types` TEXT NULL DEFAULT NULL,
+  `unique_identify_keys` TEXT NULL DEFAULT NULL,
+  `unique_identify_types` TEXT NULL DEFAULT NULL,
+  `create_if_not_exists` TINYINT(1) NULL DEFAULT NULL,
+  `overwrite_if_exists` TINYINT(1) NULL DEFAULT NULL,
+  `description` TEXT NULL DEFAULT NULL,
+  `is_public` TINYINT(1) NOT NULL DEFAULT '0',
+  `owner` VARCHAR(50) NOT NULL,
+  `create_time` DATETIME NOT NULL,
+  `last_update_time` DATETIME NOT NULL,
+  `effective_start_time` DATETIME NOT NULL,
+  `effective_end_time` DATETIME NOT NULL,
+  `revision_id` BIGINT(20) NOT NULL,
+  `previous_revision_id` BIGINT(20) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+-- -----------------------------------------------------
+-- Table `tdt_aggregation_transformer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_aggregation_transformer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_aggregation_transformer_config` (
+  `transformer_id` BIGINT(20) NULL DEFAULT NULL,
+  `group_by_expression` TEXT NULL DEFAULT NULL,
+  `output_column_names` TEXT NULL DEFAULT NULL,
+  `output_column_types` TEXT NULL DEFAULT NULL,
+  `selected_col_exprs` TEXT NULL DEFAULT NULL,
+  `input_view_name` VARCHAR(255) NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_aggregation_transformer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_aggregation_transformer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_aggregation_transformer_config_history` (
+  `transformer_id` BIGINT(20) NULL DEFAULT NULL,
+  `group_by_expression` TEXT NULL DEFAULT NULL,
+  `output_column_names` TEXT NULL DEFAULT NULL,
+  `output_column_types` TEXT NULL DEFAULT NULL,
+  `selected_col_exprs` TEXT NULL DEFAULT NULL,
+  `input_view_name` VARCHAR(255) NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_columnmap_transformer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_columnmap_transformer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_columnmap_transformer_config` (
+  `transformer_id` BIGINT(20) NULL DEFAULT NULL,
+  `input_view_name` VARCHAR(255) NULL DEFAULT NULL,
+  `output_column_names` TEXT NULL DEFAULT NULL,
+  `output_column_types` TEXT NULL DEFAULT NULL,
+  `output_column_exprs` TEXT NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_columnmap_transformer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_columnmap_transformer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_columnmap_transformer_config_history` (
+  `transformer_id` BIGINT(20) NULL DEFAULT NULL,
+  `input_view_name` VARCHAR(255) NULL DEFAULT NULL,
+  `output_column_names` TEXT NULL DEFAULT NULL,
+  `output_column_types` TEXT NULL DEFAULT NULL,
+  `output_column_exprs` TEXT NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_csv_writer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_csv_writer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_csv_writer_config` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `database_name` VARCHAR(255) NULL DEFAULT NULL,
+  `table_name` VARCHAR(255) NULL DEFAULT NULL,
+  `truncate_table` TINYINT(1) NULL DEFAULT NULL,
+  `partition_column_names` VARCHAR(255) NULL DEFAULT NULL,
+  `bucket_number` INT(5) NULL DEFAULT NULL,
+  `cluster_key` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_keys` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_asc` VARCHAR(255) NULL DEFAULT NULL,
+  `directory` VARCHAR(255) NULL DEFAULT NULL,
+  `file_name` VARCHAR(255) NULL DEFAULT NULL,
+  `field_delimiter` VARCHAR(255) NULL DEFAULT NULL,
+  `quote_delimiter` VARCHAR(255) NULL DEFAULT NULL,
+  `line_delimiter` VARCHAR(255) NULL DEFAULT NULL,
+  `encoding` VARCHAR(20) NULL DEFAULT NULL,
+  PRIMARY KEY (`writer_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_csv_writer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_csv_writer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_csv_writer_config_history` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `database_name` VARCHAR(255) NULL DEFAULT NULL,
+  `table_name` VARCHAR(255) NULL DEFAULT NULL,
+  `truncate_table` TINYINT(1) NULL DEFAULT NULL,
+  `partition_column_names` VARCHAR(255) NULL DEFAULT NULL,
+  `bucket_number` INT(5) NULL DEFAULT NULL,
+  `cluster_key` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_keys` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_asc` VARCHAR(255) NULL DEFAULT NULL,
+  `directory` VARCHAR(255) NULL DEFAULT NULL,
+  `file_name` VARCHAR(255) NULL DEFAULT NULL,
+  `field_delimiter` VARCHAR(255) NULL DEFAULT NULL,
+  `quote_delimiter` VARCHAR(255) NULL DEFAULT NULL,
+  `line_delimiter` VARCHAR(255) NULL DEFAULT NULL,
+  `encoding` VARCHAR(20) NULL DEFAULT NULL,
+  PRIMARY KEY (`writer_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_data_stage_reader_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_data_stage_reader_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_data_stage_reader_config` (
+  `reader_id` BIGINT(20) NOT NULL,
+  `update_in_one_row` TINYINT(1) NULL DEFAULT NULL,
+  PRIMARY KEY (`reader_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_data_stage_reader_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_data_stage_reader_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_data_stage_reader_config_history` (
+  `reader_id` BIGINT(20) NOT NULL,
+  `update_in_one_row` TINYINT(1) NULL DEFAULT NULL,
+  PRIMARY KEY (`reader_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_dataflow`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_dataflow` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_dataflow` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `unique_id` VARCHAR(50) NOT NULL,
+  `name` TEXT NULL DEFAULT NULL,
+  `project_id` BIGINT(20) NULL DEFAULT NULL,
+  `description` TEXT NULL DEFAULT NULL,
+  `is_public` TINYINT(1) NOT NULL DEFAULT '0',
+  `owner` VARCHAR(50) NOT NULL,
+  `create_time` DATETIME NOT NULL,
+  `last_update_time` DATETIME NOT NULL,
+  `sub_task_id` BIGINT(20) NULL DEFAULT NULL,
+  `effective_start_time` DATETIME NOT NULL,
+  `effective_end_time` DATETIME NOT NULL,
+  `revision_id` BIGINT(20) NOT NULL,
+  `previous_revision_id` BIGINT(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `idx_tdt_dataflow_unique_id` (`unique_id` ASC))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_dataflow_component`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_dataflow_component` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_dataflow_component` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `component_id` BIGINT(20) NULL DEFAULT NULL,
+  `component_type` VARCHAR(255) NULL DEFAULT NULL,
+  `dataflow_id` BIGINT(20) NULL DEFAULT NULL,
+  `x` DOUBLE NULL DEFAULT NULL,
+  `y` DOUBLE NULL DEFAULT NULL,
+  `connect_type` VARCHAR(50) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_dataflow_component_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_dataflow_component_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_dataflow_component_history` (
+  `id` BIGINT(20) NOT NULL,
+  `component_id` BIGINT(20) NULL DEFAULT NULL,
+  `component_type` VARCHAR(255) NULL DEFAULT NULL,
+  `dataflow_id` BIGINT(20) NULL DEFAULT NULL,
+  `x` DOUBLE NULL DEFAULT NULL,
+  `y` DOUBLE NULL DEFAULT NULL,
+  `connect_type` VARCHAR(50) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_dataflow_connection`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_dataflow_connection` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_dataflow_connection` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(50) NULL DEFAULT NULL,
+  `source_id` BIGINT(20) NULL DEFAULT NULL,
+  `destination_id` BIGINT(20) NULL DEFAULT NULL,
+  `dataflow_id` BIGINT(20) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_dataflow_connection_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_dataflow_connection_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_dataflow_connection_history` (
+  `id` BIGINT(20) NOT NULL,
+  `name` VARCHAR(50) NULL DEFAULT NULL,
+  `source_id` BIGINT(20) NULL DEFAULT NULL,
+  `destination_id` BIGINT(20) NULL DEFAULT NULL,
+  `dataflow_id` BIGINT(20) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_dataflow_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_dataflow_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_dataflow_history` (
+  `id` BIGINT(20) NOT NULL,
+  `unique_id` VARCHAR(50) NOT NULL,
+  `name` TEXT NULL DEFAULT NULL,
+  `project_id` BIGINT(20) NULL DEFAULT NULL,
+  `description` TEXT NULL DEFAULT NULL,
+  `is_public` TINYINT(1) NOT NULL DEFAULT '0',
+  `owner` VARCHAR(50) NOT NULL,
+  `create_time` DATETIME NOT NULL,
+  `last_update_time` DATETIME NOT NULL,
+  `sub_task_id` BIGINT(20) NULL DEFAULT NULL,
+  `effective_start_time` DATETIME NOT NULL,
+  `effective_end_time` DATETIME NOT NULL,
+  `revision_id` BIGINT(20) NOT NULL,
+  `previous_revision_id` BIGINT(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `idx_tdt_dataflow_history_unique_id` (`unique_id` ASC))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_dataflow_task`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_dataflow_task` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_dataflow_task` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `public_handle_id` VARCHAR(50) NOT NULL,
+  `secret_handle_id` VARCHAR(50) NOT NULL,
+  `status` VARCHAR(50) NOT NULL,
+  `definition` TEXT NOT NULL,
+  `finish_time` DATETIME NULL DEFAULT NULL,
+  `clean_flag` TINYINT(1) NOT NULL DEFAULT '0',
+  `dataflow_id` BIGINT(20) NULL DEFAULT NULL,
+  `start_time` DATETIME NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `public_handle_id` (`public_handle_id` ASC))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+-- -----------------------------------------------------
+-- Table `tdt_dataloop_reader_table_details`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_dataloop_reader_table_details` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_dataloop_reader_table_details` (
+  `reader_id` BIGINT(20) NOT NULL,
+  `table_name` VARCHAR(255) NOT NULL,
+  `output_view_name` VARCHAR(255) NOT NULL,
+  `unique_identify_keys` TEXT NOT NULL,
+  `unique_identify_types` TEXT NOT NULL,
+  `output_column_expressions` TEXT NOT NULL,
+  `output_column_types` TEXT NOT NULL,
+  `output_column_alias` TEXT NOT NULL,
+  INDEX `reader_id` (`reader_id` ASC),
+  CONSTRAINT `tdt_dataloop_reader_table_details_ibfk_1`
+    FOREIGN KEY (`reader_id`)
+    REFERENCES `tdt_dataloop_reader` (`id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_dataloop_reader_table_details_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_dataloop_reader_table_details_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_dataloop_reader_table_details_history` (
+  `reader_id` BIGINT(20) NOT NULL,
+  `table_name` VARCHAR(255) NOT NULL,
+  `output_view_name` VARCHAR(255) NOT NULL,
+  `unique_identify_keys` TEXT NOT NULL,
+  `unique_identify_types` TEXT NOT NULL,
+  `output_column_expressions` TEXT NOT NULL,
+  `output_column_types` TEXT NOT NULL,
+  `output_column_alias` TEXT NOT NULL,
+  INDEX `reader_id` (`reader_id` ASC),
+  CONSTRAINT `tdt_dataloop_reader_table_details_history_ibfk_1`
+    FOREIGN KEY (`reader_id`)
+    REFERENCES `tdt_dataloop_reader_history` (`id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_dataloop_shareplex_reader_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_dataloop_shareplex_reader_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_dataloop_shareplex_reader_config` (
+  `reader_id` BIGINT(20) NOT NULL,
+  `location` VARCHAR(1000) NOT NULL,
+  INDEX `reader_id` (`reader_id` ASC),
+  CONSTRAINT `tdt_dataloop_shareplex_reader_config_ibfk_1`
+    FOREIGN KEY (`reader_id`)
+    REFERENCES `tdt_dataloop_reader` (`id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_dataloop_shareplex_reader_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_dataloop_shareplex_reader_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_dataloop_shareplex_reader_config_history` (
+  `reader_id` BIGINT(20) NOT NULL,
+  `location` VARCHAR(1000) NOT NULL,
+  INDEX `reader_id` (`reader_id` ASC),
+  CONSTRAINT `tdt_dataloop_shareplex_reader_config_history_ibfk_1`
+    FOREIGN KEY (`reader_id`)
+    REFERENCES `tdt_dataloop_reader_history` (`id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+-- -----------------------------------------------------
+-- Table `tdt_dataloop_sync_transformer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_dataloop_sync_transformer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_dataloop_sync_transformer_config` (
+  `transformer_id` BIGINT(20) NOT NULL,
+  `input_view_name` TEXT NULL DEFAULT NULL,
+  `output_view_name` TEXT NULL DEFAULT NULL,
+  INDEX `transformer_id` (`transformer_id` ASC),
+  CONSTRAINT `tdt_dataloop_sync_transformer_config_ibfk_1`
+    FOREIGN KEY (`transformer_id`)
+    REFERENCES `tdt_generic_transformer` (`id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+-- -----------------------------------------------------
+-- Table `tdt_dataloop_sync_transformer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_dataloop_sync_transformer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_dataloop_sync_transformer_config_history` (
+  `transformer_id` BIGINT(20) NOT NULL,
+  `input_view_name` TEXT NULL DEFAULT NULL,
+  `output_view_name` TEXT NULL DEFAULT NULL,
+  INDEX `transformer_id` (`transformer_id` ASC),
+  CONSTRAINT `tdt_dataloop_sync_transformer_config_history_ibfk_1`
+    FOREIGN KEY (`transformer_id`)
+    REFERENCES `tdt_generic_transformer_history` (`id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_elastic_writer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_elastic_writer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_elastic_writer_config` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `database_name` VARCHAR(255) NULL DEFAULT NULL,
+  `table_name` VARCHAR(255) NULL DEFAULT NULL,
+  `truncate_table` TINYINT(1) NULL DEFAULT NULL,
+  PRIMARY KEY (`writer_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_elastic_writer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_elastic_writer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_elastic_writer_config_history` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `database_name` VARCHAR(255) NULL DEFAULT NULL,
+  `table_name` VARCHAR(255) NULL DEFAULT NULL,
+  `truncate_table` TINYINT(1) NULL DEFAULT NULL,
+  PRIMARY KEY (`writer_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_except_transformer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_except_transformer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_except_transformer_config` (
+  `transformer_id` BIGINT(20) NULL DEFAULT NULL,
+  `left_input_view` VARCHAR(255) NULL DEFAULT NULL,
+  `right_input_view` VARCHAR(255) NULL DEFAULT NULL,
+  `left_node_name` VARCHAR(100) NULL DEFAULT NULL,
+  `reserve_dumplicate_row` TINYINT(1) NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_except_transformer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_except_transformer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_except_transformer_config_history` (
+  `transformer_id` BIGINT(20) NULL DEFAULT NULL,
+  `left_input_view` VARCHAR(255) NULL DEFAULT NULL,
+  `right_input_view` VARCHAR(255) NULL DEFAULT NULL,
+  `left_node_name` VARCHAR(100) NULL DEFAULT NULL,
+  `reserve_dumplicate_row` TINYINT(1) NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_filter_transformer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_filter_transformer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_filter_transformer_config` (
+  `transformer_id` BIGINT(20) NULL DEFAULT NULL,
+  `input_view_name` VARCHAR(255) NULL DEFAULT NULL,
+  `filter_expression` TEXT NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_filter_transformer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_filter_transformer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_filter_transformer_config_history` (
+  `transformer_id` BIGINT(20) NULL DEFAULT NULL,
+  `input_view_name` VARCHAR(255) NULL DEFAULT NULL,
+  `filter_expression` TEXT NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_fwc_writer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_fwc_writer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_fwc_writer_config` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `database_name` VARCHAR(255) NULL DEFAULT NULL,
+  `table_name` VARCHAR(255) NULL DEFAULT NULL,
+  `truncate_table` TINYINT(1) NULL DEFAULT NULL,
+  `partition_column_names` VARCHAR(255) NULL DEFAULT NULL,
+  `bucket_number` INT(5) NULL DEFAULT NULL,
+  `cluster_key` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_keys` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_asc` VARCHAR(255) NULL DEFAULT NULL,
+  `directory` VARCHAR(255) NULL DEFAULT NULL,
+  `file_name` VARCHAR(255) NULL DEFAULT NULL,
+  `field_width` VARCHAR(255) NULL DEFAULT NULL,
+  `padding_type` VARCHAR(50) NULL DEFAULT NULL,
+  `padding_char` VARCHAR(20) NULL DEFAULT NULL,
+  `encoding` VARCHAR(20) NULL DEFAULT NULL,
+  PRIMARY KEY (`writer_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_fwc_writer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_fwc_writer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_fwc_writer_config_history` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `database_name` VARCHAR(255) NULL DEFAULT NULL,
+  `table_name` VARCHAR(255) NULL DEFAULT NULL,
+  `truncate_table` TINYINT(1) NULL DEFAULT NULL,
+  `partition_column_names` VARCHAR(255) NULL DEFAULT NULL,
+  `bucket_number` INT(5) NULL DEFAULT NULL,
+  `cluster_key` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_keys` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_asc` VARCHAR(255) NULL DEFAULT NULL,
+  `directory` VARCHAR(255) NULL DEFAULT NULL,
+  `file_name` VARCHAR(255) NULL DEFAULT NULL,
+  `field_width` VARCHAR(255) NULL DEFAULT NULL,
+  `padding_type` VARCHAR(50) NULL DEFAULT NULL,
+  `padding_char` VARCHAR(20) NULL DEFAULT NULL,
+  `encoding` VARCHAR(20) NULL DEFAULT NULL,
+  PRIMARY KEY (`writer_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_aggregation_transformer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_aggregation_transformer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_aggregation_transformer_config` (
+  `transformer_id` BIGINT(20) NOT NULL,
+  `group_by_expression` TEXT NULL DEFAULT NULL,
+  `having_filter_expression` TEXT NULL DEFAULT NULL,
+  `input_view_name` TEXT NULL DEFAULT NULL,
+  `output_view_name` TEXT NULL DEFAULT NULL,
+  INDEX `transformer_id` (`transformer_id` ASC),
+  CONSTRAINT `tdt_generic_aggregation_transformer_config_ibfk_1`
+    FOREIGN KEY (`transformer_id`)
+    REFERENCES `tdt_generic_transformer` (`id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_aggregation_transformer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_aggregation_transformer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_aggregation_transformer_config_history` (
+  `transformer_id` BIGINT(20) NOT NULL,
+  `group_by_expression` TEXT NULL DEFAULT NULL,
+  `having_filter_expression` TEXT NULL DEFAULT NULL,
+  `input_view_name` TEXT NULL DEFAULT NULL,
+  `output_view_name` TEXT NULL DEFAULT NULL,
+  INDEX `transformer_id` (`transformer_id` ASC),
+  CONSTRAINT `tdt_generic_aggregation_transformer_config_history_ibfk_1`
+    FOREIGN KEY (`transformer_id`)
+    REFERENCES `tdt_generic_transformer_history` (`id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_csv_reader_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_csv_reader_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_csv_reader_config` (
+  `reader_id` BIGINT(20) NULL DEFAULT NULL,
+  `location` VARCHAR(50) NULL DEFAULT NULL,
+  `field_delimiter` VARCHAR(10) NULL DEFAULT NULL,
+  `quote_delimiter` VARCHAR(10) NULL DEFAULT NULL,
+  `line_delimiter` VARCHAR(10) NULL DEFAULT NULL,
+  `contain_first_row` TINYINT(1) NULL DEFAULT NULL,
+  `encoding` VARCHAR(10) NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_csv_reader_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_csv_reader_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_csv_reader_config_history` (
+  `reader_id` BIGINT(20) NULL DEFAULT NULL,
+  `location` VARCHAR(50) NULL DEFAULT NULL,
+  `field_delimiter` VARCHAR(10) NULL DEFAULT NULL,
+  `quote_delimiter` VARCHAR(10) NULL DEFAULT NULL,
+  `line_delimiter` VARCHAR(10) NULL DEFAULT NULL,
+  `contain_first_row` TINYINT(1) NULL DEFAULT NULL,
+  `encoding` VARCHAR(10) NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_fwc_reader_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_fwc_reader_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_fwc_reader_config` (
+  `reader_id` BIGINT(20) NULL DEFAULT NULL,
+  `location` VARCHAR(50) NULL DEFAULT NULL,
+  `field_width` VARCHAR(100) NULL DEFAULT NULL,
+  `padding_type` VARCHAR(10) NULL DEFAULT NULL,
+  `padding_char` VARCHAR(10) NULL DEFAULT NULL,
+  `contain_first_row` TINYINT(1) NULL DEFAULT NULL,
+  `encoding` VARCHAR(10) NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_fwc_reader_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_fwc_reader_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_fwc_reader_config_history` (
+  `reader_id` BIGINT(20) NULL DEFAULT NULL,
+  `location` VARCHAR(50) NULL DEFAULT NULL,
+  `field_width` VARCHAR(100) NULL DEFAULT NULL,
+  `padding_type` VARCHAR(10) NULL DEFAULT NULL,
+  `padding_char` VARCHAR(10) NULL DEFAULT NULL,
+  `contain_first_row` TINYINT(1) NULL DEFAULT NULL,
+  `encoding` VARCHAR(10) NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_hive_writer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_hive_writer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_hive_writer_config` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `database_name` TEXT NULL DEFAULT NULL,
+  `table_name` TEXT NULL DEFAULT NULL,
+  `input_view_name` TEXT NULL DEFAULT NULL,
+  `allow_duplicate_data` TINYINT(1) NULL DEFAULT NULL,
+  INDEX `writer_id` (`writer_id` ASC),
+  CONSTRAINT `tdt_generic_hive_writer_config_ibfk_1`
+    FOREIGN KEY (`writer_id`)
+    REFERENCES `tdt_generic_writer` (`id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_hive_writer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_hive_writer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_hive_writer_config_history` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `database_name` TEXT NULL DEFAULT NULL,
+  `table_name` TEXT NULL DEFAULT NULL,
+  `input_view_name` TEXT NULL DEFAULT NULL,
+  `allow_duplicate_data` TINYINT(1) NULL DEFAULT NULL,
+  INDEX `writer_id` (`writer_id` ASC),
+  CONSTRAINT `tdt_generic_hive_writer_config_history_ibfk_1`
+    FOREIGN KEY (`writer_id`)
+    REFERENCES `tdt_generic_writer_history` (`id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_inceptor_reader_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_inceptor_reader_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_inceptor_reader_config` (
+  `reader_id` BIGINT(20) NULL DEFAULT NULL,
+  `database_name` VARCHAR(50) NULL DEFAULT NULL,
+  `table_name` VARCHAR(50) NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_inceptor_reader_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_inceptor_reader_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_inceptor_reader_config_history` (
+  `reader_id` BIGINT(20) NULL DEFAULT NULL,
+  `database_name` VARCHAR(50) NULL DEFAULT NULL,
+  `table_name` VARCHAR(50) NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_jdbc_reader_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_jdbc_reader_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_jdbc_reader_config` (
+  `reader_id` BIGINT(20) NULL DEFAULT NULL,
+  `driver_class` VARCHAR(100) NULL DEFAULT NULL,
+  `driver_location` VARCHAR(100) NULL DEFAULT NULL,
+  `jdbc_url` VARCHAR(100) NULL DEFAULT NULL,
+  `table_name` VARCHAR(100) NULL DEFAULT NULL,
+  `filter_condition` TEXT NULL DEFAULT NULL,
+  `login_user` VARCHAR(50) NULL DEFAULT NULL,
+  `login_password` VARCHAR(50) NULL DEFAULT NULL,
+  `split_number` INT(5) NULL DEFAULT NULL,
+  `get_split_key` VARCHAR(30) NULL DEFAULT NULL,
+  `input_column_names` TEXT NULL DEFAULT NULL,
+  `input_column_types` TEXT NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_jdbc_reader_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_jdbc_reader_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_jdbc_reader_config_history` (
+  `reader_id` BIGINT(20) NULL DEFAULT NULL,
+  `driver_class` VARCHAR(100) NULL DEFAULT NULL,
+  `driver_location` VARCHAR(100) NULL DEFAULT NULL,
+  `jdbc_url` VARCHAR(100) NULL DEFAULT NULL,
+  `table_name` VARCHAR(100) NULL DEFAULT NULL,
+  `filter_condition` TEXT NULL DEFAULT NULL,
+  `login_user` VARCHAR(50) NULL DEFAULT NULL,
+  `login_password` VARCHAR(50) NULL DEFAULT NULL,
+  `split_number` INT(5) NULL DEFAULT NULL,
+  `get_split_key` VARCHAR(30) NULL DEFAULT NULL,
+  `input_column_names` TEXT NULL DEFAULT NULL,
+  `input_column_types` TEXT NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_join_transformer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_join_transformer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_join_transformer_config` (
+  `transformer_id` BIGINT(20) NOT NULL,
+  `left_input_view` TEXT NULL DEFAULT NULL,
+  `right_input_view` TEXT NULL DEFAULT NULL,
+  `join_type` VARCHAR(20) NULL DEFAULT NULL,
+  `join_expression` TEXT NULL DEFAULT NULL,
+  `output_view_name` TEXT NULL DEFAULT NULL,
+  INDEX `transformer_id` (`transformer_id` ASC),
+  CONSTRAINT `tdt_generic_join_transformer_config_ibfk_1`
+    FOREIGN KEY (`transformer_id`)
+    REFERENCES `tdt_generic_transformer` (`id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_join_transformer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_join_transformer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_join_transformer_config_history` (
+  `transformer_id` BIGINT(20) NOT NULL,
+  `left_input_view` TEXT NULL DEFAULT NULL,
+  `right_input_view` TEXT NULL DEFAULT NULL,
+  `join_type` VARCHAR(20) NULL DEFAULT NULL,
+  `join_expression` TEXT NULL DEFAULT NULL,
+  `output_view_name` TEXT NULL DEFAULT NULL,
+  INDEX `transformer_id` (`transformer_id` ASC),
+  CONSTRAINT `tdt_generic_join_transformer_config_history_ibfk_1`
+    FOREIGN KEY (`transformer_id`)
+    REFERENCES `tdt_generic_transformer_history` (`id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_orctransaction_writer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_orctransaction_writer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_orctransaction_writer_config` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `database_name` TEXT NULL DEFAULT NULL,
+  `table_name` TEXT NULL DEFAULT NULL,
+  `cluster_key` VARCHAR(100) NULL DEFAULT NULL,
+  `bucket_number` INT(11) NULL DEFAULT NULL,
+  `input_view_name` TEXT NULL DEFAULT NULL,
+  `allow_duplicate_data` TINYINT(1) NULL DEFAULT NULL,
+  INDEX `writer_id` (`writer_id` ASC),
+  CONSTRAINT `tdt_generic_orctransaction_writer_config_ibfk_1`
+    FOREIGN KEY (`writer_id`)
+    REFERENCES `tdt_generic_writer` (`id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_orctransaction_writer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_orctransaction_writer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_orctransaction_writer_config_history` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `database_name` TEXT NULL DEFAULT NULL,
+  `table_name` TEXT NULL DEFAULT NULL,
+  `cluster_key` VARCHAR(100) NULL DEFAULT NULL,
+  `bucket_number` INT(11) NULL DEFAULT NULL,
+  `input_view_name` TEXT NULL DEFAULT NULL,
+  `allow_duplicate_data` TINYINT(1) NULL DEFAULT NULL,
+  INDEX `writer_id` (`writer_id` ASC),
+  CONSTRAINT `tdt_generic_orctransaction_writer_config_history_ibfk_1`
+    FOREIGN KEY (`writer_id`)
+    REFERENCES `tdt_generic_writer_history` (`id`)
+    ON DELETE CASCADE)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_reader`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_reader` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_reader` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `unique_id` VARCHAR(100) NULL DEFAULT NULL,
+  `name` VARCHAR(20) NULL DEFAULT NULL,
+  `reader_type` VARCHAR(20) NULL DEFAULT NULL,
+  `description` VARCHAR(50) NULL DEFAULT NULL,
+  `is_public` TINYINT(1) NULL DEFAULT NULL,
+  `owner` VARCHAR(20) NULL DEFAULT NULL,
+  `create_time` DATETIME NULL DEFAULT NULL,
+  `last_update_time` DATETIME NULL DEFAULT NULL,
+  `effective_end_time` DATETIME NULL DEFAULT NULL,
+  `effective_start_time` DATETIME NULL DEFAULT NULL,
+  `revision_id` BIGINT(20) NULL DEFAULT NULL,
+  `previous_revision_id` BIGINT(20) NULL DEFAULT NULL,
+  `output_column_names` TEXT NULL DEFAULT NULL,
+  `output_column_types` TEXT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_reader_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_reader_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_reader_history` (
+  `id` BIGINT(20) NOT NULL,
+  `unique_id` VARCHAR(100) NULL DEFAULT NULL,
+  `name` VARCHAR(20) NULL DEFAULT NULL,
+  `reader_type` VARCHAR(20) NULL DEFAULT NULL,
+  `description` VARCHAR(50) NULL DEFAULT NULL,
+  `is_public` TINYINT(1) NULL DEFAULT NULL,
+  `owner` VARCHAR(20) NULL DEFAULT NULL,
+  `create_time` DATETIME NULL DEFAULT NULL,
+  `last_update_time` DATETIME NULL DEFAULT NULL,
+  `effective_end_time` DATETIME NULL DEFAULT NULL,
+  `effective_start_time` DATETIME NULL DEFAULT NULL,
+  `revision_id` BIGINT(20) NULL DEFAULT NULL,
+  `previous_revision_id` BIGINT(20) NULL DEFAULT NULL,
+  `output_column_names` TEXT NULL DEFAULT NULL,
+  `output_column_types` TEXT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `unique_id` (`unique_id` ASC),
+  UNIQUE INDEX `unique_id_2` (`unique_id` ASC))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_stream_reader_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_stream_reader_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_stream_reader_config` (
+  `reader_id` BIGINT(20) NULL DEFAULT NULL,
+  `field_delimiter` VARCHAR(50) NULL DEFAULT NULL,
+  `collection_delimiter` VARCHAR(50) NULL DEFAULT NULL,
+  `mapkey_delimiter` VARCHAR(50) NULL DEFAULT NULL,
+  `topic` VARCHAR(100) NULL DEFAULT NULL,
+  `source` VARCHAR(200) NULL DEFAULT NULL,
+  `zookeeper` VARCHAR(200) NULL DEFAULT NULL,
+  `broker` VARCHAR(200) NULL DEFAULT NULL,
+  `optional_props` TEXT NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_generic_stream_reader_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_generic_stream_reader_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_generic_stream_reader_config_history` (
+  `reader_id` BIGINT(20) NULL DEFAULT NULL,
+  `field_delimiter` VARCHAR(50) NULL DEFAULT NULL,
+  `collection_delimiter` VARCHAR(50) NULL DEFAULT NULL,
+  `mapkey_delimiter` VARCHAR(50) NULL DEFAULT NULL,
+  `topic` VARCHAR(100) NULL DEFAULT NULL,
+  `source` VARCHAR(200) NULL DEFAULT NULL,
+  `zookeeper` VARCHAR(200) NULL DEFAULT NULL,
+  `broker` VARCHAR(200) NULL DEFAULT NULL,
+  `optional_props` TEXT NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_hbase_writer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_hbase_writer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_hbase_writer_config` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `key_field_column_names` VARCHAR(255) NULL DEFAULT NULL,
+  `split_keys` VARCHAR(255) NULL DEFAULT NULL,
+  `attach_row_key_udf` TINYINT(1) NULL DEFAULT NULL,
+  `region_number` INT(5) NULL DEFAULT NULL,
+  `fields_terminator` VARCHAR(20) NULL DEFAULT NULL,
+  `collection_items_terminator` VARCHAR(20) NULL DEFAULT NULL,
+  `map_keys_terminator` VARCHAR(20) NULL DEFAULT NULL,
+  `lines_terminator` VARCHAR(20) NULL DEFAULT NULL,
+  `database_name` VARCHAR(255) NULL DEFAULT NULL,
+  `table_name` VARCHAR(255) NULL DEFAULT NULL,
+  `truncate_table` TINYINT(1) NULL DEFAULT NULL,
+  PRIMARY KEY (`writer_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_hbase_writer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_hbase_writer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_hbase_writer_config_history` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `key_field_column_names` VARCHAR(255) NULL DEFAULT NULL,
+  `split_keys` VARCHAR(255) NULL DEFAULT NULL,
+  `attach_row_key_udf` TINYINT(1) NULL DEFAULT NULL,
+  `region_number` INT(5) NULL DEFAULT NULL,
+  `fields_terminator` VARCHAR(20) NULL DEFAULT NULL,
+  `collection_items_terminator` VARCHAR(20) NULL DEFAULT NULL,
+  `map_keys_terminator` VARCHAR(20) NULL DEFAULT NULL,
+  `lines_terminator` VARCHAR(20) NULL DEFAULT NULL,
+  `truncate_table` TINYINT(1) NULL DEFAULT NULL,
+  `table_name` VARCHAR(255) NULL DEFAULT NULL,
+  `database_name` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`writer_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_holodesk_writer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_holodesk_writer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_holodesk_writer_config` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `partition_column_names` VARCHAR(255) NULL DEFAULT NULL,
+  `index_column_names` VARCHAR(255) NULL DEFAULT NULL,
+  `dimension_column_names` VARCHAR(255) NULL DEFAULT NULL,
+  `truncate_table` TINYINT(1) NULL DEFAULT NULL,
+  `table_name` VARCHAR(255) NULL DEFAULT NULL,
+  `database_name` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`writer_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_holodesk_writer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_holodesk_writer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_holodesk_writer_config_history` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `partition_column_names` VARCHAR(255) NULL DEFAULT NULL,
+  `index_column_names` VARCHAR(255) NULL DEFAULT NULL,
+  `dimension_column_names` VARCHAR(255) NULL DEFAULT NULL,
+  `database_name` VARCHAR(255) NULL DEFAULT NULL,
+  `table_name` VARCHAR(255) NULL DEFAULT NULL,
+  `truncate_table` TINYINT(1) NULL DEFAULT NULL,
+  PRIMARY KEY (`writer_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_hyperdrive_writer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_hyperdrive_writer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_hyperdrive_writer_config` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `key_field_column_names` VARCHAR(255) NULL DEFAULT NULL,
+  `split_keys` VARCHAR(255) NULL DEFAULT NULL,
+  `attach_row_key_udf` TINYINT(1) NULL DEFAULT NULL,
+  `region_number` INT(5) NULL DEFAULT NULL,
+  `fields_terminator` VARCHAR(20) NULL DEFAULT NULL,
+  `collection_items_terminator` VARCHAR(20) NULL DEFAULT NULL,
+  `map_keys_terminator` VARCHAR(20) NULL DEFAULT NULL,
+  `lines_terminator` VARCHAR(20) NULL DEFAULT NULL,
+  `str_default_len` INT(5) NULL DEFAULT NULL,
+  `key_field_segment_len` VARCHAR(50) NULL DEFAULT NULL,
+  `struct_segment_len` VARCHAR(50) NULL DEFAULT NULL,
+  `database_name` VARCHAR(255) NULL DEFAULT NULL,
+  `table_name` VARCHAR(255) NULL DEFAULT NULL,
+  `truncate_table` TINYINT(1) NULL DEFAULT NULL,
+  PRIMARY KEY (`writer_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_hyperdrive_writer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_hyperdrive_writer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_hyperdrive_writer_config_history` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `key_field_column_names` VARCHAR(255) NULL DEFAULT NULL,
+  `split_keys` VARCHAR(255) NULL DEFAULT NULL,
+  `attach_row_key_udf` TINYINT(1) NULL DEFAULT NULL,
+  `region_number` INT(5) NULL DEFAULT NULL,
+  `fields_terminator` VARCHAR(20) NULL DEFAULT NULL,
+  `collection_items_terminator` VARCHAR(20) NULL DEFAULT NULL,
+  `map_keys_terminator` VARCHAR(20) NULL DEFAULT NULL,
+  `lines_terminator` VARCHAR(20) NULL DEFAULT NULL,
+  `str_default_len` INT(5) NULL DEFAULT NULL,
+  `key_field_segment_len` VARCHAR(50) NULL DEFAULT NULL,
+  `struct_segment_len` VARCHAR(50) NULL DEFAULT NULL,
+  `truncate_table` TINYINT(1) NULL DEFAULT NULL,
+  `table_name` VARCHAR(255) NULL DEFAULT NULL,
+  `database_name` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`writer_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_intersect_transformer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_intersect_transformer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_intersect_transformer_config` (
+  `transformer_id` BIGINT(20) NULL DEFAULT NULL,
+  `left_input_view` VARCHAR(255) NULL DEFAULT NULL,
+  `right_input_view` VARCHAR(255) NULL DEFAULT NULL,
+  `left_node_name` VARCHAR(100) NULL DEFAULT NULL,
+  `reserve_dumplicate_row` TINYINT(1) NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_intersect_transformer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_intersect_transformer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_intersect_transformer_config_history` (
+  `transformer_id` BIGINT(20) NULL DEFAULT NULL,
+  `left_input_view` VARCHAR(255) NULL DEFAULT NULL,
+  `right_input_view` VARCHAR(255) NULL DEFAULT NULL,
+  `left_node_name` VARCHAR(100) NULL DEFAULT NULL,
+  `reserve_dumplicate_row` TINYINT(1) NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_jdbc_connections`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_jdbc_connections` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_jdbc_connections` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `unique_id` VARCHAR(50) NOT NULL,
+  `conn_str` VARCHAR(500) NOT NULL,
+  `username` VARCHAR(100) NULL DEFAULT NULL,
+  `password` VARCHAR(100) NULL DEFAULT NULL,
+  `description` TEXT NULL DEFAULT NULL,
+  `is_public` TINYINT(1) NOT NULL DEFAULT '0',
+  `owner` VARCHAR(50) NOT NULL,
+  `create_time` DATETIME NOT NULL,
+  `last_update_time` DATETIME NOT NULL,
+  `effective_start_time` DATETIME NOT NULL,
+  `effective_end_time` DATETIME NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_join_transformer`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_join_transformer` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_join_transformer` (
+  `transformer_id` BIGINT(20) NULL DEFAULT NULL,
+  `left_input_view` VARCHAR(50) NULL DEFAULT NULL,
+  `right_input_view` VARCHAR(50) NULL DEFAULT NULL,
+  `left_node_name` VARCHAR(50) NULL DEFAULT NULL,
+  `selected_columns` TEXT NULL DEFAULT NULL,
+  `output_column_names` TEXT NULL DEFAULT NULL,
+  `output_column_types` TEXT NULL DEFAULT NULL,
+  `join_expression` TEXT NULL DEFAULT NULL,
+  `join_type` VARCHAR(50) NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_join_transformer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_join_transformer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_join_transformer_config` (
+  `transformer_id` BIGINT(20) NOT NULL,
+  `left_input_view` VARCHAR(50) NULL DEFAULT NULL,
+  `right_input_view` VARCHAR(50) NULL DEFAULT NULL,
+  `left_node_name` VARCHAR(50) NULL DEFAULT NULL,
+  `selected_columns` TEXT NULL DEFAULT NULL,
+  `output_column_names` TEXT NULL DEFAULT NULL,
+  `output_column_types` TEXT NULL DEFAULT NULL,
+  `join_expression` TEXT NULL DEFAULT NULL,
+  `join_type` VARCHAR(50) NULL DEFAULT NULL,
+  PRIMARY KEY (`transformer_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_join_transformer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_join_transformer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_join_transformer_config_history` (
+  `transformer_id` BIGINT(20) NOT NULL,
+  `left_input_view` VARCHAR(50) NULL DEFAULT NULL,
+  `right_input_view` VARCHAR(50) NULL DEFAULT NULL,
+  `left_node_name` VARCHAR(50) NULL DEFAULT NULL,
+  `selected_columns` TEXT NULL DEFAULT NULL,
+  `output_column_names` TEXT NULL DEFAULT NULL,
+  `output_column_types` TEXT NULL DEFAULT NULL,
+  `join_expression` TEXT NULL DEFAULT NULL,
+  `join_type` VARCHAR(50) NULL DEFAULT NULL,
+  PRIMARY KEY (`transformer_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_join_transformer_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_join_transformer_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_join_transformer_history` (
+  `transformer_id` BIGINT(20) NULL DEFAULT NULL,
+  `left_input_view` VARCHAR(50) NULL DEFAULT NULL,
+  `right_input_view` VARCHAR(50) NULL DEFAULT NULL,
+  `left_node_name` VARCHAR(50) NULL DEFAULT NULL,
+  `selected_columns` TEXT NULL DEFAULT NULL,
+  `output_column_names` TEXT NULL DEFAULT NULL,
+  `output_column_types` TEXT NULL DEFAULT NULL,
+  `join_expression` TEXT NULL DEFAULT NULL,
+  `join_type` VARCHAR(50) NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_ogg_reader_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_ogg_reader_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_ogg_reader_config` (
+  `reader_id` BIGINT(20) NOT NULL,
+  PRIMARY KEY (`reader_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_ogg_reader_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_ogg_reader_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_ogg_reader_config_history` (
+  `reader_id` BIGINT(20) NOT NULL,
+  PRIMARY KEY (`reader_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_orc_writer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_orc_writer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_orc_writer_config` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `database_name` VARCHAR(255) NULL DEFAULT NULL,
+  `table_name` VARCHAR(255) NULL DEFAULT NULL,
+  `truncate_table` TINYINT(1) NULL DEFAULT NULL,
+  `partition_column_names` VARCHAR(255) NULL DEFAULT NULL,
+  `bucket_number` INT(5) NULL DEFAULT NULL,
+  `cluster_key` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_keys` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_asc` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`writer_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_orc_writer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_orc_writer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_orc_writer_config_history` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `database_name` VARCHAR(255) NULL DEFAULT NULL,
+  `table_name` VARCHAR(255) NULL DEFAULT NULL,
+  `truncate_table` TINYINT(1) NULL DEFAULT NULL,
+  `partition_column_names` VARCHAR(255) NULL DEFAULT NULL,
+  `bucket_number` INT(5) NULL DEFAULT NULL,
+  `cluster_key` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_keys` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_asc` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`writer_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_orctransaction_writer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_orctransaction_writer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_orctransaction_writer_config` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `database_name` VARCHAR(255) NULL DEFAULT NULL,
+  `table_name` VARCHAR(255) NULL DEFAULT NULL,
+  `truncate_table` TINYINT(1) NULL DEFAULT NULL,
+  `partition_column_names` VARCHAR(255) NULL DEFAULT NULL,
+  `bucket_number` INT(5) NULL DEFAULT NULL,
+  `cluster_key` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_keys` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_asc` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`writer_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_orctransaction_writer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_orctransaction_writer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_orctransaction_writer_config_history` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `database_name` VARCHAR(255) NULL DEFAULT NULL,
+  `table_name` VARCHAR(255) NULL DEFAULT NULL,
+  `truncate_table` TINYINT(1) NULL DEFAULT NULL,
+  `partition_column_names` VARCHAR(255) NULL DEFAULT NULL,
+  `bucket_number` INT(5) NULL DEFAULT NULL,
+  `cluster_key` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_keys` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_asc` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`writer_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_orctransactionsync_writer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_orctransactionsync_writer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_orctransactionsync_writer_config` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `database_name` VARCHAR(255) NULL DEFAULT NULL,
+  `table_name` VARCHAR(255) NULL DEFAULT NULL,
+  `truncate_table` TINYINT(1) NULL DEFAULT NULL,
+  `partition_column_names` VARCHAR(255) NULL DEFAULT NULL,
+  `bucket_number` INT(5) NULL DEFAULT NULL,
+  `cluster_key` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_keys` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_asc` VARCHAR(255) NULL DEFAULT NULL,
+  `allow_duplicate_data` TINYINT(1) NULL DEFAULT NULL,
+  `unique_keys` VARCHAR(255) NULL DEFAULT NULL,
+  `transaction_per_job` TINYINT(1) NULL DEFAULT NULL,
+  PRIMARY KEY (`writer_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_orctransactionsync_writer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_orctransactionsync_writer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_orctransactionsync_writer_config_history` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `database_name` VARCHAR(255) NULL DEFAULT NULL,
+  `table_name` VARCHAR(255) NULL DEFAULT NULL,
+  `truncate_table` TINYINT(1) NULL DEFAULT NULL,
+  `partition_column_names` VARCHAR(255) NULL DEFAULT NULL,
+  `bucket_number` INT(5) NULL DEFAULT NULL,
+  `cluster_key` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_keys` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_asc` VARCHAR(255) NULL DEFAULT NULL,
+  `allow_duplicate_data` TINYINT(1) NULL DEFAULT NULL,
+  `unique_keys` VARCHAR(255) NULL DEFAULT NULL,
+  `transaction_per_job` TINYINT(1) NULL DEFAULT NULL,
+  PRIMARY KEY (`writer_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_rowsizelimiter_transformer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_rowsizelimiter_transformer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_rowsizelimiter_transformer_config` (
+  `transformer_id` BIGINT(20) NULL DEFAULT NULL,
+  `input_view_name` VARCHAR(255) NULL DEFAULT NULL,
+  `row_size` INT(5) NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_rowsizelimiter_transformer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_rowsizelimiter_transformer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_rowsizelimiter_transformer_config_history` (
+  `transformer_id` BIGINT(20) NULL DEFAULT NULL,
+  `input_view_name` VARCHAR(255) NULL DEFAULT NULL,
+  `row_size` INT(5) NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_shareplex_reader_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_shareplex_reader_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_shareplex_reader_config` (
+  `reader_id` BIGINT(20) NOT NULL,
+  PRIMARY KEY (`reader_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_shareplex_reader_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_shareplex_reader_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_shareplex_reader_config_history` (
+  `reader_id` BIGINT(20) NOT NULL,
+  PRIMARY KEY (`reader_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_tablefilter_transformer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_tablefilter_transformer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_tablefilter_transformer_config` (
+  `transformer_id` BIGINT(20) NULL DEFAULT NULL,
+  `input_view_name` VARCHAR(255) NULL DEFAULT NULL,
+  `selected_table_name` VARCHAR(255) NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_tablefilter_transformer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_tablefilter_transformer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_tablefilter_transformer_config_history` (
+  `transformer_id` BIGINT(20) NULL DEFAULT NULL,
+  `input_view_name` VARCHAR(255) NULL DEFAULT NULL,
+  `selected_table_name` VARCHAR(255) NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_text_writer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_text_writer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_text_writer_config` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `database_name` VARCHAR(255) NULL DEFAULT NULL,
+  `table_name` VARCHAR(255) NULL DEFAULT NULL,
+  `truncate_table` TINYINT(1) NULL DEFAULT NULL,
+  `partition_column_names` VARCHAR(255) NULL DEFAULT NULL,
+  `bucket_number` INT(5) NULL DEFAULT NULL,
+  `cluster_key` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_keys` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_asc` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`writer_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_text_writer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_text_writer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_text_writer_config_history` (
+  `writer_id` BIGINT(20) NOT NULL,
+  `database_name` VARCHAR(255) NULL DEFAULT NULL,
+  `table_name` VARCHAR(255) NULL DEFAULT NULL,
+  `truncate_table` TINYINT(1) NULL DEFAULT NULL,
+  `partition_column_names` VARCHAR(255) NULL DEFAULT NULL,
+  `bucket_number` INT(5) NULL DEFAULT NULL,
+  `cluster_key` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_keys` VARCHAR(255) NULL DEFAULT NULL,
+  `sort_asc` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`writer_id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_union_transformer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_union_transformer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_union_transformer_config` (
+  `transformer_id` BIGINT(20) NULL DEFAULT NULL,
+  `left_input_view` VARCHAR(255) NULL DEFAULT NULL,
+  `right_input_view` VARCHAR(255) NULL DEFAULT NULL,
+  `left_node_name` VARCHAR(100) NULL DEFAULT NULL,
+  `reserve_dumplicate_row` TINYINT(1) NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_union_transformer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_union_transformer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_union_transformer_config_history` (
+  `transformer_id` BIGINT(20) NULL DEFAULT NULL,
+  `left_input_view` VARCHAR(255) NULL DEFAULT NULL,
+  `right_input_view` VARCHAR(255) NULL DEFAULT NULL,
+  `left_node_name` VARCHAR(100) NULL DEFAULT NULL,
+  `reserve_dumplicate_row` TINYINT(1) NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_variable`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_variable` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_variable` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `unique_id` VARCHAR(255) NULL DEFAULT NULL,
+  `var_key` VARCHAR(100) NULL DEFAULT NULL,
+  `var_value` VARCHAR(255) NULL DEFAULT NULL,
+  `description` TEXT NULL DEFAULT NULL,
+  `is_public` TINYINT(1) NULL DEFAULT NULL,
+  `owner` VARCHAR(50) NULL DEFAULT NULL,
+  `create_time` DATETIME NULL DEFAULT NULL,
+  `last_update_time` DATETIME NULL DEFAULT NULL,
+  `effective_start_time` DATETIME NULL DEFAULT NULL,
+  `effective_end_time` DATETIME NULL DEFAULT NULL,
+  `is_global` TINYINT(1) NULL DEFAULT NULL,
+  `dataflow_id` BIGINT(20) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_windowslide_transformer_config`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_windowslide_transformer_config` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_windowslide_transformer_config` (
+  `transformer_id` BIGINT(20) NULL DEFAULT NULL,
+  `input_view_name` VARCHAR(255) NULL DEFAULT NULL,
+  `length` INT(5) NULL DEFAULT NULL,
+  `slide` INT(5) NULL DEFAULT NULL,
+  `length_unit` VARCHAR(255) NULL DEFAULT NULL,
+  `slide_unit` VARCHAR(255) NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `tdt_windowslide_transformer_config_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `tdt_windowslide_transformer_config_history` ;
+
+CREATE TABLE IF NOT EXISTS `tdt_windowslide_transformer_config_history` (
+  `transformer_id` BIGINT(20) NULL DEFAULT NULL,
+  `input_view_name` VARCHAR(255) NULL DEFAULT NULL,
+  `length` INT(5) NULL DEFAULT NULL,
+  `slide` INT(5) NULL DEFAULT NULL,
+  `length_unit` VARCHAR(255) NULL DEFAULT NULL,
+  `slide_unit` VARCHAR(255) NULL DEFAULT NULL)
+ENGINE = InnoDB
+CHARSET = utf8;

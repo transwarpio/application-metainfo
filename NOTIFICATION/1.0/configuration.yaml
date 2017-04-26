@@ -1,0 +1,80 @@
+- name: notification.http.port
+  recommendExpression: 9999
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: notification.root.logger
+  recommendExpression: INFO, console
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: notification.log.maxfilesize
+  recommendExpression: 64
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: notification.log.maxbackupindex
+  recommendExpression: 16
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: notification.security.root.logger
+  recommendExpression: INFO, console
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: notification.security.log.maxfilesize
+  recommendExpression: 64
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: notification.security.log.maxbackupindex
+  recommendExpression: 16
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: javax.jdo.option.ConnectionUserName
+  recommendExpression: notificationuser
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: javax.jdo.option.ConnectionPassword
+  recommendExpression: password
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: PASSWORD

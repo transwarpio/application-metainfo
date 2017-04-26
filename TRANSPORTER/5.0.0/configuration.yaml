@@ -1,0 +1,89 @@
+- name: tdt.server.thrift.port
+  recommendExpression: 20000
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE
+  
+- name: tdt.jdbc.driver.class
+  recommendExpression: org.apache.hadoop.hive.jdbc.HiveDriver
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE
+
+- name: tdt.jdbc.user.name
+  recommendExpression: tdtuser
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE
+
+- name: tdt.jdbc.passord
+  recommendExpression: passord
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE
+
+- name: tdt.server.thrift.bind.host
+  recommendExpression: 127.0.0.1
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE  
+
+- name: tdt.jdbc.user.name
+  recommendExpression: tdtuser
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tdt.jdbc.password
+  recommendExpression: password
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: PASSWORD
+
+- name: tdt.jdbc.max.active
+  recommendExpression: 100
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE
+
+- name: tdt.jdbc.initial.size
+  recommendExpression: 10
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE
+
+- name: tdt.server.authentication
+  recommendExpression: NONE
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE

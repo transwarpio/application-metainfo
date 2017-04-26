@@ -65,6 +65,11 @@ roles:
     - directive: !<docker-compose>
         action: Up
         file: "/etc/${service.sid}/conf/tos-master-${service.sid}.yaml"
+  - type: Delete
+    directives:
+    - directive: !<docker-compose>
+        action: Stop
+        file: "/etc/${service.sid}/conf/tos-master-${service.sid}.yaml"
 - name: TOS_SLAVE
   friendlyName: "TOS Slave"
   category: SLAVE
@@ -130,6 +135,11 @@ roles:
     directives:
     - directive: !<docker-compose>
         action: Up
+        file: "/etc/${service.sid}/conf/tos-slave-${service.sid}.yaml"
+  - type: Delete
+    directives:
+    - directive: !<docker-compose>
+        action: Stop
         file: "/etc/${service.sid}/conf/tos-slave-${service.sid}.yaml"
 
 product: "TOS"
