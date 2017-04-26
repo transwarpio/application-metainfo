@@ -38,13 +38,13 @@
 <#if dependencies.TXSQL??>
     <#assign mysqlHostPorts = []/>
     <#list dependencies.TXSQL.roles['TXSQL_SERVER'] as role>
-        mysqlHostPorts = mysqlHostPorts + [role.hostname + ':' + dependencies.TXSQL['mysql.rw.port']]
+        <#assign mysqlHostPorts = mysqlHostPorts + [role.hostname + ':' + dependencies.TXSQL['mysql.rw.port']]>
     </#list>
 <#else>
     <#assign mysqlHostPorts = [service.roles.INCEPTOR_MYSQL[0]['hostname'] + ":" + service['mysql.port']]/>
 </#if>
 
-    <#assign dbconnectionstring="jdbc:mysql://" + mysqlHostPorts?join(",") + "/metastore_" + service.sid + "?createDatabaseIfNotExist=true&amp;user=hiveuser&amp;password=password&amp;characterEncoding=UTF-8">
+    <#assign dbconnectionstring="jdbc:mysql://" + mysqlHostPorts?join(",") + "/metastore_" + service.sid + "?createDatabaseIfNotExist=true&amp;user=" + service['javax.jdo.option.ConnectionUserName'] + "&amp;password=" + service['javax.jdo.option.ConnectionPassword'] + "&amp;characterEncoding=UTF-8">
     <@property "hive.stats.dbconnectionstring" dbconnectionstring/>
     <#assign scratchdir="hdfs://" + dependencies.HDFS.nameservices[0] + "/" + service.sid + "/tmp/hive">
     <@property "hive.exec.scratchdir" scratchdir/>
@@ -52,7 +52,7 @@
     <@property "hive.metastore.uris" uris/>
     <#assign tracker=service.roles.INCEPTOR_METASTORE[0]['hostname'] + ":8031">
     <@property "mapred.job.tracker" tracker/>
-    <#assign connectionURL="jdbc:mysql://" + service.roles.INCEPTOR_MYSQL[0]['hostname'] + ":" + service['mysql.port'] + "/metastore_" + service.sid + "?createDatabaseIfNotExist=false&amp;characterEncoding=UTF-8">
+    <#assign connectionURL="jdbc:mysql://" + mysqlHostPorts?join(",") + "/metastore_" + service.sid + "?createDatabaseIfNotExist=false&amp;characterEncoding=UTF-8">
     <@property "javax.jdo.option.ConnectionURL" connectionURL/>
     <#if dependencies.LICENSE_SERVICE??>
     <#assign  license=dependencies.LICENSE_SERVICE license_servers=[]>

@@ -294,24 +294,6 @@
   groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
-- name: hive.metastore.password
-  recommendExpression: password
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: hive.metastore.username
-  recommendExpression: hiveuser
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
 - name: ngmr.fastdisk.dir
   recommendExpression: /mnt/ramdisk/ngmr
   defaultValue: null

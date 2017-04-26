@@ -85,7 +85,7 @@
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: ["hive-site.xml"]
-  visibility: READ_WRITE
+  visibility: PASSWORD
 
 - name: hive.server2.session.check.interval
   recommendExpression: 60000
