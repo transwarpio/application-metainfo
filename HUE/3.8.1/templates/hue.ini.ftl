@@ -758,7 +758,7 @@
 
       # URL of the HistoryServer API
       ## history_server_api_url=http://localhost:19888
-<#if dependencies.YARN.roles.YARN_HISTORYSERVER?? && dependencies.YARN['historyserver.http-port']??>
+<#if dependencies.YARN.roles.YARN_HISTORYSERVER??>
       history_server_api_url=http://${dependencies.YARN.roles.YARN_HISTORYSERVER[0]['hostname']}:${dependencies.YARN['historyserver.http-port']}
 </#if>
 
@@ -774,31 +774,29 @@
       ## logical_name=my-rm-name
 
 <#if dependencies.YARN?? && dependencies.YARN.roles.YARN_RESOURCEMANAGER?size gt 1>
-    <#list dependencies.YARN.roles.YARN_RESOURCEMANAGER as resourcemanager>
-        [[[ha]]]
-        resourcemanager_host=dependencies.YARN.roles.YARN_RESOURCEMANAGER[1]['hostname']
-        resourcemanager_web_port=dependencies.YARN.roles.YARN_RESOURCEMANAGER[1]['resourcemanager.webapp.port']
-        submit_to=True
-        logical_name=rm2
-        resourcemanager_api_url=http://${resourcemanager_host}:${resourcemanager_web_port}
-        <#if dependencies.YARN.roles.YARN_HISTORYSERVER?? && dependencies.YARN['historyserver.http-port']??>
-            history_server_api_url=http://${dependencies.YARN.roles.YARN_HISTORYSERVER[0]['hostname']}:${dependencies.YARN['historyserver.http-port']}
-        </#if>
-    </#list>
+      [[[ha]]]
+      resourcemanager_host=${dependencies.YARN.roles.YARN_RESOURCEMANAGER[1]['hostname']}
+      resourcemanager_port=${dependencies.YARN['resourcemanager.port']}
+      submit_to=True
+      logical_name=rm2
+      resourcemanager_api_url=http://${dependencies.YARN.roles.YARN_RESOURCEMANAGER[1]['hostname']}:${dependencies.YARN['resourcemanager.webapp.port']}
+      <#if dependencies.YARN.roles.YARN_HISTORYSERVER??>
+      history_server_api_url=http://${dependencies.YARN.roles.YARN_HISTORYSERVER[0]['hostname']}:${dependencies.YARN['historyserver.http-port']}
+      </#if>
+</#if>
 <#if dependencies.YARN?? && dependencies.YARN.roles.YARN_RESOURCEMANAGER?size gt 2>
   <#assign  size=dependencies.YARN.roles.YARN_RESOURCEMANAGER?size>
   <#list 2..size-1 as i>
       [[[ha${i}]]]
-      resourcemanager_host=dependencies.YARN.roles.YARN_RESOURCEMANAGER[i]['hostname']
-      resourcemanager_web_port=dependencies.YARN.roles.YARN_RESOURCEMANAGER[i]['resourcemanager.webapp.port']
+      resourcemanager_host=${dependencies.YARN.roles.YARN_RESOURCEMANAGER[i]['hostname']}
+      resourcemanager_port=${dependencies.YARN['resourcemanager.port']}
       submit_to=True
-      logical_name=rm2
-      resourcemanager_api_url=http://${resourcemanager_host}:${resourcemanager_web_port}
-    <#if dependencies.YARN.roles.YARN_HISTORYSERVER?? && dependencies.YARN['historyserver.http-port']??>
-        history_server_api_url=http://${dependencies.YARN.roles.YARN_HISTORYSERVER[0]['hostname']}:${dependencies.YARN['historyserver.http-port']}
-    </#if>
+      logical_name=rm${i+1}
+      resourcemanager_api_url=http://${dependencies.YARN.roles.YARN_RESOURCEMANAGER[i]['hostname']}:${dependencies.YARN['resourcemanager.webapp.port']}
+      <#if dependencies.YARN.roles.YARN_HISTORYSERVER?? && dependencies.YARN['historyserver.http-port']??>
+      history_server_api_url=http://${dependencies.YARN.roles.YARN_HISTORYSERVER[0]['hostname']}:${dependencies.YARN['historyserver.http-port']}
+      </#if>
   </#list>
-</#if>
 </#if>
 
   # Configuration for MapReduce (MR1)

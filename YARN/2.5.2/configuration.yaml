@@ -636,3 +636,14 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: historyserver.http-port
+  recommendExpression: 19888
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes:
+    - YARN_HISTORYSERVER
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
