@@ -407,6 +407,14 @@ roleGroups:
     others:
     - key: mountPoints
       optional: true
+
+stages:
+  - type: Bootstrap
+    taskGroups:
+    - !<FormakZK>
+      summaryPolicy: ALL
+      timeoutMinutes: 1
+
 jobs:
   - type: Stop
     stages:
