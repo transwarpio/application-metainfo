@@ -156,7 +156,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.master.distributed.log.replay
@@ -421,7 +421,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.client.meta.operation.timeout
@@ -430,7 +430,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.sservice.scan.pagesize

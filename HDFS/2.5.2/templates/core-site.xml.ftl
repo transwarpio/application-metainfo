@@ -9,7 +9,6 @@
 <#--------------------------->
 <#assign
     sid=service.sid
-    auth=service.auth
     fsid=dependencies.HDFS!sid
     federation=service.nameservices?? && service.nameservices?size gt 0
 >
@@ -47,16 +46,26 @@
     <@property "ha.zookeeper.parent-znode" "/" + sid + "-ha"/>
 </#if>
 <#--handle the kerberos-->
-<#if auth == "kerberos">
-    <@property "hadoop.security.authentication" auth/>
-    <#if service["hadoop.http.authentication.type"]=="kerberos">
+<#if service.auth == "kerberos">
+    <@property "hadoop.security.authentication" service.auth/>
+    <@property "hadoop.security.authorization" "true"/>
     <@property "hadoop.http.filter.initializers" "org.apache.hadoop.security.AuthenticationFilterInitializer"/>
-    <@property "hadoop.http.authentication.simple.anonymous.allowed" "false"/>
-    <#assign realm=service['kerberos.realm'] principal="HTTP/" + localhostname?lower_case + "@" + realm>
+    <@property "hadoop.http.authentication.simple.anonymous.allowed" "true"/>
+    <#assign principal="HTTP/" + localhostname?lower_case + "@" + service.realm/>
     <@property "hadoop.http.authentication.kerberos.principal" principal/>
-    <@property "hadoop.http.authentication.kerberos.keytab" "/etc/"+ fsid + "/hdfs.keytab"/>
+    <@property "hadoop.http.authentication.kerberos.keytab" "/etc/"+ fsid + "/conf/hdfs.keytab"/>
     <@property "hadoop.http.authentication.signature.secret.file" "/etc/hadoop-http-auth-signature-secret"/>
-    </#if>
+<#if service.plugins?seq_contains("guarndian")>
+    <@property "hadoop.security.group.mapping" "org.apache.hadoop.security.LdapGroupsMapping"/>
+    <@property "hadoop.security.group.mapping.ldap.bind.user" "cn=manager,dc=tdh"/>
+    <@property "hadoop.security.group.mapping.ldap.bind.password.file" "/etc/hadoop/conf/ldap-conn-pass.txt"/>
+    <@property "hadoop.security.group.mapping.ldap.url" "ldap://${service.kdc.hostname}:${dependencies.GUARDIAN['guardian.apacheds.ldap.port']}"/>
+    <@property "hadoop.security.group.mapping.ldap.base" "dc=tdh"/>
+    <@property "hadoop.security.group.mapping.ldap.search.filter.user" "(&(objectClass=inetOrgPerson)(uid={0}))"/>
+    <@property "hadoop.security.group.mapping.ldap.search.filter.group" "(objectClass=configGroup)"/>
+    <@property "hadoop.security.group.mapping.ldap.search.attr.member" "member"/>
+    <@property "hadoop.security.group.mapping.ldap.search.attr.group.name" "cn"/>
+</#if>
 </#if>
 <#--hadoop.proxyuser.[hive, hue, httpfs, oozie].[hosts,groups]-->
 <#assign services=["hbase","hive", "hue", "httpfs", "oozie"]>

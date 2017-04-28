@@ -65,7 +65,7 @@ roles:
   - name: HDFS_DATANODE
     friendlyName: "Data Node"
     labelPrefix: "hadoop-hdfs-datanode"
-    linkExpression: "http://${localhostname}:${service[(service.auth=='kerberos')?then('secure.datanode.http-port','datanode.http-port')]}/"
+    linkExpression: "http://${localhostname}:${service['datanode.http-port']}/?user.name=hdfs"
     category: SLAVE
     frontendOperations: ["Start", "Stop", "Commission", "Decommission", "Delete", "Scaleout"]
     env:
@@ -140,7 +140,7 @@ roles:
   - name: HDFS_NAMENODE
     friendlyName: "Name Node"
     labelPrefix: "hadoop-hdfs-namenode"
-    linkExpression: "http://${localhostname}:${service['namenode.http-port']}/"
+    linkExpression: "http://${localhostname}:${service['namenode.http-port']}/?user.name=hdfs"
     category: MASTER
     frontendOperations: ["Start", "Stop"]
     env:
@@ -253,7 +253,7 @@ roleGroups:
       - name: HDFS_NAMENODE
         friendlyName: "Name Node"
         labelPrefix: "hadoop-hdfs-namenode"
-        linkExpression: "http://${localhostname}:${service['namenode.http-port']}/"
+        linkExpression: "http://${localhostname}:${service['namenode.http-port']}/?user.name=hdfs"
         category: MASTER
         frontendOperations: ["Start", "Stop", "Move"]
         env:
@@ -441,6 +441,12 @@ pages:
 - configuration
 - operation
 - security
+
+principals:
+- HTTP
+- host
+- hdfs
+- httpfs
 
 healthChecks:
 - category: DAEMON_CHECK

@@ -2,7 +2,7 @@
 Server {
   com.sun.security.auth.module.Krb5LoginModule required
   useKeyTab=true
-  keyTab="/etc/${service.sid}/conf/${service.keytab}.keytab"
+  keyTab="${service.keytab}"
   storeKey=true
   useTicketCache=false
   principal="zookeeper/${localhostname?lower_case}@${service.realm}";

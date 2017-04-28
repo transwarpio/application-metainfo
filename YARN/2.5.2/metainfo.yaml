@@ -19,7 +19,7 @@ roles:
 - name: YARN_RESOURCEMANAGER
   friendlyName: "Resource Manager"
   labelPrefix: "hadoop-yarn-resourcemanager"
-  linkExpression: "http://${localhostname}:${service['resourcemanager.webapp.port']}/"
+  linkExpression: "http://${localhostname}:${service['resourcemanager.webapp.port']}/?user.name=yarn"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   env:
@@ -72,7 +72,7 @@ roles:
 - name: YARN_NODEMANAGER
   friendlyName: "Node Manager"
   labelPrefix: "hadoop-yarn-nodemanager"
-  linkExpression: "http://${service['yarn.nodemanager.webapp.address']?replace(r'${yarn.nodemanager.hostname}', localhostname)}/"
+  linkExpression: "http://${service['yarn.nodemanager.webapp.address']?replace(r'${yarn.nodemanager.hostname}', localhostname)}/?user.name=yarn"
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Commission", "Decommission", "Delete", "Scaleout"]
   env:
@@ -271,6 +271,11 @@ pages:
 - operation
 - resource_management
 - security
+
+principals:
+- HTTP
+- mapred
+- yarn
 
 healthChecks:
 - category: DAEMON_CHECK

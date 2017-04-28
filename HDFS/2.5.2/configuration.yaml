@@ -206,30 +206,8 @@
   groups: []
   visibility: READ_WRITE
 
-- name: secure.datanode.port
-  recommendExpression: 1002
-  defaultValue: null
-  valueType: PORT
-  scope: !<RoleTypes>
-    roleTypes:
-    - HDFS_DATANODE
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
 - name: datanode.port
   recommendExpression: 50010
-  defaultValue: null
-  valueType: PORT
-  scope: !<RoleTypes>
-    roleTypes:
-    - HDFS_DATANODE
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: secure.datanode.http-port
-  recommendExpression: 1004
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>

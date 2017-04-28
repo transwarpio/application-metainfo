@@ -51,7 +51,15 @@
 # export HIVE_CONF_DIR=
 
 # Folder containing extra ibraries required for hive compilation/execution can be controlled by:
-# export HIVE_AUX_JARS_PATH=
+<#if service.plugins?seq_contains("guardian")>
+for f in /usr/lib/transwarp/plugins/guardian/slipstream/lib/*jar; do
+if [ "HIVE_AUX_JARS_PATH" ]; then
+export HIVE_AUX_JARS_PATH=$f:$HIVE_AUX_JARS_PATH
+else
+export HIVE_AUX_JARS_PATH=$f
+fi
+done
+</#if>
 
 export HADOOP_HEAPSIZE=${service['hive.memory']}
 export INCEPTOR_SERVER_MEMORY=${service['hive.memory']}
@@ -93,3 +101,7 @@ export HIVE_METASTORE_SERVER=${service.roles.INCEPTOR_METASTORE[0]['hostname']}
 export SPARK_DRIVER_ADDR=${service.roles.INCEPTOR_SERVER[0]['hostname']}
 export EXECUTOR_ID_PATH=/${service.sid}/executorID
 export METASTORE_ID=metastore_${service.sid}
+
+<#if service.auth = "kerberos">
+    cp /etc/${service.sid}/conf/krb5.conf /etc
+</#if>

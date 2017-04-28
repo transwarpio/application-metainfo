@@ -7,22 +7,28 @@
 </property>
 </#macro>
 <#--------------------------->
-<#assign sid=service.sid auth=service.auth>
+<#assign sid=service.sid auth=service.auth realm=service.realm>
 <configuration>
 <#--handle kerberos-->
 <#if auth == "kerberos">
-<#assign realm=service['kerberos.realm']>
     <@property "dfs.block.access.token.enable" "true"/>
 <#assign roles=["dfs.namenode", "dfs.journalnode"]>
 <#list roles as role>
-    <@property role + ".keytab.file" "/etc/" + sid + "/hdfs.keytab"/>
+    <@property role + ".keytab.file" "/etc/" + sid + "/conf/hdfs.keytab"/>
     <@property role + ".kerberos.principal" "hdfs/_HOST@" + realm/>
     <@property role + ".kerberos.internal.spnego.principal" "HTTP/_HOST@" + realm/>
 </#list>
-    <@property "dfs.datanode.kerberos.principal" "/etc/" + sid + "/hdfs.keytab"/>
+    <@property "dfs.datanode.data.dir.perm" "700"/>
+    <@property "dfs.datanode.keytab.file" service.keytab/>
     <@property "dfs.datanode.kerberos.principal" "hdfs/_HOST@" + realm/>
     <@property "dfs.web.authentication.kerberos.principal" "HTTP/_HOST@" + realm/>
-    <@property "dfs.web.authentication.kerberos.keytab" "/etc/" + sid + "/hdfs.keytab"/>
+    <@property "dfs.web.authentication.kerberos.keytab" service.keytab/>
+    <#--  for datanode to use unprivileged port -->
+    <@property "dfs.data.transfer.protection" "integrity"/>
+    <#if service.plugins?seq_contains("guardian")>
+    <@property "dfs.namenode.inode.attributes.provider.class" "io.transwarp.guardian.plugins.hdfs.GuardianINodeAttributeProvider"/>
+    <@property "hdfs.service.id" service.sid/>
+    </#if>
 </#if>
 <#--handle federation-->
 <#assign namenode_use_wildcard=service['namenode.use.wildcard']>
@@ -78,12 +84,10 @@
     <@property "dfs.journalnode.http-address" hostname + ":" + httpPort/>
 <#--handleDatanode-->
 <#assign useWildcard=service["datanode.use.wildcard"]
-         port=(auth == "kerberos")?string(service["secure.datanode.port"], service["datanode.port"])
-         httpPort=(auth == "kerberos")?string(service["secure.datanode.http-port"], service["datanode.http-port"])
-         ipcPort=service["datanode.ipc-port"]>
-    <@property "dfs.datanode.address" hostname + ":" + port/>
-    <@property "dfs.datanode.http.address" hostname + ":" + httpPort/>
-    <@property "dfs.datanode.ipc.address" hostname + ":" + ipcPort/>
+         hostname=(useWildcard == "true")?string("0.0.0.0", localhostname)/>
+    <@property "dfs.datanode.address" hostname + ":" + service["datanode.port"]/>
+    <@property "dfs.datanode.http.address" hostname + ":" + service["datanode.http-port"]/>
+    <@property "dfs.datanode.ipc.address" hostname + ":" + service["datanode.ipc-port"]/>
 <#--handleOther-->
     <@property "dfs.hosts.exclude" "/etc/${sid}/conf/exclude-list.txt"/>
     <@property "dfs.client.read.shortcircuit", "true"/>

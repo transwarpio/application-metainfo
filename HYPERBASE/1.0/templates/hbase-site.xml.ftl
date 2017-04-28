@@ -9,7 +9,6 @@
 <#--------------------------->
 <#assign
     sid=service.sid
-    auth=service.auth
 >
 <configuration>
 
@@ -24,15 +23,24 @@
 </#if>
 
 <#-- TODO handle the kerberos-->
-<#if auth == "kerberos">
-    <@property "hadoop.security.authentication" auth/>
-    <#if service["hadoop.http.authentication.type"]=="kerberos">
-    <@property "hadoop.http.filter.initializers" "org.apache.hadoop.security.AuthenticationFilterInitializer"/>
-    <@property "hadoop.http.authentication.simple.anonymous.allowed" "false"/>
-    <#assign realm=service['kerberos.realm'] principal="HTTP/" + localhostname?lower_case + "@" + realm>
-    <@property "hadoop.http.authentication.kerberos.principal" principal/>
-    <@property "hadoop.http.authentication.kerberos.keytab" "/etc/"+ fsid + "/hdfs.keytab"/>
-    <@property "hadoop.http.authentication.signature.secret.file" "/etc/hadoop-http-auth-signature-secret"/>
+<#if service.auth == "kerberos">
+    <@property "hbase.security.authentication" "kerberos"/>
+    <@property "hbase.rpc.engine" "org.apache.hadoop.hbase.ipc.SecureRpcEngine"/>
+    <@property "hbase.regionserver.kerberos.principal" "hbase/_HOST@" + service.realm/>
+    <@property "hbase.regionserver.keytab.file" service.keytab/>
+    <@property "hbase.master.kerberos.principal" "hbase/_HOST@" + service.realm/>
+    <@property "hbase.master.keytab.file" service.keytab/>
+    <@property "hbase.thrift.kerberos.principal"  "hbase/_HOST@" + service.realm/>
+    <@property "hbase.thrift.keytab.file" service.keytab/>
+    <@property "hbase.thrift.security.qop" "auth-conf"/>
+    <@property "hbase.security.authorization" "true"/>
+    <#if service.plugins?seq_contains("guardian")>
+    <@property "hbase.service.id" service.sid/>
+    <@property "hbase.coprocessor.region.classes" service['hbase.coprocessor.region.classes'] + ",org.apache.hadoop.hbase.security.token.TokenProvider,io.transwarp.guardian.plugins.hyperbase.GuardianAccessController,org.apache.hadoop.hbase.security.access.SecureBulkLoadEndpoint"/>
+    <@property "hbase.coprocessor.master.classes" service['hbase.coprocessor.master.classes'] + ",io.transwarp.guardian.plugins.hyperbase.GuardianAccessController"/>
+    <#else>
+    <@property "hbase.coprocessor.region.classes" service['hbase.coprocessor.region.classes'] + ",org.apache.hadoop.hbase.security.token.TokenProvider,org.apache.hadoop.hbase.security.access.AccessController,org.apache.hadoop.hbase.security.access.SecureBulkLoadEndpoint"/>
+    <@property "hbase.coprocessor.master.classes" service['hbase.coprocessor.master.classes'] + ",org.apache.hadoop.hbase.security.access.AccessController"/>
     </#if>
 </#if>
     <#assign path="hdfs://" + dependencies.HDFS.nameservices[0] + "/" + service.sid + "_hregionindex">

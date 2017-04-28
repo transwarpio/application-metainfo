@@ -7,15 +7,17 @@
 </property>
 </#macro>
 <#--------------------------->
-<#assign
-    sid=service.sid
-    auth=service.auth
-    historyServer=service.roles.YARN_HISTORYSERVER[0]['hostname']
->
+<#assign historyServer=service.roles.YARN_HISTORYSERVER[0]['hostname']>
 <configuration>
     <@property "mapreduce.jobhistory.address" historyServer + ":10020"/>
     <@property "mapreduce.jobhistory.webapp.address" historyServer + ":19888"/>
-    <@property "yarn.app.mapreduce.am.staging-dir" "/" + sid + "/user"/>
+    <@property "yarn.app.mapreduce.am.staging-dir" "/" + service.sid + "/user"/>
+    <#if service.auth = "kerberos">
+    <@property "mapreduce.jobhistory.principal" "mapred/_HOST@" + service.realm></@property>
+    <@property "mapreduce.jobhistory.keytab" service.keytab></@property>
+    <@property "mapreduce.jobhistory.webapp.spnego-keytab-file" service.keytab></@property>
+    <@property "mapreduce.jobhistory.webapp.spnego-principal" "HTTP/_HOST@" + service.realm></@property>
+    </#if>
 <#--Take properties from the context-->
 <#list service['mapred_site'] as key, value>
     <@property key value/>

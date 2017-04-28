@@ -23,7 +23,7 @@ roles:
 - name: HYPERBASE_MASTER
   friendlyName: "Hyperbase Master"
   labelPrefix: "hyperbase-master"
-  linkExpression: "http://${localhostname}:${service['master.info.port']}/"
+  linkExpression: "http://${localhostname}:${service['master.info.port']}/?user.name=hyperbase"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   env:
@@ -73,7 +73,7 @@ roles:
 - name: HYPERBASE_REGIONSERVER
   friendlyName: "Region Server"
   labelPrefix: "hyperbase-regionserver"
-  linkExpression: "http://${localhostname}:${service['regionserver.info.port']}/"
+  linkExpression: "http://${localhostname}:${service['regionserver.info.port']}/?user.name=hyperbase"
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
@@ -199,6 +199,10 @@ pages:
 - configuration
 - operation
 - security
+
+principals:
+- HTTP
+- hbase
 
 healthChecks:
 - category: DAEMON_CHECK

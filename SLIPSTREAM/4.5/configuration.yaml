@@ -258,35 +258,17 @@
   groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
-- name: transwarp.docker.network.interfaces
-  recommendExpression: eth0
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: ["hive-site.xml"]
-  visibility: READ_WRITE
-
-- name: transwarp.docker.network.hypervisor-subnetmask
-  recommendExpression: 255.255.255.255
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: ["hive-site.xml"]
-  visibility: READ_WRITE
-
-- name: transwarp.docker.enable
+- name: hive.server2.enabled
   recommendExpression: true
   defaultValue: null
-  valueType: BOOL
+  valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
-- name: transwarp.docker.network.policy
-  recommendExpression: io.transwarp.docker.DockerNetworkPolicyHostGW
+- name: hive.server2.authentication
+  recommendExpression: LDAP
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}

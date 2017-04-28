@@ -17,7 +17,28 @@
     rm_webapp_port=service['resourcemanager.webapp.port']
 >
 <configuration>
-<#--federation is true-->
+
+<#if service.auth = "kerberos">
+    <@property "yarn.resourcemanager.keytab" service.keytab/>
+    <@property "yarn.nodemanager.keytab" service.keytab/>
+    <@property "yarn.resourcemanager.principal" "yarn/_HOST@" + service.realm/>
+    <@property "yarn.nodemanager.principal" "yarn/_HOST@" + service.realm/>
+    <@property "yarn.nodemanager.container-executor.class" "org.apache.hadoop.yarn.server.nodemanager.DefaultContainerExecutor"/>
+    <@property "yarn.nodemanager.linux-container-executor.group" "yarn"/>
+    <#if service.roles.YARN_TIMELINESERVER??>
+    <@property "yarn.timeline-service.keytab" service.keytab/>
+    <@property "yarn.timeline-service.principal" "yarn/_HOST@" + service.realm/>
+    <@property "yarn.timeline-service.http-authentication.type" "kerberos"/>
+    <@property "yarn.timeline-service.http-authentication.kerberos.principal" "HTTP/_HOST@" + service.realm/>
+    <@property "yarn.timeline-service.http-authentication.kerberos.keytab" service.keytab/>
+    <#if service.plugins?seq_contains("guardian")>
+    <@property "yarn.service.id" service.sid/>
+    <@property "yarn.authorization-provider" "io.transwarp.guardian.plugins.yarn.GuardianYarnAuthorizer"/>
+    <@property "yarn.resourcemanager.configuration.provider-class" "io.transwarp.guardian.plugins.yarn.GuardianYarnConfigurationProvider"/>
+    </#if>
+    </#if>
+</#if>
+
 <#if service.roles.YARN_RESOURCEMANAGER?? && service.roles.YARN_RESOURCEMANAGER?size gt 1>
     <@property "yarn.resourcemanager.ha.enabled" "true"/>
     <@property "yarn.resourcemanager.recovery.enabled" "true"/>
@@ -59,6 +80,12 @@
     <@property "yarn.resourcemanager.admin.address" resourceManager + ":" + rm_admin_port/>
     <@property "yarn.resourcemanager.webapp.address" resourceManager + ":" + rm_webapp_port/>
 </#if>
+
+    <@property "yarn.resourcemanager.scheduler.address" resourceManager + ":8030"/>
+    <@property "yarn.resourcemanager.resource-tracker.address" resourceManager + ":8031"/>
+    <@property "yarn.resourcemanager.address" resourceManager + ":8032"/>
+    <@property "yarn.resourcemanager.admin.address" resourceManager + ":8033"/>
+    <@property "yarn.resourcemanager.webapp.address" resourceManager + ":8088"/>
     <@property "yarn.nodemanager.remote-app-log-dir" "/" + sid + "/var/log/hadoop-yarn/apps"/>
 
 <#if service.roles.YARN_HISTORYSERVER?? && service.roles.YARN_HISTORYSERVER?size gt 0>

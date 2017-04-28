@@ -28,6 +28,16 @@ export HADOOP_CONF_DIR=/etc/${dependencies.HDFS.sid}/conf:/etc/${dependencies.YA
 
 # Extra Java CLASSPATH elements.  Optional.
 export HBASE_CLASSPATH=/etc/${dependencies.HDFS.sid}/conf
+<#if service.plugins?seq_contains("guardian")>
+for f in /usr/lib/transwarp/plugins/guardian/hyperbase/lib/*jar; do
+if [ "$HBASE_CLASSPATH" ]; then
+export HBASE_CLASSPATH=$HBASE_CLASSPATH:$f
+else
+export HBASE_CLASSPATH=$f
+fi
+done
+</#if>
+
 export HADOOP_MAPRED_HOME=/usr/lib/hadoop-mapreduce
 
 # Extra Java runtime options.
@@ -129,3 +139,8 @@ export DEPEND_ON_ES=false
 </#if>
 
 export HBASE_ZOOKEEPER_ZNODE_PARENT=/${service.sid}
+
+
+<#if service.auth = "kerberos">
+cp /etc/${service.sid}/conf/krb5.conf /etc
+</#if>

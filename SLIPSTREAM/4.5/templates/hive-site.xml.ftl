@@ -7,7 +7,6 @@
 </property>
 </#macro>
 <#--------------------------->
-<#assign auth=service.auth>
 <configuration>
 
 <#--handle dependent.zookeeper-->
@@ -23,15 +22,32 @@
 </#if>
 
 <#-- TODO handle the kerberos-->
-<#if auth == "kerberos">
-    <@property "hadoop.security.authentication" auth/>
-    <#if service["hadoop.http.authentication.type"]=="kerberos">
-    <@property "hadoop.http.filter.initializers" "org.apache.hadoop.security.AuthenticationFilterInitializer"/>
-    <@property "hadoop.http.authentication.simple.anonymous.allowed" "false"/>
-    <#assign realm=service['kerberos.realm'] principal="HTTP/" + localhostname?lower_case + "@" + realm>
-    <@property "hadoop.http.authentication.kerberos.principal" principal/>
-    <@property "hadoop.http.authentication.kerberos.keytab" "/etc/"+ fsid + "/hdfs.keytab"/>
-    <@property "hadoop.http.authentication.signature.secret.file" "/etc/hadoop-http-auth-signature-secret"/>
+<#if service.auth == "kerberos">
+    <@property "hive.metastore.sasl.enabled" "true"/>
+    <@property "hive.metastore.kerberos.keytab.file" service.keytab/>
+    <@property "hive.metastore.kerberos.principal" "hive/_HOST@" + service.realm/>
+    <#if service['hive.server2.authentication'] != "LDAP">
+    <@property "hive.server2.authentication" "KERBEROS"/>
+    <#else>
+    <@property "hive.server2.authentication" "LDAP"/>
+    </#if>
+    <@property "hive.server2.authentication.kerberos.principal"  "hive/_HOST@" + service.realm/>
+    <@property "hive.server2.authentication.kerberos.keytab" service.keytab/>
+    <#if service['hive.server2.enabled'] == "true">
+    <@property "hive.security.authorization.manager" "org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd.SQLStdHiveAuthorizerFactory"/>
+    <@property "hive.security.authenticator.manager" "org.apache.hadoop.hive.ql.security.SessionStateUserAuthenticator"/>
+    <@property "hive.security.authorization.enabled" "true"/>
+    <#if service.plugins?seq_contains("guardian")>
+    <@property "hive.security.authorization.manager" "io.transwarp.guardian.plugins.inceptor.GuardianHiveAuthorizerFactory"/>
+    <@property "hive.service.id" service.sid/>
+    <@property "hive.metastore.event.listeners" "io.transwarp.guardian.plugins.inceptor.GuardianMetaStoreListener"/>
+    </#if>
+    </#if>
+<#else>
+    <#if service['hive.server2.authentication'] != "LDAP">
+    <@property "hive.server2.authentication" "NONE"/>
+    <#else>
+    <@property "hive.server2.authentication" "LDAP"/>
     </#if>
 </#if>
 
@@ -61,9 +77,6 @@
     </#list>
     <@property "license.zookeeper.quorum" license_servers?join(",")/>
     </#if>
-    <#assign inceptor=service.roles.INCEPTOR_SERVER[0]['hostname'] + ":" + service['hive.server2.thrift.port']>
-    <@property "transwarp.docker.inceptor" inceptor/>
-
 <#--Take properties from the context-->
 <#list service['hive-site.xml'] as key, value>
     <@property key value/>

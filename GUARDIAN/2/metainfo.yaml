@@ -10,6 +10,7 @@ roles:
   friendlyName: "Guardian Server"
   labelPrefix: "guardian-server"
   category: MASTER
+  linkExpression: "http://${localhostname}:${service['guardian.server.port']}"
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [3, 2, 1]}

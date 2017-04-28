@@ -203,6 +203,8 @@ stages:
 product: Inceptor
 
 firstWizardConfigs:
+- hive.server2.enabled
+- hive.server2.authentication
 - hive.exec.scratchdir
 - hive.metastore.warehouse.dir
 - ngmr.fastdisk.dir
@@ -222,6 +224,10 @@ pages:
 - operation
 - resource_allocation
 - security
+
+principals:
+- HTTP
+- hive
 
 healthChecks:
 - category: DAEMON_CHECK

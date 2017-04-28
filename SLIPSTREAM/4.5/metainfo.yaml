@@ -203,6 +203,8 @@ stages:
 product: Stream
 
 firstWizardConfigs:
+- hive.server2.enabled
+- hive.server2.authentication
 - hive.exec.scratchdir
 - hive.metastore.warehouse.dir
 - ngmr.fastdisk.dir
@@ -214,13 +216,16 @@ firstWizardConfigs:
 - ngmr.fastdisk.size
 
 pages:
-- summary
 - roles
 - configuration
 - operation
 - resource_allocation
 - security
 - holodesk
+
+principals:
+- HTTP
+- hive
 
 healthChecks:
 - category: DAEMON_CHECK
