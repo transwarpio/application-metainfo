@@ -5,7 +5,7 @@
   master=servers[0].hostname
 >
 apacheds-backend-master:
-  image: ${registryServer}:${registryPort}/tos/apacheds:live
+  image: ${registryServer}:${registryPort}/transwarp/apacheds:tdh500
   net: host
   working_dir: /usr/lib/guardian-apacheds/scripts
   volumes:
@@ -39,7 +39,7 @@ apacheds-backend-master:
   </#list>
 </#if>
 guardian-server:
-  image: ${registryServer}:${registryPort}/tos/guardian:live
+  image: ${registryServer}:${registryPort}/transwarp/guardian:tdh500
   net: host
   working_dir: /usr/lib/guardian/scripts
   volumes:

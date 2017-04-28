@@ -51,4 +51,4 @@ healthChecks:
   intervalSeconds: 5
   method: !<DockerPs>
     imageMap:
-      GUARNDIAN_SERVER: ["apacheds-backend-master", "guardian-server"]
+      GUARDIAN_SERVER: ["apacheds-backend-master", "guardian-server"]
