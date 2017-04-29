@@ -73,7 +73,6 @@ export HIVE_SERVER2="true"
 export INCEPTOR_LICENSE_ZOOKEEPER_QUORUM=${quorum}
 export INCEPTOR_UI_PORT=${service['inceptor.ui.port']}
 export METASTORE_PORT=${service['hive.metastore.port']}
-export MYSQL_PORT=${service['mysql.port']}
 
 <#if dependencies.ZOOKEEPER[.data_model["localhostname"]]??>
     <#if dependencies.ZOOKEEPER[.data_model["localhostname"]]['zookeeper.client.port']??>
@@ -81,10 +80,15 @@ export MYSQL_PORT=${service['mysql.port']}
     </#if>
 </#if>
 
-export JAVAX_JDO_OPTION_CONNECTIONURL=jdbc:mysql://0.0.0.0:${service['mysql.port']}/metastore_${service.sid}
-export JAVAX_JDO_OPTION_CONNECTION_USERNAME=${service['hive.metastore.username']}
-export JAVAX_JDO_OPTION_CONNECTION_PASSWORD=${service['hive.metastore.password']}
-export MYSQL_SERVER=${service.roles.INCEPTOR_MYSQL[0]['hostname']}
+<#assign hostPorts = []>
+<#assign txsql = dependencies['TXSQL']>
+<#list txsql.roles['TXSQL_SERVER'] as r>
+    <#assign hostPorts = hostPorts + [r.hostname + ':' + txsql['mysql.rw.port']]>
+</#list>
+export MYSQL_SERVER_PORT=${hostPorts?join(",")}
+export JAVAX_JDO_OPTION_CONNECTIONURL=jdbc:mysql://${hostPorts?join(",")}/metastore_${service.sid}
+export JAVAX_JDO_OPTION_CONNECTION_USERNAME=${service['javax.jdo.option.ConnectionUserName']}
+export JAVAX_JDO_OPTION_CONNECTION_PASSWORD=${service['javax.jdo.option.ConnectionPassword']}
 export HIVE_METASTORE_SERVER=${service.roles.INCEPTOR_METASTORE[0]['hostname']}
 export SPARK_DRIVER_ADDR=${service.roles.INCEPTOR_SERVER[0]['hostname']}
 export EXECUTOR_ID_PATH=/${service.sid}/executorID
