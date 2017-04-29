@@ -28,10 +28,6 @@ roles:
   env:
   - name: DISCOVER_CONF_DIR
     value: /etc/${service.sid}/conf
-  - name: DISCOVER_LOG_DIR
-    value: /var/log/${service.sid}
-  - name: HADOOP_CONF_DIR
-    value: /etc/${dependencies.HDFS.sid}/conf:/etc/${dependencies.YARN.sid}/conf
   mountPaths:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
@@ -45,6 +41,12 @@ roles:
   - mountPath: /etc/${dependencies.YARN.sid}/conf
     hostPath: /etc/${dependencies.YARN.sid}/conf
     name: yarn
+  - mountPath: /var/home
+    hostPath: ${service['rstudio.home.dir']}
+    name: home
+  - mountPath: /etc/transwarp/conf/
+    hostPath: /etc/transwarp/conf/
+    name: topology
   summaryPolicy: ALL
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -89,10 +91,6 @@ roles:
   env:
   - name: DISCOVER_CONF_DIR
     value: /etc/${service.sid}/conf
-  - name: DISCOVER_LOG_DIR
-    value: /var/log/${service.sid}
-  - name: HADOOP_CONF_DIR
-    value: /etc/${dependencies.HDFS.sid}/conf:/etc/${dependencies.YARN.sid}/conf
   mountPaths:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
@@ -103,6 +101,9 @@ roles:
   - mountPath: ${service['zeppelin.notebook.dir']}
     hostPath: ${service['zeppelin.notebook.dir']}
     name: data
+  - mountPath: /etc/transwarp/conf/
+    hostPath: /etc/transwarp/conf/
+    name: topology
   summaryPolicy: ALL
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -128,20 +129,43 @@ roles:
         templatePath: "zeppelin-site.xml"
         targetPath: "/etc/${service.sid}/conf/notebook/zeppelin-site.xml"
         mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "shiro.ini"
+        targetPath: "/etc/${service.sid}/conf/notebook/shiro.ini"
+        mode: "755"
+- name: DISCOVER_LOCAL-CRAN
+  friendlyName: "Discover Local-Cran"
+  labelPrefix: "discover-local-cran"
+  dockerImage: "transwarp/local-cran:tdh500"
+  category: MASTER
+  linkExpression: "ftp://${localhostname}"
+  summaryPolicy: ALL
+  env: []
+  mountPaths: []
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations: []
 
 product: Discover
 
 firstWizardConfigs:
-- spark.master.webui.port
-- spark.worker.webui.port
+- rstudio.home.dir
+- zeppelin.notebook.dir
 - zeppelin.server.port
-- zeppelin.server.ssl.port
 
 pages:
 - roles
 - configuration
 - operation
 - resource_allocation_discover
+
+principals:
+- discover
 
 healthChecks:
 - category: DAEMON_CHECK

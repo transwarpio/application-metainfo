@@ -88,8 +88,8 @@
 # export ZEPPELIN_IMPERSONATE_SPARK_PROXY_USER  #Optional, by default is true; can be set to false if you don't want to use --proxy-user option with Spark interpreter when impersonation enabled
 
 export JAVA_HOME=${r'${JAVA_HOME}'}
-export ZEPPELIN_MEM="-Xms1024m -Xmx2048m -XX:MaxPermSize=2560m"
-export ZEPPELIN_INTP_MEM="-Xms1024m -Xmx2048m -XX:MaxPermSize=2560m"
+export ZEPPELIN_MEM="-Xms1024m -Xmx2048m -XX:MaxPermSize=1024m"
+export ZEPPELIN_INTP_MEM="-Xms1024m -Xmx2048m -XX:MaxPermSize=1024m"
 export SPARK_HOME=/usr/lib/discover
 export SPARK_APP_NAME=${service.sid}-notebook
 export ZEPPELIN_LOG_DIR=/var/log/${service.sid}

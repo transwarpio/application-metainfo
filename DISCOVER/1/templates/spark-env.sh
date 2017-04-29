@@ -16,6 +16,7 @@
 # limitations under the License.
 #
 
+export SPARK_CLIENT_MEM="-Xmx${service['spark.client.memory']}m"
 export SPARK_LAUNCH_WITH_SCALA=0
 export SPARK_LIBRARY_PATH=$SPARK_HOME/lib
 export SCALA_LIBRARY_PATH=$SPARK_HOME/lib
@@ -27,18 +28,7 @@ export SPARK_WORKER_DIR=/var/run/spark/work
 export SPARK_LOG_DIR=/var/log/${service.sid}
 export SPARK_HISTORY_OPTS="$SPARK_HISTORY_OPTS -Dspark.history.fs.logDirectory=hdfs:///var/log/spark/apps -Dspark.history.ui.port=${service['spark.history.ui.port']}"
 
-export HADOOP_HOME=${r'${HADOOP_HOME:-/usr/lib/hadoop}'}
-export HADOOP_HDFS_HOME=${r'${HADOOP_HDFS_HOME:-${HADOOP_HOME}/../hadoop-hdfs}'}
-export HADOOP_MAPRED_HOME=${r'${HADOOP_MAPRED_HOME:-${HADOOP_HOME}/../hadoop-mapreduce}'}
-export HADOOP_YARN_HOME=${r'${HADOOP_YARN_HOME:-${HADOOP_HOME}/../hadoop-yarn}'}
 export HADOOP_CONF_DIR=/etc/${dependencies.HDFS.sid}/conf:/etc/${dependencies.YARN.sid}/conf
-
-# Let's make sure that all needed hadoop libs are added properly
-CLASSPATH="$CLASSPATH:$HADOOP_HOME/*:$HADOOP_HDFS_HOME/*:$HADOOP_YARN_HOME/*:$HADOOP_MAPRED_HOME/*"
-
-if [ -n "$HADOOP_HOME" ]; then
-  export SPARK_LIBRARY_PATH=$SPARK_LIBRARY_PATH:$HADOOP_HOME/lib/native
-fi
 
 ### Comment above 2 lines and uncomment the following if
 ### you want to run with scala version, that is included with the package

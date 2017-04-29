@@ -8,13 +8,22 @@
   groups: []
   visibility: READ_WRITE
 # spark-env.sh
+- name: spark.client.memory
+  recommendExpression: 2048
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: spark.master.webui.port
   recommendExpression: 18080
   defaultValue: null
   valueType: PORT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["zeppelin-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: spark.worker.webui.port
@@ -23,7 +32,7 @@
   valueType: PORT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["zeppelin-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: spark.master.port
@@ -32,7 +41,7 @@
   valueType: PORT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["zeppelin-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: spark.worker.port
@@ -41,7 +50,7 @@
   valueType: PORT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["zeppelin-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: spark.history.ui.port
@@ -50,7 +59,7 @@
   valueType: PORT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["zeppelin-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 #spark-defaults.conf
@@ -101,7 +110,7 @@
 
 # zeppelin-env.sh
 - name: zeppelin.notebook.dir
-  recommendExpression: /notebook/
+  recommendExpression: /discover/notebook/
   defaultValue: null
   valueType: ABSOLUTE_PATH
   scope: !<ServiceLevel> {}
@@ -335,11 +344,11 @@
   groups: ["zeppelin-site.xml"]
   visibility: READ_WRITE
 
-# security
-- name: kerberos.enabled
-  recommendExpression: false
+# sssd.conf
+- name: rstudio.home.dir
+  recommendExpression: /disocver/rstudio
   defaultValue: null
-  valueType: BOOL
+  valueType: ABSOLUTE_PATH
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
