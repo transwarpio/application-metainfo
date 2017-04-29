@@ -53,9 +53,9 @@
     <@property "yarn.resourcemanager.ha.rm-ids" rm_Ids/>
 <#else>
     <#assign resourceManager=service.roles.YARN_RESOURCEMANAGER[0]['hostname']>
-    <@property "yarn.resourcemanager.scheduler.address" resourceManager + ":" +rm_port/>
+    <@property "yarn.resourcemanager.address" resourceManager + ":" + rm_port/>
     <@property "yarn.resourcemanager.resource-tracker.address" resourceManager + ":" + rm_track_port/>
-    <@property "yarn.resourcemanager.address" resourceManager + ":" + rm_scheduler_port/>
+    <@property "yarn.resourcemanager.scheduler.address" resourceManager + ":" + rm_scheduler_port/>
     <@property "yarn.resourcemanager.admin.address" resourceManager + ":" + rm_admin_port/>
     <@property "yarn.resourcemanager.webapp.address" resourceManager + ":" + rm_webapp_port/>
 </#if>
