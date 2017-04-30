@@ -76,7 +76,7 @@ roles:
         targetPath: "/etc/${service.sid}/conf/spark-defaults.conf"
         mode: "755"
     - directive: !<resource>
-        templateType: Raw
+        templateType: FreeMarker
         templatePath: "log4j.properties"
         targetPath: "/etc/${service.sid}/conf/log4j.properties"
         mode: "755"

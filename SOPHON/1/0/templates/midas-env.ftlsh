@@ -30,5 +30,5 @@ SPARK_HOME=/usr/lib/spark2
 SPARK_USER=hive
 HADOOP_USER_NAME=hive
 MIDAS_SERVER_JAVA_OPTS="-Xms${service['midas.server.initial_heapsize']}m -Xmx${service['midas.server.heapsize']}m -XX:PermSize=${service['midas.server.permsize']}m -Dmidas.log.dir=/var/log/${service.sid}"
-HADOOP_CONF_DIR=/etc/${dependencies.HDFS.sid}/conf:/etc/${dependencies.YARN.sid}/conf
+HADOOP_CONF_DIR=/etc/${dependencies.YARN.sid}/conf
 LIVY_LOG_DIR=/var/log/${service.sid}
