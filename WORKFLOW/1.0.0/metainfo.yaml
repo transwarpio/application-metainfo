@@ -22,7 +22,7 @@ roles:
 - name: WORKFLOW_SERVER
   friendlyName: "Workflow Server"
   labelPrefix: "workflow-server"
-  linkExpression: "http://${localhostname}:${service['workflow.desktop.http.port']}"
+  linkExpression: "http://${localhostname}:${service['workflow.http.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop"]
   env:

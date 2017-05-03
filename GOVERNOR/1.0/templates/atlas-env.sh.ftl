@@ -70,3 +70,5 @@ export JAVAX_JDO_OPTION_CONNECTION_URL=jdbc:mysql://${hostPorts?join(",")}/gover
 export JAVAX_JDO_OPTION_CONNECTION_USERNAME=${service['javax.jdo.option.ConnectionUserName']}
 export JAVAX_JDO_OPTION_CONNECTION_PASSWORD=${service['javax.jdo.option.ConnectionPassword']}
 export DATABASE_NAME=governor_${service.sid}
+
+export ATLAS_RUNTIME_ENVIRONMENT=DOCKER
