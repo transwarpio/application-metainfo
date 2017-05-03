@@ -135,9 +135,6 @@ roles:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
-  - mountPath: /var/run/${dependencies.HDFS.sid}
-    hostPath: /var/run/${dependencies.HDFS.sid}
-    name: hdfssocketdir
   - mountPath: /etc/${dependencies.HDFS.sid}/conf
     hostPath: /etc/${dependencies.HDFS.sid}/conf
     name: hdfs
