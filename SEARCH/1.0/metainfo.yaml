@@ -47,6 +47,8 @@ firstWizardConfigs:
 - es.heap.size
 - es.heap.newsize
 
+product: Search
+
 healthChecks:
 - category: DAEMON_CHECK
   intervalSeconds: 30
