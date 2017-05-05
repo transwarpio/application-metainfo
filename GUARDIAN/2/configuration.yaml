@@ -47,7 +47,7 @@
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
-  visibility: READ_WRITE
+  visibility: WRITE_ONLY
 
 - name: guardian.admin.password
   recommendExpression: 123
