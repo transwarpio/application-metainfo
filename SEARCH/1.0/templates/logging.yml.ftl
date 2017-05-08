@@ -43,7 +43,7 @@ appender:
 
   file:
     type: dailyRollingFile
-    file: ${path.logs}/${cluster.name}.log
+    file: ${service['path.logs']}/${service['cluster.name']}.log
     datePattern: "'.'yyyy-MM-dd"
     layout:
       type: pattern
@@ -53,9 +53,9 @@ appender:
   # For more information see https://logging.apache.org/log4j/extras/apidocs/org/apache/log4j/rolling/RollingFileAppender.html
   #file:
     #type: extrasRollingFile
-    #file: ${path.logs}/${cluster.name}.log
+    #file: ${service['path.logs']}/${service['cluster.name']}.log
     #rollingPolicy: timeBased
-    #rollingPolicy.FileNamePattern: ${path.logs}/${cluster.name}.log.%d{yyyy-MM-dd}.gz
+    #rollingPolicy.FileNamePattern: ${service['path.logs']}/${service['cluster.name']}.log.%d{yyyy-MM-dd}.gz
     #layout:
       #type: pattern
       #conversionPattern: "[%d{ISO8601}][%-5p][%-25c] %m%n"
