@@ -72,3 +72,7 @@ export JAVAX_JDO_OPTION_CONNECTION_PASSWORD=${service['javax.jdo.option.Connecti
 export DATABASE_NAME=governor_${service.sid}
 
 export ATLAS_RUNTIME_ENVIRONMENT=DOCKER
+
+<#if service.auth = "kerberos">
+cp /etc/${service.sid}/conf/krb5.conf /etc/
+</#if>

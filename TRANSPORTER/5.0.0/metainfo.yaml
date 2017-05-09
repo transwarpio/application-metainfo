@@ -22,7 +22,6 @@ roles:
 - name: TDT_SERVER
   friendlyName: "Transporter Server"
   labelPrefix: "transporter-server"
-  linkExpression: "http://${localhostname}:${service['tdt.server.thrift.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop"]
   env:
@@ -98,10 +97,15 @@ firstWizardConfigs:
 - tdt.jdbc.user.name
 - tdt.jdbc.password
 
+principals:
+- tdt
+- hive
+
 pages:
 - roles
 - configuration
 - operation
+- security
 
 healthChecks:
 - category: DAEMON_CHECK

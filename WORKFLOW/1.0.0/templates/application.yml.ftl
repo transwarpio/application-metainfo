@@ -3,7 +3,7 @@ app:
   # the application name
   name: ${service.sid}
   # indicates whether workflow works under access control
-  access-control: ${service['workflow.access.control.enabled']}
+  access-control: ${(service.auth = "kerberos")?c}
 
 job:
   # the job plugin directory
