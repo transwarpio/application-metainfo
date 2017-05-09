@@ -219,7 +219,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hive-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hive.server2.idle.operation.timeout
@@ -260,15 +260,6 @@
 
 - name: hive.server2.enabled
   recommendExpression: true
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: ["hive-site.xml"]
-  visibility: READ_WRITE
-
-- name: hive.server2.authentication
-  recommendExpression: LDAP
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}

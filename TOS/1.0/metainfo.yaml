@@ -142,7 +142,7 @@ roles:
         action: Stop
         file: "/etc/${service.sid}/conf/tos-slave-${service.sid}.yaml"
 
-product: "TOS"
+product: TOS
 
 healthChecks:
 - category: DAEMON_CHECK

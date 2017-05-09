@@ -143,6 +143,8 @@ firstWizardConfigs:
 - midas.redis.port
 - livy.scheduler.port
 
+product: Sophon
+
 healthChecks:
 - category: DAEMON_CHECK
   intervalSeconds: 30

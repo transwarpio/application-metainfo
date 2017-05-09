@@ -51,6 +51,16 @@
     </#if>
 </#if>
 
+<#if service['hive.server2.enabled'] = "true" && service['hive.server2.authentication'] = "LDAP">
+    <@property  "hive.server2.authentication.ldap.baseDN", "ou=People,dc=tdh"/>
+    <@property  "hive.server2.authentication.ldap.url" "ldap://localhost"/>
+    <@property  "hive.server2.enable.doAs" "false"/>
+    <@property  "hive.security.authorization.enabled" "true"/>
+    <@property  "hive.security.authorization.manager" "org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd.SQLStdHiveAuthorizerFactory"/>
+    <@property  "hive.security.authenticator.manager" "org.apache.hadoop.hive.ql.security.SessionStateUserAuthenticator"/>
+    <@property  "hive.users.in.admin.role" "hive"/>
+</#if>
+
 <#if dependencies.TXSQL??>
     <#assign mysqlHostPorts = []/>
     <#list dependencies.TXSQL.roles['TXSQL_SERVER'] as role>
