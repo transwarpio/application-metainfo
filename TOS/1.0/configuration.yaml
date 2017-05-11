@@ -79,3 +79,21 @@
   groups: []
   visibility: READ_WRITE
 # TODO tos.haproxy.port
+
+- name: tos.master.dashboard.username
+  recommendExpression: dashboard
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tos.master.dashboard.password
+  recommendExpression: password
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

@@ -61,6 +61,7 @@ apiserver:
   - ALSOLOGTOSTDERR=true
   - LOGTOSTDERR=false
   - LOG_DIR=/var/log/kubernetes/apiserver
+  - BASIC_AUTH_FILE=/srv/kubernetes/auth
 
 controller:
   image: ${registryServer}:${registryPort}/transwarp/hyperkube:tdh500
@@ -77,7 +78,7 @@ controller:
   environment:
   - V=4
   - LEADER_ELECT=true
-  - MASTER=127.0.0.1:${service['tos.master.apiserver.port']}
+  - KUBECONFIG=/srv/kubernetes/kubeconfig
   - ROOT_CA_FILE=/srv/kubernetes/ca.crt
   - SERVICE_ACCOUNT_PRIVATE_KEY_FILE=/srv/kubernetes/server.key
   - ALSOLOGTOSTDERR=true
@@ -99,7 +100,9 @@ scheduler:
     - /srv/kubernetes:/srv/kubernetes
     - /etc/transwarp/conf:/etc/transwarp/conf
   environment:
-  - MASTER=127.0.0.1:${service['tos.master.apiserver.port']}
+#  - MASTER=https://127.0.0.1:${service['tos.master.apiserver.secure.port']}
+#  - MASTER=127.0.0.1:${service['tos.master.apiserver.port']}
+  - KUBECONFIG=/srv/kubernetes/kubeconfig
   - LEADER_ELECT=true
   - ALSOLOGTOSTDERR=true
   - LOGTOSTDERR=false

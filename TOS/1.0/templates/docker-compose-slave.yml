@@ -26,7 +26,6 @@ kubelet:
     - --containerized=true
 #    - --config=/etc/kubernetes/manifests-multi
     - --pod-infra-container-image=${registryServer}:${registryPort}/transwarp/pause:tdh500
-    - --disk_mount_dirs=/mnt/.*
     - --max-pods=200
     - --resolv-conf=/dev/null
     - --allow_privileged=true
@@ -41,6 +40,27 @@ kubelet:
     - /var/run:/var/run
     - /var/log/kubernetes/kubelet:/var/log/kubernetes/kubelet
     - /srv/kubernetes:/srv/kubernetes
+
+proxy:
+  image: ${registryServer}:${registryPort}/transwarp/hyperkube:tdh500
+  net: host
+  pid: host
+  privileged: true
+  restart: always
+  command:
+    - hyperkube
+    - proxy
+    - --kubeconfig=/srv/kubernetes/kubeconfig
+    - --v=2
+    - --masquerade-all
+    - --resource-container=""
+    - --alsologtostderr=true
+    - --logtostderr=false
+    - --log_dir=/var/log/kubernetes/proxy
+  volumes:
+    - /var/log/kubernetes/proxy:/var/log/kubernetes/proxy
+    - /srv/kubernetes:/srv/kubernetes
+
 # for tos ha
 haproxy:
   image: ${registryServer}:${registryPort}/transwarp/haproxy:tdh500

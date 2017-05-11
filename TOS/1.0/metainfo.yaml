@@ -50,6 +50,16 @@ roles:
         templatePath: "docker-compose-master.yml"
         targetPath: "/etc/${service.sid}/conf/tos-master-${service.sid}.yaml"
         mode: "755"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "kubeconfig"
+        targetPath: "/srv/kubernetes/kubeconfig"
+        mode: "600"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "auth"
+        targetPath: "/srv/kubernetes/auth"
+        mode: "600"
   - type: Start
     directives:
     - directive: !<docker-compose>
@@ -120,6 +130,11 @@ roles:
         templateType: Raw
         templatePath: "kubeconfig"
         targetPath: "/srv/kubernetes/kubeconfig"
+        mode: "600"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "docker-compose-slave.yml"
+        targetPath: "/etc/${service.sid}/conf/tos-slave-${service.sid}.yaml"
         mode: "755"
   - type: Start
     directives:
@@ -164,3 +179,5 @@ firstWizardConfigs:
 - tos.master.controller.port
 - tos.slave.kubelet.port
 - tos.slave.kubelet.healthzport
+- tos.master.dashboard.username
+- tos.master.dashboard.password
