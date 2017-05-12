@@ -18,7 +18,7 @@ apacheds-backend-master:
     - GUARDIAN_DS_REALM=${service['guardian.ds.realm']}
     - GUARDIAN_DS_KDC_PORT=${service['guardian.apacheds.kdc.port']}
     - GUARDIAN_DS_PARTITION_SYNC_ON_WRITE=false
-    - ADMIN_PASSWD=${service['guardian.admin.password']} #only valid when the first time ds starts
+    - GUARDIAN_DS_ADMIN_PASSWORD=${service['guardian.admin.password']} #only valid when the first time ds starts
     - GUARDIAN_DS_ROOT_PASSWORD=${service['guardian.ds.root.password']} #only valid when the first time ds starts
     <#if (servers?size > 1)>
     - GUARDIAN_DS_HA_ENABLED=true
@@ -49,6 +49,8 @@ guardian-server:
     - GUARDIAN_SERVER_BIND_PORT=${service['guardian.server.port']}
     - LDAP_HOST=${master}
     - LDAP_PORT=${service['guardian.apacheds.ldap.port']}
+    - GUARDIAN_CONNECTION_PASSWORD=${service['guardian.admin.password']}
+    - BIND_PWD=${service['guardian.ds.root.password']}
     <#if (servers?size > 1)>
     - LDAP_SLAVES=${slaves_with_port?join(";")}
     </#if>
