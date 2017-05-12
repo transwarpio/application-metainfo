@@ -1,7 +1,7 @@
 ---
 name: TOS
 version: 1.0
-global: false
+global: true
 namePrefix: TOS
 friendlyName: TOS
 dependencies: []
