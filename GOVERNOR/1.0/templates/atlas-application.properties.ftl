@@ -215,3 +215,8 @@ atlas.dependency.services.state.check.period.ms=900000
 #atlas.authentication.principal=governor@TDH
 #atlas.authentication.keytab=/etc/governor/governor.keytab
 
+<#assign license_servers=[]>
+<#list dependencies.LICENSE_SERVICE.roles.LICENSE_NODE as server>
+    <#assign license_servers += [(server.hostname + ":" + dependencies.LICENSE_SERVICE[server.hostname]["zookeeper.client.port"])]>
+</#list>
+atlas.license.servers=${license_servers?join(",")}
