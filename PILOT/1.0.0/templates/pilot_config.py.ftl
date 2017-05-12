@@ -39,7 +39,7 @@ CACHE_CONFIG = {'CACHE_TYPE': 'filesystem',
 ENABLE_TIME_ROTATE = True
 
 # The guardian config
-GUARDIAN_AUTH = False
+GUARDIAN_AUTH = True
 GUARDIAN_HOST = '172.16.1.190'
 GUARDIAN_PORT = '8080'
 GUARDIAN_TIMEOUT = 5  # second

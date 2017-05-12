@@ -24,7 +24,7 @@ roles:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: conf
-  - mountPath: /var/notification/logs
+  - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
   summaryPolicy: ALL
