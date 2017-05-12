@@ -11,15 +11,6 @@ job:
       # otherwise relative to the root directory of workflow application
   dir-prefix: job
 
-metrics:
-  keys:
-    pending-jobs: job.pending.number
-    complete-jobs: job.complete.number
-    running-jobs: job.running.number
-    failed-jobs: job.failure.number
-    cancelled-jobs: job.cancelled.number
-    skipped-jobs: job.skipped.number
-
 # schedule settings
 schedule:
   execute:
@@ -54,7 +45,17 @@ schedule:
     # restarted.
     seconds: ${service['workflow.recovery.seconds']}
 
-
+<#if service['workflow.access.control.enabled'] == "false">
 pseudo:
-  username: ${service['javax.jdo.option.ConnectionUserName']}
-  password: ${service['javax.jdo.option.ConnectionPassword']}
+  username: ${service['workflow.pseudo.username']}
+  password: ${service['workflow.pseudo.password']}
+</#if>
+
+# shiro session timeout in seconds if exists
+session.timeout.seconds: ${service['workflow.session.timeout.seconds']}
+
+# http cookie rememberMe in days
+cookie.remember-me.days: ${service['workflow.cookie.rememberme.days']}
+
+# http cookie max-age in hours
+cookie.max-age.hours: ${service['workflow.cookie.maxage.hours']}

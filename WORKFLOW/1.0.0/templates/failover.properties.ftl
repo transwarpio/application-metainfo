@@ -1,5 +1,9 @@
 # the general control of enabling/disabling failover
-failover.enabled=${service['workflow.ha.enabled']}
+<#if service.roles.WORKFLOW_SERVER?size gt 1>
+failover.enabled=true
+<#else>
+failover.enabled=false
+</#if>
 
 # the master port of workflow service
 master.port=${service['workflow.http.port']}

@@ -7,15 +7,6 @@
   groups: []
   visibility: READ_WRITE
 
-- name: workflow.ha.enabled
-  recommendExpression: false
-  defaultValue: null
-  valueType: BOOL
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
 - name: workflow.access.control.enabled
   recommendExpression: false
   defaultValue: null
@@ -150,3 +141,48 @@
   onDeps: []
   groups: []
   visibility: PASSWORD
+
+- name: workflow.pseudo.username
+  recommendExpression: workflow
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.pseudo.password
+  recommendExpression: Trasnwarp4T
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.session.timeout.seconds
+  recommendExpression: 1800
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.cookie.rememberme.days
+  recommendExpression: 30
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.cookie.maxage.hours
+  recommendExpression: 24
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

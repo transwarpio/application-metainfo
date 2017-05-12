@@ -73,6 +73,12 @@ firstWizardConfigs:
 - workflow.http.port
 - javax.jdo.option.ConnectionUserName
 - javax.jdo.option.ConnectionPassword
+- workflow.access.control.enabled
+- workflow.pseudo.username
+- workflow.pseudo.password
+- workflow.session.timeout.seconds
+- workflow.cookie.rememberme.days
+- workflow.cookie.maxage.hours
 
 pages:
 - roles
