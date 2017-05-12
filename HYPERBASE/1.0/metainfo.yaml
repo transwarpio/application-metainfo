@@ -47,7 +47,7 @@ roles:
     name: hosts
   summaryPolicy: SOME
   autoAssign:
-  - advice: !<NumSeq> {"numSeq": [1]}
+  - advice: !<NumSeq> {"numSeq": [3, 2, 1]}
   suggestion:
   - criteria: !<Range> {"min": 1}
   validation:
@@ -146,7 +146,7 @@ roles:
     name: hosts
   summaryPolicy: SOME
   autoAssign:
-  - advice: !<NumSeq> {"numSeq": [3, 2, 1]}
+  - advice: !<NumSeq> {"numSeq": [1]}
   suggestion:
   - criteria: !<Range> {"min": 1}
   validation:
