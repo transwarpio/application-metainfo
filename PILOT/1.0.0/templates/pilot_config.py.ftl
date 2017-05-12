@@ -1,15 +1,14 @@
 import os
 
-#---------------------------------------------------------
-# Superset specific config
-#---------------------------------------------------------
-ROW_LIMIT = 5000	
-SUPERSET_WORKERS = 4
-SUPERSET_WEBSERVER_PORT = 8086
-#---------------------------------------------------------
-
+# The worker number of server
+PILOT_WORKERS = 8
+# The port of server
+PILOT_WEBSERVER_PORT = ${service['pilot.desktop.http.port']}
+# Maximum number of rows returned when creating slice
+ROW_LIMIT = 5000
 # Maximum number of rows returned in the SQL editor
-SQL_MAX_ROW = 1000
+SQL_MAX_ROW = 10000
+
 
 DATA_DIR = os.path.join(os.path.expanduser('~'), 'pilot')
 # The SQLAlchemy connection string.
@@ -30,17 +29,31 @@ password = service['javax.jdo.option.ConnectionPassword']>
 #SQLALCHEMY_DATABASE_URI = 'mysql://user:password@localhost:3306/database?charset=utf8'
 SQLALCHEMY_DATABASE_URI = 'mysql://${username}:${password}@${mysqlHostPort}/pilot_${service.sid}?charset=utf8'
 # The lift time (seconds) of cached data
-CACHE_DEFAULT_TIMEOUT = 300
+CACHE_DEFAULT_TIMEOUT = 3600
 # The cache type and config
 CACHE_CONFIG = {'CACHE_TYPE': 'filesystem',
-                'CACHE_THRESHOLD': 200,
+                'CACHE_THRESHOLD': 500,
                 'CACHE_DIR': '/tmp/pilot_cache'}
 
+# Enable Time Rotate Log Handler
+ENABLE_TIME_ROTATE = True
+
 # The guardian config
+GUARDIAN_AUTH = False
 GUARDIAN_HOST = '172.16.1.190'
 GUARDIAN_PORT = '8080'
 GUARDIAN_TIMEOUT = 5  # second
 
+# License check
+<#assign license_servers=[]>
+<#list dependencies.LICENSE_SERVICE.roles.LICENSE_NODE as server>
+    <#assign license_servers += [(server.hostname + ":" + dependencies.LICENSE_SERVICE[server.hostname]["zookeeper.client.port"])]>
+</#list>
+LICENSE_CHECK_SERVER = '${license_servers?join(",")}'
+
+# The jar has default path.
+# if you have not moved it, then no need to changed it.
+# LICENSE_CHECK_JAR = '/usr/local/lib/pilot-license.jar'
 
 # Setup default language
 BABEL_DEFAULT_LOCALE = 'zh'
@@ -50,6 +63,3 @@ LANGUAGES = {
     # 'fr': {'flag': 'fr', 'name': 'French'},
      'zh': {'flag': 'cn', 'name': 'Chinese'},
 }
-
-
-
