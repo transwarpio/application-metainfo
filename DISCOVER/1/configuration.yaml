@@ -353,3 +353,12 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: discover.local-cran.port
+  recommendExpression: 2121
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

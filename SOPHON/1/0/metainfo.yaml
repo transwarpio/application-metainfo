@@ -24,6 +24,10 @@ roles:
     value: <#if service.auth == "kerberos">true<#else>false</#if>
   - name: MIDAS_CONF_DIR
     value: /etc/${service.sid}/conf
+  - name: SOPHON_HDFS_CONF
+    value: /etc/${dependencies.HDFS.sid}/conf
+  - name: SOHPON_YARN_CONF
+    value: /etc/${dependencies.YARN.sid}/conf
   mountPaths:
   - mountPath: /etc/${dependencies.HDFS.sid}/conf
     hostPath: /etc/${dependencies.HDFS.sid}/conf
@@ -107,8 +111,10 @@ roles:
   labelPrefix: "sophon-scheduler"
   category: MASTER
   env:
-  - name: SCHEDULER_CONF_DIR
+  - name: SERVICE_CONF_DIR
     value: /etc/${service.sid}/conf
+  - name: SERVICE_HOME
+    value: /usr/lib/scheduler
   mountPaths:
     - mountPath: /etc/${service.sid}/conf
       hostPath: /etc/${service.sid}/conf
