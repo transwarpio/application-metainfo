@@ -23,7 +23,7 @@ roles:
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   env:
-  - name: HADOOP_CONF_DIR
+  - name: YARN_CONF
     value: /etc/${service.sid}/conf
   mountPaths:
   - mountPath: /etc/${service.sid}/conf
