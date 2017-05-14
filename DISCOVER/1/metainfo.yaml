@@ -139,9 +139,11 @@ roles:
   labelPrefix: "discover-local-cran"
   dockerImage: "transwarp/local-cran:tdh500"
   category: MASTER
-  linkExpression: "ftp://${localhostname}"
+  linkExpression: "ftp://${localhostname}:${service['discover.local-cran.port']}"
   summaryPolicy: ALL
-  env: []
+  env:
+  - name: FTP_PORT
+    value: ${service['discover.local-cran.port']}
   mountPaths: []
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -157,12 +159,14 @@ firstWizardConfigs:
 - rstudio.home.dir
 - zeppelin.notebook.dir
 - zeppelin.server.port
+- discover.local-cran.port
 
 pages:
 - roles
 - configuration
 - operation
 - resource_allocation_discover
+- security
 
 principals:
 - discover
