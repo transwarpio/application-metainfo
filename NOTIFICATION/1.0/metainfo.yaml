@@ -27,6 +27,9 @@ roles:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
   summaryPolicy: ALL
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
