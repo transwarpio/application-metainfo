@@ -42,26 +42,28 @@ apiserver:
     - /srv/kubernetes:/srv/kubernetes
     - /etc/transwarp/conf:/etc/transwarp/conf
   environment:
-  - V=4
   - ETCD_SERVERS=${etcd_servers?join(',')}
-  - ETCD_PORT=${service['tos.master.leader.elect.port']}
-  - APISERVER_COUNT=${service.roles.TOS_MASTER?size}
-  - INSECURE_BIND_ADDRESS=0.0.0.0
-  - INSECURE_PORT=${service['tos.master.apiserver.port']}
-  - BIND_ADDRESS=0.0.0.0
-  - SECURE_PORT=${service['tos.master.apiserver.secure.port']}
-  - RUNTIME_CONFIG=api/v1
-  - ALLOW_PRIVILEGED=true
-  - CORS_ALLOWED_ORIGINS=.*
-  - ADMISSION_CONTROL=ServiceAccount,ResourceQuota
-  - SERVICE_CLUSTER_IP_RANGE=10.10.10.0/24
-  - CLIENT_CA_FILE=/srv/kubernetes/ca.crt
-  - TLS_CERT_FILE=/srv/kubernetes/server.cert
-  - TLS_PRIVATE_KEY_FILE=/srv/kubernetes/server.key
-  - ALSOLOGTOSTDERR=true
-  - LOGTOSTDERR=false
-  - LOG_DIR=/var/log/kubernetes/apiserver
-  - BASIC_AUTH_FILE=/srv/kubernetes/auth
+  - APISERVER_PARAMS="
+    --v=4
+    --etcd_servers=${etcd_servers?join(',')}
+    --apiserver-count=${service.roles.TOS_MASTER?size}
+    --insecure-bind-address=0.0.0.0
+    --insecure-port=${service['tos.master.apiserver.port']}
+    --bind-address=0.0.0.0
+    --secure-port=${service['tos.master.apiserver.secure.port']}
+    --runtime_config=api/v1
+    --allow_privileged=true
+    --cors_allowed_origins=.*
+    --admission_control=ServiceAccount,ResourceQuota
+    --service-cluster-ip-range=10.10.10.0/24
+    --client_ca_file=/srv/kubernetes/ca.crt
+    --tls_cert_file=/srv/kubernetes/server.cert
+    --tls_private_key_file=/srv/kubernetes/server.key
+    --alsologtostderr=true
+    --logtostderr=false
+    --log_dir=/var/log/kubernetes/apiserver
+    --basic-auth-file=/srv/kubernetes/auth
+    "
 
 controller:
   image: ${registryServer}:${registryPort}/transwarp/hyperkube:tdh500
@@ -76,16 +78,18 @@ controller:
     - /srv/kubernetes:/srv/kubernetes
     - /etc/transwarp/conf:/etc/transwarp/conf
   environment:
-  - V=4
-  - LEADER_ELECT=true
-  - KUBECONFIG=/srv/kubernetes/kubeconfig
-  - ROOT_CA_FILE=/srv/kubernetes/ca.crt
-  - SERVICE_ACCOUNT_PRIVATE_KEY_FILE=/srv/kubernetes/server.key
-  - ALSOLOGTOSTDERR=true
-  - LOGTOSTDERR=false
-  - LOG_DIR=/var/log/kubernetes/controller
-  - ADDRESS=0.0.0.0
-  - PORT=${service['tos.master.controller.port']}
+  - CONTROLLER_PARAMS="
+    --v=4
+    --leader-elect=true
+    --root-ca-file=/srv/kubernetes/ca.crt
+    --service-account-private-key-file=/srv/kubernetes/server.key
+    --kubeconfig=/srv/kubernetes/kubeconfig
+    --alsologtostderr=true
+    --logtostderr=false
+    --log_dir=/var/log/kubernetes/controller
+    --address=0.0.0.0
+    --port=${service['tos.master.controller.port']}
+    "
 
 scheduler:
   image: ${registryServer}:${registryPort}/transwarp/hyperkube:tdh500
@@ -100,12 +104,12 @@ scheduler:
     - /srv/kubernetes:/srv/kubernetes
     - /etc/transwarp/conf:/etc/transwarp/conf
   environment:
-#  - MASTER=https://127.0.0.1:${service['tos.master.apiserver.secure.port']}
-#  - MASTER=127.0.0.1:${service['tos.master.apiserver.port']}
-  - KUBECONFIG=/srv/kubernetes/kubeconfig
-  - LEADER_ELECT=true
-  - ALSOLOGTOSTDERR=true
-  - LOGTOSTDERR=false
-  - LOG_DIR=/var/log/kubernetes/scheduler
-  - ADDRESS=0.0.0.0
-  - PORT=${service['tos.master.scheduler.port']}
+  - SCHEDULER_PARAMS="
+    --leader-elect=true
+    --kubeconfig=/srv/kubernetes/kubeconfig
+    --alsologtostderr=true
+    --logtostderr=false
+    --log_dir=/var/log/kubernetes/scheduler
+    --address=0.0.0.0
+    --port=${service['tos.master.scheduler.port']}
+    "

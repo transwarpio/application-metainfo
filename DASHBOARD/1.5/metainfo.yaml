@@ -1,7 +1,7 @@
 ---
 name: DASHBOARD
-version: 1.0
-global: false
+version: 1.5
+global: true
 namePrefix: Dashboard
 friendlyName: Dashboard
 dependencies: []
@@ -9,6 +9,7 @@ user: root
 roles:
 - name: DASHBOARD
   friendlyName: "Dashboard"
+  labelPrefix: "kubernetes-dashboard"
   linkExpression: "https://${dependencies.TOS.roles.TOS_MASTER[0].hostname}:${dependencies.TOS['tos.master.apiserver.secure.port']}/ui"
   category: MASTER
   frontendOperations: []

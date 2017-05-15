@@ -5,7 +5,6 @@
 </#list>
 <#assign mysqlHostPort = mysqlHostPorts?join(",")>
 
-<#assign mysqlHostPort = dependencies.TXSQL.roles.TXSQL_SERVER[0]['hostname'] + ":" + dependencies.TXSQL['mysql.rw.port']/>
 driver=com.mysql.jdbc.Driver
 url=jdbc:mysql://${mysqlHostPort}/governor_${service.sid}?allowMultiQueries=true&useUnicode=true&characterEncoding=utf8&autoReconnect=true
 username=${service['javax.jdo.option.ConnectionUserName']}
