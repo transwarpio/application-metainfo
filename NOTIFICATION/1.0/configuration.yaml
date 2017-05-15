@@ -1,5 +1,5 @@
 - name: notification.http.port
-  recommendExpression: 9999
+  recommendExpression: 7999
   defaultValue: null
   valueType: PORT
   scope: !<ServiceLevel> {}

@@ -76,7 +76,7 @@ roles:
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Commission", "Decommission", "Delete", "Scaleout"]
   env:
-  - name: HADOOP_CONF_DIR
+  - name: YARN_CONF
     value: /etc/${service.sid}/conf
   mountPaths:
   - mountPath: /etc/${service.sid}/conf
@@ -136,7 +136,7 @@ roles:
         <#assign namenodes += dependencies.HDFS.roles.HDFS_NAMENODE[0]['hostname']>
       </#if>
       ${namenodes?join(",")}
-  - name: HADOOP_CONF_DIR
+  - name: YARN_CONF
     value: /etc/${service.sid}/conf
   mountPaths:
   - mountPath: /etc/${service.sid}/conf
@@ -180,7 +180,7 @@ roles:
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
-  - name: HADOOP_CONF_DIR
+  - name: YARN_CONF
     value: /etc/${service.sid}/conf
   - name: HDFS_HA_NAMENODE_SERVICE
     value: |

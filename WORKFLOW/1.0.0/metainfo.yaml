@@ -38,7 +38,7 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
-  summaryPolicy: ALL
+  summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [2]}
   suggestion:
