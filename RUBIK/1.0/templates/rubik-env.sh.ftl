@@ -1,6 +1,9 @@
 #!/bin/bash
 
-export MAXMEMSIZE=${service['max.memory.size']}m
+<#assign limitsMemory = service['zookeeper.container.limits.memory']?number
+  memoryRatio = service['zookeeper.memory.ratio']?number
+  memory = limitsMemory * memoryRatio * 1024>
+export MAXMEMSIZE=${memory?floor}m
 
 export LOG_DIR=/var/log/${service.sid}
 export RUBIK_CONF_DIR=/etc/${service.sid}/conf

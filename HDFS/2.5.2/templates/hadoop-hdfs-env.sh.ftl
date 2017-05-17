@@ -57,35 +57,37 @@ done
 export HADOOP_OPTS="$HADOOP_OPTS -Djava.net.preferIPv4Stack=true $HADOOP_CLIENT_OPTS"
 
 # Command specific options appended to HADOOP_OPTS when specified
-<#if service[.data_model["localhostname"]]['namenode.memory']??>
-  <#assign NAMENODE_MEMORY=service[.data_model["localhostname"]]['namenode.memory']?trim>
-<#else>
-  <#assign NAMENODE_MEMORY=24000>
-</#if>
-<#if service[.data_model["localhostname"]]['datanode.memory']??>
-  <#assign DATANODE_MEMORY=service[.data_model["localhostname"]]['datanode.memory']>
-<#else>
-  <#assign DATANODE_MEMORY=4096>
-</#if>
-<#if service[.data_model["localhostname"]]['journalnode.memory']??>
-  <#assign JOURNALNODE_MEMORY=service[.data_model["localhostname"]]['journalnode.memory']>
-<#else>
-  <#assign JOURNALNODE_MEMORY=4096>
-</#if>
 # Export role memory
-export NAMENODE_MEMORY=${NAMENODE_MEMORY}m
-export DATANODE_MEMORY=${DATANODE_MEMORY}m
-export JOURNALNODE_MEMORY=${JOURNALNODE_MEMORY}m
-export HADOOP_NAMENODE_OPTS="-Xmx${NAMENODE_MEMORY}m -XX:+UseConcMarkSweepGC -XX:+ExplicitGCInvokesConcurrent -Dcom.sun.management.jmxremote $HADOOP_NAMENODE_OPTS"
-export HADOOP_SECONDARYNAMENODE_OPTS="-Xmx${NAMENODE_MEMORY}m -Dcom.sun.management.jmxremote $HADOOP_SECONDARYNAMENODE_OPTS"
-export HADOOP_DATANODE_OPTS="-Xmx${DATANODE_MEMORY}m -Dcom.sun.management.jmxremote $HADOOP_DATANODE_OPTS"
+<#if service['namenode.container.limits.memory']??>
+  <#assign limitsMemory = service['namenode.container.limits.memory']?trim?number
+    memoryRatio = service['namenode.memory.ratio']?number
+    memory = limitsMemory * memoryRatio * 1024>
+export NAMENODE_MEMORY=${memory?floor}m
+export HADOOP_NAMENODE_OPTS="-Xmx${memory?floor}m -XX:+UseConcMarkSweepGC -XX:+ExplicitGCInvokesConcurrent -Dcom.sun.management.jmxremote $HADOOP_NAMENODE_OPTS"
+export HADOOP_SECONDARYNAMENODE_OPTS="-Xmx${memory?floor}m -Dcom.sun.management.jmxremote $HADOOP_SECONDARYNAMENODE_OPTS"
+
+  <#assign limitsMemory = service['zkfc.container.limits.memory']?trim?number
+    memoryRatio = service['zkfc.memory.ratio']?number
+    memory = limitsMemory * memoryRatio * 1024>
+export ZKFC_MEMORY=${memory?floor}m
+export HADOOP_ZKFC_OPTS="-Xmx${memory?floor}m $HADOOP_ZKFC_OPTS"
+</#if>
+<#if service['datanode.container.limits.memory']??>
+  <#assign limitsMemory = service['datanode.container.limits.memory']?number
+    memoryRatio = service['datanode.memory.ratio']?number
+    memory = limitsMemory * memoryRatio * 1024>
+export DATANODE_MEMORY=${memory?floor}m
+export HADOOP_DATANODE_OPTS="-Xmx${memory?floor}m -Dcom.sun.management.jmxremote $HADOOP_DATANODE_OPTS"
+</#if>
+<#if service['journalnode.container.limits.memory']??>
+  <#assign limitsMemory = service['journalnode.container.limits.memory']?number
+    memoryRatio = service['journalnode.memory.ratio']?number
+    memory = limitsMemory * memoryRatio * 1024>
+export JOURNALNODE_MEMORY=${memory?floor}m
+export HADOOP_JOURNALNODE_OPTS="-Xmx${memory?floor}m $HADOOP_JOURNALNODE_OPTS"
+</#if>
+
 export HADOOP_BALANCER_OPTS="-Xmx4096m -Dcom.sun.management.jmxremote $HADOOP_BALANCER_OPTS"
-export HADOOP_JOURNALNODE_OPTS="-Xmx${JOURNALNODE_MEMORY}m $HADOOP_JOURNALNODE_OPTS"
-
-
-# The ZKFC does not need a large heap, and keeping it small avoids
-# any potential for long GC pauses
-export HADOOP_ZKFC_OPTS="-Xmx256m $HADOOP_ZKFC_OPTS"
 
 # The following applies to multiple commands (fs, dfs, fsck, distcp etc)
 #export HADOOP_CLIENT_OPTS="-Xmx128m $HADOOP_CLIENT_OPTS"
@@ -113,7 +115,7 @@ export CLUSTER=${service.sid}
   <#list service.nameservices as nameservice>
     <#assign namenodes=service[nameservice]["HDFS_NAMENODE"]>
     <#if namenodes?size == 1>
-      <#if namenodes[0].id == .data_model["role.id"]>
+      <#if namenodes[0].hostname == .data_model["localhostname"]>
 export NAMENODE_NAMESERVICE=${nameservice}
 export HDFS_HA=false
       </#if>
@@ -126,11 +128,11 @@ export HDFS_HA=false
         <#assign nn2=namenodes[0]>
       </#if>
 
-      <#if nn1.id == .data_model["role.id"]>
+      <#if nn1.hostname == .data_model["localhostname"]>
 export NAMENODE_NAMESERVICE=${nameservice}
 export HDFS_HA=true
 export NAMENODE_ORDINAL=0
-      <#elseif nn2.id == .data_model["role.id"]>
+      <#elseif nn2.hostname == .data_model["localhostname"]>
 export NAMENODE_NAMESERVICE=${nameservice}
 export HDFS_HA=true
 export NAMENODE_ORDINAL=1
@@ -146,11 +148,7 @@ export NAMENODE_PRIMARY_JMX_URL=http://${nn1.hostname}:${nn1HttpPort}/jmx
 </#if>
 
 <#if service["HDFS_NAMENODE"]??>
-  <#list service["HDFS_NAMENODE"] as namenode>
-    <#if namenode.id == .data_model["role.id"]>
 export HDFS_HA=false
-    </#if>
-  </#list>
 </#if>
 
 # Export journalnode config
@@ -163,15 +161,11 @@ export HDFS_JOURNAL_NODE_COUNT=${service.roles.HDFS_JOURNALNODE?size}
 # Export dfs.datanode.data.dir
 <#if service[.data_model["localhostname"]]['dfs.datanode.data.dir']??>
 export DATANODE_DATA_DIRS=${service[.data_model["localhostname"]]['dfs.datanode.data.dir']}
-<#else>
-export DATANODE_DATA_DIRS=/vdir/hadoop/data
 </#if>
 
 # Export dfs.namenode.name.dir
 <#if service[.data_model["localhostname"]]['dfs.namenode.name.dir']??>
 export NAMENODE_DATA_DIRS=${service[.data_model["localhostname"]]['dfs.namenode.name.dir']}
-<#else>
-export NAMENODE_DATA_DIRS=/vdir/hadoop/hadoop_image,/vdir/hadoop/namenode_dir
 </#if>
 
 <#if service.auth = "kerberos">

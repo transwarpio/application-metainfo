@@ -320,69 +320,6 @@
   groups: []
   visibility: READ_WRITE
 
-- name: inceptor.yarn.master.memory
-  recommendExpression: 512
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: inceptor.yarn.executor.memory
-  recommendExpression: 1569
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: inceptor.yarn.executor.cores
-  recommendExpression: 3
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: inceptor.yarn.number.executors
-  recommendExpression: -1
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: inceptor.yarn.number.workers
-  recommendExpression: -1
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: inceptor.yarn.scheduler.mode
-  recommendExpression: GreedyMode
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: spark.yarn.queue
-  recommendExpression: default
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
 - name: inceptor.ui.port
   recommendExpression: 4040
   defaultValue: null
@@ -392,15 +329,16 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
-
-- name: hive.memory
-  recommendExpression: 8192
-  defaultValue: null
-  valueType: MB
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
+#
+#- name: inceptor.server.memory
+#  recommendExpression: 8192
+#  defaultValue: null
+#  valueType: MB
+#  scope: !<RoleTypes>
+#    roleTypes: [INCEPTOR_SERVER]
+#  onDeps: []
+#  groups: []
+#  visibility: READ_WRITE
 
 - name: hive.server2.thrift.port
   recommendExpression: 10000
@@ -431,7 +369,67 @@
   groups: []
   visibility: READ_WRITE
 
-- name: hive.cores
+- name: mysql.datadir
+  recommendExpression: /hadoop/mysql
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_MYSQL]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.container.limits.memory
+  recommendExpression: 32
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.container.limits.cpu
+  recommendExpression: 10
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.container.requests.memory
+  recommendExpression: 0
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.container.requests.cpu
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.memory.ratio
+  recommendExpression: 0.9
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.number.eachnode
   recommendExpression: 2
   defaultValue: null
   valueType: NON_NEG_INT
@@ -440,21 +438,102 @@
   groups: []
   visibility: READ_WRITE
 
-- name: inceptor.ngmr.yarn
-  recommendExpression: false
+- name: server.container.limits.memory
+  recommendExpression: 8
   defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
 
-- name: mysql.datadir
-  recommendExpression: /hadoop/mysql
+- name: server.container.limits.cpu
+  recommendExpression: 1
   defaultValue: null
-  valueType: STRING
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [INCEPTOR_MYSQL]
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.requests.memory
+  recommendExpression: 0
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.requests.cpu
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.memory.ratio
+  recommendExpression: 0.9
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: metastore.container.limits.memory
+  recommendExpression: 4
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: metastore.container.limits.cpu
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: metastore.container.requests.memory
+  recommendExpression: 0
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: metastore.container.requests.cpu
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: metastore.memory.ratio
+  recommendExpression: 0.9
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
   onDeps: []
   groups: []
   visibility: READ_WRITE

@@ -51,3 +51,53 @@
   onDeps: []
   groups: []
   visibility: PASSWORD
+
+- name: governor.container.limits.memory
+  recommendExpression: 4
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [GOVERNOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: governor.container.limits.cpu
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GOVERNOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: governor.container.requests.memory
+  recommendExpression: 0
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [GOVERNOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: governor.container.requests.cpu
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GOVERNOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: governor.memory.ratio
+  recommendExpression: 0.9
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [GOVERNOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

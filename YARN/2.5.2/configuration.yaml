@@ -324,7 +324,7 @@
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
-    roleTypes: [YARN_RESOURCEMANAGER]
+    roleTypes: [YARN_TIMELINESERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -334,7 +334,7 @@
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
-    roleTypes: [YARN_RESOURCEMANAGER]
+    roleTypes: [YARN_TIMELINESERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -370,6 +370,15 @@
   recommendExpression: 98304
   defaultValue: null
   valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["yarn-site.xml"]
+  visibility: READ_WRITE
+
+- name: yarn.scheduler.maximum-allocation-vcores
+  recommendExpression: 96
+  defaultValue: null
+  valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: ["yarn-site.xml"]
@@ -420,15 +429,6 @@
   groups: ["yarn-site.xml"]
   visibility: READ_WRITE
 
-- name: yarn.scheduler.maximum-allocation-vcores
-  recommendExpression: 96
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: ["yarn-site.xml"]
-  visibility: READ_WRITE
-
 - name: yarn.nodemanager.aux-services
   recommendExpression: mapreduce_shuffle
   defaultValue: null
@@ -439,30 +439,30 @@
   visibility: READ_WRITE
 
 - name: yarn.nodemanager.resource.cpu-vcores
-#  recommendExpression: |
-#    <#if numCores gt 6>
-#    ${numCores}
-#    <#else>
-#    6
-#    </#if>
-  recommendExpression: 6
+  #  recommendExpression: 6
+  recommendExpression: |
+    <#if numCores gt 6>
+    ${numCores}
+    <#else>
+    6
+    </#if>
   defaultValue: null
   valueType: "NON_NEG_INT"
   scope: !<RoleTypes>
     roleTypes: [YARN_NODEMANAGER]
-# isNodeSpecific : true
+  isNodeSpecific : true
   onDeps: []
   groups: ["yarn-site.xml"]
   visibility: READ_WRITE
 
 - name: yarn.nodemanager.resource.memory-mb
-#  recommendExpression: ${(memBytes / 1024 / 1024 / 2)?floor?c}
-  recommendExpression: 6
+#  recommendExpression: 6
+  recommendExpression: ${(memBytes / 1024 / 1024 / 2)?floor?c}
   defaultValue: null
   valueType: "MB"
   scope: !<RoleTypes>
     roleTypes: [YARN_NODEMANAGER]
-# isNodeSpecific : true
+  isNodeSpecific : true
   onDeps: []
   groups: ["yarn-site.xml"]
   visibility: READ_WRITE
@@ -571,15 +571,6 @@
   groups: ["yarn-site.xml"]
   visibility: READ_WRITE
 
-- name: yarn.nodemanager.resource.memory-mb
-  recommendExpression: 7974
-  defaultValue: null
-  valueType: MB
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: ["yarn-site.xml"]
-  visibility: READ_WRITE
-
 - name: yarn.log-aggregation-enable
   recommendExpression: false
   defaultValue: null
@@ -589,54 +580,6 @@
   groups: ["yarn-site.xml"]
   visibility: READ_WRITE
 
-- name: nodemanager.memory
-  recommendExpression: 4096
-  defaultValue: null
-  valueType: MB
-  isNodeSpecific: true
-  scope: !<RoleTypes>
-    roleTypes:
-    - YARN_NODEMANAGER
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: resourcemanager.memory
-  recommendExpression: 4096
-  defaultValue: null
-  valueType: MB
-  isNodeSpecific: true
-  scope: !<RoleTypes>
-    roleTypes:
-    - YARN_RESOURCEMANAGER
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: historyserver.memory
-  recommendExpression: 4096
-  defaultValue: null
-  valueType: MB
-  isNodeSpecific: true
-  scope: !<RoleTypes>
-    roleTypes:
-    - YARN_HISTORYSERVER
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: timelineserver.memory
-  recommendExpression: 4096
-  defaultValue: null
-  valueType: MB
-  isNodeSpecific: true
-  scope: !<RoleTypes>
-    roleTypes:
-    - YARN_TIMELINESERVER
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
 - name: historyserver.http-port
   recommendExpression: 19888
   defaultValue: null
@@ -644,6 +587,206 @@
   scope: !<RoleTypes>
     roleTypes:
     - YARN_HISTORYSERVER
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: resourcemanager.container.limits.memory
+  recommendExpression: 4
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [YARN_RESOURCEMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: resourcemanager.container.limits.cpu
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [YARN_RESOURCEMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: resourcemanager.container.requests.memory
+  recommendExpression: 0
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [YARN_RESOURCEMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: resourcemanager.container.requests.cpu
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [YARN_RESOURCEMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: resourcemanager.memory.ratio
+  recommendExpression: 0.9
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [YARN_RESOURCEMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: nodemanager.container.limits.memory
+  recommendExpression: 4
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [YARN_RESOURCEMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: nodemanager.container.limits.cpu
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [YARN_RESOURCEMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: nodemanager.container.requests.memory
+  recommendExpression: 0
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [YARN_RESOURCEMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: nodemanager.container.requests.cpu
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [YARN_NODEMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: nodemanager.memory.ratio
+  recommendExpression: 0.9
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [YARN_NODEMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: historyserver.container.limits.memory
+  recommendExpression: 4
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [YARN_HISTORYSERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: historyserver.container.limits.cpu
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [YARN_HISTORYSERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: historyserver.container.requests.memory
+  recommendExpression: 0
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [YARN_HISTORYSERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: historyserver.container.requests.cpu
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [YARN_HISTORYSERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: historyserver.memory.ratio
+  recommendExpression: 0.9
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [YARN_HISTORYSERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: timelineserver.container.limits.memory
+  recommendExpression: 4
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [YARN_TIMELINESERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: timelineserver.container.limits.cpu
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [YARN_TIMELINESERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: timelineserver.container.requests.memory
+  recommendExpression: 0
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [YARN_TIMELINESERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: timelineserver.container.requests.cpu
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [YARN_TIMELINESERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: timelineserver.memory.ratio
+  recommendExpression: 0.9
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [YARN_TIMELINESERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE

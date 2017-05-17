@@ -46,30 +46,30 @@ JAVA=$JAVA_HOME/bin/java
 JAVA_HEAP_MAX=-Xmx4096m
 
 # Specify the heap memory setting for yarn roles which will overwrite the JAVA_HEAP_MAX setting
-<#if service[.data_model["localhostname"]]['nodemanager.memory']??>
-<#assign YARN_NODEMANAGER_HEAPSIZE=service[.data_model["localhostname"]]['nodemanager.memory']?trim>
-<#else>
-<#assign YARN_NODEMANAGER_HEAPSIZE=4096>
+<#if service['nodemanager.container.limits.memory']??>
+  <#assign limitsMemory = service['nodemanager.container.limits.memory']?number
+    memoryRatio = service['nodemanager.memory.ratio']?number
+    memory = limitsMemory * memoryRatio * 1024>
+export YARN_NODEMANAGER_HEAPSIZE=${memory?floor}m
 </#if>
-<#if service[.data_model["localhostname"]]['resourcemanager.memory']??>
-<#assign YARN_RESOURCEMANAGER_HEAPSIZE=service[.data_model["localhostname"]]['resourcemanager.memory']>
-<#else>
-<#assign YARN_RESOURCEMANAGER_HEAPSIZE=4096>
+<#if service['resourcemanager.container.limits.memory']??>
+  <#assign limitsMemory = service['resourcemanager.container.limits.memory']?number
+  memoryRatio = service['resourcemanager.memory.ratio']?number
+  memory = limitsMemory * memoryRatio * 1024>
+export YARN_RESOURCEMANAGER_HEAPSIZE=${memory?floor}m
 </#if>
-<#if service[.data_model["localhostname"]]['historyserver.memory']??>
-<#assign YARN_HISTORYSERVER_HEAPSIZE=service[.data_model["localhostname"]]['historyserver.memory']>
-<#else>
-<#assign YARN_HISTORYSERVER_HEAPSIZE=4096>
+<#if service['historyserver.container.limits.memory']??>
+  <#assign limitsMemory = service['historyserver.container.limits.memory']?number
+  memoryRatio = service['historyserver.memory.ratio']?number
+  memory = limitsMemory * memoryRatio * 1024>
+export YARN_HISTORYSERVER_HEAPSIZE=${memory?floor}m
 </#if>
-<#if service[.data_model["localhostname"]]['timelineserver.memory']??>
-<#assign YARN_TIMELINESERVER_HEAPSIZE=service[.data_model["localhostname"]]['timelineserver.memory']>
-<#else>
-<#assign YARN_TIMELINESERVER_HEAPSIZE=4096>
+<#if service['timelineserver.container.limits.memory']??>
+  <#assign limitsMemory = service['timelineserver.container.limits.memory']?number
+  memoryRatio = service['timelineserver.memory.ratio']?number
+  memory = limitsMemory * memoryRatio * 1024>
+export YARN_TIMELINESERVER_HEAPSIZE=${memory?floor}m
 </#if>
-export YARN_NODEMANAGER_HEAPSIZE=${YARN_NODEMANAGER_HEAPSIZE}m
-export YARN_RESOURCEMANAGER_HEAPSIZE=${YARN_RESOURCEMANAGER_HEAPSIZE}m
-export YARN_HISTORYSERVER_HEAPSIZE=${YARN_HISTORYSERVER_HEAPSIZE}m
-export YARN_TIMELINESERVER_HEAPSIZE=${YARN_TIMELINESERVER_HEAPSIZE}m
 
 # check envvars which might override default args
 if [ "$YARN_HEAPSIZE" != "" ]; then

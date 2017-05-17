@@ -62,6 +62,11 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
+  resources:
+    limitsMemoryKey: metastore.container.limits.memory
+    limitsCpuKey: metastore.container.limits.cpu
+    requestsMemoryKey: metastore.container.requests.memory
+    requestsCpuKey: metastore.container.requests.cpu
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -112,6 +117,11 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -158,6 +168,11 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
+  resources:
+    limitsMemoryKey: executor.container.limits.memory
+    limitsCpuKey: executor.container.limits.cpu
+    requestsMemoryKey: executor.container.requests.memory
+    requestsCpuKey: executor.container.requests.cpu
   nodeSpecificMounts:
   - configKey: ngmr.localdir
   summaryPolicy: SOME
@@ -215,6 +230,23 @@ firstWizardConfigs:
 - ngmr.fastdisk.size
 - javax.jdo.option.ConnectionUserName
 - javax.jdo.option.ConnectionPassword
+#- inceptor.server.memory
+- server.container.limits.memory
+- server.container.limits.cpu
+- server.container.requests.memory
+- server.container.requests.cpu
+- server.memory.ratio
+- metastore.container.limits.memory
+- metastore.container.limits.cpu
+- metastore.container.requests.memory
+- metastore.container.requests.cpu
+- metastore.memory.ratio
+- executor.container.limits.memory
+- executor.container.limits.cpu
+- executor.container.requests.memory
+- executor.container.requests.cpu
+- executor.memory.ratio
+- executor.number.eachnode
 
 pages:
 - summary

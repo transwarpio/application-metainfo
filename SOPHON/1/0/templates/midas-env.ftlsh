@@ -29,6 +29,10 @@
 SPARK_HOME=/usr/lib/spark2
 SPARK_USER=hive
 HADOOP_USER_NAME=hive
-MIDAS_SERVER_JAVA_OPTS="-Xms${service['midas.server.initial_heapsize']}m -Xmx${service['midas.server.heapsize']}m -XX:PermSize=${service['midas.server.permsize']}m -Dmidas.log.dir=/var/log/${service.sid}"
+
+<#assign limitsMemory = service['zookeeper.container.limits.memory']?number
+  memoryRatio = service['zookeeper.memory.ratio']?number
+  memory = limitsMemory * memoryRatio * 1024>
+MIDAS_SERVER_JAVA_OPTS="-Xms${(memory/2)?floor}m -Xmx${memory?floor}m -XX:PermSize=${(memory/8)?floor}m -Dmidas.log.dir=/var/log/${service.sid}"
 HADOOP_CONF_DIR=/etc/${dependencies.YARN.sid}/conf
 LIVY_LOG_DIR=/var/log/${service.sid}

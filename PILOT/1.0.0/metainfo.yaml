@@ -34,6 +34,11 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
+  resources:
+    limitsMemoryKey: pilot.container.limits.memory
+    limitsCpuKey: pilot.container.limits.cpu
+    requestsMemoryKey: pilot.container.requests.memory
+    requestsCpuKey: pilot.container.requests.cpu
   summaryPolicy: ALL
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -69,6 +74,11 @@ firstWizardConfigs:
 - pilot.desktop.http.port
 - javax.jdo.option.ConnectionUserName
 - javax.jdo.option.ConnectionPassword
+- pilot.container.limits.memory
+- pilot.container.limits.cpu
+- pilot.container.requests.memory
+- pilot.container.requests.cpu
+- pilot.memory.ratio
 
 pages:
 - roles

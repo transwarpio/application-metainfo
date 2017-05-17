@@ -47,6 +47,11 @@ roles:
   - mountPath: /etc/transwarp/conf/
     hostPath: /etc/transwarp/conf/
     name: topology
+  resources:
+    limitsMemoryKey: rstudio.container.limits.memory
+    limitsCpuKey: rstudio.container.limits.cpu
+    requestsMemoryKey: rstudio.container.requests.memory
+    requestsCpuKey: rstudio.container.requests.cpu
   summaryPolicy: ALL
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -104,6 +109,11 @@ roles:
   - mountPath: /etc/transwarp/conf/
     hostPath: /etc/transwarp/conf/
     name: topology
+  resources:
+    limitsMemoryKey: notebook.container.limits.memory
+    limitsCpuKey: notebook.container.limits.cpu
+    requestsMemoryKey: notebook.container.requests.memory
+    requestsCpuKey: notebook.container.requests.cpu
   summaryPolicy: ALL
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -144,7 +154,15 @@ roles:
   env:
   - name: FTP_PORT
     value: ${service['discover.local-cran.port']}
-  mountPaths: []
+  mountPaths:
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
+  resources:
+    limitsMemoryKey: local-cran.container.limits.memory
+    limitsCpuKey: local-cran.container.limits.cpu
+    requestsMemoryKey: local-cran.container.requests.memory
+    requestsCpuKey: local-cran.container.requests.cpu
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
   suggestion:
@@ -160,6 +178,21 @@ firstWizardConfigs:
 - zeppelin.notebook.dir
 - zeppelin.server.port
 - discover.local-cran.port
+- rstudio.container.limits.memory
+- rstudio.container.limits.cpu
+- rstudio.container.requests.memory
+- rstudio.container.requests.cpu
+- rstudio.memory.ratio
+- notebook.container.limits.memory
+- notebook.container.limits.cpu
+- notebook.container.requests.memory
+- notebook.container.requests.cpu
+- notebook.memory.ratio
+- local-cran.container.limits.memory
+- local-cran.container.limits.cpu
+- local-cran.container.requests.memory
+- local-cran.container.requests.cpu
+- local-cran.memory.ratio
 
 pages:
 - roles

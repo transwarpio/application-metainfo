@@ -50,6 +50,11 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
+  resources:
+    limitsMemoryKey: master.container.limits.memory
+    limitsCpuKey: master.container.limits.cpu
+    requestsMemoryKey: master.container.requests.memory
+    requestsCpuKey: master.container.requests.cpu
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [3, 2, 1]}
@@ -100,6 +105,11 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
+  resources:
+    limitsMemoryKey: regionserver.container.limits.memory
+    limitsCpuKey: regionserver.container.limits.cpu
+    requestsMemoryKey: regionserver.container.requests.memory
+    requestsCpuKey: regionserver.container.requests.cpu
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}
@@ -149,6 +159,11 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
+  resources:
+    limitsMemoryKey: thrift.container.limits.memory
+    limitsCpuKey: thrift.container.limits.cpu
+    requestsMemoryKey: thrift.container.requests.memory
+    requestsCpuKey: thrift.container.requests.cpu
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -183,13 +198,28 @@ firstWizardConfigs:
 - master.port
 - master.info.port
 - master.jmx.port
-- master.memory
+#- master.memory
 - regionserver.port
 - regionserver.info.port
 - regionserver.jmx.port
-- regionserver.memory
-- thrift.server.memory
+#- regionserver.memory
+#- thrift.server.memory
 - zookeeper.session.timeout
+- master.container.limits.memory
+- master.container.limits.cpu
+- master.container.requests.memory
+- master.container.requests.cpu
+- master.memory.ratio
+- regionserver.container.limits.memory
+- regionserver.container.limits.cpu
+- regionserver.container.requests.memory
+- regionserver.container.requests.cpu
+- regionserver.memory.ratio
+- thrift.container.limits.memory
+- thrift.container.limits.cpu
+- thrift.container.requests.memory
+- thrift.container.requests.cpu
+- thrift.memory.ratio
 
 dashboardMetrics:
 - HyperBaseReadRequestsRate

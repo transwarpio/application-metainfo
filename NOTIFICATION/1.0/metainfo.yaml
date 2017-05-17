@@ -30,6 +30,11 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
+  resources:
+    limitsMemoryKey: notification.container.limits.memory
+    limitsCpuKey: notification.container.limits.cpu
+    requestsMemoryKey: notification.container.requests.memory
+    requestsCpuKey: notification.container.requests.cpu
   summaryPolicy: ALL
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -65,6 +70,11 @@ firstWizardConfigs:
 - notification.http.port
 - javax.jdo.option.ConnectionUserName
 - javax.jdo.option.ConnectionPassword
+- notification.container.limits.memory
+- notification.container.limits.cpu
+- notification.container.requests.memory
+- notification.container.requests.cpu
+- notification.memory.ratio
 
 pages:
 - roles

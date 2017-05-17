@@ -42,6 +42,11 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
+  resources:
+    limitsMemoryKey: kafka.container.limits.memory
+    limitsCpuKey: kafka.container.limits.cpu
+    requestsMemoryKey: kafka.container.requests.memory
+    requestsCpuKey: kafka.container.requests.cpu
   nodeSpecificMounts:
   - configKey: kmq.log.dirs
   summaryPolicy: SOME
@@ -62,6 +67,11 @@ firstWizardConfigs:
 - kmq.log.dirs
 - kmq.port
 - kmq.zookeeper.connection.timeout.ms
+- kafka.container.limits.memory
+- kafka.container.limits.cpu
+- kafka.container.requests.memory
+- kafka.container.requests.cpu
+- kafka.memory.ratio
 
 pages:
 - summary

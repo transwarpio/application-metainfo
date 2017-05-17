@@ -57,6 +57,11 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
+  resources:
+    limitsMemoryKey: oozie.container.limits.memory
+    limitsCpuKey: oozie.container.limits.cpu
+    requestsMemoryKey: oozie.container.requests.memory
+    requestsCpuKey: oozie.container.requests.cpu
   summaryPolicy: ALL
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -95,6 +100,11 @@ roles:
 
 firstWizardConfigs:
 - oozie.http.port
+- oozie.container.limits.memory
+- oozie.container.limits.cpu
+- oozie.container.requests.memory
+- oozie.container.requests.cpu
+- oozie.memory.ratio
 
 pages:
 - roles

@@ -430,15 +430,15 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
-
-- name: hive.cores
-  recommendExpression: 2
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
+#
+#- name: hive.cores
+#  recommendExpression: 2
+#  defaultValue: null
+#  valueType: NON_NEG_INT
+#  scope: !<ServiceLevel> {}
+#  onDeps: []
+#  groups: []
+#  visibility: READ_WRITE
 
 - name: inceptor.ngmr.yarn
   recommendExpression: false
@@ -455,6 +455,165 @@
   valueType: STRING
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_MYSQL]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.container.limits.memory
+  recommendExpression: 32
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.container.limits.cpu
+  recommendExpression: 10
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.container.requests.memory
+  recommendExpression: 0
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.container.requests.cpu
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.memory.ratio
+  recommendExpression: 0.9
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.number.eachnode
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.limits.memory
+  recommendExpression: 8
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.limits.cpu
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.requests.memory
+  recommendExpression: 0
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.requests.cpu
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.memory.ratio
+  recommendExpression: 0.9
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: metastore.container.limits.memory
+  recommendExpression: 4
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: metastore.container.limits.cpu
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: metastore.container.requests.memory
+  recommendExpression: 0
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: metastore.container.requests.cpu
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: metastore.memory.ratio
+  recommendExpression: 0.9
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
   onDeps: []
   groups: []
   visibility: READ_WRITE

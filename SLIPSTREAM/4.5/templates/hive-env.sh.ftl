@@ -61,10 +61,20 @@ fi
 done
 </#if>
 
-export HADOOP_HEAPSIZE=${service['hive.memory']}
-export INCEPTOR_SERVER_MEMORY=${service['hive.memory']}
-export INCEPTOR_EXECUTOR_MEMORY=${service['hive.memory']}
-export SPARK_CORES=${service['hive.cores']}
+<#assign limitsMemory = service['server.container.limits.memory']?number
+  memoryRatio = service['server.memory.ratio']?number
+  memory = limitsMemory * memoryRatio * 1024>
+export HADOOP_HEAPSIZE=${memory?floor}
+export INCEPTOR_SERVER_MEMORY=${memory?floor}
+
+# TODO get executor memory from resource configuration
+<#assign limitsMemory = service['executor.container.limits.memory']?number
+  memoryRatio = service['executor.memory.ratio']?number
+  memory = limitsMemory * memoryRatio * 1024>
+export INCEPTOR_EXECUTOR_MEMORY=${memory?floor}
+
+export SPARK_CORES=${service['executor.container.limits.cpu']}
+
 export HIVE_PORT=${service['hive.server2.thrift.port']}
 export HADOOP_CONF_DIR=/etc/${dependencies.HDFS.sid}/conf:/etc/${dependencies.YARN.sid}/conf
 export HBASE_CONF_DIR=/etc/${dependencies.HYPERBASE.sid}/conf

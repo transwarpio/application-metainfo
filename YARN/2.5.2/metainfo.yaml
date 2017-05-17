@@ -41,6 +41,11 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
+  resources:
+    limitsMemoryKey: resourcemanager.container.limits.memory
+    limitsCpuKey: resourcemanager.container.limits.cpu
+    requestsMemoryKey: resourcemanager.container.requests.memory
+    requestsCpuKey: resourcemanager.container.requests.cpu
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -94,6 +99,11 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
+  resources:
+    limitsMemoryKey: nodemanager.container.limits.memory
+    limitsCpuKey: nodemanager.container.limits.cpu
+    requestsMemoryKey: nodemanager.container.requests.memory
+    requestsCpuKey: nodemanager.container.requests.cpu
   nodeSpecificMounts:
   - configKey: yarn.nodemanager.local-dirs
   - configKey: yarn.nodemanager.log-dirs
@@ -154,6 +164,11 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
+  resources:
+    limitsMemoryKey: historyserver.container.limits.memory
+    limitsCpuKey: historyserver.container.limits.cpu
+    requestsMemoryKey: historyserver.container.requests.memory
+    requestsCpuKey: historyserver.container.requests.cpu
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -211,6 +226,11 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
+  resources:
+    limitsMemoryKey: timelineserver.container.limits.memory
+    limitsCpuKey: timelineserver.container.limits.cpu
+    requestsMemoryKey: timelineserver.container.requests.memory
+    requestsCpuKey: timelineserver.container.requests.cpu
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -254,11 +274,33 @@ firstWizardConfigs:
 - resourcemanager.resource-tracker.port
 - resourcemanager.scheduler.port
 - resourcemanager.webapp.port
+- yarn.scheduler.maximum-allocation-mb
+- yarn.scheduler.maximum-allocation-vcores
 - yarn.nodemanager.resource.cpu-vcores
 - yarn.nodemanager.resource.memory-mb
 - timelineserver.port
 - timelineserver.http.port
 - mapred.child.heapsize
+- resourcemanager.container.limits.memory
+- resourcemanager.container.limits.cpu
+- resourcemanager.container.requests.memory
+- resourcemanager.container.requests.cpu
+- resourcemanager.memory.ratio
+- nodemanager.container.limits.memory
+- nodemanager.container.limits.cpu
+- nodemanager.container.requests.memory
+- nodemanager.container.requests.cpu
+- nodemanager.memory.ratio
+- historyserver.container.limits.memory
+- historyserver.container.limits.cpu
+- historyserver.container.requests.memory
+- historyserver.container.requests.cpu
+- historyserver.memory.ratio
+- timelineserver.container.limits.memory
+- timelineserver.container.limits.cpu
+- timelineserver.container.requests.memory
+- timelineserver.container.requests.cpu
+- timelineserver.memory.ratio
 
 dashboardMetrics:
 - YarnVCoreUsage

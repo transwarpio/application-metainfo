@@ -43,6 +43,11 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
+  resources:
+    limitsMemoryKey: tdt.container.limits.memory
+    limitsCpuKey: tdt.container.limits.cpu
+    requestsMemoryKey: tdt.container.requests.memory
+    requestsCpuKey: tdt.container.requests.cpu
   summaryPolicy: ALL
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -96,6 +101,11 @@ firstWizardConfigs:
 - tdt.server.thrift.bind.host
 - tdt.jdbc.user.name
 - tdt.jdbc.password
+- tdt.container.limits.memory
+- tdt.container.limits.cpu
+- tdt.container.requests.memory
+- tdt.container.requests.cpu
+- tdt.memory.ratio
 
 principals:
 - tdt

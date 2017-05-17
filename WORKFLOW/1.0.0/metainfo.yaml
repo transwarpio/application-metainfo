@@ -38,6 +38,11 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
+  resources:
+    limitsMemoryKey: workflow.container.limits.memory
+    limitsCpuKey: workflow.container.limits.cpu
+    requestsMemoryKey: workflow.container.requests.memory
+    requestsCpuKey: workflow.container.requests.cpu
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [2]}
@@ -79,6 +84,11 @@ firstWizardConfigs:
 - workflow.session.timeout.seconds
 - workflow.cookie.rememberme.days
 - workflow.cookie.maxage.hours
+- workflow.container.limits.memory
+- workflow.container.limits.cpu
+- workflow.container.requests.memory
+- workflow.container.requests.cpu
+- workflow.memory.ratio
 
 pages:
 - roles

@@ -41,6 +41,11 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
+  resources:
+    limitsMemoryKey: rubik.container.limits.memory
+    limitsCpuKey: rubik.container.limits.cpu
+    requestsMemoryKey: rubik.container.requests.memory
+    requestsCpuKey: rubik.container.requests.cpu
   summaryPolicy: ALL
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -74,9 +79,14 @@ product: Studio
 
 firstWizardConfigs:
 - designer.server.port
-- max.memory.size
+#- max.memory.size
 - javax.jdo.option.ConnectionUserName
 - javax.jdo.option.ConnectionPassword
+- rubik.container.limits.memory
+- rubik.container.limits.cpu
+- rubik.container.requests.memory
+- rubik.container.requests.cpu
+- rubik.memory.ratio
 
 pages:
 - roles

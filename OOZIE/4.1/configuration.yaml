@@ -52,14 +52,14 @@
   groups: []
   visibility: READ_WRITE
 
-- name: oozie.server.memory
-  recommendExpression: 1024
-  defaultValue: null
-  valueType: MB
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
+#- name: oozie.server.memory
+#  recommendExpression: 1024
+#  defaultValue: null
+#  valueType: MB
+#  scope: !<ServiceLevel> {}
+#  onDeps: []
+#  groups: []
+#  visibility: READ_WRITE
 
 - name: oozie.admin.port
   recommendExpression: 11001
@@ -75,6 +75,56 @@
   defaultValue: null
   valueType: PORT
   scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: oozie.container.limits.memory
+  recommendExpression: 1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [OOZIE_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: oozie.container.limits.cpu
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [OOZIE_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: oozie.container.requests.memory
+  recommendExpression: 0
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [OOZIE_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: oozie.container.requests.cpu
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [OOZIE_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: oozie.memory.ratio
+  recommendExpression: 0.9
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [OOZIE_SERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE

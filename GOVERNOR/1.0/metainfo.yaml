@@ -60,6 +60,11 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
+  resources:
+    limitsMemoryKey: governor.container.limits.memory
+    limitsCpuKey: governor.container.limits.cpu
+    requestsMemoryKey: governor.container.requests.memory
+    requestsCpuKey: governor.container.requests.cpu
   summaryPolicy: ALL
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -105,6 +110,11 @@ firstWizardConfigs:
 - governor.http.port
 - javax.jdo.option.ConnectionUserName
 - javax.jdo.option.ConnectionPassword
+- governor.container.limits.memory
+- governor.container.limits.cpu
+- governor.container.requests.memory
+- governor.container.requests.cpu
+- governor.memory.ratio
 
 pages:
 - roles

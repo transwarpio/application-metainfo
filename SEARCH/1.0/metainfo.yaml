@@ -24,6 +24,11 @@ roles:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
+  resources:
+    limitsMemoryKey: search.container.limits.memory
+    limitsCpuKey: search.container.limits.cpu
+    requestsMemoryKey: search.container.requests.memory
+    requestsCpuKey: search.container.requests.cpu
   nodeSpecificMounts:
   - configKey: path.data
   autoAssign:
@@ -44,8 +49,13 @@ firstWizardConfigs:
 - node.master
 - node.data
 - network.host
-- es.heap.size
-- es.heap.newsize
+# - es.heap.size
+# - es.heap.newsize
+- search.container.limits.memory
+- search.container.limits.cpu
+- search.container.requests.memory
+- search.container.requests.cpu
+- search.memory.ratio
 
 product: Search
 

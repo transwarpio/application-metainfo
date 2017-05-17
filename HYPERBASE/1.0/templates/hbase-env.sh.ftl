@@ -73,33 +73,27 @@ HBASE_JMX_OPTS="$HBASE_JMX_OPTS -Dcom.sun.management.jmxremote.access.file=$HBAS
 export HBASE_MASTER_OPTS="$HBASE_JMX_OPTS -Dcom.sun.management.jmxremote.port=${service['master.jmx.port']}"
 export HBASE_REGIONSERVER_OPTS="$HBASE_JMX_OPTS -Dcom.sun.management.jmxremote.port=${service['regionserver.jmx.port']}"
 
-<#if service[.data_model["localhostname"]]['master.memory']??>
-<#assign MASTER_MEMORY=service[.data_model["localhostname"]]['master.memory']?trim>
-<#else>
-<#assign MASTER_MEMORY=4096>
+<#if service['master.container.limits.memory']??>
+    <#assign limitsMemory = service['master.container.limits.memory']?number
+    memoryRatio = service['master.memory.ratio']?number
+    memory = limitsMemory * memoryRatio * 1024>
+export HBASE_MASTER_MEMORY=${memory?floor}m
+export HBASE_MASTER_OPTS="$HBASE_MASTER_OPTS -Xmx${memory?floor}m"
 </#if>
-<#if service[.data_model["localhostname"]]['regionserver.memory']??>
-<#assign REGIONSERVER_MEMORY=service[.data_model["localhostname"]]['regionserver.memory']?trim>
-<#assign HALF_REGIONSERVER_MEMORY=((REGIONSERVER_MEMORY?number)/2)?floor?c>
-<#else>
-<#assign REGIONSERVER_MEMORY=24000>
-<#assign HALF_REGIONSERVER_MEMORY=12000>
+<#if service['regionserver.container.limits.memory']??>
+    <#assign limitsMemory = service['regionserver.container.limits.memory']?number
+    memoryRatio = service['regionserver.memory.ratio']?number
+    memory = limitsMemory * memoryRatio * 1024>
+export HBASE_REGIONSERVER_MEMORY=${memory?floor}m
+export HBASE_REGIONSERVER_OPTS="$HBASE_REGIONSERVER_OPTS -Xms${(memory/2)?floor}m -Xmx${memory?floor}m -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps"
 </#if>
-<#if service[.data_model["localhostname"]]['thrift.server.memory']??>
-<#assign THRIFT_SERVER_MEMORY=service[.data_model["localhostname"]]['thrift.server.memory']>
-<#else>
-<#assign THRIFT_SERVER_MEMORY=4096>
+<#if service['thrift.container.limits.memory']??>
+    <#assign limitsMemory = service['thrift.container.limits.memory']?number
+    memoryRatio = service['thrift.memory.ratio']?number
+    memory = limitsMemory * memoryRatio * 1024>
+export HBASE_THRIFT_SERVER_MEMORY=${memory?floor}m
+export HBASE_THRIFT_OPTS="$HBASE_THRIFT_OPTS -Xmx${memory?floor}m"
 </#if>
-
-export HBASE_MASTER_MEMORY=${MASTER_MEMORY}m
-export HBASE_REGIONSERVER_MEMORY=${REGIONSERVER_MEMORY}m
-export HBASE_THRIFT_SERVER_MEMORY=${THRIFT_SERVER_MEMORY}m
-
-export HBASE_MASTER_OPTS="$HBASE_MASTER_OPTS -Xmx${MASTER_MEMORY}m"
-
-export HBASE_REGIONSERVER_OPTS="$HBASE_REGIONSERVER_OPTS -Xms${HALF_REGIONSERVER_MEMORY}m -Xmx${REGIONSERVER_MEMORY}m -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps"
-
-export HBASE_THRIFT_OPTS="$HBASE_THRIFT_OPTS -Xmx${THRIFT_SERVER_MEMORY}m"
 
 #other roles heap size has been set in opts, chronos server do not set specific the java opts, use hbase heapsize instead.
 export HBASE_HEAPSIZE="1024m"

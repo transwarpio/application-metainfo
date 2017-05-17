@@ -25,6 +25,15 @@ roles:
     value: <#if dependencies.SEARCH??>${dependencies.SEARCH.roles.SEARCH_SERVER[0].hostname}<#else>0.0.0.0</#if>
   - name: ELASTICSEARCH_PORT
     value: 9200
+  mountPaths:
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
   summaryPolicy: SOME
   mountPaths: []
   autoAssign:
@@ -38,6 +47,11 @@ roles:
 firstWizardConfigs:
 - transpedia.host
 - transpedia.port
+- server.container.limits.memory
+- server.container.limits.cpu
+- server.container.requests.memory
+- server.container.requests.cpu
+- server.memory.ratio
 
 healthChecks:
 - category: DAEMON_CHECK

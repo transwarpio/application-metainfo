@@ -26,7 +26,11 @@ export BASEDIR=/usr/lib/oozie
 # Settings for the Embedded Tomcat that runs Oozie
 # Java System properties for Oozie should be specified in this variable
 #
-export CATALINA_OPTS="$CATALINA_OPTS -Xmx${service['oozie.server.memory']}m -agentpath:/usr/lib/hadoop/bin/libagent.so"
+
+<#assign limitsMemory = service['oozie.container.limits.memory']?number
+  memoryRatio = service['oozie.memory.ratio']?number
+  memory = limitsMemory * memoryRatio * 1024>
+export CATALINA_OPTS="$CATALINA_OPTS -Xmx${memory?floor}m -agentpath:/usr/lib/hadoop/bin/libagent.so"
 
 # Oozie configuration file to load from Oozie configuration directory
 #

@@ -30,6 +30,11 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
+  resources:
+    limitsMemoryKey: zookeeper.container.limits.memory
+    limitsCpuKey: zookeeper.container.limits.cpu
+    requestsMemoryKey: zookeeper.container.requests.memory
+    requestsCpuKey: zookeeper.container.requests.cpu
   summaryPolicy: MAJOR
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [5, 3, 1]}
@@ -65,6 +70,11 @@ firstWizardConfigs:
 - zookeeper.client.port
 - zookeeper.peer.communicate.port
 - zookeeper.leader.elect.port
+- zookeeper.container.limits.memory
+- zookeeper.container.limits.cpu
+- zookeeper.container.requests.memory
+- zookeeper.container.requests.cpu
+- zookeeper.memory.ratio
 
 dashboardMetrics:
 - MaxZookeeperRequestLatency

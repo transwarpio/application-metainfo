@@ -67,6 +67,11 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
+  resources:
+    limitsMemoryKey: hue.container.limits.memory
+    limitsCpuKey: hue.container.limits.cpu
+    requestsMemoryKey: hue.container.requests.memory
+    requestsCpuKey: hue.container.requests.cpu
   summaryPolicy: ALL
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -83,6 +88,11 @@ roles:
 
 firstWizardConfigs:
 - hue.desktop.http.port
+- hue.container.limits.memory
+- hue.container.limits.cpu
+- hue.container.requests.memory
+- hue.container.requests.cpu
+- hue.memory.ratio
 
 pages:
 - roles

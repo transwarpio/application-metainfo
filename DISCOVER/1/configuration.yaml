@@ -362,3 +362,153 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: rstudio.container.limits.memory
+  recommendExpression: 4
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_RSTUDIO]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: rstudio.container.limits.cpu
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_RSTUDIO]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: rstudio.container.requests.memory
+  recommendExpression: 0
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_RSTUDIO]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: rstudio.container.requests.cpu
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_RSTUDIO]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: rstudio.memory.ratio
+  recommendExpression: 0.9
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_RSTUDIO]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: notebook.container.limits.memory
+  recommendExpression: 4
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_NOTEBOOK]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: notebook.container.limits.cpu
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_NOTEBOOK]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: notebook.container.requests.memory
+  recommendExpression: 0
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_NOTEBOOK]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: notebook.container.requests.cpu
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_NOTEBOOK]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: notebook.memory.ratio
+  recommendExpression: 0.9
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_NOTEBOOK]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: local-cran.container.limits.memory
+  recommendExpression: 4
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_LOCAL-CRAN]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: local-cran.container.limits.cpu
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_LOCAL-CRAN]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: local-cran.container.requests.memory
+  recommendExpression: 0
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_LOCAL-CRAN]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: local-cran.container.requests.cpu
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_LOCAL-CRAN]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: local-cran.memory.ratio
+  recommendExpression: 0.9
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_LOCAL-CRAN]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

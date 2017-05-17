@@ -39,6 +39,11 @@ roles:
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
+  resources:
+    limitsMemoryKey: sqoop.container.limits.memory
+    limitsCpuKey: sqoop.container.limits.cpu
+    requestsMemoryKey: sqoop.container.requests.memory
+    requestsCpuKey: sqoop.container.requests.cpu
   summaryPolicy: ALL
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -56,7 +61,12 @@ roles:
 firstWizardConfigs:
 - sqoop.http.port
 - sqoop.admin.port
-- sqoop.server.memory
+#- sqoop.server.memory
+- sqoop.container.limits.memory
+- sqoop.container.limits.cpu
+- sqoop.container.requests.memory
+- sqoop.container.requests.cpu
+- sqoop.memory.ratio
 
 pages:
 - roles

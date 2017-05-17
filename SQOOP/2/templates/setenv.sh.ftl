@@ -17,7 +17,10 @@
 
 # Set Sqoop specific environment variables here
 
-JAVA_OPTS="$JAVA_OPTS -Xmx${service['sqoop.server.memory']}m -Dsqoop.config.dir=/etc/${service.sid}/conf"
+<#assign limitsMemory = service['oozie.container.limits.memory']?number
+  memoryRatio = service['oozie.memory.ratio']?number
+  memory = limitsMemory * memoryRatio * 1024>
+JAVA_OPTS="$JAVA_OPTS -Xmx${memory?floor}m -Dsqoop.config.dir=/etc/${service.sid}/conf"
 
 # The port Sqoop server runs
 #

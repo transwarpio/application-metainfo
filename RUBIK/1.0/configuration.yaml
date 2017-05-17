@@ -88,14 +88,14 @@
   groups: []
   visibility: READ_WRITE
 
-- name: max.memory.size
-  recommendExpression: 2048
-  defaultValue: null
-  valueType: MB
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
+#- name: max.memory.size
+#  recommendExpression: 2048
+#  defaultValue: null
+#  valueType: MB
+#  scope: !<ServiceLevel> {}
+#  onDeps: []
+#  groups: []
+#  visibility: READ_WRITE
 
 - name: javax.jdo.option.ConnectionUserName
   recommendExpression: rubikuser
@@ -114,3 +114,53 @@
   onDeps: []
   groups: []
   visibility: PASSWORD
+
+- name: rubik.container.limits.memory
+  recommendExpression: 2
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [RUBIK_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: rubik.container.limits.cpu
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [RUBIK_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: rubik.container.requests.memory
+  recommendExpression: 0
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [RUBIK_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: rubik.container.requests.cpu
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [RUBIK_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: rubik.memory.ratio
+  recommendExpression: 0.9
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [RUBIK_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

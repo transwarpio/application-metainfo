@@ -26,6 +26,11 @@ roles:
     - mountPath: /etc/transwarp/conf
       hostPath: /etc/transwarp/conf
       name: hosts
+  resources:
+    limitsMemoryKey: txsql.container.limits.memory
+    limitsCpuKey: txsql.container.limits.cpu
+    requestsMemoryKey: txsql.container.requests.memory
+    requestsCpuKey: txsql.container.requests.cpu
   nodeSpecificMounts:
     - configKey: data.dir
   summaryPolicy: MAJOR
@@ -56,6 +61,11 @@ firstWizardConfigs:
 - mysql.local.port
 - binlogsvr.rpc.port
 - paxos.port
+- txsql.container.limits.memory
+- txsql.container.limits.cpu
+- txsql.container.requests.memory
+- txsql.container.requests.cpu
+- txsql.memory.ratio
 
 healthChecks:
 - category: DAEMON_CHECK
