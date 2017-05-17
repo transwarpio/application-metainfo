@@ -7,15 +7,6 @@
   groups: []
   visibility: READ_WRITE
 
-- name: designer.authentication.enableguardian
-  recommendExpression: false
-  defaultValue: null
-  valueType: BOOL
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
 - name: connectionpool.expiretime
   recommendExpression: 30
   defaultValue: null

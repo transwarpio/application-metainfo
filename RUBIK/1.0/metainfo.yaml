@@ -82,6 +82,7 @@ pages:
 - roles
 - configuration
 - operation
+- security
 
 healthChecks:
 - category: DAEMON_CHECK

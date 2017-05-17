@@ -35,7 +35,7 @@
   visibility: READ_WRITE
 
 - name: tdt.server.thrift.bind.host
-  recommendExpression: 127.0.0.1
+  recommendExpression: 0.0.0.0
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}

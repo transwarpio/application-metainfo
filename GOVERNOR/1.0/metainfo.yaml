@@ -26,10 +26,6 @@ dependencies:
     minVersion: 2.5.2-tdh50
     maxVersion: 2.5.2-tdh50
     optional: false
-#  - name: GUARDIAN
-#    minVersion: 0.1-tdh50
-#    maxVersion: 0.1-tdh50
-#    optional: false
   - name: NOTIFICATION
     minVersion: 1.0-tdh50
     maxVersion: 1.0-tdh50
@@ -114,6 +110,11 @@ pages:
 - roles
 - configuration
 - operation
+- security
+
+principals:
+- kafka
+- hbase
 
 healthChecks:
 - category: DAEMON_CHECK

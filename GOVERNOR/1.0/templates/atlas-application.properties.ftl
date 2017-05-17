@@ -110,12 +110,13 @@ atlas.notification.replicas=2
 atlas.notification.topics=ATLAS_HOOK
 
 ### Kafka Kerberos Config ###
-#atlas.kafka.security.protocol=SASL_PLAINTEXT
-#atlas.kafka.sasl.mechanism=GSSAPI
-#atlas.kafka.sasl.kerberos.service.name=kafka
+<#if service.auth = "kerberos">
+atlas.kafka.security.protocol=SASL_PLAINTEXT
+atlas.kafka.sasl.mechanism=GSSAPI
+atlas.kafka.sasl.kerberos.service.name=kafka
 # kafka client jaas conf, modify principal/keytab as need, and make sure keytab file exist & readable
-#java.security.auth.login.config=conf/kafka_client_jaas.conf
-
+java.security.auth.login.config=/etc/${service.sid}/conf/kafka_client_jaas.conf
+</#if>
 
 #########  Hive Lineage Configs  #########
 # This models reflects the base super types for Data and Process
@@ -211,9 +212,9 @@ atlas.dependency.services.state.check.period.ms=900000
 
 # atlas authentication
 #### authentication method {simple, kerberos}
-#atlas.authentication.method=simple
-#atlas.authentication.principal=governor@TDH
-#atlas.authentication.keytab=/etc/governor/governor.keytab
+atlas.authentication.method=${service.auth}
+atlas.authentication.principal=hbase/${localhostname}@${service.realm}
+atlas.authentication.keytab=${service.keytab}
 
 <#assign license_servers=[]>
 <#list dependencies.LICENSE_SERVICE.roles.LICENSE_NODE as server>

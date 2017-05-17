@@ -20,3 +20,7 @@ export JAVAX_JDO_OPTION_CONNECTION_URL=jdbc:mysql://${hostPorts?join(",")}/tdt_$
 export JAVAX_JDO_OPTION_CONNECTION_USERNAME=${service['tdt.jdbc.user.name']}
 export JAVAX_JDO_OPTION_CONNECTION_PASSWORD=${service['tdt.jdbc.password']}
 export DATABASE_NAME=tdt_${service.sid}
+
+<#if service.auth = "kerberos">
+cp /etc/${service.sid}/conf/krb5.conf /etc/
+</#if>
