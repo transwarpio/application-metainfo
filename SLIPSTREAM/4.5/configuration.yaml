@@ -195,15 +195,6 @@
   groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
-- name: hbase.zookeeper.property.clientPort
-  recommendExpression: 2181
-  defaultValue: null
-  valueType: PORT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: ["hive-site.xml"]
-  visibility: READ_WRITE
-
 - name: hive.exec.compress.output
   recommendExpression: false
   defaultValue: null

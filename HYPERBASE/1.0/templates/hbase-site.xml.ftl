@@ -61,6 +61,18 @@
     <@property "hbase.regionserver.port" service['regionserver.port']/>
     <@property "hbase.regionserver.info.port" service['regionserver.info.port']/>
 
+<#if dependencies.SEARCH??>
+    <#assign master_nodes=[] master_node_count=0>
+    <#list dependencies.SEARCH.roles.SEARCH_SERVER as server>
+        <#if dependencies.SEARCH[server.hostname]['node.master']="true">
+            <#assign master_nodes+=[server.hostname] master_node_count+=1>
+        </#if>
+    </#list>
+    <@property "discovery.zen.minimum_master_nodes" "${dependencies.SEARCH['discovery.zen.minimum_master_nodes']}"/>
+    <@property "discovery.zen.ping.unicast.host" "${master_nodes?join(',')}"/>
+    <@property "discovery.zen.ping.multicast.enabled" "${dependencies.SEARCH['discovery.zen.ping.multicast.enabled']}"/>
+    <@property "cluster.name" "${dependencies.SEARCH['cluster.name']}"/>
+</#if>
 <#--Take properties from the context-->
 <#list service['hbase-site.xml'] as key, value>
     <@property key value/>
