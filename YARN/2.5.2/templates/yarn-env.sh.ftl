@@ -19,6 +19,8 @@ export HADOOP_YARN_USER=${r"${HADOOP_YARN_USER:-yarn}"}
 # resolve links - $0 may be a softlink
 export YARN_LOG_DIR=/var/log/${service.sid}
 export HADOOP_CONF_DIR=/etc/${service.sid}/conf
+<#-- HDFS_CONF_DIR should be /etc/${dependencies.HDFS.sid}/conf,
+     otherwise TDH-Client downloader cannot find which HDFS this YARN depends on -->
 export HDFS_CONF_DIR=/etc/${dependencies.HDFS.sid}/conf
 export YARN_RESOURCEMANAGER_ADDRRESS=${service.roles.YARN_RESOURCEMANAGER[0]['hostname']}
 export NODEMANAGER_LOCAL_DIRS=${service['yarn.nodemanager.local-dirs']}
