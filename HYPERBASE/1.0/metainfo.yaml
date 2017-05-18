@@ -18,6 +18,11 @@ dependencies:
     minVersion: 2.5.2-tdh50
     maxVersion: 2.5.2-tdh50
     optional: false
+  - name: SEARCH
+    minVersion: 1.0-tdh50
+    maxVersion: 1.0-tdh50
+    optional: true
+    preferred: true
 user: hbase
 roles:
 - name: HYPERBASE_MASTER

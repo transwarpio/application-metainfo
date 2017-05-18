@@ -21,7 +21,7 @@
     <@property "zookeeper.znode.parent" "/" + (dependencies.HYPERBASE??)?then(dependencies.HYPERBASE.sid, service.sid)/>
 </#if>
 
-<#-- TODO handle the kerberos-->
+<#-- handle the kerberos-->
 <#if service.auth == "kerberos">
     <@property "hive.metastore.sasl.enabled" "true"/>
     <@property "hive.metastore.kerberos.keytab.file" service.keytab/>
@@ -87,6 +87,26 @@
     </#list>
     <@property "license.zookeeper.quorum" license_servers?join(",")/>
     </#if>
+
+<#-- handle dependency -->
+    <#if dependencies.HYPERBASE?? && service.auth = "kerberos">
+    <@property "hbase.regionserver.kerberos.principal" "hbase/_HOST@${service.realm}"/>
+    <@property "hbase.master.kerberos.principal" "hbase/_HOST@${service.realm}"/>
+    <@property "hbase.security.authentication" "kerberos"/>
+    </#if>
+    <#if dependencies.SEARCH??>
+    <#assign master_nodes=[] master_node_count=0>
+    <#list dependencies.SEARCH.roles.SEARCH_SERVER as server>
+        <#if dependencies.SEARCH[server.hostname]['node.master']="true">
+            <#assign master_nodes+=[server.hostname] master_node_count+=1>
+        </#if>
+    </#list>
+    <@property "discovery.zen.minimum_master_nodes" "${dependencies.SEARCH['discovery.zen.minimum_master_nodes']}"/>
+    <@property "discovery.zen.ping.unicast.host" "${master_nodes?join(',')}"/>
+    <@property "discovery.zen.ping.multicast.enabled" "${dependencies.SEARCH['discovery.zen.ping.multicast.enabled']}"/>
+    <@property "cluster.name" "${dependencies.SEARCH['cluster.name']}"/>
+    </#if>
+
 <#--Take properties from the context-->
 <#list service['hive-site.xml'] as key, value>
     <@property key value/>

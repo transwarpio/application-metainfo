@@ -341,15 +341,6 @@
   groups: ["hbase-site.xml"]
   visibility: READ_WRITE
 
-- name: hbase.zookeeper.property.clientPort
-  recommendExpression: 2181
-  defaultValue: null
-  valueType: PORT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: ["hbase-site.xml"]
-  visibility: READ_WRITE
-
 - name: hbase.hregion.memstore.chunkpool.maxsize
   recommendExpression: 0.3
   defaultValue: null
