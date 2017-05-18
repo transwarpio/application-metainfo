@@ -38,6 +38,43 @@ dependencies:
     preferred: true
 user: hive
 roles:
+- name: INCEPTOR_METASTORE
+  friendlyName: "Inceptor Metastore"
+  labelPrefix: "inceptor-metastore"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  env:
+  - name: INCEPTOR_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths:
+  - mountPath: /etc/${service.sid}/conf
+    hostPath: /etc/${service.sid}/conf
+    name: inceptor
+  - mountPath: /etc/${dependencies.HYPERBASE.sid}/conf
+    hostPath: /etc/${dependencies.HYPERBASE.sid}/conf
+    name: hyperbase
+  - mountPath: /etc/${dependencies.HDFS.sid}/conf
+    hostPath: /etc/${dependencies.HDFS.sid}/conf
+    name: hdfs
+  - mountPath: /var/log/${service.sid}
+    hostPath: /var/log/${service.sid}
+    name: log
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/log/${service.sid}" ,"/var/run/${service.sid}", "/etc/${service.sid}/conf"]
+        mode: "755"
 - name: INCEPTOR_SERVER
   friendlyName: "Inceptor Server"
   labelPrefix: "inceptor-server"
@@ -87,43 +124,6 @@ roles:
     directives:
     - directive: !<mkdirs>
         paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
-        mode: "755"
-- name: INCEPTOR_METASTORE
-  friendlyName: "Inceptor Metastore"
-  labelPrefix: "inceptor-metastore"
-  category: MASTER
-  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
-  env:
-  - name: INCEPTOR_CONF_DIR
-    value: /etc/${service.sid}/conf
-  mountPaths:
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: inceptor
-  - mountPath: /etc/${dependencies.HYPERBASE.sid}/conf
-    hostPath: /etc/${dependencies.HYPERBASE.sid}/conf
-    name: hyperbase
-  - mountPath: /etc/${dependencies.HDFS.sid}/conf
-    hostPath: /etc/${dependencies.HDFS.sid}/conf
-    name: hdfs
-  - mountPath: /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
-  summaryPolicy: SOME
-  autoAssign:
-  - advice: !<NumSeq> {"numSeq": [1]}
-  suggestion:
-  - criteria: !<Range> {"min": 1}
-  validation:
-  - criteria: !<Range> {"min": 1}
-  operations:
-  - type: Install
-    directives:
-    - directive: !<mkdirs>
-        paths: ["/var/log/${service.sid}" ,"/var/run/${service.sid}", "/etc/${service.sid}/conf"]
         mode: "755"
 - name: INCEPTOR_EXECUTOR
   friendlyName: "Inceptor Executor"
