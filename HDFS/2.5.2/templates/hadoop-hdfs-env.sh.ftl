@@ -155,7 +155,7 @@ export HDFS_HA=false
 <#if service['journalnode.http-port']??>
 export JOURNALNODE_HTTP_PORT=${service['journalnode.http-port']}
 export JOURNALNODE_RPC_PORT=${service['journalnode.rpc-port']}
-export HDFS_JOURNAL_NODE_COUNT=${service.roles.HDFS_JOURNALNODE?size}
+# export HDFS_JOURNAL_NODE_COUNT=${service.roles.HDFS_JOURNALNODE?size}
 </#if>
 
 # Export dfs.datanode.data.dir
