@@ -109,8 +109,8 @@ pages:
 
 healthChecks:
 - category: DAEMON_CHECK
-  intervalSeconds: 5
+  intervalSeconds: 10
   method: !<K8sPod> {}
-#- category: VITAL_SIGN_CHECK
-#  intervalSeconds: 10
-#  method: !<Builtin> {}
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 120
+  method: !<Builtin> {}
