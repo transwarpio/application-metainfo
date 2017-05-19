@@ -159,8 +159,8 @@ roles:
         mode: "755"
 
 firstWizardConfigs:
-- midas.server.heapsize
-- midas.server.permsize
+#- midas.server.heapsize
+#- midas.server.permsize
 - spark.executor.heapsize
 - spark.executor.permsize
 - spark.executor.max_permsize
@@ -169,6 +169,21 @@ firstWizardConfigs:
 - spark.driver.max_permsize
 - midas.redis.port
 - livy.scheduler.port
+- server.container.limits.memory
+- server.container.limits.cpu
+- server.container.requests.memory
+- server.container.requests.cpu
+- server.memory.ratio
+- redis.container.limits.memory
+- redis.container.limits.cpu
+- redis.container.requests.memory
+- redis.container.requests.cpu
+- redis.memory.ratio
+- scheduler.container.limits.memory
+- scheduler.container.limits.cpu
+- scheduler.container.requests.memory
+- scheduler.container.requests.cpu
+- scheduler.memory.ratio
 
 product: Sophon
 

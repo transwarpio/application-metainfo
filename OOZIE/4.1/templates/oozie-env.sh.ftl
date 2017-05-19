@@ -78,7 +78,10 @@ export OOZIE_ADMIN_PORT=${service['oozie.admin.port']}
 export OOZIE_HTTP_HOSTNAME=${localhostname}
 export OOZIE_HTTP_PORT=${service['oozie.http.port']}
 export OOZIE_HTTPS_PORT=${service['oozie.https.port']}
-export OOZIE_SERVER_MEMORY=${service['oozie.server.memory']}m
+<#assign limitsMemory = service['oozie.container.limits.memory']?number
+  memoryRatio = service['oozie.memory.ratio']?number
+  memory = limitsMemory * memoryRatio * 1024>
+export OOZIE_SERVER_MEMORY=${memory?floor}m
 
 <#assign url="http://" + service.roles.OOZIE_SERVER[0]['hostname'] + ":" + service['oozie.http.port'] + "/oozie">
 export OOZIE_BASE_URL=${url}

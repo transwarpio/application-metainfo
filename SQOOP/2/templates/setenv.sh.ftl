@@ -17,8 +17,8 @@
 
 # Set Sqoop specific environment variables here
 
-<#assign limitsMemory = service['oozie.container.limits.memory']?number
-  memoryRatio = service['oozie.memory.ratio']?number
+<#assign limitsMemory = service['sqoop.container.limits.memory']?number
+  memoryRatio = service['sqoop.memory.ratio']?number
   memory = limitsMemory * memoryRatio * 1024>
 JAVA_OPTS="$JAVA_OPTS -Xmx${memory?floor}m -Dsqoop.config.dir=/etc/${service.sid}/conf"
 

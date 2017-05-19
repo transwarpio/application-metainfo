@@ -89,7 +89,7 @@
   visibility: READ_WRITE
 
 - name: hue.container.limits.memory
-  recommendExpression: 2
+  recommendExpression: 4
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>

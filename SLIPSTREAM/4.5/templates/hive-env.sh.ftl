@@ -94,7 +94,7 @@ export METASTORE_PORT=${service['hive.metastore.port']}
 
 <#if dependencies.ZOOKEEPER[.data_model["localhostname"]]??>
     <#if dependencies.ZOOKEEPER[.data_model["localhostname"]]['zookeeper.client.port']??>
-    export TRANSWARP_ZOOKEEPER_PORT=${dependencies.ZOOKEEPER[.data_model["localhostname"]]['zookeeper.client.port']}
+export TRANSWARP_ZOOKEEPER_PORT=${dependencies.ZOOKEEPER[.data_model["localhostname"]]['zookeeper.client.port']}
     </#if>
 </#if>
 

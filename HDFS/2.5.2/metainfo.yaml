@@ -49,6 +49,11 @@ roles:
     - mountPath: /etc/transwarp/conf
       hostPath: /etc/transwarp/conf
       name: hosts
+    resources:
+      limitsMemoryKey: httpfs.container.limits.memory
+      limitsCpuKey: httpfs.container.limits.cpu
+      requestsMemoryKey: httpfs.container.requests.memory
+      requestsCpuKey: httpfs.container.requests.cpu
     summaryPolicy: ALL
     autoAssign:
     - advice: !<NumSeq> {"numSeq": [1]}
@@ -474,6 +479,11 @@ firstWizardConfigs:
 - datanode.container.requests.memory
 - datanode.container.requests.cpu
 - datanode.memory.ratio
+- httpfs.container.limits.memory
+- httpfs.container.limits.cpu
+- httpfs.container.requests.memory
+- httpfs.container.requests.cpu
+- httpfs.memory.ratio
 
 dashboardMetrics:
 - DFSUsage

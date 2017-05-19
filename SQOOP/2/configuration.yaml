@@ -26,7 +26,7 @@
 #  visibility: READ_WRITE
 
 - name: sqoop.container.limits.memory
-  recommendExpression: 1
+  recommendExpression: 4
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>

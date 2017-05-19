@@ -1,7 +1,7 @@
 #!/bin/bash
 
-<#assign limitsMemory = service['zookeeper.container.limits.memory']?number
-  memoryRatio = service['zookeeper.memory.ratio']?number
+<#assign limitsMemory = service['rubik.container.limits.memory']?number
+  memoryRatio = service['rubik.memory.ratio']?number
   memory = limitsMemory * memoryRatio * 1024>
 export MAXMEMSIZE=${memory?floor}m
 
