@@ -142,107 +142,6 @@ roles:
           templatePath: "hadoop-metrics2-namenode.properties"
           targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-namenode.properties"
           mode: "755"
-  - name: HDFS_NAMENODE
-    friendlyName: "Name Node"
-    labelPrefix: "hadoop-hdfs-namenode"
-    linkExpression: "http://${localhostname}:${service['namenode.http-port']}/?user.name=hdfs"
-    category: MASTER
-    frontendOperations: ["Start", "Stop"]
-    env:
-    - name: HDFS_HA_NAMENODE_SERVICE
-      value: |
-        <#assign namenodes=[]>
-        <#if service.nameservices?? && service.nameservices?size gt 0>
-          <#list service.nameservices as ns>
-            <#list service[ns]['HDFS_NAMENODE'] as namenode>
-              <#assign namenodes += [namenode.hostname]>
-            </#list>
-          </#list>
-        <#else>
-          <#assign namenodes += service.roles.HDFS_NAMENODE[0]['hostname']>
-        </#if>
-        ${namenodes?join(",")}
-    - name: HDFS_JOURNAL_NODE_SPEC
-      value: |
-        <#assign journalnodes=[]>
-        <#if service.roles.HDFS_JOURNALNODE?? && service.roles.HDFS_JOURNALNODE?size gt 0>
-          <#list service.roles.HDFS_JOURNALNODE as journalnode>
-            <#assign journalnodes += [journalnode.hostname]>
-          </#list>
-        </#if>
-        ${service.roles.HDFS_JOURNALNODE[0]['hostname']}
-    - name: HADOOP_CONF_DIR
-      value: /etc/${service.sid}/conf
-    - name: SOCKETDIR
-      value: /var/run/${service.sid}
-    mountPaths:
-    - mountPath: /var/log/${service.sid}
-      hostPath: /var/log/${service.sid}
-      name: log
-    - mountPath: /etc/${service.sid}/conf
-      hostPath: /etc/${service.sid}/conf
-      name: hdfs
-    - mountPath: /var/transwarp/data
-      hostPath: /var/namenode_format/
-      name: format
-    - mountPath: /etc/transwarp/conf/
-      hostPath: /etc/transwarp/conf/
-      name: topology
-    - mountPath: /var/run/${service.sid}
-      hostPath: /var/run/${service.sid}
-      name: hdfssocketdir
-    - mountPath: /etc/transwarp/conf
-      hostPath: /etc/transwarp/conf
-      name: hosts
-    resources:
-      limitsMemoryKey: namenode.container.limits.memory
-      limitsCpuKey: namenode.container.limits.cpu
-      requestsMemoryKey: namenode.container.requests.memory
-      requestsCpuKey: namenode.container.requests.cpu
-    nodeSpecificMounts:
-    - configKey: dfs.namenode.name.dir
-    summaryPolicy: SOME
-    autoAssign: []
-    suggestion:
-      - criteria: !<Range>
-          min: 0
-          max: 0
-    validation:
-      - when: !<WhenRoleGroup>
-          fieldName: nameservices
-          inRange: {"min": 0, "max": 0}
-        criteria: !<Range>
-          min: 1
-          max: 1
-      - when: !<WhenRoleGroup>
-          fieldName: nameservices
-          inRange: {"min": 1}
-        criteria: !<Range>
-          min: 0,
-          max: 0
-    operations:
-      - type: Install
-        directives:
-        - directive: !<mkdirs>
-            paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
-            mode: "755"
-      - type: Config
-        directives:
-        - directive: !<resource>
-            templateType: Raw
-            templatePath: "hadoop-metrics2-datanode.properties"
-            targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-datanode.properties"
-            mode: "755"
-        - directive: !<resource>
-            templateType: Raw
-            templatePath: "hadoop-metrics2-namenode.properties"
-            targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-namenode.properties"
-            mode: "755"
-        - directive: !<resource>
-            templateType: FreeMarker
-            templatePath: "exclude-list.txt"
-            targetPath: "/etc/${service.sid}/conf/exclude-list.txt"
-            mode: "755"
 roleGroups:
   - fieldName: nameservices
     namePrefix: nameservice
@@ -263,6 +162,56 @@ roleGroups:
           min: 0
           max: 0
     roles:
+      - name: HDFS_JOURNALNODE
+        friendlyName: "Journal Node"
+        labelPrefix: "hadoop-hdfs-journalnode"
+        category: MASTER
+        frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
+        env:
+        - name: HADOOP_PID_DIR
+          value: /var/run/${service.sid}/
+        - name: HADOOP_CONF_DIR
+          value: /etc/${service.sid}/conf
+        - name: JOURNALNODE_DATA_DIRS
+          value: /hadoop/journal
+        mountPaths:
+        - mountPath: /etc/${service.sid}/conf
+          hostPath: /etc/${service.sid}/conf
+          name: hdfs
+        - mountPath: /var/log/${service.sid}
+          hostPath: /var/log/${service.sid}
+          name: log
+        - mountPath: /hadoop/journal
+          hostPath: /hadoop/journal
+          name: journaldir
+        - mountPath: /etc/transwarp/conf
+          hostPath: /etc/transwarp/conf
+          name: hosts
+        summaryPolicy: MAJOR
+        autoAssign:
+        - advice: !<NumSeq> {"numSeq": [3]}
+        suggestion:
+        - criteria: !<Range> {"min": 3}
+        validation:
+        - criteria: !<Range> {"min": 3}
+        operations:
+          - type: Install
+            directives:
+            - directive: !<mkdirs>
+                paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
+                mode: "755"
+          - type: Config
+            directives:
+            - directive: !<resource>
+                templateType: Raw
+                templatePath: "hadoop-metrics2-datanode.properties"
+                targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-datanode.properties"
+                mode: "755"
+            - directive: !<resource>
+                templateType: Raw
+                templatePath: "hadoop-metrics2-namenode.properties"
+                targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-namenode.properties"
+                mode: "755"
       - name: HDFS_NAMENODE
         friendlyName: "Name Node"
         labelPrefix: "hadoop-hdfs-namenode"
@@ -323,7 +272,7 @@ roleGroups:
         summaryPolicy: ALL
         autoAssign:
           - advice: !<NumSeq>
-              numSeq: [2, 1]
+              numSeq: [2]
               mates: ["LICENSE_NODE"]
         suggestion:
           - criteria: !<Range> {"min": 2, "max": 2}
@@ -351,80 +300,6 @@ roleGroups:
                 templateType: FreeMarker
                 templatePath: "exclude-list.txt"
                 targetPath: "/etc/${service.sid}/conf/exclude-list.txt"
-                mode: "755"
-      - name: HDFS_JOURNALNODE
-        friendlyName: "Journal Node"
-        labelPrefix: "hadoop-hdfs-journalnode"
-        category: MASTER
-        frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
-        env:
-        - name: HADOOP_PID_DIR
-          value: /var/run/${service.sid}/
-        - name: HADOOP_CONF_DIR
-          value: /etc/${service.sid}/conf
-        - name: JOURNALNODE_DATA_DIRS
-          value: /hadoop/journal
-        mountPaths:
-        - mountPath: /etc/${service.sid}/conf
-          hostPath: /etc/${service.sid}/conf
-          name: hdfs
-        - mountPath: /var/log/${service.sid}
-          hostPath: /var/log/${service.sid}
-          name: log
-        - mountPath: /hadoop/journal
-          hostPath: /hadoop/journal
-          name: journaldir
-        - mountPath: /etc/transwarp/conf
-          hostPath: /etc/transwarp/conf
-          name: hosts
-        resources:
-          limitsMemoryKey: journalnode.container.limits.memory
-          limitsCpuKey: journalnode.container.limits.cpu
-          requestsMemoryKey: journalnode.container.requests.memory
-          requestsCpuKey: journalnode.container.requests.cpu
-        summaryPolicy: MAJOR
-        autoAssign:
-          - when: !<WhenRoleType>
-              roleType: HDFS_NAMENODE
-              inRange: {"min": 2}
-            advice: !<NumSeq>
-              numSeq: [3, 1]
-              mates: ["HDFS_NAMENODE"]
-        suggestion:
-          - when: !<WhenRoleType>
-              roleType: HDFS_NAMENODE
-              inRange: {"min": 2}
-            criteria: !<Range>
-              min: 3
-              oddity: true
-        validation:
-          - when: !<WhenRoleType>
-              roleType: HDFS_NAMENODE
-              inRange: {"min": 1, "max": 1}
-            criteria: !<Range>
-              min: 0
-              max: 0
-          - when: !<WhenRoleType>
-              roleType: HDFS_NAMENODE
-              inRange: {"min": 2}
-            criteria: !<Range> {"min": 1}
-        operations:
-          - type: Install
-            directives:
-            - directive: !<mkdirs>
-                paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
-                mode: "755"
-          - type: Config
-            directives:
-            - directive: !<resource>
-                templateType: Raw
-                templatePath: "hadoop-metrics2-datanode.properties"
-                targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-datanode.properties"
-                mode: "755"
-            - directive: !<resource>
-                templateType: Raw
-                templatePath: "hadoop-metrics2-namenode.properties"
-                targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-namenode.properties"
                 mode: "755"
 
     others:

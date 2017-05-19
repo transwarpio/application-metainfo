@@ -36,6 +36,9 @@ roles:
   - mountPath: /etc/hadoop/conf
     hostPath: /etc/${dependencies.YARN.sid}/conf
     name: yarn
+  - mountPath: /var/transwarp/data/repository/db
+    hostPath: /var/transwarp/${service.sid}/data/repository/db
+    name: database
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
     name: hosts
@@ -55,7 +58,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}"]
+        paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}", "/var/transwarp/${service.sid}/data/repository/db"]
         mode: "755"
 
 firstWizardConfigs:
