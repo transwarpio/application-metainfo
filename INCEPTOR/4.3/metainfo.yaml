@@ -36,6 +36,11 @@ dependencies:
     maxVersion: 1.0-tdh50
     optional: true
     preferred: true
+  - name: RUBIK
+    minVersion: 1.0-tdh50
+    maxVersion: 1.0-tdh50
+    optional: true
+    preferred: true
 user: hive
 roles:
 - name: INCEPTOR_METASTORE
@@ -50,8 +55,8 @@ roles:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: inceptor
-  - mountPath: /etc/${dependencies.HYPERBASE.sid}/conf
-    hostPath: /etc/${dependencies.HYPERBASE.sid}/conf
+  - mountPath: /etc/<#if dependencies.HYPERBASE??>${dependencies.HYPERBASE.sid}<#else>hyperbase1</#if>/conf
+    hostPath: /etc/<#if dependencies.HYPERBASE??>${dependencies.HYPERBASE.sid}<#else>hyperbase1</#if>/conf
     name: hyperbase
   - mountPath: /etc/${dependencies.HDFS.sid}/conf
     hostPath: /etc/${dependencies.HDFS.sid}/conf
@@ -102,9 +107,12 @@ roles:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: inceptor
-  - mountPath: /etc/${dependencies.HYPERBASE.sid}/conf
-    hostPath: /etc/${dependencies.HYPERBASE.sid}/conf
+  - mountPath: /etc/<#if dependencies.HYPERBASE??>${dependencies.HYPERBASE.sid}<#else>hyperbase1</#if>/conf
+    hostPath: /etc/<#if dependencies.HYPERBASE??>${dependencies.HYPERBASE.sid}<#else>hyperbase1</#if>/conf
     name: hyperbase
+  - mountPath: /etc/<#if dependencies.RUBIK??>${dependencies.RUBIK.sid}<#else>rubik1</#if>/conf
+    hostPath: /etc/<#if dependencies.RUBIK??>${dependencies.RUBIK.sid}<#else>rubik1</#if>/conf
+    name: rubik
   - mountPath: /etc/${dependencies.HDFS.sid}/conf
     hostPath: /etc/${dependencies.HDFS.sid}/conf
     name: hdfs
@@ -135,6 +143,12 @@ roles:
     - directive: !<mkdirs>
         paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
         mode: "755"
+  - type: Config
+    directives:
+    - directive: !<link>
+        action: Link
+        from: "/etc/<#if dependencies.RUBIK??>${dependencies.RUBIK.sid}<#else>rubik1</#if>/conf/dataSource.properties"
+        to: "/etc/${service.sid}/conf/dataSource.properties"
 - name: INCEPTOR_EXECUTOR
   friendlyName: "Inceptor Executor"
   labelPrefix: "inceptor-executor"
@@ -156,8 +170,8 @@ roles:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: inceptor
-  - mountPath: /etc/${dependencies.HYPERBASE.sid}/conf
-    hostPath: /etc/${dependencies.HYPERBASE.sid}/conf
+  - mountPath: /etc/<#if dependencies.HYPERBASE??>${dependencies.HYPERBASE.sid}<#else>hyperbase1</#if>/conf
+    hostPath: /etc/<#if dependencies.HYPERBASE??>${dependencies.HYPERBASE.sid}<#else>hyperbase1</#if>/conf
     name: hyperbase
   - mountPath: /etc/${dependencies.HDFS.sid}/conf
     hostPath: /etc/${dependencies.HDFS.sid}/conf
