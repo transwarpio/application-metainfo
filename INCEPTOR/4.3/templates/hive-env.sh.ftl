@@ -115,6 +115,13 @@ export SPARK_DRIVER_ADDR=${service.roles.INCEPTOR_SERVER[0]['hostname']}
 export EXECUTOR_ID_PATH=/${service.sid}/executorID
 export METASTORE_ID=metastore_${service.sid}
 
+# security environment
 <#if service.auth = "kerberos">
+export KRB_ENABLE=true
+export EXECUTOR_PRINCIPAL=hive/_HOST@${service.realm}
+export EXECUTOR_KEYTAB=/etc/${service.sid}/conf/inceptor.keytab
 cp /etc/${service.sid}/conf/krb5.conf /etc
+<#else>
+export KRB_ENABLE=false
 </#if>
+

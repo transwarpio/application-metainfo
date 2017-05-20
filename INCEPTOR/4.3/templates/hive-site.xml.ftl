@@ -26,6 +26,8 @@
     <@property "hive.metastore.sasl.enabled" "true"/>
     <@property "hive.metastore.kerberos.keytab.file" service.keytab/>
     <@property "hive.metastore.kerberos.principal" "hive/_HOST@" + service.realm/>
+    <@property "yarn.resourcemanager.principal" "yarn/_HOST@" + service.realm/>
+    <@property "transwarp.docker.inceptor" service.roles.INCEPTOR_SERVER[0]['hostname'] + ':' + service['hive.server2.thrift.port']/>
     <#if service['hive.server2.authentication'] != "LDAP">
     <@property "hive.server2.authentication" "KERBEROS"/>
     <#else>
