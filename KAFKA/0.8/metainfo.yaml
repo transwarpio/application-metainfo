@@ -64,9 +64,12 @@ roles:
         mode: "755"
 
 firstWizardConfigs:
+- listeners
+- advertised.listeners
+- delete.topic.enable
 - kmq.log.dirs
-- kmq.port
-- kmq.zookeeper.connection.timeout.ms
+- zookeeper.connection.timeout.ms
+- zookeeper.connection.timeout.ms
 - kafka.container.limits.memory
 - kafka.container.limits.cpu
 - kafka.container.requests.memory
@@ -74,7 +77,6 @@ firstWizardConfigs:
 - kafka.memory.ratio
 
 pages:
-- summary
 - roles
 - configuration
 - operation

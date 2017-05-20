@@ -24,48 +24,64 @@
 ############################# Server Basics #############################
 
 # The id of the broker. This must be set to a unique integer for each broker.
-<#assign nodeId=.data_model['node.id']>
-broker.id=${nodeId}
+broker.id=${.data_model['node.id']}
+
+# Switch to enable topic deletion or not, default value is false
+delete.topic.enable=${service['delete.topic.enable']}
 
 ############################# Socket Server Settings #############################
+# The address the socket server listens on. It will get the value returned from
+# java.net.InetAddress.getCanonicalHostName() if not configured.
+#   FORMAT:
+#     listeners = security_protocol://host_name:port
+#   EXAMPLE:
+#     listeners = PLAINTEXT://your.host.name:9092
+<#if service.auth == "kerberos">
+listeners=SASL_PLAINTEXT://${service.listeners?split("://")[1]}
+advertised.listeners=SASL_PLAINTEXT://${service['advertised.listeners']?split("://")[1]}
+<#else>
+listeners=${service.listeners}
+advertised.listeners=${service['advertised.listeners']}
+</#if>
 
-# The port the socket server listens on
-port=${service['kmq.port']}
-
-# Hostname the broker will bind to and advertise to producers and consumers.
-# If not set, the server will bind to all interfaces and advertise the value returned from
-# from java.net.InetAddress.getCanonicalHostName().
-host.name=${localhostname}
+# Hostname and port the broker will advertise to producers and consumers. If not set,
+# it uses the value for "listeners" if configured.  Otherwise, it will use the value
+# returned from java.net.InetAddress.getCanonicalHostName().
+#advertised.listeners=PLAINTEXT://your.host.name:9092
 
 # The number of threads handling network requests
-num.network.threads=${service['kmq.num.network.threads']}
+num.network.threads=${service['num.network.threads']}
 
 # The number of threads doing disk I/O
-num.io.threads=${service['kmq.num.io.threads']}
+num.io.threads=${service['num.io.threads']}
 
 # The send buffer (SO_SNDBUF) used by the socket server
-socket.send.buffer.bytes=${service['kmq.socket.send.buffer.bytes']}
+socket.send.buffer.bytes=${service['socket.send.buffer.bytes']}
 
 # The receive buffer (SO_RCVBUF) used by the socket server
-socket.receive.buffer.bytes=${service['kmq.socket.receive.buffer.bytes']}
+socket.receive.buffer.bytes=${service['socket.receive.buffer.bytes']}
 
 # The maximum size of a request that the socket server will accept (protection against OOM)
-socket.request.max.bytes=${service['kmq.socket.request.max.bytes']}
-
+socket.request.max.bytes=${service['socket.request.max.bytes']}
 
 ############################# Log Basics #############################
 
 # A comma seperated list of directories under which to store log files
 log.dirs=${service['kmq.log.dirs']}
 
-# The number of logical partitions per topic per server. More partitions allow greater parallelism
-# for consumption, but also mean more files.
-num.partitions=${service['kmq.num.partitions']}
+# The default number of log partitions per topic. More partitions allow greater
+# parallelism for consumption, but this will also result in more files across
+# the brokers.
+num.partitions=${service['num.partitions']}
+
+# The number of threads per data directory to be used for log recovery at startup and flushing at shutdown.
+# This value is recommended to be increased for installations with data dirs located in RAID array.
+num.recovery.threads.per.data.dir=${service['num.recovery.threads.per.data.dir']}
 
 ############################# Log Flush Policy #############################
 
-# The following configurations control the flush of data to disk. This is among the most
-# important performance knob in kafka.
+# Messages are immediately written to the filesystem but by default we only fsync() to sync
+# the OS cache lazily. The following configurations control the flush of data to disk.
 # There are a few important trade-offs here:
 #    1. Durability: Unflushed data may be lost if you are not using replication.
 #    2. Latency: Very large flush intervals may lead to latency spikes when the flush does occur as there will be a lot of data to flush.
@@ -74,15 +90,13 @@ num.partitions=${service['kmq.num.partitions']}
 # every N messages (or both). This can be done globally and overridden on a per-topic basis.
 
 # The number of messages to accept before forcing a flush of data to disk
-log.flush.interval.messages=${service['kmq.log.flush.interval.messages']}
+log.flush.interval.messages=${service['log.flush.interval.messages']}
 
 # The maximum amount of time a message can sit in a log before we force a flush
-log.flush.interval.ms=${service['kmq.log.flush.interval.ms']}
+log.flush.interval.ms=${service['log.flush.interval.ms']}
 
 # Per-topic overrides for log.flush.interval.ms
-log.flush.interval.ms.per.topic=
-
-log.flush.scheduler.interval.ms=${service['kmq.log.flush.scheduler.interval.ms']}
+log.flush.scheduler.interval.ms=${service['log.flush.scheduler.interval.ms']}
 
 ############################# Log Retention Policy #############################
 
@@ -92,32 +106,24 @@ log.flush.scheduler.interval.ms=${service['kmq.log.flush.scheduler.interval.ms']
 # from the end of the log.
 
 # The minimum age of a log file to be eligible for deletion
-log.retention.hours=${service['kmq.log.retention.hours']}
-
-log.retention.hours.per.topic=
-
-log.retention.bytes=${service['kmq.log.retention.bytes']}
-
-log.retention.bytes.per.topic=
-
-log.retention.check.interval.ms=${service['kmq.log.retention.check.interval.ms']}
-
-log.roll.hours=${service['kmq.log.roll.hours']}
+log.retention.hours=${service['log.retention.hours']}
 
 # A size-based retention policy for logs. Segments are pruned from the log as long as the remaining
 # segments don't drop below log.retention.bytes.
-#log.retention.bytes=1073741824
+log.retention.bytes=${service['log.retention.bytes']}
 
 # The maximum size of a log segment file. When this size is reached a new log segment will be created.
-log.segment.bytes=${service['kmq.log.segment.bytes']}
+log.segment.bytes=${service['log.segment.bytes']}
 
 # The interval at which log segments are checked to see if they can be deleted according
 # to the retention policies
-log.cleanup.interval.mins=${service['kmq.log.cleanup.interval.mins']}
+log.retention.check.interval.ms=${service['log.retention.check.interval.ms']}
 
-log.index.size.max.bytes=${service['kmq.log.index.size.max.bytes']}
+log.roll.hours=${service['log.roll.hours']}
 
-log.index.interval.bytes=${service['kmq.log.index.interval.bytes']}
+log.index.size.max.bytes=${service['log.index.size.max.bytes']}
+
+log.index.interval.bytes=${service['log.index.interval.bytes']}
 
 ############################# Zookeeper #############################
 
@@ -129,61 +135,26 @@ log.index.interval.bytes=${service['kmq.log.index.interval.bytes']}
 zookeeper.connect=${quorum}
 
 # Timeout in ms for connecting to zookeeper
-zookeeper.connection.timeout.ms=${service['kmq.zookeeper.connection.timeout.ms']}
+zookeeper.connection.timeout.ms=${service['zookeeper.connection.timeout.ms']}
 
-zookeeper.session.timeout.ms=${service['kmq.zookeeper.session.timeout.ms']}
+zookeeper.session.timeout.ms=${service['zookeeper.session.timeout.ms']}
 
-zookeeper.sync.time.ms=${service['kmq.zookeeper.sync.time.ms']}
-
-############################# Other ################################
-message.max.bytes=${service['kmq.message.max.bytes']}
-
-replica.fetch.max.bytes=${service['kmq.replica.fetch.max.bytes']}
-
-queued.max.requests=${service['kmq.queued.max.requests']}
-
-auto.create.topics.enable=${service['kmq.auto.create.topics.enable']}
-
-controller.socket.timeout.ms=${service['kmq.controller.socket.timeout.ms']}
-
-controller.message.queue.size=${service['kmq.controller.message.queue.size']}
-
-default.replication.factor=${service['kmq.default.replication.factor']}
-
-replica.lag.time.max.ms=${service['kmq.replica.lag.time.max.ms']}
-
-replica.socket.timeout.ms=${service['kmq.replica.socket.timeout.ms']}
-
-replica.socket.receive.buffer.bytes=${service['kmq.replica.socket.receive.buffer.bytes']}
-
-replica.fetch.wait.max.ms=${service['kmq.replica.fetch.wait.max.ms']}
-
-replica.fetch.min.bytes=${service['kmq.replica.fetch.min.bytes']}
-
-num.replica.fetchers=${service['kmq.num.replica.fetchers']}
-
-replica.high.watermark.checkpoint.interval.ms=${service['kmq.replica.high.watermark.checkpoint.interval.ms']}
-
-fetch.purgatory.purge.interval.requests=${service['kmq.fetch.purgatory.purge.interval.requests']}
-
-producer.purgatory.purge.interval.requests=${service['kmq.producer.purgatory.purge.interval.requests']}
-
-controlled.shutdown.enable=${service['kmq.controlled.shutdown.enable']}
-
-controlled.shutdown.max.retries=${service['kmq.controlled.shutdown.max.retries']}
-
-controlled.shutdown.retry.backoff.ms=${service['kmq.controlled.shutdown.retry.backoff.ms']}
+zookeeper.sync.time.ms=${service['zookeeper.sync.time.ms']}
 
 ############################# security #############################
 # Authentication method: simple, kerberos or ipaddress
 # Property principal and keytab should also be configured when authentication set to kerberos.
-authentication=${service['auth']}
+<#if service.auth == "kerberos">
+sasl.enabled.mechanisms=GSSAPI
+security.inter.broker.protocol=SASL_PLAINTEXT
+sasl.mechanism.inter.broker.protocol=GSSAPI
 
-# whether cache acl in memory or not
-#acl.cache=true
+sasl.kerberos.service.name=kafka
+authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer
+super.users=User:kafka
+</#if>
 
-# principal for kerberos authentication
-principal=kafka/${localhostname}
-
-# keytab for kerberos authentication
-keytab=/etc/${service.sid}/kafka.keytab
+############################# Custom and Other ###############################
+<#list service['server.properties'] as key, value>
+${key}=${value}
+</#list>

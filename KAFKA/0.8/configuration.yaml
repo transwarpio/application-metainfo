@@ -1,3 +1,80 @@
+#Server Basics
+- name: delete.topic.enable
+  recommendExpression: false
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+# Socket Server Settings
+- name: listeners
+  recommendExpression: PLAINTEXT://${localhostname}:9092
+  defaultValue: null
+  valueType: STRING
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: advertised.listeners
+  recommendExpression: PLAINTEXT://${localhostname}:9092
+  defaultValue: null
+  valueType: STRING
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: num.network.threads
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: num.io.threads
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: socket.send.buffer.bytes
+  recommendExpression: 1048576
+  defaultValue: null
+  valueType: BYTES
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: socket.receive.buffer.bytes
+  recommendExpression: 1048576
+  defaultValue: null
+  valueType: BYTES
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: socket.request.max.bytes
+  recommendExpression: 104857600
+  defaultValue: null
+  valueType: BYTES
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+#Log Basics
 - name: kmq.log.dirs
   recommendExpression: |
     <#function localDir suffix>
@@ -21,17 +98,7 @@
   groups: []
   visibility: READ_WRITE
 
-- name: kmq.port
-  recommendExpression: 9092
-  defaultValue: null
-  valueType: PORT
-  scope: !<RoleTypes>
-    roleTypes: [KAFKA_SERVER]
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.num.network.threads
+- name: num.partitions
   recommendExpression: 2
   defaultValue: null
   valueType: NON_NEG_INT
@@ -40,52 +107,16 @@
   groups: []
   visibility: READ_WRITE
 
-- name: kmq.num.io.threads
-  recommendExpression: 2
+- name: num.recovery.threads.per.data.dir
+  recommendExpression: 1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
   visibility: READ_WRITE
-
-- name: kmq.socket.send.buffer.bytes
-  recommendExpression: 1048576
-  defaultValue: null
-  valueType: BYTES
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.socket.request.max.bytes
-  recommendExpression: 104857600
-  defaultValue: null
-  valueType: BYTES
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.socket.receive.buffer.bytes
-  recommendExpression: 1048576
-  defaultValue: null
-  valueType: BYTES
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.num.partitions
-  recommendExpression: 2
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.log.flush.interval.messages
+#Log Flush Policy
+- name: log.flush.interval.messages
   recommendExpression: 10000
   defaultValue: null
   valueType: NON_NEG_INT
@@ -94,7 +125,7 @@
   groups: []
   visibility: READ_WRITE
 
-- name: kmq.log.flush.interval.ms
+- name: log.flush.interval.ms
   recommendExpression: 1000
   defaultValue: null
   valueType: NON_NEG_INT
@@ -103,160 +134,7 @@
   groups: []
   visibility: READ_WRITE
 
-- name: kmq.log.flush.intervals.ms.per.topic
-  recommendExpression: 1000000
-  defaultValue: null
-  valueType: MILLISECONDS
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.log.retention.hours
-  recommendExpression: 168
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.log.segment.bytes
-  recommendExpression: 536870912
-  defaultValue: null
-  valueType: BYTES
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.log.cleanup.interval.mins
-  recommendExpression: 1
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.zookeeper.connection.timeout.ms
-  recommendExpression: 6000
-  defaultValue: null
-  valueType: MILLISECONDS
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kafka.host.name.policy
-  recommendExpression: hostname
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.queued.max.requests
-  recommendExpression: 500
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.log.segment.bytes.per.topic
-  recommendExpression: 100000
-  defaultValue: null
-  valueType: BYTES
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.log.roll.hours.per.topic
-  recommendExpression: 1
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.log.retention.hours.per.topic
-  recommendExpression: ""
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.log.retention.bytes.per.topic
-  recommendExpression: 100000
-  defaultValue: null
-  valueType: BYTES
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.log.roll.hours
-  recommendExpression: 148
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.log.retention.bytes
-  recommendExpression: -1
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.log.retention.check.interval.ms
-  recommendExpression: 300000
-  defaultValue: null
-  valueType: MILLISECONDS
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.log.index.size.max.bytes
-  recommendExpression: 10485760
-  defaultValue: null
-  valueType: BYTES
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.log.index.interval.bytes
-  recommendExpression: 4096
-  defaultValue: null
-  valueType: BYTES
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.log.flush.interval.ms.per.topic
-  recommendExpression: 300000
-  defaultValue: null
-  valueType: MILLISECONDS
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.log.flush.scheduler.interval.ms
+- name: log.flush.scheduler.interval.ms
   recommendExpression: 3000
   defaultValue: null
   valueType: MILLISECONDS
@@ -265,80 +143,44 @@
   groups: []
   visibility: READ_WRITE
 
-- name: kmq.auto.create.topics.enable
-  recommendExpression: true
-  defaultValue: null
-  valueType: BOOL
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.controller.socket.timeout.ms
-  recommendExpression: 30000
-  defaultValue: null
-  valueType: MILLISECONDS
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.controller.message.queue.size
-  recommendExpression: 10
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.default.replication.factor
-  recommendExpression: 1
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.replica.lag.time.max.ms
-  recommendExpression: 10000
-  defaultValue: null
-  valueType: MILLISECONDS
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.replica.socket.timeout.ms
-  recommendExpression: 30000
-  defaultValue: null
-  valueType: MILLISECONDS
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.replica.socket.receive.buffer.bytes
-  recommendExpression: 65536
-  defaultValue: null
-  valueType: BYTES
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.replica.fetch.max.bytes
+- name: log.flush.intervals.ms.per.topic
   recommendExpression: 1000000
   defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+#Log Retention Policy
+- name: log.retention.hours
+  recommendExpression: 168
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: log.retention.bytes
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: log.segment.bytes
+  recommendExpression: 536870912
+  defaultValue: null
   valueType: BYTES
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
   visibility: READ_WRITE
 
-- name: kmq.replica.fetch.wait.max.ms
-  recommendExpression: 500
+- name: log.retention.check.interval.ms
+  recommendExpression: 300000
   defaultValue: null
   valueType: MILLISECONDS
   scope: !<ServiceLevel> {}
@@ -346,8 +188,17 @@
   groups: []
   visibility: READ_WRITE
 
-- name: kmq.replica.fetch.min.bytes
-  recommendExpression: 500
+- name: log.roll.hours
+  recommendExpression: 168
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: log.index.size.max.bytes
+  recommendExpression: 10485760
   defaultValue: null
   valueType: BYTES
   scope: !<ServiceLevel> {}
@@ -355,43 +206,16 @@
   groups: []
   visibility: READ_WRITE
 
-- name: kmq.num.replica.fetchers
-  recommendExpression: 1
+- name: log.index.interval.bytes
+  recommendExpression: 4096
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: BYTES
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
   visibility: READ_WRITE
-
-- name: kmq.replica.high.watermark.checkpoint.interval.ms
-  recommendExpression: 5000
-  defaultValue: null
-  valueType: MILLISECONDS
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.fetch.purgatory.purge.interval.requests
-  recommendExpression: 10000
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.producer.purgatory.purge.interval.requests
-  recommendExpression: 10000
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.zookeeper.session.timeout.ms
+#Zookeeper
+- name: zookeeper.connection.timeout.ms
   recommendExpression: 6000
   defaultValue: null
   valueType: MILLISECONDS
@@ -400,7 +224,16 @@
   groups: []
   visibility: READ_WRITE
 
-- name: kmq.zookeeper.sync.time.ms
+- name: zookeeper.session.timeout.ms
+  recommendExpression: 6000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.sync.time.ms
   recommendExpression: 2000
   defaultValue: null
   valueType: MILLISECONDS
@@ -408,43 +241,205 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
-
-- name: kmq.controlled.shutdown.enable
-  recommendExpression: false
-  defaultValue: null
-  valueType: BOOL
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kmq.controlled.shutdown.max.retries
-  recommendExpression: 3
+#Others
+- name: queued.max.requests
+  recommendExpression: 500
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: []
+  groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kmq.controlled.shutdown.retry.backoff.ms
-  recommendExpression: 5000
+- name: log.segment.bytes.per.topic
+  recommendExpression: 100000
+  defaultValue: null
+  valueType: BYTES
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: log.roll.hours.per.topic
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: log.flush.interval.ms.per.topic
+  recommendExpression: 300000
   defaultValue: null
   valueType: MILLISECONDS
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: []
+  groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kmq.message.max.bytes
+- name: auto.create.topics.enable
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: controller.socket.timeout.ms
+  recommendExpression: 30000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: controller.message.queue.size
+  recommendExpression: 10
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: default.replication.factor
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: replica.lag.time.max.ms
+  recommendExpression: 10000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: replica.socket.timeout.ms
+  recommendExpression: 30000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: replica.socket.receive.buffer.bytes
+  recommendExpression: 65536
+  defaultValue: null
+  valueType: BYTES
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: replica.fetch.max.bytes
   recommendExpression: 1000000
   defaultValue: null
   valueType: BYTES
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: []
+  groups: ['server.properties']
   visibility: READ_WRITE
 
+- name: replica.fetch.wait.max.ms
+  recommendExpression: 500
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: replica.fetch.min.bytes
+  recommendExpression: 500
+  defaultValue: null
+  valueType: BYTES
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: num.replica.fetchers
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: replica.high.watermark.checkpoint.interval.ms
+  recommendExpression: 5000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: fetch.purgatory.purge.interval.requests
+  recommendExpression: 10000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: producer.purgatory.purge.interval.requests
+  recommendExpression: 10000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: controlled.shutdown.enable
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: controlled.shutdown.max.retries
+  recommendExpression: 3
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: controlled.shutdown.retry.backoff.ms
+  recommendExpression: 5000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: message.max.bytes
+  recommendExpression: 1000000
+  defaultValue: null
+  valueType: BYTES
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+# kafka-env.sh
 - name: brokerid.equalsto.dndid
   recommendExpression: false
   defaultValue: null
