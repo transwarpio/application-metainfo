@@ -171,6 +171,14 @@ roles:
         templatePath: "hadoop-metrics2-historyserver.properties"
         targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-historyserver.properties"
         mode: "644"
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
+        to: "/etc/${service.sid}/conf/core-site.xml"
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
+        to: "/etc/${service.sid}/conf/hdfs-site.xml"
 - name: YARN_TIMELINESERVER
   friendlyName: "Timeline Server"
   labelPrefix: "hadoop-yarn-timelineserver"

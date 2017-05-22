@@ -24,11 +24,13 @@ roles:
     value: <#if service.auth == "kerberos">true<#else>false</#if>
   - name: MIDAS_CONF_DIR
     value: /etc/${service.sid}/conf
-  - name: SOPHON_HDFS_CONF
-    value: /etc/${dependencies.HDFS.sid}/conf
-  - name: SOHPON_YARN_CONF
-    value: /etc/${dependencies.YARN.sid}/conf
   mountPaths:
+  - mountPath: /etc/${dependencies.YARN.sid}/conf
+    hostPath: /etc/${dependencies.YARN.sid}/conf
+    name: yarn
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: topology
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: conf
@@ -88,7 +90,10 @@ roles:
   env:
   - name: MIDAS_REDIS_PORT
     value: ${service['midas.redis.port']}
-  mountPaths: []
+  mountPaths:
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
   resources:
     limitsMemoryKey: redis.container.limits.memory
     limitsCpuKey: redis.container.limits.cpu
@@ -120,6 +125,9 @@ roles:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: conf
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
   resources:
     limitsMemoryKey: scheduler.container.limits.memory
     limitsCpuKey: scheduler.container.limits.cpu
