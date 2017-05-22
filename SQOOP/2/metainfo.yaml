@@ -36,8 +36,8 @@ roles:
   - mountPath: /etc/hadoop/conf
     hostPath: /etc/${dependencies.YARN.sid}/conf
     name: yarn
-  - mountPath: /var/transwarp/data/repository/db
-    hostPath: /var/transwarp/${service.sid}/data/repository/db
+  - mountPath: /var/transwarp/data/repository
+    hostPath: /var/transwarp/${service.sid}/data/repository
     name: database
   - mountPath: /etc/transwarp/conf
     hostPath: /etc/transwarp/conf
