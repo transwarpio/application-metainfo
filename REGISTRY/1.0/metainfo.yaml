@@ -35,6 +35,11 @@ roles:
         templatePath: "config.yml"
         targetPath: "/etc/${service.sid}/config.yml"
         mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: registry-server.service
+        targetPath: "/usr/lib/systemd/system/registry-server-${service.sid}.service"
+        mode: "644"
     - directive: !<download>
         url: "${transwarpRepo}/registry/registry.tar.gz"
         targetPath: "/etc/${service.sid}/registry.tar.gz"
@@ -49,14 +54,16 @@ roles:
         mode: "755"
   - type: Start
     directives:
-    - directive: !<docker-compose>
-        action: Up
-        file: "/etc/${service.sid}/docker-registry.yml"
+    - directive: !<systemctl>
+        action: EnableStart
+        service: registry-server-${service.sid}
+        sleepSec: 2
   - type: Stop
     directives:
-    - directive: !<docker-compose>
-        action: Stop
-        file: "/etc/${service.sid}/docker-registry.yml"
+    - directive: !<systemctl>
+        action: DisableStop
+        service: registry-server-${service.sid}
+        sleepSec: 2
 
 healthChecks:
 - category: DAEMON_CHECK
