@@ -186,7 +186,7 @@ atlas.server.ha.enabled=false
 </#if>
 
 #### atlas.login.method {FILE,LDAP,AD,GUARDIAN} ####
-atlas.login.method=GUARDIAN
+atlas.login.method=<#if service.auth = "kerberos">GUARDIAN<#else>EMPTY</#if>
 <#noparse>
 ### File path of users-credentials
 atlas.login.credentials.file=${sys:atlas.home}/conf/users-credentials.properties
