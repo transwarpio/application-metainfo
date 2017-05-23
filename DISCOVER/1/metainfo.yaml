@@ -35,6 +35,9 @@ roles:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
+  - mountPath: /etc/${dependencies.HDFS.sid}/conf
+    hostPath: /etc/${dependencies.HDFS.sid}/conf
+    name: hdfs
   - mountPath: /etc/${dependencies.YARN.sid}/conf
     hostPath: /etc/${dependencies.YARN.sid}/conf
     name: yarn

@@ -28,7 +28,7 @@ export SPARK_WORKER_DIR=/var/run/spark/work
 export SPARK_LOG_DIR=/var/log/${service.sid}
 export SPARK_HISTORY_OPTS="$SPARK_HISTORY_OPTS -Dspark.history.fs.logDirectory=hdfs:///var/log/spark/apps -Dspark.history.ui.port=${service['spark.history.ui.port']}"
 
-export HADOOP_CONF_DIR=/etc/${dependencies.HDFS.sid}/conf:/etc/${dependencies.YARN.sid}/conf
+export HADOOP_CONF_DIR=/etc/${dependencies.YARN.sid}/conf
 
 ### Comment above 2 lines and uncomment the following if
 ### you want to run with scala version, that is included with the package
