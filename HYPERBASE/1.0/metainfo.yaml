@@ -41,15 +41,6 @@ roles:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
-  - mountPath: /etc/${dependencies.HDFS.sid}/conf
-    hostPath: /etc/${dependencies.HDFS.sid}/conf
-    name: hdfs
-  - mountPath: /etc/${dependencies.YARN.sid}/conf
-    hostPath: /etc/${dependencies.YARN.sid}/conf
-    name: yarn
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
   resources:
     limitsMemoryKey: master.container.limits.memory
     limitsCpuKey: master.container.limits.cpu
@@ -96,15 +87,6 @@ roles:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
-  - mountPath: /etc/${dependencies.HDFS.sid}/conf
-    hostPath: /etc/${dependencies.HDFS.sid}/conf
-    name: hdfs
-  - mountPath: /etc/${dependencies.YARN.sid}/conf
-    hostPath: /etc/${dependencies.YARN.sid}/conf
-    name: yarn
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
   resources:
     limitsMemoryKey: regionserver.container.limits.memory
     limitsCpuKey: regionserver.container.limits.cpu
@@ -150,15 +132,6 @@ roles:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
-  - mountPath: /etc/${dependencies.HDFS.sid}/conf
-    hostPath: /etc/${dependencies.HDFS.sid}/conf
-    name: hdfs
-  - mountPath: /etc/${dependencies.YARN.sid}/conf
-    hostPath: /etc/${dependencies.YARN.sid}/conf
-    name: yarn
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
   resources:
     limitsMemoryKey: thrift.container.limits.memory
     limitsCpuKey: thrift.container.limits.cpu

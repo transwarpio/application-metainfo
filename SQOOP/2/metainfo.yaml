@@ -30,18 +30,12 @@ roles:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
-  - mountPath: /etc/${dependencies.HDFS.sid}/conf
-    hostPath: /etc/${dependencies.HDFS.sid}/conf
-    name: hdfs
   - mountPath: /etc/hadoop/conf
     hostPath: /etc/${dependencies.YARN.sid}/conf
     name: yarn
   - mountPath: /var/transwarp/data/repository
     hostPath: /var/transwarp/${service.sid}/data/repository
     name: database
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
   resources:
     limitsMemoryKey: sqoop.container.limits.memory
     limitsCpuKey: sqoop.container.limits.cpu

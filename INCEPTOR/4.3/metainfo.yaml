@@ -55,18 +55,9 @@ roles:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: inceptor
-  - mountPath: /etc/<#if dependencies.HYPERBASE??>${dependencies.HYPERBASE.sid}<#else>hyperbase1</#if>/conf
-    hostPath: /etc/<#if dependencies.HYPERBASE??>${dependencies.HYPERBASE.sid}<#else>hyperbase1</#if>/conf
-    name: hyperbase
-  - mountPath: /etc/${dependencies.HDFS.sid}/conf
-    hostPath: /etc/${dependencies.HDFS.sid}/conf
-    name: hdfs
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
   resources:
     limitsMemoryKey: metastore.container.limits.memory
     limitsCpuKey: metastore.container.limits.cpu
@@ -107,24 +98,12 @@ roles:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: inceptor
-  - mountPath: /etc/<#if dependencies.HYPERBASE??>${dependencies.HYPERBASE.sid}<#else>hyperbase1</#if>/conf
-    hostPath: /etc/<#if dependencies.HYPERBASE??>${dependencies.HYPERBASE.sid}<#else>hyperbase1</#if>/conf
-    name: hyperbase
-  - mountPath: /etc/<#if dependencies.RUBIK??>${dependencies.RUBIK.sid}<#else>rubik1</#if>/conf
-    hostPath: /etc/<#if dependencies.RUBIK??>${dependencies.RUBIK.sid}<#else>rubik1</#if>/conf
-    name: rubik
-  - mountPath: /etc/${dependencies.HDFS.sid}/conf
-    hostPath: /etc/${dependencies.HDFS.sid}/conf
-    name: hdfs
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
   - mountPath: ${service['ngmr.fastdisk.dir']}/fastdisk
     hostPath: ${service['ngmr.fastdisk.dir']}/fastdisk
     name: fastdir
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
   resources:
     limitsMemoryKey: server.container.limits.memory
     limitsCpuKey: server.container.limits.cpu
@@ -170,18 +149,9 @@ roles:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: inceptor
-  - mountPath: /etc/<#if dependencies.HYPERBASE??>${dependencies.HYPERBASE.sid}<#else>hyperbase1</#if>/conf
-    hostPath: /etc/<#if dependencies.HYPERBASE??>${dependencies.HYPERBASE.sid}<#else>hyperbase1</#if>/conf
-    name: hyperbase
-  - mountPath: /etc/${dependencies.HDFS.sid}/conf
-    hostPath: /etc/${dependencies.HDFS.sid}/conf
-    name: hdfs
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
   resources:
     limitsMemoryKey: executor.container.limits.memory
     limitsCpuKey: executor.container.limits.cpu

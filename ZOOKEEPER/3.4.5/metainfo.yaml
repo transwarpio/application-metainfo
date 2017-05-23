@@ -27,9 +27,6 @@ roles:
   - mountPath: /var/${service.sid}
     hostPath: /var/${service.sid}
     name: data
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
   resources:
     limitsMemoryKey: zookeeper.container.limits.memory
     limitsCpuKey: zookeeper.container.limits.cpu

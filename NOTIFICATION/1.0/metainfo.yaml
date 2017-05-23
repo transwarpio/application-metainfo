@@ -27,9 +27,6 @@ roles:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
   resources:
     limitsMemoryKey: notification.container.limits.memory
     limitsCpuKey: notification.container.limits.cpu

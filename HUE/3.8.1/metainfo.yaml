@@ -55,18 +55,9 @@ roles:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
-  - mountPath: /etc/${dependencies.HDFS.sid}/conf
-    hostPath: /etc/${dependencies.HDFS.sid}/conf
-    name: hdfs
-  - mountPath: /etc/${dependencies.INCEPTOR.sid}/conf
-    hostPath: /etc/${dependencies.INCEPTOR.sid}/conf
-    name: inceptor
   - mountPath: /var/lib/${service.sid}
     hostPath: /var/lib/${service.sid}
     name: datadir
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
   resources:
     limitsMemoryKey: hue.container.limits.memory
     limitsCpuKey: hue.container.limits.cpu

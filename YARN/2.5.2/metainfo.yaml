@@ -35,12 +35,6 @@ roles:
   - mountPath: /var/transwarp
     hostPath: /var/${service.sid}
     name: transwarp
-  - mountPath: /etc/${dependencies.HDFS.sid}/conf
-    hostPath: /etc/${dependencies.HDFS.sid}/conf
-    name: hdfs
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
   resources:
     limitsMemoryKey: resourcemanager.container.limits.memory
     limitsCpuKey: resourcemanager.container.limits.cpu
@@ -93,12 +87,6 @@ roles:
   - mountPath: /var/transwarp
     hostPath: /var/${service.sid}
     name: transwarp
-  - mountPath: /etc/${dependencies.HDFS.sid}/conf
-    hostPath: /etc/${dependencies.HDFS.sid}/conf
-    name: hdfs
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
   resources:
     limitsMemoryKey: nodemanager.container.limits.memory
     limitsCpuKey: nodemanager.container.limits.cpu
@@ -158,12 +146,6 @@ roles:
   - mountPath: /var/transwarp
     hostPath: /var/${service.sid}
     name: transwarp
-  - mountPath: /etc/${dependencies.HDFS.sid}/conf
-    hostPath: /etc/${dependencies.HDFS.sid}/conf
-    name: hdfs
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
   resources:
     limitsMemoryKey: historyserver.container.limits.memory
     limitsCpuKey: historyserver.container.limits.cpu
@@ -220,12 +202,6 @@ roles:
   - mountPath: /var/transwarp
     hostPath: /var/${service.sid}
     name: transwarp
-  - mountPath: /etc/${dependencies.HDFS.sid}/conf
-    hostPath: /etc/${dependencies.HDFS.sid}/conf
-    name: hdfs
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
   resources:
     limitsMemoryKey: timelineserver.container.limits.memory
     limitsCpuKey: timelineserver.container.limits.cpu

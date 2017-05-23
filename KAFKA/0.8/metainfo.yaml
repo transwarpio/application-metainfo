@@ -39,9 +39,6 @@ roles:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: conf
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
   resources:
     limitsMemoryKey: kafka.container.limits.memory
     limitsCpuKey: kafka.container.limits.cpu

@@ -38,9 +38,6 @@ roles:
   - mountPath: /var/lib/Rubik
     hostPath: /var/lib/${service.sid}
     name: libdir
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
   resources:
     limitsMemoryKey: rubik.container.limits.memory
     limitsCpuKey: rubik.container.limits.cpu

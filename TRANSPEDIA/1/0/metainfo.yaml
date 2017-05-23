@@ -25,10 +25,7 @@ roles:
     value: <#if dependencies.SEARCH??>${dependencies.SEARCH.roles.SEARCH_SERVER[0].hostname}<#else>0.0.0.0</#if>
   - name: ELASTICSEARCH_PORT
     value: 9200
-  mountPaths:
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
+  mountPaths: []
   resources:
     limitsMemoryKey: server.container.limits.memory
     limitsCpuKey: server.container.limits.cpu

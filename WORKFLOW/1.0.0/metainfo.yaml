@@ -38,9 +38,6 @@ roles:
   - mountPath: /var/lib/workflow
     hostPath: /var/lib/${service.sid}
     name: data
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
   resources:
     limitsMemoryKey: workflow.container.limits.memory
     limitsCpuKey: workflow.container.limits.cpu

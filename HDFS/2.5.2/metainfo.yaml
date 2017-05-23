@@ -46,9 +46,6 @@ roles:
     - mountPath: /var/run/${service.sid}
       hostPath: /var/run/${service.sid}
       name: hdfssocketdir
-    - mountPath: /etc/transwarp/conf
-      hostPath: /etc/transwarp/conf
-      name: hosts
     resources:
       limitsMemoryKey: httpfs.container.limits.memory
       limitsCpuKey: httpfs.container.limits.cpu
@@ -110,9 +107,6 @@ roles:
     - mountPath: /var/run/${service.sid}
       hostPath: /var/run/${service.sid}
       name: hdfssocketdir
-    - mountPath: /etc/transwarp/conf
-      hostPath: /etc/transwarp/conf
-      name: hosts
     resources:
       limitsMemoryKey: datanode.container.limits.memory
       limitsCpuKey: datanode.container.limits.cpu
@@ -189,9 +183,11 @@ roleGroups:
         - mountPath: /hadoop/journal
           hostPath: /hadoop/journal
           name: journaldir
-        - mountPath: /etc/transwarp/conf
-          hostPath: /etc/transwarp/conf
-          name: hosts
+        resources:
+          limitsMemoryKey: journalnode.container.limits.memory
+          limitsCpuKey: journalnode.container.limits.cpu
+          requestsMemoryKey: journalnode.container.requests.memory
+          requestsCpuKey: journalnode.container.requests.cpu
         summaryPolicy: MAJOR
         autoAssign:
         - advice: !<NumSeq> {"numSeq": [3]}
@@ -260,9 +256,6 @@ roleGroups:
         - mountPath: /var/transwarp/data
           hostPath: /var/namenode_format/
           name: format
-        - mountPath: /etc/transwarp/conf/
-          hostPath: /etc/transwarp/conf/
-          name: topology
         - mountPath: /var/run/${service.sid}
           hostPath: /var/run/${service.sid}
           name: hdfssocketdir

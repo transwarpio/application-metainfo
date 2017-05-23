@@ -51,15 +51,6 @@ roles:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
-  - mountPath: /etc/${dependencies.HYPERBASE.sid}/conf
-    hostPath: /etc/${dependencies.HYPERBASE.sid}/conf
-    name: hbase
-  - mountPath: /etc/${dependencies.HDFS.sid}/conf
-    hostPath: /etc/${dependencies.HDFS.sid}/conf
-    name: hdfs
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
   resources:
     limitsMemoryKey: governor.container.limits.memory
     limitsCpuKey: governor.container.limits.cpu

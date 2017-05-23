@@ -35,18 +35,9 @@ roles:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
-  - mountPath: /etc/${dependencies.HDFS.sid}/conf
-    hostPath: /etc/${dependencies.HDFS.sid}/conf
-    name: hdfs
-  - mountPath: /etc/${dependencies.YARN.sid}/conf
-    hostPath: /etc/${dependencies.YARN.sid}/conf
-    name: yarn
   - mountPath: /var/home
     hostPath: ${service['rstudio.home.dir']}
     name: home
-  - mountPath: /etc/transwarp/conf/
-    hostPath: /etc/transwarp/conf/
-    name: topology
   resources:
     limitsMemoryKey: rstudio.container.limits.memory
     limitsCpuKey: rstudio.container.limits.cpu
@@ -106,9 +97,6 @@ roles:
   - mountPath: ${service['zeppelin.notebook.dir']}
     hostPath: ${service['zeppelin.notebook.dir']}
     name: data
-  - mountPath: /etc/transwarp/conf/
-    hostPath: /etc/transwarp/conf/
-    name: topology
   resources:
     limitsMemoryKey: notebook.container.limits.memory
     limitsCpuKey: notebook.container.limits.cpu
@@ -154,10 +142,7 @@ roles:
   env:
   - name: FTP_PORT
     value: ${service['discover.local-cran.port']}
-  mountPaths:
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
+  mountPaths: []
   resources:
     limitsMemoryKey: local-cran.container.limits.memory
     limitsCpuKey: local-cran.container.limits.cpu

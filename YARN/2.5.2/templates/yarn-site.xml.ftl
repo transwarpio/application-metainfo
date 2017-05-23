@@ -81,11 +81,6 @@
     <@property "yarn.resourcemanager.webapp.address" resourceManager + ":" + rm_webapp_port/>
 </#if>
 
-    <@property "yarn.resourcemanager.scheduler.address" resourceManager + ":8030"/>
-    <@property "yarn.resourcemanager.resource-tracker.address" resourceManager + ":8031"/>
-    <@property "yarn.resourcemanager.address" resourceManager + ":8032"/>
-    <@property "yarn.resourcemanager.admin.address" resourceManager + ":8033"/>
-    <@property "yarn.resourcemanager.webapp.address" resourceManager + ":8088"/>
     <@property "yarn.nodemanager.remote-app-log-dir" "/" + sid + "/var/log/hadoop-yarn/apps"/>
 
 <#if service.roles.YARN_HISTORYSERVER?? && service.roles.YARN_HISTORYSERVER?size gt 0>

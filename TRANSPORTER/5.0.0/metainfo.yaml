@@ -34,15 +34,6 @@ roles:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
-  - mountPath: /etc/${dependencies.HDFS.sid}/conf
-    hostPath: /etc/${dependencies.HDFS.sid}/conf
-    name: hdfs
-  - mountPath: /etc/${dependencies.INCEPTOR.sid}/conf
-    hostPath: /etc/${dependencies.INCEPTOR.sid}/conf
-    name: inceptor
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
   resources:
     limitsMemoryKey: tdt.container.limits.memory
     limitsCpuKey: tdt.container.limits.cpu

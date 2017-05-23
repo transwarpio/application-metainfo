@@ -31,9 +31,6 @@ roles:
   - mountPath: /var/log/pilot
     hostPath: /var/log/${service.sid}
     name: log
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
   resources:
     limitsMemoryKey: pilot.container.limits.memory
     limitsCpuKey: pilot.container.limits.cpu

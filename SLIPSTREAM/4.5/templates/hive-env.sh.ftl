@@ -77,7 +77,9 @@ export SPARK_CORES=${service['executor.container.limits.cpu']}
 
 export HIVE_PORT=${service['hive.server2.thrift.port']}
 export HADOOP_CONF_DIR=/etc/${dependencies.HDFS.sid}/conf:/etc/${dependencies.YARN.sid}/conf
+<#if dependencies.HYPERBASE??>
 export HBASE_CONF_DIR=/etc/${dependencies.HYPERBASE.sid}/conf
+</#if>
 export HIVE_SERVER2="true"
 
 <#--handle dependent.zookeeper-->
