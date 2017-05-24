@@ -81,6 +81,7 @@
   visibility: "READ_WRITE"
 - name: dfs.datanode.du.reserved
   recommendExpression: |
+    <#compress>
     <#function diskSizeByMnt mnt>
       <#list disks?reverse as disk>
         <#if mnt?contains(disk.mountPoint)>
@@ -97,6 +98,7 @@
      </#if>
     </#list>
     ${reserved?floor?c}
+    </#compress>
   defaultValue: 0
   valueType: BYTES
   isNodeSpecific: true
