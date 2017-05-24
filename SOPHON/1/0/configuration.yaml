@@ -199,7 +199,7 @@
   visibility: READ_WRITE
 
 - name: server.container.limits.memory
-  recommendExpression: 1
+  recommendExpression: 8
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -249,7 +249,7 @@
   visibility: READ_WRITE
 
 - name: redis.container.limits.memory
-  recommendExpression: 1
+  recommendExpression: 4
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -299,7 +299,7 @@
   visibility: READ_WRITE
 
 - name: scheduler.container.limits.memory
-  recommendExpression: 1
+  recommendExpression: 4
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
