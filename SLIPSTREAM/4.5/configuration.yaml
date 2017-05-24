@@ -618,6 +618,105 @@
   groups: []
   visibility: READ_WRITE
 
+- name: ngmr.engine.mode
+  recommendExpression: mapred
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.network.sndrcv.buffer
+  recommendExpression: 0
+  defaultValue: null
+  valueType: BYTES
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.network.server.num.threads
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.network.client.num.threads
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.network.num.buffers
+  recommendExpression: 10240
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.network.server.backlog
+  recommendExpression: 5
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.network.client.timeout
+  recommendExpression: 120
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.memsegment.size
+  recommendExpression: 32768
+  defaultValue: null
+  valueType: BYTES
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.io.mode
+  recommendExpression: NIO
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.io.directbufs
+  recommendExpression: true
+  defaultValue: BOOL
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.io.num.connection.perpeer
+  recommendExpression: 5
+  defaultValue: BOOL
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: spark.morphling.recovery.mode
   recommendExpression: standalone
   defaultValue: null
