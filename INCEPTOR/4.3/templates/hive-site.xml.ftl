@@ -43,9 +43,17 @@
     <@property "hive.security.authorization.manager" "io.transwarp.guardian.plugins.inceptor.GuardianHiveAuthorizerFactory"/>
     <@property "hive.service.id" service.sid/>
     <@property "hive.metastore.event.listeners" "io.transwarp.guardian.plugins.inceptor.GuardianMetaStoreListener"/>
+    <@property "inceptor.scheduler.enabled" "true"/>
+    <@property "spark.guardian.enabled" "true"/>
     </#if>
     </#if>
 <#else>
+    <#if service['inceptor.scheduler.enabled'] = "true">
+    <@property "inceptor.scheduler.enabled" "true"/>
+    <@property "inceptor.scheduler.config" "/etc/${service.sid}/conf/inceptor-scheduler.xml"/>
+    <#else>
+    <@property "inceptor.scheduler.enabled" "false"/>
+    </#if>
     <#if service['hive.server2.authentication'] != "LDAP">
     <@property "hive.server2.authentication" "NONE"/>
     <#else>

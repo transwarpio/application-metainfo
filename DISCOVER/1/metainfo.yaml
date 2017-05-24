@@ -35,6 +35,12 @@ roles:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
+  - mountPath: /etc/${dependencies.HDFS.sid}/conf
+    hostPath: /etc/${dependencies.HDFS.sid}/conf
+    name: hdfs
+  - mountPath: /etc/${dependencies.YARN.sid}/conf
+    hostPath: /etc/${dependencies.YARN.sid}/conf
+    name: yarn
   - mountPath: /var/home
     hostPath: ${service['rstudio.home.dir']}
     name: home
@@ -142,7 +148,10 @@ roles:
   env:
   - name: FTP_PORT
     value: ${service['discover.local-cran.port']}
-  mountPaths: []
+  mountPaths:
+  - mountPath: /etc/transwarp/conf
+    hostPath: /etc/transwarp/conf
+    name: hosts
   resources:
     limitsMemoryKey: local-cran.container.limits.memory
     limitsCpuKey: local-cran.container.limits.cpu
