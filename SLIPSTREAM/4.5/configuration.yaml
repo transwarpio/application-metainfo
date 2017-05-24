@@ -617,3 +617,128 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: spark.morphling.recovery.mode
+  recommendExpression: standalone
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.taskstate.backend
+  recommendExpression: filesystem
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.taskstate.checkpoint.directory
+  recommendExpression: |
+    <#function hdfsUri path>
+      <#local hdfs=dependencies['HDFS']>
+      <#if hdfs['nameservices']?? && hdfs['nameservices']?size gt 0>
+        <#local hostPort=hdfs['nameservices'][0]>
+      <#else>
+        <#local host=hdfs['roles']['HDFS_NAMENODE'][0]['hostname']>
+        <#if hdfs['namenode.rpc-port']??>
+          <#local port=hdfs['namenode.rpc-port']>
+        </#if>
+        <#if hdfs[host]?? && hdfs[host]['namenode.rpc-port']??>
+          <#local port=hdfs[host]['namenode.rpc-port']>
+        </#if>
+        <#local hostPort=host + ':' + port>
+      </#if>
+      <#return 'hdfs://' + hostPort + path>
+    </#function>
+    ${hdfsUri("/" + service['sid'] + '/checkpoints')}
+  defaultValue: null
+  valueType: URI
+  scope: !<ServiceLevel> {}
+  onDeps: ['HDFS']
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.zookeeper.session.timeout
+  recommendExpression: 10000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.zookeeper.connect.timeout
+  recommendExpression: 5000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.zookeeper.max.retries
+  recommendExpression: 3
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.zookeeper.retry.wait
+  recommendExpression: 5000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.zookeeper.root.path
+  recommendExpression: /morphling
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.zookeeper.namespace
+  recommendExpression: /${service['sid']}
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.zookeeper.checkpoints.path
+  recommendExpression: /checkpoints
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.submitted.job.path
+  recommendExpression: /runningjobs
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.completed.checkpoints.storage.dir
+  recommendExpression: /morphling/completedcheckpoints
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
