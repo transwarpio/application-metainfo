@@ -129,18 +129,6 @@ roles:
       - directive: !<mkdirs>
           paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
           mode: "755"
-    - type: Config
-      directives:
-      - directive: !<resource>
-          templateType: Raw
-          templatePath: "hadoop-metrics2-datanode.properties"
-          targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-datanode.properties"
-          mode: "755"
-      - directive: !<resource>
-          templateType: Raw
-          templatePath: "hadoop-metrics2-namenode.properties"
-          targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-namenode.properties"
-          mode: "755"
 roleGroups:
   - fieldName: nameservices
     namePrefix: nameservice
@@ -200,18 +188,6 @@ roleGroups:
             directives:
             - directive: !<mkdirs>
                 paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
-                mode: "755"
-          - type: Config
-            directives:
-            - directive: !<resource>
-                templateType: Raw
-                templatePath: "hadoop-metrics2-datanode.properties"
-                targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-datanode.properties"
-                mode: "755"
-            - directive: !<resource>
-                templateType: Raw
-                templatePath: "hadoop-metrics2-namenode.properties"
-                targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-namenode.properties"
                 mode: "755"
       - name: HDFS_NAMENODE
         friendlyName: "Name Node"
@@ -282,18 +258,6 @@ roleGroups:
             - directive: !<mkdirs>
                 paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
                 mode: "755"
-          - type: Config
-            directives:
-            - directive: !<resource>
-                templateType: Raw
-                templatePath: "hadoop-metrics2-datanode.properties"
-                targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-datanode.properties"
-                mode: "755"
-            - directive: !<resource>
-                templateType: Raw
-                templatePath: "hadoop-metrics2-namenode.properties"
-                targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-namenode.properties"
-                mode: "755"
             - directive: !<resource>
                 templateType: FreeMarker
                 templatePath: "exclude-list.txt"
@@ -327,6 +291,10 @@ firstWizardConfigs:
 - datanode.http-port
 - datanode.port
 - journalnode.http-port
+- namenode.memory
+- zkfc.memory
+- journalnode.memory
+- datanode.memory
 - namenode.container.limits.memory
 - namenode.container.limits.cpu
 - namenode.container.requests.memory

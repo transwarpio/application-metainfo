@@ -57,35 +57,66 @@ done
 export HADOOP_OPTS="$HADOOP_OPTS -Djava.net.preferIPv4Stack=true $HADOOP_CLIENT_OPTS"
 
 # Command specific options appended to HADOOP_OPTS when specified
-# Export role memory
-<#if service['namenode.container.limits.memory']??>
-  <#assign limitsMemory = service['namenode.container.limits.memory']?trim?number
+# Export namenode memory
+<#if service['namenode.container.limits.memory'] != "-1" && service['namenode.memory.ratio'] != "-1">
+  <#assign limitsMemory = service['namenode.container.limits.memory']?number
     memoryRatio = service['namenode.memory.ratio']?number
-    memory = limitsMemory * memoryRatio * 1024>
-export NAMENODE_MEMORY=${memory?floor}m
-export HADOOP_NAMENODE_OPTS="-Xmx${memory?floor}m -XX:+UseConcMarkSweepGC -XX:+ExplicitGCInvokesConcurrent -Dcom.sun.management.jmxremote $HADOOP_NAMENODE_OPTS"
-export HADOOP_SECONDARYNAMENODE_OPTS="-Xmx${memory?floor}m -Dcom.sun.management.jmxremote $HADOOP_SECONDARYNAMENODE_OPTS"
+    namenodeMemory = limitsMemory * memoryRatio * 1024>
+<#else>
+  <#if service[.data_model["localhostname"]]['namenode.memory']??>
+    <#assign namenodeMemory=service[.data_model["localhostname"]]['namenode.memory']?trim?number>
+  <#else>
+    <#assign namenodeMemory=24000>
+  </#if>
+</#if>
+export NAMENODE_MEMORY=${namenodeMemory?floor}m
+export HADOOP_NAMENODE_OPTS="-Xmx${namenodeMemory?floor}m -XX:+UseConcMarkSweepGC -XX:+ExplicitGCInvokesConcurrent -Dcom.sun.management.jmxremote $HADOOP_NAMENODE_OPTS"
+export HADOOP_SECONDARYNAMENODE_OPTS="-Xmx${namenodeMemory?floor}m -Dcom.sun.management.jmxremote $HADOOP_SECONDARYNAMENODE_OPTS"
 
-  <#assign limitsMemory = service['zkfc.container.limits.memory']?trim?number
+# Export zkfc memory
+<#if service['zkfc.container.limits.memory'] != "-1" && service['zkfc.memory.ratio'] != "-1">
+  <#assign limitsMemory = service['zkfc.container.limits.memory']?number
     memoryRatio = service['zkfc.memory.ratio']?number
-    memory = limitsMemory * memoryRatio * 1024>
-export ZKFC_MEMORY=${memory?floor}m
-export HADOOP_ZKFC_OPTS="-Xmx${memory?floor}m $HADOOP_ZKFC_OPTS"
+    zkfcMemory = limitsMemory * memoryRatio * 1024>
+<#else>
+  <#if service[.data_model["localhostname"]]['zkfc.memory']??>
+    <#assign zkfcMemory=service[.data_model["localhostname"]]['zkfc.memory']?trim?number>
+  <#else>
+    <#assign zkfcMemory=1024>
+  </#if>
 </#if>
-<#if service['datanode.container.limits.memory']??>
-  <#assign limitsMemory = service['datanode.container.limits.memory']?number
+export ZKFC_MEMORY=${zkfcMemory?floor}m
+export HADOOP_ZKFC_OPTS="-Xmx${zkfcMemory?floor}m $HADOOP_ZKFC_OPTS"
+
+# Export datanode memory
+<#if service['datanode.container.limits.memory'] != "-1" && service['datanode.memory.ratio'] != "-1">
+    <#assign limitsMemory = service['datanode.container.limits.memory']?number
     memoryRatio = service['datanode.memory.ratio']?number
-    memory = limitsMemory * memoryRatio * 1024>
-export DATANODE_MEMORY=${memory?floor}m
-export HADOOP_DATANODE_OPTS="-Xmx${memory?floor}m -Dcom.sun.management.jmxremote $HADOOP_DATANODE_OPTS"
+    datanodeMemory = limitsMemory * memoryRatio * 1024>
+<#else>
+    <#if service[.data_model["localhostname"]]['datanode.memory']??>
+        <#assign datanodeMemory=service[.data_model["localhostname"]]['datanode.memory']?trim?number>
+    <#else>
+        <#assign datanodeMemory=4096>
+    </#if>
 </#if>
-<#if service['journalnode.container.limits.memory']??>
+export DATANODE_MEMORY=${datanodeMemory?floor}m
+export HADOOP_DATANODE_OPTS="-Xmx${datanodeMemory?floor}m -Dcom.sun.management.jmxremote $HADOOP_DATANODE_OPTS"
+
+# Export journalnode memory
+<#if service['journalnode.container.limits.memory'] != "-1" && service['journalnode.memory.ratio'] != "-1">
   <#assign limitsMemory = service['journalnode.container.limits.memory']?number
     memoryRatio = service['journalnode.memory.ratio']?number
-    memory = limitsMemory * memoryRatio * 1024>
-export JOURNALNODE_MEMORY=${memory?floor}m
-export HADOOP_JOURNALNODE_OPTS="-Xmx${memory?floor}m $HADOOP_JOURNALNODE_OPTS"
+    journalnodeMemory = limitsMemory * memoryRatio * 1024>
+<#else>
+  <#if service[.data_model["localhostname"]]['journalnode.memory']??>
+    <#assign journalnodeMemory=service[.data_model["localhostname"]]['journalnode.memory']?trim?number>
+  <#else>
+    <#assign journalnodeMemory=4096>
+  </#if>
 </#if>
+export JOURNALNODE_MEMORY=${journalnodeMemory?floor}m
+export HADOOP_JOURNALNODE_OPTS="-Xmx${journalnodeMemory?floor}m $HADOOP_JOURNALNODE_OPTS"
 
 export HADOOP_BALANCER_OPTS="-Xmx4096m -Dcom.sun.management.jmxremote $HADOOP_BALANCER_OPTS"
 

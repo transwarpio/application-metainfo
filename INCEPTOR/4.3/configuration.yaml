@@ -329,16 +329,62 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
-#
-#- name: inceptor.server.memory
-#  recommendExpression: 8192
-#  defaultValue: null
-#  valueType: MB
-#  scope: !<RoleTypes>
-#    roleTypes: [INCEPTOR_SERVER]
-#  onDeps: []
-#  groups: []
-#  visibility: READ_WRITE
+
+- name: inceptor.metastore.memory
+  recommendExpression: 4096
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: inceptor.server.memory
+  recommendExpression: 8192
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# min(32000m, total_memory_size / 2)
+- name: inceptor.executor.memory
+  recommendExpression: |
+    <#assign  thirdMemMB = (memBytes/1048576/2)?int>
+    <#if thirdMemMB <= 32000>
+      ${thirdMemMB?int}
+    <#else>
+      32000
+    </#if>
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: inceptor.executor.cores
+  recommendExpression: |
+    <#if (numCores/2)?int gt 10>
+      ${(numCores/2)?int}
+    <#else>
+      10
+    </#if>
+  defaultValue: null
+  valueType: NON_NEG_INT
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
 
 - name: hive.server2.thrift.port
   recommendExpression: 10000
@@ -380,7 +426,7 @@
   visibility: READ_WRITE
 
 - name: executor.container.limits.memory
-  recommendExpression: 32
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -390,7 +436,7 @@
   visibility: READ_WRITE
 
 - name: executor.container.limits.cpu
-  recommendExpression: 10
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -400,7 +446,7 @@
   visibility: READ_WRITE
 
 - name: executor.container.requests.memory
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -410,7 +456,7 @@
   visibility: READ_WRITE
 
 - name: executor.container.requests.cpu
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -420,7 +466,7 @@
   visibility: READ_WRITE
 
 - name: executor.memory.ratio
-  recommendExpression: 0.9
+  recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>
@@ -439,7 +485,7 @@
   visibility: READ_WRITE
 
 - name: server.container.limits.memory
-  recommendExpression: 8
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -449,7 +495,7 @@
   visibility: READ_WRITE
 
 - name: server.container.limits.cpu
-  recommendExpression: 1
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -459,7 +505,7 @@
   visibility: READ_WRITE
 
 - name: server.container.requests.memory
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -469,7 +515,7 @@
   visibility: READ_WRITE
 
 - name: server.container.requests.cpu
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -479,7 +525,7 @@
   visibility: READ_WRITE
 
 - name: server.memory.ratio
-  recommendExpression: 0.9
+  recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>
@@ -489,7 +535,7 @@
   visibility: READ_WRITE
 
 - name: metastore.container.limits.memory
-  recommendExpression: 4
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -499,7 +545,7 @@
   visibility: READ_WRITE
 
 - name: metastore.container.limits.cpu
-  recommendExpression: 1
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -509,7 +555,7 @@
   visibility: READ_WRITE
 
 - name: metastore.container.requests.memory
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -519,7 +565,7 @@
   visibility: READ_WRITE
 
 - name: metastore.container.requests.cpu
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -529,7 +575,7 @@
   visibility: READ_WRITE
 
 - name: metastore.memory.ratio
-  recommendExpression: 0.9
+  recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>
@@ -543,6 +589,15 @@
   recommendExpression: false
   defaultValue: null
   valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.driver.port
+  recommendExpression: 51888
+  defaultValue: null
+  valueType: PORT
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []

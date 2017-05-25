@@ -17,9 +17,13 @@
 
 # Set Sqoop specific environment variables here
 
-<#assign limitsMemory = service['sqoop.container.limits.memory']?number
-  memoryRatio = service['sqoop.memory.ratio']?number
-  memory = limitsMemory * memoryRatio * 1024>
+<#if service['sqoop.container.limits.memory'] != "-1" && service['sqoop.memory.ratio'] != "-1">
+  <#assign limitsMemory = service['sqoop.container.limits.memory']?number
+    memoryRatio = service['sqoop.memory.ratio']?number
+    memory = limitsMemory * memoryRatio * 1024>
+<#else>
+  <#assign memory = service['sqoop.server.memory']?number>
+</#if>
 JAVA_OPTS="$JAVA_OPTS -Xmx${memory?floor}m -Dsqoop.config.dir=/etc/${service.sid}/conf"
 
 # The port Sqoop server runs

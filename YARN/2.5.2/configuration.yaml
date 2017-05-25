@@ -591,8 +591,44 @@
   groups: []
   visibility: READ_WRITE
 
+- name: resourcemanager.memory
+  recommendExpression: 4096
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes:
+    - YARN_RESOURCEMANAGER
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: historyserver.memory
+  recommendExpression: 4096
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes:
+    - YARN_HISTORYSERVER
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: timelineserver.memory
+  recommendExpression: 4096
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes:
+    - YARN_TIMELINESERVER
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: resourcemanager.container.limits.memory
-  recommendExpression: 4
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -602,7 +638,7 @@
   visibility: READ_WRITE
 
 - name: resourcemanager.container.limits.cpu
-  recommendExpression: 2
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -612,7 +648,7 @@
   visibility: READ_WRITE
 
 - name: resourcemanager.container.requests.memory
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -622,7 +658,7 @@
   visibility: READ_WRITE
 
 - name: resourcemanager.container.requests.cpu
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -632,7 +668,7 @@
   visibility: READ_WRITE
 
 - name: resourcemanager.memory.ratio
-  recommendExpression: 0.9
+  recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>
@@ -642,7 +678,7 @@
   visibility: READ_WRITE
 
 - name: nodemanager.container.limits.memory
-  recommendExpression: 4
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -652,7 +688,7 @@
   visibility: READ_WRITE
 
 - name: nodemanager.container.limits.cpu
-  recommendExpression: 2
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -662,7 +698,7 @@
   visibility: READ_WRITE
 
 - name: nodemanager.container.requests.memory
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -672,7 +708,7 @@
   visibility: READ_WRITE
 
 - name: nodemanager.container.requests.cpu
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -682,7 +718,7 @@
   visibility: READ_WRITE
 
 - name: nodemanager.memory.ratio
-  recommendExpression: 0.9
+  recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>
@@ -692,7 +728,7 @@
   visibility: READ_WRITE
 
 - name: historyserver.container.limits.memory
-  recommendExpression: 4
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -702,7 +738,7 @@
   visibility: READ_WRITE
 
 - name: historyserver.container.limits.cpu
-  recommendExpression: 2
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -712,7 +748,7 @@
   visibility: READ_WRITE
 
 - name: historyserver.container.requests.memory
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -722,7 +758,7 @@
   visibility: READ_WRITE
 
 - name: historyserver.container.requests.cpu
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -732,7 +768,7 @@
   visibility: READ_WRITE
 
 - name: historyserver.memory.ratio
-  recommendExpression: 0.9
+  recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>
@@ -742,7 +778,7 @@
   visibility: READ_WRITE
 
 - name: timelineserver.container.limits.memory
-  recommendExpression: 4
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -752,7 +788,7 @@
   visibility: READ_WRITE
 
 - name: timelineserver.container.limits.cpu
-  recommendExpression: 2
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -762,7 +798,7 @@
   visibility: READ_WRITE
 
 - name: timelineserver.container.requests.memory
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -772,7 +808,7 @@
   visibility: READ_WRITE
 
 - name: timelineserver.container.requests.cpu
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -782,7 +818,7 @@
   visibility: READ_WRITE
 
 - name: timelineserver.memory.ratio
-  recommendExpression: 0.9
+  recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>

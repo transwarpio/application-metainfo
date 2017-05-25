@@ -19,13 +19,21 @@ PID_DIR=/var/run/elasticsearch
 
 # Heap size defaults to 256m min, 1g max
 # Set ES_HEAP_SIZE to 50% of available RAM, but no more than 31g
-<#assign limitsMemory = service['search.container.limits.memory']?number
+<#if service['search.container.limits.memory'] != "-1" && service['search.memory.ratio'] != "-1">
+  <#assign limitsMemory = service['search.container.limits.memory']?number
   memoryRatio = service['search.memory.ratio']?number
-  memory = limitsMemory * memoryRatio * 1024>
-ES_HEAP_SIZE=${memory?floor}m
+  searchMemory = limitsMemory * memoryRatio * 1024>
+<#else>
+  <#if service[.data_model["localhostname"]]['es.heap.size']??>
+    <#assign searchMemory=service[.data_model["localhostname"]]['es.heap.size']?trim?number>
+  <#else>
+    <#assign searchMemory=30720>
+  </#if>
+</#if>
+ES_HEAP_SIZE=${searchMemory?floor}m
 
 # Heap new generation
-ES_HEAP_NEWSIZE=${(memory/4)?floor}m
+ES_HEAP_NEWSIZE=${(searchMemory/4)?floor}m
 
 # Maximum direct memory
 #ES_DIRECT_SIZE=

@@ -58,7 +58,7 @@ roles:
 firstWizardConfigs:
 - sqoop.http.port
 - sqoop.admin.port
-#- sqoop.server.memory
+- sqoop.server.memory
 - sqoop.container.limits.memory
 - sqoop.container.limits.cpu
 - sqoop.container.requests.memory

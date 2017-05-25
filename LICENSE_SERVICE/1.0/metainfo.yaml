@@ -83,6 +83,7 @@ firstWizardConfigs:
 - zookeeper.client.port
 - zookeeper.peer.communicate.port
 - zookeeper.leader.elect.port
+- zookeeper.server.memory
 - zookeeper.container.limits.memory
 - zookeeper.container.limits.cpu
 - zookeeper.container.requests.memory

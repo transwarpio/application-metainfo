@@ -82,30 +82,30 @@
   groups: []
   visibility: READ_WRITE
 # midas-env.sh
-#- name: midas.server.initial_heapsize
-#  recommendExpression: 512
-#  defaultValue: null
-#  valueType: MB
-#  scope: !<ServiceLevel> {}
-#  onDeps: []
-#  groups: []
-#  visibility: READ_WRITE
-#- name: midas.server.heapsize
-#  recommendExpression: 1024
-#  defaultValue: null
-#  valueType: MB
-#  scope: !<ServiceLevel> {}
-#  onDeps: []
-#  groups: []
-#  visibility: READ_WRITE
-#- name: midas.server.permsize
-#  recommendExpression: 128
-#  defaultValue: null
-#  valueType: MB
-#  scope: !<ServiceLevel> {}
-#  onDeps: []
-#  groups: []
-#  visibility: READ_WRITE
+- name: midas.server.initial_heapsize
+  recommendExpression: 512
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: midas.server.heapsize
+  recommendExpression: 1024
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: midas.server.permsize
+  recommendExpression: 128
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
 # spark-defaults.conf
 - name: spark.executor.memory
   recommendExpression: 18432
@@ -216,7 +216,7 @@
   visibility: READ_WRITE
 
 - name: server.container.limits.memory
-  recommendExpression: 8
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -226,7 +226,7 @@
   visibility: READ_WRITE
 
 - name: server.container.limits.cpu
-  recommendExpression: 1
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -236,7 +236,7 @@
   visibility: READ_WRITE
 
 - name: server.container.requests.memory
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -246,7 +246,7 @@
   visibility: READ_WRITE
 
 - name: server.container.requests.cpu
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -256,7 +256,7 @@
   visibility: READ_WRITE
 
 - name: server.memory.ratio
-  recommendExpression: 0.9
+  recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>
@@ -266,7 +266,7 @@
   visibility: READ_WRITE
 
 - name: redis.container.limits.memory
-  recommendExpression: 4
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -276,7 +276,7 @@
   visibility: READ_WRITE
 
 - name: redis.container.limits.cpu
-  recommendExpression: 1
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -286,7 +286,7 @@
   visibility: READ_WRITE
 
 - name: redis.container.requests.memory
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -296,7 +296,7 @@
   visibility: READ_WRITE
 
 - name: redis.container.requests.cpu
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -306,7 +306,7 @@
   visibility: READ_WRITE
 
 - name: redis.memory.ratio
-  recommendExpression: 0.9
+  recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>
@@ -316,7 +316,7 @@
   visibility: READ_WRITE
 
 - name: scheduler.container.limits.memory
-  recommendExpression: 4
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -326,7 +326,7 @@
   visibility: READ_WRITE
 
 - name: scheduler.container.limits.cpu
-  recommendExpression: 1
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -336,7 +336,7 @@
   visibility: READ_WRITE
 
 - name: scheduler.container.requests.memory
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -346,7 +346,7 @@
   visibility: READ_WRITE
 
 - name: scheduler.container.requests.cpu
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -356,7 +356,7 @@
   visibility: READ_WRITE
 
 - name: scheduler.memory.ratio
-  recommendExpression: 0.9
+  recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>

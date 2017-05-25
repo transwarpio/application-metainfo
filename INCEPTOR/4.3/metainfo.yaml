@@ -214,7 +214,10 @@ firstWizardConfigs:
 - ngmr.fastdisk.size
 - javax.jdo.option.ConnectionUserName
 - javax.jdo.option.ConnectionPassword
-#- inceptor.server.memory
+- inceptor.metastore.memory
+- inceptor.server.memory
+- inceptor.executor.memory
+- inceptor.executor.cores
 - server.container.limits.memory
 - server.container.limits.cpu
 - server.container.requests.memory

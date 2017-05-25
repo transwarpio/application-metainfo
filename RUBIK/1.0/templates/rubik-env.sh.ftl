@@ -1,8 +1,12 @@
 #!/bin/bash
 
-<#assign limitsMemory = service['rubik.container.limits.memory']?number
-  memoryRatio = service['rubik.memory.ratio']?number
-  memory = limitsMemory * memoryRatio * 1024>
+<#if service['rubik.container.limits.memory'] != "-1" && service['rubik.memory.ratio'] != "-1">
+  <#assign limitsMemory = service['rubik.container.limits.memory']?number
+    memoryRatio = service['rubik.memory.ratio']?number
+    memory = limitsMemory * memoryRatio * 1024>
+<#else>
+  <#assign memory = service['rubik.memory']?number>
+</#if>
 export MAXMEMSIZE=${memory?floor}m
 
 export LOG_DIR=/var/log/${service.sid}

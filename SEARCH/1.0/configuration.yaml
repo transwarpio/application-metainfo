@@ -138,24 +138,24 @@
   groups: ["elasticsearch.yml"]
   visibility: READ_WRITE
 
-## elasticsearch-env
-## min(30720m, total_memory_size / 3)
-#- name: es.heap.size
-#  recommendExpression: |
-#    <#assign  thirdMemMB = (memBytes/1048576/3)?int>
-#    <#if thirdMemMB <= 30720>
-#      ${thirdMemMB?int}
-#    <#else>
-#      30720
-#    </#if>
-#  defaultValue: null
-#  valueType: MB
-#  isNodeSpecific: true
-#  scope: !<RoleTypes>
-#    roleTypes: [SEARCH_SERVER]
-#  onDeps: []
-#  groups: []
-#  visibility: READ_WRITE
+# elasticsearch-env
+# min(30720m, total_memory_size / 3)
+- name: es.heap.size
+  recommendExpression: |
+    <#assign  thirdMemMB = (memBytes/1048576/3)?int>
+    <#if thirdMemMB <= 30720>
+      ${thirdMemMB?int}
+    <#else>
+      30720
+    </#if>
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
 ## es.heap.size/4
 #- name: es.heap.newsize
 #  recommendExpression: |
@@ -175,7 +175,7 @@
 #  visibility: READ_WRITE
 
 - name: search.container.limits.memory
-  recommendExpression: 30
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -185,7 +185,7 @@
   visibility: READ_WRITE
 
 - name: search.container.limits.cpu
-  recommendExpression: 10
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -195,7 +195,7 @@
   visibility: READ_WRITE
 
 - name: search.container.requests.memory
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -205,7 +205,7 @@
   visibility: READ_WRITE
 
 - name: search.container.requests.cpu
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -215,7 +215,7 @@
   visibility: READ_WRITE
 
 - name: search.memory.ratio
-  recommendExpression: 0.9
+  recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>

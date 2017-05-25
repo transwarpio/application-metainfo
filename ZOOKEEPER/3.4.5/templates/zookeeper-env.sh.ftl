@@ -4,9 +4,14 @@ export ZOOKEEPER_LOG_DIR=/var/log/${service.sid}
 export ZOOKEEPER_DATA_DIR=/var/${service.sid}
 
 export SERVER_JVMFLAGS="-Dcom.sun.management.jmxremote.port=${service['zookeeper.jmxremote.port']} -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.local.only=false"
-<#assign limitsMemory = service['zookeeper.container.limits.memory']?number
+
+<#if service['zookeeper.container.limits.memory'] != "-1" && service['zookeeper.memory.ratio'] != "-1">
+  <#assign limitsMemory = service['zookeeper.container.limits.memory']?number
     memoryRatio = service['zookeeper.memory.ratio']?number
     memory = limitsMemory * memoryRatio * 1024>
+<#else>
+  <#assign memory = service['zookeeper.server.memory']?number>
+</#if>
 export SERVER_JVMFLAGS="-Xmx${memory?floor}m $SERVER_JVMFLAGS"
 
 export SERVER_JVMFLAGS="-Dzookeeper.log.dir=/var/log/${service.sid} -Dzookeeper.root.logger=INFO,ROLLINGFILE $SERVER_JVMFLAGS"

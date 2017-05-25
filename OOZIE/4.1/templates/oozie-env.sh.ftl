@@ -27,10 +27,14 @@ export BASEDIR=/usr/lib/oozie
 # Java System properties for Oozie should be specified in this variable
 #
 
-<#assign limitsMemory = service['oozie.container.limits.memory']?number
-  memoryRatio = service['oozie.memory.ratio']?number
-  memory = limitsMemory * memoryRatio * 1024>
-export CATALINA_OPTS="$CATALINA_OPTS -Xmx${memory?floor}m -agentpath:/usr/lib/hadoop/bin/libagent.so"
+<#if service['oozie.container.limits.memory'] != "-1" && service['oozie.memory.ratio'] != "-1">
+  <#assign limitsMemory = service['oozie.container.limits.memory']?number
+    memoryRatio = service['oozie.memory.ratio']?number
+    oozieMemory = limitsMemory * memoryRatio * 1024>
+<#else>
+  <#assign oozieMemory = service['oozie.server.memory']?number>
+</#if>
+export CATALINA_OPTS="$CATALINA_OPTS -Xmx${oozieMemory?floor}m -agentpath:/usr/lib/hadoop/bin/libagent.so"
 
 # Oozie configuration file to load from Oozie configuration directory
 #

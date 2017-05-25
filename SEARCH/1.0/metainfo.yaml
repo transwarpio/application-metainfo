@@ -49,8 +49,7 @@ firstWizardConfigs:
 - node.master
 - node.data
 - network.host
-# - es.heap.size
-# - es.heap.newsize
+- es.heap.size
 - search.container.limits.memory
 - search.container.limits.cpu
 - search.container.requests.memory

@@ -525,49 +525,49 @@
   groups: ["hbase-site.xml"]
   visibility: READ_WRITE
 
-#- name: regionserver.memory
-#  recommendExpression: |
-#    <#assign halfMemMB = (memBytes/1048576/2)?floor>
-#    <#if halfMemMB <= 24000>
-#    ${halfMemMB?floor?c}
-#    <#else>
-#    24000
-#    </#if>
-#  defaultValue: null
-#  valueType: MB
-#  isNodeSpecific: true
-#  scope: !<RoleTypes>
-#    roleTypes: [HYPERBASE_REGIONSERVER]
-#  onDeps: []
-#  groups: []
-#  visibility: READ_WRITE
-#
-#- name: master.memory
-#  recommendExpression: 4096
-#  defaultValue: null
-#  valueType: MB
-#  isNodeSpecific: true
-#  scope: !<RoleTypes>
-#    roleTypes: [HYPERBASE_MASTER]
-##  isNodeSpecific: true
-#  onDeps: []
-#  groups: []
-#  visibility: READ_WRITE
-#
-#- name: thrift.server.memory
-#  recommendExpression: 4096
-#  defaultValue: null
-#  valueType: MB
-#  isNodeSpecific: true
-#  scope: !<RoleTypes>
-#    roleTypes: [HYPERBASE_THRIFT]
-##  isNodeSpecific: true
-#  onDeps: []
-#  groups: ["hbase-site.xml"]
-#  visibility: READ_WRITE
+- name: regionserver.memory
+  recommendExpression: |
+    <#assign halfMemMB = (memBytes/1048576/2)?floor>
+    <#if halfMemMB <= 24000>
+    ${halfMemMB?floor?c}
+    <#else>
+    24000
+    </#if>
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [HYPERBASE_REGIONSERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: master.memory
+  recommendExpression: 4096
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [HYPERBASE_MASTER]
+  isNodeSpecific: true
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: thrift.memory
+  recommendExpression: 4096
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [HYPERBASE_THRIFT]
+  isNodeSpecific: true
+  onDeps: []
+  groups: ["hbase-site.xml"]
+  visibility: READ_WRITE
 
 - name: master.container.limits.memory
-  recommendExpression: 4
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -577,7 +577,7 @@
   visibility: READ_WRITE
 
 - name: master.container.limits.cpu
-  recommendExpression: 1
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -587,7 +587,7 @@
   visibility: READ_WRITE
 
 - name: master.container.requests.memory
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -597,7 +597,7 @@
   visibility: READ_WRITE
 
 - name: master.container.requests.cpu
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -607,7 +607,7 @@
   visibility: READ_WRITE
 
 - name: master.memory.ratio
-  recommendExpression: 0.9
+  recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>
@@ -617,7 +617,7 @@
   visibility: READ_WRITE
 
 - name: regionserver.container.limits.memory
-  recommendExpression: 24
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -627,7 +627,7 @@
   visibility: READ_WRITE
 
 - name: regionserver.container.limits.cpu
-  recommendExpression: 1
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -637,7 +637,7 @@
   visibility: READ_WRITE
 
 - name: regionserver.container.requests.memory
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -647,7 +647,7 @@
   visibility: READ_WRITE
 
 - name: regionserver.container.requests.cpu
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -657,7 +657,7 @@
   visibility: READ_WRITE
 
 - name: regionserver.memory.ratio
-  recommendExpression: 0.9
+  recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>
@@ -667,7 +667,7 @@
   visibility: READ_WRITE
 
 - name: thrift.container.limits.memory
-  recommendExpression: 4
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -677,7 +677,7 @@
   visibility: READ_WRITE
 
 - name: thrift.container.limits.cpu
-  recommendExpression: 1
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -687,7 +687,7 @@
   visibility: READ_WRITE
 
 - name: thrift.container.requests.memory
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -697,7 +697,7 @@
   visibility: READ_WRITE
 
 - name: thrift.container.requests.cpu
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -707,7 +707,7 @@
   visibility: READ_WRITE
 
 - name: thrift.memory.ratio
-  recommendExpression: 0.9
+  recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>

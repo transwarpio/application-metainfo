@@ -89,7 +89,7 @@
   visibility: READ_WRITE
 
 - name: hue.container.limits.memory
-  recommendExpression: 4
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -99,7 +99,7 @@
   visibility: READ_WRITE
 
 - name: hue.container.limits.cpu
-  recommendExpression: 1
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -109,7 +109,7 @@
   visibility: READ_WRITE
 
 - name: hue.container.requests.memory
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -119,7 +119,7 @@
   visibility: READ_WRITE
 
 - name: hue.container.requests.cpu
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -129,7 +129,7 @@
   visibility: READ_WRITE
 
 - name: hue.memory.ratio
-  recommendExpression: 0.9
+  recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>

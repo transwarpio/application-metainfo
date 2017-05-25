@@ -61,19 +61,57 @@ fi
 done
 </#if>
 
-<#assign limitsMemory = service['server.container.limits.memory']?number
-  memoryRatio = service['server.memory.ratio']?number
-  memory = limitsMemory * memoryRatio * 1024>
-export HADOOP_HEAPSIZE=${memory?floor}
-export INCEPTOR_SERVER_MEMORY=${memory?floor}
+
+<#if service['server.container.limits.memory'] != "-1" && service['server.memory.ratio'] != "-1">
+    <#assign limitsMemory = service['server.container.limits.memory']?number
+    memoryRatio = service['server.memory.ratio']?number
+    serverMemory = limitsMemory * memoryRatio * 1024>
+<#else>
+    <#if service[.data_model["localhostname"]]['inceptor.server.memory']??>
+        <#assign serverMemory=service[.data_model["localhostname"]]['inceptor.server.memory']?trim?number>
+    <#else>
+        <#assign serverMemory=8192>
+    </#if>
+</#if>
+export INCEPTOR_SERVER_MEMORY=${serverMemory?floor}
 
 # TODO get executor memory from resource configuration
-<#assign limitsMemory = service['executor.container.limits.memory']?number
-  memoryRatio = service['executor.memory.ratio']?number
-  memory = limitsMemory * memoryRatio * 1024>
-export INCEPTOR_EXECUTOR_MEMORY=${memory?floor}
+<#if service['executor.container.limits.memory'] != "-1" && service['executor.memory.ratio'] != "-1">
+  <#assign limitsMemory = service['executor.container.limits.memory']?number
+    memoryRatio = service['executor.memory.ratio']?number
+    executorMemory = limitsMemory * memoryRatio * 1024>
+<#else>
+  <#if service[.data_model["localhostname"]]['inceptor.executor.memory']??>
+    <#assign executorMemory=service[.data_model["localhostname"]]['inceptor.executor.memory']?trim?number>
+  <#else>
+    <#assign executorMemory=32000>
+  </#if>
+</#if>
+export INCEPTOR_EXECUTOR_MEMORY=${executorMemory?floor}
 
-export SPARK_CORES=${service['executor.container.limits.cpu']}
+<#if service['executor.container.limits.cpu'] != "-1">
+  <#assign sparkCores=service['executor.container.limits.cpu']>
+<#else>
+  <#if service[.data_model["localhostname"]]['inceptor.executor.cores']??>
+    <#assign sparkCores=service[.data_model["localhostname"]]['inceptor.executor.cores']?trim?number>
+  <#else>
+    <#assign sparkCores=10>
+  </#if>
+</#if>
+export SPARK_CORES=${sparkCores}
+
+<#if service['metastore.container.limits.memory'] != "-1" && service['metastore.memory.ratio'] != "-1">
+  <#assign limitsMemory = service['metastore.container.limits.memory']?number
+    memoryRatio = service['metastore.memory.ratio']?number
+    metastoreMemory = limitsMemory * memoryRatio * 1024>
+<#else>
+  <#if service[.data_model["localhostname"]]['inceptor.metastore.memory']??>
+    <#assign metastoreMemory=service[.data_model["localhostname"]]['inceptor.metastore.memory']?trim?number>
+  <#else>
+    <#assign metastoreMemory=32000>
+  </#if>
+</#if>
+export INCEPTOR_METASTORE_MEMORY=${metastoreMemory?floor}
 
 export HIVE_PORT=${service['hive.server2.thrift.port']}
 export HADOOP_CONF_DIR=/etc/${dependencies.HDFS.sid}/conf:/etc/${dependencies.YARN.sid}/conf

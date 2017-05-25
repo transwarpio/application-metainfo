@@ -261,15 +261,62 @@
   groups: ["core-site.xml"]
   visibility: READ_WRITE
 
+- name: namenode.memory
+  recommendExpression: |
+    <#assign halfMemMB = (memBytes/1048576/2)?int>
+    <#if halfMemMB <= 24000>
+    ${halfMemMB?c}
+    <#else>
+    24000
+    </#if>
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes:
+    - HDFS_NAMENODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zkfc.memory
+  recommendExpression: 1024
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes:
+    - HDFS_NAMENODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: journalnode.memory
+  recommendExpression: 4096
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes:
+    - HDFS_JOURNALNODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: datanode.memory
+  recommendExpression: 4096
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes:
+    - HDFS_DATANODE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: namenode.container.limits.memory
-  recommendExpression: 24
-#  recommendExpression: |
-#    <#assign halfMemMB = (memBytes/1048576/1024/2)?int>
-#    <#if halfMemMB <= 24>
-#    ${halfMemMB?c}
-#    <#else>
-#    24
-#    </#if>
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -279,7 +326,7 @@
   visibility: READ_WRITE
 
 - name: namenode.container.limits.cpu
-  recommendExpression: 1
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -289,7 +336,7 @@
   visibility: READ_WRITE
 
 - name: namenode.container.requests.memory
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -299,7 +346,7 @@
   visibility: READ_WRITE
 
 - name: namenode.container.requests.cpu
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -309,7 +356,7 @@
   visibility: READ_WRITE
 
 - name: namenode.memory.ratio
-  recommendExpression: 0.9
+  recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>
@@ -319,7 +366,7 @@
   visibility: READ_WRITE
 
 - name: zkfc.container.limits.memory
-  recommendExpression: 1
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -329,7 +376,7 @@
   visibility: READ_WRITE
 
 - name: zkfc.container.limits.cpu
-  recommendExpression: 1
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -339,7 +386,7 @@
   visibility: READ_WRITE
 
 - name: zkfc.container.requests.memory
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -349,7 +396,7 @@
   visibility: READ_WRITE
 
 - name: zkfc.container.requests.cpu
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -359,7 +406,7 @@
   visibility: READ_WRITE
 
 - name: zkfc.memory.ratio
-  recommendExpression: 0.9
+  recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>
@@ -369,7 +416,7 @@
   visibility: READ_WRITE
 
 - name: journalnode.container.limits.memory
-  recommendExpression: 4
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -379,7 +426,7 @@
   visibility: READ_WRITE
 
 - name: journalnode.container.limits.cpu
-  recommendExpression: 1
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -389,7 +436,7 @@
   visibility: READ_WRITE
 
 - name: journalnode.container.requests.memory
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -399,7 +446,7 @@
   visibility: READ_WRITE
 
 - name: journalnode.container.requests.cpu
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -409,7 +456,7 @@
   visibility: READ_WRITE
 
 - name: journalnode.memory.ratio
-  recommendExpression: 0.9
+  recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>
@@ -419,7 +466,7 @@
   visibility: READ_WRITE
 
 - name: datanode.container.limits.memory
-  recommendExpression: 4
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -429,7 +476,7 @@
   visibility: READ_WRITE
 
 - name: datanode.container.limits.cpu
-  recommendExpression: 1
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -439,7 +486,7 @@
   visibility: READ_WRITE
 
 - name: datanode.container.requests.memory
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
@@ -449,7 +496,7 @@
   visibility: READ_WRITE
 
 - name: datanode.container.requests.cpu
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -459,7 +506,7 @@
   visibility: READ_WRITE
 
 - name: datanode.memory.ratio
-  recommendExpression: 0.9
+  recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>
@@ -469,51 +516,51 @@
   visibility: READ_WRITE
 
 - name: httpfs.container.limits.memory
-  recommendExpression: 4
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
-    roleTypes: [HDFS_DATANODE]
+    roleTypes: [HDFS_HTTPFS]
   onDeps: []
   groups: []
   visibility: READ_WRITE
 
 - name: httpfs.container.limits.cpu
-  recommendExpression: 1
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [HDFS_DATANODE]
+    roleTypes: [HDFS_HTTPFS]
   onDeps: []
   groups: []
   visibility: READ_WRITE
 
 - name: httpfs.container.requests.memory
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
-    roleTypes: [HDFS_DATANODE]
+    roleTypes: [HDFS_HTTPFS]
   onDeps: []
   groups: []
   visibility: READ_WRITE
 
 - name: httpfs.container.requests.cpu
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [HDFS_DATANODE]
+    roleTypes: [HDFS_HTTPFS]
   onDeps: []
   groups: []
   visibility: READ_WRITE
 
 - name: httpfs.memory.ratio
-  recommendExpression: 0.9
+  recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>
-    roleTypes: [HDFS_DATANODE]
+    roleTypes: [HDFS_HTTPFS]
   onDeps: []
   groups: []
   visibility: READ_WRITE

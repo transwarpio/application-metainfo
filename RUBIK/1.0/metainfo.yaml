@@ -76,9 +76,9 @@ product: Studio
 
 firstWizardConfigs:
 - designer.server.port
-#- max.memory.size
 - javax.jdo.option.ConnectionUserName
 - javax.jdo.option.ConnectionPassword
+- rubik.memory
 - rubik.container.limits.memory
 - rubik.container.limits.cpu
 - rubik.container.requests.memory

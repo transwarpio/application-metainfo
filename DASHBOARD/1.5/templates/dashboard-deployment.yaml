@@ -40,6 +40,13 @@ spec:
             port: ${service['tos.master.dashboard.port']}
           initialDelaySeconds: 30
           timeoutSeconds: 30
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "0.2"
+          requests:
+            memory: "0Gi"
+            cpu: "0"
         volumeMounts:
         - mountPath: "/srv/kubernetes"
           name: "certs"

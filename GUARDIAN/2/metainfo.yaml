@@ -45,11 +45,6 @@ firstWizardConfigs:
 - guardian.apacheds.ldap.port
 - guardian.apacheds.kdc.port
 - guardian.apacheds.data.dir
-- server.container.limits.memory
-- server.container.limits.cpu
-- server.container.requests.memory
-- server.container.requests.cpu
-- server.memory.ratio
 
 healthChecks:
 - category: DAEMON_CHECK

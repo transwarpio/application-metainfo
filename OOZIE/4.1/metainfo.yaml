@@ -85,6 +85,7 @@ roles:
 
 firstWizardConfigs:
 - oozie.http.port
+- oozie.server.memory
 - oozie.container.limits.memory
 - oozie.container.limits.cpu
 - oozie.container.requests.memory

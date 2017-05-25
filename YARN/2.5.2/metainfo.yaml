@@ -265,6 +265,9 @@ firstWizardConfigs:
 - timelineserver.port
 - timelineserver.http.port
 - mapred.child.heapsize
+- resourcemanager.memory
+- historyserver.memory
+- timelineserver.memory
 - resourcemanager.container.limits.memory
 - resourcemanager.container.limits.cpu
 - resourcemanager.container.requests.memory

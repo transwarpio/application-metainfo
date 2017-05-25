@@ -140,8 +140,9 @@ roles:
         mode: "755"
 
 firstWizardConfigs:
-#- midas.server.heapsize
-#- midas.server.permsize
+- midas.server.initial_heapsize
+- midas.server.heapsize
+- midas.server.permsize
 - spark.executor.heapsize
 - spark.executor.permsize
 - spark.executor.max_permsize

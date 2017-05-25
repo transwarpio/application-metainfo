@@ -81,52 +81,62 @@
   groups: [zoo_cfg]
   visibility: READ_WRITE
 
+- name: zookeeper.server.memory
+  recommendExpression: 256
+  defaultValue: null
+  valueType: MB
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: zookeeper.container.limits.memory
-  recommendExpression: 2
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
-    roleTypes: [LICENSE_NODE]
+    roleTypes: [ZOOKEEPER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
 
 - name: zookeeper.container.limits.cpu
-  recommendExpression: 0.2
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [LICENSE_NODE]
+    roleTypes: [ZOOKEEPER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
 
 - name: zookeeper.container.requests.memory
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
-    roleTypes: [LICENSE_NODE]
+    roleTypes: [ZOOKEEPER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
 
 - name: zookeeper.container.requests.cpu
-  recommendExpression: 0
+  recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [LICENSE_NODE]
+    roleTypes: [ZOOKEEPER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
 
 - name: zookeeper.memory.ratio
-  recommendExpression: 0.9
+  recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>
-    roleTypes: [LICENSE_NODE]
+    roleTypes: [ZOOKEEPER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
