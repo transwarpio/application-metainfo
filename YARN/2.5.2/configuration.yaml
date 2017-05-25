@@ -554,12 +554,12 @@
       </#if>
       <#return prefix + suffix>
     </#function>
-    ${hdfsPath('/var/log/hadoop-yarn/apps')}
-  defaultValue: "/tmp/hadoop-yarn/staging"
+    ${hdfsPath('/user')}
+  defaultValue: "/user"
   valueType: ABSOLUTE_PATH
   scope: !<ServiceLevel> {}
   onDeps: [HDFS]
-  groups: ["yarn-site.xml"]
+  groups: [mapred_site]
   visibility: READ_WRITE
 
 - name: yarn.nodemanager.delete.debug-delay-sec

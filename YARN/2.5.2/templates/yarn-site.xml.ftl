@@ -81,8 +81,6 @@
     <@property "yarn.resourcemanager.webapp.address" resourceManager + ":" + rm_webapp_port/>
 </#if>
 
-    <@property "yarn.nodemanager.remote-app-log-dir" "/" + sid + "/var/log/hadoop-yarn/apps"/>
-
 <#if service.roles.YARN_HISTORYSERVER?? && service.roles.YARN_HISTORYSERVER?size gt 0>
     <#assign historyServer=service.roles.YARN_HISTORYSERVER[0]['hostname']>
     <@property "yarn.log.server.url" "http://" + historyServer + ":19888/jobhistory/logs/"/>

@@ -23,8 +23,12 @@ export HADOOP_CONF_DIR=/etc/${service.sid}/conf
      otherwise TDH-Client downloader cannot find which HDFS this YARN depends on -->
 export HDFS_CONF_DIR=/etc/${dependencies.HDFS.sid}/conf
 export YARN_RESOURCEMANAGER_ADDRRESS=${service.roles.YARN_RESOURCEMANAGER[0]['hostname']}
+<#if service['yarn.nodemanager.local-dirs']??>
 export NODEMANAGER_LOCAL_DIRS=${service['yarn.nodemanager.local-dirs']}
+</#if>
+<#if service['yarn.nodemanager.local-dirs']??>
 export NODEMANAGER_LOG_DIRS=${service['yarn.nodemanager.log-dirs']}
+</#if>
 <#if service.roles.YARN_TIMELINESERVER??>
 export YARN_TIMELINE_SERVICE_HOSTNAME=${service.roles.YARN_TIMELINESERVER[0]['hostname']}
 </#if>

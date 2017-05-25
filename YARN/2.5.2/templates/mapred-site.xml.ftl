@@ -11,7 +11,6 @@
 <configuration>
     <@property "mapreduce.jobhistory.address" historyServer + ":10020"/>
     <@property "mapreduce.jobhistory.webapp.address" historyServer + ":19888"/>
-    <@property "yarn.app.mapreduce.am.staging-dir" "/" + service.sid + "/user"/>
     <#if service.auth = "kerberos">
     <@property "mapreduce.jobhistory.principal" "mapred/_HOST@" + service.realm></@property>
     <@property "mapreduce.jobhistory.keytab" service.keytab></@property>
