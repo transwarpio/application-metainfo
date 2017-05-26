@@ -62,8 +62,12 @@
 </#if>
 
 <#if service['hive.server2.enabled'] = "true" && service['hive.server2.authentication'] = "LDAP">
-    <@property  "hive.server2.authentication.ldap.baseDN", "ou=People,dc=tdh"/>
-    <@property  "hive.server2.authentication.ldap.url" "ldap://localhost"/>
+    <#assign  guardian=dependencies.GUARDIAN guardian_servers=[]>
+    <#list guardian.roles["GUARDIAN_SERVER"] as role>
+        <#assign guardian_servers += [("ldap://" + role.hostname + ":" + guardian["guardian.apacheds.ldap.port"])]>
+    </#list>
+    <@property  "hive.server2.authentication.ldap.baseDN", "ou=People,${service.domain}"/>
+    <@property  "hive.server2.authentication.ldap.url" "${guardian_servers?join(' ')}"/>
     <@property  "hive.server2.enable.doAs" "false"/>
     <@property  "hive.security.authorization.enabled" "true"/>
     <@property  "hive.security.authorization.manager" "org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd.SQLStdHiveAuthorizerFactory"/>
