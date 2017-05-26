@@ -42,7 +42,7 @@ roles:
     requestsCpuKey: resourcemanager.container.requests.cpu
   summaryPolicy: SOME
   autoAssign:
-  - advice: !<NumSeq> {"numSeq": [1]}
+  - advice: !<NumSeq> {"numSeq": [2, 1]}
   suggestion:
   - criteria: !<Range> {"min": 1}
   validation:
