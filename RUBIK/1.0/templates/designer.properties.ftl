@@ -18,3 +18,8 @@ service.rest.sleep.interval.ms=${service['service.rest.sleep.interval.ms']}
 service.rest.retries=${service['service.rest.retries']}
 service.rest.readTimeoutMSecs=${service['service.rest.readTimeoutMSecs']}
 service.rest.connectTimeoutMSecs=${service['service.rest.connectTimeoutMSecs']}
+<#assign license_servers=[]>
+<#list dependencies.LICENSE_SERVICE.roles.LICENSE_NODE as server>
+    <#assign license_servers += [(server.hostname + ":" + dependencies.LICENSE_SERVICE[server.hostname]["zookeeper.client.port"])]>
+</#list>
+license.server.quorum=${license_servers?join(",")}
