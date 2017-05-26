@@ -25,12 +25,6 @@ roles:
   - name: MIDAS_CONF_DIR
     value: /etc/${service.sid}/conf
   mountPaths:
-  - mountPath: /etc/${dependencies.YARN.sid}/conf
-    hostPath: /etc/${dependencies.YARN.sid}/conf
-    name: yarn
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: topology
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: conf
@@ -90,10 +84,7 @@ roles:
   env:
   - name: MIDAS_REDIS_PORT
     value: ${service['midas.redis.port']}
-  mountPaths:
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
+  mountPaths: []
   resources:
     limitsMemoryKey: redis.container.limits.memory
     limitsCpuKey: redis.container.limits.cpu
@@ -125,9 +116,6 @@ roles:
   - mountPath: /etc/${service.sid}/conf
     hostPath: /etc/${service.sid}/conf
     name: conf
-  - mountPath: /etc/transwarp/conf
-    hostPath: /etc/transwarp/conf
-    name: hosts
   resources:
     limitsMemoryKey: scheduler.container.limits.memory
     limitsCpuKey: scheduler.container.limits.cpu
@@ -179,6 +167,15 @@ firstWizardConfigs:
 - scheduler.memory.ratio
 
 product: Sophon
+
+principals:
+- hive
+
+pages:
+- roles
+- configuration
+- operation
+- security
 
 healthChecks:
 - category: DAEMON_CHECK

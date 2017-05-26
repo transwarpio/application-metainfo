@@ -31,9 +31,18 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: livy.server.user.manager.open
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
 #dieu.conf
 - name: dieu.docker.image.name
-  recommendExpression: "${dependencies.TOS.roles.TOS_MASTER[0].hostname}:${dependencies.TOS['tos.master.apiserver.port']}/tos/tensorflow:midas-3.1"
+  recommendExpression: "${dependencies.REGISTRY.roles['REGISTRY_SERVER'][0].hostname}:${dependencies.REGISTRY['registry.port']}/transwarp/sophon-tensorflow:tdh500"
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
@@ -50,6 +59,14 @@
   visibility: READ_WRITE
 - name: dieu.ps.instances
   recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: dieu.running.timeout
+  recommendExpression: 120000
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
