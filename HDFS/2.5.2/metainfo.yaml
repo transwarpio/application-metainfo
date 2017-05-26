@@ -51,7 +51,7 @@ roles:
       limitsCpuKey: httpfs.container.limits.cpu
       requestsMemoryKey: httpfs.container.requests.memory
       requestsCpuKey: httpfs.container.requests.cpu
-    summaryPolicy: ALL
+    summaryPolicy: NONE
     autoAssign:
     - advice: !<NumSeq> {"numSeq": [1]}
     suggestion:
