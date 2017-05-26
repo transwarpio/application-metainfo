@@ -430,7 +430,7 @@
   visibility: READ_WRITE
 
 - name: executor.number.eachnode
-  recommendExpression: 2
+  recommendExpression: 1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
