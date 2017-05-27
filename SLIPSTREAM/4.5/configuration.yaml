@@ -881,11 +881,28 @@
   visibility: READ_WRITE
 
 - name: spark.morphling.completed.checkpoints.storage.dir
-  recommendExpression: /morphling/completedcheckpoints
+  recommendExpression: |
+    <#function hdfsUri path>
+      <#local hdfs=dependencies['HDFS']>
+      <#if hdfs['nameservices']?? && hdfs['nameservices']?size gt 0>
+        <#local hostPort=hdfs['nameservices'][0]>
+      <#else>
+        <#local host=hdfs['roles']['HDFS_NAMENODE'][0]['hostname']>
+        <#if hdfs['namenode.rpc-port']??>
+          <#local port=hdfs['namenode.rpc-port']>
+        </#if>
+        <#if hdfs[host]?? && hdfs[host]['namenode.rpc-port']??>
+          <#local port=hdfs[host]['namenode.rpc-port']>
+        </#if>
+        <#local hostPort=host + ':' + port>
+      </#if>
+      <#return 'hdfs://' + hostPort + path>
+    </#function>
+    ${hdfsUri("/" + service['sid'] + '/complete')}
   defaultValue: null
-  valueType: ABSOLUTE_PATH
+  valueType: URI
   scope: !<ServiceLevel> {}
-  onDeps: []
+  onDeps: ['HDFS']
   groups: []
   visibility: READ_WRITE
 
