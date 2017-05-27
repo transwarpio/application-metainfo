@@ -246,6 +246,7 @@ pages:
 principals:
 - HTTP
 - hive
+- kafka
 
 healthChecks:
 - category: DAEMON_CHECK

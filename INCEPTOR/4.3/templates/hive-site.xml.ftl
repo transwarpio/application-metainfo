@@ -61,6 +61,12 @@
     </#if>
 </#if>
 
+<#if service.plugins?seq_contains("governor")>
+    <@property "hive.exec.post.hooks" "org.apache.atlas.hive.hook.HivePostHook"/>
+    <@property "hive.exec.failure.hooks" "org.apache.atlas.hive.hook.HiveFailHook"/>
+    <@property "atlas.cluster.name" "${service.sid}"/>
+</#if>
+
 <#if service['hive.server2.enabled'] = "true" && service['hive.server2.authentication'] = "LDAP">
     <#assign  guardian=dependencies.GUARDIAN guardian_servers=[]>
     <#list guardian.roles["GUARDIAN_SERVER"] as role>

@@ -54,14 +54,14 @@ atlas.graph.index.search.directory=${sys:atlas.home}/data/es
 <#--handle dependent.search-->
 <#-- TODO modify es port-->
 <#if dependencies.SEARCH??>
-    <#assign search=dependencies.SEARCH searches=[]>
+    <#assign search=dependencies.SEARCH searches=[] searchesWithPort=[]>
     <#list search.roles.SEARCH_SERVER as role>
         <#assign searches += [role.hostname]>
+        <#assign searchesWithPort += [role.hostname + ":9200"]>
     </#list>
-    <#assign search_hosts = searches?join(",")>
 </#if>
-atlas.graph.index.search.hostname=${search_hosts}
-atlas.graph.index.search.http.port=9200
+atlas.graph.index.search.hostname=${searches?join(",")}
+atlas.graph.index.search.elasticsearch.rest.address=${searchesWithPort?join(",")}
 atlas.graph.index.search.index-name=${service['atlas.graph.index.search.index-name']}
 atlas.graph.index.search.elasticsearch.client-only=true
 atlas.graph.index.search.elasticsearch.cluster-name=${dependencies.SEARCH['cluster.name']}
@@ -83,10 +83,10 @@ atlas.notification.embedded=false
     <#assign quorum = quorums?join(",")>
 </#if>
 atlas.kafka.zookeeper.connect=${quorum}
-<#if dependencies.ZOOKEEPER??>
+<#if dependencies.KAFKA??>
     <#assign kafka=dependencies.KAFKA kafkas=[]>
     <#list kafka.roles.KAFKA_SERVER as role>
-        <#assign kafkas += [role.hostname + ":" + kafka["kmq.port"]]>
+        <#assign kafkas += [role.hostname + ":" + kafka[role.hostname]["listeners"]?split(":")[2]]>
     </#list>
     <#assign kafka_hosts = kafkas?join(",")>
 </#if>

@@ -30,9 +30,6 @@ roles:
   - name: KAFKA_CONF_DIR
     value: /etc/${service.sid}/conf
   mountPaths:
-  - mountPath: /hadoop/kmq
-    hostPath: /hadoop/kmq
-    name: data
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log

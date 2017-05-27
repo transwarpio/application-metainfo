@@ -74,6 +74,19 @@ done
 </#if>
 export INCEPTOR_SERVER_MEMORY=${serverMemory?floor}
 
+<#if service.plugins?seq_contains("governor")>
+for f in /usr/lib/transwarp/plugins/governor/inceptor/lib/*jar; do
+if [ "HIVE_AUX_JARS_PATH" ]; then
+export HIVE_AUX_JARS_PATH=$f:$HIVE_AUX_JARS_PATH
+else
+export HIVE_AUX_JARS_PATH=$f
+fi
+done
+export EXTRA_JAVA_OPTS="-Djava.security.auth.login.config=/etc/${service.sid}/conf/kafka_client_jaas.conf"
+</#if>
+
+export HADOOP_HEAPSIZE=${service['hive.memory']}
+export INCEPTOR_SERVER_MEMORY=${service['hive.memory']}
 # TODO get executor memory from resource configuration
 <#if service['executor.container.limits.memory'] != "-1" && service['executor.memory.ratio'] != "-1">
   <#assign limitsMemory = service['executor.container.limits.memory']?number
