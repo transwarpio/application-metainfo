@@ -178,11 +178,11 @@ roleGroups:
           requestsCpuKey: journalnode.container.requests.cpu
         summaryPolicy: MAJOR
         autoAssign:
-        - advice: !<NumSeq> {"numSeq": [3]}
+        - advice: !<NumSeq> {"numSeq": [3, 1]}
         suggestion:
         - criteria: !<Range> {"min": 3}
         validation:
-        - criteria: !<Range> {"min": 3}
+        - criteria: !<Range> {"min": 1}
         operations:
           - type: Install
             directives:
