@@ -97,3 +97,23 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: tos.master.etcd.heartbeat.interval
+  recommendExpression: 250
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tos.master.etcd.election.timeout
+  recommendExpression: 1250
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

@@ -15,6 +15,8 @@ etcd:
   command:
     - etcd
     - --data-dir=/var/etcd/data
+    - --heartbeat-interval=${service['tos.master.etcd.heartbeat.interval']}
+    - --election-timeout=${service['tos.master.etcd.election.timeout']}
   volumes:
     - /var/etcd/data:/var/etcd/data
   environment:

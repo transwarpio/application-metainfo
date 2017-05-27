@@ -172,6 +172,8 @@ healthChecks:
 
 firstWizardConfigs:
 - tos.master.etcd.port
+- tos.master.etcd.election.timeout
+- tos.master.etcd.heartbeat.interval
 - tos.master.leader.elect.port
 - tos.master.apiserver.port
 - tos.master.apiserver.secure.port
