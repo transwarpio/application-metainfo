@@ -85,8 +85,6 @@ done
 export EXTRA_JAVA_OPTS="-Djava.security.auth.login.config=/etc/${service.sid}/conf/kafka_client_jaas.conf"
 </#if>
 
-export HADOOP_HEAPSIZE=${service['hive.memory']}
-export INCEPTOR_SERVER_MEMORY=${service['hive.memory']}
 # TODO get executor memory from resource configuration
 <#if service['executor.container.limits.memory'] != "-1" && service['executor.memory.ratio'] != "-1">
   <#assign limitsMemory = service['executor.container.limits.memory']?number
