@@ -204,6 +204,7 @@ pages:
 - configuration
 - operation
 - security
+- plugin
 
 principals:
 - HTTP

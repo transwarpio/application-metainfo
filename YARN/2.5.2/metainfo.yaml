@@ -55,14 +55,6 @@ roles:
         mode: "755"
   - type: Config
     directives:
-#    - directive: !<link>
-#        action: Link
-#        from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
-#        to: "/etc/${service.sid}/conf/hdfs-site.xml"
-#    - directive: !<link>
-#        action: Link
-#        from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
-#        to: "/etc/${service.sid}/conf/core-site.xml"
     - directive: !<resource>
         templateType: Raw
         templatePath: "hadoop-metrics2-resourcemanager.properties"
@@ -115,6 +107,14 @@ roles:
         templatePath: "hadoop-metrics2-nodemanager.properties"
         targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-nodemanager.properties"
         mode: "644"
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
+        to: "/etc/${service.sid}/conf/core-site.xml"
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
+        to: "/etc/${service.sid}/conf/hdfs-site.xml"
 - name: YARN_HISTORYSERVER
   friendlyName: "History Server"
   labelPrefix: "hadoop-yarn-historyserver"
@@ -171,14 +171,6 @@ roles:
         templatePath: "hadoop-metrics2-historyserver.properties"
         targetPath: "/etc/${service.sid}/conf/hadoop-metrics2-historyserver.properties"
         mode: "644"
-    - directive: !<link>
-        action: Link
-        from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
-        to: "/etc/${service.sid}/conf/core-site.xml"
-    - directive: !<link>
-        action: Link
-        from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
-        to: "/etc/${service.sid}/conf/hdfs-site.xml"
 - name: YARN_TIMELINESERVER
   friendlyName: "Timeline Server"
   labelPrefix: "hadoop-yarn-timelineserver"
@@ -300,6 +292,7 @@ pages:
 - operation
 - resource_management
 - security
+- plugin
 
 principals:
 - HTTP

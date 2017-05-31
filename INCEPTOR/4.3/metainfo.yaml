@@ -242,6 +242,7 @@ pages:
 - operation
 - resource_allocation
 - security
+- plugin
 
 principals:
 - HTTP
