@@ -89,6 +89,12 @@ pages:
 - roles
 - configuration
 - operation
+- security
+
+principals:
+- HTTP
+- httpfs
+- hue
 
 healthChecks:
 - category: DAEMON_CHECK

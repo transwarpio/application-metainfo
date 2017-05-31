@@ -69,6 +69,11 @@ pages:
 - roles
 - configuration
 - operation
+- security
+
+principals:
+- HTTP
+- sqoop2
 
 healthChecks:
 - category: DAEMON_CHECK

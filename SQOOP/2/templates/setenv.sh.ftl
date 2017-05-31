@@ -39,4 +39,12 @@ export CATALINA_TMPDIR=/var/transwarp/data/server/temp
 
 export YARN_LOG_DIR=/var/log/${dependencies.YARN.sid}
 
+export HADOOP_CONF_DIR=/etc/${dependencies.YARN.sid}/conf/
+
 export USER=yarn
+
+cp /etc/${service.sid}/conf/sqoop.properties /usr/lib/sqoop/server/conf/
+
+<#if service.auth == "kerberos">
+cp /etc/${service.sid}/conf/krb5.conf /etc
+</#if>

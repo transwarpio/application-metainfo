@@ -16,6 +16,22 @@
     <#assign yarn_sid=dependencies.YARN.sid>
     <@property "oozie.service.HadoopAccessorService.hadoop.configurations" "*=hadoop-conf"/>
     <@property "oozie.service.HadoopAccessorService.action.configurations" "*=action-conf"/>
+
+<#--Kerberos-->
+<#if service.auth = "kerberos">
+    <@property "local.realm" "${service.realm}"/>
+    <@property "oozie.service.HadoopAccessorService.kerberos.enabled" "true"/>
+    <@property "oozie.service.HadoopAccessorService.keytab.file" "${service.keytab}"/>
+    <@property "oozie.service.HadoopAccessorService.kerberos.principal" "oozie/${localhostname}@${service.realm}"/>
+
+    <@property "oozie.authentication.type" "${service.auth}"/>
+    <@property "oozie.server.authentication.type" "${service.auth}"/>
+    <@property "oozie.authentication.kerberos.principal" "HTTP/${localhostname}@${service.realm}"/>
+    <@property "oozie.authentication.kerberos.keytab" "${service.keytab}"/>
+
+    <@property "oozie.credentials.credentialclasses" "hcat=org.apache.oozie.action.hadoop.HCatCredentials,hbase=org.apache.oozie.action.hadoop.HbaseCredentials,hive2=org.apache.oozie.action.hadoop.Hive2Credentials"/>
+</#if>
+
 <#--Take properties from the context-->
 <#list service['oozie-site.xml'] as key, value>
     <@property key value/>

@@ -16,4 +16,12 @@
     <@property "httpfs.proxyuser.hdfs.hosts" "*"/>
     <@property "httpfs.proxyuser.hbase.groups" "*"/>
     <@property "httpfs.proxyuser.hbase.hosts" "*"/>
+    <#if service.auth = "kerberos" >
+    <@property "httpfs.authentication.type" "kerberos"/>
+    <@property "httpfs.hadoop.authentication.type" "kerberos"/>
+    <@property "httpfs.authentication.kerberos.principal" "HTTP/${localhostname?lower_case}@${service.realm}"/>
+    <@property "httpfs.authentication.kerberos.keytab" "${service.keytab}"/>
+    <@property "httpfs.hadoop.authentication.kerberos.principal" "httpfs/${localhostname?lower_case}@${service.realm}"/>
+    <@property "httpfs.hadoop.authentication.kerberos.keytab" "${service.keytab}"/>
+    </#if>
 </configuration>

@@ -100,3 +100,7 @@ export OOZIE_BASE_URL=${url}
 </#if>
 export HDFS_NAMESERVICE=${hdfs_nameservice}
 export RPC_PORT=${rpc_port}
+
+<#if service.auth == "kerberos">
+cp /etc/${service.sid}/conf/krb5.conf /etc
+</#if>

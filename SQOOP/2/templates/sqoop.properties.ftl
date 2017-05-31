@@ -137,7 +137,6 @@ org.apache.sqoop.submission.engine=org.apache.sqoop.submission.mapreduce.Mapredu
 # Hadoop configuration directory
 org.apache.sqoop.submission.engine.mapreduce.configuration.directory=/etc/${dependencies.YARN.sid}/conf/
 
-<#noparse>
 #
 # Execution engine configuration
 #
@@ -146,15 +145,14 @@ org.apache.sqoop.execution.engine=org.apache.sqoop.execution.mapreduce.Mapreduce
 #
 # Authentication configuration
 #
-<#if auth=="kerberos">
+<#if service.auth = "kerberos">
 org.apache.sqoop.authentication.type=KERBEROS
 org.apache.sqoop.authentication.handler=org.apache.sqoop.security.KerberosAuthenticationHandler
-org.apache.sqoop.authentication.kerberos.principal=sqoop2/${localhostname?lower_case}@${kerberos_realm}
-org.apache.sqoop.authentication.kerberos.keytab=/etc/${service.sid}/sqoop2.keytab
-org.apache.sqoop.authentication.kerberos.http.principal=HTTP/${localhostname?lower_case}@${kerberos_realm}
-org.apache.sqoop.authentication.kerberos.http.keytab=/etc/${service.sid}/sqoop2.keytab
+org.apache.sqoop.authentication.kerberos.principal=sqoop2/${localhostname?lower_case}@${service.realm}
+org.apache.sqoop.authentication.kerberos.keytab=${service.keytab}
+org.apache.sqoop.authentication.kerberos.http.principal=HTTP/${localhostname?lower_case}@${service.realm}
+org.apache.sqoop.authentication.kerberos.http.keytab=${service.keytab}
 <#else>
 org.apache.sqoop.authentication.type=SIMPLE
 org.apache.sqoop.authentication.handler=org.apache.sqoop.security.SimpleAuthenticationHandler
 </#if>
-</#noparse>

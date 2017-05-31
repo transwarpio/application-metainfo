@@ -96,6 +96,11 @@ pages:
 - roles
 - configuration
 - operation
+- security
+
+principals:
+- oozie
+- HTTP
 
 healthChecks:
 - category: DAEMON_CHECK

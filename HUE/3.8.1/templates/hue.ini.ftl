@@ -468,11 +468,11 @@
     ## hue_principal=hue/hostname.foo.com
     # Path to kinit
     ## kinit_path=/path/to/kinit
-<#--<#if service['auth']=="kerberos">-->
-    <#--hue_keytab=/etc/${service.sid}/hue.keytab-->
-    <#--hue_principal=hue/${localhostname?lower_case}@${kerberos_realm}-->
-    <#--kinit_path=/usr/bin/kinit-->
-<#--</#if>-->
+<#if service.auth = "kerberos">
+    hue_keytab=${service.keytab}
+    hue_principal=hue/${localhostname?lower_case}@${service.realm}
+    kinit_path=/usr/bin/kinit
+</#if>
 
 
   # Configuration options for using OAuthBackend (core) login
@@ -709,7 +709,7 @@
 
       # Change this if your HDFS cluster is Kerberos-secured
       ## security_enabled=false
-<#if dependencies.HDFS?? && dependencies.HDFS.auth?? && dependencies.HDFS.auth=="kerberos">
+<#if dependencies.HDFS?? && dependencies.HDFS.auth = "kerberos">
       security_enabled=true
 </#if>
 
@@ -746,7 +746,7 @@
 
       # Change this if your YARN cluster is Kerberos-secured
       ## security_enabled=false
-<#if dependencies.YARN?? && dependencies.YARN.auth?? && dependencies.YARN.auth=="kerberos">
+<#if dependencies.YARN?? && dependencies.YARN.auth ="kerberos">
       security_enabled=true
 </#if>
 
@@ -849,7 +849,7 @@
 
   # Requires FQDN in oozie_url if enabled
   ## security_enabled=false
-<#if dependencies.OOZIE?? && dependencies.OOZIE.auth?? && dependencies.OOZIE.auth=="kerberos">
+<#if dependencies.OOZIE?? && dependencies.OOZIE.auth = "kerberos">
   security_enabled=true
 </#if>
 
@@ -1003,7 +1003,7 @@
   server_url=http://${dependencies.SQOOP.roles.SQOOP[0]['hostname']}:${dependencies.SQOOP['sqoop.http.port']}/sqoop
 </#if>
 
-<#if dependencies.SQOOP?? && dependencies.SQOOP.auth?? && dependencies.SQOOP.auth == "kerberos">
+<#if dependencies.SQOOP?? && dependencies.SQOOP.auth = "kerberos">
     security_enabled=true
 </#if>
 
@@ -1055,7 +1055,7 @@
   # which is useful when used in conjunction with the nonblocking server in Thrift.
   ## thrift_transport=buffered
 
-<#if dependencies.HYPERBASE?? && dependencies.HYPERBASE.auth?? && dependencies.HYPERBASE.auth=="kerberos">
+<#if dependencies.HYPERBASE?? && dependencies.HYPERBASE.auth = "kerberos">
    mechanism=GSSAPI
 </#if>
 
