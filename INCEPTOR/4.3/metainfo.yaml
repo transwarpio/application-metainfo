@@ -40,7 +40,7 @@ dependencies:
     minVersion: 1.0-tdh50
     maxVersion: 1.0-tdh50
     optional: true
-    preferred: true
+    preferred: false
 user: hive
 roles:
 - name: INCEPTOR_METASTORE
