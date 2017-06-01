@@ -117,3 +117,23 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: tos.registry.ui.port
+  recommendExpression: 8081
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_REGISTRY]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tos.registry.port
+  recommendExpression: 5000
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_REGISTRY]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

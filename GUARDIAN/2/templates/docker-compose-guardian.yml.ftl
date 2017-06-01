@@ -1,6 +1,6 @@
 <#assign
-  registryServer=dependencies.REGISTRY.roles['REGISTRY_SERVER'][0].hostname
-  registryPort=dependencies.REGISTRY['registry.port']
+  registryServer=dependencies.TOS.roles['TOS_REGISTRY'][0].hostname
+  registryPort=dependencies.TOS['tos.registry.port']
   servers=service.roles.GUARDIAN_SERVER?sort_by("id")
   master=servers[0].hostname
 >

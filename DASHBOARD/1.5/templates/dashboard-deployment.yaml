@@ -1,7 +1,7 @@
 <#assign
-  registryServer=dependencies.REGISTRY.roles['REGISTRY_SERVER'][0].hostname
-  registryPort=dependencies.REGISTRY['registry.port']
   tosService=dependencies.TOS
+  registryServer=tosService.roles['TOS_REGISTRY'][0].hostname
+  registryPort=tosService['tos.registry.port']
 >
 kind: Deployment
 apiVersion: extensions/v1beta1

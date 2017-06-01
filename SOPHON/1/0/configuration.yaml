@@ -42,7 +42,7 @@
   visibility: READ_WRITE
 #dieu.conf
 - name: dieu.docker.image.name
-  recommendExpression: "${dependencies.REGISTRY.roles['REGISTRY_SERVER'][0].hostname}:${dependencies.REGISTRY['registry.port']}/transwarp/sophon-tensorflow:tdh500"
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-tensorflow:tdh500"
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
