@@ -91,7 +91,7 @@ org.apache.sqoop.repository.schema.immutable=false
 org.apache.sqoop.repository.jdbc.handler=org.apache.sqoop.repository.derby.DerbyRepositoryHandler
 org.apache.sqoop.repository.jdbc.transaction.isolation=READ_COMMITTED
 org.apache.sqoop.repository.jdbc.maximum.connections=10
-org.apache.sqoop.repository.jdbc.url=jdbc:derby:/var/lib/sqoop2/repository/db;create=true
+org.apache.sqoop.repository.jdbc.url=jdbc:derby:/var/transwarp/data/repository/db;create=true
 org.apache.sqoop.repository.jdbc.driver=org.apache.derby.jdbc.EmbeddedDriver
 org.apache.sqoop.repository.jdbc.user=sa
 org.apache.sqoop.repository.jdbc.password=
