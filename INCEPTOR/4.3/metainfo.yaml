@@ -159,6 +159,7 @@ roles:
     requestsCpuKey: executor.container.requests.cpu
   nodeSpecificMounts:
   - configKey: ngmr.localdir
+  - configKey: ngmr.fastdisk.dir
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}
