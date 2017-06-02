@@ -96,9 +96,6 @@ roles:
   - mountPath: /var/log/${service.sid}
     hostPath: /var/log/${service.sid}
     name: log
-  - mountPath: ${service['ngmr.fastdisk.dir']}/fastdisk
-    hostPath: ${service['ngmr.fastdisk.dir']}/fastdisk
-    name: fastdir
   resources:
     limitsMemoryKey: server.container.limits.memory
     limitsCpuKey: server.container.limits.cpu
