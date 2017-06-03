@@ -5,7 +5,7 @@
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
-    roleTypes: [GUARDIAN_SERVER]
+    roleTypes: [GUARDIAN_APACHEDS]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -15,7 +15,7 @@
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
-    roleTypes: [GUARDIAN_SERVER]
+    roleTypes: [GUARDIAN_APACHEDS]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -25,7 +25,7 @@
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
-    roleTypes: [GUARDIAN_SERVER]
+    roleTypes: [GUARDIAN_APACHEDS]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -34,6 +34,16 @@
   recommendExpression: 8380
   defaultValue: null
   valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.server.tls.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
   scope: !<RoleTypes>
     roleTypes: [GUARDIAN_SERVER]
   onDeps: []
