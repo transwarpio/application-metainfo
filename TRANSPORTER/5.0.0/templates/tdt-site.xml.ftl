@@ -35,7 +35,7 @@
     <@property "tdt.server.authentication.kerberos.principal" "tdt/${localhostname}@${service.realm}"/>
     <#else>
     <@property "tdt.server.authentication" "LDAP"/>
-    <@property "tdt.server.authentication.ldap.url" "ldap://" + dependencies.GUARDIAN.roles.GUARDIAN_SERVER?sort_by("id")[0].hostname + ":" + dependencies.GUARDIAN['guardian.apacheds.ldap.port']/>
+    <@property "tdt.server.authentication.ldap.url" "ldap://" + dependencies.GUARDIAN.roles.GUARDIAN_APACHEDS?sort_by("id")[0].hostname + ":" + dependencies.GUARDIAN['guardian.apacheds.ldap.port']/>
     <@property "tdt.server.authentication.ldap.baseDN" "ou=People,${service.domain}"/>
     </#if>
 <#else>

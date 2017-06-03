@@ -24,7 +24,11 @@
     </property>
     <property>
         <name>guardian.client.cache.enabled</name>
-        <value>false</value>
+        <value>true</value>
+    </property>
+    <property>
+        <name>guardian.server.tls.enabled</name>
+        <value>${guardian['guardian.server.tls.enabled']}</value>
     </property>
 </configuration>
 </#if>

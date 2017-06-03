@@ -69,7 +69,7 @@
 
 <#if service['hive.server2.enabled'] = "true" && service['hive.server2.authentication'] = "LDAP">
     <#assign  guardian=dependencies.GUARDIAN guardian_servers=[]>
-    <#list guardian.roles["GUARDIAN_SERVER"] as role>
+    <#list guardian.roles["GUARDIAN_APACHEDS"] as role>
         <#assign guardian_servers += [("ldap://" + role.hostname + ":" + guardian["guardian.apacheds.ldap.port"])]>
     </#list>
     <@property  "hive.server2.authentication.ldap.baseDN", "ou=People,${service.domain}"/>
