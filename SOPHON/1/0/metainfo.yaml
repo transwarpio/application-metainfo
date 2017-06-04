@@ -76,6 +76,11 @@ roles:
         templatePath: "log4j.properties"
         targetPath: "/etc/${service.sid}/conf/log4j.properties"
         mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "sophon-env.sh"
+        targetPath: "/etc/${service.sid}/conf/sophon-env.sh"
+        mode: "755"
 - name: SOPHON_REDIS
   dockerImage: "transwarp/sophon-redis:tdh500"
   friendlyName: "Sophon Redis"
