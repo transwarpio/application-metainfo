@@ -13,6 +13,7 @@ roles:
 - name: TRANSPEDIA_SERVER
   friendlyName: "Transpedia Server"
   labelPrefix: "transpedia-server"
+  linkExpression: "http://${service.roles.TRANSPEDIA_SERVER[0].hostname}:${service['transpedia.port']}"
   category: MASTER
   env:
   - name: TRANSPEDIA_HOST

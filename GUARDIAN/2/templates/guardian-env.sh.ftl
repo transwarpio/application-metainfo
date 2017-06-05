@@ -1,9 +1,4 @@
-<#assign
-registryServer=dependencies.REGISTRY.roles['REGISTRY_SERVER'][0].hostname
-registryPort=dependencies.REGISTRY['registry.port']
-servers=service.roles.GUARDIAN_APACHEDS?sort_by("id")
-master=servers[0].hostname
->
+<#assign servers=service.roles.GUARDIAN_APACHEDS?sort_by("id") master=servers[0].hostname>
 <#if (servers?size >1)>
 <#assign slaves=servers[1..(servers?size-1)] slaves_with_port=[]>
 <#list slaves as slave>
