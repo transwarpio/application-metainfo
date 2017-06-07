@@ -316,6 +316,29 @@ roles:
         script: "rm -f /opt/kubernetes/manifests-multi/tos-controller.manifest"
     - directive: !<shell>
         script: "rm -f /opt/kubernetes/manifests-multi/tos-scheduler.manifest"
+
+stages:
+  - type: Start
+    taskGroups:
+    - !<Role>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: TOS_SLAVE
+      operation: Start
+    - !<Role>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: TOS_REGISTRY
+      operation: Start
+    - !<Role>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: TOS_MASTER
+      operation: Start
+    - !<Wait-Healthy>
+      summaryPolicy: ALL
+      timeoutMinutes: 5
+
 product: TOS
 
 healthChecks:
