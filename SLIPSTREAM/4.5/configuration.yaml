@@ -834,3 +834,22 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: EXTRA_DRIVER_OPTS
+  recommendExpression: ""
+  defaultValue: ""
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["ngmr-env.sh"]
+  visibility: READ_WRITE
+
+- name: EXTRA_EXECUTOR_OPTS
+  recommendExpression: ""
+  defaultValue: ""
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["ngmr-env.sh"]
+  visibility: READ_WRITE
+
