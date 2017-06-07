@@ -351,7 +351,7 @@ healthChecks:
       TOS_REGISTRY:
         DockerPs: ["/entrypoint.sh", "/root/start-apache"]
       TOS_SLAVE:
-        Systemctl: ["kubelet", "haproxy"]
+        Systemctl: ["kubelet", "haproxy", "docker"]
 - category: VITAL_SIGN_CHECK
   intervalSeconds: 10
   method: !<Builtin> {}
