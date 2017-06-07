@@ -258,11 +258,6 @@ roleGroups:
             - directive: !<mkdirs>
                 paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
                 mode: "755"
-            - directive: !<resource>
-                templateType: FreeMarker
-                templatePath: "exclude-list.txt"
-                targetPath: "/etc/${service.sid}/conf/exclude-list.txt"
-                mode: "755"
 
     others:
     - key: mountPoints
