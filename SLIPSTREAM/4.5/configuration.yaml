@@ -142,8 +142,8 @@
   visibility: READ_WRITE
 
 - name: hive.aux.jars.path
-  recommendExpression: file:///usr/lib/hive/lib/hive-hbase-handler.jar,file:///usr/lib/hbase/hbase-bson.jar,file:///usr/lib/hbase/hbase-client.jar,file:///usr/lib/hbase/hbase-common.jar,file:///usr/lib/hbase/hbase-examples.jar,file:///usr/lib/hbase/hbase-hadoop2-compat.jar,file:///usr/lib/hbase/hbase-hadoop-compat.jar,file:///usr/lib/hbase/hbase-hyperbase.jar,file:///usr/lib/hbase/hbase-it.jar,file:///usr/lib/hbase/hbase-prefix-tree.jar,file:///usr/lib/hbase/hbase-protocol.jar,file:///usr/lib/hbase/hbase-server.jar,file:///usr/lib/hbase/hbase-shell.jar,file:///usr/lib/hbase/hbase-testing-util.jar,file:///usr/lib/hbase/hbase-thrift.jar,file:///usr/lib/hbase/chronos-client.jar,file:///usr/lib/hbase/chronos-server.jar,file:///usr/lib/hbase/transaction-client.jar,file:///usr/lib/hbase/transaction-coprocessor.jar,file:///usr/lib/zookeeper/zookeeper.jar,file:///usr/lib/hbase/lib/protobuf-java-2.5.0.jar,file:///usr/lib/hive/lib/kryo-2.21.jar
-  defaultValue: null
+  recommendExpression: ""
+  defaultValue: ""
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
@@ -321,69 +321,6 @@
   groups: []
   visibility: READ_WRITE
 
-- name: inceptor.yarn.master.memory
-  recommendExpression: 512
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: inceptor.yarn.executor.memory
-  recommendExpression: 1569
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: inceptor.yarn.executor.cores
-  recommendExpression: 3
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: inceptor.yarn.number.executors
-  recommendExpression: -1
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: inceptor.yarn.number.workers
-  recommendExpression: -1
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: inceptor.yarn.scheduler.mode
-  recommendExpression: GreedyMode
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: spark.yarn.queue
-  recommendExpression: default
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
 - name: inceptor.ui.port
   recommendExpression: 4044
   defaultValue: null
@@ -474,24 +411,6 @@
   recommendExpression: 3306
   defaultValue: null
   valueType: PORT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-#
-#- name: hive.cores
-#  recommendExpression: 2
-#  defaultValue: null
-#  valueType: NON_NEG_INT
-#  scope: !<ServiceLevel> {}
-#  onDeps: []
-#  groups: []
-#  visibility: READ_WRITE
-
-- name: inceptor.ngmr.yarn
-  recommendExpression: false
-  defaultValue: null
-  valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
