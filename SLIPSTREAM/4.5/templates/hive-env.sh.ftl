@@ -61,17 +61,16 @@ fi
 done
 </#if>
 
-
 <#if service['server.container.limits.memory'] != "-1" && service['server.memory.ratio'] != "-1">
-    <#assign limitsMemory = service['server.container.limits.memory']?number
+  <#assign limitsMemory = service['server.container.limits.memory']?number
     memoryRatio = service['server.memory.ratio']?number
     serverMemory = limitsMemory * memoryRatio * 1024>
 <#else>
-    <#if service[.data_model["localhostname"]]['inceptor.server.memory']??>
-        <#assign serverMemory=service[.data_model["localhostname"]]['inceptor.server.memory']?trim?number>
-    <#else>
-        <#assign serverMemory=8192>
-    </#if>
+  <#if service[.data_model["localhostname"]]['inceptor.server.memory']??>
+    <#assign serverMemory=service[.data_model["localhostname"]]['inceptor.server.memory']?trim?number>
+  <#else>
+    <#assign serverMemory=8192>
+  </#if>
 </#if>
 export INCEPTOR_SERVER_MEMORY=${serverMemory?floor}
 
@@ -108,12 +107,13 @@ export SPARK_CORES=${sparkCores}
   <#if service[.data_model["localhostname"]]['inceptor.metastore.memory']??>
     <#assign metastoreMemory=service[.data_model["localhostname"]]['inceptor.metastore.memory']?trim?number>
   <#else>
-    <#assign metastoreMemory=32000>
+    <#assign metastoreMemory=8192>
   </#if>
 </#if>
 export INCEPTOR_METASTORE_MEMORY=${metastoreMemory?floor}
 
 export HIVE_PORT=${service['hive.server2.thrift.port']}
+
 export HADOOP_CONF_DIR=/etc/${dependencies.HDFS.sid}/conf:/etc/${dependencies.YARN.sid}/conf
 <#if dependencies.HYPERBASE??>
 export HBASE_CONF_DIR=/etc/${dependencies.HYPERBASE.sid}/conf
@@ -141,7 +141,7 @@ export TRANSWARP_ZOOKEEPER_PORT=${dependencies.ZOOKEEPER[.data_model["localhostn
 <#assign hostPorts = []>
 <#assign txsql = dependencies['TXSQL']>
 <#list txsql.roles['TXSQL_SERVER'] as r>
-    <#assign hostPorts = hostPorts + [r.hostname + ':' + txsql['mysql.rw.port']]>
+  <#assign hostPorts = hostPorts + [r.hostname + ':' + txsql['mysql.rw.port']]>
 </#list>
 export MYSQL_SERVER_PORT=${hostPorts?join(",")}
 export JAVAX_JDO_OPTION_CONNECTIONURL=jdbc:mysql://${hostPorts?join(",")}/metastore_${service.sid}
@@ -152,6 +152,12 @@ export SPARK_DRIVER_ADDR=${service.roles.INCEPTOR_SERVER[0]['hostname']}
 export EXECUTOR_ID_PATH=/${service.sid}/executorID
 export METASTORE_ID=metastore_${service.sid}
 
+# security environment
 <#if service.auth = "kerberos">
-    cp /etc/${service.sid}/conf/krb5.conf /etc
+export KRB_ENABLE=true
+export EXECUTOR_PRINCIPAL=hive/_HOST@${service.realm}
+export EXECUTOR_KEYTAB=/etc/${service.sid}/conf/slipstream.keytab
+cp /etc/${service.sid}/conf/krb5.conf /etc
+<#else>
+export KRB_ENABLE=false
 </#if>

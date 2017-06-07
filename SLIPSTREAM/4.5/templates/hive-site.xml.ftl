@@ -26,6 +26,8 @@
     <@property "hive.metastore.sasl.enabled" "true"/>
     <@property "hive.metastore.kerberos.keytab.file" service.keytab/>
     <@property "hive.metastore.kerberos.principal" "hive/_HOST@" + service.realm/>
+    <@property "yarn.resourcemanager.principal" "yarn/_HOST@" + service.realm/>
+    <@property "transwarp.docker.inceptor" service.roles.INCEPTOR_SERVER[0]['hostname'] + ':' + service['hive.server2.thrift.port']/>
     <#if service['hive.server2.authentication'] != "LDAP">
     <@property "hive.server2.authentication" "KERBEROS"/>
     <#else>
@@ -41,6 +43,7 @@
     <@property "hive.security.authorization.manager" "io.transwarp.guardian.plugins.inceptor.GuardianHiveAuthorizerFactory"/>
     <@property "hive.service.id" service.sid/>
     <@property "hive.metastore.event.listeners" "io.transwarp.guardian.plugins.inceptor.GuardianMetaStoreListener"/>
+    <@property "spark.guardian.enabled" "true"/>
     </#if>
     </#if>
 <#else>
@@ -52,8 +55,12 @@
 </#if>
 
 <#if service['hive.server2.enabled'] = "true" && service['hive.server2.authentication'] = "LDAP">
-    <@property  "hive.server2.authentication.ldap.baseDN", "ou=People,dc=tdh"/>
-    <@property  "hive.server2.authentication.ldap.url" "ldap://localhost"/>
+    <#assign  guardian=dependencies.GUARDIAN guardian_servers=[]>
+    <#list guardian.roles["GUARDIAN_APACHEDS"] as role>
+        <#assign guardian_servers += [("ldap://" + role.hostname + ":" + guardian["guardian.apacheds.ldap.port"])]>
+    </#list>
+    <@property  "hive.server2.authentication.ldap.baseDN", "ou=People,${service.domain}"/>
+    <@property  "hive.server2.authentication.ldap.url" "${guardian_servers?join(' ')}"/>
     <@property  "hive.server2.enable.doAs" "false"/>
     <@property  "hive.security.authorization.enabled" "true"/>
     <@property  "hive.security.authorization.manager" "org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd.SQLStdHiveAuthorizerFactory"/>
@@ -93,7 +100,7 @@
     <@property "hbase.regionserver.kerberos.principal" "hbase/_HOST@${service.realm}"/>
     <@property "hbase.master.kerberos.principal" "hbase/_HOST@${service.realm}"/>
     <@property "hbase.security.authentication" "kerberos"/>
-</#if>
+    </#if>
     <#if dependencies.SEARCH??>
     <#assign master_nodes=[] master_node_count=0>
     <#list dependencies.SEARCH.roles.SEARCH_SERVER as server>
@@ -105,7 +112,7 @@
     <@property "discovery.zen.ping.unicast.hosts" "${master_nodes?join(',')}"/>
     <@property "discovery.zen.ping.multicast.enabled" "${dependencies.SEARCH['discovery.zen.ping.multicast.enabled']}"/>
     <@property "cluster.name" "${dependencies.SEARCH['cluster.name']}"/>
-</#if>
+    </#if>
 
 <#--Take properties from the context-->
 <#list service['hive-site.xml'] as key, value>

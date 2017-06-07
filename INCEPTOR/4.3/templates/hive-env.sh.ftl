@@ -118,7 +118,7 @@ export SPARK_CORES=${sparkCores}
   <#if service[.data_model["localhostname"]]['inceptor.metastore.memory']??>
     <#assign metastoreMemory=service[.data_model["localhostname"]]['inceptor.metastore.memory']?trim?number>
   <#else>
-    <#assign metastoreMemory=4096>
+    <#assign metastoreMemory=8192>
   </#if>
 </#if>
 export INCEPTOR_METASTORE_MEMORY=${metastoreMemory?floor}
