@@ -68,7 +68,7 @@
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
-  visibility: READ_WRITE
+  visibility: PASSWORD
 
 - name: hue.ldap.user.name.attribute
   recommendExpression: uid
@@ -86,7 +86,7 @@
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
-  visibility: READ_WRITE
+  visibility: PASSWORD
 
 - name: hue.container.limits.memory
   recommendExpression: -1

@@ -288,7 +288,7 @@
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: ["zeppelin-site.xml"]
-  visibility: READ_WRITE
+  visibility: PASSWORD
 
 - name: zeppelin.ssl.truststore.path
   recommendExpression: truststore

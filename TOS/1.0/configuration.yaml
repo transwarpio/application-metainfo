@@ -96,7 +96,7 @@
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
-  visibility: READ_WRITE
+  visibility: PASSWORD
 
 - name: tos.master.etcd.heartbeat.interval
   recommendExpression: 250
