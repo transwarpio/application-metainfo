@@ -163,6 +163,17 @@ roles:
         targetPath: "/etc/${service.sid}/conf/jmxremote.passwd"
         mode: "600"
 
+stages:
+  - type: Bootstrap
+    taskGroups:
+    - !<Create-Dir-in-HDFS>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      dirs: ["/${service.sid}"]
+      user: "hbase"
+      group: "hbase"
+      mod: 711
+
 product: Hyperbase
 
 firstWizardConfigs:

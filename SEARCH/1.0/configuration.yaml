@@ -20,7 +20,14 @@
   visibility: READ_WRITE
 
 - name: node.master
-  recommendExpression: true
+  recommendExpression: |
+    <#compress>
+    <#assign servers=service.roles.SEARCH_SERVER?sort_by("id") hosts=[]>
+    <#list servers as server>
+      <#assign hosts+=[(server.hostname)]>
+    </#list>
+    <#if (hosts?seq_index_of(localhostname)<3)>true<#else>false</#if>
+    </#compress>
   defaultValue: null
   valueType: BOOL
   isNodeSpecific: true
