@@ -78,7 +78,7 @@ path.data: ${service['path.data']}
 #
 gateway.recover_after_nodes: ${(server_count/2 +1)?int}
 gateway.recover_after_data_nodes: ${(server_count/2 +1)?int}
-gateway.recover_after_master_nodes: ${master_node_count}
+gateway.recover_after_master_nodes: ${(master_node_count/2 +1)?int}
 gateway.expected_nodes: ${server_count}
 gateway.expected_data_nodes: ${server_count}
 gateway.expected_master_nodes: ${master_node_count}

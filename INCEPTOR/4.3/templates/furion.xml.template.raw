@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <root weight="100">
-  <default weight="1">
+  <default weight="1" />
   <system weight="1">
   <adhoc weight="60" rsvCPURatio="0" scheduler="FAIR">
     <adhoc1 weight="50"/>
