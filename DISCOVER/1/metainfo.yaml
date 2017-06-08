@@ -24,7 +24,7 @@ roles:
   dockerImage: "transwarp/rstudio:tdh500"
   linkExpression: "http://${localhostname}:8787/"
   category: MASTER
-  frontendOperations: ["Start", "Stop", "Delete"]
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
   - name: DISCOVER_CONF_DIR
     value: /etc/${service.sid}/conf
@@ -83,6 +83,7 @@ roles:
   labelPrefix: "discover-notebook"
   dockerImage: "transwarp/notebook:tdh500"
   category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   linkExpression: "http://${localhostname}:${service['zeppelin.server.port']}/"
   env:
   - name: DISCOVER_CONF_DIR
