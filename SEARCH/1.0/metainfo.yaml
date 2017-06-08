@@ -11,6 +11,7 @@ roles:
   friendlyName: "Search Server"
   labelPrefix: "search-server"
   category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
   - name: LOG_DIR
     value: /var/log/${service.sid}
