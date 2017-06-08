@@ -161,6 +161,15 @@ roles:
         mode: "755"
 
 stages:
+  - type: Bootstrap
+    taskGroups:
+    - !<Create-Dir-in-HDFS>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      dirs: ["/${service.sid}"]
+      user: "hive"
+      group: "hive"
+      mod: 711
   - type: Config
     taskGroups:
     - !<Create-Database>

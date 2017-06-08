@@ -101,7 +101,6 @@
     </#if>
     <@property "dfs.journalnode.edits.dir" "/hadoop/journal"/>
     <@property "dfs.client.socket-timeout" "120000"/>
-    <@property "dfs.permissions" "false"/>
 <#--Take properties from the context-->
 <#list service['hdfs-site.xml'] as key, value>
     <@property key value/>

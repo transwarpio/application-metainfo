@@ -68,7 +68,7 @@
 </#if>
 </#if>
 <#--hadoop.proxyuser.[hive, hue, httpfs, oozie].[hosts,groups]-->
-<#assign services=["hbase","hive", "hue", "httpfs", "oozie"]>
+<#assign services=["hbase","hive", "hue", "httpfs", "oozie", "guardian"]>
 <#list services as s>
     <@property "hadoop.proxyuser." + s + ".hosts" "*"/>
     <@property "hadoop.proxyuser." + s + ".groups" "*"/>
@@ -78,7 +78,6 @@
 <@property "hadoop.proxyuser." + user + ".groups" "*"/>
 <@property "net.topology.node.switch.mapping.impl" "org.apache.hadoop.net.ScriptBasedMapping"/>
 <@property "net.topology.script.file.name" "/usr/lib/transwarp/scripts/rack_map.sh"/>
-<@property "hadoop.security.group.mapping" "org.apache.hadoop.security.ShellBasedUnixGroupsMapping"/>
 <#--Take properties from the context-->
 <#list service['core-site.xml'] as key, value>
     <@property key value/>
