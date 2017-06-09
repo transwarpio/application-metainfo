@@ -13,6 +13,8 @@ spec:
     - name: tos-apiserver-${service.sid}
       image: transwarp/hyperkube:tdh500
       imagePullPolicy: IfNotPresent
+      securityContext:
+        privileged: true
       command:
         - boot.sh
         - apiserver

@@ -11,6 +11,8 @@ spec:
   - name: tos-registryui-${service.sid}
     image: transwarp/registryui:tdh500
     imagePullPolicy: IfNotPresent
+    securityContext:
+      privileged: true
     args:
     - /root/start-apache.sh
     env:

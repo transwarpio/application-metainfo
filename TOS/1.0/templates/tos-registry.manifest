@@ -10,6 +10,8 @@ spec:
   - name: tos-registry-${service.sid}
     image: transwarp/registry:tdh500
     imagePullPolicy: IfNotPresent
+    securityContext:
+      privileged: true
     env:
     - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
       value: /var/lib/registry

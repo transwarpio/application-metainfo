@@ -13,6 +13,8 @@ spec:
     - name: tos-etcd-${service.sid}
       image: transwarp/etcd:tdh500
       imagePullPolicy: IfNotPresent
+      securityContext:
+        privileged: true
       command:
       - etcd
       - --data-dir=/var/etcd/data
