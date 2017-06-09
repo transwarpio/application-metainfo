@@ -55,7 +55,7 @@
     <@property "hadoop.http.authentication.kerberos.principal" principal/>
     <@property "hadoop.http.authentication.kerberos.keytab" "/etc/"+ fsid + "/conf/hdfs.keytab"/>
     <@property "hadoop.http.authentication.signature.secret.file" "/etc/hadoop-http-auth-signature-secret"/>
-<#if service.plugins?seq_contains("guarndian")>
+<#if service.plugins?seq_contains("guardian")>
     <@property "hadoop.security.group.mapping" "org.apache.hadoop.security.LdapGroupsMapping"/>
     <@property "hadoop.security.group.mapping.ldap.bind.user" "cn=manager,dc=tdh"/>
     <@property "hadoop.security.group.mapping.ldap.bind.password.file" "/etc/hadoop/conf/ldap-conn-pass.txt"/>
