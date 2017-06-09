@@ -10,6 +10,7 @@
 <configuration>
 		<@property "guardian.server.ldap.type" "APACHEDS" />
 		<@property "guardian.server.kerberos.principal" "guardian/guardian" />
+		<@property "guardian.server.kerberos.password" "${service['guardian.server.kerberos.password']}" />
 		<@property "guardian.server.kerberos.keytab" "/etc/guardian/conf/guardian.keytab" />
 		<@property "guardian.server.war.location" "/usr/lib/guardian/webui/guardian-server.war" />
 		<@property "guardian.server.db.location" "/var/lib/guardian/guardian.db" />

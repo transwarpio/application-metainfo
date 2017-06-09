@@ -57,11 +57,11 @@
     <@property "hadoop.http.authentication.signature.secret.file" "/etc/hadoop-http-auth-signature-secret"/>
 <#if service.plugins?seq_contains("guardian")>
     <@property "hadoop.security.group.mapping" "org.apache.hadoop.security.LdapGroupsMapping"/>
-    <@property "hadoop.security.group.mapping.ldap.bind.user" "cn=manager,dc=tdh"/>
-    <@property "hadoop.security.group.mapping.ldap.bind.password.file" "/etc/hadoop/conf/ldap-conn-pass.txt"/>
+    <@property "hadoop.security.group.mapping.ldap.bind.user" "uid=admin,ou=system"/>
+    <@property "hadoop.security.group.mapping.ldap.bind.password.file" "/etc/${service.sid}/conf/ldap-conn-pass.txt"/>
     <@property "hadoop.security.group.mapping.ldap.url" "ldap://${service.kdc.hostname}:${dependencies.GUARDIAN['guardian.apacheds.ldap.port']}"/>
-    <@property "hadoop.security.group.mapping.ldap.base" "dc=tdh"/>
-    <@property "hadoop.security.group.mapping.ldap.search.filter.user" "(&(objectClass=inetOrgPerson)(uid={0}))"/>
+    <@property "hadoop.security.group.mapping.ldap.base" "${dependencies.GUARDIAN['guardian.ds.domain']}"/>
+    <@property "hadoop.security.group.mapping.ldap.search.filter.user" "(&amp;(objectClass=inetOrgPerson)(uid={0}))"/>
     <@property "hadoop.security.group.mapping.ldap.search.filter.group" "(objectClass=configGroup)"/>
     <@property "hadoop.security.group.mapping.ldap.search.attr.member" "member"/>
     <@property "hadoop.security.group.mapping.ldap.search.attr.group.name" "cn"/>
