@@ -138,7 +138,10 @@ roles:
   - criteria: !<Range> {"min": 1}
   operations:
   - type: Install
-    directives: []
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf"]
+        mode: "755"
   - type: Config
     directives:
     - directive: !<resource>
