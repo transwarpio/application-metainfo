@@ -5,6 +5,7 @@ designer.authentication.enableguardian=${(service.auth == "kerberos")?c}
 connectionpool.expiretime=${service['connectionpool.expiretime']}
 #max group size
 cube.group.max.size=${service['cube.group.max.size']}
+cube.group.optimize=${service['cube.group.optimize']}
 #max size of sub tasks executing concurrently in one task
 subtask.execute.max.size=${service['subtask.execute.max.size']}
 #cube parser
@@ -18,6 +19,7 @@ service.rest.sleep.interval.ms=${service['service.rest.sleep.interval.ms']}
 service.rest.retries=${service['service.rest.retries']}
 service.rest.readTimeoutMSecs=${service['service.rest.readTimeoutMSecs']}
 service.rest.connectTimeoutMSecs=${service['service.rest.connectTimeoutMSecs']}
+service.checker.sleep.interval.min=${service['service.checker.sleep.interval.min']}
 <#assign license_servers=[]>
 <#list dependencies.LICENSE_SERVICE.roles.LICENSE_NODE as server>
     <#assign license_servers += [(server.hostname + ":" + dependencies.LICENSE_SERVICE[server.hostname]["zookeeper.client.port"])]>
