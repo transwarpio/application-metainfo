@@ -20,3 +20,6 @@ export GUARDIAN_DS_HA_ENABLED=false
 export GUARDIAN_DS_HA_MASTER_HOST=${master}
 export GUARDIAN_DS_HA_MASTER_PORT=${service['guardian.apacheds.ldap.port']}
 </#if>
+
+export GUARDIAN_LOG_DIR=/var/log/${service.sid}
+export GUARDIAN_SERVER_KEY_STORE=/srv/guardian/server.keystore

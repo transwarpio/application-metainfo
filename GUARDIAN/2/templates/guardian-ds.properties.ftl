@@ -6,7 +6,7 @@
 	</#list>
 </#if>
 
-guardian.ds.database.dir=/var/lib/guardian-apacheds/data
+guardian.ds.database.dir=${service['guardian.apacheds.data.dir']}
 guardian.ds.domain=${service['guardian.ds.domain']}
 guardian.ds.linux.id.start=5000
 guardian.ds.ldap.host=localhost
