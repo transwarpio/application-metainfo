@@ -22,13 +22,9 @@
 </#if>
 
 <#-- handle the kerberos-->
+<#assign  authentication="NONE">
 <#if service.auth == "kerberos">
-  <#if service['hive.server2.authentication'] != "LDAP">
-    <@property "hive.server2.authentication" "KERBEROS"/>
-  <#else>
-    <@property "hive.server2.authentication" "CUSTOM"/>
-    <@property "hive.server2.custom.authentication.class" "io.transwarp.guardian.plugins.inceptor.GuardianLdapAuthProviderImpl"/>
-  </#if>
+    <#assign  authentication="KERBEROS">
     <@property "hive.metastore.sasl.enabled" "true"/>
     <@property "hive.metastore.kerberos.keytab.file" service.keytab/>
     <@property "hive.metastore.kerberos.principal" "hive/_HOST@" + service.realm/>
@@ -36,6 +32,19 @@
     <@property "transwarp.docker.inceptor" service.roles.INCEPTOR_SERVER[0]['hostname'] + ':' + service['hive.server2.thrift.port']/>
     <@property "hive.server2.authentication.kerberos.principal"  "hive/_HOST@" + service.realm/>
     <@property "hive.server2.authentication.kerberos.keytab" service.keytab/>
+</#if>
+<#if service['hive.server2.authentication'] == "LDAP">
+    <#assign  authentication="CUSTOM">
+    <#assign  guardian=dependencies.GUARDIAN guardian_servers=[]>
+    <#list guardian.roles["GUARDIAN_APACHEDS"] as role>
+        <#assign guardian_servers += [("ldap://" + role.hostname + ":" + guardian["guardian.apacheds.ldap.port"])]>
+    </#list>
+    <@property "hive.server2.custom.authentication.class" "io.transwarp.guardian.plugins.inceptor.GuardianLdapAuthProviderImpl"/>
+    <@property "hive.server2.authentication.ldap.baseDN", "ou=People,${service.domain}"/>
+    <@property "hive.server2.authentication.ldap.url" "${guardian_servers?join(' ')}"/>
+</#if>
+<#if authentication == "KERBEROS" || authentication ==  "CUSTOM">
+    <@property "hive.server2.authentication" authentication/>
     <@property "hive.security.authenticator.manager" "org.apache.hadoop.hive.ql.security.SessionStateUserAuthenticator"/>
     <@property "hive.security.authorization.enabled" "true"/>
   <#if service.plugins?seq_contains("guardian")>
@@ -44,26 +53,6 @@
     <@property "hive.metastore.event.listeners" "io.transwarp.guardian.plugins.inceptor.GuardianMetaStoreListener"/>
   <#else>
     <@property "hive.security.authorization.manager" "org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd.SQLStdHiveAuthorizerFactory"/>
-  </#if>
-<#else>
-  <#if service['hive.server2.authentication'] = "LDAP">
-    <#assign  guardian=dependencies.GUARDIAN guardian_servers=[]>
-    <#list guardian.roles["GUARDIAN_APACHEDS"] as role>
-        <#assign guardian_servers += [("ldap://" + role.hostname + ":" + guardian["guardian.apacheds.ldap.port"])]>
-    </#list>
-    <@property "hive.server2.authentication" "CUSTOM"/>
-    <@property "hive.server2.custom.authentication.class" "io.transwarp.guardian.plugins.inceptor.GuardianLdapAuthProviderImpl"/>
-    <@property "hive.server2.authentication.ldap.baseDN", "ou=People,${service.domain}"/>
-    <@property "hive.server2.authentication.ldap.url" "${guardian_servers?join(' ')}"/>
-    <@property "hive.security.authorization.enabled" "true"/>
-    <@property "hive.security.authenticator.manager" "org.apache.hadoop.hive.ql.security.SessionStateUserAuthenticator"/>
-    <#if service.plugins?seq_contains("guardian")>
-    <@property "hive.security.authorization.manager" "io.transwarp.guardian.plugins.inceptor.GuardianHiveAuthorizerFactory"/>
-    <@property "hive.service.id" service.sid/>
-    <@property "hive.metastore.event.listeners" "io.transwarp.guardian.plugins.inceptor.GuardianMetaStoreListener"/>
-    <#else>
-    <@property "hive.security.authorization.manager" "org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd.SQLStdHiveAuthorizerFactory"/>
-    </#if>
   </#if>
 </#if>
 
