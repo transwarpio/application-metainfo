@@ -54,7 +54,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf/spark", "/var/log/${service.sid}", "/var/run/${service.sid}"]
+        paths: ["/etc/${service.sid}/conf/spark", "/etc/${service.sid}/conf/notebook", "/var/log/${service.sid}", "/var/run/${service.sid}", "service['rstudio.home.dir']"]
         mode: "755"
   - type: Config
     directives:
@@ -78,6 +78,21 @@ roles:
         templatePath: "guardian-site.xml"
         targetPath: "/etc/${service.sid}/conf/spark/guardian-site.xml"
         mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "zeppelin-env.sh"
+        targetPath: "/etc/${service.sid}/conf/notebook/zeppelin-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "zeppelin-site.xml"
+        targetPath: "/etc/${service.sid}/conf/notebook/zeppelin-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "shiro.ini"
+        targetPath: "/etc/${service.sid}/conf/notebook/shiro.ini"
+        mode: "755"
 - name: DISCOVER_NOTEBOOK
   friendlyName: "Discover Notebook"
   labelPrefix: "discover-notebook"
@@ -98,6 +113,9 @@ roles:
   - mountPath: ${service['zeppelin.notebook.dir']}
     hostPath: ${service['zeppelin.notebook.dir']}
     name: data
+  - mountPath: /home
+    hostPath: ${service['rstudio.home.dir']}
+    name: home
   resources:
     limitsMemoryKey: notebook.container.limits.memory
     limitsCpuKey: notebook.container.limits.cpu
@@ -114,10 +132,30 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf/notebook", "/var/log/${service.sid}", "${service['zeppelin.notebook.dir']}}"]
+        paths: ["/etc/${service.sid}/conf/spark", "/etc/${service.sid}/conf/notebook", "/var/log/${service.sid}", "${service['zeppelin.notebook.dir']}}", "service['rstudio.home.dir']"]
         mode: "755"
   - type: Config
     directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "discover-context-env.properties"
+        targetPath: "/etc/${service.sid}/conf/spark/discover-context-env.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "spark-defaults.conf"
+        targetPath: "/etc/${service.sid}/conf/spark/spark-defaults.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "spark-env.sh"
+        targetPath: "/etc/${service.sid}/conf/spark/spark-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "guardian-site.xml"
+        targetPath: "/etc/${service.sid}/conf/spark/guardian-site.xml"
+        mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "zeppelin-env.sh"
@@ -155,7 +193,12 @@ roles:
   - criteria: !<Range> {"min": 1}
   validation:
   - criteria: !<Range> {"min": 1}
-  operations: []
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf/"]
+        mode: "755"
 
 product: Discover
 
@@ -186,9 +229,6 @@ pages:
 - operation
 - resource_allocation_discover
 - security
-
-principals:
-- discover
 
 healthChecks:
 - category: DAEMON_CHECK
