@@ -21,6 +21,7 @@
 		<@property "guardian.server.tls.enabled" "${service['guardian.server.tls.enabled']}" />
 		<@property "guardian.server.key.store" "/srv/guardian/server.keystore" />
 		<@property "guardian.server.key.store.pw" "changeit" />
+		<@property "guardian.allow.read.everything" "true"/>
 </configuration>
 
 
