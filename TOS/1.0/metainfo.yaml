@@ -157,7 +157,7 @@ roles:
 - name: TOS_REGISTRY
   friendlyName: "TOS Registry"
   linkExpression: "http://${localhostname}:${service['tos.registry.ui.port']}/"
-  category: SLAVE
+  category: MASTER
   frontendOperations: ["Start", "Stop"]
   summaryPolicy: SOME
   autoAssign:
