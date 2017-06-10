@@ -23,62 +23,67 @@
 
 <#-- handle the kerberos-->
 <#if service.auth == "kerberos">
+  <#if service['hive.server2.authentication'] != "LDAP">
+    <@property "hive.server2.authentication" "KERBEROS"/>
+  <#else>
+    <@property "hive.server2.authentication" "CUSTOM"/>
+    <@property "hive.server2.custom.authentication.class" "io.transwarp.guardian.plugins.inceptor.GuardianLdapAuthProviderImpl"/>
+  </#if>
     <@property "hive.metastore.sasl.enabled" "true"/>
     <@property "hive.metastore.kerberos.keytab.file" service.keytab/>
     <@property "hive.metastore.kerberos.principal" "hive/_HOST@" + service.realm/>
     <@property "yarn.resourcemanager.principal" "yarn/_HOST@" + service.realm/>
     <@property "transwarp.docker.inceptor" service.roles.INCEPTOR_SERVER[0]['hostname'] + ':' + service['hive.server2.thrift.port']/>
-    <#if service['hive.server2.authentication'] != "LDAP">
-    <@property "hive.server2.authentication" "KERBEROS"/>
-    <#else>
-    <@property "hive.server2.authentication" "LDAP"/>
-    </#if>
     <@property "hive.server2.authentication.kerberos.principal"  "hive/_HOST@" + service.realm/>
     <@property "hive.server2.authentication.kerberos.keytab" service.keytab/>
-    <#if service['hive.server2.enabled'] == "true">
-    <@property "hive.security.authorization.manager" "org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd.SQLStdHiveAuthorizerFactory"/>
     <@property "hive.security.authenticator.manager" "org.apache.hadoop.hive.ql.security.SessionStateUserAuthenticator"/>
     <@property "hive.security.authorization.enabled" "true"/>
-    <#if service.plugins?seq_contains("guardian")>
+  <#if service.plugins?seq_contains("guardian")>
     <@property "hive.security.authorization.manager" "io.transwarp.guardian.plugins.inceptor.GuardianHiveAuthorizerFactory"/>
     <@property "hive.service.id" service.sid/>
     <@property "hive.metastore.event.listeners" "io.transwarp.guardian.plugins.inceptor.GuardianMetaStoreListener"/>
-    <@property "inceptor.scheduler.enabled" "true"/>
-    <@property "spark.guardian.enabled" "true"/>
-    </#if>
-    </#if>
+  <#else>
+    <@property "hive.security.authorization.manager" "org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd.SQLStdHiveAuthorizerFactory"/>
+  </#if>
 <#else>
-    <#if service['inceptor.scheduler.enabled'] = "true">
-    <@property "inceptor.scheduler.enabled" "true"/>
-    <@property "inceptor.scheduler.config" "/etc/${service.sid}/conf/inceptor-scheduler.xml"/>
-    <#else>
-    <@property "inceptor.scheduler.enabled" "false"/>
-    </#if>
-    <#if service['hive.server2.authentication'] != "LDAP">
-    <@property "hive.server2.authentication" "NONE"/>
-    <#else>
-    <@property "hive.server2.authentication" "LDAP"/>
-    </#if>
-</#if>
-
-<#if service.plugins?seq_contains("governor")>
-    <@property "hive.exec.post.hooks" "org.apache.atlas.hive.hook.HivePostHook"/>
-    <@property "hive.exec.failure.hooks" "org.apache.atlas.hive.hook.HiveFailHook"/>
-    <@property "atlas.cluster.name" "${service.sid}"/>
-</#if>
-
-<#if service['hive.server2.enabled'] = "true" && service['hive.server2.authentication'] = "LDAP">
+  <#if service['hive.server2.authentication'] = "LDAP">
     <#assign  guardian=dependencies.GUARDIAN guardian_servers=[]>
     <#list guardian.roles["GUARDIAN_APACHEDS"] as role>
         <#assign guardian_servers += [("ldap://" + role.hostname + ":" + guardian["guardian.apacheds.ldap.port"])]>
     </#list>
-    <@property  "hive.server2.authentication.ldap.baseDN", "ou=People,${service.domain}"/>
-    <@property  "hive.server2.authentication.ldap.url" "${guardian_servers?join(' ')}"/>
-    <@property  "hive.server2.enable.doAs" "false"/>
-    <@property  "hive.security.authorization.enabled" "true"/>
-    <@property  "hive.security.authorization.manager" "org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd.SQLStdHiveAuthorizerFactory"/>
-    <@property  "hive.security.authenticator.manager" "org.apache.hadoop.hive.ql.security.SessionStateUserAuthenticator"/>
-    <@property  "hive.users.in.admin.role" "hive"/>
+    <@property "hive.server2.authentication" "CUSTOM"/>
+    <@property "hive.server2.custom.authentication.class" "io.transwarp.guardian.plugins.inceptor.GuardianLdapAuthProviderImpl"/>
+    <@property "hive.server2.authentication.ldap.baseDN", "ou=People,${service.domain}"/>
+    <@property "hive.server2.authentication.ldap.url" "${guardian_servers?join(' ')}"/>
+    <@property "hive.security.authorization.enabled" "true"/>
+    <@property "hive.security.authenticator.manager" "org.apache.hadoop.hive.ql.security.SessionStateUserAuthenticator"/>
+    <#if service.plugins?seq_contains("guardian")>
+    <@property "hive.security.authorization.manager" "io.transwarp.guardian.plugins.inceptor.GuardianHiveAuthorizerFactory"/>
+    <@property "hive.service.id" service.sid/>
+    <@property "hive.metastore.event.listeners" "io.transwarp.guardian.plugins.inceptor.GuardianMetaStoreListener"/>
+    <#else>
+    <@property "hive.security.authorization.manager" "org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd.SQLStdHiveAuthorizerFactory"/>
+    </#if>
+  </#if>
+</#if>
+
+<#-- handle inceptor scheduler -->
+<#if service.plugins?seq_contains("guardian")>
+    <@property "inceptor.scheduler.enabled" "true"/>
+    <@property "spark.guardian.enabled" "true"/>
+<#else>
+  <#if service['inceptor.scheduler.enabled'] = "true">
+    <@property "inceptor.scheduler.enabled" "true"/>
+    <@property "inceptor.scheduler.config" "/etc/${service.sid}/conf/inceptor-scheduler.xml"/>
+  <#else>
+    <@property "inceptor.scheduler.enabled" "false"/>
+  </#if>
+</#if>
+ 
+<#if service.plugins?seq_contains("governor")>
+    <@property "hive.exec.post.hooks" "org.apache.atlas.hive.hook.HivePostHook"/>
+    <@property "hive.exec.failure.hooks" "org.apache.atlas.hive.hook.HiveFailHook"/>
+    <@property "atlas.cluster.name" "${service.sid}"/>
 </#if>
 
 <#if dependencies.TXSQL??>
