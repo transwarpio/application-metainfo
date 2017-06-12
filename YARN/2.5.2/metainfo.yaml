@@ -229,14 +229,14 @@ stages:
       dirs: ["/tmp" , "/user"]
       user: "hdfs"
       group: "hadoop"
-      mod: 777
+      mod: 1777
     - !<Create-Dir-in-HDFS>
       summaryPolicy: ALL
       timeoutMinutes: 10
       dirs: ["/${service.sid}/user" , "/${service.sid}/user/history", "/${service.sid}/var/log/hadoop-yarn/apps"]
       user: "yarn"
       group: "hadoop"
-      mod: 777
+      mod: 1777
 
 product: Hadoop
 
