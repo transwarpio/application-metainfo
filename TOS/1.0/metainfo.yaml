@@ -337,7 +337,7 @@ stages:
       operation: Start
     - !<Wait-Healthy>
       summaryPolicy: ALL
-      timeoutMinutes: 5
+      timeoutMinutes: 12
 
 product: TOS
 
