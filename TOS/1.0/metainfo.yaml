@@ -122,7 +122,7 @@ roles:
   - type: Scaleout
     directives:
     - directive: !<shell>
-        script: "docker run --volume /srv/kubernetes/:/srv/kubernetes/ transwarp/gencerts:tdh500 /usr/bin/entry.sh"
+        script: "docker run --volume /srv/kubernetes/:/srv/kubernetes/ --net=host transwarp/gencerts:tdh500 /usr/bin/entry.sh"
     - directive: !<systemctl>
         action: EnableStart
         service: kubelet
