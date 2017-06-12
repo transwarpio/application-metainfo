@@ -18,9 +18,9 @@ dependencies:
     maxVersion: 2.5.2-tdh50
     optional: false
 roles:
-- name: DISCOVER_RSTUDIO
-  friendlyName: "Discover Rstudio"
-  labelPrefix: "discover-rstudio"
+- name: DISCOVER_IDE
+  friendlyName: "Discover IDE"
+  labelPrefix: "discover-ide"
   dockerImage: "transwarp/rstudio:tdh500"
   linkExpression: "http://${localhostname}:8787/"
   category: MASTER
@@ -36,13 +36,13 @@ roles:
     hostPath: /var/log/${service.sid}
     name: log
   - mountPath: /var/home
-    hostPath: ${service['rstudio.home.dir']}
+    hostPath: ${service['discover.ide.home.dir']}
     name: home
   resources:
-    limitsMemoryKey: rstudio.container.limits.memory
-    limitsCpuKey: rstudio.container.limits.cpu
-    requestsMemoryKey: rstudio.container.requests.memory
-    requestsCpuKey: rstudio.container.requests.cpu
+    limitsMemoryKey: discover.ide.container.limits.memory
+    limitsCpuKey: discover.ide.container.limits.cpu
+    requestsMemoryKey: discover.ide.container.requests.memory
+    requestsCpuKey: discover.ide.container.requests.cpu
   summaryPolicy: ALL
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -54,7 +54,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf/spark", "/etc/${service.sid}/conf/notebook", "/var/log/${service.sid}", "/var/run/${service.sid}", "service['rstudio.home.dir']"]
+        paths: ["/etc/${service.sid}/conf/spark", "/etc/${service.sid}/conf/notebook", "/var/log/${service.sid}", "/var/run/${service.sid}", "service['discover.ide.home.dir']"]
         mode: "755"
   - type: Config
     directives:
@@ -114,7 +114,7 @@ roles:
     hostPath: ${service['zeppelin.notebook.dir']}
     name: data
   - mountPath: /home
-    hostPath: ${service['rstudio.home.dir']}
+    hostPath: ${service['discover.ide.home.dir']}
     name: home
   resources:
     limitsMemoryKey: notebook.container.limits.memory
@@ -132,7 +132,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf/spark", "/etc/${service.sid}/conf/notebook", "/var/log/${service.sid}", "${service['zeppelin.notebook.dir']}}", "service['rstudio.home.dir']"]
+        paths: ["/etc/${service.sid}/conf/spark", "/etc/${service.sid}/conf/notebook", "/var/log/${service.sid}", "${service['zeppelin.notebook.dir']}}", "service['discover.ide.home.dir']"]
         mode: "755"
   - type: Config
     directives:
@@ -203,15 +203,15 @@ roles:
 product: Discover
 
 firstWizardConfigs:
-- rstudio.home.dir
+- discover.ide.home.dir
 - zeppelin.notebook.dir
 - zeppelin.server.port
 - discover.local-cran.port
-- rstudio.container.limits.memory
-- rstudio.container.limits.cpu
-- rstudio.container.requests.memory
-- rstudio.container.requests.cpu
-- rstudio.memory.ratio
+- discover.ide.container.limits.memory
+- discover.ide.container.limits.cpu
+- discover.ide.container.requests.memory
+- discover.ide.container.requests.cpu
+- discover.ide.memory.ratio
 - notebook.container.limits.memory
 - notebook.container.limits.cpu
 - notebook.container.requests.memory

@@ -345,8 +345,8 @@
   visibility: READ_WRITE
 
 # sssd.conf
-- name: rstudio.home.dir
-  recommendExpression: /disocver/rstudio
+- name: discover.ide.home.dir
+  recommendExpression: /disocver/ide
   defaultValue: null
   valueType: ABSOLUTE_PATH
   scope: !<ServiceLevel> {}
@@ -363,52 +363,52 @@
   groups: []
   visibility: READ_WRITE
 
-- name: rstudio.container.limits.memory
+- name: discover.ide.container.limits.memory
   recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
-    roleTypes: [DISCOVER_RSTUDIO]
+    roleTypes: [DISCOVER_IDE]
   onDeps: []
   groups: []
   visibility: READ_WRITE
 
-- name: rstudio.container.limits.cpu
+- name: discover.ide.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [DISCOVER_RSTUDIO]
+    roleTypes: [DISCOVER_IDE]
   onDeps: []
   groups: []
   visibility: READ_WRITE
 
-- name: rstudio.container.requests.memory
+- name: discover.ide.container.requests.memory
   recommendExpression: -1
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
-    roleTypes: [DISCOVER_RSTUDIO]
+    roleTypes: [DISCOVER_IDE]
   onDeps: []
   groups: []
   visibility: READ_WRITE
 
-- name: rstudio.container.requests.cpu
+- name: discover.ide.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [DISCOVER_RSTUDIO]
+    roleTypes: [DISCOVER_IDE]
   onDeps: []
   groups: []
   visibility: READ_WRITE
 
-- name: rstudio.memory.ratio
+- name: discover.ide.memory.ratio
   recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>
-    roleTypes: [DISCOVER_RSTUDIO]
+    roleTypes: [DISCOVER_IDE]
   onDeps: []
   groups: []
   visibility: READ_WRITE
