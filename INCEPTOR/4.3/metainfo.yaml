@@ -242,6 +242,9 @@ firstWizardConfigs:
 - executor.memory.ratio
 - executor.number.eachnode
 
+dashboardMetrics:
+- InceptorSqlActiveTasks
+
 pages:
 - summary
 - roles

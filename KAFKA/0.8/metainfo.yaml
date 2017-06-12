@@ -70,7 +70,11 @@ firstWizardConfigs:
 - kafka.container.requests.cpu
 - kafka.memory.ratio
 
+dashboardMetrics:
+- AllTopicsBytesOutPerSec
+
 pages:
+- summary
 - roles
 - configuration
 - operation
