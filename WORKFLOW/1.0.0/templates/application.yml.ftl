@@ -45,11 +45,9 @@ schedule:
     # restarted.
     seconds: ${service['workflow.recovery.seconds']}
 
-<#if service['workflow.access.control.enabled'] == "false">
 pseudo:
   username: ${service['workflow.pseudo.username']}
   password: ${service['workflow.pseudo.password']}
-</#if>
 
 # shiro session timeout in seconds if exists
 session.timeout.seconds: ${service['workflow.session.timeout.seconds']}
