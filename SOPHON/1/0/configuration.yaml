@@ -364,3 +364,21 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+#for sophon inceptor plugin
+- name: sophon.inceptor.ldap.username
+  recommendExpression: ""
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: sophon.inceptor.ldap.password
+  recommendExpression: ""
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
