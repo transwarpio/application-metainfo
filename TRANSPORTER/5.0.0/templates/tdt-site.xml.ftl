@@ -9,11 +9,12 @@
 <configuration>
     <@property "tdt.server.logging.task.log.location" "/var/log/${service.sid}"/>
     <@property "tdt.task.rule.file.location" "/etc/${service.sid}/conf/rule.json"/>
-    <#assign inceptor_url = dependencies.INCEPTOR.roles.INCEPTOR_SERVER[0]['hostname'] + ":" + dependencies.INCEPTOR['hive.server2.thrift.port']>
+    <#assign inceptor_server = dependencies.INCEPTOR.roles.INCEPTOR_SERVER[0]['hostname']>
+    <#assign inceptor_url = inceptor_server + ":" + dependencies.INCEPTOR['hive.server2.thrift.port']>
     <#if service.auth != "kerberos">
     <@property "tdt.jdbc.url" "jdbc:hive2://${inceptor_url}/tdt"/>
     <#else>
-    <@property "tdt.jdbc.url" "jdbc:hive2://${inceptor_url}/tdt;authentication=kerberos;kuser=tdt/${localhostname}@${service.realm};keytab=${service.keytab};krb5conf=/etc/krb5.conf;principal=hive/${localhostname}@${service.realm}"/>
+    <@property "tdt.jdbc.url" "jdbc:hive2://${inceptor_url}/tdt;authentication=kerberos;kuser=tdt/${localhostname}@${service.realm};keytab=${service.keytab};krb5conf=/etc/krb5.conf;principal=hive/${inceptor_server}@${service.realm}"/>
     </#if>
 
 <#assign license_servers=[]>
