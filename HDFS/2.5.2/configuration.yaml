@@ -252,6 +252,15 @@
   groups: ["hdfs-site.xml"]
   visibility: READ_WRITE
 
+- name: dfs.permissions.superusergroup
+  recommendExpression: "hbase"
+  defaultValue: "supergroup"
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hdfs-site.xml"]
+  visibility: READ_WRITE
+
 - name: dfs.namenode.acls.enabled
   recommendExpression: true
   defaultValue: null
