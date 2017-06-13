@@ -82,7 +82,7 @@
   visibility: READ_WRITE
 
 - name: zookeeper.server.memory
-  recommendExpression: 4096
+  recommendExpression: 1024
   defaultValue: null
   valueType: MB
   scope: !<RoleTypes>
