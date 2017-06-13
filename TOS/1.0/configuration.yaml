@@ -137,3 +137,14 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: tos.master.etcd.initial.cluster.state
+  recommendExpression: new
+  defaultValue: null
+  valueType: STRING
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [TOS_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

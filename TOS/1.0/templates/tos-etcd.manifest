@@ -22,15 +22,13 @@ spec:
       - --election-timeout=${service['tos.master.etcd.election.timeout']}
       env:
       - name: ETCD_INITIAL_CLUSTER_STATE
-        value: new
+        value: ${service[.data_model["localhostname"]]['tos.master.etcd.initial.cluster.state']}
       - name: ETCD_NAME
         value: ETCD${.data_model['role.id']}
       - name: ETCD_INITIAL_ADVERTISE_PEER_URLS
         value: http://${localhostname}:${service['tos.master.leader.elect.port']}
       - name: ETCD_INITIAL_CLUSTER
         value: ${etcd_initial_servers?join(",")}
-      - name: ETCD_INITIAL_CLUSTER_STATE
-        value: new
       - name: ETCD_INITIAL_CLUSTER_TOKEN
         value: etcd-k8s-cluster
       - name: ETCD_LISTEN_PEER_URLS

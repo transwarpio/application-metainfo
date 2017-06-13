@@ -10,7 +10,7 @@ roles:
 - name: TOS_SLAVE
   friendlyName: "TOS Slave"
   category: SLAVE
-  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  frontendOperations: ["Start", "Stop", "Scaleout"]
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}
@@ -97,11 +97,6 @@ roles:
         action: EnableStart
         service: haproxy
         sleepSec: 2
-#    - directive: !<resource>
-#        templateType: FreeMarker
-#        templatePath: "tos-gencerts.manifest"
-#        targetPath: "/opt/kubernetes/manifests-multi/tos-gencerts.manifest"
-#        mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "tos-proxy.manifest"
@@ -109,6 +104,8 @@ roles:
         mode: "755"
   - type: Stop
     directives:
+    - directive: !<shell>
+        script: "rm -f /opt/kubernetes/manifests-multi/tos-proxy.manifest"
     - directive: !<systemctl>
         action: DisableStop
         service: kubelet
@@ -117,8 +114,6 @@ roles:
         action: DisableStop
         service: haproxy
         sleepSec: 2
-    - directive: !<shell>
-        script: "rm -f /opt/kubernetes/manifests-multi/tos-proxy.manifest"
   - type: Scaleout
     directives:
     - directive: !<shell>
@@ -131,11 +126,6 @@ roles:
         action: EnableStart
         service: haproxy
         sleepSec: 2
-#    - directive: !<resource>
-#        templateType: FreeMarker
-#        templatePath: "tos-gencerts.manifest"
-#        targetPath: "/opt/kubernetes/manifests-multi/tos-gencerts.manifest"
-#        mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "tos-proxy.manifest"
@@ -143,6 +133,8 @@ roles:
         mode: "755"
   - type: Delete
     directives:
+    - directive: !<shell>
+        script: "rm -f /opt/kubernetes/manifests-multi/tos-proxy.manifest"
     - directive: !<systemctl>
         action: DisableStop
         service: kubelet
@@ -151,8 +143,6 @@ roles:
         action: DisableStop
         service: haproxy
         sleepSec: 2
-    - directive: !<shell>
-        script: "rm -f /opt/kubernetes/manifests-multi/tos-proxy.manifest"
 
 - name: TOS_REGISTRY
   friendlyName: "TOS Registry"
@@ -186,11 +176,6 @@ roles:
         mode: "755"
   - type: Start
     directives:
-#    - directive: !<resource>
-#        templateType: FreeMarker
-#        templatePath: "tos-gencerts.manifest"
-#        targetPath: "/opt/kubernetes/manifests-multi/tos-gencerts.manifest"
-#        mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "tos-registry.manifest"
@@ -216,7 +201,7 @@ roles:
 - name: TOS_MASTER
   friendlyName: "TOS Master"
   category: MASTER
-  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [3, 2, 1]}
@@ -244,11 +229,6 @@ roles:
         mode: "600"
   - type: Start
     directives:
-#    - directive: !<resource>
-#        templateType: FreeMarker
-#        templatePath: "tos-gencerts.manifest"
-#        targetPath: "/opt/kubernetes/manifests-multi/tos-gencerts.manifest"
-#        mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "tos-etcd.manifest"
@@ -271,11 +251,6 @@ roles:
         mode: "755"
   - type: Scaleout
     directives:
-#    - directive: !<resource>
-#        templateType: FreeMarker
-#        templatePath: "tos-gencerts.manifest"
-#        targetPath: "/opt/kubernetes/manifests-multi/tos-gencerts.manifest"
-#        mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "tos-etcd.manifest"
