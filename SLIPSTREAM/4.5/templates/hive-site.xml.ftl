@@ -56,6 +56,19 @@
   </#if>
 </#if>
 
+<#-- handle inceptor scheduler -->
+<#if service.plugins?seq_contains("guardian")>
+    <@property "inceptor.scheduler.enabled" "true"/>
+    <@property "spark.guardian.enabled" "true"/>
+<#else>
+  <#if service['inceptor.scheduler.enabled'] = "true">
+    <@property "inceptor.scheduler.enabled" "true"/>
+    <@property "inceptor.scheduler.config" "/etc/${service.sid}/conf/inceptor-scheduler.xml"/>
+  <#else>
+    <@property "inceptor.scheduler.enabled" "false"/>
+  </#if>
+</#if>
+
 <#if dependencies.TXSQL??>
     <#assign mysqlHostPorts = []/>
     <#list dependencies.TXSQL.roles['TXSQL_SERVER'] as role>

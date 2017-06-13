@@ -826,6 +826,16 @@
   groups: []
   visibility: READ_WRITE
 
+# inceptor scheduler
+- name: inceptor.scheduler.enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: spark.driver.port
   recommendExpression: 52888
   defaultValue: null
