@@ -4,11 +4,12 @@
 </#list>
 
 <#assign server_count=service.roles.SEARCH_SERVER?size>
-<#assign master_nodes=[] master_node_count=0>
+<#assign es_nodes=[] master_nodes=[] master_node_count=0>
 <#list service.roles.SEARCH_SERVER as server>
     <#if service[server.hostname]['node.master']="true">
         <#assign master_nodes+=[server.hostname] master_node_count+=1>
     </#if>
+    <#assign es_nodes+=[server.hostname]>
 </#list>
 # ======================== Elasticsearch Configuration =========================
 #
@@ -93,7 +94,7 @@ gateway.expected_master_nodes: ${master_node_count}
 # Pass an initial list of hosts to perform discovery when new node is started:
 # The default list of hosts is ["127.0.0.1", "[::1]"]
 #
-discovery.zen.ping.unicast.hosts: ${master_nodes?join(",")}
+discovery.zen.ping.unicast.hosts: ${es_nodes?join(",")}
 #
 # Prevent the "split brain" by configuring the majority of nodes (total number of nodes / 2 + 1):
 #
