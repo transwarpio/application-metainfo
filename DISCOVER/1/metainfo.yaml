@@ -54,7 +54,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf/spark", "/etc/${service.sid}/conf/notebook", "/var/log/${service.sid}", "/var/run/${service.sid}", "service['discover.ide.home.dir']"]
+        paths: ["/etc/${service.sid}/conf/spark", "/etc/${service.sid}/conf/notebook", "/var/log/${service.sid}", "/var/run/${service.sid}", "${service['discover.ide.home.dir']}"]
         mode: "755"
   - type: Config
     directives:
@@ -132,7 +132,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf/spark", "/etc/${service.sid}/conf/notebook", "/var/log/${service.sid}", "${service['zeppelin.notebook.dir']}}", "service['discover.ide.home.dir']"]
+        paths: ["/etc/${service.sid}/conf/spark", "/etc/${service.sid}/conf/notebook", "/var/log/${service.sid}", "${service['zeppelin.notebook.dir']}", "${service['discover.ide.home.dir']}"]
         mode: "755"
   - type: Config
     directives:
