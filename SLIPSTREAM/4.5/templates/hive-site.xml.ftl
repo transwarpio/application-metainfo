@@ -90,14 +90,12 @@
     <@property "hbase.security.authentication" "kerberos"/>
     </#if>
     <#if dependencies.SEARCH??>
-    <#assign master_nodes=[] master_node_count=0>
+    <#assign es_nodes=[]>
     <#list dependencies.SEARCH.roles.SEARCH_SERVER as server>
-        <#if dependencies.SEARCH[server.hostname]['node.master']="true">
-            <#assign master_nodes+=[server.hostname] master_node_count+=1>
-        </#if>
+        <#assign es_nodes+=[server.hostname]>
     </#list>
     <@property "discovery.zen.minimum_master_nodes" "${dependencies.SEARCH['discovery.zen.minimum_master_nodes']}"/>
-    <@property "discovery.zen.ping.unicast.hosts" "${master_nodes?join(',')}"/>
+    <@property "discovery.zen.ping.unicast.hosts" "${es_nodes?join(',')}"/>
     <@property "discovery.zen.ping.multicast.enabled" "${dependencies.SEARCH['discovery.zen.ping.multicast.enabled']}"/>
     <@property "cluster.name" "${dependencies.SEARCH['cluster.name']}"/>
     </#if>
