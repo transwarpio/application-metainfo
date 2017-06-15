@@ -106,7 +106,11 @@ atlas.notification.create.topics=true
 # kafka topic partition number
 atlas.notification.hook.numthreads=1
 # kafka topic replica number, Its value should be set to more than 1 in HA mode
+<#if dependencies.KAFKA.roles.KAFKA_SERVER?size gte 2>
 atlas.notification.replicas=2
+<#else>
+atlas.notification.replicas=1
+</#if>
 atlas.notification.topics=ATLAS_HOOK
 
 ### Kafka Kerberos Config ###
