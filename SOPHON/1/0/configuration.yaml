@@ -8,7 +8,7 @@
   groups: []
   visibility: READ_WRITE
 - name: livy.scheduler.port
-  recommendExpression: 9998
+  recommendExpression: 9996
   defaultValue: null
   valueType: PORT
   scope: !<ServiceLevel> {}
