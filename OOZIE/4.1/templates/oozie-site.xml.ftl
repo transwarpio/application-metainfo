@@ -22,11 +22,11 @@
     <@property "local.realm" "${service.realm}"/>
     <@property "oozie.service.HadoopAccessorService.kerberos.enabled" "true"/>
     <@property "oozie.service.HadoopAccessorService.keytab.file" "${service.keytab}"/>
-    <@property "oozie.service.HadoopAccessorService.kerberos.principal" "oozie/${localhostname}@${service.realm}"/>
+    <@property "oozie.service.HadoopAccessorService.kerberos.principal" "oozie/${localhostname?lower_case}@${service.realm}"/>
 
     <@property "oozie.authentication.type" "${service.auth}"/>
     <@property "oozie.server.authentication.type" "${service.auth}"/>
-    <@property "oozie.authentication.kerberos.principal" "HTTP/${localhostname}@${service.realm}"/>
+    <@property "oozie.authentication.kerberos.principal" "HTTP/${localhostname?lower_case}@${service.realm}"/>
     <@property "oozie.authentication.kerberos.keytab" "${service.keytab}"/>
 
     <@property "oozie.credentials.credentialclasses" "hcat=org.apache.oozie.action.hadoop.HCatCredentials,hbase=org.apache.oozie.action.hadoop.HbaseCredentials,hive2=org.apache.oozie.action.hadoop.Hive2Credentials"/>

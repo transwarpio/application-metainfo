@@ -217,7 +217,7 @@ atlas.dependency.services.state.check.period.ms=900000
 # atlas authentication
 #### authentication method {simple, kerberos}
 atlas.authentication.method=${service.auth}
-atlas.authentication.principal=hbase/${localhostname}@${service.realm}
+atlas.authentication.principal=hbase/${localhostname?lower_case}@${service.realm}
 atlas.authentication.keytab=${service.keytab}
 
 <#assign license_servers=[]>
