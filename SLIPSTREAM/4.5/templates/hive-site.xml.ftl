@@ -82,14 +82,28 @@
     <@property "hive.stats.dbconnectionstring" dbconnectionstring/>
     <#assign scratchdir="hdfs://" + dependencies.HDFS.nameservices[0] + "/" + service.sid + "/tmp/hive">
     <@property "hive.exec.scratchdir" scratchdir/>
-    <#assign uris="thrift://" + service.roles.INCEPTOR_METASTORE[0]['hostname'] + ":" + service['hive.metastore.port']>
-    <@property "hive.metastore.uris" uris/>
-    <#assign tracker=service.roles.INCEPTOR_METASTORE[0]['hostname'] + ":8031">
-    <@property "mapred.job.tracker" tracker/>
+<#assign uris = []/>
+<#if dependencies.INCEPTOR??>
+    <#list dependencies.INCEPTOR.roles["INCEPTOR_METASTORE"] as role>
+        <#assign uris += [("thrift://" + role.hostname + ":" + dependencies.INCEPTOR["hive.metastore.port"])]>
+    </#list>
+<#else>
+    <#list service.roles["INCEPTOR_METASTORE"] as role>
+        <#assign uris += [("thrift://" + role.hostname + ":" + service["hive.metastore.port"])]>
+    </#list>
+</#if>
+    <@property "hive.metastore.uris" uris?join(",")/>
+<#if dependencies.YARN??>
+    <#assign rmHostPorts = []/>
+    <#list dependencies.YARN.roles["YARN_RESOURCEMANAGER"] as role>
+        <#assign rmHostPorts += [(role.hostname + ":" + dependencies.YARN["resourcemanager.resource-tracker.port"])]>
+    </#list>
+    <@property "mapred.job.tracker" rmHostPorts?join(",")/>
+</#if>
     <#assign connectionURL="jdbc:mysql://" + mysqlHostPorts?join(",") + "/metastore_" + service.sid + "?createDatabaseIfNotExist=false&amp;characterEncoding=UTF-8">
     <@property "javax.jdo.option.ConnectionURL" connectionURL/>
     <#if dependencies.LICENSE_SERVICE??>
-    <#assign  license=dependencies.LICENSE_SERVICE license_servers=[]>
+    <#assign license=dependencies.LICENSE_SERVICE license_servers=[]>
     <#list license.roles["LICENSE_NODE"] as role>
         <#assign license_servers += [(role.hostname + ":" + license[role.hostname]["zookeeper.client.port"])]>
     </#list>

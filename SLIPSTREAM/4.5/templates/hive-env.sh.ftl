@@ -130,7 +130,11 @@ export HIVE_SERVER2="true"
 </#if>
 export INCEPTOR_LICENSE_ZOOKEEPER_QUORUM=${quorum}
 export INCEPTOR_UI_PORT=${service['inceptor.ui.port']}
+<#if dependencies.INCEPTOR??>
+export METASTORE_PORT=${dependencies.INCEPTOR['hive.metastore.port']}
+<#else>
 export METASTORE_PORT=${service['hive.metastore.port']}
+</#if>
 
 <#if dependencies.ZOOKEEPER[.data_model["localhostname"]]??>
     <#if dependencies.ZOOKEEPER[.data_model["localhostname"]]['zookeeper.client.port']??>
@@ -147,7 +151,11 @@ export MYSQL_SERVER_PORT=${hostPorts?join(",")}
 export JAVAX_JDO_OPTION_CONNECTIONURL=jdbc:mysql://${hostPorts?join(",")}/metastore_${service.sid}
 export JAVAX_JDO_OPTION_CONNECTION_USERNAME=${service['javax.jdo.option.ConnectionUserName']}
 export JAVAX_JDO_OPTION_CONNECTION_PASSWORD=${service['javax.jdo.option.ConnectionPassword']}
+<#if dependencies.INCEPTOR??>
+export HIVE_METASTORE_SERVER=${dependencies.INCEPTOR.roles.INCEPTOR_METASTORE[0]['hostname']}
+<#else>
 export HIVE_METASTORE_SERVER=${service.roles.INCEPTOR_METASTORE[0]['hostname']}
+</#if>
 export SPARK_DRIVER_ADDR=${service.roles.INCEPTOR_SERVER[0]['hostname']}
 export EXECUTOR_ID_PATH=/${service.sid}/executorID
 export METASTORE_ID=metastore_${service.sid}

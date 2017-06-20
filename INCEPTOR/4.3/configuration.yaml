@@ -178,7 +178,7 @@
   visibility: READ_WRITE
 
 - name: javax.jdo.option.ConnectionUserName
-  recommendExpression: hiveuser
+  recommendExpression: inceptoruser
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
