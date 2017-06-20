@@ -398,7 +398,7 @@
   visibility: READ_WRITE
 
 - name: hive.metastore.port
-  recommendExpression: 9083
+  recommendExpression: 9093
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
