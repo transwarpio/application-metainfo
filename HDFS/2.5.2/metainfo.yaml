@@ -153,7 +153,7 @@ roleGroups:
         friendlyName: "Journal Node"
         labelPrefix: "hadoop-hdfs-journalnode"
         category: MASTER
-        frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+        frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
         env:
         - name: HADOOP_PID_DIR
           value: /var/run/${service.sid}/
