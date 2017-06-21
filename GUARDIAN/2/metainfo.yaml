@@ -21,6 +21,8 @@ roles:
   env:
   - name: GUARDIAN_CONF_DIR
     value: /etc/${service.sid}/conf
+  - name: GUARDIAN_LOG_FILE
+    value: guardian-apacheds.log
   mountPaths:
   - mountPath: ${service['guardian.apacheds.data.dir']}
     hostPath: ${service['guardian.apacheds.data.dir']}
@@ -53,6 +55,8 @@ roles:
   env:
   - name: GUARDIAN_CONF_DIR
     value: /etc/${service.sid}/conf
+  - name: GUARDIAN_LOG_FILE
+    value: guardian-server.log
   mountPaths:
   - mountPath: /srv/guardian
     hostPath: /srv/guardian

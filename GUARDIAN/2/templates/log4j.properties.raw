@@ -34,7 +34,7 @@ log4j.appender.NullAppender=org.apache.log4j.varia.NullAppender
 guardian.log.maxfilesize=64MB
 guardian.log.maxbackupindex=16
 log4j.appender.RFA=org.apache.log4j.RollingFileAppender
-log4j.appender.RFA.File=${guardian.log.dir}/${guardian.log.name}
+log4j.appender.RFA.File=${guardian.log.dir}/${guardian.log.file}
 
 log4j.appender.RFA.MaxFileSize=${guardian.log.maxfilesize}
 log4j.appender.RFA.MaxBackupIndex=${guardian.log.maxbackupindex}
@@ -52,7 +52,7 @@ log4j.appender.RFA.layout.ConversionPattern=%d{ISO8601} %p %c: %m%n
 #
 
 log4j.appender.DRFA=org.apache.log4j.DailyRollingFileAppender
-log4j.appender.DRFA.File=${guardian.log.dir}/${guardian.log.name}
+log4j.appender.DRFA.File=${guardian.log.dir}/${guardian.log.file}
 
 # Rollver at midnight
 log4j.appender.DRFA.DatePattern=.yyyy-MM-dd
@@ -96,7 +96,7 @@ log4j.appender.RFAS.MaxBackupIndex=${guardian.security.log.maxbackupindex}
 # Daily Rolling Security appender
 #
 log4j.appender.DRFAS=org.apache.log4j.DailyRollingFileAppender
-log4j.appender.DRFAS.File=${guardian.log.dir}/${guardian.log.name}
+log4j.appender.DRFAS.File=${guardian.log.dir}/${guardian.log.file}
 log4j.appender.DRFAS.layout=org.apache.log4j.PatternLayout
 log4j.appender.DRFAS.layout.ConversionPattern=%d{ISO8601} %p %c: %m%n
 log4j.appender.DRFAS.DatePattern=.yyyy-MM-dd
