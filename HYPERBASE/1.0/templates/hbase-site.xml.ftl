@@ -35,11 +35,12 @@
     <@property "hbase.thrift.security.qop" "auth-conf"/>
     <@property "hbase.security.authorization" "true"/>
     <#if service.plugins?seq_contains("guardian")>
+    <#assign esRegionCoprocessor=dependencies.SEARCH???string(",org.apache.hadoop.hyperbase.fulltextindex.coprocessor.EsRegionCoprocessor", "")>
     <@property "hbase.service.id" service.sid/>
-    <@property "hbase.coprocessor.region.classes" service['hbase.coprocessor.region.classes'] + ",org.apache.hadoop.hbase.security.token.TokenProvider,io.transwarp.guardian.plugins.hyperbase.GuardianAccessController,org.apache.hadoop.hbase.security.access.SecureBulkLoadEndpoint"/>
+    <@property "hbase.coprocessor.region.classes" service['hbase.coprocessor.region.classes'] + esRegionCoprocessor + ",org.apache.hadoop.hbase.security.token.TokenProvider,io.transwarp.guardian.plugins.hyperbase.GuardianAccessController,org.apache.hadoop.hbase.security.access.SecureBulkLoadEndpoint"/>
     <@property "hbase.coprocessor.master.classes" service['hbase.coprocessor.master.classes'] + ",io.transwarp.guardian.plugins.hyperbase.GuardianAccessController"/>
     <#else>
-    <@property "hbase.coprocessor.region.classes" service['hbase.coprocessor.region.classes'] + ",org.apache.hadoop.hbase.security.token.TokenProvider,org.apache.hadoop.hbase.security.access.AccessController,org.apache.hadoop.hbase.security.access.SecureBulkLoadEndpoint"/>
+    <@property "hbase.coprocessor.region.classes" service['hbase.coprocessor.region.classes'] + esRegionCoprocessor + ",org.apache.hadoop.hbase.security.token.TokenProvider,org.apache.hadoop.hbase.security.access.AccessController,org.apache.hadoop.hbase.security.access.SecureBulkLoadEndpoint"/>
     <@property "hbase.coprocessor.master.classes" service['hbase.coprocessor.master.classes'] + ",org.apache.hadoop.hbase.security.access.AccessController"/>
     </#if>
 </#if>
