@@ -26,6 +26,9 @@ spec:
     - name: data
       mountPath: /var/lib/registry
       readOnly: false
+    - name: config
+      mountPath: /etc/docker/registry
+      readOnly: false
   volumes:
     - name: certs
       hostPath:
@@ -33,3 +36,6 @@ spec:
     - name: data
       hostPath:
         path: /var/lib/registry_data
+    - name: config
+      hostPath:
+        path: /etc/${service.sid}/conf

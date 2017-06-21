@@ -51,7 +51,7 @@ spec:
         - mountPath: "/srv/kubernetes"
           name: "certs"
       nodeSelector:
-        kubernetes-dashboard-${service.sid}: "true"
+        kubernetes-${service.sid}: "true"
       volumes:
       - hostPath:
           path: "/srv/kubernetes"

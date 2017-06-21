@@ -9,7 +9,7 @@ user: root
 roles:
 - name: DASHBOARD
   friendlyName: "Dashboard"
-  labelPrefix: "kubernetes-dashboard"
+  labelPrefix: "kubernetes"
   linkExpression: "https://${dependencies.TOS.roles.TOS_MASTER[0].hostname}:${dependencies.TOS['tos.master.apiserver.secure.port']}/ui"
   category: MASTER
   frontendOperations: []
@@ -91,7 +91,7 @@ stages:
       timeoutMinutes: 2
       action: AddLabel
       roleType: DASHBOARD
-      labelPrefix: "kubernetes-dashboard"
+      labelPrefix: "kubernetes"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: SOME
@@ -110,7 +110,7 @@ stages:
       timeoutMinutes: 2
       action: RemoveLabel
       roleType: DASHBOARD
-      labelPrefix: "kubernetes-dashboard"
+      labelPrefix: "kubernetes"
       labelValue: "true"
     - !<Kubectl>
       summaryPolicy: SOME
