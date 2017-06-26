@@ -45,7 +45,13 @@ roles:
     - directive: !<mkdirs>
         paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}"]
         mode: "755"
-
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "dataSource.properties"
+        targetPath: "/etc/${service.sid}/conf/dataSource.properties"
+        mode: "600"
 stages:
   - type: Config
     taskGroups:

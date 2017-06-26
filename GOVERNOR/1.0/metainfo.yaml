@@ -79,7 +79,11 @@ roles:
         action: Link
         from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
         to: "/etc/${service.sid}/conf/core-site.xml"
-
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "dataSource.properties"
+        targetPath: "/etc/${service.sid}/conf/dataSource.properties"
+        mode: "600"
 stages:
   - type: Config
     taskGroups:
