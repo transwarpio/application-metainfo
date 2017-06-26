@@ -11,6 +11,10 @@ spec:
       imagePullPolicy: IfNotPresent
       securityContext:
         privileged: true
+      resources:
+        requests:
+          memory: "1Gi"
+          cpu: "1"
       command:
         - boot.sh
         - controller

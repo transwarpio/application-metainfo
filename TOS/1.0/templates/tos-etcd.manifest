@@ -15,6 +15,10 @@ spec:
       imagePullPolicy: IfNotPresent
       securityContext:
         privileged: true
+      resources:
+        requests:
+          memory: "1Gi"
+          cpu: "1"
       command:
       - etcd
       - --data-dir=/var/etcd/data
