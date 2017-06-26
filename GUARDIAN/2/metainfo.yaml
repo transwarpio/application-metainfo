@@ -80,6 +80,7 @@ jobs:
   - type: Init
     stages:
     - Install
+    - GenKeystore
     - Config
     - Start
     - GenKeytab
@@ -87,6 +88,10 @@ jobs:
     stages:
     - Start
     - GenKeytab
+  - type: Config
+    stages:
+    - GenKeystore
+    - Config
 
 firstWizardConfigs:
 - guardian.server.port

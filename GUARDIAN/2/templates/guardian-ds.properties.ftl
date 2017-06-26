@@ -23,19 +23,15 @@ guardian.ds.kdc.renew.lifetime=604800000
 guardian.ds.krb.keyring.enable=false
 guardian.ds.kdc.encryption.types=aes128-cts-hmac-sha1-96, des-cbc-md5, des3-cbc-sha1-kd
 
-guardian.ds.root.password=${service['guardian.ds.root.password']}
-# guardian.ds.root.password.store=/etc/guardian-apacheds/cert/apacheds-auth.jks
+guardian.ds.root.password.store=/etc/guardian/conf/guardian-auth.jks
 guardian.ds.admin.username=admin
-# This is initial password, recommend to change password later
-guardian.ds.admin.password=${service['guardian.admin.password']}
-# guardian.ds.admin.password.store=/etc/guardian-apacheds/cert/apahceds-auth.jks
+guardian.ds.admin.password.store=/etc/guardian/conf/guardian-auth.jks
 
 guardian.ds.ha.enabled=${(servers?size >1)?string("true", "false")}
 
 # guardian system user for connection to guardian service
 guardian.ds.guardian.username=guardian/guardian
-guardian.ds.guardian.password=${service['guardian.server.kerberos.password']}
-# guardian.ds.guardian.password.store=/etc/guardian-apacheds/cert/apacheds-auth.jks
+guardian.ds.guardian.password.store=/etc/guardian/conf/guardian-auth.jks
 
 # if true use hostname, else use ip address
 guardian.ds.ha.use.hostname=true
@@ -49,7 +45,7 @@ guardian.ds.partition.sync.on.write=false
 guardian.ds.ha.status=${(master == localhostname)?then("master", "slave")}
 
 guardian.ds.ha.user.dn=uid=admin,ou=system
-guardian.ds.ha.user.password=${service['guardian.ds.root.password']}
+guardian.ds.ha.user.password.store=/etc/guardian/conf/guardian-auth.jks
 
 guardian.ds.ha.refresh.interval=60000
 guardian.ds.ha.config.dn=ads-replConsumerId=replication,ou=system
