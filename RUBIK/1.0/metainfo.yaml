@@ -20,7 +20,12 @@ roles:
   labelPrefix: "rubik-server"
   linkExpression: "http://${localhostname}:${service['designer.server.port']}"
   category: MASTER
-  frontendOperations: ["Start", "Stop"]
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
   env:
   - name: RUBIK_CONF_DIR
     value: /etc/${service.sid}/conf

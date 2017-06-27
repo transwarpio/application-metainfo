@@ -45,6 +45,9 @@ roles:
   linkExpression: "http://${localhostname}:${service['hue.desktop.http.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete"]
+  deleteOpCondition:
+    reject:
+      number: 1
   env:
   - name: HUE_CONF_DIR
     value: /etc/${service.sid}/conf

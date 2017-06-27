@@ -31,6 +31,13 @@ roles:
   linkExpression: "http://${localhostname}:${service['master.info.port']}/?user.name=hyperbase"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 3
+    movable:
+      number: 2
+    reject:
+      number: 1
   env:
   - name: HBASE_CONF_DIR
     value: /etc/${service.sid}/conf
@@ -71,6 +78,11 @@ roles:
   linkExpression: "http://${localhostname}:${service['regionserver.info.port']}/?user.name=hyperbase"
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 3
+    reject:
+      number: 2
   env:
   - name: HBASE_CONF_DIR
     value: /etc/${service.sid}/conf

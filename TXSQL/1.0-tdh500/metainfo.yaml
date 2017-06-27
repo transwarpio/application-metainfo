@@ -12,7 +12,12 @@ roles:
   friendlyName: "TxSQL Server"
   labelPrefix: "txsql-server"
   category: MASTER
-  frontendOperations: ["Start", "Stop"]
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 3
+    reject:
+      number: 2
   env:
   - name: CONF_DIR
     value: /etc/${service.sid}/conf

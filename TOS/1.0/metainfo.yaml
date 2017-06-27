@@ -202,6 +202,13 @@ roles:
   friendlyName: "TOS Master"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 4
+    movable:
+      number: 3
+    reject:
+      number: 2
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [3, 2, 1]}

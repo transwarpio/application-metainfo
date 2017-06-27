@@ -59,6 +59,12 @@ roles:
     linkExpression: "http://${localhostname}:${service['datanode.http-port']}/?user.name=hdfs"
     category: SLAVE
     frontendOperations: ["Start", "Stop", "Commission", "Decommission", "Delete", "Scaleout"]
+    deleteOpCondition:
+      deletable:
+        number: 3
+        Decommission: true
+      reject:
+        number: 2
     env:
     - name: HDFS_HA_NAMENODE_SERVICE
       value: |
@@ -133,6 +139,13 @@ roleGroups:
         labelPrefix: "hadoop-hdfs-journalnode"
         category: MASTER
         frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
+        deleteOpCondition:
+          deletable:
+            number: 4
+          movable:
+            number: 3
+          reject:
+            number: 2
         env:
         - name: HADOOP_PID_DIR
           value: /var/run/${service.sid}/
@@ -163,6 +176,9 @@ roleGroups:
         linkExpression: "http://${localhostname}:${service['namenode.http-port']}/?user.name=hdfs"
         category: MASTER
         frontendOperations: ["Start", "Stop", "Move"]
+        deleteOpCondition:
+          reject:
+            number: 2
         env:
         - name: HDFS_HA_NAMENODE_SERVICE
           value: |

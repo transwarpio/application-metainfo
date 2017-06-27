@@ -22,6 +22,13 @@ roles:
   linkExpression: "http://${localhostname}:${service['resourcemanager.webapp.port']}/?user.name=yarn"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 3
+    movable:
+      number: 2
+    reject:
+      number: 1
   env:
   - name: HADOOP_CONF_DIR
     value: /etc/${service.sid}/conf
@@ -60,6 +67,10 @@ roles:
   linkExpression: "http://${service['yarn.nodemanager.webapp.address']?replace(r'${yarn.nodemanager.hostname}', localhostname)}/?user.name=yarn"
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Commission", "Decommission", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 1
+      Decommission: true
   env:
   - name: HADOOP_CONF_DIR
     value: /etc/${service.sid}/conf

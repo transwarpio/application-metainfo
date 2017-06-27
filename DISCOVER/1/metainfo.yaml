@@ -25,6 +25,9 @@ roles:
   linkExpression: "http://${localhostname}:8787/"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    reject:
+      number: 1
   env:
   - name: DISCOVER_CONF_DIR
     value: /etc/${service.sid}/conf
@@ -93,6 +96,9 @@ roles:
   dockerImage: "transwarp/notebook:transwarp-5.0"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    reject:
+      number: 1
   linkExpression: "http://${localhostname}:${service['zeppelin.server.port']}/"
   env:
   - name: DISCOVER_CONF_DIR
@@ -164,6 +170,9 @@ roles:
   labelPrefix: "discover-local-cran"
   dockerImage: "transwarp/local-cran:transwarp-5.0"
   category: MASTER
+  deleteOpCondition:
+    reject:
+      number: 1
   linkExpression: "ftp://${localhostname}:${service['discover.local-cran.port']}"
   summaryPolicy: ALL
   env:

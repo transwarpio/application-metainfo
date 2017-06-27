@@ -17,6 +17,11 @@ roles:
   linkExpression: "http://${localhostname}:${service['notification.http.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
   env:
   - name: NOTIFICATION_CONF_DIR
     value: /etc/${service.sid}/conf

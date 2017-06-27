@@ -19,6 +19,11 @@ roles:
   friendlyName: "Sophon Server"
   labelPrefix: "sophon-server"
   category: MASTER
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
   env:
   - name: KRB_ENABLE
     value: <#if service.auth == "kerberos">true<#else>false</#if>
@@ -75,6 +80,11 @@ roles:
   friendlyName: "Sophon Redis"
   labelPrefix: "sophon-redis"
   category: MASTER
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
   env:
   - name: MIDAS_REDIS_PORT
     value: ${service['midas.redis.port']}
@@ -97,6 +107,11 @@ roles:
   friendlyName: "Sophon Scheduler"
   labelPrefix: "sophon-scheduler"
   category: MASTER
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
   env:
   - name: SERVICE_CONF_DIR
     value: /etc/${service.sid}/conf

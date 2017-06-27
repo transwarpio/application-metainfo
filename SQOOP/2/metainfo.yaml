@@ -20,6 +20,11 @@ roles:
   labelPrefix: "sqoop"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
   env:
   - name: SQOOP_CONF_DIR
     value: /etc/${service.sid}/conf

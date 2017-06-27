@@ -41,6 +41,11 @@ roles:
   linkExpression: "http://${localhostname}:${service['governor.http.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Move"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
   env:
   - name: ATLAS_CONF
     value: /etc/${service.sid}/conf

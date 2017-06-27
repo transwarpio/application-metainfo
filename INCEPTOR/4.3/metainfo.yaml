@@ -48,6 +48,11 @@ roles:
   labelPrefix: "inceptor-metastore"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
   env:
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
@@ -76,6 +81,11 @@ roles:
   linkExpression: "http://${localhostname}:${service['inceptor.ui.port']}/"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
   env:
   - name: TRANSWARP_ZOOKEEPER_QUORUM
     value: |

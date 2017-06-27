@@ -10,8 +10,16 @@ roles:
 - name: SEARCH_SERVER
   friendlyName: "Search Server"
   labelPrefix: "search-server"
+  linkExpression: "http://${localhostname}:9200/_cluster/health?pretty=true"
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 4
+    movable:
+      number: 3
+    reject:
+      number: 2
   env:
   - name: LOG_DIR
     value: /var/log/${service.sid}

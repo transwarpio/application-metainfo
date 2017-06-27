@@ -21,6 +21,11 @@ roles:
   linkExpression: "http://${localhostname}:${service['pilot.desktop.http.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
   env:
   - name: PILOT_CONF_DIR
     value: /etc/${service.sid}/conf

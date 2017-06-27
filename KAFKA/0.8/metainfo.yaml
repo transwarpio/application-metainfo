@@ -17,6 +17,11 @@ roles:
   labelPrefix: "kafka-server"
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
   env:
   - name: TRANSWARP_ZOOKEEPER_QUORUM
     value: |

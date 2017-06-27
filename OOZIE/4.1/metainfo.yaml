@@ -29,6 +29,11 @@ roles:
   linkExpression: "http://${localhostname}:11000/"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
   env:
   - name: OOZIE_CONF_DIR
     value: /etc/${service.sid}/conf

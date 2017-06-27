@@ -24,6 +24,11 @@ roles:
   labelPrefix: "transporter-server"
   category: MASTER
   frontendOperations: ["Start", "Stop"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
   env:
   - name: TDT_CONF_DIR
     value: /etc/${service.sid}/conf
