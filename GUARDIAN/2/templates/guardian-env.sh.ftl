@@ -24,3 +24,16 @@ export GUARDIAN_DS_HA_MASTER_PORT=${service['guardian.apacheds.ldap.port']}
 export GUARDIAN_LOG_DIR=/var/log/${service.sid}
 export GUARDIAN_SERVER_KEY_STORE=/srv/guardian/server.keystore
 export JAVA_OPTS=" -Djava.security.krb5.conf=/etc/${service.sid}/conf/krb5.conf "
+
+<#--Add guardian server cache replication configuration-->
+<#assign guardian_servers=service.roles.GUARDIAN_SERVER servers_with_port=[]>
+<#list guardian_servers as server>
+    <#assign servers_with_port += [server.hostname + ":" + service['guardian.cache.repli.bind.port']]>
+</#list>
+<#if servers_with_port?seq_contains(localhostname + ":" + service['guardian.cache.repli.bind.port'])>
+export GUARDIAN_CACHE_REPLI_BIND_HOST=${localhostname}
+export GUARDIAN_CACHE_REPLI_BIND_PORT=${service['guardian.cache.repli.bind.port']}
+export GUARDIAN_CACHE_REPLI_INITIAL_HOSTS=${servers_with_port?join(",")}
+export GUARDIAN_CACHE_REPLI_PORT_RANGE=1
+export GUARDIAN_CACHE_REPLI_NUM=${guardian_servers?size}
+</#if>

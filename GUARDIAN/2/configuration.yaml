@@ -112,3 +112,12 @@
   onDeps: []
   groups: []
   visibility: WRITE_ONLY
+
+- name: guardian.cache.repli.bind.port
+  recommendExpression: 7800
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
