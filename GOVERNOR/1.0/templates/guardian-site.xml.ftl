@@ -12,11 +12,15 @@
     </property>
     <property>
         <name>guardian.connection.username</name>
-        <value>${guardian['guardian.admin.username']}</value>
+        <value>guardian/guardian</value>
     </property>
     <property>
-        <name>guardian.connection.password</name>
-        <value>${guardian['guardian.admin.password']}</value>
+        <name>guardian.connection.user.issystem</name>
+        <value>true</value>
+    </property>
+    <property>
+        <name>guardian.connection.password.store</name>
+        <value>/etc/${service.sid}/conf/guardian-client.jks</value>
     </property>
     <property>
         <name>guardian.connection.client.impl</name>

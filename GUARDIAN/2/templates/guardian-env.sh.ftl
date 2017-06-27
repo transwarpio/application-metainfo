@@ -28,9 +28,9 @@ export JAVA_OPTS=" -Djava.security.krb5.conf=/etc/${service.sid}/conf/krb5.conf 
 <#--Add guardian server cache replication configuration-->
 <#assign guardian_servers=service.roles.GUARDIAN_SERVER servers_with_port=[]>
 <#list guardian_servers as server>
-    <#assign servers_with_port += [server.hostname + ":" + service['guardian.cache.repli.bind.port']]>
+    <#assign servers_with_port += [server.hostname + "[" + service['guardian.cache.repli.bind.port'] + "]"]>
 </#list>
-<#if servers_with_port?seq_contains(localhostname + ":" + service['guardian.cache.repli.bind.port'])>
+<#if servers_with_port?seq_contains(localhostname + "[" + service['guardian.cache.repli.bind.port'] + "]")>
 export GUARDIAN_CACHE_REPLI_BIND_HOST=${localhostname}
 export GUARDIAN_CACHE_REPLI_BIND_PORT=${service['guardian.cache.repli.bind.port']}
 export GUARDIAN_CACHE_REPLI_INITIAL_HOSTS=${servers_with_port?join(",")}

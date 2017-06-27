@@ -8,7 +8,7 @@ dockerImage: "transwarp/notification:tdh500"
 dependencies:
   - name: TXSQL
     minVersion: 1.0-tdh500
-    maxVersion: 1.0-tdh509
+    maxVersion: 1.0-tdh500
     optional: false
 roles:
 - name: NOTIFICATION_SERVER

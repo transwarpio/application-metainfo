@@ -346,7 +346,7 @@
 
 # sssd.conf
 - name: discover.ide.home.dir
-  recommendExpression: /disocver/ide
+  recommendExpression: /discover/ide
   defaultValue: null
   valueType: ABSOLUTE_PATH
   scope: !<ServiceLevel> {}
