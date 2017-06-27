@@ -322,7 +322,7 @@ healthChecks:
   method: !<DockerPsAndSystemctl>
     imageMap:
       TOS_MASTER:
-        DockerPs: ["etcd", "boot.sh apiserver", "boot.sh controller", "boot.sh scheduler"]
+        DockerPs: ["boot.sh --data-dir", "boot.sh apiserver", "boot.sh controller", "boot.sh scheduler"]
       TOS_REGISTRY:
         DockerPs: ["/entrypoint.sh", "/root/start-apache"]
       TOS_SLAVE:

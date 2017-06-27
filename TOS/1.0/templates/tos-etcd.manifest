@@ -15,8 +15,12 @@ spec:
       imagePullPolicy: IfNotPresent
       securityContext:
         privileged: true
+      resources:
+        requests:
+          memory: "1Gi"
+          cpu: "1"
       command:
-      - etcd
+      - boot.sh
       - --data-dir=/var/etcd/data
       - --heartbeat-interval=${service['tos.master.etcd.heartbeat.interval']}
       - --election-timeout=${service['tos.master.etcd.election.timeout']}
@@ -37,6 +41,8 @@ spec:
         value: http://${localhostname}:${service['tos.master.etcd.port']}
       - name: ETCD_LISTEN_CLIENT_URLS
         value: http://0.0.0.0:${service['tos.master.etcd.port']}
+      - name: LOG_DIR
+        value: /var/log/kubernetes/etcd
       volumeMounts:
       - name: varetcd
         mountPath: /var/etcd/data
@@ -44,6 +50,9 @@ spec:
       - name: transwarphosts
         mountPath: /etc/transwarp/conf
         readOnly: true
+      - name: etcdlog
+        mountPath: /var/log/kubernetes/etcd
+        readOnly: false
   volumes:
     - name: varetcd
       hostPath:
@@ -51,3 +60,6 @@ spec:
     - name: transwarphosts
       hostPath:
         path: /etc/transwarp/conf
+    - name: etcdlog
+      hostPath:
+        path: /var/log/kubernetes/etcd
