@@ -56,6 +56,13 @@ roles:
     - directive: !<mkdirs>
         paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}", "/var/lib/${service.sid}"]
         mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "db.properties"
+        targetPath: "/etc/${service.sid}/conf/db.properties"
+        mode: "600"
 
 stages:
   - type: Config
