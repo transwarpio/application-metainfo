@@ -34,13 +34,7 @@ roles:
   env:
   - name: HBASE_CONF_DIR
     value: /etc/${service.sid}/conf
-  mountPaths:
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: hyperbase
-  - mountPath: /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
+  mountPaths: []
   resources:
     limitsMemoryKey: master.container.limits.memory
     limitsCpuKey: master.container.limits.cpu
@@ -57,7 +51,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}"]
+        paths: ["/var/lock/subsys/${service.sid}"]
         mode: "755"
   - type: Config
     directives:
@@ -80,13 +74,7 @@ roles:
   env:
   - name: HBASE_CONF_DIR
     value: /etc/${service.sid}/conf
-  mountPaths:
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: hyperbase
-  - mountPath: /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
+  mountPaths: []
   resources:
     limitsMemoryKey: regionserver.container.limits.memory
     limitsCpuKey: regionserver.container.limits.cpu
@@ -103,7 +91,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}"]
+        paths: ["/var/lock/subsys/${service.sid}"]
         mode: "755"
   - type: Config
     directives:
@@ -125,13 +113,7 @@ roles:
   env:
   - name: HBASE_CONF_DIR
     value: /etc/${service.sid}/conf
-  mountPaths:
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: hyperbase
-  - mountPath: /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
+  mountPaths: []
   resources:
     limitsMemoryKey: thrift.container.limits.memory
     limitsCpuKey: thrift.container.limits.cpu
@@ -148,7 +130,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}"]
+        paths: ["/var/lock/subsys/${service.sid}"]
         mode: "755"
   - type: Config
     directives:

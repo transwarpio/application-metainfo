@@ -27,18 +27,7 @@ roles:
   - mountPath: ${service['guardian.apacheds.data.dir']}
     hostPath: ${service['guardian.apacheds.data.dir']}
     name: srv
-  - mountPath: /etc/${service.sid}/conf/
-    hostPath: /etc/${service.sid}/conf/
-    name: conf
-  - mountPath: /var/log/${service.sid}/
-    hostPath: /var/log/${service.sid}/
-    name: log
-  operations:
-  - type: Install
-    directives:
-    - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/${service.sid}/data"]
-        mode: "755"
+  operations: []
 - name: GUARDIAN_SERVER
   friendlyName: "Guardian Server"
   labelPrefix: "guardian-server"
@@ -61,18 +50,9 @@ roles:
   - mountPath: /srv/guardian
     hostPath: /srv/guardian
     name: srv
-  - mountPath: /etc/${service.sid}/conf/
-    hostPath: /etc/${service.sid}/conf/
-    name: conf
-  - mountPath: /var/log/${service.sid}/
-    hostPath: /var/log/${service.sid}/
-    name: log
   operations:
   - type: Install
     directives:
-    - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/srv/guardian", "/var/log/${service.sid}"]
-        mode: "755"
     - directive: !<shell>
         script: "docker run -v /srv/guardian:/srv/guardian --net=host ${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/guardian-gencerts:tdh500 entry.sh"
 

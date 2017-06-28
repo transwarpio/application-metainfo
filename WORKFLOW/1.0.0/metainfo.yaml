@@ -14,10 +14,6 @@ dependencies:
     minVersion: 1.0-tdh500
     maxVersion: 1.0-tdh500
     optional: false
-#  - name: GUARDIAN
-#    minVersion: 1.0-tdh500
-#    maxVersion: 1.0-tdh500
-#    optional: true
 roles:
 - name: WORKFLOW_SERVER
   friendlyName: "Workflow Server"
@@ -29,12 +25,6 @@ roles:
   - name: WORKFLOW_CONF_DIR
     value: /etc/${service.sid}/conf
   mountPaths:
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: conf
-  - mountPath: /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
   - mountPath: /var/lib/workflow
     hostPath: /var/lib/${service.sid}
     name: data
@@ -54,7 +44,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}", "/var/lib/${service.sid}"]
+        paths: ["/var/lib/${service.sid}"]
         mode: "755"
   - type: Config
     directives:

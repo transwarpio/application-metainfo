@@ -33,12 +33,6 @@ roles:
   - name: OOZIE_CONF_DIR
     value: /etc/${service.sid}/conf
   mountPaths:
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: conf
-  - mountPath: /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
   - mountPath: /var/lib/${service.sid}
     hostPath: /var/lib/${service.sid}
     name: datadir
@@ -58,7 +52,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}", "/etc/${service.sid}/conf/hadoop-conf", "/etc/${service.sid}/conf/action-conf"]
+        paths: ["/etc/${service.sid}/conf/hadoop-conf", "/etc/${service.sid}/conf/action-conf"]
         mode: "755"
   - type: Config
     directives:

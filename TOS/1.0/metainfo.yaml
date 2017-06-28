@@ -25,7 +25,7 @@ roles:
         paths: ["/opt/kubernetes/bin/", "/var/log/kubernetes/kubelet", "/opt/kubernetes/manifests-multi"]
         mode: "755"
     - directive: !<mkdirs>
-        paths: ["/var/log/${service.sid}", "/var/run/${service.sid}", "/etc/${service.sid}/conf"]
+        paths: ["/var/run/${service.sid}"]
         mode: "755"
     - directive: !<mkdirs>
         paths: ["/srv/kubernetes"]
@@ -162,7 +162,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/etcd/data"]
+        paths: ["/var/etcd/data"]
         mode: "755"
     - directive: !<mkdirs>
         paths: ["/srv/kubernetes"]
@@ -213,7 +213,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/var/log/${service.sid}" ,"/var/run/${service.sid}", "/etc/${service.sid}/conf"]
+        paths: ["/var/run/${service.sid}"]
         mode: "755"
   - type: Config
     directives:

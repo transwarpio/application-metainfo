@@ -18,13 +18,7 @@ roles:
   - name: CONF_DIR
     value: /etc/${service.sid}/conf
   summaryPolicy: ALL
-  mountPaths:
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: conf
-  - mountPath: /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
+  mountPaths: []
   resources:
     limitsMemoryKey: search.container.limits.memory
     limitsCpuKey: search.container.limits.cpu
@@ -38,12 +32,7 @@ roles:
   - criteria: !<EachNode> {}
   validation:
   - criteria: !<EachNode> {}
-  operations:
-  - type: Install
-    directives:
-    - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}"]
-        mode: "755"
+  operations: []
 
 firstWizardConfigs:
 - path.data

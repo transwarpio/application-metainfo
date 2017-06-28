@@ -20,12 +20,6 @@ roles:
   - name: ZOOKEEPER_CONF_DIR
     value: /etc/${service.sid}/conf
   mountPaths:
-  - mountPath:  /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: zookeeper
   - mountPath: /var/${service.sid}
     hostPath: /var/${service.sid}
     name: data
@@ -45,7 +39,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/run/${service.sid}", "/var/log/${service.sid}"]
+        paths: ["/var/${service.sid}"]
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker

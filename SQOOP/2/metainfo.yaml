@@ -24,12 +24,6 @@ roles:
   - name: SQOOP_CONF_DIR
     value: /etc/${service.sid}/conf
   mountPaths:
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: conf
-  - mountPath: /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
   - mountPath: /etc/hadoop/conf
     hostPath: /etc/${dependencies.YARN.sid}/conf
     name: yarn
@@ -52,7 +46,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}", "/var/transwarp/${service.sid}/data/repository/db"]
+        paths: ["/var/transwarp/${service.sid}/data/repository/db"]
         mode: "755"
 
 firstWizardConfigs:

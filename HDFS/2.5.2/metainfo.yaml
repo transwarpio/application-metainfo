@@ -35,14 +35,8 @@ roles:
     - name: HADOOP_CONF_DIR
       value: /etc/${service.sid}/conf
     - name: HTTPFS_LOG_DIR
-      value: /var/log/httpfs
+      value: /var/log/${service.sid}
     mountPaths:
-    - mountPath: /etc/${service.sid}/conf
-      hostPath: /etc/${service.sid}/conf
-      name: hdfs
-    - mountPath: /var/log/httpfs
-      hostPath: /var/log/httpfs
-      name: log
     - mountPath: /var/run/${service.sid}
       hostPath: /var/run/${service.sid}
       name: hdfssocketdir
@@ -58,12 +52,7 @@ roles:
     - criteria: !<Range> {"min": 1}
     validation:
     - criteria: !<Range> {"min": 1}
-    operations:
-    - type: Install
-      directives:
-      - directive: !<mkdirs>
-          paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
-          mode: "755"
+    operations: []
   - name: HDFS_DATANODE
     friendlyName: "Data Node"
     labelPrefix: "hadoop-hdfs-datanode"
@@ -98,12 +87,6 @@ roles:
     - name: SOCKETDIR
       value: /var/run/${service.sid}
     mountPaths:
-    - mountPath: /etc/${service.sid}/conf
-      hostPath: /etc/${service.sid}/conf
-      name: hdfs
-    - mountPath: /var/log/${service.sid}
-      hostPath: /var/log/${service.sid}
-      name: log
     - mountPath: /var/run/${service.sid}
       hostPath: /var/run/${service.sid}
       name: hdfssocketdir
@@ -123,12 +106,8 @@ roles:
     validation:
       - criteria: !<Range>
           min: 1
-    operations:
-    - type: Install
-      directives:
-      - directive: !<mkdirs>
-          paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
-          mode: "755"
+    operations: []
+
 roleGroups:
   - fieldName: nameservices
     namePrefix: nameservice
@@ -162,12 +141,6 @@ roleGroups:
         - name: JOURNALNODE_DATA_DIRS
           value: /hadoop/journal
         mountPaths:
-        - mountPath: /etc/${service.sid}/conf
-          hostPath: /etc/${service.sid}/conf
-          name: hdfs
-        - mountPath: /var/log/${service.sid}
-          hostPath: /var/log/${service.sid}
-          name: log
         - mountPath: /hadoop/journal
           hostPath: /hadoop/journal
           name: journaldir
@@ -183,12 +156,7 @@ roleGroups:
         - criteria: !<Range> {"min": 3}
         validation:
         - criteria: !<Range> {"min": 1}
-        operations:
-          - type: Install
-            directives:
-            - directive: !<mkdirs>
-                paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
-                mode: "755"
+        operations: []
       - name: HDFS_NAMENODE
         friendlyName: "Name Node"
         labelPrefix: "hadoop-hdfs-namenode"
@@ -223,12 +191,6 @@ roleGroups:
         - name: SOCKETDIR
           value: /var/run/${service.sid}
         mountPaths:
-        - mountPath: /var/log/${service.sid}
-          hostPath: /var/log/${service.sid}
-          name: log
-        - mountPath: /etc/${service.sid}/conf
-          hostPath: /etc/${service.sid}/conf
-          name: hdfs
         - mountPath: /var/transwarp/data
           hostPath: /var/namenode_format/
           name: format
@@ -252,12 +214,7 @@ roleGroups:
           - criteria: !<Range> {"min": 2, "max": 2}
         validation:
           - criteria: !<Range> {"min": 1, "max": 2}
-        operations:
-          - type: Install
-            directives:
-            - directive: !<mkdirs>
-                paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
-                mode: "755"
+        operations: []
 
     others:
     - key: mountPoints

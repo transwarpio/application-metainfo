@@ -43,12 +43,7 @@ roles:
   - criteria: !<Range> {"min": 1}
   validation:
   - criteria: !<Range> {"min": 1}
-  operations:
-  - type: Install
-    directives:
-    - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}"]
-        mode: "755"
+  operations: []
 
 stages:
   - type: Config

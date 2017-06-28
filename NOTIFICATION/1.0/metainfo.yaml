@@ -20,13 +20,7 @@ roles:
   env:
   - name: NOTIFICATION_CONF_DIR
     value: /etc/${service.sid}/conf
-  mountPaths:
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: conf
-  - mountPath: /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
+  mountPaths: []
   resources:
     limitsMemoryKey: notification.container.limits.memory
     limitsCpuKey: notification.container.limits.cpu
@@ -40,11 +34,6 @@ roles:
   validation:
   - criteria: !<Range> {"min": 1}
   operations:
-  - type: Install
-    directives:
-    - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}"]
-        mode: "755"
   - type: Config
     directives:
     - directive: !<resource>

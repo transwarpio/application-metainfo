@@ -26,12 +26,6 @@ roles:
   - name: HADOOP_CONF_DIR
     value: /etc/${service.sid}/conf
   mountPaths:
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: yarn
-  - mountPath: /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
   - mountPath: /var/transwarp
     hostPath: /var/${service.sid}
     name: transwarp
@@ -51,7 +45,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
+        paths: ["/var/lock/subsys/${service.sid}","/var/run/${service.sid}"]
         mode: "755"
   - type: Config
     directives:
@@ -70,12 +64,6 @@ roles:
   - name: HADOOP_CONF_DIR
     value: /etc/${service.sid}/conf
   mountPaths:
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: yarn
-  - mountPath: /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
   - mountPath: /var/transwarp
     hostPath: /var/${service.sid}
     name: transwarp
@@ -98,7 +86,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
+        paths: ["/var/lock/subsys/${service.sid}", "/var/run/${service.sid}"]
         mode: "755"
   - type: Config
     directives:
@@ -137,12 +125,6 @@ roles:
   - name: HADOOP_CONF_DIR
     value: /etc/${service.sid}/conf
   mountPaths:
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: yarn
-  - mountPath: /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
   - mountPath: /var/transwarp
     hostPath: /var/${service.sid}
     name: transwarp
@@ -162,7 +144,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
+        paths: ["/var/lock/subsys/${service.sid}", "/var/run/${service.sid}"]
         mode: "755"
   - type: Config
     directives:
@@ -193,12 +175,6 @@ roles:
       </#if>
       ${namenodes?join(",")}
   mountPaths:
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: yarn
-  - mountPath: /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
   - mountPath: /var/transwarp
     hostPath: /var/${service.sid}
     name: transwarp
@@ -218,7 +194,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}", "/var/run/${service.sid}"]
+        paths: ["/var/lock/subsys/${service.sid}", "/var/run/${service.sid}"]
         mode: "755"
 stages:
   - type: Bootstrap

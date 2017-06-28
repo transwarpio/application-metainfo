@@ -44,13 +44,7 @@ roles:
   env:
   - name: ATLAS_CONF
     value: /etc/${service.sid}/conf
-  mountPaths:
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: conf
-  - mountPath: /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
+  mountPaths: []
   resources:
     limitsMemoryKey: governor.container.limits.memory
     limitsCpuKey: governor.container.limits.cpu
@@ -64,11 +58,6 @@ roles:
   validation:
   - criteria: !<Range> {"min": 1}
   operations:
-  - type: Install
-    directives:
-    - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}"]
-        mode: "755"
   - type: Config
     directives:
     - directive: !<link>

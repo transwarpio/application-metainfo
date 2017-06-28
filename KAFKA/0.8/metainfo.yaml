@@ -29,13 +29,7 @@ roles:
       ${zookeepers?join(",")}
   - name: KAFKA_CONF_DIR
     value: /etc/${service.sid}/conf
-  mountPaths:
-  - mountPath: /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: conf
+  mountPaths: []
   resources:
     limitsMemoryKey: kafka.container.limits.memory
     limitsCpuKey: kafka.container.limits.cpu
@@ -50,12 +44,7 @@ roles:
   - criteria: !<EachNode> {}
   validation:
   - criteria: !<EachNode> {}
-  operations:
-  - type: Install
-    directives:
-    - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf", "/var/${service.sid}", "/var/log/${service.sid}"]
-        mode: "755"
+  operations: []
 
 firstWizardConfigs:
 - listeners

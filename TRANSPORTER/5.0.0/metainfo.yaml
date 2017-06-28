@@ -27,13 +27,7 @@ roles:
   env:
   - name: TDT_CONF_DIR
     value: /etc/${service.sid}/conf
-  mountPaths:
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: conf
-  - mountPath: /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
+  mountPaths: []
   resources:
     limitsMemoryKey: tdt.container.limits.memory
     limitsCpuKey: tdt.container.limits.cpu
@@ -50,7 +44,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}", "/etc/${service.sid}/conf/hadoop"]
+        paths: ["/etc/${service.sid}/conf/hadoop"]
         mode: "755"
   - type: Config
     directives:

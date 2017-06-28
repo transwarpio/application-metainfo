@@ -24,13 +24,7 @@ roles:
     value: <#if service.auth == "kerberos">true<#else>false</#if>
   - name: MIDAS_CONF_DIR
     value: /etc/${service.sid}/conf
-  mountPaths:
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: conf
-  - mountPath: /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
+  mountPaths: []
   resources:
     limitsMemoryKey: server.container.limits.memory
     limitsCpuKey: server.container.limits.cpu
@@ -44,11 +38,6 @@ roles:
   validation:
   - criteria: !<Range> {"min": 1}
   operations:
-  - type: Install
-    directives:
-    - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/log/${service.sid}"]
-        mode: "755"
   - type: Config
     directives:
     - directive: !<resource>
@@ -102,14 +91,7 @@ roles:
   - criteria: !<Range> {"min": 1}
   validation:
   - criteria: !<Range> {"min": 1}
-  operations:
-  - type: Install
-    directives:
-    - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf"]
-        mode: "755"
-  - type: Config
-    directives: []
+  operations: []
 - name: SOPHON_SCHEDULER
   dockerImage: "transwarp/sophon-scheduler:tdh500"
   friendlyName: "Sophon Scheduler"
@@ -120,10 +102,7 @@ roles:
     value: /etc/${service.sid}/conf
   - name: SERVICE_HOME
     value: /usr/lib/scheduler
-  mountPaths:
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: conf
+  mountPaths: []
   resources:
     limitsMemoryKey: scheduler.container.limits.memory
     limitsCpuKey: scheduler.container.limits.cpu
@@ -137,11 +116,6 @@ roles:
   validation:
   - criteria: !<Range> {"min": 1}
   operations:
-  - type: Install
-    directives:
-    - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf"]
-        mode: "755"
   - type: Config
     directives:
     - directive: !<resource>

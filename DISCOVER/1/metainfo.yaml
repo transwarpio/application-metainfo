@@ -29,12 +29,6 @@ roles:
   - name: DISCOVER_CONF_DIR
     value: /etc/${service.sid}/conf
   mountPaths:
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: conf
-  - mountPath: /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
   - mountPath: /var/home
     hostPath: ${service['discover.ide.home.dir']}
     name: home
@@ -54,7 +48,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf/spark", "/etc/${service.sid}/conf/notebook", "/var/log/${service.sid}", "/var/run/${service.sid}", "${service['discover.ide.home.dir']}"]
+        paths: ["/etc/${service.sid}/conf/spark", "/etc/${service.sid}/conf/notebook", "/var/run/${service.sid}", "${service['discover.ide.home.dir']}"]
         mode: "755"
   - type: Config
     directives:
@@ -104,12 +98,6 @@ roles:
   - name: DISCOVER_CONF_DIR
     value: /etc/${service.sid}/conf
   mountPaths:
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: conf
-  - mountPath: /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
   - mountPath: ${service['zeppelin.notebook.dir']}
     hostPath: ${service['zeppelin.notebook.dir']}
     name: data
@@ -132,7 +120,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf/spark", "/etc/${service.sid}/conf/notebook", "/var/log/${service.sid}", "${service['zeppelin.notebook.dir']}", "${service['discover.ide.home.dir']}"]
+        paths: ["/etc/${service.sid}/conf/spark", "/etc/${service.sid}/conf/notebook", "${service['zeppelin.notebook.dir']}", "${service['discover.ide.home.dir']}"]
         mode: "755"
   - type: Config
     directives:
@@ -193,12 +181,7 @@ roles:
   - criteria: !<Range> {"min": 1}
   validation:
   - criteria: !<Range> {"min": 1}
-  operations:
-  - type: Install
-    directives:
-    - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf/"]
-        mode: "755"
+  operations: []
 
 product: Discover
 

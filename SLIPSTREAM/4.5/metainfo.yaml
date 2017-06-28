@@ -46,13 +46,7 @@ roles:
   env:
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
-  mountPaths:
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: inceptor
-  - mountPath: /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
+  mountPaths: []
   resources:
     limitsMemoryKey: metastore.container.limits.memory
     limitsCpuKey: metastore.container.limits.cpu
@@ -65,12 +59,7 @@ roles:
   - criteria: !<Range> {"min": 1}
   validation:
   - criteria: !<Range> {"min": 1}
-  operations:
-  - type: Install
-    directives:
-    - directive: !<mkdirs>
-        paths: ["/var/log/${service.sid}", "/etc/${service.sid}/conf"]
-        mode: "755"
+  operations: []
 - name: INCEPTOR_SERVER
   friendlyName: "Inceptor Server"
   labelPrefix: "inceptor-server"
@@ -89,13 +78,7 @@ roles:
       ${zookeepers?join(",")}
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
-  mountPaths:
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: inceptor
-  - mountPath: /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
+  mountPaths: []
   resources:
     limitsMemoryKey: server.container.limits.memory
     limitsCpuKey: server.container.limits.cpu
@@ -112,7 +95,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf", "/var/lock/subsys/${service.sid}", "/var/log/${service.sid}"]
+        paths: ["/var/lock/subsys/${service.sid}"]
         mode: "755"
 - name: INCEPTOR_EXECUTOR
   friendlyName: "Inceptor Executor"
@@ -131,13 +114,7 @@ roles:
       ${zookeepers?join(",")}
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
-  mountPaths:
-  - mountPath: /etc/${service.sid}/conf
-    hostPath: /etc/${service.sid}/conf
-    name: inceptor
-  - mountPath: /var/log/${service.sid}
-    hostPath: /var/log/${service.sid}
-    name: log
+  mountPaths: []
   resources:
     limitsMemoryKey: executor.container.limits.memory
     limitsCpuKey: executor.container.limits.cpu
@@ -153,12 +130,7 @@ roles:
   - criteria: !<EachNode> {}
   validation:
   - criteria: !<EachNode> {}
-  operations:
-  - type: Install
-    directives:
-    - directive: !<mkdirs>
-        paths: ["/var/log/${service.sid}", "/etc/${service.sid}/conf"]
-        mode: "755"
+  operations: []
 
 stages:
   - type: Bootstrap
