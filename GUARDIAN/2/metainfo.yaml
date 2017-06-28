@@ -12,7 +12,7 @@ roles:
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   deleteOpCondition:
-    reject:
+    movable:
       number: 2
   summaryPolicy: SOME
   dockerImage: "transwarp/apacheds:transwarp-5.0"
@@ -38,8 +38,10 @@ roles:
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   deleteOpCondition:
-    reject:
+    deletable:
       number: 2
+    movable:
+      number: 1
   linkExpression: <#if service['guardian.server.tls.enabled'] = "true">https<#else>http</#if>://${localhostname}:${service['guardian.server.port']}
   summaryPolicy: SOME
   dockerImage: "transwarp/guardian:transwarp-5.0"

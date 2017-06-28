@@ -177,8 +177,10 @@ roleGroups:
         category: MASTER
         frontendOperations: ["Start", "Stop", "Move"]
         deleteOpCondition:
-          reject:
+          movable:
             number: 2
+          reject:
+            number: 1
         env:
         - name: HDFS_HA_NAMENODE_SERVICE
           value: |

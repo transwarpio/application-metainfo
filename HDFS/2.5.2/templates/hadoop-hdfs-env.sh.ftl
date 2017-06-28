@@ -63,7 +63,7 @@ export HADOOP_OPTS="$HADOOP_OPTS -Djava.net.preferIPv4Stack=true $HADOOP_CLIENT_
     memoryRatio = service['namenode.memory.ratio']?number
     namenodeMemory = limitsMemory * memoryRatio * 1024>
 <#else>
-  <#if service[.data_model["localhostname"]]['namenode.memory']??>
+  <#if service[.data_model["localhostname"]]?? && service[.data_model["localhostname"]]['namenode.memory']??>
     <#assign namenodeMemory=service[.data_model["localhostname"]]['namenode.memory']?trim?number>
   <#else>
     <#assign namenodeMemory=24000>
@@ -79,7 +79,7 @@ export HADOOP_SECONDARYNAMENODE_OPTS="-Xmx${namenodeMemory?floor}m -Dcom.sun.man
     memoryRatio = service['zkfc.memory.ratio']?number
     zkfcMemory = limitsMemory * memoryRatio * 1024>
 <#else>
-  <#if service[.data_model["localhostname"]]['zkfc.memory']??>
+  <#if service[.data_model["localhostname"]]?? && service[.data_model["localhostname"]]['zkfc.memory']??>
     <#assign zkfcMemory=service[.data_model["localhostname"]]['zkfc.memory']?trim?number>
   <#else>
     <#assign zkfcMemory=1024>
@@ -94,7 +94,7 @@ export HADOOP_ZKFC_OPTS="-Xmx${zkfcMemory?floor}m $HADOOP_ZKFC_OPTS"
     memoryRatio = service['datanode.memory.ratio']?number
     datanodeMemory = limitsMemory * memoryRatio * 1024>
 <#else>
-    <#if service[.data_model["localhostname"]]['datanode.memory']??>
+    <#if service[.data_model["localhostname"]]?? && service[.data_model["localhostname"]]['datanode.memory']??>
         <#assign datanodeMemory=service[.data_model["localhostname"]]['datanode.memory']?trim?number>
     <#else>
         <#assign datanodeMemory=4096>
@@ -109,7 +109,7 @@ export HADOOP_DATANODE_OPTS="-Xmx${datanodeMemory?floor}m -Dcom.sun.management.j
     memoryRatio = service['journalnode.memory.ratio']?number
     journalnodeMemory = limitsMemory * memoryRatio * 1024>
 <#else>
-  <#if service[.data_model["localhostname"]]['journalnode.memory']??>
+  <#if service[.data_model["localhostname"]]?? && service[.data_model["localhostname"]]['journalnode.memory']??>
     <#assign journalnodeMemory=service[.data_model["localhostname"]]['journalnode.memory']?trim?number>
   <#else>
     <#assign journalnodeMemory=4096>
@@ -190,12 +190,12 @@ export JOURNALNODE_RPC_PORT=${service['journalnode.rpc-port']}
 </#if>
 
 # Export dfs.datanode.data.dir
-<#if service[.data_model["localhostname"]]['dfs.datanode.data.dir']??>
+<#if service[.data_model["localhostname"]]?? && service[.data_model["localhostname"]]['dfs.datanode.data.dir']??>
 export DATANODE_DATA_DIRS=${service[.data_model["localhostname"]]['dfs.datanode.data.dir']}
 </#if>
 
 # Export dfs.namenode.name.dir
-<#if service[.data_model["localhostname"]]['dfs.namenode.name.dir']??>
+<#if service[.data_model["localhostname"]]?? && service[.data_model["localhostname"]]['dfs.namenode.name.dir']??>
 export NAMENODE_DATA_DIRS=${service[.data_model["localhostname"]]['dfs.namenode.name.dir']}
 </#if>
 
