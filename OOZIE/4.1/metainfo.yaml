@@ -28,7 +28,7 @@ roles:
   labelPrefix: "oozie-server"
   linkExpression: "http://${localhostname}:11000/"
   category: MASTER
-  frontendOperations: ["Start", "Stop", "Delete"]
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
     deletable:
       number: 2

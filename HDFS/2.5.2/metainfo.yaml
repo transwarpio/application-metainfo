@@ -62,7 +62,7 @@ roles:
     deleteOpCondition:
       deletable:
         number: 3
-        Decommission: true
+        decommission: true
       reject:
         number: 2
     env:

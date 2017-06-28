@@ -40,7 +40,7 @@ roles:
   labelPrefix: "governor-server"
   linkExpression: "http://${localhostname}:${service['governor.http.port']}"
   category: MASTER
-  frontendOperations: ["Start", "Stop", "Delete", "Move"]
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
     deletable:
       number: 2

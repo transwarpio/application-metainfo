@@ -23,7 +23,7 @@ roles:
   friendlyName: "Transporter Server"
   labelPrefix: "transporter-server"
   category: MASTER
-  frontendOperations: ["Start", "Stop"]
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
     deletable:
       number: 2

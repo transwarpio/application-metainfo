@@ -44,7 +44,7 @@ roles:
   labelPrefix: "hue-server"
   linkExpression: "http://${localhostname}:${service['hue.desktop.http.port']}"
   category: MASTER
-  frontendOperations: ["Start", "Stop", "Delete"]
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
     reject:
       number: 1

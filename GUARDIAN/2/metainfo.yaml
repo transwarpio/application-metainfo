@@ -10,6 +10,7 @@ roles:
   friendlyName: "Guardian ApacheDS"
   labelPrefix: "guardian-apacheds"
   category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   deleteOpCondition:
     reject:
       number: 2
@@ -35,6 +36,7 @@ roles:
   friendlyName: "Guardian Server"
   labelPrefix: "guardian-server"
   category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   deleteOpCondition:
     reject:
       number: 2

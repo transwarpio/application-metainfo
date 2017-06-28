@@ -19,6 +19,7 @@ roles:
   friendlyName: "Sophon Server"
   labelPrefix: "sophon-server"
   category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
     deletable:
       number: 2
@@ -80,6 +81,7 @@ roles:
   friendlyName: "Sophon Redis"
   labelPrefix: "sophon-redis"
   category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
     deletable:
       number: 2
@@ -107,6 +109,7 @@ roles:
   friendlyName: "Sophon Scheduler"
   labelPrefix: "sophon-scheduler"
   category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
     deletable:
       number: 2

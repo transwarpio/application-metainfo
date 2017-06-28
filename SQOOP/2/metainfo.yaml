@@ -19,7 +19,7 @@ roles:
   friendlyName: "Sqoop"
   labelPrefix: "sqoop"
   category: MASTER
-  frontendOperations: ["Start", "Stop", "Delete"]
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
     deletable:
       number: 2

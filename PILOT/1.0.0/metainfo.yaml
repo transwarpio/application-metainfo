@@ -20,7 +20,7 @@ roles:
   labelPrefix: "pilot-server"
   linkExpression: "http://${localhostname}:${service['pilot.desktop.http.port']}"
   category: MASTER
-  frontendOperations: ["Start", "Stop", "Delete"]
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
     deletable:
       number: 2

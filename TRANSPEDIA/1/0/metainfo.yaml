@@ -15,6 +15,7 @@ roles:
   labelPrefix: "transpedia-server"
   linkExpression: "http://${service.roles.TRANSPEDIA_SERVER[0].hostname}:${service['transpedia.port']}"
   category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
   - name: TRANSPEDIA_HOST
     value: ${service['transpedia.host']}

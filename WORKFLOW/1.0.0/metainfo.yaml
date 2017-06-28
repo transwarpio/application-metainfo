@@ -20,7 +20,7 @@ roles:
   labelPrefix: "workflow-server"
   linkExpression: "http://${localhostname}:${service['workflow.http.port']}"
   category: MASTER
-  frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
     deletable:
       number: 2

@@ -16,7 +16,7 @@ roles:
   labelPrefix: "notification-server"
   linkExpression: "http://${localhostname}:${service['notification.http.port']}"
   category: MASTER
-  frontendOperations: ["Start", "Stop", "Delete"]
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
     deletable:
       number: 2

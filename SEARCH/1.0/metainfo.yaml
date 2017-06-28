@@ -11,13 +11,12 @@ roles:
   friendlyName: "Search Server"
   labelPrefix: "search-server"
   linkExpression: "http://${localhostname}:9200/_cluster/health?pretty=true"
-  category: SLAVE
+  category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
     deletable:
-      number: 4
-    movable:
-      number: 3
+      minMaster: true
+      health: ["yellow", "green"]
     reject:
       number: 2
   env:
