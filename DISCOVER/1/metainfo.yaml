@@ -21,7 +21,7 @@ roles:
 - name: DISCOVER_IDE
   friendlyName: "Discover IDE"
   labelPrefix: "discover-ide"
-  dockerImage: "transwarp/rstudio:tdh500"
+  dockerImage: "transwarp/rstudio:transwarp-5.0"
   linkExpression: "http://${localhostname}:8787/"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
@@ -90,7 +90,7 @@ roles:
 - name: DISCOVER_NOTEBOOK
   friendlyName: "Discover Notebook"
   labelPrefix: "discover-notebook"
-  dockerImage: "transwarp/notebook:tdh500"
+  dockerImage: "transwarp/notebook:transwarp-5.0"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   linkExpression: "http://${localhostname}:${service['zeppelin.server.port']}/"
@@ -162,7 +162,7 @@ roles:
 - name: DISCOVER_LOCAL-CRAN
   friendlyName: "Discover Local-Cran"
   labelPrefix: "discover-local-cran"
-  dockerImage: "transwarp/local-cran:tdh500"
+  dockerImage: "transwarp/local-cran:transwarp-5.0"
   category: MASTER
   linkExpression: "ftp://${localhostname}:${service['discover.local-cran.port']}"
   summaryPolicy: ALL

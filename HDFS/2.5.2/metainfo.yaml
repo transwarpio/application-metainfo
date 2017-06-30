@@ -4,7 +4,7 @@ version: 2.5.2-tdh50
 global: false
 namePrefix: HDFS
 friendlyName: HDFS
-dockerImage: "transwarp/hdfs:tdh500"
+dockerImage: "transwarp/hdfs:transwarp-5.0"
 user: hdfs
 dependencies:
   - name: ZOOKEEPER
@@ -15,7 +15,7 @@ roles:
   - name: HDFS_HTTPFS
     friendlyName: "Httpfs"
     labelPrefix: "hadoop-hdfs-httpfs"
-    dockerImage: "transwarp/httpfs:tdh500"
+    dockerImage: "transwarp/httpfs:transwarp-5.0"
     category: SLAVE
     frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
     env:

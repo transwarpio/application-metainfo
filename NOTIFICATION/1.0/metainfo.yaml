@@ -4,7 +4,7 @@ version: 1.0-tdh50
 global: false
 namePrefix: Notification
 friendlyName: Notification
-dockerImage: "transwarp/notification:tdh500"
+dockerImage: "transwarp/notification:transwarp-5.0"
 dependencies:
   - name: TXSQL
     minVersion: 1.0-tdh500

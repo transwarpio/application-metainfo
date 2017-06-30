@@ -15,7 +15,7 @@ dependencies:
     optional: false
 roles:
 - name: SOPHON_SERVER
-  dockerImage: "transwarp/sophon-server:tdh500"
+  dockerImage: "transwarp/sophon-server:transwarp-5.0"
   friendlyName: "Sophon Server"
   labelPrefix: "sophon-server"
   category: MASTER
@@ -71,7 +71,7 @@ roles:
         targetPath: "/etc/${service.sid}/conf/sophon-env.sh"
         mode: "755"
 - name: SOPHON_REDIS
-  dockerImage: "transwarp/sophon-redis:tdh500"
+  dockerImage: "transwarp/sophon-redis:transwarp-5.0"
   friendlyName: "Sophon Redis"
   labelPrefix: "sophon-redis"
   category: MASTER
@@ -93,7 +93,7 @@ roles:
   - criteria: !<Range> {"min": 1}
   operations: []
 - name: SOPHON_SCHEDULER
-  dockerImage: "transwarp/sophon-scheduler:tdh500"
+  dockerImage: "transwarp/sophon-scheduler:transwarp-5.0"
   friendlyName: "Sophon Scheduler"
   labelPrefix: "sophon-scheduler"
   category: MASTER

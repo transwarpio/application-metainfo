@@ -4,7 +4,7 @@ version: 1.0-tdh500
 global: false
 namePrefix: TxSQL
 friendlyName: "TxSQL"
-dockerImage: "transwarp/txsql:tdh500"
+dockerImage: "transwarp/txsql:transwarp-5.0"
 dependencies: []
 user: mysql
 roles:

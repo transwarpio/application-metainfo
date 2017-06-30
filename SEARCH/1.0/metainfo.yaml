@@ -5,7 +5,7 @@ global: false
 namePrefix: Search
 friendlyName: "Search"
 dependencies: []
-dockerImage: "transwarp/search:tdh500"
+dockerImage: "transwarp/search:transwarp-5.0"
 roles:
 - name: SEARCH_SERVER
   friendlyName: "Search Server"

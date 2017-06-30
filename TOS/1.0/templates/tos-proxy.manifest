@@ -7,7 +7,7 @@ spec:
   hostNetwork: true
   containers:
   - name: tos-proxy-${service.sid}
-    image: transwarp/hyperkube:tdh500
+    image: transwarp/hyperkube:transwarp-5.0
     imagePullPolicy: IfNotPresent
     securityContext:
       privileged: true

@@ -11,7 +11,7 @@ roles:
   labelPrefix: "guardian-apacheds"
   category: MASTER
   summaryPolicy: SOME
-  dockerImage: "transwarp/apacheds:tdh500"
+  dockerImage: "transwarp/apacheds:transwarp-5.0"
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [2, 1]}
   suggestion:
@@ -34,7 +34,7 @@ roles:
   category: MASTER
   linkExpression: <#if service['guardian.server.tls.enabled'] = "true">https<#else>http</#if>://${localhostname}:${service['guardian.server.port']}
   summaryPolicy: SOME
-  dockerImage: "transwarp/guardian:tdh500"
+  dockerImage: "transwarp/guardian:transwarp-5.0"
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [2, 1]}
   suggestion:
@@ -54,7 +54,7 @@ roles:
   - type: Install
     directives:
     - directive: !<shell>
-        script: "docker run -v /srv/guardian:/srv/guardian --net=host ${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/guardian-gencerts:tdh500 entry.sh"
+        script: "docker run -v /srv/guardian:/srv/guardian --net=host ${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/guardian-gencerts:transwarp-5.0 entry.sh"
 
 jobs:
   - type: Init

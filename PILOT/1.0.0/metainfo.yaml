@@ -4,7 +4,7 @@ version: 1.0.0-tdh50
 global: false
 namePrefix: Pilot
 friendlyName: Pilot
-dockerImage: "transwarp/pilot:tdh500"
+dockerImage: "transwarp/pilot:transwarp-5.0"
 dependencies:
   - name: INCEPTOR
     minVersion: 4.3-tdh500

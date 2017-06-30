@@ -4,7 +4,7 @@ version: 5.0.0-tdh50
 global: false
 namePrefix: Transporter
 friendlyName: Transwarp Data Transporter
-dockerImage: "transwarp/tdt:tdh500"
+dockerImage: "transwarp/tdt:transwarp-5.0"
 dependencies:
   - name: HDFS
     minVersion: 2.5.2-tdh50

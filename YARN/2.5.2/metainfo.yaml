@@ -4,7 +4,7 @@ version: 2.5.2-tdh50
 global: false
 namePrefix: YARN
 friendlyName: "YARN"
-dockerImage: "transwarp/yarn:tdh500"
+dockerImage: "transwarp/yarn:transwarp-5.0"
 dependencies:
   - name: ZOOKEEPER
     minVersion: 3.4.5-tdh50

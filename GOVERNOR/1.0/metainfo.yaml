@@ -4,7 +4,7 @@ version: 1.0-tdh50
 global: false
 namePrefix: Governor
 friendlyName: Governor
-dockerImage: "transwarp/governor:tdh500"
+dockerImage: "transwarp/governor:transwarp-5.0"
 dependencies:
   - name: HYPERBASE
     minVersion: 1.0-tdh50

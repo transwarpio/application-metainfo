@@ -4,7 +4,7 @@ version: 4.1-tdh50
 global: false
 namePrefix: Oozie
 friendlyName: Oozie
-dockerImage: "transwarp/oozie:tdh500"
+dockerImage: "transwarp/oozie:transwarp-5.0"
 dependencies:
   - name: HDFS
     minVersion: 2.5.2-tdh50
