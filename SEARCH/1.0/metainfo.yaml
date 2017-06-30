@@ -38,7 +38,8 @@ firstWizardConfigs:
 - path.data
 - node.master
 - node.data
-- network.host
+- network.bind_host
+- network.publish_host
 - es.heap.size
 - search.container.limits.memory
 - search.container.limits.cpu
