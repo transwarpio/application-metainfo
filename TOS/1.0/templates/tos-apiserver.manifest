@@ -1,6 +1,9 @@
 <#assign etcd_servers=[]>
 <#list service.roles.TOS_MASTER as tos_master>
 <#assign etcd_servers+=["http://" + tos_master.hostname + ":" + service['tos.master.etcd.port']]>
+<#if tos_master.hostname == .data_model["localhostname"]>
+<#assign localIp=tos_master.ip>
+</#if>
 </#list>
 apiVersion: v1
 kind: Pod
@@ -32,6 +35,7 @@ spec:
                 --insecure-bind-address=0.0.0.0
                 --insecure-port=${service['tos.master.apiserver.port']}
                 --bind-address=0.0.0.0
+                --advertise-address=${localIp}
                 --secure-port=${service['tos.master.apiserver.secure.port']}
                 --runtime_config=api/v1
                 --allow_privileged=true
