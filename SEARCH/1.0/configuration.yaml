@@ -81,9 +81,21 @@
   groups: ["elasticsearch.yml"]
   visibility: READ_WRITE
 
-- name: network.host
+- name: network.bind_host
   recommendExpression: "0.0.0.0"
   defaultValue: null
+  isNodeSpecific: true
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: ["elasticsearch.yml"]
+  visibility: READ_WRITE
+
+- name: network.publish_host
+  recommendExpression: ${localhostname}
+  defaultValue: null
+  isNodeSpecific: true
   valueType: STRING
   scope: !<RoleTypes>
     roleTypes: [SEARCH_SERVER]
