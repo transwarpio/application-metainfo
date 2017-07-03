@@ -225,3 +225,10 @@ atlas.authentication.keytab=${service.keytab}
     <#assign license_servers += [(server.hostname + ":" + dependencies.LICENSE_SERVICE[server.hostname]["zookeeper.client.port"])]>
 </#list>
 atlas.license.servers=${license_servers?join(",")}
+
+<#macro property key value>
+${key}=${value}
+</#macro>
+<#list service['atlas-application.properties'] as key, value>
+    <@property key value/>
+</#list>

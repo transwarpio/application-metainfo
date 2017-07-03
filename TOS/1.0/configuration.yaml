@@ -30,7 +30,7 @@
   visibility: READ_WRITE
 
 - name: tos.master.apiserver.secure.port
-  recommendExpression: 8443
+  recommendExpression: 8553
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
