@@ -78,6 +78,7 @@ firstWizardConfigs:
 - guardian.apacheds.ldap.port
 - guardian.apacheds.kdc.port
 - guardian.apacheds.data.dir
+- guardian.client.cache.enabled
 
 principals:
 - guardian/guardian

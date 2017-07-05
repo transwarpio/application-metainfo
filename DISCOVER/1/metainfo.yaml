@@ -101,7 +101,7 @@ roles:
   - mountPath: ${service['zeppelin.notebook.dir']}
     hostPath: ${service['zeppelin.notebook.dir']}
     name: data
-  - mountPath: /home
+  - mountPath: /var/home
     hostPath: ${service['discover.ide.home.dir']}
     name: home
   resources:
