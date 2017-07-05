@@ -28,7 +28,7 @@
     </property>
     <property>
         <name>guardian.client.cache.enabled</name>
-        <value>true</value>
+        <value>${guardian['guardian.client.cache.enabled']}</value>
     </property>
     <property>
         <name>guardian.server.tls.enabled</name>
