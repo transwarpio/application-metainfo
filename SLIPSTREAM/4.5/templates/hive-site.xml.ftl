@@ -34,16 +34,19 @@
     <@property "hive.server2.authentication.kerberos.keytab" service.keytab/>
 </#if>
 <#if service['hive.server2.authentication'] == "LDAP">
-    <#assign  authentication="CUSTOM">
+    <#assign  authentication="LDAP">
     <#assign  guardian=dependencies.GUARDIAN guardian_servers=[]>
     <#list guardian.roles["GUARDIAN_APACHEDS"] as role>
         <#assign guardian_servers += [("ldap://" + role.hostname + ":" + guardian["guardian.apacheds.ldap.port"])]>
     </#list>
-    <@property "hive.server2.custom.authentication.class" "io.transwarp.guardian.plugins.inceptor.GuardianLdapAuthProviderImpl"/>
     <@property "hive.server2.authentication.ldap.baseDN", "ou=People,${service.domain}"/>
     <@property "hive.server2.authentication.ldap.url" "${guardian_servers?join(' ')}"/>
+  <#if service.plugins?seq_contains("guardian")>
+    <#assign  authentication="CUSTOM">
+    <@property "hive.server2.custom.authentication.class" "io.transwarp.guardian.plugins.inceptor.GuardianLdapAuthProviderImpl"/>
+  </#if>
 </#if>
-<#if authentication == "KERBEROS" || authentication ==  "CUSTOM">
+<#if authentication != "NONE">
     <@property "hive.server2.authentication" authentication/>
     <@property "hive.security.authenticator.manager" "org.apache.hadoop.hive.ql.security.SessionStateUserAuthenticator"/>
     <@property "hive.security.authorization.enabled" "true"/>
