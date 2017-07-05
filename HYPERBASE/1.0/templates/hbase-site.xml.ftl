@@ -61,7 +61,8 @@
     <@property "hbase.master.info.port" service['master.info.port']/>
     <@property "hbase.regionserver.port" service['regionserver.port']/>
     <@property "hbase.regionserver.info.port" service['regionserver.info.port']/>
-
+    <@property "hbase.master.report.ip" "false"/>
+    <@property "hbase.regionserver.report.ip" "false"/>
 <#if dependencies.SEARCH??>
     <#assign es_nodes=[]>
     <#list dependencies.SEARCH.roles.SEARCH_SERVER as server>
