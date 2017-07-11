@@ -229,6 +229,8 @@ atlas.license.servers=${license_servers?join(",")}
 <#macro property key value>
 ${key}=${value}
 </#macro>
+<#if service['atlas-application.properties']??>
 <#list service['atlas-application.properties'] as key, value>
     <@property key value/>
 </#list>
+</#if>
