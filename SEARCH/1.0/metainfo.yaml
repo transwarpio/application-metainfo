@@ -10,7 +10,7 @@ roles:
 - name: SEARCH_SERVER
   friendlyName: "Search Server"
   labelPrefix: "search-server"
-  linkExpression: "http://${localhostname}:9200/_cluster/health?pretty=true"
+  linkExpression: "http://${localhostname}:${service['http.port']}/_cluster/health?pretty=true"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
@@ -45,6 +45,8 @@ firstWizardConfigs:
 - path.data
 - node.master
 - node.data
+- http.port
+- transport.tcp.port
 - network.bind_host
 - network.publish_host
 - es.heap.size

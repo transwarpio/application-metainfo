@@ -242,3 +242,21 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: http.port
+  recommendExpression: 9200
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["elasticsearch.yml"]
+  visibility: READ_WRITE
+
+- name: transport.tcp.port
+  recommendExpression: 9300
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["elasticsearch.yml"]
+  visibility: READ_WRITE
