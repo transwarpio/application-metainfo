@@ -459,6 +459,17 @@
   groups: []
   visibility: READ_WRITE
 
+- name: kafka.broker.memory
+  recommendExpression: 1
+  defaultValue: null
+  valueType: GB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: kafka.container.limits.memory
   recommendExpression: -1
   defaultValue: null
