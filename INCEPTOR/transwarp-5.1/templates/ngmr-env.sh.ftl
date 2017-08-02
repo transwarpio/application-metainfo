@@ -14,7 +14,5 @@ export NGMR_CACHE_SIZE=${service['ngmr.cache.size']}
 export NGMR_EXECUTORS_PERJOB=${service['ngmr.executors.perjob']}
 export INCEPTOR_LOG_DIR=/var/log/${service.sid}
 export SPARK_DRIVER_PORT=${service['spark.driver.port']}
-<#--Take properties from the context-->
-<#list service['ngmr-env.sh'] as key, value>
-    <@env key value/>
-</#list>
+export EXTRA_DRIVER_OPTS=" ${service['EXTRA_DRIVER_OPTS']} "
+export EXTRA_EXECUTOR_OPTS=" ${service['EXTRA_EXECUTOR_OPTS']} "

@@ -610,7 +610,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["ngmr-env.sh"]
+  groups: []
   visibility: READ_WRITE
 
 - name: EXTRA_EXECUTOR_OPTS
@@ -619,6 +619,6 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["ngmr-env.sh"]
+  groups: []
   visibility: READ_WRITE
 
