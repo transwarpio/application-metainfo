@@ -1,26 +1,26 @@
 ---
 name: OOZIE
-version: 4.1-tdh50
+version: transwarp-5.0.0-rc4
 global: false
 namePrefix: Oozie
 friendlyName: Oozie
 dockerImage: "transwarp/oozie:transwarp-5.0.0-rc4"
 dependencies:
   - name: HDFS
-    minVersion: 2.5.2-tdh50
-    maxVersion: 2.5.2-tdh50
+    minVersion: transwarp-5.0.0-rc4
+    maxVersion: transwarp-5.0.0-rc4
     optional: false
   - name: YARN
-    minVersion: 2.5.2-tdh50
-    maxVersion: 2.5.2-tdh50
+    minVersion: transwarp-5.0.0-rc4
+    maxVersion: transwarp-5.0.0-rc4
     optional: false
   - name: HYPERBASE
-    minVersion: 1.0-tdh50
-    maxVersion: 1.0-tdh50
+    minVersion: transwarp-5.0.0-rc4
+    maxVersion: transwarp-5.0.0-rc4
     optional: true
   - name: INCEPTOR
-    minVersion: 4.3-tdh50
-    maxVersion: 4.3-tdh50
+    minVersion: transwarp-5.0.0-rc4
+    maxVersion: transwarp-5.0.0-rc4
     optional: false
 roles:
 - name: OOZIE_SERVER

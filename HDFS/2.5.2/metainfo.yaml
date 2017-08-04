@@ -1,6 +1,6 @@
 ---
 name: HDFS
-version: 2.5.2-tdh50
+version: transwarp-5.0.0-rc4
 global: false
 namePrefix: HDFS
 friendlyName: HDFS
@@ -8,8 +8,8 @@ dockerImage: "transwarp/hdfs:transwarp-5.0.0-rc4"
 user: hdfs
 dependencies:
   - name: ZOOKEEPER
-    minVersion: 3.4.5-tdh50
-    maxVersion: 3.4.5-tdh50
+    minVersion: transwarp-5.0.0-rc4
+    maxVersion: transwarp-5.0.0-rc4
     optional: false
 roles:
   - name: HDFS_HTTPFS

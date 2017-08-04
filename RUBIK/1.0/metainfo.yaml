@@ -1,18 +1,18 @@
 ---
 name: RUBIK
-version: 1.0-tdh50
+version: transwarp-5.0.0-rc4
 global: false
 namePrefix: Rubik
 friendlyName: Rubik
 dockerImage: "transwarp/rubik:transwarp-5.0.0-rc4"
 dependencies:
   - name: TXSQL
-    minVersion: 1.0-tdh500
-    maxVersion: 1.0-tdh500
+    minVersion: transwarp-5.0.0-rc4
+    maxVersion: transwarp-5.0.0-rc4
     optional: false
   - name: NOTIFICATION
-    minVersion: 1.0-tdh50
-    maxVersion: 1.0-tdh50
+    minVersion: transwarp-5.0.0-rc4
+    maxVersion: transwarp-5.0.0-rc4
     optional: false
 roles:
 - name: RUBIK_SERVER

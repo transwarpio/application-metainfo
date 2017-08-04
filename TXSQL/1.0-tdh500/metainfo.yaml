@@ -1,6 +1,6 @@
 ---
 name: TXSQL
-version: 1.0-tdh500
+version: transwarp-5.0.0-rc4
 global: false
 namePrefix: TxSQL
 friendlyName: "TxSQL"

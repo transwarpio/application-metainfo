@@ -1,6 +1,6 @@
 ---
 name: SEARCH
-version: 1.0-tdh50
+version: transwarp-5.0.0-rc4
 global: false
 namePrefix: Search
 friendlyName: "Search"

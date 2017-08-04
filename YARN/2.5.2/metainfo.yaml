@@ -1,18 +1,18 @@
 ---
 name: YARN
-version: 2.5.2-tdh50
+version: transwarp-5.0.0-rc4
 global: false
 namePrefix: YARN
 friendlyName: "YARN"
 dockerImage: "transwarp/yarn:transwarp-5.0.0-rc4"
 dependencies:
   - name: ZOOKEEPER
-    minVersion: 3.4.5-tdh50
-    maxVersion: 3.4.5-tdh50
+    minVersion: transwarp-5.0.0-rc4
+    maxVersion: transwarp-5.0.0-rc4
     optional: false
   - name: HDFS
-    minVersion: 2.5.2-tdh50
-    maxVersion: 2.5.2-tdh50
+    minVersion: transwarp-5.0.0-rc4
+    maxVersion: transwarp-5.0.0-rc4
     optional: false
 user: yarn
 roles:

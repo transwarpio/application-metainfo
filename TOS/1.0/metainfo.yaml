@@ -1,6 +1,6 @@
 ---
 name: TOS
-version: 1.0
+version: transwarp-5.0.0-rc4
 global: true
 namePrefix: TOS
 friendlyName: TOS

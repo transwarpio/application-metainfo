@@ -1,6 +1,6 @@
 ---
 name: DASHBOARD
-version: 1.5
+version: transwarp-5.0.0-rc4
 global: true
 namePrefix: Dashboard
 friendlyName: Dashboard

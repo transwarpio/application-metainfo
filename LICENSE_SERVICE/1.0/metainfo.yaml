@@ -1,6 +1,6 @@
 ---
 name: LICENSE_SERVICE
-version: 1.0
+version: transwarp-5.0.0-rc4
 global: true
 # compatible with legacy init.d script name "zookeeper-server-transwarp_license_cluster"
 namePrefix: Transwarp_License_Cluster

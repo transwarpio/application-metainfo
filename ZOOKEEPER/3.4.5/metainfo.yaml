@@ -1,6 +1,6 @@
 ---
 name: ZOOKEEPER
-version: 3.4.5-tdh50
+version: transwarp-5.0.0-rc4
 global: false
 namePrefix: ZooKeeper
 friendlyName: "ZooKeeper"

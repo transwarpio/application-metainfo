@@ -1,21 +1,21 @@
 ---
 name: DISCOVER
-version: 1-tdh50
+version: transwarp-5.0.0-rc4
 global: false
 namePrefix: Discover
 friendlyName: Discover
 dependencies:
   - name: ZOOKEEPER
-    minVersion: 3.4.5-tdh50
-    maxVersion: 3.4.5-tdh50
+    minVersion: transwarp-5.0.0-rc4
+    maxVersion: transwarp-5.0.0-rc4
     optional: false
   - name: HDFS
-    minVersion: 2.5.2-tdh50
-    maxVersion: 2.5.2-tdh50
+    minVersion: transwarp-5.0.0-rc4
+    maxVersion: transwarp-5.0.0-rc4
     optional: false
   - name: YARN
-    minVersion: 2.5.2-tdh50
-    maxVersion: 2.5.2-tdh50
+    minVersion: transwarp-5.0.0-rc4
+    maxVersion: transwarp-5.0.0-rc4
     optional: false
 roles:
 - name: DISCOVER_IDE

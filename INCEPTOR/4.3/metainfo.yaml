@@ -1,44 +1,44 @@
 ---
 name: INCEPTOR
-version: 4.3-tdh50
+version: transwarp-5.0.0-rc4
 global: false
 namePrefix: Inceptor
 friendlyName: "Inceptor"
 dockerImage: "transwarp/inceptor:transwarp-5.0.0-rc4"
 dependencies:
   - name: ZOOKEEPER
-    minVersion: 3.4.5-tdh50
-    maxVersion: 3.4.5-tdh50
+    minVersion: transwarp-5.0.0-rc4
+    maxVersion: transwarp-5.0.0-rc4
     optional: false
   - name: HDFS
-    minVersion: 2.5.2-tdh50
-    maxVersion: 2.5.2-tdh50
+    minVersion: transwarp-5.0.0-rc4
+    maxVersion: transwarp-5.0.0-rc4
     optional: false
   - name: YARN
-    minVersion: 2.5.2-tdh50
-    maxVersion: 2.5.2-tdh50
+    minVersion: transwarp-5.0.0-rc4
+    maxVersion: transwarp-5.0.0-rc4
     optional: false
   - name: HYPERBASE
-    minVersion: 1.0-tdh50
-    maxVersion: 1.0-tdh50
+    minVersion: transwarp-5.0.0-rc4
+    maxVersion: transwarp-5.0.0-rc4
     optional: true
   - name: TXSQL
-    minVersion: 1.0-tdh500
-    maxVersion: 1.0-tdh500
+    minVersion: transwarp-5.0.0-rc4
+    maxVersion: transwarp-5.0.0-rc4
     optional: false
   - name: INCEPTOR
-    minVersion: 4.3-tdh50
-    maxVersion: 4.3-tdh50
+    minVersion: transwarp-5.0.0-rc4
+    maxVersion: transwarp-5.0.0-rc4
     optional: true
     preferred: false
   - name: SEARCH
-    minVersion: 1.0-tdh50
-    maxVersion: 1.0-tdh50
+    minVersion: transwarp-5.0.0-rc4
+    maxVersion: transwarp-5.0.0-rc4
     optional: true
     preferred: true
   - name: RUBIK
-    minVersion: 1.0-tdh50
-    maxVersion: 1.0-tdh50
+    minVersion: transwarp-5.0.0-rc4
+    maxVersion: transwarp-5.0.0-rc4
     optional: true
     preferred: false
 user: hive

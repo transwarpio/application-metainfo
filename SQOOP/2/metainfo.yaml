@@ -1,18 +1,18 @@
 ---
 name: SQOOP
-version: 2-tdh50
+version: transwarp-5.0.0-rc4
 global: false
 namePrefix: Sqoop
 friendlyName: Sqoop
 dockerImage: "transwarp/sqoop2:transwarp-5.0.0-rc4"
 dependencies:
   - name: HDFS
-    minVersion: 2.5.2-tdh50
-    maxVersion: 2.5.2-tdh50
+    minVersion: transwarp-5.0.0-rc4
+    maxVersion: transwarp-5.0.0-rc4
     optional: false
   - name: YARN
-    minVersion: 2.5.2-tdh50
-    maxVersion: 2.5.2-tdh50
+    minVersion: transwarp-5.0.0-rc4
+    maxVersion: transwarp-5.0.0-rc4
     optional: false
 roles:
 - name: SQOOP

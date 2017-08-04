@@ -1,13 +1,13 @@
 ---
 name: TRANSPEDIA
-version: 1.0-tdh50
+version: transwarp-5.0.0-rc4
 global: false
 namePrefix: Transpedia
 friendlyName: "Transpedia"
 dependencies:
 - name: SEARCH
-  minVersion: 1.0-tdh50
-  maxVersion: 1.0-tdh50
+  minVersion: transwarp-5.0.0-rc4
+  maxVersion: transwarp-5.0.0-rc4
 dockerImage: "transwarp/transpedia:transwarp-5.0.0-rc4"
 roles:
 - name: TRANSPEDIA_SERVER
