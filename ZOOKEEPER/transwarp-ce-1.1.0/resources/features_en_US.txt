@@ -1,0 +1,9 @@
+Sub-task
+
+[ZOOKEEPER-2080] - Fix deadlock in dynamic reconfiguration
+[ZOOKEEPER-2152] - Intermittent failure in TestReconfig.cc
+[ZOOKEEPER-2692] - Fix race condition in testWatchAutoResetWithPending
+Bug
+
+[ZOOKEEPER-1256] - ClientPortBindTest is failing on Mac OS X
+[ZOOKEEPER-1806] - testCurrentServersAreObserversInNextConfig failing frequently on trunk with non-jdk6

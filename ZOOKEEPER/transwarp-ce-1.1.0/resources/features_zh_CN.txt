@@ -1,0 +1,7 @@
+子任务
+[ zookeeper-2080 ]修正的动态可重构的僵局
+[ zookeeper-2152 ]在testreconfig.cc间歇性故障
+[ zookeeper-2692 ]修复testwatchautoresetwithpending比赛条件
+缺陷
+[ zookeeper-1256 ] - clientportbindtest是Mac OS X上的失败
+[ zookeeper-1806 ] - testcurrentserversareobserversinnextconfig失败经常在树干non-jdk6
