@@ -1,0 +1,9 @@
+Sub-task
+
+[ZOOKEEPER-2692] - Fix race condition in testWatchAutoResetWithPending
+Bug
+
+[ZOOKEEPER-2044] - CancelledKeyException in zookeeper branch-3.4
+[ZOOKEEPER-2383] - Startup race in ZooKeeperServer
+[ZOOKEEPER-2465] - Documentation copyright notice is out of date.
+[ZOOKEEPER-2467] - NullPointerException when redo Command is passed negative value

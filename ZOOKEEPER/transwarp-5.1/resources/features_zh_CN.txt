@@ -1,0 +1,7 @@
+子任务
+[ zookeeper-2692 ]修复testwatchautoresetwithpending比赛条件
+缺陷
+[ zookeeper-2044 ]在动物园branch-3.4 cancelledkeyexception
+[ zookeeper-2383 ]在ZooKeeperServer启动比赛
+[ zookeeper-2465 ]文件版权过期。
+[ zookeeper-2467 ] - NullPointerException当重做命令传递负面价值
