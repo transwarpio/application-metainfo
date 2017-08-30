@@ -1,0 +1,262 @@
+---
+# elasticsearch.yml
+- name: cluster.name
+  recommendExpression: cluster
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: node.rack
+  recommendExpression: default
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: node.master
+  recommendExpression: |
+    <#compress>
+    <#assign servers=service.roles.SEARCH_SERVER?sort_by("id") hosts=[]>
+    <#list servers as server>
+      <#assign hosts+=[(server.hostname)]>
+    </#list>
+    <#if (hosts?seq_index_of(localhostname)<3)>true<#else>false</#if>
+    </#compress>
+  defaultValue: null
+  valueType: BOOL
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: ["elasticsearch.yml"]
+  visibility: READ_WRITE
+
+- name: node.data
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: ["elasticsearch.yml"]
+  visibility: READ_WRITE
+
+- name: path.data
+  recommendExpression: |
+    <#function localDir suffix>
+      <#if rcmdMounts?size == 0>
+        <#return suffix>
+      <#else>
+        <#local dirs = []>
+        <#list rcmdMounts?sort as mnt>
+         <#local dirs = dirs + [mnt + suffix]>
+        </#list>
+        <#return dirs?join(",")>
+      </#if>
+    </#function>
+    ${localDir("/search/data")}
+  defaultValue: null
+  valueType: STRING
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: path.logs
+  recommendExpression: /var/log/${service.sid}
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: ["elasticsearch.yml"]
+  visibility: READ_WRITE
+
+- name: network.bind_host
+  recommendExpression: "0.0.0.0"
+  defaultValue: null
+  isNodeSpecific: true
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: ["elasticsearch.yml"]
+  visibility: READ_WRITE
+
+- name: network.publish_host
+  recommendExpression: ${localhostname}
+  defaultValue: null
+  isNodeSpecific: true
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: ["elasticsearch.yml"]
+  visibility: READ_WRITE
+
+- name: gateway.recover_after_time
+  recommendExpression: 5m
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["elasticsearch.yml"]
+  visibility: READ_WRITE
+
+- name: discovery.zen.minimum_master_nodes
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: index.translog.durability
+  recommendExpression: async
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["elasticsearch.yml"]
+  visibility: READ_WRITE
+
+- name: index.store.type
+  recommendExpression: niofs
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["elasticsearch.yml"]
+  visibility: READ_WRITE
+
+- name: indices.fielddata.cache.size
+  recommendExpression: 50%
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["elasticsearch.yml"]
+  visibility: READ_WRITE
+
+- name: discovery.zen.ping.multicast.enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["elasticsearch.yml"]
+  visibility: READ_WRITE
+
+# elasticsearch-env
+# min(30720m, total_memory_size / 3)
+- name: es.heap.size
+  recommendExpression: |
+    <#assign  thirdMemMB = (memBytes/1048576/3)?int>
+    <#if thirdMemMB <= 30720>
+      ${thirdMemMB?int}
+    <#else>
+      30720
+    </#if>
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+## es.heap.size/4
+#- name: es.heap.newsize
+#  recommendExpression: |
+#    <#assign  thirdMemMB = (memBytes/1048576/3)?int>
+#    <#if thirdMemMB <= 30720>
+#      ${(thirdMemMB/4)?int}
+#    <#else>
+#      ${30720/4}
+#    </#if>
+#  defaultValue: null
+#  valueType: MB
+#  isNodeSpecific: true
+#  scope: !<RoleTypes>
+#    roleTypes: [SEARCH_SERVER]
+#  onDeps: []
+#  groups: []
+#  visibility: READ_WRITE
+
+- name: search.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: http.port
+  recommendExpression: 9200
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["elasticsearch.yml"]
+  visibility: READ_WRITE
+
+- name: transport.tcp.port
+  recommendExpression: 9300
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["elasticsearch.yml"]
+  visibility: READ_WRITE
