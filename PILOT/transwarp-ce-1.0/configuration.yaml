@@ -1,0 +1,103 @@
+- name: filerobot.desktop.http.port
+  recommendExpression: 5005
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: pilot.desktop.http.port
+  recommendExpression: 8086
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: pilot.server.worker.number
+  recommendExpression: 8
+  defaultValue: 8
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: pilot.mapbox.key
+  recommendExpression: The key to enable Mapbox visualizations (See www.mapbox.com)
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: javax.jdo.option.ConnectionUserName
+  recommendExpression: pilotuser
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: javax.jdo.option.ConnectionPassword
+  recommendExpression: password
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: PASSWORD
+
+- name: pilot.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [PILOT_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: pilot.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [PILOT_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: pilot.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [PILOT_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: pilot.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [PILOT_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: pilot.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [PILOT_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
