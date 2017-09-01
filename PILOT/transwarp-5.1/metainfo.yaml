@@ -1,19 +1,24 @@
 ---
-name: NOTIFICATION
+name: PILOT
 version: transwarp-5.1
 global: false
-namePrefix: Notification
-friendlyName: Notification
-dockerImage: "transwarp/notification:transwarp-5.1"
+namePrefix: Pilot
+friendlyName: Pilot
+dockerImage: "transwarp/pilot:transwarp-5.0"
 dependencies:
+  - name: INCEPTOR
+    minVersion: transwarp-5.1
+    maxVersion: transwarp-5.1
+    optional: true
   - name: TXSQL
     minVersion: transwarp-5.1
     maxVersion: transwarp-5.1
     optional: false
 roles:
-- name: NOTIFICATION_SERVER
-  friendlyName: "Notification Server"
-  labelPrefix: "notification-server"
+- name: PILOT_SERVER
+  friendlyName: "Pilot Server"
+  labelPrefix: "pilot-server"
+  linkExpression: "http://${localhostname}:${service['pilot.desktop.http.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
@@ -22,14 +27,20 @@ roles:
     reject:
       number: 1
   env:
-  - name: NOTIFICATION_CONF_DIR
+  - name: PILOT_CONF_DIR
     value: /etc/${service.sid}/conf
-  mountPaths: []
+  mountPaths:
+  - mountPath: /etc/pilot/conf
+    hostPath: /etc/${service.sid}/conf
+    name: conf
+  - mountPath: /var/log/pilot
+    hostPath: /var/log/${service.sid}
+    name: log
   resources:
-    limitsMemoryKey: notification.container.limits.memory
-    limitsCpuKey: notification.container.limits.cpu
-    requestsMemoryKey: notification.container.requests.memory
-    requestsCpuKey: notification.container.requests.cpu
+    limitsMemoryKey: pilot.container.limits.memory
+    limitsCpuKey: pilot.container.limits.cpu
+    requestsMemoryKey: pilot.container.requests.memory
+    requestsCpuKey: pilot.container.requests.cpu
   summaryPolicy: ALL
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
@@ -37,25 +48,19 @@ roles:
   - criteria: !<Range> {"min": 1}
   validation:
   - criteria: !<Range> {"min": 1}
-  operations:
-  - type: Config
-    directives:
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "dataSource.properties"
-        targetPath: "/etc/${service.sid}/conf/dataSource.properties"
-        mode: "600"
+  operations: []
+
 stages:
   - type: Config
     taskGroups:
     - !<Create-Database>
-      dbPrefix: notification
+      dbPrefix: pilot
       dbUserConfig: javax.jdo.option.ConnectionUserName
       dbPasswordConfig: javax.jdo.option.ConnectionPassword
       timeoutMinutes: 5
       summaryPolicy: SOME
     - !<Role>
-      roleType: "NOTIFICATION_SERVER"
+      roleType: "PILOT_SERVER"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
@@ -63,19 +68,20 @@ stages:
 product: Studio
 
 firstWizardConfigs:
-- notification.http.port
+- pilot.desktop.http.port
 - javax.jdo.option.ConnectionUserName
 - javax.jdo.option.ConnectionPassword
-- notification.container.limits.memory
-- notification.container.limits.cpu
-- notification.container.requests.memory
-- notification.container.requests.cpu
-- notification.memory.ratio
+- pilot.container.limits.memory
+- pilot.container.limits.cpu
+- pilot.container.requests.memory
+- pilot.container.requests.cpu
+- pilot.memory.ratio
 
 pages:
 - roles
 - configuration
 - operation
+- security
 
 healthChecks:
 - category: DAEMON_CHECK

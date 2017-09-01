@@ -152,7 +152,7 @@
   visibility: READ_WRITE
 
 - name: workflow.pseudo.password
-  recommendExpression: Trasnwarp4T
+  recommendExpression: Transwarp4T
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}

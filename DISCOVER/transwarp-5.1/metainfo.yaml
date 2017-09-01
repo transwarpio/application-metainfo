@@ -192,6 +192,17 @@ roles:
   - criteria: !<Range> {"min": 1}
   operations: []
 
+stages:
+  - type: Bootstrap
+    taskGroups:
+    - !<Create-Dir-in-HDFS>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      dirs: ["/${service.sid}"]
+      user: "hive"
+      group: "hive"
+      mod: 711
+
 product: Discover
 
 firstWizardConfigs:

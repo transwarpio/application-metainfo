@@ -309,6 +309,16 @@
   groups: []
   visibility: READ_WRITE
 
+- name: nodemanager.webapp.port
+  recommendExpression: 8042
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [YARN_RESOURCEMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: yarn.nodemanager.webapp.address
   defaultValue: ${r"${yarn.nodemanager.hostname}:8042"}
   recommendExpression: ${r"${yarn.nodemanager.hostname}:8042"}

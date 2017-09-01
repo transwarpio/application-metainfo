@@ -124,7 +124,7 @@ export HIVE_SERVER2="true"
 <#if dependencies.ZOOKEEPER??>
     <#assign zookeeper=dependencies.ZOOKEEPER quorums=[]>
     <#list zookeeper.roles.ZOOKEEPER as role>
-        <#assign quorums += [role.hostname + ":" + zookeeper[role.hostname]["zookeeper.client.port"]]>
+        <#assign quorums += [role.hostname + ":" + zookeeper["zookeeper.client.port"]]>
     </#list>
     <#assign quorum = quorums?join(",")>
 </#if>
@@ -136,9 +136,9 @@ export METASTORE_PORT=${dependencies.INCEPTOR['hive.metastore.port']}
 export METASTORE_PORT=${service['hive.metastore.port']}
 </#if>
 
-<#if dependencies.ZOOKEEPER[.data_model["localhostname"]]??>
-    <#if dependencies.ZOOKEEPER[.data_model["localhostname"]]['zookeeper.client.port']??>
-export TRANSWARP_ZOOKEEPER_PORT=${dependencies.ZOOKEEPER[.data_model["localhostname"]]['zookeeper.client.port']}
+<#if dependencies.ZOOKEEPER??>
+    <#if dependencies.ZOOKEEPER['zookeeper.client.port']??>
+export TRANSWARP_ZOOKEEPER_PORT=${dependencies.ZOOKEEPER['zookeeper.client.port']}
     </#if>
 </#if>
 

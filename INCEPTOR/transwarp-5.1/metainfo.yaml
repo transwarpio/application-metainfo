@@ -53,6 +53,12 @@ roles:
       number: 2
     reject:
       number: 1
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - netstat -an | grep ${service['hive.metastore.port']} | grep LISTEN > /dev/null
   env:
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
@@ -86,6 +92,11 @@ roles:
       number: 2
     reject:
       number: 1
+  readinessProbe:
+    probe: !<httpGet>
+      path: /
+      port: ${service['inceptor.ui.port']}
+      scheme: HTTP
   env:
   - name: TRANSWARP_ZOOKEEPER_QUORUM
     value: |
@@ -117,12 +128,6 @@ roles:
     - directive: !<mkdirs>
         paths: ["/var/lock/subsys/${service.sid}", "/var/run/${service.sid}"]
         mode: "755"
-  - type: Config
-    directives:
-    - directive: !<link>
-        action: Link
-        from: "/etc/<#if dependencies.RUBIK??>${dependencies.RUBIK.sid}<#else>rubik1</#if>/conf/dataSource.properties"
-        to: "/etc/${service.sid}/conf/dataSource.properties"
 - name: INCEPTOR_EXECUTOR
   friendlyName: "Inceptor Executor"
   labelPrefix: "inceptor-executor"
@@ -196,6 +201,20 @@ stages:
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
+  - type: PreUpgrade
+    taskGroups:
+    - !<DockerRunPreUpgrade>
+        summaryPolicy: ALL
+        timeoutMinutes: 10
+        roleType: INCEPTOR_METASTORE
+        node: Any
+  - type: PreRollback
+    taskGroups:
+    - !<DockerRunPreRollback>
+        summaryPolicy: ALL
+        timeoutMinutes: 10
+        roleType: INCEPTOR_METASTORE
+        node: Any
 
 product: Inceptor
 

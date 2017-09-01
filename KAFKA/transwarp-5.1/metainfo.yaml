@@ -56,9 +56,9 @@ firstWizardConfigs:
 - advertised.listeners
 - delete.topic.enable
 - kmq.log.dirs
+- zookeeper.connection.timeout.ms
+- zookeeper.connection.timeout.ms
 - kafka.broker.memory
-- zookeeper.connection.timeout.ms
-- zookeeper.connection.timeout.ms
 - kafka.container.limits.memory
 - kafka.container.limits.cpu
 - kafka.container.requests.memory

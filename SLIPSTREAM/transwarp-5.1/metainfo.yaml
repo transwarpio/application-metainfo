@@ -48,6 +48,12 @@ roles:
       number: 2
     reject:
       number: 1
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - netstat -an | grep ${service['hive.metastore.port']} | grep LISTEN > /dev/null
   env:
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
@@ -76,6 +82,11 @@ roles:
       number: 2
     reject:
       number: 1
+  readinessProbe:
+    probe: !<httpGet>
+      path: /
+      port: ${service['inceptor.ui.port']}
+      scheme: HTTP
   env:
   - name: TRANSWARP_ZOOKEEPER_QUORUM
     value: |

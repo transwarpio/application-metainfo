@@ -21,7 +21,7 @@
   visibility: READ_WRITE
 
 - name: guardian.apacheds.kdc.port
-  recommendExpression: 6088
+  recommendExpression: 1088
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>

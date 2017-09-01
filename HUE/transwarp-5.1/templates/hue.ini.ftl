@@ -1128,7 +1128,7 @@
 <#if dependencies.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?size gt 0>
   <#list dependencies.ZOOKEEPER.roles.ZOOKEEPER as zookeeper>
     <#assign hostname = zookeeper.hostname>
-    <#assign port = dependencies.ZOOKEEPER[zookeeper.hostname]["zookeeper.client.port"]>
+    <#assign port = dependencies.ZOOKEEPER["zookeeper.client.port"]>
     <#assign zookeepers += [(hostname+":"+port)]>
   </#list>
 </#if>

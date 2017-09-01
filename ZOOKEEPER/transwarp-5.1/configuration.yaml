@@ -2,7 +2,7 @@
   recommendExpression: 2181
   defaultValue: null
   valueType: PORT
-  isNodeSpecific: true
+#  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes: [ZOOKEEPER]
   onDeps: []

@@ -17,7 +17,7 @@ master.port=${service['workflow.http.port']}
 <#if dependencies.ZOOKEEPER??>
     <#assign zookeeper=dependencies.ZOOKEEPER quorums=[]>
     <#list zookeeper.roles.ZOOKEEPER as role>
-        <#assign quorums += [role.hostname + ":" + zookeeper[role.hostname]["zookeeper.client.port"]]>
+        <#assign quorums += [role.hostname + ":" + zookeeper["zookeeper.client.port"]]>
     </#list>
     <#assign quorum = quorums?join(",")>
 </#if>

@@ -31,12 +31,12 @@
     <@property "yarn.timeline-service.http-authentication.type" "kerberos"/>
     <@property "yarn.timeline-service.http-authentication.kerberos.principal" "HTTP/_HOST@" + service.realm/>
     <@property "yarn.timeline-service.http-authentication.kerberos.keytab" service.keytab/>
-    <#if service.plugins?seq_contains("guardian")>
+    </#if>
+</#if>
+<#if service.plugins?seq_contains("guardian")>
     <@property "yarn.service.id" service.sid/>
     <@property "yarn.authorization-provider" "io.transwarp.guardian.plugins.yarn.GuardianYarnAuthorizer"/>
     <@property "yarn.resourcemanager.configuration.provider-class" "io.transwarp.guardian.plugins.yarn.GuardianYarnConfigurationProvider"/>
-    </#if>
-    </#if>
 </#if>
 
 <#if service.roles.YARN_RESOURCEMANAGER?? && service.roles.YARN_RESOURCEMANAGER?size gt 1>
@@ -47,7 +47,7 @@
     <#if dependencies.ZOOKEEPER??>
         <#assign zookeeper=dependencies.ZOOKEEPER quorums=[]>
         <#list zookeeper.roles.ZOOKEEPER as role>
-            <#assign quorums += [role.hostname + ":" + zookeeper[role.hostname]["zookeeper.client.port"]]>
+            <#assign quorums += [role.hostname + ":" + zookeeper["zookeeper.client.port"]]>
         </#list>
         <#assign quorum = quorums?join(",")>
     </#if>

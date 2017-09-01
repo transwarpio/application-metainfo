@@ -22,6 +22,16 @@ roles:
   linkExpression: "http://${localhostname}:${service['resourcemanager.webapp.port']}/?user.name=yarn"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /
+      port: ${service['resourcemanager.webapp.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
   deleteOpCondition:
     deletable:
       number: 3
@@ -67,6 +77,16 @@ roles:
   linkExpression: "http://${service['yarn.nodemanager.webapp.address']?replace(r'${yarn.nodemanager.hostname}', localhostname)}/?user.name=yarn"
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Commission", "Decommission", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /
+      port: ${service['nodemanager.webapp.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
   deleteOpCondition:
     deletable:
       number: 1
@@ -119,6 +139,16 @@ roles:
   labelPrefix: "hadoop-yarn-historyserver"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /
+      port: ${service['historyserver.http-port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
   env:
   - name: HDFS_HA_NAMENODE_SERVICE
     value: |
@@ -169,6 +199,16 @@ roles:
   labelPrefix: "hadoop-yarn-timelineserver"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /
+      port: ${service['timelineserver.http.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
   env:
   - name: HADOOP_CONF_DIR
     value: /etc/${service.sid}/conf
@@ -243,6 +283,7 @@ firstWizardConfigs:
 - yarn.nodemanager.resource.memory-mb
 - timelineserver.port
 - timelineserver.http.port
+- nodemanager.webapp.port
 - mapred.child.heapsize
 - resourcemanager.memory
 - historyserver.memory

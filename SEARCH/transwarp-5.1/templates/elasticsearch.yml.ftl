@@ -116,6 +116,7 @@ license.zookeeper.quorum: ${license_servers?join(",")}
 
 index.number_of_shards: 10
 index.number_of_replicas: 1
+index.shard.path.selector: tiered
 
 <#list service['elasticsearch.yml'] as key, value>
 ${key}: ${value}

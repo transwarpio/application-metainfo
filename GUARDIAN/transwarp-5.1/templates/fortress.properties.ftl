@@ -75,7 +75,7 @@ max.log.conn=3
 
 # This node contains fortress properties stored on behalf of connecting LDAP clients:
 config.realm=DEFAULT
-config.root=ou=Config,dc=tdh
+config.root=ou=Config,${service['guardian.ds.domain']}
 
 # enable this to see trace statements when connection pool allocates new connections:
 debug.ldap.pool=true

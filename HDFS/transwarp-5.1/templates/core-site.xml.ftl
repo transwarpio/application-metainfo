@@ -40,7 +40,7 @@
 <#if dependencies.ZOOKEEPER??>
     <#assign zookeeper=dependencies.ZOOKEEPER quorum=[]>
     <#list zookeeper.roles.ZOOKEEPER as role>
-        <#assign quorum += [role.hostname + ":" + zookeeper[role.hostname]["zookeeper.client.port"]]>
+        <#assign quorum += [role.hostname + ":" + zookeeper["zookeeper.client.port"]]>
     </#list>
     <@property "ha.zookeeper.quorum" quorum?join(",")/>
     <@property "ha.zookeeper.parent-znode" "/" + sid + "-ha"/>

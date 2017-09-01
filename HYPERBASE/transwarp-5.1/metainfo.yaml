@@ -38,6 +38,16 @@ roles:
       number: 2
     reject:
       number: 1
+  readinessProbe:
+    probe: !<httpGet>
+      path: /
+      port: ${service['master.info.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
   env:
   - name: HBASE_CONF_DIR
     value: /etc/${service.sid}/conf
@@ -83,6 +93,11 @@ roles:
       number: 3
     reject:
       number: 2
+  readinessProbe:
+    probe: !<httpGet>
+      path: /
+      port: ${service['regionserver.info.port']}
+      scheme: HTTP
   env:
   - name: HBASE_CONF_DIR
     value: /etc/${service.sid}/conf
@@ -122,6 +137,11 @@ roles:
   labelPrefix: "hyperbase-thrift"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /
+      port: 9095
+      scheme: HTTP
   env:
   - name: HBASE_CONF_DIR
     value: /etc/${service.sid}/conf

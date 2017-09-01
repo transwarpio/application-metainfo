@@ -46,17 +46,20 @@
     <@property "hive.server2.custom.authentication.class" "io.transwarp.guardian.plugins.inceptor.GuardianLdapAuthProviderImpl"/>
   </#if>
 </#if>
+<#assign  manager="NONE">
 <#if authentication != "NONE">
     <@property "hive.server2.authentication" authentication/>
     <@property "hive.security.authenticator.manager" "org.apache.hadoop.hive.ql.security.SessionStateUserAuthenticator"/>
     <@property "hive.security.authorization.enabled" "true"/>
-  <#if service.plugins?seq_contains("guardian")>
-    <@property "hive.security.authorization.manager" "io.transwarp.guardian.plugins.inceptor.GuardianHiveAuthorizerFactory"/>
+    <#assign  manager="org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd.SQLStdHiveAuthorizerFactory">
+</#if>
+<#if service.plugins?seq_contains("guardian")>
     <@property "hive.service.id" service.sid/>
     <@property "hive.metastore.event.listeners" "io.transwarp.guardian.plugins.inceptor.GuardianMetaStoreListener"/>
-  <#else>
-    <@property "hive.security.authorization.manager" "org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd.SQLStdHiveAuthorizerFactory"/>
-  </#if>
+    <#assign  manager="io.transwarp.guardian.plugins.inceptor.GuardianHiveAuthorizerFactory">
+</#if>
+<#if manager != "NONE">
+    <@property "hive.security.authorization.manager" manager/>
 </#if>
 
 <#-- handle inceptor scheduler -->
@@ -71,7 +74,7 @@
     <@property "inceptor.scheduler.enabled" "false"/>
   </#if>
 </#if>
- 
+
 <#if service.plugins?seq_contains("governor")>
     <@property "hive.exec.post.hooks" "org.apache.atlas.hive.hook.HivePostHook"/>
     <@property "hive.exec.failure.hooks" "org.apache.atlas.hive.hook.HiveFailHook"/>

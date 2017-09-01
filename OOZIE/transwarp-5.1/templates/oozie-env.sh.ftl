@@ -38,7 +38,6 @@ export CATALINA_OPTS="$CATALINA_OPTS -Xmx${oozieMemory?floor}m -agentpath:/usr/l
 
 # Oozie configuration file to load from Oozie configuration directory
 #
-export OOZIE_CONFIG=/etc/${service.sid}/conf
 export OOZIE_CONFIG_FILE=oozie-site.xml
 
 # Oozie logs directory
