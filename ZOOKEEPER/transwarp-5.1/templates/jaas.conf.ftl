@@ -7,4 +7,9 @@ Server {
   useTicketCache=false
   principal="zookeeper/${localhostname?lower_case}@${service.realm}";
 };
+Client {
+  com.sun.security.auth.module.Krb5LoginModule required
+  useKeyTab=false
+  useTicketCache=true;
+};
 </#if>
