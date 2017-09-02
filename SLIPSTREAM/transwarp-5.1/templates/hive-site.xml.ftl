@@ -88,6 +88,7 @@
     <@property "hive.stats.dbconnectionstring" dbconnectionstring/>
     <#assign scratchdir="hdfs://" + dependencies.HDFS.nameservices[0] + "/" + service.sid + "/tmp/hive">
     <@property "hive.exec.scratchdir" scratchdir/>
+    <@property "inceptor.ui.port" "${service['inceptor.ui.port']}"/>
 <#assign uris = []/>
 <#if dependencies.INCEPTOR??>
     <#list dependencies.INCEPTOR.roles["INCEPTOR_METASTORE"] as role>
