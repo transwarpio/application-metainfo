@@ -26,6 +26,9 @@
 # The id of the broker. This must be set to a unique integer for each broker.
 broker.id=${.data_model['node.id']}
 
+# The sid of the role. Guardian kafka plug read is as component
+kafka.service.id=${service.sid}
+
 # Switch to enable topic deletion or not, default value is false
 delete.topic.enable=${service['delete.topic.enable']}
 
