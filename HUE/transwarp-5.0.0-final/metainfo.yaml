@@ -1,0 +1,102 @@
+---
+name: HUE
+version: transwarp-5.0.0-final
+global: false
+namePrefix: Hue
+friendlyName: Hue
+dockerImage: "transwarp/hue:transwarp-5.0.0-final"
+dependencies:
+  - name: ZOOKEEPER
+    minVersion: transwarp-5.0.0-final
+    maxVersion: transwarp-5.0.0-final
+    optional: false
+  - name: HDFS
+    minVersion: transwarp-5.0.0-final
+    maxVersion: transwarp-5.0.0-final
+    optional: false
+  - name: YARN
+    minVersion: transwarp-5.0.0-final
+    maxVersion: transwarp-5.0.0-final
+    optional: false
+  - name: OOZIE
+    minVersion: transwarp-5.0.0-final
+    maxVersion: transwarp-5.0.0-final
+    optional: false
+  - name: HYPERBASE
+    minVersion: transwarp-5.0.0-final
+    maxVersion: transwarp-5.0.0-final
+    optional: true
+  - name: INCEPTOR
+    minVersion: transwarp-5.0.0-final
+    maxVersion: transwarp-5.0.0-final
+    optional: true
+  - name: SLIPSTREAM
+    minVersion: transwarp-5.0.0-final
+    maxVersion: transwarp-5.0.0-final
+    optional: true
+  - name: SQOOP
+    minVersion: transwarp-5.0.0-final
+    maxVersion: transwarp-5.0.0-final
+    optional: true
+roles:
+- name: HUE_SERVER
+  friendlyName: "Hue Server"
+  labelPrefix: "hue-server"
+  linkExpression: "http://${localhostname}:${service['hue.desktop.http.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    reject:
+      number: 1
+  env:
+  - name: HUE_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths:
+  - mountPath: /var/lib/${service.sid}
+    hostPath: /var/lib/${service.sid}
+    name: datadir
+  resources:
+    limitsMemoryKey: hue.container.limits.memory
+    limitsCpuKey: hue.container.limits.cpu
+    requestsMemoryKey: hue.container.requests.memory
+    requestsCpuKey: hue.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/hadoop-httpfs/conf"]
+        mode: "755"
+
+firstWizardConfigs:
+- hue.desktop.http.port
+- hue.container.limits.memory
+- hue.container.limits.cpu
+- hue.container.requests.memory
+- hue.container.requests.cpu
+- hue.memory.ratio
+
+pages:
+- roles
+- configuration
+- operation
+- security
+
+principals:
+- HTTP
+- httpfs
+- hue
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 10
+  method: !<Builtin> {}
