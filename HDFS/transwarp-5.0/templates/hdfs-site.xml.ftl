@@ -25,10 +25,10 @@
     <@property "dfs.web.authentication.kerberos.keytab" service.keytab/>
     <#--  for datanode to use unprivileged port -->
     <@property "dfs.data.transfer.protection" "integrity"/>
-    <#if service.plugins?seq_contains("guardian")>
+</#if>
+<#if service.plugins?seq_contains("guardian")>
     <@property "dfs.namenode.inode.attributes.provider.class" "io.transwarp.guardian.plugins.hdfs.GuardianINodeAttributeProvider"/>
     <@property "hdfs.service.id" service.sid/>
-    </#if>
 </#if>
 <#--handle federation-->
 <#assign namenode_use_wildcard=service['namenode.use.wildcard']>
