@@ -37,6 +37,7 @@ spec:
                 --bind-address=0.0.0.0
                 --advertise-address=${localIp}
                 --secure-port=${service['tos.master.apiserver.secure.port']}
+                --licence-enable=false
                 --runtime_config=api/v1
                 --allow_privileged=true
                 --cors_allowed_origins=.*
