@@ -170,6 +170,7 @@ roles:
   labelPrefix: "discover-local-cran"
   dockerImage: "transwarp/local-cran:transwarp-5.0"
   category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
     reject:
       number: 1
