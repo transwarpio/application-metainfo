@@ -36,7 +36,7 @@ GUARDIAN_AUTH = ${(service.auth = "kerberos")?string("True", "False")}
     <#assign guardianPort = dependencies.GUARDIAN["guardian.server.port"]>
     <#assign guardianProtocol = (guardianPort = "8380")?string("https", "http")>
     <#assign guardianHost = dependencies.GUARDIAN.roles.GUARDIAN_SERVER?sort_by("id")[0].hostname>
-GUARDIAN_HTTP_PROTOCOL = ${guardianProtocol}
+GUARDIAN_HTTP_PROTOCOL = '${guardianProtocol}'
 GUARDIAN_SERVER = '${guardianHost}:${guardianPort}'
 </#if>
 
