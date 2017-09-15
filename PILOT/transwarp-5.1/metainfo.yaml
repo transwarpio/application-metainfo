@@ -125,6 +125,7 @@ firstWizardConfigs:
 - filerobot.desktop.http.port
 - pilot.desktop.http.port
 - pilot.server.worker.number
+- pilot.load.examples
 - pilot.mapbox.key
 - javax.jdo.option.ConnectionUserName
 - javax.jdo.option.ConnectionPassword

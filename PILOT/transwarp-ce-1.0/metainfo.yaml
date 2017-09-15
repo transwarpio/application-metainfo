@@ -126,6 +126,7 @@ firstWizardConfigs:
 - pilot.desktop.http.port
 - pilot.server.worker.number
 - pilot.mapbox.key
+- pilot.load.examples
 - javax.jdo.option.ConnectionUserName
 - javax.jdo.option.ConnectionPassword
 - pilot.container.limits.memory
