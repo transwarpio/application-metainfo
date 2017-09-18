@@ -25,11 +25,6 @@ password = service['javax.jdo.option.ConnectionPassword']>
 SQLALCHEMY_DATABASE_URI = 'mysql://${username}:${password}@${mysqlHostPort}/pilot_${service.sid}?charset=utf8'
 
 
-# Enable Time Rotate Log Handler
-ENABLE_TIME_ROTATE = True
-TIME_ROTATE_LOG_LEVEL = 'INFO'
-
-
 # The guardian config
 GUARDIAN_AUTH = ${(service.auth = "kerberos")?string("True", "False")}
 <#if service.auth = "kerberos">
@@ -55,6 +50,15 @@ LICENSE_CHECK_SERVER = '${quorum}'
 # Filerobot server
 <#assign filerobotServer = service.roles.FILEROBOT_SERVER[0]['hostname'] + ":" + service['filerobot.desktop.http.port']>
 FILE_ROBOT_SERVER = '${filerobotServer}'
+
+
+# if load examples data
+LOAD_EXAMPLES = ${(service['pilot.load.examples'] = "true")?string("True", "False")}
+
+
+# hdfs
+DEFAULT_HTTPFS = ${dependencies.HDFS.roles.HDFS_HTTPFS[0]['hostname']}
+DEFAULT_HDFS_CONN_NAME = 'default_${dependencies.HDFS.roles.HDFS_HTTPFS[0]['hostname']}'
 
 
 # Set this API key to enable Mapbox visualizations

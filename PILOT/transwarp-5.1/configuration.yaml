@@ -25,6 +25,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: pilot.load.examples
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: pilot.mapbox.key
   recommendExpression: The key to enable Mapbox visualizations (See www.mapbox.com)
   defaultValue: null
