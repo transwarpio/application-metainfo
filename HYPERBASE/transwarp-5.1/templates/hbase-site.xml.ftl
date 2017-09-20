@@ -23,9 +23,8 @@
 </#if>
 
 <#-- TODO handle the kerberos-->
-<#assign coprocessorRegion="NONE">
-<#assign coprocessorMaster="NONE">
-<#assign esRegionCoprocessor=dependencies.SEARCH???string(",org.apache.hadoop.hyperbase.fulltextindex.coprocessor.EsRegionCoprocessor", "")>
+<#assign coprocessorRegion=""/>
+<#assign coprocessorMaster=""/>
 <#if service.auth == "kerberos">
     <@property "hbase.security.authentication" "kerberos"/>
     <@property "hbase.rpc.engine" "org.apache.hadoop.hbase.ipc.SecureRpcEngine"/>
@@ -41,15 +40,19 @@
     <@property "hbase.rest.authentication.kerberos.principal" "hbase/_HOST@" + service.realm/>
     <@property "hbase.rest.authentication.kerberos.keytab" service.keytab/>
     <@property "hbase.security.authorization" "true"/>
-    <#assign coprocessorRegion=service['hbase.coprocessor.region.classes'] + esRegionCoprocessor + ",org.apache.hadoop.hbase.security.token.TokenProvider,org.apache.hadoop.hbase.security.access.AccessController,org.apache.hadoop.hbase.security.access.SecureBulkLoadEndpoint">
-    <#assign coprocessorMaster=service['hbase.coprocessor.master.classes'] + ",org.apache.hadoop.hbase.security.access.AccessController">
+    <#assign coprocessorRegion=",org.apache.hadoop.hbase.security.token.TokenProvider,org.apache.hadoop.hbase.security.access.AccessController,org.apache.hadoop.hbase.security.access.SecureBulkLoadEndpoint"/>
+    <#assign coprocessorMaster=",org.apache.hadoop.hbase.security.access.AccessController"/>
 </#if>
-    <#if coprocessorRegion!="NONE">
-    <@property "hbase.coprocessor.region.classes" coprocessorRegion/>
-    </#if>
-    <#if coprocessorMaster!="NONE">
-    <@property "hbase.coprocessor.master.classes" coprocessorMaster/>
-    </#if>
+
+<#if service.plugins?seq_contains("guardian")>
+    <@property "hbase.service.id" service.sid/>
+    <#assign coprocessorRegion=",org.apache.hadoop.hbase.security.token.TokenProvider,io.transwarp.guardian.plugins.hyperbase.GuardianAccessController,org.apache.hadoop.hbase.security.access.SecureBulkLoadEndpoint"/>
+    <#assign coprocessorMaster=",io.transwarp.guardian.plugins.hyperbase.GuardianAccessController"/>
+</#if>
+
+    <#assign esRegionCoprocessor=dependencies.SEARCH???string(",org.apache.hadoop.hyperbase.fulltextindex.coprocessor.EsRegionCoprocessor", "")>
+    <@property "hbase.coprocessor.region.classes" service['hbase.coprocessor.region.classes'] + esRegionCoprocessor + coprocessorRegion/>
+    <@property "hbase.coprocessor.master.classes" service['hbase.coprocessor.master.classes'] + coprocessorMaster/>
 
     <#assign path="hdfs://" + dependencies.HDFS.nameservices[0] + "/" + service.sid + "_hregionindex">
     <@property "hregion.index.path" path/>
