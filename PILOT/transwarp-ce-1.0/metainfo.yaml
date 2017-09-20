@@ -121,6 +121,8 @@ stages:
       summaryPolicy: SOME
       timeoutMinutes: 1
 
+product: Studio
+
 firstWizardConfigs:
 - filerobot.desktop.http.port
 - pilot.desktop.http.port
