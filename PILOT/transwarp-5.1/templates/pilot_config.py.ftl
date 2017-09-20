@@ -57,8 +57,8 @@ LOAD_EXAMPLES = ${(service['pilot.load.examples'] = "true")?string("True", "Fals
 
 
 # hdfs
-DEFAULT_HTTPFS = ${dependencies.HDFS.roles.HDFS_HTTPFS[0]['hostname']}
-DEFAULT_HDFS_CONN_NAME = 'default_${dependencies.HDFS.roles.HDFS_HTTPFS[0]['hostname']}'
+DEFAULT_HTTPFS = '${dependencies.HDFS.roles.HDFS_HTTPFS[0]['hostname']}'
+DEFAULT_HDFS_CONN_NAME = 'default_{}'.format(DEFAULT_HTTPFS)
 
 
 # Set this API key to enable Mapbox visualizations
