@@ -244,31 +244,6 @@ stages:
     - !<FormakZK>
       summaryPolicy: ALL
       timeoutMinutes: 1
-  - type: Start
-    taskGroups:
-    - !<Upload-License>
-      summaryPolicy: NONE
-      timeoutMinutes: 3
-    - !<Role>
-      roleType: "HDFS_JOURNALNODE"
-      operation: Start
-      summaryPolicy: SOME
-      timeoutMinutes: 3
-    - !<Role>
-      roleType: "HDFS_NAMENODE"
-      operation: Start
-      summaryPolicy: ALL
-      timeoutMinutes: 3
-    - !<Role>
-      roleType: "HDFS_HTTPFS"
-      operation: Start
-      summaryPolicy: SOME
-      timeoutMinutes: 3
-    - !<Role>
-      roleType: "HDFS_DATANODE"
-      operation: Start
-      summaryPolicy: SOME
-      timeoutMinutes: 3
 
 jobs:
   - type: Stop
