@@ -29,7 +29,9 @@ https://github.com/transwarpio/application-metainfo（以下称“公开仓库�
 
 从内部仓库的dev分支拉出个人的分支进行开发修改，修改完成后向内部仓库的dev分支发起merge request。
 
-dev分支中较短版本号的版本目录（如transwarp-5.1，transwarp-ce-1.0）表示正在开发的版本的metainfo，较长版本号的版本目录（如transwarp-5.1.0-rc1，transwarp-ce-1.0.1）表示即将或已经发布的版本，开发过程只修改未发布版本的metainfo。
+dev分支中较短版本号的版本目录（如transwarp-5.1，transwarp-ce-1.0）表示正在开发的版本的元信息，较长版本号的版本目录（如transwarp-5.1.0-rc1，transwarp-ce-1.0.1）表示即将或已经发布的版本，开发过程只修改未发布版本的元信息。
+
+元信息与模板的开发标准参见 [服务标准化手册](/TDH 5.0 service standard.md)
 
 ## 打包流程
 
