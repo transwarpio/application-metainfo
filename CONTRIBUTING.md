@@ -3,6 +3,7 @@
 版本管理通过以下两个仓库进行，为镜像关系
 
 http://172.16.1.41:10080/managability/application-metainfo（以下称“内部仓库”）
+
 https://github.com/transwarpio/application-metainfo（以下称“公开仓库”）
 
 每个仓库有dev和master两个branch
