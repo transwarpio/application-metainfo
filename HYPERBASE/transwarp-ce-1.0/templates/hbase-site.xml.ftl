@@ -23,6 +23,8 @@
 </#if>
 
 <#-- TODO handle the kerberos-->
+<#assign coprocessorRegion=""/>
+<#assign coprocessorMaster=""/>
 <#if service.auth == "kerberos">
     <@property "hbase.security.authentication" "kerberos"/>
     <@property "hbase.rpc.engine" "org.apache.hadoop.hbase.ipc.SecureRpcEngine"/>
