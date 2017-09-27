@@ -200,10 +200,8 @@ roles:
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   readinessProbe:
-    probe: !<httpGet>
-      path: /
+    probe: !<tcpSocket>
       port: ${service['timelineserver.http.port']}
-      scheme: HTTP
     failureThreshold: 3
     initialDelaySeconds: 60
     periodSeconds: 10
