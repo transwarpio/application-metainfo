@@ -125,14 +125,14 @@ stages:
     - !<DockerRunPreUpgrade>
       summaryPolicy: ALL
       timeoutMinutes: 10
-      roleType: TDT_SERVER
+      roleType: PILOT_SERVER
       node: Any
   - type: PreRollback
     taskGroups:
     - !<DockerRunPreRollback>
       summaryPolicy: ALL
       timeoutMinutes: 10
-      roleType: TDT_SERVER
+      roleType: PILOT_SERVER
       node: Any
 
 product: Studio
