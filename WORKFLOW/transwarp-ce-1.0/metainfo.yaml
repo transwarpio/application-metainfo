@@ -73,6 +73,20 @@ stages:
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
+  - type: PreUpgrade
+    taskGroups:
+    - !<DockerRunPreUpgrade>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      roleType: WORKFLOW_SERVER
+      node: Any
+  - type: PreRollback
+    taskGroups:
+    - !<DockerRunPreRollback>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      roleType: WORKFLOW_SERVER
+      node: Any
 
 product: Studio
 
