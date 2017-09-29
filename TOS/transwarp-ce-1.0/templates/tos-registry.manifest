@@ -8,7 +8,7 @@ spec:
   hostNetwork: true
   containers:
   - name: tos-registry-${service.sid}
-    image: transwarp/registry:transwarp-ce-1.0
+    image: transwarp-ce/registry:transwarp-ce-1.0
     imagePullPolicy: IfNotPresent
     securityContext:
       privileged: true

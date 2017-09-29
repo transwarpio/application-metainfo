@@ -4,7 +4,7 @@ version: transwarp-ce-1.0
 global: false
 namePrefix: TxSQL
 friendlyName: "TxSQL"
-dockerImage: "transwarp/txsql:transwarp-ce-1.0"
+dockerImage: "transwarp-ce/txsql:transwarp-ce-1.0"
 dependencies: []
 user: mysql
 roles:

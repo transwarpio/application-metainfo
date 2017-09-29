@@ -4,7 +4,7 @@ version: transwarp-ce-1.0
 global: false
 namePrefix: Workflow
 friendlyName: Workflow
-dockerImage: "transwarp/workflow:transwarp-ce-1.0"
+dockerImage: "transwarp-ce/workflow:transwarp-ce-1.0"
 dependencies:
   - name: ZOOKEEPER
     minVersion: transwarp-ce-1.0

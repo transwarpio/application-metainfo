@@ -7,7 +7,7 @@ namePrefix: Transwarp_License_Cluster
 friendlyName: "License Service"
 dependencies: []
 packages: ["zookeeper"]
-dockerImage: "transwarp/zookeeper:transwarp-ce-1.0"
+dockerImage: "transwarp-ce/zookeeper:transwarp-ce-1.0"
 user: zookeeper
 roles:
 - name: LICENSE_NODE

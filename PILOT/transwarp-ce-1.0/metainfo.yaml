@@ -25,7 +25,7 @@ roles:
   - name: FILEROBOT_SERVER
     friendlyName: "Filerobot Server"
     labelPrefix: "filerobot-server"
-    dockerImage: "transwarp/filerobot:transwarp-ce-1.0"
+    dockerImage: "transwarp-ce/filerobot:transwarp-ce-1.0"
     linkExpression: "http://${localhostname}:${service['filerobot.desktop.http.port']}"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete"]
@@ -63,7 +63,7 @@ roles:
   - name: PILOT_SERVER
     friendlyName: "Pilot Server"
     labelPrefix: "pilot-server"
-    dockerImage: "transwarp/pilot:transwarp-ce-1.0"
+    dockerImage: "transwarp-ce/pilot:transwarp-ce-1.0"
     linkExpression: "http://${localhostname}:${service['pilot.desktop.http.port']}"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete"]

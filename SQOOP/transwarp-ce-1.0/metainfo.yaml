@@ -4,7 +4,7 @@ version: transwarp-ce-1.0
 global: false
 namePrefix: Sqoop
 friendlyName: Sqoop
-dockerImage: "transwarp/sqoop2:transwarp-ce-1.0"
+dockerImage: "transwarp-ce/sqoop2:transwarp-ce-1.0"
 dependencies:
   - name: HDFS
     minVersion: transwarp-ce-1.0

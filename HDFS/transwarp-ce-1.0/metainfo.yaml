@@ -4,7 +4,7 @@ version: transwarp-ce-1.0
 global: false
 namePrefix: HDFS
 friendlyName: HDFS
-dockerImage: "transwarp/hdfs:transwarp-ce-1.0"
+dockerImage: "transwarp-ce/hdfs:transwarp-ce-1.0"
 user: hdfs
 dependencies:
   - name: ZOOKEEPER
@@ -15,7 +15,7 @@ roles:
   - name: HDFS_HTTPFS
     friendlyName: "Httpfs"
     labelPrefix: "hadoop-hdfs-httpfs"
-    dockerImage: "transwarp/httpfs:transwarp-ce-1.0"
+    dockerImage: "transwarp-ce/httpfs:transwarp-ce-1.0"
     category: SLAVE
     frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
     readinessProbe:

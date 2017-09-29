@@ -7,7 +7,7 @@ spec:
   hostNetwork: true
   containers:
     - name: tos-controller-${service.sid}
-      image: transwarp/hyperkube:transwarp-ce-1.0
+      image: transwarp-ce/hyperkube:transwarp-ce-1.0
       imagePullPolicy: IfNotPresent
       securityContext:
         privileged: true

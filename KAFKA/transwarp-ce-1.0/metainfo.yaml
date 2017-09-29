@@ -9,7 +9,7 @@ dependencies:
     minVersion: transwarp-ce-1.0
     maxVersion: transwarp-ce-1.0
     optional: false
-dockerImage: "transwarp/kafka:transwarp-ce-1.0"
+dockerImage: "transwarp-ce/kafka:transwarp-ce-1.0"
 user: kafka
 roles:
 - name: KAFKA_SERVER

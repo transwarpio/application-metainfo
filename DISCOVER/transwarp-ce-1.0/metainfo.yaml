@@ -21,7 +21,7 @@ roles:
 - name: DISCOVER_NOTEBOOK
   friendlyName: "Discover Notebook"
   labelPrefix: "discover-notebook"
-  dockerImage: "transwarp/notebook:transwarp-ce-1.0"
+  dockerImage: "transwarp-ce/notebook:transwarp-ce-1.0"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:

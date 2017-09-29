@@ -21,7 +21,7 @@ spec:
       hostNetwork: true
       containers:
       - name: kubernetes-dashboard
-        image: ${registryServer}:${registryPort}/transwarp/dashboard:transwarp-ce-1.0
+        image: ${registryServer}:${registryPort}/transwarp-ce/dashboard:transwarp-ce-1.0
         imagePullPolicy: Always
         ports:
         - containerPort: ${service['tos.master.dashboard.port']}
