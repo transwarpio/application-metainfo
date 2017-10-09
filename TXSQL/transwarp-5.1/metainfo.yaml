@@ -25,7 +25,7 @@ roles:
       - -c
       - mysql -h `hostname` -uroot -P${service['mysql.rw.port']} -p"${service['root.password']}" -e "select 1 from dual"  > /dev/null && echo ok
     failureThreshold: 3
-    initialDelaySeconds: 60
+    initialDelaySeconds: 10
     periodSeconds: 10
     successThreshold: 1
     timeoutSeconds: 1

@@ -35,7 +35,7 @@ roles:
         port: ${service['filerobot.desktop.http.port']}
         scheme: HTTP
       failureThreshold: 3
-      initialDelaySeconds: 60
+      initialDelaySeconds: 10
       periodSeconds: 10
       successThreshold: 1
       timeoutSeconds: 1
@@ -73,7 +73,7 @@ roles:
         port: ${service['pilot.desktop.http.port']}
         scheme: HTTP
       failureThreshold: 3
-      initialDelaySeconds: 60
+      initialDelaySeconds: 10
       periodSeconds: 10
       successThreshold: 1
       timeoutSeconds: 1
