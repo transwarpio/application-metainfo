@@ -24,7 +24,7 @@ roles:
         port: 14000
         scheme: HTTP
       failureThreshold: 3
-      initialDelaySeconds: 60
+      initialDelaySeconds: 10
       periodSeconds: 10
       successThreshold: 1
       timeoutSeconds: 1
@@ -75,7 +75,7 @@ roles:
         port: ${service['datanode.http-port']}
         scheme: HTTP
       failureThreshold: 3
-      initialDelaySeconds: 60
+      initialDelaySeconds: 10
       periodSeconds: 10
       successThreshold: 1
       timeoutSeconds: 1
@@ -165,7 +165,7 @@ roleGroups:
             port: ${service['journalnode.http-port']}
             scheme: HTTP
           failureThreshold: 3
-          initialDelaySeconds: 60
+          initialDelaySeconds: 10
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 1
@@ -212,7 +212,7 @@ roleGroups:
             port: ${service['namenode.http-port']}
             scheme: HTTP
           failureThreshold: 3
-          initialDelaySeconds: 60
+          initialDelaySeconds: 10
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 1
