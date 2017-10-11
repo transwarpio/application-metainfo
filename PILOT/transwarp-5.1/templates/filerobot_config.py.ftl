@@ -1,5 +1,5 @@
 
-FILEROBOT_WORKERS = 4
+FILEROBOT_WORKERS = ${service['filerobot.server.worker.number']}
 
 FILEROBOT_WEBSERVER_PORT = ${service['filerobot.desktop.http.port']}
 

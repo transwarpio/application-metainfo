@@ -25,7 +25,7 @@ roles:
   - name: FILEROBOT_SERVER
     friendlyName: "Filerobot Server"
     labelPrefix: "filerobot-server"
-    dockerImage: "transwarp-ce/filerobot:transwarp-5.1"
+    dockerImage: "transwarp/filerobot:transwarp-5.1"
     linkExpression: "http://${localhostname}:${service['filerobot.desktop.http.port']}"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete"]
@@ -45,7 +45,10 @@ roles:
     mountPaths:
     - mountPath: /etc/filerobot/conf
       hostPath: /etc/${service.sid}/conf
-      name: conf2
+      name: conf1
+    - mountPath: /var/log/filerobot
+      hostPath: /var/log/${service.sid}
+      name: log1
     summaryPolicy: ALL
     autoAssign:
     - advice: !<NumSeq> {"numSeq": [1]}
@@ -63,7 +66,7 @@ roles:
   - name: PILOT_SERVER
     friendlyName: "Pilot Server"
     labelPrefix: "pilot-server"
-    dockerImage: "transwarp-ce/pilot:transwarp-5.1"
+    dockerImage: "transwarp/pilot:transwarp-5.1"
     linkExpression: "http://${localhostname}:${service['pilot.desktop.http.port']}"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete"]
@@ -125,6 +128,7 @@ product: Studio
 
 firstWizardConfigs:
 - filerobot.desktop.http.port
+- filerobot.server.worker.number
 - pilot.desktop.http.port
 - pilot.server.worker.number
 - pilot.load.examples

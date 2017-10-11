@@ -125,6 +125,7 @@ product: Studio
 
 firstWizardConfigs:
 - filerobot.desktop.http.port
+- filerobot.server.worker.number
 - pilot.desktop.http.port
 - pilot.server.worker.number
 - pilot.mapbox.key
