@@ -7,6 +7,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: filerobot.server.worker.number
+  recommendExpression: 4
+  defaultValue: 4
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: pilot.desktop.http.port
   recommendExpression: 8086
   defaultValue: null
