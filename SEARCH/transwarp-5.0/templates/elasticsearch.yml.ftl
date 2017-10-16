@@ -112,6 +112,10 @@ discovery.zen.minimum_master_nodes: ${service['discovery.zen.minimum_master_node
 # Require explicit names when deleting indices:
 #
 # action.destructive_requires_name: true
+thread_pool:
+  bulk:
+    queue_size: ${service['thread_pool.bulk.queue_size']}
+
 license.zookeeper.quorum: ${license_servers?join(",")}
 
 index.number_of_shards: 10

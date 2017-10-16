@@ -260,3 +260,12 @@
   onDeps: []
   groups: ["elasticsearch.yml"]
   visibility: READ_WRITE
+
+- name: thread_pool.bulk.queue_size
+  recommendExpression: 5000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
