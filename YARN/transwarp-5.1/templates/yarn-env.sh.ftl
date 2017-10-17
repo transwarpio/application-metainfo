@@ -130,4 +130,6 @@ unset IFS
 
 <#if service.auth = "kerberos">
 cp /etc/${service.sid}/conf/krb5.conf /etc
+export MASTERPRINCIPAL=yarn/${localhostname}
+export KEYTAB=/etc/${service.sid}/conf/yarn.keytab
 </#if>

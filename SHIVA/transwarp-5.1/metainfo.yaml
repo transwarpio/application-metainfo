@@ -50,6 +50,14 @@ roles:
         templatePath: "master.conf"
         targetPath: "/etc/${service.sid}/conf/master.conf"
         mode: "755"
+  Commission:
+    roleType: SHIVA_WEBSERVER
+    nodePolicy: Any
+    needConfig: false
+  Decommission:
+    roleType: SHIVA_WEBSERVER
+    nodePolicy: Any
+    needConfig: false
 
 - name: SHIVA_WEBSERVER
   friendlyName: "Shiva Webserver"
@@ -113,7 +121,7 @@ roles:
   labelPrefix: "shiva-tabletserver"
   dockerImage: "transwarp/shiva-tabletserver:transwarp-5.1"
   category: SLAVE
-  frontendOperations: ["Start", "Stop", "Delete", "Scaleout", "Decommission"]
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout", "Commission", "Decommission"]
   readinessProbe:
     probe: !<httpGet>
       path: /
@@ -173,6 +181,14 @@ roles:
         templatePath: "topology.conf"
         targetPath: "/etc/${service.sid}/conf/topology.conf"
         mode: "755"
+  Commission:
+    roleType: SHIVA_WEBSERVER
+    nodePolicy: Any
+    needConfig: false
+  Decommission:
+    roleType: SHIVA_WEBSERVER
+    nodePolicy: Any
+    needConfig: false
 
 firstWizardConfigs:
 - master.rpc_service.master_service_port
