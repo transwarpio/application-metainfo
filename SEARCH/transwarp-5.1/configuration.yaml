@@ -1,20 +1,10 @@
 ---
 # elasticsearch.yml
 - name: cluster.name
-  recommendExpression: cluster
+  recommendExpression: ${service.sid}
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: node.rack
-  recommendExpression: default
-  defaultValue: null
-  valueType: STRING
-  scope: !<RoleTypes>
-    roleTypes: [SEARCH_SERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -34,7 +24,7 @@
   scope: !<RoleTypes>
     roleTypes: [SEARCH_SERVER]
   onDeps: []
-  groups: ["elasticsearch.yml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: node.data
@@ -45,7 +35,7 @@
   scope: !<RoleTypes>
     roleTypes: [SEARCH_SERVER]
   onDeps: []
-  groups: ["elasticsearch.yml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: path.data
@@ -75,11 +65,12 @@
   recommendExpression: /var/log/${service.sid}
   defaultValue: null
   valueType: STRING
+  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes: [SEARCH_SERVER]
   onDeps: []
-  groups: ["elasticsearch.yml"]
-  visibility: READ_WRITE
+  groups: []
+  visibility: HIDDEN
 
 - name: network.bind_host
   recommendExpression: "0.0.0.0"
@@ -89,7 +80,7 @@
   scope: !<RoleTypes>
     roleTypes: [SEARCH_SERVER]
   onDeps: []
-  groups: ["elasticsearch.yml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: network.publish_host
@@ -100,7 +91,7 @@
   scope: !<RoleTypes>
     roleTypes: [SEARCH_SERVER]
   onDeps: []
-  groups: ["elasticsearch.yml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: gateway.recover_after_time
@@ -109,7 +100,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["elasticsearch.yml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: discovery.zen.minimum_master_nodes
@@ -127,7 +118,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["elasticsearch.yml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: index.store.type
@@ -136,7 +127,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["elasticsearch.yml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: indices.fielddata.cache.size
@@ -145,16 +136,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["elasticsearch.yml"]
-  visibility: READ_WRITE
-
-- name: discovery.zen.ping.multicast.enabled
-  recommendExpression: false
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: ["elasticsearch.yml"]
+  groups: []
   visibility: READ_WRITE
 
 # elasticsearch-env
@@ -233,6 +215,46 @@
   groups: []
   visibility: READ_WRITE
 
+- name: search.head.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.head.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.head.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.head.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: search.memory.ratio
   recommendExpression: -1
   defaultValue: null
@@ -249,7 +271,7 @@
   valueType: PORT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["elasticsearch.yml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: transport.tcp.port
@@ -258,5 +280,32 @@
   valueType: PORT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["elasticsearch.yml"]
+  groups: []
+  visibility: READ_WRITE
+
+- name: index.shard.path.selector
+  recommendExpression: tiered
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: thread_pool.bulk.queue_size
+  recommendExpression: 5000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: head.port
+  recommendExpression: 9100
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
   visibility: READ_WRITE

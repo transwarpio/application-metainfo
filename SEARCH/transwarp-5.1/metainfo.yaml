@@ -5,11 +5,11 @@ global: false
 namePrefix: Search
 friendlyName: "Search"
 dependencies: []
-dockerImage: "transwarp/search:transwarp-5.1"
 roles:
 - name: SEARCH_SERVER
   friendlyName: "Search Server"
   labelPrefix: "search-server"
+  dockerImage: "transwarp/search:transwarp-5.1"
   linkExpression: "http://${localhostname}:${service['http.port']}/_cluster/health?pretty=true"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
@@ -24,7 +24,7 @@ roles:
     value: /var/log/${service.sid}
   - name: CONF_DIR
     value: /etc/${service.sid}/conf
-  summaryPolicy: ALL
+  summaryPolicy: MAJOR
   mountPaths: []
   resources:
     limitsMemoryKey: search.container.limits.memory
@@ -40,13 +40,43 @@ roles:
   validation:
   - criteria: !<EachNode> {}
   operations: []
+- name: SEARCH_HEAD
+  friendlyName: "Search Head"
+  labelPrefix: "search-head"
+  dockerImage: "transwarp/search-head:transwarp-5.1"
+  linkExpression: "http://${localhostname}:${service['head.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop"]
+  env:
+  - name: HEAD_PORT
+    value: ${service['head.port']}
+  - name: HEAD_TARGET_HOST
+    value: ${service.roles.SEARCH_SERVER[0].hostname}:${service['http.port']}
+  - name: HEAD_LOG_DIR
+    value: /var/log/head
+  summaryPolicy: NONE
+  mountPaths: []
+  resources:
+    limitsMemoryKey: search.head.container.limits.memory
+    limitsCpuKey: search.head.container.limits.cpu
+    requestsMemoryKey: search.head.container.requests.memory
+    requestsCpuKey: search.head.container.requests.cpu
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"max": 1}
+  validation:
+  - criteria: !<Range> {"max": 1}
+  operations: []
 
 firstWizardConfigs:
+- cluster.name
 - path.data
 - node.master
 - node.data
 - http.port
 - transport.tcp.port
+- head.port
 - network.bind_host
 - network.publish_host
 - es.heap.size
@@ -54,6 +84,10 @@ firstWizardConfigs:
 - search.container.limits.cpu
 - search.container.requests.memory
 - search.container.requests.cpu
+- search.head.container.limits.memory
+- search.head.container.limits.cpu
+- search.head.container.requests.memory
+- search.head.container.requests.cpu
 - search.memory.ratio
 
 product: Search
