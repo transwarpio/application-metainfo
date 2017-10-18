@@ -201,6 +201,4 @@ export NAMENODE_DATA_DIRS=${service[.data_model["localhostname"]]['dfs.namenode.
 
 <#if service.auth = "kerberos">
 cp /etc/${service.sid}/conf/krb5.conf /etc/
-export MASTERPRINCIPAL=hdfs/${localhostname}
-export KEYTAB=/etc/${service.sid}/conf/hdfs.keytab
 </#if>
