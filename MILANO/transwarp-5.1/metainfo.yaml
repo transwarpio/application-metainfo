@@ -138,7 +138,7 @@ roles:
   friendlyName: "Kibana"
   labelPrefix: "kibana"
   dockerImage: "transwarp/kibana:transwarp-5.1"
-  linkExpression: "http://${localhostname}:5601"
+  linkExpression: "http://${localhostname}:${service['kibana.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
@@ -226,6 +226,7 @@ firstWizardConfigs:
 - logstash.container.requests.memory
 - logstash.container.requests.cpu
 - logstash.memory.ratio
+- kibana.port
 - kibana.container.limits.memory
 - kibana.container.limits.cpu
 - kibana.container.requests.memory

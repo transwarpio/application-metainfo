@@ -180,6 +180,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: kibana.port
+  recommendExpression: 5601
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: kibana.container.limits.memory
   recommendExpression: 2
   defaultValue: 2 
