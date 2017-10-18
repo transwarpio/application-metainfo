@@ -133,14 +133,6 @@ roles:
       - criteria: !<Range>
           min: 1
     operations: []
-    Commission:
-      roleType: HDFS_NAMENODE
-      nodePolicy: Any
-      needConfig: true
-    Decommission:
-      roleType: HDFS_NAMENODE
-      nodePolicy: Any
-      needConfig: true
 
 roleGroups:
   - fieldName: nameservices
