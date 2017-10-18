@@ -12,7 +12,7 @@ roles:
   labelPrefix: "shiva-master"
   dockerImage: "transwarp/shiva-master:transwarp-5.1"
   category: MASTER
-  frontendOperations: ["Start", "Stop", "Delete", "Scaleout", "Decommission"]
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   readinessProbe:
     probe: !<httpGet>
       path: /
@@ -121,7 +121,7 @@ roles:
   labelPrefix: "shiva-tabletserver"
   dockerImage: "transwarp/shiva-tabletserver:transwarp-5.1"
   category: SLAVE
-  frontendOperations: ["Start", "Stop", "Delete", "Scaleout", "Commission", "Decommission"]
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   readinessProbe:
     probe: !<httpGet>
       path: /
