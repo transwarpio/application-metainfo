@@ -134,6 +134,15 @@ roles:
         action: Link
         from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
         to: "/etc/${service.sid}/conf/hdfs-site.xml"
+  Commission:
+    roleType: YARN_RESOURCEMANAGER
+    nodePolicy: Any
+    needConfig: true
+  Decommission:
+    roleType: YARN_RESOURCEMANAGER
+    nodePolicy: Any
+    needConfig: true
+
 - name: YARN_HISTORYSERVER
   friendlyName: "History Server"
   labelPrefix: "hadoop-yarn-historyserver"
