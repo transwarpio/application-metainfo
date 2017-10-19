@@ -9,6 +9,15 @@
 <#--------------------------->
 <configuration>
 
+<#--handle dependent.shiva-->
+<#if dependencies.SHIVA??>
+    <#assign shiva=dependencies.SHIVA master_group=[]>
+    <#list shiva.roles.SHIVA_MASTER as master>
+        <#assign master_group += [master.ip + ":" + shiva['master.rpc_service.master_service_port']]>
+    </#list>
+    <@property "ngmr.holodesk.shiva.mastergroup" master_group?join(",")/>
+</#if>
+
 <#--handle dependent.zookeeper-->
 <#if dependencies.ZOOKEEPER??>
     <#assign zookeeper=dependencies.ZOOKEEPER quorum=[]>

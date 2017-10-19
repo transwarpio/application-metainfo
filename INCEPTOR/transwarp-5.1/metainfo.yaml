@@ -41,6 +41,11 @@ dependencies:
     maxVersion: transwarp-5.1
     optional: true
     preferred: false
+  - name: SHIVA
+    minVersion: transwarp-5.1
+    maxVersion: transwarp-5.1
+    optional: true
+    preferred: true
 user: hive
 roles:
 - name: INCEPTOR_METASTORE

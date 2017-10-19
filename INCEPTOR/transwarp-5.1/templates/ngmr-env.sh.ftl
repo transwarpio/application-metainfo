@@ -16,3 +16,12 @@ export INCEPTOR_LOG_DIR=/var/log/${service.sid}
 export SPARK_DRIVER_PORT=${service['spark.driver.port']}
 export EXTRA_DRIVER_OPTS=" ${service['EXTRA_DRIVER_OPTS']} "
 export EXTRA_EXECUTOR_OPTS=" ${service['EXTRA_EXECUTOR_OPTS']} "
+#SHIVA ENV
+<#if dependencies.SHIVA??>
+    <#assign shiva=dependencies.SHIVA master_group=[]>
+    <#list shiva.roles.SHIVA_MASTER as master>
+        <#assign master_group += [master.ip + ":" + shiva['master.rpc_service.master_service_port']]>
+    </#list>
+    <#assign master_group = master_group?join(",")>
+export SHIVA_MASTER_GROUP=${master_group}
+</#if>
