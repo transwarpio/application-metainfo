@@ -50,7 +50,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/var/log/${service.sid}/filebeat","/hadoop/milano/${service.sid}/filebeat","/etc/${service.sid}/conf"]
+        paths: ["/hadoop/milano/${service.sid}/filebeat","/etc/${service.sid}/conf"]
         mode: "755"
   - type: Config
     directives:
