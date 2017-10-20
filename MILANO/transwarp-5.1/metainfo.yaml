@@ -207,7 +207,7 @@ roles:
         targetPath: "/etc/${service.sid}/conf/kafka-manager-consumer.properties"
         mode: "666"
 
-product: Milano
+product: Studio
 
 firstWizardConfigs:
 - filebeat.port
