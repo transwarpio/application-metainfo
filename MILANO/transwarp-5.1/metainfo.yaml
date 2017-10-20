@@ -35,7 +35,7 @@ roles:
   summaryPolicy: SOME
   mountPaths:
   - mountPath: /var/log
-    hostPath: /var/log/${service.sid}/filebeat
+    hostPath: /var/log
     name: cntr-log-path
   - mountPath: /var/run/${service.sid}/filebeat
     hostPath: /hadoop/milano/${service.sid}/filebeat
