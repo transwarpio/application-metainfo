@@ -23,7 +23,8 @@ export GUARDIAN_DS_HA_MASTER_PORT=${service['guardian.apacheds.ldap.port']}
 
 export GUARDIAN_LOG_DIR=/var/log/${service.sid}
 export GUARDIAN_SERVER_KEY_STORE=/srv/guardian/server.keystore
-export JAVA_OPTS=" -Djava.security.krb5.conf=/etc/${service.sid}/conf/krb5.conf "
+export JAVA_OPTS=" $JAVA_OPTS -Djava.security.krb5.conf=/etc/${service.sid}/conf/krb5.conf "
+export JAVA_OPTS=" $JAVA_OPTS -Xms1024m -Xmx2048m -XX:MaxPermSize=128m -XX:+UseConcMarkSweepGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:$GUARDIAN_LOG_DIR/guardian-server_gc.log -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=$GUARDIAN_LOG_DIR "
 
 <#--Add guardian server cache replication configuration-->
 <#assign guardian_servers=service.roles.GUARDIAN_SERVER servers_with_port=[]>
