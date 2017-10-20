@@ -46,6 +46,7 @@ atlas.graph.storage.hbase.table=${service['atlas.graph.storage.hbase.table']}
 # Graph Search Index
 #ElasticSearch
 atlas.graph.index.search.backend=elasticsearch
+atlas.graph.index.search.max-result-set-size=${service['atlas.graph.index.search.max-result-set-size']}
 <#noparse>
 atlas.graph.index.search.directory=${sys:atlas.home}/data/es
 </#noparse>
