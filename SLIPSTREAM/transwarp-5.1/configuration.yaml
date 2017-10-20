@@ -586,7 +586,7 @@
   visibility: READ_WRITE
 
 - name: ngmr.engine.mode
-  recommendExpression: mapred
+  recommendExpression: morphling
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
@@ -859,6 +859,68 @@
   defaultValue: ""
   valueType: STRING
   scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: historyserver.memory.max.mb
+  recommendExpression: 1024
+  defaultValue: null
+  valueType: MB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_HISTORYSERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: historyserver.memory.initial.mb
+  recommendExpression: 256
+  defaultValue: null
+  valueType: MB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_HISTORYSERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: slipstream.historyserver.akka.listen.port
+  recommendExpression: 23456
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_HISTORYSERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: slipstream.historyserver.restful.listen.port
+  recommendExpression: 9099
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: history.localdir
+  recommendExpression: |
+    <#function localDir suffix>
+      <#if rcmdMounts?size == 0>
+        <#return suffix>
+      <#else>
+        <#local dirs = []>
+        <#list rcmdMounts?sort as mnt>
+         <#local dirs = dirs + [mnt + suffix]>
+        </#list>
+        <#return dirs?join(",")>
+      </#if>
+    </#function>
+    ${localDir("/historyserver/" + service['sid'])}
+  isNodeSpecific: true
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_HISTORYSERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE

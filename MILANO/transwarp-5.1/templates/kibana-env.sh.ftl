@@ -8,3 +8,4 @@ export KIBANA_HOST=${localhostname}
     </#list>
 </#if>
 export ELASTICSEARCH_URL=${searchWithPort[0]}
+export KIBANA_PORT=${service['kibana.port']}
