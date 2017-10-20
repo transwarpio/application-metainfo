@@ -72,11 +72,6 @@ roles:
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "guardian-site.xml"
-        targetPath: "/etc/${service.sid}/conf/spark/guardian-site.xml"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
         templatePath: "zeppelin-env.sh"
         targetPath: "/etc/${service.sid}/conf/notebook/zeppelin-env.sh"
         mode: "755"
@@ -144,11 +139,6 @@ roles:
         templateType: FreeMarker
         templatePath: "spark-env.sh"
         targetPath: "/etc/${service.sid}/conf/spark/spark-env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "guardian-site.xml"
-        targetPath: "/etc/${service.sid}/conf/spark/guardian-site.xml"
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker

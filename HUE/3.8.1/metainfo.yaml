@@ -89,9 +89,9 @@ pages:
 - security
 
 principals:
+- hue
 - HTTP
 - httpfs
-- hue
 
 healthChecks:
 - category: DAEMON_CHECK

@@ -54,7 +54,6 @@
     <#assign  manager="org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd.SQLStdHiveAuthorizerFactory">
 </#if>
 <#if service.plugins?seq_contains("guardian")>
-    <@property "hive.service.id" service.sid/>
     <@property "hive.metastore.event.listeners" "io.transwarp.guardian.plugins.inceptor.GuardianMetaStoreListener"/>
     <#assign  manager="io.transwarp.guardian.plugins.inceptor.GuardianHiveAuthorizerFactory">
 </#if>
@@ -136,10 +135,10 @@
     </#list>
     <@property "discovery.zen.minimum_master_nodes" "${dependencies.SEARCH['discovery.zen.minimum_master_nodes']}"/>
     <@property "discovery.zen.ping.unicast.hosts" "${es_nodes?join(',')}"/>
-    <@property "discovery.zen.ping.multicast.enabled" "${dependencies.SEARCH['discovery.zen.ping.multicast.enabled']}"/>
     <@property "cluster.name" "${dependencies.SEARCH['cluster.name']}"/>
     </#if>
-
+    <@property "hive.service.type" "INCEPTOR"/>
+    <@property "hive.service.id" "${service.sid}"/>
 <#--Take properties from the context-->
 <#list service['hive-site.xml'] as key, value>
     <@property key value/>

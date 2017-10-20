@@ -7,10 +7,13 @@
 </property>
 </#macro>
 <#--------------------------->
-<#assign historyServer=service.roles.YARN_HISTORYSERVER[0]['hostname']>
 <configuration>
+    <#if service.roles.YARN_HISTORYSERVER??>
+    <#assign historyServer=service.roles.YARN_HISTORYSERVER[0]['hostname']>
     <@property "mapreduce.jobhistory.address" historyServer + ":10020"/>
     <@property "mapreduce.jobhistory.webapp.address" historyServer + ":19888"/>
+    </#if>
+
     <#if service.auth = "kerberos">
     <@property "mapreduce.jobhistory.principal" "mapred/_HOST@" + service.realm></@property>
     <@property "mapreduce.jobhistory.keytab" service.keytab></@property>

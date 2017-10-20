@@ -15,6 +15,10 @@ dependencies:
     maxVersion: transwarp-5.1
     optional: false
 user: yarn
+plugins:
+  - provider: GUARDIAN
+    version: 2.7.2+500.51250
+    useTar: false
 roles:
 - name: YARN_RESOURCEMANAGER
   friendlyName: "Resource Manager"
@@ -321,9 +325,9 @@ pages:
 - plugin
 
 principals:
+- yarn
 - HTTP
 - mapred
-- yarn
 
 healthChecks:
 - category: DAEMON_CHECK

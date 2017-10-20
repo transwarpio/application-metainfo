@@ -21,7 +21,8 @@ ExecStart=/opt/kubernetes/bin/hyperkube kubelet \
     --max-pods=200 \
     --require-kubeconfig \
     --allow_privileged=true \
-    --host-network-sources=*
+    --host-network-sources=* \
+    --hostname-override=${localhostname}
 
 KillMode=process
 Restart=always
