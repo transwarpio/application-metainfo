@@ -169,3 +169,15 @@ cp /etc/${service.sid}/conf/krb5.conf /etc
 <#else>
 export KRB_ENABLE=false
 </#if>
+
+
+<#if service.roles.INCEPTOR_HISTORYSERVER??>
+export HISTORY_SERVER_BIND_ADDRESS=${service.roles.INCEPTOR_HISTORYSERVER[0]['hostname']}
+export AKKA_LISTEN_PORT=${service['slipstream.historyserver.akka.listen.port']}
+export RESTFUL_API_LISTENER_PORT=${service['slipstream.historyserver.restful.listen.port']}
+export HISTORY_XMS_MB=${service['historyserver.memory.initial.mb']}
+export HISTORY_XMX_MB=${service['historyserver.memory.max.mb']}
+    <#if service[.data_model["localhostname"]]['history.localdir']??>
+      export HISTORY_SERVER_FILES_DIR=${service[.data_model["localhostname"]]['history.localdir']}
+    </#if>
+</#if>

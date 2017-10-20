@@ -71,6 +71,28 @@ roles:
   validation:
   - criteria: !<Range> {"min": 1}
   operations: []
+- name: INCEPTOR_HISTORYSERVER
+  friendlyName: "Inceptor History Server"
+  labelPrefix: "inceptor-historyserver"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  env:
+  - name: INCEPTOR_CONF_DIR
+    value: /etc/${service.sid}/conf
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  mountPaths: []
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [0]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 0}
+  operations: []
 - name: INCEPTOR_SERVER
   friendlyName: "Inceptor Server"
   labelPrefix: "inceptor-server"
@@ -177,6 +199,11 @@ stages:
       summaryPolicy: SOME
       timeoutMinutes: 1
     - !<Role>
+      roleType: "INCEPTOR_HISTORYSERVER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
       roleType: "INCEPTOR_SERVER"
       operation: Config
       summaryPolicy: SOME
@@ -223,6 +250,11 @@ firstWizardConfigs:
 - executor.container.requests.cpu
 - executor.memory.ratio
 - executor.number.eachnode
+- history.localdir
+- historyserver.memory.initial.mb
+- historyserver.memory.max.mb
+- slipstream.historyserver.akka.listen.port
+- slipstream.historyserver.restful.listen.port
 
 pages:
 - roles
