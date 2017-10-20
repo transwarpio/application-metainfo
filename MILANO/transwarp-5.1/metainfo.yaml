@@ -168,7 +168,7 @@ roles:
   friendlyName: "KafkaManager"
   labelPrefix: "kafka-manager"
   dockerImage: "transwarp/kafka-manager:transwarp-5.1"
-  linkExpression: "http://${localhostname}:service['kafka.manager.port']"
+  linkExpression: "http://${localhostname}:${service['kafka.manager.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
