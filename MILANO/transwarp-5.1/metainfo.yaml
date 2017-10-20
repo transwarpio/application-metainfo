@@ -35,7 +35,7 @@ roles:
   summaryPolicy: SOME
   mountPaths:
   - mountPath: /var/log
-    hostPath: /var/log/${service.sid}/filebeat
+    hostPath: /var/log
     name: cntr-log-path
   - mountPath: /var/run/${service.sid}/filebeat
     hostPath: /hadoop/milano/${service.sid}/filebeat
@@ -50,7 +50,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/var/log/${service.sid}/filebeat","/hadoop/milano/${service.sid}/filebeat","/etc/${service.sid}/conf"]
+        paths: ["/hadoop/milano/${service.sid}/filebeat","/etc/${service.sid}/conf"]
         mode: "755"
   - type: Config
     directives:
@@ -168,7 +168,7 @@ roles:
   friendlyName: "KafkaManager"
   labelPrefix: "kafka-manager"
   dockerImage: "transwarp/kafka-manager:transwarp-5.1"
-  linkExpression: "http://${localhostname}:service['kafka.manager.port']"
+  linkExpression: "http://${localhostname}:${service['kafka.manager.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
@@ -207,7 +207,7 @@ roles:
         targetPath: "/etc/${service.sid}/conf/kafka-manager-consumer.properties"
         mode: "666"
 
-product: Milano
+product: Studio
 
 firstWizardConfigs:
 - filebeat.port
