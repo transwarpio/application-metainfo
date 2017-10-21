@@ -80,7 +80,6 @@
     </#list>
     <@property "discovery.zen.minimum_master_nodes" "${dependencies.SEARCH['discovery.zen.minimum_master_nodes']}"/>
     <@property "discovery.zen.ping.unicast.hosts" "${es_nodes?join(',')}"/>
-    <@property "discovery.zen.ping.multicast.enabled" "${dependencies.SEARCH['discovery.zen.ping.multicast.enabled']}"/>
     <@property "cluster.name" "${dependencies.SEARCH['cluster.name']}"/>
 </#if>
 <#--Take properties from the context-->
