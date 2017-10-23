@@ -37,18 +37,7 @@ node.name: ${localhostname}
 #
 # Add custom attributes to the node:
 #
-# node.attr.rack: r1
-#
-# Every node can be configured to allow or deny being eligible as the master,
-# and to allow or deny to store the data.
-#
-# Allow this node to be eligible as a master node (enabled by default):
-#
-node.master: ${service['node.master']}
-#
-# Allow this node to store data (enabled by default):
-#
-node.data: ${service['node.data']}
+node.rack: ${service['node.rack']}
 #
 # ----------------------------------- Paths ------------------------------------
 #
@@ -58,7 +47,7 @@ path.data: ${service['path.data']}
 #
 # Path to log files:
 #
-path.logs: ${service['path.logs']}
+# path.logs: /path/to/logs
 #
 # ----------------------------------- Memory -----------------------------------
 #
@@ -75,13 +64,11 @@ path.logs: ${service['path.logs']}
 #
 # Set the bind adress to a specific IP (IPv4 or IPv6):
 #
-network.bind_host: ${service['network.bind_host']}
-network.publish_host: ${service['network.publish_host']}
+# network.host: 192.168.0.1
 #
 # Set a custom port for HTTP:
 #
-http.port: ${service['http.port']}
-transport.tcp.port: ${service['transport.tcp.port']}
+# http.port: 9200
 #
 # For more information, see the documentation at:
 # <http://www.elastic.co/guide/en/elasticsearch/reference/current/modules-network.html>
@@ -90,7 +77,6 @@ transport.tcp.port: ${service['transport.tcp.port']}
 #
 # Block initial recovery after a full cluster restart until N nodes are started:
 #
-gateway.recover_after_time: ${service['gateway.recover_after_time']}
 gateway.recover_after_nodes: ${(server_count/2 +1)?int}
 gateway.recover_after_data_nodes: ${(server_count/2 +1)?int}
 gateway.recover_after_master_nodes: ${(master_node_count/2 +1)?int}
@@ -126,24 +112,12 @@ discovery.zen.minimum_master_nodes: ${service['discovery.zen.minimum_master_node
 # Require explicit names when deleting indices:
 #
 # action.destructive_requires_name: true
-#
-# ---------------------------------- Thread Pool -------------------------------
-#
-# For more information, see the documentation at:
-# <https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-threadpool.html>
-#
-thread_pool:
-  bulk:
-    queue_size: ${service['thread_pool.bulk.queue_size']}
-
 license.zookeeper.quorum: ${license_servers?join(",")}
-index.shard.path.selector: ${service['index.shard.path.selector']}
-bootstrap.system_call_filter: false
-http.cors.enabled: true
-http.cors.allow-origin: "*"
-indices.fielddata.cache.size: ${service['indices.fielddata.cache.size']}
-index.store.type: ${service['index.store.type']}
-index.translog.durability: ${service['index.translog.durability']}
 
-transport.type: netty3
-http.type: netty3
+index.number_of_shards: 10
+index.number_of_replicas: 1
+index.shard.path.selector: tiered
+
+<#list service['elasticsearch.yml'] as key, value>
+${key}: ${value}
+</#list>
