@@ -586,7 +586,7 @@
   visibility: READ_WRITE
 
 - name: ngmr.engine.mode
-  recommendExpression: mapred
+  recommendExpression: morphling
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
