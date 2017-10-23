@@ -3,19 +3,37 @@
 ################################
 
 # Elasticsearch home directory
-#ES_HOME=/usr/lib/elasticsearch/elasticsearch-2.0.0-transwarp
+ES_HOME=/usr/lib/elasticsearch/elasticsearch-2.0.0-transwarp
 
 # Elasticsearch configuration directory
-#CONF_DIR=/etc/${service.sid}/conf
+CONF_DIR=/etc/${service.sid}/conf
 
 # Elasticsearch data directory
-#DATA_DIR=${service['path.data']}
+DATA_DIR=${service['path.data']}
 
 # Elasticsearch logs directory
-#LOG_DIR=/var/log/${service.sid}
+LOG_DIR=/var/log/${service.sid}
 
 # Elasticsearch PID directory
-#PID_DIR=/var/run/elasticsearch
+PID_DIR=/var/run/elasticsearch
+
+# Heap size defaults to 256m min, 1g max
+# Set ES_HEAP_SIZE to 50% of available RAM, but no more than 31g
+<#if service['search.container.limits.memory'] != "-1" && service['search.memory.ratio'] != "-1">
+  <#assign limitsMemory = service['search.container.limits.memory']?number
+  memoryRatio = service['search.memory.ratio']?number
+  searchMemory = limitsMemory * memoryRatio * 1024>
+<#else>
+  <#if service[.data_model["localhostname"]]['es.heap.size']??>
+    <#assign searchMemory=service[.data_model["localhostname"]]['es.heap.size']?trim?number>
+  <#else>
+    <#assign searchMemory=30720>
+  </#if>
+</#if>
+ES_HEAP_SIZE=${searchMemory?floor}m
+
+# Heap new generation
+ES_HEAP_NEWSIZE=${(searchMemory/4)?floor}m
 
 # Maximum direct memory
 #ES_DIRECT_SIZE=
@@ -62,4 +80,4 @@ ES_GROUP=elasticsearch
 # Maximum number of VMA (Virtual Memory Areas) a process can own
 # When using Systemd, this setting is ignored and the 'vm.max_map_count'
 # property is set at boot time in /usr/lib/sysctl.d/elasticsearch.conf
-MAX_MAP_COUNT=262144
+#MAX_MAP_COUNT=262144
