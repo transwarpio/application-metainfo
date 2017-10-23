@@ -63,9 +63,6 @@ stages:
       timeoutMinutes: 10
       roleType: LICENSE_NODE
       operation: Start
-    - !<Wait-Healthy>
-      summaryPolicy: ALL
-      timeoutMinutes: 10
     - !<Upload-License>
       summaryPolicy: ALL
       timeoutMinutes: 10

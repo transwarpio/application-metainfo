@@ -19,7 +19,7 @@
 - name: atlas.graph.index.search.max-result-set-size
   recommendExpression: 10000
   defaultValue: null
-  valueType: INT
+  valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
