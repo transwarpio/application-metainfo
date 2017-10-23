@@ -1,40 +1,4 @@
-- name: tdt.server.thrift.port
-  recommendExpression: 20000
-  defaultValue: null
-  valueType: PORT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: ["tdt-site.xml"]
-  visibility: READ_WRITE
-  
-- name: tdt.jdbc.driver.class
-  recommendExpression: org.apache.hadoop.hive.jdbc.HiveDriver
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: ["tdt-site.xml"]
-  visibility: READ_WRITE
-
-- name: tdt.jdbc.user.name
-  recommendExpression: tdtuser
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: ["tdt-site.xml"]
-  visibility: READ_WRITE
-
-- name: tdt.jdbc.passord
-  recommendExpression: passord
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: ["tdt-site.xml"]
-  visibility: READ_WRITE
-
-- name: tdt.server.thrift.bind.host
+- name: tdt.server.host
   recommendExpression: 0.0.0.0
   defaultValue: null
   valueType: STRING
@@ -43,50 +7,86 @@
   groups: ["tdt-site.xml"]
   visibility: READ_WRITE  
 
-- name: tdt.jdbc.user.name
+- name: tdt.server.port
+  recommendExpression: 8100
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE
+  
+- name: tdt.persistence.user.name
   recommendExpression: tdtuser
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: []
+  groups: ["tdt-site.xml"]
   visibility: READ_WRITE
 
-- name: tdt.jdbc.password
+- name: tdt.persistence.password
   recommendExpression: password
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: []
+  groups: ["tdt-site.xml"]
   visibility: PASSWORD
-
-- name: tdt.jdbc.max.active
-  recommendExpression: 100
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: ["tdt-site.xml"]
-  visibility: READ_WRITE
-
-- name: tdt.jdbc.initial.size
-  recommendExpression: 10
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: ["tdt-site.xml"]
-  visibility: READ_WRITE
-
-- name: tdt.server.authentication
-  recommendExpression: NONE
+  
+- name: tdt.task.live.time
+  recommendExpression: 2hour
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: ["tdt-site.xml"]
-  visibility: READ_WRITE
+  visibility: READ_WRITE  
+  
+- name: tdt.task.failure.retry.times
+  recommendExpression: 1
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE    
+  
+- name: tdt.task.failure.retry.period
+  recommendExpression: 30sec
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE      
+  
+- name: tdt.task.scavenger.check.period
+  recommendExpression: 10min
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE     
+  
+- name: tdt.task.max.accept.size
+  recommendExpression: 10000
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE       
+  
+- name: tdt.task.max.concurrence.size
+  recommendExpression: 100
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE         
 
 - name: tdt.container.limits.memory
   recommendExpression: -1
