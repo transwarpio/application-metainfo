@@ -2,9 +2,9 @@
  *WARP-17184：Discover spark升级至 spark2.2
  *WARP-17523：Discover base 系统升级至 CentOS 7.2
  *WARP-15288：Discover Notebook中支持Python3数据分析探索
- *WARP-17171：Discover NoteBook中添加Tensorflow 深度学习Python支持
+
 *New featuers
-1.数据预处理和特征工程
+ 1.数据预处理和特征工程
  *WARP-16740：分布式计算信息熵
  *WARP-17442：分布式计算基尼不纯度
  *WARP-15401：分布式众数统计函数txMode
@@ -17,15 +17,18 @@
  *WARP-15406：自动化分布式数据近零方差列筛选
  *WARP-17378：自动化分布式非正态数值列变换
  *WARP-16727：自动化分布式多类型数据特征工程函数
-2.Discover-lib新增机器学习算法和编程接口
+ 2.Discover-lib新增机器学习算法和编程接口
  *WARP-17185：增加无监督异常值检测算法txIsolationForest
  *WARP-17188：增加分类算法txGBTLR
  *WARP-17351：增加基于贝叶斯个性化排序的推荐算法txBPR
  *WARP-17352：增加无监督异常值检测算法txLOF
  *WARP-17353：增加密度聚类算法txDBScan
-3.模型评估和模型选择优化
+ 3.模型评估和模型选择优化
  *WARP-15409：分布式模型交叉验证txCrossValidator
  *WARP-15410：分布式模型超参数调整方法txTrainValidationSplit
+ 4.Discover Notebook 新增解释器
+ *WARP-17171：Discover NoteBook中添加Tensorflow 深度学习Python支持
+
 *Bug fix
  *WARP-17856: 非安全模式下txSqlConnect需要设置keytabPath变量
  *WARP-16400: guardian 中未设置用户配额时，采用默认配额
