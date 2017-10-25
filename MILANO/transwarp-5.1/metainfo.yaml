@@ -221,6 +221,7 @@ firstWizardConfigs:
 - logstash.worker_num
 - logstash.batch_size
 - logstash.heap_size
+- logstash.index_pattern
 - logstash.container.limits.memory
 - logstash.container.limits.cpu
 - logstash.container.requests.memory
