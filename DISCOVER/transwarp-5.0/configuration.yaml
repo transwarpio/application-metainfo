@@ -72,7 +72,7 @@
   groups: []
   visibility: READ_WRITE
 
-- name: spark.excutor.memory
+- name: spark.executor.memory
   recommendExpression: 1024
   defaultValue: null
   valueType: MB

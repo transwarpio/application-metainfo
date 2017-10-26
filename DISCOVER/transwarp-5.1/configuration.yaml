@@ -7,6 +7,25 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: spark.executor.cores
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.webui.port
+  recommendExpression: 4088
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 # spark-env.sh
 - name: spark.client.memory
   recommendExpression: 2048
@@ -72,7 +91,7 @@
   groups: []
   visibility: READ_WRITE
 
-- name: spark.excutor.memory
+- name: spark.executor.memory
   recommendExpression: 1024
   defaultValue: null
   valueType: MB
