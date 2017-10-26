@@ -130,3 +130,23 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: guardian.server.audit.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.server.audit.level
+  recommendExpression: ADD,UPDATE,DELETE,LOGIN
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

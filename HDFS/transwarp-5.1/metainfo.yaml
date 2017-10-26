@@ -11,6 +11,10 @@ dependencies:
     minVersion: transwarp-5.1
     maxVersion: transwarp-5.1
     optional: false
+plugins:
+  - provider: GUARDIAN
+    version: 2.7.2+500.51250
+    useTar: false
 roles:
   - name: HDFS_HTTPFS
     friendlyName: "Httpfs"
@@ -368,9 +372,9 @@ pages:
 - plugin
 
 principals:
+- hdfs
 - HTTP
 - host
-- hdfs
 - httpfs
 
 healthChecks:

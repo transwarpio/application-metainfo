@@ -71,8 +71,8 @@ pages:
 - security
 
 principals:
-- HTTP
 - sqoop2
+- HTTP
 
 healthChecks:
 - category: DAEMON_CHECK

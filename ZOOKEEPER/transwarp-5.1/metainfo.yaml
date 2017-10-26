@@ -99,8 +99,8 @@ pages:
 - security
 
 principals:
-- HTTP
 - zookeeper
+- HTTP
 
 healthChecks:
 - category: DAEMON_CHECK

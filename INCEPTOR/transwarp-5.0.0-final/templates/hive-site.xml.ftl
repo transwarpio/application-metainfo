@@ -52,7 +52,6 @@
     <@property "hive.security.authorization.enabled" "true"/>
   <#if service.plugins?seq_contains("guardian")>
     <@property "hive.security.authorization.manager" "io.transwarp.guardian.plugins.inceptor.GuardianHiveAuthorizerFactory"/>
-    <@property "hive.service.id" service.sid/>
     <@property "hive.metastore.event.listeners" "io.transwarp.guardian.plugins.inceptor.GuardianMetaStoreListener"/>
   <#else>
     <@property "hive.security.authorization.manager" "org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd.SQLStdHiveAuthorizerFactory"/>
@@ -135,7 +134,8 @@
     <@property "discovery.zen.ping.multicast.enabled" "${dependencies.SEARCH['discovery.zen.ping.multicast.enabled']}"/>
     <@property "cluster.name" "${dependencies.SEARCH['cluster.name']}"/>
     </#if>
-
+    <@property "hive.service.type" "INCEPTOR"/>
+    <@property "hive.service.id" "${service.sid}"/>
 <#--Take properties from the context-->
 <#list service['hive-site.xml'] as key, value>
     <@property key value/>

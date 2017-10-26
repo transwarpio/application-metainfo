@@ -39,15 +39,6 @@ export HADOOP_CLASSPATH=$f
 fi
 done
 
-<#if service.plugins?seq_contains("guardian")>
-for f in /usr/lib/transwarp/plugins/guardian/hdfs/lib/*jar; do
-if [ "$HADOOP_CLASSPATH" ]; then
-export HADOOP_CLASSPATH=$f:$HADOOP_CLASSPATH
-else
-export HADOOP_CLASSPATH=$f
-fi
-done
-</#if>
 
 # The maximum amount of heap to use, in MB. Default is 1000.
 #export HADOOP_HEAPSIZE=
@@ -199,6 +190,16 @@ export DATANODE_DATA_DIRS=${service[.data_model["localhostname"]]['dfs.datanode.
 export NAMENODE_DATA_DIRS=${service[.data_model["localhostname"]]['dfs.namenode.name.dir']}
 </#if>
 
+<#if service.plugins?seq_contains("guardian")>
+cp /etc/${service.sid}/conf/krb5.conf /etc
+export MASTERPRINCIPAL=hdfs/${localhostname}
+export KEYTAB=/etc/${service.sid}/conf/hdfs.keytab
+export KRB_PLUGIN_ENABLE=true
+</#if>
+
 <#if service.auth = "kerberos">
 cp /etc/${service.sid}/conf/krb5.conf /etc/
+export MASTERPRINCIPAL=hdfs/${localhostname}
+export KEYTAB=/etc/${service.sid}/conf/hdfs.keytab
+export KRB_PLUGIN_ENABLE=true
 </#if>

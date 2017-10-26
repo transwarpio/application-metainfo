@@ -132,7 +132,7 @@
     <@property "discovery.zen.ping.multicast.enabled" "${dependencies.SEARCH['discovery.zen.ping.multicast.enabled']}"/>
     <@property "cluster.name" "${dependencies.SEARCH['cluster.name']}"/>
     </#if>
-
+    <@property "hive.service.type" "SLIPSTREAM"/>
 <#--Take properties from the context-->
 <#list service['hive-site.xml'] as key, value>
     <@property key value/>

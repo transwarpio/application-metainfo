@@ -47,6 +47,11 @@ dependencies:
     optional: true
     preferred: true
 user: hive
+plugins:
+  - provider: GUARDIAN
+    version: 0.12.0+500.51250
+    useTar: false
+
 roles:
 - name: INCEPTOR_METASTORE
   friendlyName: "Inceptor Metastore"
@@ -271,8 +276,8 @@ pages:
 - plugin
 
 principals:
-- HTTP
 - hive
+- HTTP
 - kafka
 
 healthChecks:

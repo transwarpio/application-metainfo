@@ -37,15 +37,6 @@ for f in $HADOOP_HOME/contrib/capacity-scheduler/*.jar; do
   fi
 done
 
-<#if service.plugins?seq_contains("guardian")>
-for f in /usr/lib/transwarp/plugins/guardian/yarn/lib/*jar; do
-if [ "$HADOOP_CLASSPATH" ]; then
-export HADOOP_CLASSPATH=$f:$HADOOP_CLASSPATH
-else
-export HADOOP_CLASSPATH=$f
-fi
-done
-</#if>
 
 # The maximum amount of heap to use, in MB. Default is 1000.
 #export HADOOP_HEAPSIZE=

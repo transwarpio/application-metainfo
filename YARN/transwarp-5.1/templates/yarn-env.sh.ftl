@@ -128,6 +128,16 @@ fi
 # restore ordinary behaviour
 unset IFS
 
+<#if service.plugins?seq_contains("guardian")>
+cp /etc/${service.sid}/conf/krb5.conf /etc
+export MASTERPRINCIPAL=yarn/${localhostname}
+export KEYTAB=/etc/${service.sid}/conf/yarn.keytab
+export KRB_PLUGIN_ENABLE=true
+</#if>
+
 <#if service.auth = "kerberos">
 cp /etc/${service.sid}/conf/krb5.conf /etc
+export MASTERPRINCIPAL=yarn/${localhostname}
+export KEYTAB=/etc/${service.sid}/conf/yarn.keytab
+export KRB_PLUGIN_ENABLE=true
 </#if>

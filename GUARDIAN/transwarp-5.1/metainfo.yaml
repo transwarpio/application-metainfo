@@ -31,7 +31,12 @@ roles:
   - mountPath: ${service['guardian.apacheds.data.dir']}
     hostPath: ${service['guardian.apacheds.data.dir']}
     name: srv
-  operations: []
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["${service['guardian.apacheds.data.dir']}"]
+        mode: "755"
 - name: GUARDIAN_SERVER
   friendlyName: "Guardian Server"
   labelPrefix: "guardian-server"
@@ -99,3 +104,6 @@ healthChecks:
 - category: DAEMON_CHECK
   intervalSeconds: 15
   method: !<K8sPod> {}
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 20
+  method: !<Builtin> {}

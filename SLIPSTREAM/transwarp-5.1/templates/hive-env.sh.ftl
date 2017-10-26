@@ -51,15 +51,7 @@
 # export HIVE_CONF_DIR=
 
 # Folder containing extra ibraries required for hive compilation/execution can be controlled by:
-<#if service.plugins?seq_contains("guardian")>
-for f in /usr/lib/transwarp/plugins/guardian/slipstream/lib/*jar; do
-if [ "HIVE_AUX_JARS_PATH" ]; then
-export HIVE_AUX_JARS_PATH=$f:$HIVE_AUX_JARS_PATH
-else
-export HIVE_AUX_JARS_PATH=$f
-fi
-done
-</#if>
+
 
 <#if service['server.container.limits.memory'] != "-1" && service['server.memory.ratio'] != "-1">
   <#assign limitsMemory = service['server.container.limits.memory']?number
@@ -160,12 +152,21 @@ export SPARK_DRIVER_ADDR=${service.roles.INCEPTOR_SERVER[0]['hostname']}
 export EXECUTOR_ID_PATH=/${service.sid}/executorID
 export METASTORE_ID=metastore_${service.sid}
 
+<#if service.plugins?seq_contains("guardian")>
+cp /etc/${service.sid}/conf/krb5.conf /etc
+export MASTERPRINCIPAL=hive/${localhostname}
+export KEYTAB=/etc/${service.sid}/conf/slipstream.keytab
+export KRB_PLUGIN_ENABLE=true
+</#if>
+
 # security environment
 <#if service.auth = "kerberos">
 export KRB_ENABLE=true
 export EXECUTOR_PRINCIPAL=hive/_HOST@${service.realm}
 export EXECUTOR_KEYTAB=/etc/${service.sid}/conf/slipstream.keytab
-cp /etc/${service.sid}/conf/krb5.conf /etc
+export MASTERPRINCIPAL=hive/${localhostname}
+export KEYTAB=/etc/${service.sid}/conf/slipstream.keytab
+export KRB_PLUGIN_ENABLE=true
 <#else>
 export KRB_ENABLE=false
 </#if>
