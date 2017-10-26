@@ -76,7 +76,7 @@
 <#if dependencies.SEARCH??>
     <#assign es_nodes=[]>
     <#list dependencies.SEARCH.roles.SEARCH_SERVER as server>
-        <#assign es_nodes+=[server.hostname]>
+        <#assign es_nodes+=[(server.hostname + ":" + dependencies.SEARCH["http.port"])]>
     </#list>
     <@property "discovery.zen.minimum_master_nodes" "${dependencies.SEARCH['discovery.zen.minimum_master_nodes']}"/>
     <@property "discovery.zen.ping.unicast.hosts" "${es_nodes?join(',')}"/>

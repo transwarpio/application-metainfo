@@ -9,7 +9,7 @@
 #CONF_DIR=/etc/${service.sid}/conf
 
 # Elasticsearch data directory
-#DATA_DIR=${service['path.data']}
+DATA_DIR=${service['path.data']}
 
 # Elasticsearch logs directory
 #LOG_DIR=/var/log/${service.sid}
