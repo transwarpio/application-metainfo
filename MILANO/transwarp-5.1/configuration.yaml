@@ -121,6 +121,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: logstash.index_pattern
+  recommendExpression: "logs-%{+YYYY-MM-dd}"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: logstash.container.limits.memory
   recommendExpression: 3
   defaultValue: 3
