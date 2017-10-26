@@ -21,7 +21,7 @@ roles:
 - name: DISCOVER_IDE
   friendlyName: "Discover IDE"
   labelPrefix: "discover-ide"
-  dockerImage: "transwarp/rstudio:transwarp-5.1"
+  dockerImage: "transwarp/discover-ide:transwarp-5.1"
   linkExpression: "http://${localhostname}:8787/"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
@@ -93,7 +93,7 @@ roles:
 - name: DISCOVER_NOTEBOOK
   friendlyName: "Discover Notebook"
   labelPrefix: "discover-notebook"
-  dockerImage: "transwarp/notebook:transwarp-5.1"
+  dockerImage: "transwarp/discover-notebook:transwarp-5.1"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
@@ -168,7 +168,7 @@ roles:
 - name: DISCOVER_LOCAL-CRAN
   friendlyName: "Discover Local-Cran"
   labelPrefix: "discover-local-cran"
-  dockerImage: "transwarp/local-cran:transwarp-5.1"
+  dockerImage: "transwarp/discover-localcran:transwarp-5.1"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
