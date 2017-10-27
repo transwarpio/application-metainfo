@@ -14,6 +14,10 @@ dependencies:
     minVersion: transwarp-5.1
     maxVersion: transwarp-5.1
     optional: false
+  - name: WORKFLOW
+    minVersion: transwarp-5.1
+    maxVersion: transwarp-5.1
+    optional: false
 roles:
 - name: RUBIK_SERVER
   friendlyName: "Rubik Server"
@@ -94,6 +98,8 @@ firstWizardConfigs:
 - rubik.container.requests.memory
 - rubik.container.requests.cpu
 - rubik.memory.ratio
+- workflow.client.username
+- workflow.client.password
 
 pages:
 - roles
