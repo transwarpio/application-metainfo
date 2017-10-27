@@ -37,6 +37,11 @@ schedule:
     plugin-retry-max-running: ${service['workflow.plugin.retry.max.running']}
     # delay of a job if max running number is met, in milliseconds
     delay-millis: ${service['workflow.max.running.delay.millis']}
+  cleansing:
+    #indicates how long ago the data should be deleted. Unit is the month
+    cleanTimeInterval: ${service['workflow.cleansing.cleanTimeInterval']}
+    #indicates how long a data-clean verification will happen in 30 days
+    examinationInterval: ${service['workflow.cleansing.examinationInterval']}
   recovery:
     # when server is initialized or failover, it reload all schedules from
     # persistence layer, this parameter controls the coverage of the recovery

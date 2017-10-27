@@ -88,6 +88,24 @@
   groups: []
   visibility: READ_WRITE
 
+- name: workflow.cleansing.cleanTimeInterval
+  recommendExpression: 12
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.cleansing.examinationInterval
+  recommendExpression: 30
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: workflow.recovery.seconds
   recommendExpression: 86400
   defaultValue: null
