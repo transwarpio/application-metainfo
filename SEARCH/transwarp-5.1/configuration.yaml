@@ -1,7 +1,7 @@
 ---
 # elasticsearch.yml
 - name: cluster.name
-  recommendExpression: ${service.sid}
+  recommendExpression: cluster
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
