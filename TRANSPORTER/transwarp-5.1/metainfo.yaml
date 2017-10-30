@@ -86,6 +86,20 @@ stages:
       summaryPolicy: ALL
       timeoutMinutes: 5
       dbNames: ["tdt", "tdt_results"]
+  - type: PreUpgrade
+    taskGroups:
+    - !<DockerRunPreUpgrade>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      roleType: TDT_SERVER
+      node: Any
+  - type: PreRollback
+    taskGroups:
+    - !<DockerRunPreRollback>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      roleType: TDT_SERVER
+      node: Any
 
 product: Studio
 
