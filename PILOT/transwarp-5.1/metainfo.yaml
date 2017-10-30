@@ -4,7 +4,7 @@ version: transwarp-5.1
 global: false
 namePrefix: Pilot
 friendlyName: Pilot
-dockerImage: "transwarp/pilot:transwarp-5.0"
+dockerImage: "transwarp/pilot:transwarp-5.1"
 dependencies:
   - name: INCEPTOR
     minVersion: transwarp-5.1

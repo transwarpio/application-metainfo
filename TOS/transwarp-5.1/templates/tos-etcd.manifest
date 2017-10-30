@@ -11,7 +11,7 @@ spec:
   hostNetwork: true
   containers:
     - name: tos-etcd-${service.sid}
-      image: transwarp/etcd:transwarp-5.0
+      image: transwarp/etcd:transwarp-5.1
       imagePullPolicy: IfNotPresent
       securityContext:
         privileged: true
