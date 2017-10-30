@@ -69,6 +69,22 @@ roles:
   - criteria: !<EachNode> {}
   operations: []
 
+stages:
+  - type: PreUpgrade
+    taskGroups:
+    - !<DockerRunPreUpgrade>
+        summaryPolicy: ALL
+        timeoutMinutes: 86400
+        roleType: SEARCH_SERVER
+        node: Each
+  - type: PreRollback
+    taskGroups:
+    - !<DockerRunPreRollback>
+        summaryPolicy: ALL
+        timeoutMinutes: 86400
+        roleType: SEARCH_SERVER
+        node: Each
+
 firstWizardConfigs:
 - cluster.name
 - path.data
