@@ -38,7 +38,7 @@ roles:
   deleteOpCondition:
     deletable:
       number: 3
-      decommission: true
+      decommission: false
     reject:
       number: 2
   mountPaths: []
@@ -151,7 +151,7 @@ roles:
   deleteOpCondition:
     deletable:
       number: 3
-      decommission: true
+      decommission: false
     reject:
       number: 2
   mountPaths: []
