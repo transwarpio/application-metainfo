@@ -46,7 +46,7 @@ roles:
   dockerImage: "transwarp/search-head:transwarp-5.1"
   linkExpression: "http://${localhostname}:${service['head.port']}"
   category: MASTER
-  frontendOperations: ["Start", "Stop"]
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   env:
   - name: HEAD_PORT
     value: ${service['head.port']}
@@ -64,9 +64,9 @@ roles:
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
   suggestion:
-  - criteria: !<Range> {"max": 1}
+  - criteria: !<EachNode> {}
   validation:
-  - criteria: !<Range> {"max": 1}
+  - criteria: !<EachNode> {}
   operations: []
 
 firstWizardConfigs:
