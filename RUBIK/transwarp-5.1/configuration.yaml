@@ -182,3 +182,23 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: workflow.client.username
+  recommendExpression: workflow
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [RUBIK_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.client.password
+  recommendExpression: Transwarp4T
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [RUBIK_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
