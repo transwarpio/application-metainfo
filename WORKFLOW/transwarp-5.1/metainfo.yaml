@@ -112,6 +112,9 @@ pages:
 - operation
 - security
 
+principals:
+- workflow
+
 healthChecks:
 - category: DAEMON_CHECK
   intervalSeconds: 5

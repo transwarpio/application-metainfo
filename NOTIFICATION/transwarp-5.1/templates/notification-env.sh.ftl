@@ -15,3 +15,6 @@ export JAVAX_JDO_OPTION_CONNECTION_PASSWORD=${service['javax.jdo.option.Connecti
 export DATABASE_NAME=notification_${service.sid}
 export TABLE_NAME=nt_notification
 export STUDIO_SCHEMA_SQL=/etc/${service.sid}/conf/init_notification.sql
+<#if service.auth = "kerberos">
+cp /etc/${service.sid}/conf/krb5.conf /etc/
+</#if>

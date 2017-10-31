@@ -101,6 +101,9 @@ pages:
 - operation
 - security
 
+principals:
+- rubik
+
 healthChecks:
 - category: DAEMON_CHECK
   intervalSeconds: 5

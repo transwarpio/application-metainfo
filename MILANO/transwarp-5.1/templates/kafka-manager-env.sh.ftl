@@ -19,6 +19,7 @@ export KF_MGR_PORT=${service['kafka.manager.port']}
 <#if service.auth = "kerberos">
 export KRB_ENABLE=true
 export KRB_OPTS="-Djava.security.krb5.conf=/etc/${service.sid}/conf/krb5.conf -Djava.security.auth.login.config=/etc/${service.sid}/conf/kafka-manager-jaas.conf"
+cp /etc/${service.sid}/conf/krb5.conf /etc/
 <#else>
 export KRB_ENABLE=false
 </#if>
