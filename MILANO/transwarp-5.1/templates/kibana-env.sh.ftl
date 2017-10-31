@@ -9,3 +9,6 @@ export KIBANA_HOST=${localhostname}
 </#if>
 export ELASTICSEARCH_URL=${searchWithPort[0]}
 export KIBANA_PORT=${service['kibana.port']}
+<#if service.auth = "kerberos">
+cp /etc/${service.sid}/conf/krb5.conf /etc/
+</#if>

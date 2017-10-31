@@ -28,6 +28,7 @@ export KRB_ENABLE=true
 export KRB_REALM=${service.realm}
 export LG_PRINCIPAL=kafka/${localhostname}@${service.realm}
 export LG_KEYTAB=/etc/${service.sid}/conf/milano.keytab
+cp /etc/${service.sid}/conf/krb5.conf /etc/
 <#else>
 export KRB_ENABLE=false
 </#if>

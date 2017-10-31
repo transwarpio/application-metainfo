@@ -12,3 +12,6 @@ export JAVAX_JDO_OPTION_CONNECTION_URL=jdbc:mysql://${hostPorts?join(",")}/workf
 export JAVAX_JDO_OPTION_CONNECTION_USERNAME=${service['javax.jdo.option.ConnectionUserName']}
 export JAVAX_JDO_OPTION_CONNECTION_PASSWORD=${service['javax.jdo.option.ConnectionPassword']}
 export DATABASE_NAME=workflow_${service.sid}
+<#if service.auth = "kerberos">
+cp /etc/${service.sid}/conf/krb5.conf /etc/
+</#if>
