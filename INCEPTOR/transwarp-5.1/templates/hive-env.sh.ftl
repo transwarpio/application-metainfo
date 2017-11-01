@@ -171,6 +171,7 @@ export KRB_PLUGIN_ENABLE=true
 
 # security environment
 <#if service.auth = "kerberos">
+cp /etc/${service.sid}/conf/krb5.conf /etc
 export KRB_ENABLE=true
 export EXECUTOR_PRINCIPAL=hive/_HOST@${service.realm}
 export EXECUTOR_KEYTAB=/etc/${service.sid}/conf/inceptor.keytab

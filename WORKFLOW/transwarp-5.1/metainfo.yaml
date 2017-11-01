@@ -6,6 +6,10 @@ namePrefix: Workflow
 friendlyName: Workflow
 dockerImage: "transwarp/workflow:transwarp-5.1"
 dependencies:
+  - name: GUARDIAN
+    minVersion: transwarp-5.1
+    maxVersion: transwarp-5.1
+    optional: true
   - name: ZOOKEEPER
     minVersion: transwarp-5.1
     maxVersion: transwarp-5.1

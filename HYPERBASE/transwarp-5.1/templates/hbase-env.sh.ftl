@@ -147,7 +147,7 @@ export HBASE_ZOOKEEPER_ZNODE_PARENT=/${service.sid}
 
 <#if service.plugins?seq_contains("guardian")>
 cp /etc/${service.sid}/conf/krb5.conf /etc
-export MASTERPRINCIPAL=yarn/${localhostname}
+export MASTERPRINCIPAL=hbase/${localhostname}
 export KEYTAB=/etc/${service.sid}/conf/hyperbase.keytab
 export KRB_PLUGIN_ENABLE=true
 </#if>
