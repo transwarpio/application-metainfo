@@ -33,6 +33,24 @@
   onDeps: []
   groups: ["tdt-site.xml"]
   visibility: PASSWORD
+
+- name: tdt.inceptor.ldap.username
+  recommendExpression: tdtuser
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE
+
+- name: tdt.inceptor.ldap.password
+  recommendExpression: password
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE
   
 - name: tdt.task.live.time
   recommendExpression: 2hour
