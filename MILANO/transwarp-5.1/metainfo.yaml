@@ -211,7 +211,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf"]
+        paths: ["/etc/${service.sid}/conf", "/etc/${service.sid}/conf/settings"]
         mode: "755"
   - type: Config
     directives:
@@ -225,6 +225,11 @@ roles:
         templatePath: "settings/kafka-manager-consumer.properties.ftl"
         targetPath: "/etc/${service.sid}/conf/kafka-manager-consumer.properties"
         mode: "666"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "settings/kafka-manager-init.sh.ftl"
+        targetPath: "/etc/${service.sid}/conf/settings/kafka-manager-init.sh"
+        mode: "755"
 
 product: Studio
 
