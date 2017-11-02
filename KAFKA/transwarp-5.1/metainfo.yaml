@@ -11,6 +11,10 @@ dependencies:
     optional: false
 dockerImage: "transwarp/kafka:transwarp-5.1"
 user: kafka
+plugins:
+  - provider: GUARDIAN
+    version: 0.12.0+500.51250
+    useTar: false
 roles:
 - name: KAFKA_SERVER
   friendlyName: "Kafka Server"
@@ -74,6 +78,7 @@ pages:
 - configuration
 - operation
 - security
+- plugin
 
 principals:
 - kafka
