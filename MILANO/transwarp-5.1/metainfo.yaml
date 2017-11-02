@@ -162,8 +162,27 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf"]
+        paths: ["/etc/${service.sid}/conf", "/etc/${service.sid}/settings"]
         mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "settings/kibana-init.sh.ftl"
+        targetPath: "/etc/${service.sid}/settings/kibana-init.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "settings/kibana-index.json.ftl"
+        targetPath: "/etc/${service.sid}/settings/kibana-index.json"
+        mode: "666"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "settings/kibana-demo.json.ftl"
+        targetPath: "/etc/${service.sid}/settings/kibana-demo.json"
+        mode: "666"
+    - directive: !<shell>
+        script: "bash -e /etc/${service.sid}/settings/kibana-init.sh"
 - name: MILANO_KAFKA_MANAGER
   friendlyName: "KafkaManager"
   labelPrefix: "kafka-manager"
