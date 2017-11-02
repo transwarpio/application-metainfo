@@ -18,6 +18,8 @@
     <@property "tdt.inceptor.auth.mode" "LDAP"/>
 	<#else>
     <@property "tdt.inceptor.auth.mode" "KERBEROS"/>
+    <@property "tdt.server.principal" "tdt/${localhostname?lower_case}@${service.realm}"/>
+    <@property "tdt.server.keytab" "${service.keytab}"/>
 	</#if>
 <#else>
     <@property "tdt.inceptor.auth.mode" "NONE"/>
