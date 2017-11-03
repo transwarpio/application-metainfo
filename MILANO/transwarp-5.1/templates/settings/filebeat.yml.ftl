@@ -4,6 +4,11 @@
 
 #==========================  Modules configuration ============================
 #filebeat.modules:
+filebeat.config.prospectors:
+  path: /etc/${service.sid}/conf/filebeat.yml
+  reload.enabled: true
+  reload.period: 10s
+
 filebeat.prospectors:
 - type: log
   paths:
@@ -37,7 +42,7 @@ filebeat.prospectors:
 
 - type: log
   paths:
-    - /var/log/inceptor*/*spark-executor*.log
+    - /var/log/inceptor*/*executor*.log
   fields:
     service: sparkexecutor
   fields_under_root: true
@@ -52,7 +57,7 @@ filebeat.prospectors:
 
 - type: log
   paths:
-    - /var/log/inceptor*/*spark-application*.log
+    - /var/log/inceptor*/*application*.log
   fields:
     service: sparkapplication
   fields_under_root: true
@@ -219,9 +224,54 @@ filebeat.prospectors:
 
 - type: log
   paths:
-    - /var/log/kakfa*/**/*.log
+    - /var/log/search*/*.log
+  fields:
+    service: search
+  fields_under_root: true
+  multiline.pattern: '^\[[0-9]{4}-[0-9]{2}-[0-9]{2}'
+  multiline.negate: true
+  multiline.match: after
+  scan_frequency: 3s
+  close_eof: false
+  harvester_buffer_size: 1048576
+  exclude_lines: ['^DBG']
+  exclude_files: ['.gz$']
+
+- type: log
+  paths:
+    - /var/log/kafka*/**/*.log
   fields:
     service: kafka
+  fields_under_root: true
+  multiline.pattern: '^\[[0-9]{4}-[0-9]{2}-[0-9]{2}'
+  multiline.negate: true
+  multiline.match: after
+  scan_frequency: 3s
+  close_eof: false
+  harvester_buffer_size: 1048576
+  exclude_lines: ['^DBG']
+  exclude_files: ['.gz$']
+
+- type: log
+  paths:
+    - /var/log/streamsql*/*.log
+  fields:
+    service: streamsql
+  fields_under_root: true
+  multiline.pattern: '^\[[0-9]{4}-[0-9]{2}-[0-9]{2}'
+  multiline.negate: true
+  multiline.match: after
+  scan_frequency: 3s
+  close_eof: false
+  harvester_buffer_size: 1048576
+  exclude_lines: ['^DBG']
+  exclude_files: ['.gz$']
+
+- type: log
+  paths:
+    - /var/log/shiva*/*.log
+  fields:
+    service: shiva
   fields_under_root: true
   multiline.pattern: '^\[[0-9]{4}-[0-9]{2}-[0-9]{2}'
   multiline.negate: true

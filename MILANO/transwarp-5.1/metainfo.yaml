@@ -58,7 +58,7 @@ roles:
         templateType: FreeMarker
         templatePath: "settings/filebeat.yml.ftl"
         targetPath: "/etc/${service.sid}/conf/filebeat.yml"
-        mode: "666"
+        mode: "655"
 - name: MILANO_LOGSTASH
   friendlyName: "Logstash"
   labelPrefix: "logstash"
@@ -162,8 +162,27 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf"]
+        paths: ["/etc/${service.sid}/conf", "/etc/${service.sid}/settings"]
         mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "settings/kibana-init.sh.ftl"
+        targetPath: "/etc/${service.sid}/settings/kibana-init.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "settings/kibana-index.json.ftl"
+        targetPath: "/etc/${service.sid}/settings/kibana-index.json"
+        mode: "666"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "settings/kibana-demo.json.ftl"
+        targetPath: "/etc/${service.sid}/settings/kibana-demo.json"
+        mode: "666"
+    - directive: !<shell>
+        script: "bash -e /etc/${service.sid}/settings/kibana-init.sh"
 - name: MILANO_KAFKA_MANAGER
   friendlyName: "KafkaManager"
   labelPrefix: "kafka-manager"
@@ -192,7 +211,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf"]
+        paths: ["/etc/${service.sid}/conf", "/etc/${service.sid}/conf/settings"]
         mode: "755"
   - type: Config
     directives:
@@ -205,6 +224,52 @@ roles:
         templateType: FreeMarker
         templatePath: "settings/kafka-manager-consumer.properties.ftl"
         targetPath: "/etc/${service.sid}/conf/kafka-manager-consumer.properties"
+        mode: "666"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "settings/kafka-manager-init.sh.ftl"
+        targetPath: "/etc/${service.sid}/conf/settings/kafka-manager-init.sh"
+        mode: "755"
+- name: MILANO_CRONTAB
+  friendlyName: "Crontab"
+  labelPrefix: "crontab"
+  dockerImage: "transwarp/crontab:transwarp-5.1"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  env:
+  - name: CRONTAB_CONF_DIR
+    value: /etc/${service.sid}/conf
+  resources:
+    limitsMemoryKey: crontab.container.limits.memory
+    limitsCpuKey: crontab.container.limits.cpu
+    requestsMemoryKey: crontab.container.requests.memory
+    requestsCpuKey: crontab.container.requests.cpu
+  summaryPolicy: SOME
+  mountPaths:
+  - mountPath: /var/log
+    hostPath: /var/log/${service.sid}/crontabs
+    name: cntr-log-path
+  - mountPath: /etc/crontabs
+    hostPath: /etc/${service.sid}/conf/crontabs
+    name: cntr-conf-path
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf/crontabs"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "config/crontabs.conf.ftl"
+        targetPath: "/etc/${service.sid}/conf/crontabs/root"
         mode: "666"
 
 product: Studio
@@ -237,6 +302,14 @@ firstWizardConfigs:
 - kafka.manager.container.limits.cpu
 - kafka.manager.container.requests.memory
 - kafka.manager.container.requests.cpu
+- crontab.enable
+- crontab.index.prefix
+- crontab.retention.days
+- crontab.schedule.time
+- crontab.container.limits.memory
+- crontab.container.limits.cpu
+- crontab.container.requests.memory
+- crontab.container.requests.cpu
 
 dashboardMetrics:
 - AllTopicBytesOutPerSec
