@@ -316,3 +316,89 @@
   groups: []
   visibility: READ_WRITE
 
+- name: crontab.enable
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: crontab.index.prefix
+  recommendExpression: "logs-"
+  defaultValue: "logs-"
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: crontab.retention.days
+  recommendExpression: 3
+  defaultValue: 3
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: crontab.schedule.time
+  recommendExpression: "* 0 * * * "
+  defaultValue: "* 0 * * * "
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: crontab.container.limits.memory
+  recommendExpression: 1
+  defaultValue: 2
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [CRONTAB]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: crontab.container.limits.cpu
+  recommendExpression: 1
+  defaultValue: 2
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [CRONTAB]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: crontab.container.requests.memory
+  recommendExpression: 0.5
+  defaultValue: 2
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [CRONTAB]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: crontab.container.requests.cpu
+  recommendExpression: 0.5
+  defaultValue: 1
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [CRONTAB]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: crontab.memory.ratio
+  recommendExpression: 0.8
+  defaultValue: 0.8
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [CRONTAB]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+

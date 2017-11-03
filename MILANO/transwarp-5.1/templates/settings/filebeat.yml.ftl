@@ -4,6 +4,11 @@
 
 #==========================  Modules configuration ============================
 #filebeat.modules:
+filebeat.config.prospectors:
+  path: /etc/${service.sid}/conf/filebeat.yml
+  reload.enabled: true
+  reload.period: 10s
+
 filebeat.prospectors:
 - type: log
   paths:
