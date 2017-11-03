@@ -153,7 +153,12 @@ security.inter.broker.protocol=SASL_PLAINTEXT
 sasl.mechanism.inter.broker.protocol=GSSAPI
 
 sasl.kerberos.service.name=kafka
+
+<#if service.plugins?seq_contains("guardian")>
+authorizer.class.name=io.transwarp.guardian.plugins.kafka.GuardianAclAuthorizer
+<#else>
 authorizer.class.name=kafka.security.auth.SimpleAclAuthorizer
+</#if>
 super.users=User:kafka
 </#if>
 
