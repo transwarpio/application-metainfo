@@ -9,7 +9,9 @@ export MYSQL_DATADIR=/var/transwarp/mysql/data
 # Export ngmr.localdir
 export SPARK_LOCAL_DIR=${service[.data_model["localhostname"]]['ngmr.localdir']}
 </#if>
-export SPARK_FASTDISK_DIR=${service['ngmr.fastdisk.dir']}
+<#if service[.data_model["localhostname"]]['ngmr.fastdisk.dir']??>
+export SPARK_FASTDISK_DIR=${service[.data_model["localhostname"]]['ngmr.fastdisk.dir']}
+</#if>
 export NGMR_CACHE_SIZE=${service['ngmr.cache.size']}
 export NGMR_EXECUTORS_PERJOB=${service['ngmr.executors.perjob']}
 export INCEPTOR_LOG_DIR=/var/log/${service.sid}
