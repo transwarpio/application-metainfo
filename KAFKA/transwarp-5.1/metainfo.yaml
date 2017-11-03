@@ -13,7 +13,7 @@ dockerImage: "transwarp/kafka:transwarp-5.1"
 user: kafka
 plugins:
   - provider: GUARDIAN
-    version: 0.12.0+500.51250
+    version: 0.10.2+500.51250
     useTar: false
 roles:
 - name: KAFKA_SERVER
