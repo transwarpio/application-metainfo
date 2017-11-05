@@ -15,7 +15,7 @@ roles:
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
     deletable:
-      minMaster: true
+      minMaster: false
       health: ["yellow", "green"]
     reject:
       number: 2
