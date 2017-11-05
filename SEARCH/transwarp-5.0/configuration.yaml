@@ -112,6 +112,15 @@
   groups: ["elasticsearch.yml"]
   visibility: READ_WRITE
 
+- name: discovery.zen.minimum_master_nodes
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: index.translog.durability
   recommendExpression: async
   defaultValue: null
