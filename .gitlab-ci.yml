@@ -8,6 +8,7 @@ stages:
 image_build:
   stage: postcommit_build
   script:
+    - set -e
     - time=`date "+%Y-%m-%d-%H-%M-%S"`
     - imageTag="${CI_COMMIT_REF_NAME}-${time}-${CI_JOB_ID}"
     - export IMAGE_TAG=${imageTag}
