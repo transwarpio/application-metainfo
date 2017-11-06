@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
 build_application-metainfo() {
-    set -e
-
     SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
     META_SRC_DIR="$SCRIPT_DIR"/../..
     TARGET_DIR="$META_SRC_DIR/target"
@@ -14,6 +12,10 @@ build_application-metainfo() {
 
         META_DST_DIR="$TARGET_DIR/$VERSION"
 
+        if [ ! -e "$META_SRC_DIR" ]; then
+            echo "not found $META_SRC_DIR"
+            return 1
+        fi
         cd "$META_SRC_DIR"
         dirs=()
         while IFS=  read -r -d $'\0'; do
@@ -43,8 +45,20 @@ ADD application-metainfo /root/application-metainfo
         GOLD_TAG="${DOCKER_REPO_URL}/gold/application-metainfo:$VERSION-alpha1"
 
         docker build -t "$POST_COMMIT_TAG" .
+        if [[ $? != 0 ]]; then
+            return 1
+        fi
         docker push "$POST_COMMIT_TAG"
+        if [[ $? != 0 ]]; then
+            return 1
+        fi
         docker tag "$POST_COMMIT_TAG" "$GOLD_TAG"
+        if [[ $? != 0 ]]; then
+            return 1
+        fi
         docker push "$GOLD_TAG"
+        if [[ $? != 0 ]]; then
+            return 1
+        fi
     done
 }
