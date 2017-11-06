@@ -1,0 +1,514 @@
+# discover-context-env.properties
+- name: discover.yarn.queue
+  recommendExpression: default
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+# spark-env.sh
+- name: spark.client.memory
+  recommendExpression: 2048
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.master.webui.port
+  recommendExpression: 18080
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.worker.webui.port
+  recommendExpression: 18081
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.master.port
+  recommendExpression: 7077
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.worker.port
+  recommendExpression: 7078
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.history.ui.port
+  recommendExpression: 18082
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+#spark-defaults.conf
+- name: spark.driver.memory
+  recommendExpression: 2048
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.executor.memory
+  recommendExpression: 1024
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.reducer.maxSizeInFlight
+  recommendExpression: 96
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.shuffle.file.buffer
+  recommendExpression: 64
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.files.fetchTimeout
+  recommendExpression: 90
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# zeppelin-env.sh
+- name: zeppelin.notebook.dir
+  recommendExpression: /discover/notebook/
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+# zeppelin-site.xml
+- name: zeppelin.server.addr
+  recommendExpression: 0.0.0.0
+  defaultValue: null
+  valueType: HOST
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.server.port
+  recommendExpression: 8686
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.server.ssl.port
+  recommendExpression: 8443
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.server.context.path
+  recommendExpression: /
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.war.tempdir
+  recommendExpression: webapps
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.notebook.homescreen
+  recommendExpression: ""
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.notebook.homescreen.hide
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.notebook.storage
+  recommendExpression: org.apache.zeppelin.notebook.repo.GitNotebookRepo
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.notebook.one.way.sync
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.interpreter.dir
+  recommendExpression: interpreter
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.interpreter.localRepo
+  recommendExpression: local-repo
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.interpreters
+  recommendExpression: org.apache.zeppelin.rbase.RInterpreter,org.apache.zeppelin.hive.HiveInterpreter,org.apache.zeppelin.spark.SparkInterpreter,org.apache.zeppelin.spark.PySparkInterpreter,org.apache.zeppelin.rinterpreter.RRepl,org.apache.zeppelin.rinterpreter.KnitR,org.apache.zeppelin.spark.SparkRInterpreter,org.apache.zeppelin.spark.SparkSqlInterpreter,org.apache.zeppelin.spark.DepInterpreter,org.apache.zeppelin.markdown.Markdown,org.apache.zeppelin.angular.AngularInterpreter,org.apache.zeppelin.shell.ShellInterpreter,org.apache.zeppelin.file.HDFSFileInterpreter,org.apache.zeppelin.flink.FlinkInterpreter,,org.apache.zeppelin.python.PythonInterpreter,org.apache.zeppelin.python.PythonInterpreterPandasSql,org.apache.zeppelin.python.PythonCondaInterpreter,org.apache.zeppelin.python.PythonDockerInterpreter,org.apache.zeppelin.lens.LensInterpreter,org.apache.zeppelin.ignite.IgniteInterpreter,org.apache.zeppelin.ignite.IgniteSqlInterpreter,org.apache.zeppelin.cassandra.CassandraInterpreter,org.apache.zeppelin.geode.GeodeOqlInterpreter,org.apache.zeppelin.postgresql.PostgreSqlInterpreter,org.apache.zeppelin.jdbc.JDBCInterpreter,org.apache.zeppelin.kylin.KylinInterpreter,org.apache.zeppelin.elasticsearch.ElasticsearchInterpreter,org.apache.zeppelin.scalding.ScaldingInterpreter,org.apache.zeppelin.alluxio.AlluxioInterpreter,org.apache.zeppelin.hbase.HbaseInterpreter,org.apache.zeppelin.livy.LivySparkInterpreter,org.apache.zeppelin.livy.LivyPySparkInterpreter,org.apache.zeppelin.livy.LivyPySpark3Interpreter,org.apache.zeppelin.livy.LivySparkRInterpreter,org.apache.zeppelin.livy.LivySparkSQLInterpreter,org.apache.zeppelin.bigquery.BigQueryInterpreter,org.apache.zeppelin.beam.BeamInterpreter,org.apache.zeppelin.pig.PigInterpreter,org.apache.zeppelin.pig.PigQueryInterpreter,org.apache.zeppelin.scio.ScioInterpreter
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.interpreter.group.order
+  recommendExpression: spark,md,angular,sh,livy,alluxio,file,psql,flink,python,ignite,lens,cassandra,geode,kylin,elasticsearch,scalding,jdbc,hbase,bigquery,beam
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.interpreter.connect.timeout
+  recommendExpression: 30000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.ssl
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.ssl.client.auth
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.ssl.keystore.path
+  recommendExpression: keystore
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.ssl.keystore.type
+  recommendExpression: JKS
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.ssl.keystore.password
+  recommendExpression: "change me"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: PASSWORD
+
+- name: zeppelin.ssl.truststore.path
+  recommendExpression: truststore
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.ssl.truststore.type
+  recommendExpression: JKS
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.server.allowed.origins
+  recommendExpression: '*'
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.anonymous.allowed
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.notebook.public
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+- name: zeppelin.websocket.max.text.message.size
+  recommendExpression: 1024000
+  defaultValue: null
+  valueType: BYTES
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["zeppelin-site.xml"]
+  visibility: READ_WRITE
+
+# sssd.conf
+- name: discover.ide.home.dir
+  recommendExpression: /discover/ide
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: discover.local-cran.port
+  recommendExpression: 2121
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: discover.ide.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_IDE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: discover.ide.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_IDE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: discover.ide.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_IDE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: discover.ide.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_IDE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: discover.ide.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_IDE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: notebook.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_NOTEBOOK]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: notebook.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_NOTEBOOK]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: notebook.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_NOTEBOOK]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: notebook.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_NOTEBOOK]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: notebook.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_NOTEBOOK]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: local-cran.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_LOCAL-CRAN]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: local-cran.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_LOCAL-CRAN]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: local-cran.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_LOCAL-CRAN]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: local-cran.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_LOCAL-CRAN]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: local-cran.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [DISCOVER_LOCAL-CRAN]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
