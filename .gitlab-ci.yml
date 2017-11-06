@@ -30,8 +30,9 @@ image_build:
 
     - echo "here is your build script"
     - mkdir -p ~/.docker && cp /root/.docker/config.json ~/.docker/
-    - bash -x script/jenkins_job_build.sh
+    - bash -x script/jenkins_job_build.sh; BUILD_STATUS=$?
     - ps aux | grep docker | grep -v "grep" |  awk '{print $2}' | xargs kill -9
+    - "[ $BUILD_STATUS -eq 0 ]"
   only:
     - dev
   tags:
