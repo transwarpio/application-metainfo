@@ -13,7 +13,7 @@ image_build:
     - export IMAGE_TAG=${imageTag}
     - export BUILD_IMAGE="Y"
     - export DEPLOY_JAR="Y"
-    - export COMPONENT_BASE="governor"
+    - export COMPONENT_BASE="${CI_PROJECT_NAME}"
     - export DEV_ROOT=$CI_PROJECT_DIR
     - export DOCKER_REPO_URL="172.16.1.99"
     - export BUILDER="postcommit"
