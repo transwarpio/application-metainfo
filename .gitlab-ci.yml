@@ -30,7 +30,9 @@ image_build:
 
     - echo "here is your build script"
     - bash -x script/jenkins_job_build.sh
-    - ps aux | grep docker | grep -v "grep" |  awk '{print $2}' | xargs kill -9 
+    - ps aux | grep docker | grep -v "grep" |  awk '{print $2}' | xargs kill -9
+  only:
+    - dev
   tags:
     - k8s
 
