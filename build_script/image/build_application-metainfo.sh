@@ -37,8 +37,8 @@ RUN mkdir -p /root/application-metainfo
 ADD application-metainfo /root/application-metainfo
 ' > Dockerfile
 
-        POST_COMMIT_TAG="${DOCKER_REPO_URL}/postcommit/application-metainfo:$VERSION"
-        GOLD_TAG="${DOCKER_REPO_URL}/gold/application-metainfo:$VERSION"
+        POST_COMMIT_TAG="${DOCKER_REPO_URL}/postcommit/application-metainfo:$VERSION-alpha1"
+        GOLD_TAG="${DOCKER_REPO_URL}/gold/application-metainfo:$VERSION-alpha1"
 
         docker build -t "$POST_COMMIT_TAG" .
         docker push "$POST_COMMIT_TAG"
