@@ -1,0 +1,35 @@
+image: 172.16.1.99/transwarp/base/builder:centos7
+before_script:
+    - startdocker.sh &
+
+stages:
+  - postcommit_build
+
+image_build:
+  stage: postcommit_build
+  script:
+    - time=`date "+%Y-%m-%d-%H-%M-%S"`
+    - imageTag="${CI_COMMIT_REF_NAME}-${time}-${CI_JOB_ID}"
+    - export IMAGE_TAG=${imageTag}
+    - export BUILD_IMAGE="Y"
+    - export DEPLOY_JAR="Y"
+    - export COMPONENT_BASE="governor"
+    - export DEV_ROOT=$CI_PROJECT_DIR
+    - export DOCKER_REPO_URL="172.16.1.99"
+    - export BUILDER="postcommit"
+    - export OSINFO="centos-6"
+    - export releaseStagingId="priv-transwarp-lib"
+    - export releaseRepoName="libs-release-local"
+    - export releaseRepoUrl="http://172.16.1.161:30033/repository/libs-release-local"
+    - export snapStagingId="priv-transwarp-snapshots"
+    - export snapRepoName="libs-snapshot"
+    - export snapRepoUrl="http://172.16.1.161:30033/repository/libs-snapshot-local"
+    - git clone http://gitlab-ci-token:${CI_JOB_TOKEN}@172.16.1.41:10080/InfraTools/packageRelease.git script
+    - cp build_script/image/build_${CI_PROJECT_NAME}.sh script/build_utils/image/build_${CI_PROJECT_NAME}.sh
+
+    - echo "here is your build script"
+    - bash -x script/jenkins_job_build.sh
+    - ps aux | grep docker | grep -v "grep" |  awk '{print $2}' | xargs kill -9 
+  tags:
+    - k8s
+
