@@ -14,7 +14,7 @@ build_application-metainfo() {
 
         if [ ! -e "$META_SRC_DIR" ]; then
             echo "not found $META_SRC_DIR"
-            return 1
+            exit 1
         fi
         cd "$META_SRC_DIR"
         dirs=()
@@ -46,19 +46,19 @@ ADD application-metainfo /root/application-metainfo
 
         docker build -t "$POST_COMMIT_TAG" .
         if [[ $? != 0 ]]; then
-            return 1
+            exit 1
         fi
         docker push "$POST_COMMIT_TAG"
         if [[ $? != 0 ]]; then
-            return 1
+            exit 1
         fi
         docker tag "$POST_COMMIT_TAG" "$GOLD_TAG"
         if [[ $? != 0 ]]; then
-            return 1
+            exit 1
         fi
         docker push "$GOLD_TAG"
         if [[ $? != 0 ]]; then
-            return 1
+            exit 1
         fi
     done
 }
