@@ -108,7 +108,7 @@
   visibility: READ_WRITE
 # spark-defaults.conf
 - name: spark.executor.memory
-  recommendExpression: 18432
+  recommendExpression: 2048
   defaultValue: null
   valueType: MB
   scope: !<ServiceLevel> {}
@@ -132,7 +132,7 @@
   groups: []
   visibility: READ_WRITE
 - name: spark.executor.instances
-  recommendExpression: 4
+  recommendExpression: 1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
