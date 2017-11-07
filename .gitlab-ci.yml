@@ -1,6 +1,7 @@
 image: 172.16.1.99/transwarp/base/builder:centos7
 before_script:
     - startdocker.sh &
+    - while ! test -e "/var/run/docker.sock"; do echo 'waiting docker ready ...'; sleep 1; done;
 
 stages:
   - postcommit_build
