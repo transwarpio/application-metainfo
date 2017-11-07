@@ -7,5 +7,5 @@ pull_merge_request() {
     git checkout -b ${temp_branch} FETCH_HEAD
 
     git checkout ${gitlabTargetBranch}
-    git merge --no-ff ${temp_branch} --no-edit
+    git merge --no-ff ${temp_branch} --no-edit --no-commit
 }
