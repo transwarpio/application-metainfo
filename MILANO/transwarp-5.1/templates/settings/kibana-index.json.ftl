@@ -1,8 +1,30 @@
 {
     "aliases" : { },
     "mappings" : {
-      "timelion-sheet" : {
+      "config" : {
         "properties" : {
+          "buildNum" : {
+            "type" : "keyword"
+          },
+          "defaultIndex" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "timelion:showTutorial" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "search" : {
+        "properties" : {
+          "columns" : {
+            "type" : "text"
+          },
           "description" : {
             "type" : "text"
           },
@@ -16,22 +38,7 @@
               }
             }
           },
-          "timelion_chart_height" : {
-            "type" : "integer"
-          },
-          "timelion_columns" : {
-            "type" : "integer"
-          },
-          "timelion_interval" : {
-            "type" : "text"
-          },
-          "timelion_other_interval" : {
-            "type" : "text"
-          },
-          "timelion_rows" : {
-            "type" : "integer"
-          },
-          "timelion_sheet" : {
+          "sort" : {
             "type" : "text"
           },
           "title" : {
@@ -46,31 +53,6 @@
         "properties" : {
           "uuid" : {
             "type" : "keyword"
-          }
-        }
-      },
-      "index-pattern" : {
-        "properties" : {
-          "fieldFormatMap" : {
-            "type" : "text"
-          },
-          "fields" : {
-            "type" : "text"
-          },
-          "intervalName" : {
-            "type" : "text"
-          },
-          "notExpandable" : {
-            "type" : "boolean"
-          },
-          "sourceFilters" : {
-            "type" : "text"
-          },
-          "timeFieldName" : {
-            "type" : "text"
-          },
-          "title" : {
-            "type" : "text"
           }
         }
       },
@@ -131,19 +113,28 @@
           }
         }
       },
-      "config" : {
+      "index-pattern" : {
         "properties" : {
-          "buildNum" : {
-            "type" : "keyword"
+          "fieldFormatMap" : {
+            "type" : "text"
           },
-          "defaultIndex" : {
-            "type" : "text",
-            "fields" : {
-              "keyword" : {
-                "type" : "keyword",
-                "ignore_above" : 256
-              }
-            }
+          "fields" : {
+            "type" : "text"
+          },
+          "intervalName" : {
+            "type" : "text"
+          },
+          "notExpandable" : {
+            "type" : "boolean"
+          },
+          "sourceFilters" : {
+            "type" : "text"
+          },
+          "timeFieldName" : {
+            "type" : "text"
+          },
+          "title" : {
+            "type" : "text"
           }
         }
       },
@@ -176,11 +167,8 @@
           }
         }
       },
-      "search" : {
+      "timelion-sheet" : {
         "properties" : {
-          "columns" : {
-            "type" : "text"
-          },
           "description" : {
             "type" : "text"
           },
@@ -194,7 +182,22 @@
               }
             }
           },
-          "sort" : {
+          "timelion_chart_height" : {
+            "type" : "integer"
+          },
+          "timelion_columns" : {
+            "type" : "integer"
+          },
+          "timelion_interval" : {
+            "type" : "text"
+          },
+          "timelion_other_interval" : {
+            "type" : "text"
+          },
+          "timelion_rows" : {
+            "type" : "integer"
+          },
+          "timelion_sheet" : {
             "type" : "text"
           },
           "title" : {
