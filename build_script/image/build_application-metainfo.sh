@@ -33,6 +33,7 @@ build_application-metainfo() {
         cd "$TARGET_DIR"
         rm -rf application-metainfo
         mv "$VERSION" application-metainfo
+        ls application-metainfo
         echo 'FROM 172.16.1.41:5000/release/basefs:latest
 
 RUN mkdir -p /root/application-metainfo
