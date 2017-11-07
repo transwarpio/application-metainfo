@@ -28,7 +28,7 @@ image_build:
     - git clone http://gitlab-ci-token:${CI_JOB_TOKEN}@172.16.1.41:10080/InfraTools/packageRelease.git script
     - cp build_script/image/build_${CI_PROJECT_NAME}.sh script/build_utils/image/build_${CI_PROJECT_NAME}.sh
     - git clone http://gitlab-ci-token:${CI_JOB_TOKEN}@172.16.1.41:10080/wjcaitu/docker-builder
-    - mkdir -p ~/.docker && cp docker-builder/builder/config.json ~/.docker/
+#    - mkdir -p ~/.docker && cp docker-builder/builder/config.json ~/.docker/
 
     - echo "here is your build script"
     - bash -x script/jenkins_job_build.sh
