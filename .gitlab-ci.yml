@@ -27,6 +27,7 @@ image_build:
     - export snapRepoUrl="http://172.16.1.161:30033/repository/libs-snapshot-local"
     - git clone http://gitlab-ci-token:${CI_JOB_TOKEN}@172.16.1.41:10080/InfraTools/packageRelease.git script
     - cp build_script/image/build_${CI_PROJECT_NAME}.sh script/build_utils/image/build_${CI_PROJECT_NAME}.sh
+    - mkdir -p ~/.docker && cp /root/.docker/config.json ~/.docker
 
     - echo "here is your build script"
     - bash -x script/jenkins_job_build.sh
