@@ -3,8 +3,7 @@
 build_application-metainfo() {
     set -e
 
-    SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-    META_SRC_DIR="$SCRIPT_DIR"/../..
+    META_SRC_DIR="$WORKSPACE"
     TARGET_DIR="$META_SRC_DIR/target"
 
     mkdir -p "$TARGET_DIR"
