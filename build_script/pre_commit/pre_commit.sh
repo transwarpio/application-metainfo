@@ -57,7 +57,7 @@ calc_affected_versions() {
 calc_affected_services() {
     current_version=$1
 
-    affected_services=$(git diff origin/${gitlabTargetBranch} | perl -nle 'm\ [ab]/([^/]*)/'${current_version}'/\; print \$1' | sort | uniq)
+    affected_services=$(git diff origin/${gitlabTargetBranch} | perl -nle 'm\ [ab]/([^/]*)/'${current_version}'/\; print $1' | sort | uniq)
 }
 
 
