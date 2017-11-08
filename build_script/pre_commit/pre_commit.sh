@@ -70,7 +70,7 @@ pull_merge_request
 calc_affected_versions
 echo "affected versions: ${AFFECTED_VERSIONS[@]}"
 
-for version in "${AFFECTED_VERSIONS[@]}}"; do
+for version in "${AFFECTED_VERSIONS[@]}"; do
     echo "# testing $version ..."
     calc_affected_services "$version"
     echo "modified services: ${affected_services}"
