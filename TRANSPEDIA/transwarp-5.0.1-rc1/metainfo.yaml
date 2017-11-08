@@ -1,0 +1,58 @@
+---
+name: TRANSPEDIA
+version: transwarp-5.0.1-rc1
+global: false
+namePrefix: Transpedia
+friendlyName: "Transpedia"
+dependencies:
+- name: SEARCH
+  minVersion: transwarp-5.0.1-rc1
+  maxVersion: transwarp-5.0.1-rc1
+dockerImage: "transwarp/transpedia:transwarp-5.0.1-rc1"
+roles:
+- name: TRANSPEDIA_SERVER
+  friendlyName: "Transpedia Server"
+  labelPrefix: "transpedia-server"
+  linkExpression: "http://${service.roles.TRANSPEDIA_SERVER[0].hostname}:${service['transpedia.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  env:
+  - name: TRANSPEDIA_HOST
+    value: ${service['transpedia.host']}
+  - name: TRANSPEDIA_PORT
+    value: ${service['transpedia.port']}
+  - name: ES_ENABLE
+    value: <#if dependencies.SEARCH??>false<#else>true</#if>
+  - name: ELASTICSEARCH_HOSTS
+    value: <#if dependencies.SEARCH??>${dependencies.SEARCH.roles.SEARCH_SERVER[0].hostname}<#else>0.0.0.0</#if>
+  - name: ELASTICSEARCH_PORT
+    value: 9200
+  mountPaths: []
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  summaryPolicy: SOME
+  mountPaths: []
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations: []
+
+firstWizardConfigs:
+- transpedia.host
+- transpedia.port
+- server.container.limits.memory
+- server.container.limits.cpu
+- server.container.requests.memory
+- server.container.requests.cpu
+- server.memory.ratio
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 30
+  method: !<K8sPod> {}

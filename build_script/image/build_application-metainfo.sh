@@ -8,7 +8,7 @@ build_application-metainfo() {
 
     mkdir -p "$TARGET_DIR"
 
-    for VERSION in transwarp-5.1 transwarp-5.1.0-rc2; do
+    for VERSION in transwarp-5.0.1-rc1; do
         echo "preparing $VERSION ..."
 
         META_DST_DIR="$TARGET_DIR/$VERSION"

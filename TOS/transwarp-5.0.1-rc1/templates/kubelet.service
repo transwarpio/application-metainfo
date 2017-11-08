@@ -1,0 +1,31 @@
+[Unit]
+Description=Kubernetes Kubelet
+After=docker.service docker.socket
+Wants=docker.socket
+
+[Service]
+ExecStart=/opt/kubernetes/bin/hyperkube kubelet \
+    --logtostderr=false \
+    --alsologtostderr=true \
+    --v=4 \
+    --address=0.0.0.0 \
+    --cluster_dns=10.10.10.10 \
+    --cluster_domain=transwarp.local \
+    --port=${service['tos.slave.kubelet.port']} \
+    --log_dir=/var/log/kubernetes/kubelet \
+    --config=/opt/kubernetes/manifests-multi \
+    --kubeconfig=/srv/kubernetes/kubeconfig \
+    --api_servers=https://127.0.0.1:6443 \
+    --pod-infra-container-image=transwarp/pause:transwarp-5.0.1-rc1 \
+    --resolv-conf=/dev/null \
+    --max-pods=200 \
+    --require-kubeconfig \
+    --allow_privileged=true \
+    --host-network-sources=*
+
+KillMode=process
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target
