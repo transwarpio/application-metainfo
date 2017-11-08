@@ -17,7 +17,8 @@ filter {
       "message" => [
         "^%{TDH_TIMESTAMP:datetime}\s+%{LOGLEVEL:level}\s+%{GREEDYDATA:message}$",
         "^%{TDH_TIMESTAMP:datetime}\s+(%{NOTSPACE}\s+-\s+)?%{LOGLEVEL:level}\s+%{GREEDYDATA:message}$",
-        "^%{TDH_TIMESTAMP:datetime}\[%{LOGLEVEL:level}\s*\]\s*%{GREEDYDATA:message}$"
+        "^%{TDH_TIMESTAMP:datetime}\[%{LOGLEVEL:level}\s*\]\s*%{GREEDYDATA:message}$",
+        "^%{TDH_TIMESTAMP:datetime}\s+%{GREEDYDATA:message}$"
       ]
     }
     overwrite => ["message"]
@@ -54,6 +55,15 @@ filter {
         "%{HBASE_RS_COMPACTION}",
         "%{HBASE_JVM_PAUSE}",
         "%{HBASE_GC_FULL}"
+      ]}
+    }
+  }
+  if [source] =~ "guardian" {
+    grok {
+      patterns_dir => ["/etc/${service.sid}/conf/patterns"]
+      break_on_match => true
+      match => { "message" => [
+        "%{GUARDIAN_AUDIT}"
       ]}
     }
   }
