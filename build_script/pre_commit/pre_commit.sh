@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 
+SUPPORTED_VERSIONS=(transwarp-5.1 transwarp-5.0 transwarp-ce-1.0)
+
+
 set -e
 
-SUPPORTED_VERSIONS=(transwarp-5.1 transwarp-5.0 transwarp-ce-1.0)
+SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 print_merge_params() {
     echo "=================================================="
@@ -51,6 +54,12 @@ calc_affected_versions() {
 }
 
 
+get_affected_services() {
+    current_version=$1
+
+
+}
+
 
 
 
@@ -60,3 +69,8 @@ pull_merge_request
 
 calc_affected_versions
 echo "affected versions: ${AFFECTED_VERSIONS[@]}"
+
+for version in "${AFFECTED_VERSIONS[@]}}"; do
+    echo "# testing $version ..."
+
+done
