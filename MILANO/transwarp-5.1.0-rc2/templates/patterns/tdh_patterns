@@ -1,0 +1,170 @@
+#########################
+# Events in es log
+#########################
+ES_EXCEPTION .* %{NOTSPACE:exception_type}Exception\[%{NONGREEDYDATA:exception_desc}\]
+
+#################################
+# Event in NN Log
+#################################
+# INFO
+# WRAN
+HDFS_NN_SAFEMODE ^.*namenode\.SafeModeException: Log not rolled. Name node is in safe mode$
+# ERROR
+
+#################################
+# Event in DN Log
+#################################
+# INFO
+# WARN
+# ERROR
+
+#################################
+# Event in JN Log
+#################################
+# INFO
+# WARN
+# ERROR
+
+#################################
+# Event in HMaster Log
+#################################
+# INFO
+# WRAN
+HBASE_RESPONSETOOSLOW ^org\.apache\.hadoop\.ipc\.RpcServer: \(responseTooSlow\): {"processingtimems":%{NUMBER:process_time:float},"call":"%{NOTSPACE:call}","client":"%{NOTSPACE:client}","starttimems":%{NUMBER:f_start_time:float},"queuetimems":%{NUMBER:f_queue_time:float},"class":"%{NOTSPACE:class}","responsesize":%{NUMBER:response_size:float},"method":"%{NOTSPACE:method}"}
+# ERROR
+HBASE_RS_OFFLINE ^org\.apache\.hadoop\.hbase\.master\.HMaster: Region server %{WORD:rs_host},%{NUMBER:rs_port},%{NUMBER:rs_thread} reported a fatal error:
+
+#################################
+# Event in RegionServer Log
+#################################
+# INFO
+HBASE_ES_TRACE ^org\.elasticsearch\.io\.transwarp\.trace.*: {"Desc":"%{NOTSPACE:desc}","TraceId":%{NOTSPACE:trace_id},"SpanId":%{NOTSPACE:span_id},"ParentSpanId":%{NOTSPACE:parent_span_id},"StartTime":%{NOTSPACE:start_time},"StopTime":%{NOTSPACE:stop_time},"ServerRpcExecutionResult":"%{NOTSPACE:rpc_result}","remoteAddress":"%{NOTSPACE:remote_addr}","user":"%{NOTSPACE:user}"}END
+HBASE_RS_TRANSITION ^org\.apache\..*\.ZKAssign: regionserver:%{NOTSPACE:rs_id}, quorum=%{NOTSPACE:quorum_list}, baseZNode=%{NOTSPACE:baseZNode} Transitioned node %{NOTSPACE:transNode} from %{NOTSPACE:stat_from} to %{NOTSPACE:stat_to}
+HBASE_RS_COMPACTION ^org\.apache\.hadoop\.hbase\.regionserver\.compactions\.%{NOTSPACE:compact_type}: %{GREEDYDATA:compact_content}$
+HBASE_GC_FULL ^%{TIMESTAMP_ISO8601}:\s+%{NUMBER}: \[Full GCforce garbage collection
+# WARN
+HBASE_JVM_PAUSE ^org\.apache\.hadoop\.hbase\.util\.JvmPauseMonitor: .*pause of approximately %{NUMBER:jvm_pause:float}ms
+# ERROR
+
+#################################
+# Event in k8s log
+#################################
+# Kubelet Event
+K8S_KBL_KILL_POD (^Killing unwanted pod %{QUOTEDSTRING:kill_pod}$)
+K8S_KBL_KILL_CONTAINER (^Killing container "%{NOTSPACE:kill_container} \/".*$)
+K8S_LOGLEVEL ([IEW])
+
+#################################
+# Event in hive server log
+#################################
+# SQL Events
+SQL_EXEC_MODE_OPT ^ql\.Driver:.*\(SessionHandle=%{NOTSPACE:session_handle}\).* - (Set execution mode to |Restore the execution mode to )%{NOTSPACE:exec_mode}>$
+SQL_HEARTBEAT_ON ^.*start the heartbeat for session: %{NOTSPACE:heartbeat_session_on}
+SQL_HEARTBEAT_OFF ^.*stop the heartbeat for session: %{NOTSPACE:heartbeat_session_off}
+SQL_HEARTBEAT_RUNNING ^.*heartbeating for session %{NOTSPACE:heartbeat_session_running}
+SQL_SQL_STMT ^ql\.Driver:.*\(SessionHandle=%{NOTSPACE:session_handle}\)\] - Starting command:%{GREEDYDATA:sql_stmt}$
+SQL_PARSE_STMT ^parse\.ParseDriver:.*\(SessionHandle=%{NOTSPACE:session_handle}\)\] - Parsing command:%{GREEDYDATA:sql_stmt}$
+SQL_SQL_LIFE_END ^ql\.Driver:.*\(SessionHandle=%{NOTSPACE:session_handle}\)\] - Driver\.run finished at %{NUMBER}, duration %{NUMBER:duration:float}ms, query %{NOTSPACE:spark_job_groupid}
+SQL_AUTH_FAIL ^.*Authorization failed: %{NOTSPACE:auth_fail}
+SQL_ZK_LOCK_NODE ^.*Create lock node %{NOTSPACE:lock_node} successfully and ready to be active.*$
+SQL_ZK_LOCK_NODE_FAIL ^.*Failed to create lock node %{NOTSPACE:lock_node_fail} and wait to be active.*$
+SQL_STANDBY_SWITCH ^.*(Enter standby mode and wait to be active mode|Active server has lost, try to become active|Current server will become active).*$
+SQL_STREAM_START ^inceptor\.InceptorDriver:.*\(SessionHandle=%{NOTSPACE:session_handle}\).* Separate totally %{NUMBER:total_task_num:int} tasks into %{NUMBER:hive_task_num:int} Inceptor tasks and %{NUMBER:strm_task_num:int} streaming tasks$
+SQL_STREAMTASK_BEGIN (.*Schedule stream %{NUMBER:strm_id} for application %{NOTSPACE:app_name}.*)
+SQL_STREAMTASK_FAIL (.*Failed to execute command due to %{DATA:strm_err_msg}.*|.*Failed to restore streamjobs, errors: %{DATA:strm_err_msg}.*)
+SQL_STREAMTASK_RESUBMIT (.*Re-submit task %{NUMBER:strm_id} for application %{DATA:app_name} with command %{DATA:strm_cmd}.*)
+SQL_SPARKTASK_CANCEL (.*cancelOperation(|BySession)\(\) performed on sessionID: %{NUMBER:task_canceled_on_session:int}.*)
+SQL_SPARKJOB_GROUPID ^inceptor\.InceptorContext:.*\(SessionHandle=%{NOTSPACE:session_handle}\)\] - Setting job group %{NOTSPACE:spark_job_groupid}, job description %{GREEDYDATA:sql_stmt}$
+
+PERFLOG_EVENT ([^\s>]+)
+# (TimeToSubmit|compile|doAuthorization|Driver\.execute|Driver\.run|runTasks|task\.DDL\.Stage-%{INT}|task\.MAPRED-SPARK\.Stage-%{INT})
+SQL_PERFLOG_START ^ql\.Driver:.*\(SessionHandle=%{NOTSPACE:session_handle}\).*<PERFLOG method=%{PERFLOG_EVENT:method}>$
+SQL_PERFLOG_END ^ql\.Driver:.*\(SessionHandle=%{NOTSPACE:session_handle}\).*<\/PERFLOG method=%{PERFLOG_EVENT:method} start=%{NUMBER:start:float} end=%{NUMBER:end:float} duration=%{NUMBER:duration:float}>$
+#SQL_DRIVER_START ^ql\.Driver:.*\(SessionHandle=%{NOTSPACE:session_handle}\)\] - <PERFLOG method=(?<method>Driver\.run)>
+#SQL_DRIVER_END ^ql\.Driver:.*\(SessionHandle=%{NOTSPACE:session_handle}\)\] - <\/PERFLOG method=(?<method>Driver\.run) start=%{NUMBER:start:float} end=%{NUMBER:end:float} duration=%{NUMBER:duration:float}>$
+
+# Metastore Events
+MS_INIT ^metastore\.ObjectStore:.* - Initialized ObjectStore$
+MS_CLOSE ^metastore\.HiveMetaStore: .*Shutting down the object store\.\.\.$
+MS_AUDIT_LOG HiveMetaStore\.audit:.*logAuditEvent\(%{NUMBER:event_id}\).* - ugi=%{NOTSPACE:ugi}\s+ip=%{NOTSPACE:ip}\s+cmd=%{GREEDYDATA:cmd}$
+# this is a wanr type
+MS_THREAD_POOL_FULL (.*server\.TThreadPoolServe.* pool size = %{NUMBER:pool_size:int}, active threads = %{NUMBER:thread_num:int}.*)
+
+# Hbase Session
+HB_TOKEN_RENEW_SUCCESS (Obtained a new hbase delegation token for user %{NOTSPACE:user} and store it to hdfs session path: %{NOTSPACE:session_path}$)
+HB_TOKEN_RENEW_FAIL (Failed to get hbase delegation token because of .*|Can\'t find hbase-site\.xml in classpath|Hyperbase delegation token manager is not working)
+HB_TOKEN_RENEW_BEGIN (Schedule a task to renew HBase Delegation Token)
+HB_TOKEN_RENEW_STOP (Stop schedule new tasks to renew token|Stop the hbase delegation token renewer)
+HB_TOKEN_RENEW_RESUME (Resume hbase delegation token renewer)
+HB_ROOT_CREATION_FAIL (The root scratch dir: .* on HDFS should be writable, Current permissions are: .*)
+SESSION_DROP ((?<session_finished>Drop Session Paths for Session): %{NOTSPACE:session_handle}$)
+SESSION_CLOSE ((?<session_finished>Close session) %{NOTSPACE:session_handle}, because Session Manager is shutdown)
+SESSION_FAIL (Error removing session resource dir|Session %{NOTSPACE:session_handle} is (?<session_finished>Timed-out)|Invalid SessionHandle: %{NOTSPACE:session_handle}, (?<session_finished>The session might be closed due to time expiration), current session idle timeout is set to %{NUMBER:timeout:int}ms)
+SESSION_ACTIVE (Current active session count after time out check:)
+
+# Spark Task
+SPK_JOB_GET ^scheduler\.DAGScheduler:.* - Got job %{NUMBER:job_id} \(%{GREEDYDATA}\) with %{NUMBER:partition_size:int} output partitions \(allowLocal=%{NOTSPACE:is_allowlocal:bool}\), from job group %{NOTSPACE:spark_job_groupid}$
+SPK_STAGE_RESUBMIT (.*Resubmitting .* due to fetch failure.*|.*Resubmitted .* marking it as still running.*)
+SPK_STAGE_SUBMIT ^scheduler\.DAGScheduler:.* - Submitting Stage %{NUMBER:stage_id} \(%{GREEDYDATA}\), which has no missing parents, from job %{NUMBER:job_id}$
+SPK_STAGE_TASK_SUBMIT ^scheduler\.DAGScheduler:.* - Submitting %{NUMBER:task_num:int} missing tasks from Stage %{NUMBER:stage_id} .*$
+SPK_STAGE_TASK_FINISH ^scheduler\.DAGScheduler:.* - Completed (ResultTask|ShuffleMapTask)\(%{NUMBER:stage_id},\s+%{NUMBER:task_idx}\)$
+SPK_STAGE_FINISH ^scheduler\.DAGScheduler:.* - Stage %{NUMBER:stage_id} .* finished in %{NUMBER:duration:float} s$
+SPK_STAGE_MASK_FAIL ^scheduler\.DAGScheduler:.* - Marking Stage %{NUMBER:stage_id}.* as failed due to a fetch failure from Stage %{NUMBER:failed_stage_id}
+# need to split 'running/waiting/failed_stage' into stage array in filter
+SPK_STAGE_RUNNING (scheduler\.DAGScheduler:.* - running: Set\(%{GREEDYDATA:running_stage}\))
+SPK_STAGE_WAITING (scheduler\.DAGScheduler:.* - waiting: Set\(%{GREEDYDATA:waiting_stage}\))
+SPK_STAGE_FAILED (scheduler\.DAGScheduler:.* - failed: Set\(%{GREEDYDATA:failed_stage}\))
+#SPK_EXECUTOR_LOST (.*Executor lost:.*format.*)
+SPK_TASK_CANCEL_FAIL (Could not cancel tasks for stage %{NUMBER:stage_id})
+SPK_TASK_START ^scheduler\.TaskSetManager:.* - Starting task %{INT:task_idx}\.(?<task_attempt>[0-3]) in stage %{INT:stage_id}\.(?<stage_attempt>[0-3]) \(TID %{NUMBER:task_id}, %{NOTSPACE:executor_id},.*\)$
+SPK_TASK_FINISH ^scheduler\.TaskSetManager:.* - Finished task %{INT:task_idx}\.(?<task_attempt>[0-3]) in stage %{INT:stage_id}\.(?<stage_attempt>[0-3]) \(TID %{NUMBER:task_id}\) in %{NUMBER:duration:float} ms on %{NOTSPACE:executor_id} .*$
+SPK_DAG_STOP (Stopping DAGScheduler .*)
+SPK_CTXT_SHUTDOWN (.*shutting down SparkContext.*)
+SPK_ACTOR_UNKNOWN (.*received unknown message in DAGSchedulerActorSupervisor.*)
+
+# Spark WARN case
+SPK_EXECUTOR_LOST ^scheduler\.TaskSetManager:.* - Lost task %{INT:task_idx}\.(?<task_attempt>[0-3]) in stage %{INT:stage_id}\.(?<stage_attempt>[0-3]) \(TID %{NUMBER:task_id}, %{NOTSPACE:executor_id}\): ExecutorLostFailure \(executor lost\)
+
+# Spark ERROR case
+SPK_JOB_ABORT ^Job aborted due to stage failure: Task %{INT:task_idx} in stage %{NUMBER:stage_id}\.(?<stage_attempt>[0-3]) failed 4 times,.*\(TID %{NUMBER:task_id}, %{NOTSPACE:executor_id}\): %{GREEDYDATA:job_err_msg}$
+
+# HDFS
+HDFS_ACID_WRITE ^metadata\.Hive: .*moveAcidFiles\(%{NUMBER:file_num:int}\).*SessionHandle=%{NOTSPACE:session_handle}\)\] - Moving bucket %{NOTSPACE:bkt_src_dir} to %{NOTSPACE:bkt_dest_dir}$
+HDFS_SQL_RESULT ^exec\.FileSinkOperator: .*mvFileToFinalPath\(%{NUMBER:file_num:int}\) .*SessionHandle=%{NOTSPACE:session_handle}\)\] - Moving tmp dir: %{NOTSPACE:tmp_dir} to: %{NOTSPACE:dest_dir}$
+HDFS_MAPJOIN ^execution\.MapJoinOperator: .*\(sessionHandle=%{NOTSPACE:session_handle}\)\] - Store data of small tables in %{NOTSPACE:hdfs_path}$
+HDFS_LOADDATA ^exec\.Task: .*SessionHandle=%{NOTSPACE:session_handle} - Loading data to table %{NOTSPACE:table} from %{NOTSPACE:hdfs_path}$
+
+# Thrift
+THFT_AUDIT_STAT (ThriftCLIService\.audit: ugi=%{NOTSPACE:ugi}\s+ip={NOTSPACE:ip}\s+cmd=GetOperationStatus$)
+THFT_AUDIT_SQL (ThriftCLIService\.audit: ugi=%{NOTSPACE:ugi}\s+ip={NOTSPACE:ip}\s+cmd=ExecuteStatement.*stmt=\{%{GREEDYDATA:stmt}\})
+
+# GC Event
+EVENT_GC ^%{TIMESTAMP_ISO8601}:\s+%{NUMBER}:\s+\[GC%{NOTSPACE:gc_datetime}: %{NUMBER:last_gc_elapse:float}: \[ParNew: %{NUMBER:young_before_gc:int}K->%{NUMBER:young_after_gc:int}K\(%{NUMBER:young_size}K\), %{NUMBER:young_gc_cost:float} secs\] %{NUMBER:heap_before_gc:int}K->%{NUMBER:heap_after_gc:int}K\(%{NUMBER:heap_size:int}K\), %{NUMBER:heap_gc_cost:float} secs\] \[Times: user=%{NUMBER:user_gc_cost:float} sys=%{NUMBER:sys_gc_cost:float}, real=%{NUMBER:real_gc_cost:float} secs\]\s+$
+EVENT_FULL_GC ^%{TIMESTAMP_ISO8601}:\s+%{NUMBER}:\s+\[Full GC%{NOTSPACE:gc_datetime}: %{NUMBER:last_full_gc_elapse:float}: \[ParNew: %{NUMBER:young_before_full_gc:int}K->%{NUMBER:young_after_full_gc:int}K\(%{NUMBER:young_size}K\), %{NUMBER:young_full_gc_cost:float} secs\] %{NUMBER:heap_before_full_gc:int}K->%{NUMBER:heap_after_full_gc:int}K\(%{NUMBER:heap_size:int}K\), %{NUMBER:heap_full_gc_cost:float} secs\] \[Times: user=%{NUMBER:user_full_gc_cost:float} sys=%{NUMBER:sys_full_gc_cost:float}, real=%{NUMBER:real_full_gc_cost:float} secs\]\s+$
+
+#################################
+# Event in hive server log
+#################################
+# ES Events in Trace
+INCEPTOR_ES_TRACE (org\.elasticsearch\.io\.transwarp\.trace\.ESLog4jSpanReceiver: .*"Desc":.*"TraceId":%{NUMBER}.*"SpanId":.*"ParentSpanId":.*"hits":)
+INCEPTOR_ERROR ^%{NOTSPACE:class}: .*\(SessionHandle=%{NOTSPACE:session_handle}\)\] - %{GREEDYDATA:inceptor_err_msg}$
+
+#################################
+# Leviathan Event
+#################################
+LEVI_EVENT (leviathan\.TimedEventTracker:.* - \[Leviathan\]\[%{NUMBER:levi_event_id}\]Job: %{NUMBER:job_id}, Stage: %{INT:stage_id}\.(?<stage_attempt>[0-3]), Duration: %{NUMBER:duration:float} ms, TaskTime: %{NUMBER:task_time:int} ms, TaskCount: %{INT:tasK_count:int}, ShufRead: %{INT:shuf_read_byte:int} byte, ShufWrite: %{INT:shuf_write_byte:int} byte, GCTime: %{NUMBER:gc_time:float} ms, FSTouchTime: %{NUMBER:fs_touch_time:float} ms, RemoteFetchTime: %{NUMBER:remote_fetch_time:float} ms, FetchWaitTime: %{NUMBER:fetch_wait_time:float} ms, ShufWriteTime: %{NUMBER:shuf_write_time:float} ms, ShufCompactTime: %{NUMBER:shuf_compact_time:float} ms)
+
+#################################
+# Event in spark log
+#################################
+# Spark Task
+SPK_EXE_TASK_ACK ^.*CoarseGrainedExecutorBackend: Got assigned task %{NUMBER:task_id}$
+SPK_EXE_TASK_START ^.*Executor: Running task %{INT:task_idx}\.(?<task_attempt>[0-3]) in stage %{INT:stage_id}\.(?<stage_attempt>[0-3]) \(TID %{NUMBER:task_id}\)
+SPK_EXE_TASK_FINISH ^.*Executor: Finished task %{INT:task_idx}\.(?<task_attempt>[0-3]) in stage %{INT:stage_id}\.(?<stage_attempt>[0-3]) \(TID %{NUMBER:task_id}\)\. %{NUMBER:return_size:int} bytes result sent to driver
+
+# Spark Executor Fail Case
+SPK_EXE_EXCEPTION ^.*Executor: Exception in task %{INT:task_idx}\.(?<task_attempt>[0-3]) in stage %{INT:stage_id}\.(?<stage_attempt>[0-3]) \(TID %{NUMBER:task_id}\)%{GREEDYDATA:task_err_msg}
+#SPK_EXE_UNCAUGHT_EXCEPTION ^org\.apache\.spark\.executor\.ExecutorUncaughtExceptionHandler: Uncaught exception in thread Thread[Executor task launch worker-16,5,main]
+SPK_GC_EVENT ^.*: \[Leviathan\].* Executor thread number: %{INT:executor_thread_number} opened fd: %{INT:executor_opened_fd} JVM offheap status: used %{NUMBER:executor_offheap_used} capa %{NUMBER:executor_offheap_capa} max %{NUMBER:executor_offheap_max} JVM heap gc status: count %{NUMBER:executor_gc_count} gcTime %{NUMBER:executor_gc_time} ms JVM Heap: init = %{NUMBER:executor_heap_init}\(%{NUMBER:executor_heap_init_k}K\) used = %{NUMBER:executor_heap_used}\(%{NUMBER:executor_heap_used_k}K\) committed = %{NUMBER:executor_heap_committed}\(%{NUMBER:executor_heap_committed_k}K\) max = %{NUMBER:executor_heap_max}\(%{NUMBER:executor_heap_max_k}K\) Non-Heap: init = %{NUMBER:executor_non_heap_init}\(%{NUMBER:executor_non_heap_init_k}K\) used = %{NUMBER:executor_non_heap_used}\(%{NUMBER:executor_non_heap_used_k}K\) committed = %{NUMBER:executor_non_heap_committed}\(%{NUMBER:executor_non_heap_committed_k}K\) max = %{NUMBER:executor_non_heap_max}\(%{NUMBER:executor_non_heap_max_k}K\) cost %{NUMBER:executor_gc_cost} ms
+SPK_GC_EVENT2 .*: \[Leviathan\].* Executor thread number: %{INT:executor_thread_number:int}; opened fd: %{INT:executor_opened_fd:int}; JVM offheap status: used %{NUMBER:executor_offheap_used:float} byte, capa %{NUMBER:executor_offheap_capa:float} byte, max %{NUMBER:executor_offheap_max:float} byte; JVM heap gc status: count %{NUMBER:executor_gc_count:int}, gcTime %{NUMBER:executor_gc_time:int} ms; JVM Heap: init = %{NUMBER:executor_heap_init:float}\(%{NUMBER:executor_heap_init_k:float}K\) used = %{NUMBER:executor_heap_used:float}\(%{NUMBER:executor_heap_used_k:float}K\) committed = %{NUMBER:executor_heap_committed:float}\(%{NUMBER:executor_heap_committed_k:float}K\) max = %{NUMBER:executor_heap_max:float}\(%{NUMBER:executor_heap_max_k:float}K\), Non-Heap: init = %{NUMBER:executor_non_heap_init:float}\(%{NUMBER:executor_non_heap_init_k:float}K\) used = %{NUMBER:executor_non_heap_used:float}\(%{NUMBER:executor_non_heap_used_k:float}K\) committed = %{NUMBER:executor_non_heap_committed:float}\(%{NUMBER:executor_non_heap_committed_k:float}K\) max = %{NUMBER:executor_non_heap_max:float}\(%{NUMBER:executor_non_heap_max_k:float}K\); Get these information costs: %{NUMBER:executor_gc_cost:float} ms
+
