@@ -54,10 +54,10 @@ calc_affected_versions() {
 }
 
 
-get_affected_services() {
+calc_affected_services() {
     current_version=$1
 
-
+    affected_services=$(git diff origin/${gitlabTargetBranch} | perl -nle 'm\ [ab]/([^/]*)/'${current_version}'/\; print \$1' | sort | uniq)
 }
 
 
@@ -72,5 +72,8 @@ echo "affected versions: ${AFFECTED_VERSIONS[@]}"
 
 for version in "${AFFECTED_VERSIONS[@]}}"; do
     echo "# testing $version ..."
-
+    calc_affected_services "$version"
+    echo "modified services: ${affected_services}"
+    start_sequence=$(python "${SCRIPT_DIR}/util/get_sorted_releted_services.py" "${WORKSPACE}" ${version} ${affected_services})
+    echo "start sequence: ${start_sequence}"
 done
