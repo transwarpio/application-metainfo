@@ -81,12 +81,12 @@ revert_virtual_machines() {
         ssh ${host_ip} virsh start ${guest_id}
 
         for i in {1..60}; do
-            if ping -c 1 -w 2 ${guest_ip}; then
+            if ssh ${guest_ip} hostname; then
                 break
             fi
             sleep 1
         done
-        if ! ping -c 1 -w 2 ${guest_ip}; then
+        if ! ssh ${guest_ip} hostname; then
             exit 1
         fi
     done
