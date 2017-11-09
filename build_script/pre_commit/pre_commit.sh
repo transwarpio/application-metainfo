@@ -72,9 +72,9 @@ revert_virtual_machines() {
         guest_ip=$(echo ${host_guest} | cut -d':' -f2)
         guest_id="cloudservice_${guest_ip}_centos72"
 
-        ssh ${host_ip} virsh destroy ${guest_id}
-        ssh ${host_ip} virsh snapshot-revert ${guest_id} ${current_version}
-        ssh ${host_ip} virsh start ${guest_id}
+        ssh -o StrictHostKeyChecking=no ${host_ip} virsh destroy ${guest_id}
+        ssh -o StrictHostKeyChecking=no ${host_ip} virsh snapshot-revert ${guest_id} ${current_version}
+        ssh -o StrictHostKeyChecking=no ${host_ip} virsh start ${guest_id}
 
         for i in {1..60}; do
             if ping -c 1 -w 2 ${guest_ip}; then
