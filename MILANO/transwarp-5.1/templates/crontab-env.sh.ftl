@@ -10,3 +10,5 @@ export ES_PORT=9200
 
 export INDEX_PREFIX=${service['crontab.index.prefix']}
 export RETENTION_DAYS=${service['crontab.retention.days']}
+export PERSISTED_INDEX_PREFIX=persisted-${service['crontab.index.prefix']}
+export PERSISTED_RETENTION_DAYS=${service['crontab.persisted.retention.days']}

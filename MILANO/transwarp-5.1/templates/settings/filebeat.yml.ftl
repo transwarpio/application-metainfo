@@ -282,6 +282,22 @@ filebeat.prospectors:
   exclude_lines: ['^DBG']
   exclude_files: ['.gz$']
 
+- type: log
+  paths:
+    - /var/log/guardian*/*guardian*.log
+    - /var/log/guardian*/*guardian*.audit
+  fields:
+    service: guardian
+  fields_under_root: true
+  multiline.pattern: '^\[[0-9]{4}-[0-9]{2}-[0-9]{2}'
+  multiline.negate: true
+  multiline.match: after
+  scan_frequency: 3s
+  close_eof: false
+  harvester_buffer_size: 1048576
+  exclude_lines: ['^DBG']
+  exclude_files: ['.gz$']
+
 <#if service['filebeat.yml']??>
 <#list service['filebeat.yml'] as key, value>
 - type: log

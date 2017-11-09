@@ -1,4 +1,9 @@
 filter {
+
+  mutate {
+    add_field => { "index_prefix" => "" }
+  }
+
   grok {
     patterns_dir => ["/etc/${service.sid}/conf/patterns"]
     break_on_match => false
@@ -17,7 +22,8 @@ filter {
       "message" => [
         "^%{TDH_TIMESTAMP:datetime}\s+%{LOGLEVEL:level}\s+%{GREEDYDATA:message}$",
         "^%{TDH_TIMESTAMP:datetime}\s+(%{NOTSPACE}\s+-\s+)?%{LOGLEVEL:level}\s+%{GREEDYDATA:message}$",
-        "^%{TDH_TIMESTAMP:datetime}\[%{LOGLEVEL:level}\s*\]\s*%{GREEDYDATA:message}$"
+        "^%{TDH_TIMESTAMP:datetime}\[%{LOGLEVEL:level}\s*\]\s*%{GREEDYDATA:message}$",
+        "^%{TDH_TIMESTAMP:datetime}\s+%{GREEDYDATA:message}$"
       ]
     }
     overwrite => ["message"]
@@ -55,6 +61,18 @@ filter {
         "%{HBASE_JVM_PAUSE}",
         "%{HBASE_GC_FULL}"
       ]}
+    }
+  }
+  if [source] =~ "guardian" {
+    grok {
+      patterns_dir => ["/etc/${service.sid}/conf/patterns"]
+      break_on_match => true
+      match => { "message" => [
+        "%{GUARDIAN_AUDIT}"
+      ]}
+    }
+    mutate {
+      update => { "index_prefix" => "persisted-" }
     }
   }
   if [source] =~ "spark-executor" {
@@ -212,6 +230,16 @@ filter {
       "."
     ]}
   }
+
+<#if service['b-index-prefix.conf']??>
+  <#list service['b-index-prefix.conf'] as key, value>
+  if [source] =~ "${key}" {
+    mutate {
+      update => { "index_prefix" => "${value}" }
+    }
+  }
+  </#list>
+</#if>
 
   if "_dateparsefailure" in [tags] {
     mutate { remove_tag => ["_dateparsefailure"] }

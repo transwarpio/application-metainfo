@@ -9,7 +9,7 @@
 output {
   elasticsearch {
     hosts => ["${searchesWithPort?join("\",\"")}"]
-    index => "${service['logstash.index_pattern']}"
+    index => "%{[index_prefix]}${service['logstash.index_pattern']}"
     template => "/etc/${service.sid}/conf/temp/mappings.txt"
     template_name => "logs"
     template_overwrite => true
