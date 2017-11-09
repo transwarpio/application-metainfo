@@ -4,6 +4,8 @@ SUPPORTED_VERSIONS=(transwarp-5.1 transwarp-5.0 transwarp-ce-1.0)
 VIRTUAL_MACHINES=(172.16.1.1:172.16.1.249 172.16.1.2:172.16.1.250 172.16.1.4:172.16.1.251)
 MANAGER_IP=172.16.1.251
 MANAGER_PORT=8180
+MANAGER_USER=admin
+MANAGER_PASS=admin
 
 
 set -e
@@ -73,10 +75,10 @@ revert_virtual_machines() {
         guest_id="cloudservice_${guest_ip}_centos72"
 
         set +e
-        ssh -o StrictHostKeyChecking=no ${host_ip} virsh destroy ${guest_id}
+        ssh ${host_ip} virsh destroy ${guest_id}
         set -e
-        ssh -o StrictHostKeyChecking=no ${host_ip} virsh snapshot-revert ${guest_id} ${current_version}
-        ssh -o StrictHostKeyChecking=no ${host_ip} virsh start ${guest_id}
+        ssh ${host_ip} virsh snapshot-revert ${guest_id} ${current_version}
+        ssh ${host_ip} virsh start ${guest_id}
 
         for i in {1..60}; do
             if ping -c 1 -w 2 ${guest_ip}; then
@@ -90,6 +92,22 @@ revert_virtual_machines() {
     done
 }
 
+
+update_meta() {
+    ssh ${MANAGER_IP} /etc/init.d/transwarp-manager stop
+    ssh ${MANAGER_IP} rm -rf /var/lib/transwarp-manager/master/content/meta/services/*
+    echo "Updating meta ..."
+    scp -rp ${WORKSPACE}/* ${MANAGER_IP}:/var/lib/transwarp-manager/master/content/meta/services/
+    ssh ${MANAGER_IP} /etc/init.d/transwarp-manager start
+}
+
+login() {
+    curl -f -v -b cookies.txt -c cookies.txt -X POST \
+      --data '{"userName": "'${MANAGER_USER}'", "userPassword": "'${MANAGER_PASS}'"}' \
+      http://${MANAGER_IP}:${MANAGER_PORT}/api/login
+
+
+}
 
 
 
@@ -109,4 +127,8 @@ for version in "${AFFECTED_VERSIONS[@]}"; do
     echo "start sequence: ${start_sequence}"
 
     revert_virtual_machines ${version}
+
+    update_meta
+
+
 done
