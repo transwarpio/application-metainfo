@@ -1,4 +1,9 @@
 filter {
+
+  mutate {
+    add_field => { "index_prefix" => "" }
+  }
+
   grok {
     patterns_dir => ["/etc/${service.sid}/conf/patterns"]
     break_on_match => false
@@ -65,6 +70,9 @@ filter {
       match => { "message" => [
         "%{GUARDIAN_AUDIT}"
       ]}
+    }
+    mutate {
+      update => { "index_prefix" => "persisted-" }
     }
   }
   if [source] =~ "spark-executor" {
@@ -222,6 +230,16 @@ filter {
       "."
     ]}
   }
+
+<#if service['b-index-prefix.conf']??>
+  <#list service['b-index-prefix.conf'] as key, value>
+  if [source] =~ "${key}" {
+    mutate {
+      update => { "index_prefix" => "${value}" }
+    }
+  }
+  </#list>
+</#if>
 
   if "_dateparsefailure" in [tags] {
     mutate { remove_tag => ["_dateparsefailure"] }

@@ -343,6 +343,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: crontab.persisted.retention.days
+  recommendExpression: 365
+  defaultValue: 365
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: crontab.schedule.time
   recommendExpression: "* 0 * * * "
   defaultValue: "* 0 * * * "
