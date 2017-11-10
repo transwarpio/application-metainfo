@@ -156,13 +156,14 @@ install_service() {
 polling_job() {
     local job_id=$1
 
+    local current_retry=1
+
     for i in $(seq 1 ${MAX_TIMES}); do
         local job=$(
             curl -f -b cookies.txt -c cookies.txt -X GET \
                 http://${MANAGER_IP}:${MANAGER_PORT}/api/operations/jobs/${job_id}
         )
         local status=$(echo ${job} | python -m json.tool | grep status | cut -d'"'  -f 4)
-        local current_retry=1
 
         case "${status}" in
             WAITING|RUNNING)
