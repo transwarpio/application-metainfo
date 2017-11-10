@@ -104,6 +104,7 @@ update_meta() {
     scp -rp ${WORKSPACE}/* ${MANAGER_IP}:/var/lib/transwarp-manager/master/content/meta/services/
     ssh ${MANAGER_IP} /etc/init.d/transwarp-manager start
     ssh ${MANAGER_IP} /etc/init.d/transwarp-manager restart
+    sleep 60
 }
 
 login() {
