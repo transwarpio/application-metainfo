@@ -237,7 +237,8 @@ for stage in job[u'stages']:
 enable_cluster_kerberos() {
     local job_ids=$(
       curl -f -b cookies.txt -c cookies.txt -X POST \
-        --data '{"pluginEnabled":true,"userName":"'${KADMIN_USER}'","password":"'${KADMIN_PASS}'"}' |
+        --data '{"pluginEnabled":true,"userName":"'${KADMIN_USER}'","password":"'${KADMIN_PASS}'"}' \
+        http://${MANAGER_IP}:${MANAGER_PORT}/api/clusters/${CLUSTER_ID}/enableKerberos |
             sed 's/\[\([^]]*\)\]/\1/g' | sed 's/,//g'
     )
     for job_id in ${job_ids}; do
