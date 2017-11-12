@@ -278,6 +278,8 @@ for version in "${AFFECTED_VERSIONS[@]}"; do
         install_service ${service_type}
     done
 
-    start_global_service GUARDIAN
-    enable_cluster_kerberos
+    if [[ "$version" != *"ce"* ]]; then
+        start_global_service GUARDIAN
+        enable_cluster_kerberos
+    fi
 done
