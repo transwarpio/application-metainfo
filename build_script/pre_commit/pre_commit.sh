@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+exit 0 # TODO debug
+
 SUPPORTED_VERSIONS=(transwarp-5.1 transwarp-5.0 transwarp-ce-1.0)
 VIRTUAL_MACHINES=(172.16.1.1:172.16.1.249 172.16.1.2:172.16.1.250 172.16.1.4:172.16.1.251)
 MANAGER_IP=172.16.1.251
