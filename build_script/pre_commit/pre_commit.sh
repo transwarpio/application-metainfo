@@ -7,6 +7,8 @@ MANAGER_PORT=8180
 MANAGER_USER=admin
 MANAGER_PASS=admin
 CLUSTER_ID=1
+KADMIN_USER=admin
+KADMIN_PASS=kadmin
 
 SLEEP_SECONDS=3
 MAX_TIMES=1000
@@ -153,6 +155,34 @@ install_service() {
     polling_job ${job_id}
 }
 
+start_service() {
+    local service_id=$1
+
+    local job_id=$(
+        curl -f -b cookies.txt -c cookies.txt -X POST \
+            http://${MANAGER_IP}:${MANAGER_PORT}/api/services/${service_id}/operations/start |
+                grep id | cut -d':' -f2
+    )
+    polling_job ${job_id}
+}
+
+start_global_service() {
+    local service_type=$1
+
+    local global_services=$(
+        curl -f -b cookies.txt -c cookies.txt -X GET \
+            http://${MANAGER_IP}:${MANAGER_PORT}/api/services
+    )
+    service_id=$(echo ${global_services} | python -c "
+import sys; import json; services=json.loads(sys.stdin.read());
+for service in services:
+  if service[u'type'] == u'${service_type}':
+    print service[u'id']
+    break
+")
+    start_service ${service_id}
+}
+
 polling_job() {
     local job_id=$1
 
@@ -204,6 +234,19 @@ for stage in job[u'stages']:
     return 1
 }
 
+enable_cluster_kerberos() {
+    local job_ids=$(
+      curl -f -b cookies.txt -c cookies.txt -X POST \
+        --data '{"pluginEnabled":true,"userName":"'${KADMIN_USER}'","password":"'${KADMIN_PASS}'"}' |
+            sed 's/\[\([^]]*\)\]/\1/g' | sed 's/,//g'
+    )
+    for job_id in ${job_ids}; do
+        polling_job ${job_id}
+    done
+}
+
+
+
 
 print_merge_params
 
@@ -225,10 +268,15 @@ for version in "${AFFECTED_VERSIONS[@]}"; do
 
     login
 
+    start_global_service TOS
+    sleep 60
+    start_global_service LICENSE_SERVICE
+
     for service_type in ${start_sequence}; do
         create_cluster_service ${service_type} ${version} "KUBERNETES"
         install_service ${service_type}
     done
 
-    # TODO enable Guardian
+    start_global_service GUARDIAN
+    enable_cluster_kerberos
 done
