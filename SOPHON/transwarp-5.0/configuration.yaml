@@ -23,6 +23,14 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+- name: livy.file.local-dir-whitelist
+  recommendExpression: "/usr/lib/midas"
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
 - name: livy.server.port
   recommendExpression: 6066
   defaultValue: null
