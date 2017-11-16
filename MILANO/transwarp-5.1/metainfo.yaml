@@ -305,6 +305,7 @@ firstWizardConfigs:
 - crontab.enable
 - crontab.index.prefix
 - crontab.retention.days
+- crontab.persisted.retention.days
 - crontab.schedule.time
 - crontab.container.limits.memory
 - crontab.container.limits.cpu

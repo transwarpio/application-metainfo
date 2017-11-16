@@ -1,0 +1,390 @@
+---
+name: HDFS
+version: transwarp-5.1.0-rc3
+global: false
+namePrefix: HDFS
+friendlyName: HDFS
+dockerImage: "transwarp/hdfs:transwarp-5.1.0-rc3"
+user: hdfs
+dependencies:
+  - name: GUARDIAN
+    minVersion: transwarp-5.1.0-rc3
+    maxVersion: transwarp-5.1.0-rc3
+    optional: true
+  - name: ZOOKEEPER
+    minVersion: transwarp-5.1.0-rc3
+    maxVersion: transwarp-5.1.0-rc3
+    optional: false
+plugins:
+  - provider: GUARDIAN
+    version: 2.7.2+500.51250
+    useTar: false
+roles:
+  - name: HDFS_HTTPFS
+    friendlyName: "Httpfs"
+    labelPrefix: "hadoop-hdfs-httpfs"
+    dockerImage: "transwarp/httpfs:transwarp-5.1.0-rc3"
+    category: SLAVE
+    frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+    readinessProbe:
+      probe: !<httpGet>
+        path: /
+        port: 14000
+        scheme: HTTP
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    env:
+    - name: HDFS_HA_NAMENODE_SERVICE
+      value: |
+        <#assign namenodes=[]>
+        <#if service.nameservices?? && service.nameservices?size gt 0>
+          <#list service.nameservices as ns>
+            <#list service[ns]['HDFS_NAMENODE'] as namenode>
+              <#assign namenodes += [namenode.hostname]>
+            </#list>
+          </#list>
+        <#else>
+          <#assign namenodes += service.roles.HDFS_NAMENODE[0]['hostname']>
+        </#if>
+        ${namenodes?join(",")}
+    - name: HADOOP_CONF_DIR
+      value: /etc/${service.sid}/conf
+    - name: HTTPFS_LOG_DIR
+      value: /var/log/${service.sid}
+    mountPaths:
+    - mountPath: /var/run/${service.sid}
+      hostPath: /var/run/${service.sid}
+      name: hdfssocketdir
+    resources:
+      limitsMemoryKey: httpfs.container.limits.memory
+      limitsCpuKey: httpfs.container.limits.cpu
+      requestsMemoryKey: httpfs.container.requests.memory
+      requestsCpuKey: httpfs.container.requests.cpu
+    summaryPolicy: NONE
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations: []
+  - name: HDFS_DATANODE
+    friendlyName: "Data Node"
+    labelPrefix: "hadoop-hdfs-datanode"
+    linkExpression: "http://${localhostname}:${service['datanode.http-port']}/?user.name=hdfs"
+    category: SLAVE
+    frontendOperations: ["Start", "Stop", "Commission", "Decommission", "Delete", "Scaleout"]
+    readinessProbe:
+      probe: !<httpGet>
+        path: /
+        port: ${service['datanode.http-port']}
+        scheme: HTTP
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    deleteOpCondition:
+      deletable:
+        number: 3
+        decommission: true
+      reject:
+        number: 2
+    env:
+    - name: HDFS_HA_NAMENODE_SERVICE
+      value: |
+        <#assign namenodes=[]>
+        <#if service.nameservices?? && service.nameservices?size gt 0>
+          <#list service.nameservices as ns>
+            <#list service[ns]['HDFS_NAMENODE'] as namenode>
+              <#assign namenodes += [namenode.hostname]>
+            </#list>
+          </#list>
+        <#else>
+          <#assign namenodes += service.roles.HDFS_NAMENODE[0]['hostname']>
+        </#if>
+        ${namenodes?join(",")}
+    - name: HDFS_JOURNAL_NODE_SPEC
+      value: |
+        <#assign journalnodes=[]>
+        <#if service.roles.HDFS_JOURNALNODE?? && service.roles.HDFS_JOURNALNODE?size gt 0>
+          <#list service.roles.HDFS_JOURNALNODE as journalnode>
+            <#assign journalnodes += [journalnode.hostname]>
+          </#list>
+        </#if>
+        ${service.roles.HDFS_JOURNALNODE[0]['hostname']}
+    - name: HADOOP_CONF_DIR
+      value: /etc/${service.sid}/conf
+    - name: SOCKETDIR
+      value: /var/run/${service.sid}
+    mountPaths:
+    - mountPath: /var/run/${service.sid}
+      hostPath: /var/run/${service.sid}
+      name: hdfssocketdir
+    resources:
+      limitsMemoryKey: datanode.container.limits.memory
+      limitsCpuKey: datanode.container.limits.cpu
+      requestsMemoryKey: datanode.container.requests.memory
+      requestsCpuKey: datanode.container.requests.cpu
+    nodeSpecificMounts:
+    - configKey: dfs.datanode.data.dir
+    summaryPolicy: SOME
+    autoAssign:
+      - advice: !<EachNode> {}
+    suggestion:
+      - criteria: !<Range>
+          min: 3
+    validation:
+      - criteria: !<Range>
+          min: 1
+    operations: []
+
+roleGroups:
+  - fieldName: nameservices
+    namePrefix: nameservice
+    friendlyName: "Name Service"
+    autoAssign:
+      - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+      - criteria: !<Range> {"min": 1}
+    validation:
+      - when: !<WhenRoleType>
+          roleType: HDFS_NAMENODE
+          inRange: {"min": 0, "max": 0}
+        criteria: !<Range> {"min": 1}
+      - when: !<WhenRoleType>
+          roleType: HDFS_NAMENODE
+          inRange: {"min": 1}
+        criteria: !<Range>
+          min: 0
+          max: 0
+    roles:
+      - name: HDFS_JOURNALNODE
+        friendlyName: "Journal Node"
+        labelPrefix: "hadoop-hdfs-journalnode"
+        category: MASTER
+        frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
+        readinessProbe:
+          probe: !<httpGet>
+            path: /
+            port: ${service['journalnode.http-port']}
+            scheme: HTTP
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        deleteOpCondition:
+          deletable:
+            number: 4
+          movable:
+            number: 3
+          reject:
+            number: 2
+        env:
+        - name: HADOOP_PID_DIR
+          value: /var/run/${service.sid}/
+        - name: HADOOP_CONF_DIR
+          value: /etc/${service.sid}/conf
+        - name: JOURNALNODE_DATA_DIRS
+          value: /hadoop/journal
+        mountPaths:
+        - mountPath: /hadoop/journal
+          hostPath: /hadoop/journal
+          name: journaldir
+        resources:
+          limitsMemoryKey: journalnode.container.limits.memory
+          limitsCpuKey: journalnode.container.limits.cpu
+          requestsMemoryKey: journalnode.container.requests.memory
+          requestsCpuKey: journalnode.container.requests.cpu
+        summaryPolicy: MAJOR
+        autoAssign:
+        - advice: !<NumSeq> {"numSeq": [3, 1]}
+        suggestion:
+        - criteria: !<Range> {"min": 3}
+        validation:
+        - criteria: !<Range> {"min": 1}
+        operations: []
+      - name: HDFS_NAMENODE
+        friendlyName: "Name Node"
+        labelPrefix: "hadoop-hdfs-namenode"
+        linkExpression: "http://${localhostname}:${service['namenode.http-port']}/?user.name=hdfs"
+        category: MASTER
+        frontendOperations: ["Start", "Stop", "Move"]
+        readinessProbe:
+          probe: !<httpGet>
+            path: /dfshealth.html
+            port: ${service['namenode.http-port']}
+            scheme: HTTP
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        deleteOpCondition:
+          movable:
+            number: 2
+          reject:
+            number: 1
+        env:
+        - name: HDFS_HA_NAMENODE_SERVICE
+          value: |
+            <#assign namenodes=[]>
+            <#if service.nameservices?? && service.nameservices?size gt 0>
+              <#list service.nameservices as ns>
+                <#list service[ns]['HDFS_NAMENODE'] as namenode>
+                  <#assign namenodes += [namenode.hostname]>
+                </#list>
+              </#list>
+            <#else>
+              <#assign namenodes += service.roles.HDFS_NAMENODE[0]['hostname']>
+            </#if>
+            ${namenodes?join(",")}
+        - name: HDFS_JOURNAL_NODE_SPEC
+          value: |
+            <#assign journalnodes=[]>
+            <#if service.roles.HDFS_JOURNALNODE?? && service.roles.HDFS_JOURNALNODE?size gt 0>
+              <#list service.roles.HDFS_JOURNALNODE as journalnode>
+                <#assign journalnodes += [journalnode.hostname]>
+              </#list>
+            </#if>
+            ${service.roles.HDFS_JOURNALNODE[0]['hostname']}
+        - name: HADOOP_CONF_DIR
+          value: /etc/${service.sid}/conf
+        - name: SOCKETDIR
+          value: /var/run/${service.sid}
+        mountPaths:
+        - mountPath: /var/transwarp/data
+          hostPath: /var/namenode_format/
+          name: format
+        - mountPath: /var/run/${service.sid}
+          hostPath: /var/run/${service.sid}
+          name: hdfssocketdir
+        resources:
+          limitsMemoryKey: namenode.container.limits.memory
+          limitsCpuKey: namenode.container.limits.cpu
+          requestsMemoryKey: namenode.container.requests.memory
+          requestsCpuKey: namenode.container.requests.cpu
+        nodeSpecificMounts:
+        - configKey: dfs.namenode.name.dir
+        containers: ["HDFS_NAMENODE", "HDFS_ZKFC"]
+        summaryPolicy: ALL
+        autoAssign:
+          - advice: !<NumSeq>
+              numSeq: [2]
+              mates: ["LICENSE_NODE"]
+        suggestion:
+          - criteria: !<Range> {"min": 2, "max": 2}
+        validation:
+          - criteria: !<Range> {"min": 1, "max": 2}
+        operations: []
+
+    others:
+    - key: mountPoints
+      optional: true
+
+stages:
+  - type: Bootstrap
+    taskGroups:
+    - !<FormakZK>
+      summaryPolicy: ALL
+      timeoutMinutes: 1
+  - type: Start
+    taskGroups:
+    - !<Upload-License>
+      summaryPolicy: NONE
+      timeoutMinutes: 3
+    - !<Role>
+      roleType: "HDFS_JOURNALNODE"
+      operation: Start
+      summaryPolicy: SOME
+      timeoutMinutes: 3
+    - !<Role>
+      roleType: "HDFS_NAMENODE"
+      operation: Start
+      summaryPolicy: ALL
+      timeoutMinutes: 3
+    - !<Role>
+      roleType: "HDFS_HTTPFS"
+      operation: Start
+      summaryPolicy: SOME
+      timeoutMinutes: 3
+    - !<Role>
+      roleType: "HDFS_DATANODE"
+      operation: Start
+      summaryPolicy: SOME
+      timeoutMinutes: 3
+
+jobs:
+  - type: Stop
+    stages:
+    - Checkpoint
+    - Stop
+product: Hadoop
+
+firstWizardConfigs:
+- dfs.namenode.name.dir
+- dfs.datanode.data.dir
+- dfs.datanode.failed.volumes.tolerated
+- namenode.http-port
+- namenode.rpc-port
+- datanode.http-port
+- datanode.port
+- journalnode.http-port
+- namenode.memory
+- zkfc.memory
+- journalnode.memory
+- datanode.memory
+- namenode.container.limits.memory
+- namenode.container.limits.cpu
+- namenode.container.requests.memory
+- namenode.container.requests.cpu
+- namenode.memory.ratio
+- zkfc.container.limits.memory
+- zkfc.container.limits.cpu
+- zkfc.container.requests.memory
+- zkfc.container.requests.cpu
+- zkfc.memory.ratio
+- journalnode.container.limits.memory
+- journalnode.container.limits.cpu
+- journalnode.container.requests.memory
+- journalnode.container.requests.cpu
+- journalnode.memory.ratio
+- datanode.container.limits.memory
+- datanode.container.limits.cpu
+- datanode.container.requests.memory
+- datanode.container.requests.cpu
+- datanode.memory.ratio
+- httpfs.container.limits.memory
+- httpfs.container.limits.cpu
+- httpfs.container.requests.memory
+- httpfs.container.requests.cpu
+- httpfs.memory.ratio
+
+dashboardMetrics:
+- DFSUsage
+
+pages:
+- summary
+- roles
+- configuration
+- operation
+- security
+- plugin
+
+principals:
+- hdfs
+- HTTP
+- host
+- httpfs
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 10
+  method: !<Builtin> {}

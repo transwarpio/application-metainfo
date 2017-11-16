@@ -3,6 +3,11 @@
 build_application-metainfo() {
     set -e
 
+    if [ "$CI_PROJECT_NAMESPACE" != "managability" ]; then
+        echo "not in Project managability, exit ..."
+        return 0
+    fi
+
     META_SRC_DIR="$WORKSPACE"
     TARGET_DIR="$META_SRC_DIR/target"
 

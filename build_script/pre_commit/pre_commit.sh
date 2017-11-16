@@ -4,7 +4,15 @@ SUPPORTED_VERSIONS=(transwarp-5.1 transwarp-5.0 transwarp-ce-1.0)
 VIRTUAL_MACHINES=(172.16.1.1:172.16.1.249 172.16.1.2:172.16.1.250 172.16.1.4:172.16.1.251)
 MANAGER_IP=172.16.1.251
 MANAGER_PORT=8180
+MANAGER_USER=admin
+MANAGER_PASS=admin
+CLUSTER_ID=1
+KADMIN_USER=admin
+KADMIN_PASS=kadmin
 
+SLEEP_SECONDS=3
+MAX_TIMES=1000
+MAX_RETRY=5
 
 set -e
 
@@ -73,23 +81,170 @@ revert_virtual_machines() {
         guest_id="cloudservice_${guest_ip}_centos72"
 
         set +e
-        ssh -o StrictHostKeyChecking=no ${host_ip} virsh destroy ${guest_id}
+        ssh ${host_ip} virsh destroy ${guest_id}
         set -e
-        ssh -o StrictHostKeyChecking=no ${host_ip} virsh snapshot-revert ${guest_id} ${current_version}
-        ssh -o StrictHostKeyChecking=no ${host_ip} virsh start ${guest_id}
+        ssh ${host_ip} virsh snapshot-revert ${guest_id} ${current_version}
+        ssh ${host_ip} virsh start ${guest_id}
 
         for i in {1..60}; do
-            if ping -c 1 -w 2 ${guest_ip}; then
+            if ssh ${guest_ip} hostname; then
                 break
             fi
             sleep 1
         done
-        if ! ping -c 1 -w 2 ${guest_ip}; then
+        if ! ssh ${guest_ip} hostname; then
             exit 1
         fi
     done
 }
 
+
+update_meta() {
+    ssh ${MANAGER_IP} /etc/init.d/transwarp-manager stop
+    ssh ${MANAGER_IP} rm -rf /var/lib/transwarp-manager/master/content/meta/services/*
+    echo "Updating meta ..."
+    scp -rp ${WORKSPACE}/* ${MANAGER_IP}:/var/lib/transwarp-manager/master/content/meta/services/
+    ssh ${MANAGER_IP} /etc/init.d/transwarp-manager start
+    ssh ${MANAGER_IP} /etc/init.d/transwarp-manager restart
+    sleep 60
+}
+
+login() {
+    curl -f -v -b cookies.txt -c cookies.txt -X POST \
+      --data '{"userName": "'${MANAGER_USER}'", "userPassword": "'${MANAGER_PASS}'"}' \
+      http://${MANAGER_IP}:${MANAGER_PORT}/api/users/login
+}
+
+SERVICE_TYPE_ID_MAP=()
+
+create_global_service() {
+    local service_type=$1
+    local version=$2
+    local deploy_mode=$3
+
+    SERVICE_TYPE_ID_MAP[service_type]=$(
+        curl -f -b cookies.txt -c cookies.txt -X POST \
+            --data '[{"type":"'${service_type}'", "version": "'${version}'", "deployMode": "'${deploy_mode}'"}]' \
+            http://${MANAGER_IP}:${MANAGER_PORT}/api/services |
+                grep id | grep -oP '(?<=: ).*(?=,)'
+    )
+}
+
+create_cluster_service() {
+    local service_type=$1
+    local version=$2
+    local deploy_mode=$3
+
+    SERVICE_TYPE_ID_MAP[service_type]=$(
+        curl -f -b cookies.txt -c cookies.txt -X POST \
+            --data '[{"type":"'${service_type}'", "version": "'${version}'", "clusterId": '${CLUSTER_ID}', "deployMode": "'${deploy_mode}'"}]' \
+            http://${MANAGER_IP}:${MANAGER_PORT}/api/services |
+                grep id | grep -oP '(?<=: ).*(?=,)'
+    )
+}
+
+install_service() {
+    local service_type=$1
+    local service_id=${SERVICE_TYPE_ID_MAP[service_type]}
+
+    local job_id=$(
+        curl -f -b cookies.txt -c cookies.txt -X POST \
+            http://${MANAGER_IP}:${MANAGER_PORT}/api/services/${service_id}/operations/init |
+                grep id | cut -d':' -f2
+    )
+    polling_job ${job_id}
+}
+
+start_service() {
+    local service_id=$1
+
+    local job_id=$(
+        curl -f -b cookies.txt -c cookies.txt -X POST \
+            http://${MANAGER_IP}:${MANAGER_PORT}/api/services/${service_id}/operations/start |
+                grep id | cut -d':' -f2
+    )
+    polling_job ${job_id}
+}
+
+start_global_service() {
+    local service_type=$1
+
+    local global_services=$(
+        curl -f -b cookies.txt -c cookies.txt -X GET \
+            http://${MANAGER_IP}:${MANAGER_PORT}/api/services
+    )
+    service_id=$(echo ${global_services} | python -c "
+import sys; import json; services=json.loads(sys.stdin.read());
+for service in services:
+  if service[u'type'] == u'${service_type}':
+    print service[u'id']
+    break
+")
+    start_service ${service_id}
+}
+
+polling_job() {
+    local job_id=$1
+
+    local current_retry=1
+
+    for i in $(seq 1 ${MAX_TIMES}); do
+        local job=$(
+            curl -f -b cookies.txt -c cookies.txt -X GET \
+                http://${MANAGER_IP}:${MANAGER_PORT}/api/operations/jobs/${job_id}
+        )
+        local status=$(echo ${job} | python -m json.tool | grep status | cut -d'"'  -f 4)
+
+        case "${status}" in
+            WAITING|RUNNING)
+                sleep ${SLEEP_SECONDS}
+                ;;
+            SUCCESSFUL)
+                return 0
+                ;;
+            WARNING|IGNORED_WARNING|FAILED|IGNORED_FAILED)
+                if (( ${current_retry} <= ${MAX_RETRY} )); then
+                    local stage_ids=$(echo ${job} | python -c "
+import sys; import json; job=json.loads(sys.stdin.read());
+for stage in job[u'stages']:
+  print stage[u'id']")
+                for stage_id in ${stage_ids}; do
+                    local stage=$(curl -f -b cookies.txt -c cookies.txt -X GET \
+                      http://${MANAGER_IP}:${MANAGER_PORT}/api/operations/stages/${stage_id}
+                    )
+                    local stage_status=$(echo ${stage} | python -m json.tool | grep status |
+                      cut -d'"' -f4
+                    )
+                    if [ ${stage_status} == "WARNING" -o ${stage_status} == "FAILED" ]; then
+                        curl -f -b cookies.txt -c cookies.txt -X POST \
+                            http://${MANAGER_IP}:${MANAGER_PORT}/api/operations/stages/${stage_id}/retry
+                        ((current_retry++))
+                        break
+                    fi
+                done
+                else
+                    return 1
+                fi
+                ;;
+            *)
+                echo "unexpected status ${status}"
+                return 1
+        esac
+    done
+    return 1
+}
+
+enable_cluster_kerberos() {
+    local job_ids=$(
+      curl -f -b cookies.txt -c cookies.txt -X POST \
+        --data '{"pluginEnabled":true,"userName":"'${KADMIN_USER}'","password":"'${KADMIN_PASS}'"}' \
+        http://${MANAGER_IP}:${MANAGER_PORT}/api/clusters/${CLUSTER_ID}/enableKerberos |
+            sed 's/\[\([^]]*\)\]/\1/g' | sed 's/,//g'
+    )
+    for job_id in ${job_ids}; do
+        polling_job ${job_id}
+    done
+}
 
 
 
@@ -109,4 +264,22 @@ for version in "${AFFECTED_VERSIONS[@]}"; do
     echo "start sequence: ${start_sequence}"
 
     revert_virtual_machines ${version}
+
+    update_meta
+
+    login
+
+    start_global_service TOS
+    sleep 60
+    start_global_service LICENSE_SERVICE
+
+    for service_type in ${start_sequence}; do
+        create_cluster_service ${service_type} ${version} "KUBERNETES"
+        install_service ${service_type}
+    done
+
+    if [[ "$version" != *"ce"* ]]; then
+        start_global_service GUARDIAN
+        enable_cluster_kerberos
+    fi
 done

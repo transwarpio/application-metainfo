@@ -1,0 +1,8 @@
+*Improvement
+ *WARP-16400: guardian中未显示给用户分配配额时，采用默认配额
+
+*New featuers
+ *WARP-17512: 增加txApply分布式执行函数
+
+*Bug fix
+ *WARP-17856: 安全模式下txSqlConnect 中需要显示赋keytabPath的问题
