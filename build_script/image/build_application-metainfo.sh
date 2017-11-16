@@ -3,12 +3,17 @@
 build_application-metainfo() {
     set -e
 
+    if [ "$CI_PROJECT_NAMESPACE" != "managability" ]; then
+        echo "not in Project managability, exit ..."
+        return 0
+    fi
+
     META_SRC_DIR="$WORKSPACE"
     TARGET_DIR="$META_SRC_DIR/target"
 
     mkdir -p "$TARGET_DIR"
 
-    for VERSION in transwarp-5.1.0-rc3; do
+    for VERSION in transwarp-5.1 transwarp-5.0 transwarp-ce-1.0; do
         echo "preparing $VERSION ..."
 
         META_DST_DIR="$TARGET_DIR/$VERSION"
