@@ -19,6 +19,7 @@ input {
     sasl_kerberos_service_name => "kafka"
     sasl_mechanism => "GSSAPI"
     security_protocol => "SASL_PLAINTEXT"
+    max_poll_records => "1000"
   }
 }
 <#else>
@@ -30,6 +31,7 @@ input {
     codec => "json"
     consumer_threads => ${service['logstash.worker_num']}
     poll_timeout_ms  => 1000
+    max_poll_records => "1000"
   }
 }
 </#if>
