@@ -147,3 +147,9 @@ index.translog.durability: ${service['index.translog.durability']}
 
 transport.type: netty3
 http.type: netty3
+
+<#if service['elasticsearch.yml']??>
+<#list service['elasticsearch.yml'] as key, value>
+${key}: ${value}
+</#list>
+</#if>
