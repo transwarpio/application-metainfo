@@ -96,6 +96,25 @@ revert_virtual_machines() {
             exit 1
         fi
     done
+
+    for host_guest in "${VIRTUAL_MACHINES[@]}"; do
+        guest_ip=$(echo ${host_guest} | cut -d':' -f2)
+        if [ "$guest_ip" != "$MANAGER_IP" ]; then
+            ssh ${guest_ip} systemctl stop ntpd
+
+            for i in {1..600}; do
+                if ssh ${guest_ip} ntpdate "$MANAGER_IP"; then
+                    break
+                fi
+                sleep 1
+            done
+            if ! ssh ${guest_ip} ntpdate "$MANAGER_IP"; then
+                exit 1
+            fi
+
+            ssh ${guest_ip} systemctl start ntpd
+        fi
+    done
 }
 
 
