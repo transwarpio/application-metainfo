@@ -21,7 +21,7 @@
   valueType: URI
   scope: !<ServiceLevel> {}
   onDeps: ['HDFS']
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hregion.index.path
@@ -47,7 +47,7 @@
   valueType: URI
   scope: !<ServiceLevel> {}
   onDeps: ['HDFS']
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.regionserver.replication.handler.count
@@ -56,7 +56,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.partition.ignore.unavailable.clusters
@@ -65,7 +65,7 @@
   valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.hstore.blockingStoreFiles
@@ -74,7 +74,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.sservice.search.poolsize
@@ -83,7 +83,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.sservice.handler.count
@@ -92,7 +92,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.sservice.local.cacheinterval
@@ -101,7 +101,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 
@@ -111,7 +111,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.hregion.max.filesize
@@ -120,7 +120,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.client.scanner.caching
@@ -129,7 +129,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.sservice.scheduler.poolsize
@@ -138,7 +138,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.abort.disconected.batchmutate
@@ -147,7 +147,7 @@
   valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.coprocessor.master.classes
@@ -165,7 +165,7 @@
   valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.assignment.timeout.management
@@ -174,7 +174,7 @@
   valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.zookeeper.leaderport
@@ -183,7 +183,7 @@
   valueType: PORT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.balancer.period
@@ -192,7 +192,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.regionserver.handler.count
@@ -201,7 +201,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.client.operation.timeout
@@ -210,7 +210,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.zookeeper.property.maxClientCnxns
@@ -219,7 +219,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.sservice.scheduler.frequency
@@ -228,7 +228,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: regionserver.info.port
@@ -238,7 +238,7 @@
   scope: !<RoleTypes>
     roleTypes: [HYPERBASE_REGIONSERVER]
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: regionserver.jmx.port
@@ -257,7 +257,7 @@
   valueType: PORT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.regionserver.lease.period
@@ -266,7 +266,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: zookeeper.session.timeout
@@ -275,7 +275,7 @@
   valueType: MILLISECONDS
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: dfs.support.append
@@ -284,7 +284,7 @@
   valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.rpc.timeout
@@ -293,7 +293,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.sservice.table.localrate
@@ -302,7 +302,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.sservice.local.mergeinterval
@@ -311,7 +311,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.zookeeper.peerport
@@ -320,7 +320,7 @@
   valueType: PORT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.hregion.memstore.mslab.enabled
@@ -329,7 +329,7 @@
   valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.regionserver.global.memstore.upperLimit
@@ -338,7 +338,7 @@
   valueType: FLOAT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.hregion.memstore.chunkpool.maxsize
@@ -347,7 +347,7 @@
   valueType: FLOAT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.sservice.tolerable.timediff
@@ -356,7 +356,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.lightweight.snapshotmanager.enable
@@ -365,7 +365,7 @@
   valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: master.info.port
@@ -394,7 +394,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.hregion.memstore.flush.size
@@ -403,7 +403,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.coprocessor.region.classes
@@ -430,7 +430,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.use.partition.table
@@ -439,7 +439,7 @@
   valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.client.scanner.timeout.period
@@ -448,7 +448,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.regionserver.info.bindAddress
@@ -457,7 +457,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hfile.block.cache.size
@@ -466,7 +466,7 @@
   valueType: FLOAT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.regions.slop
@@ -475,7 +475,7 @@
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.cluster.distributed
@@ -484,7 +484,7 @@
   valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.regionserver.global.memstore.lowerLimit
@@ -493,7 +493,7 @@
   valueType: FLOAT
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: master.port
@@ -513,7 +513,7 @@
   scope: !<RoleTypes>
     roleTypes: [HYPERBASE_REGIONSERVER]
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: hbase.hregion.majorcompaction.cron
@@ -522,7 +522,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: regionserver.memory
@@ -563,7 +563,7 @@
     roleTypes: [HYPERBASE_THRIFT]
   isNodeSpecific: true
   onDeps: []
-  groups: ["hbase-site.xml"]
+  groups: []
   visibility: READ_WRITE
 
 - name: master.container.limits.memory
