@@ -1,18 +1,18 @@
 ---
 name: WORKFLOW
-version: transwarp-ce-1.0.0-final.0-final
+version: transwarp-ce-1.0.0-final
 global: false
 namePrefix: Workflow
 friendlyName: Workflow
-dockerImage: "transwarp-ce/workflow:transwarp-ce-1.0.0-final.0-final"
+dockerImage: "transwarp-ce/workflow:transwarp-ce-1.0.0-final"
 dependencies:
   - name: ZOOKEEPER
-    minVersion: transwarp-ce-1.0.0-final.0-final
-    maxVersion: transwarp-ce-1.0.0-final.0-final
+    minVersion: transwarp-ce-1.0.0-final
+    maxVersion: transwarp-ce-1.0.0-final
     optional: false
   - name: TXSQL
-    minVersion: transwarp-ce-1.0.0-final.0-final
-    maxVersion: transwarp-ce-1.0.0-final.0-final
+    minVersion: transwarp-ce-1.0.0-final
+    maxVersion: transwarp-ce-1.0.0-final
     optional: false
 roles:
 - name: WORKFLOW_SERVER

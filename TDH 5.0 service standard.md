@@ -208,6 +208,18 @@ Manager会为服务的配置项计算推荐值，均在页面上显示，用户�
  |   ...
 ```
 
+## 静态资源文件
+
+### 服务的图标
+服务的图标在application-metainfo的各服务各版本的resources/image目录中，需要提供4个图标，均为PNG格式，命名和作用如下：
+
+| 图片名称 | 图片格式 | 图片作用 |
+|---|---|---|
+| icon-app.png | 48x48 彩色透明底 | 应用市场 |
+| icon-default.png | 16x16 灰色（#616b77）透明底 | 菜单和Dashboard服务小图标 |
+| icon-danger.png | 16x16 红色（#ec5353）透明底 | 菜单和Dashboard服务小图标的高亮状态 |
+| icon-danger-medium.png | 42x42 红色（#ec5533）透明底 | 添加服务向导的服务图标 |
+
 ## 服务的部署与启动
 
 ### 操作
