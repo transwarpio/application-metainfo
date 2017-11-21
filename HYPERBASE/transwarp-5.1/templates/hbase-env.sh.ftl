@@ -157,4 +157,5 @@ cp /etc/${service.sid}/conf/krb5.conf /etc
 export MASTERPRINCIPAL=hbase/${localhostname}
 export KEYTAB=/etc/${service.sid}/conf/hyperbase.keytab
 export KRB_PLUGIN_ENABLE=true
+export KRB_OPTS="-Djava.security.krb5.conf=/etc/${service.sid}/conf/krb5.conf -Djava.security.auth.login.config=/etc/${service.sid}/conf/jaas.conf"
 </#if>
