@@ -1,5 +1,6 @@
 #!/bin/bash
 
+export GUARDIAN_SERVICE_ID=${service.sid}
 export TDT_LOG_DIR=/var/log/${service.sid}
 
 <#if service.auth = "kerberos">

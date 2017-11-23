@@ -10,7 +10,7 @@ transporter.enabled=true
 <#assign address = address?join(",")>
 
 # the host of transporter
-transporter.host=${address}
+transporter.address=${address}
 
 <#else>
 transporter.enabled=false

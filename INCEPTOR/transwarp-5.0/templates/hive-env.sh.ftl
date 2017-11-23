@@ -52,6 +52,7 @@
 
 # Folder containing extra ibraries required for hive compilation/execution can be controlled by:
 <#if service.plugins?seq_contains("guardian")>
+cp /etc/${service.sid}/conf/krb5.conf /etc
 for f in /usr/lib/transwarp/plugins/guardian/inceptor/lib/*jar; do
 if [ "HIVE_AUX_JARS_PATH" ]; then
 export HIVE_AUX_JARS_PATH=$f:$HIVE_AUX_JARS_PATH
