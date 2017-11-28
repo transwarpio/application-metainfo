@@ -27,7 +27,7 @@ EXTRA_EXECUTOR_OPTS=" ${service['EXTRA_EXECUTOR_OPTS']} "
     <#assign master_group = master_group?join(",")>
 export SHIVA_MASTER_GROUP=${master_group}
 <#noparse>
-EXTRA_EXECUTOR_OPTS+=" -D${SHIVA_MASTER_GROUP} "
+EXTRA_EXECUTOR_OPTS+=" -Dngmr.holodesk.shiva.mastergroup=${SHIVA_MASTER_GROUP} "
 </#noparse>
 </#if>
 export EXTRA_EXECUTOR_OPTS
