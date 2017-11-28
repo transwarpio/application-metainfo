@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <configuration>
 
+<property>
+    <name>ngmr.holodesk.shiva.mastergroup</name>
+    <value>172.16.1.204:9630,172.16.1.205:9630,172.16.1.206:9630</value>
+</property>
 
 <property>
     <name>hive.zookeeper.quorum</name>
