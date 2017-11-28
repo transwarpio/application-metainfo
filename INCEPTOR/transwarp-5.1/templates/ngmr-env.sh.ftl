@@ -17,7 +17,7 @@ export NGMR_EXECUTORS_PERJOB=${service['ngmr.executors.perjob']}
 export INCEPTOR_LOG_DIR=/var/log/${service.sid}
 export SPARK_DRIVER_PORT=${service['spark.driver.port']}
 export EXTRA_DRIVER_OPTS=" ${service['EXTRA_DRIVER_OPTS']} "
-export EXTRA_EXECUTOR_OPTS=" ${service['EXTRA_EXECUTOR_OPTS']} "
+EXTRA_EXECUTOR_OPTS=" ${service['EXTRA_EXECUTOR_OPTS']} "
 #SHIVA ENV
 <#if dependencies.SHIVA??>
     <#assign shiva=dependencies.SHIVA master_group=[]>
@@ -26,4 +26,8 @@ export EXTRA_EXECUTOR_OPTS=" ${service['EXTRA_EXECUTOR_OPTS']} "
     </#list>
     <#assign master_group = master_group?join(",")>
 export SHIVA_MASTER_GROUP=${master_group}
+<#noparse>
+EXTRA_EXECUTOR_OPTS+=" -Dngmr.holodesk.shiva.mastergroup=${SHIVA_MASTER_GROUP} "
+</#noparse>
 </#if>
+export EXTRA_EXECUTOR_OPTS
