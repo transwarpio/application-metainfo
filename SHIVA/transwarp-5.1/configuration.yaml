@@ -118,8 +118,8 @@
   visibility: READ_WRITE
 
 - name: master.rpc_client.rpc_timeout_ms
-  recommendExpression: 3000
-  defaultValue: 3000
+  recommendExpression: 10000
+  defaultValue: 10000
   valueType: NON_NEG_INT
   scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
   onDeps: []
@@ -154,8 +154,8 @@
   visibility: READ_WRITE
 
 - name: master.raft.heartbeat_period_ms
-  recommendExpression: 1000
-  defaultValue: 1000
+  recommendExpression: 5000
+  defaultValue: 5000
   valueType: NON_NEG_INT
   scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
   onDeps: []
@@ -407,8 +407,8 @@
   visibility: READ_WRITE
 
 - name: tabletserver.raft.heartbeat_period_ms
-  recommendExpression: 1000
-  defaultValue: 1000
+  recommendExpression: 5000
+  defaultValue: 5000
   valueType: NON_NEG_INT
   scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
   onDeps: []
