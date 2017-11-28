@@ -108,6 +108,7 @@
     <#list dependencies.INCEPTOR.roles["INCEPTOR_METASTORE"] as role>
         <#assign uris += [("thrift://" + role.hostname + ":" + dependencies.INCEPTOR["hive.metastore.port"])]>
     </#list>
+    <@property "hive.metastore.service.id" "${dependencies.INCEPTOR.sid}"/>
 <#else>
     <#list service.roles["INCEPTOR_METASTORE"] as role>
         <#assign uris += [("thrift://" + role.hostname + ":" + service["hive.metastore.port"])]>
