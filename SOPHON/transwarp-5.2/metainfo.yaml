@@ -18,6 +18,34 @@ dependencies:
     maxVersion: transwarp-5.2
     optional: false
 roles:
+- name: SOPHON_REDIS
+  dockerImage: "transwarp/sophon-redis:transwarp-5.2"
+  friendlyName: "Sophon Redis"
+  labelPrefix: "sophon-redis"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+  - name: MIDAS_REDIS_PORT
+    value: ${service['midas.redis.port']}
+  mountPaths: []
+  resources:
+    limitsMemoryKey: redis.container.limits.memory
+    limitsCpuKey: redis.container.limits.cpu
+    requestsMemoryKey: redis.container.requests.memory
+    requestsCpuKey: redis.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations: []
 - name: SOPHON_SERVER
   dockerImage: "transwarp/sophon-server:transwarp-5.2"
   friendlyName: "Sophon Server"
@@ -80,34 +108,6 @@ roles:
         templatePath: "sophon-env.sh"
         targetPath: "/etc/${service.sid}/conf/sophon-env.sh"
         mode: "755"
-- name: SOPHON_REDIS
-  dockerImage: "transwarp/sophon-redis:transwarp-5.2"
-  friendlyName: "Sophon Redis"
-  labelPrefix: "sophon-redis"
-  category: MASTER
-  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
-  deleteOpCondition:
-    deletable:
-      number: 2
-    reject:
-      number: 1
-  env:
-  - name: MIDAS_REDIS_PORT
-    value: ${service['midas.redis.port']}
-  mountPaths: []
-  resources:
-    limitsMemoryKey: redis.container.limits.memory
-    limitsCpuKey: redis.container.limits.cpu
-    requestsMemoryKey: redis.container.requests.memory
-    requestsCpuKey: redis.container.requests.cpu
-  summaryPolicy: ALL
-  autoAssign:
-  - advice: !<NumSeq> {"numSeq": [1]}
-  suggestion:
-  - criteria: !<Range> {"min": 1}
-  validation:
-  - criteria: !<Range> {"min": 1}
-  operations: []
 - name: SOPHON_SCHEDULER
   dockerImage: "transwarp/sophon-scheduler:transwarp-5.2"
   friendlyName: "Sophon Scheduler"
