@@ -150,6 +150,8 @@ http.type: netty3
 
 <#if service['elasticsearch.yml']??>
 <#list service['elasticsearch.yml'] as key, value>
+<#if key != "discovery.zen.ping.multicast.enabled">
 ${key}: ${value}
+</#if>
 </#list>
 </#if>
