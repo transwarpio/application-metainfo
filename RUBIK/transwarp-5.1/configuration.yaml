@@ -183,6 +183,26 @@
   groups: []
   visibility: READ_WRITE
 
+- name: workflow.connect.timeout
+  recommendExpression: 60000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [RUBIK_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.socket.timeout
+  recommendExpression: 60000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [RUBIK_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: workflow.client.username
   recommendExpression: workflow
   defaultValue: null

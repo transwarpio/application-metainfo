@@ -14,10 +14,10 @@ service.path=/api/v1/
 login.path=login
 
 # connect timeout in milliseconds
-connect.timeout=3000
+connect.timeout=${service['workflow.connect.timeout']}
 
 # socket timeout in milliseconds
-socket.timeout=3000
+socket.timeout=${service['workflow.socket.timeout']}
 
 # client username
 client.username=${service['workflow.client.username']}
