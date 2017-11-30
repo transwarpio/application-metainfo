@@ -10,6 +10,7 @@ job:
       # if starts with slash, treat as absolute path;
       # otherwise relative to the root directory of workflow application
   dir-prefix: job
+  keytab-cache-location: /tmp/workflow/keytab
 
 # schedule settings
 schedule:
