@@ -102,6 +102,8 @@ firstWizardConfigs:
 - rubik.container.requests.memory
 - rubik.container.requests.cpu
 - rubik.memory.ratio
+- workflow.connect.timeout
+- workflow.socket.timeout
 - workflow.client.username
 - workflow.client.password
 
