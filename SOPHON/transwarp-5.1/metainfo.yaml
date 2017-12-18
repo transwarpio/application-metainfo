@@ -17,6 +17,10 @@ dependencies:
     minVersion: transwarp-5.1
     maxVersion: transwarp-5.1
     optional: false
+  - name: TXSQL
+    minVersion: transwarp-5.1
+    maxVersion: transwarp-5.1
+    optional: true
 roles:
 - name: SOPHON_REDIS
   dockerImage: "transwarp/sophon-redis:transwarp-5.1"
