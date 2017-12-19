@@ -29,6 +29,7 @@ spec:
                 --logtostderr=false
                 --log_dir=/var/log/kubernetes/controller
                 --address=0.0.0.0
+                --pod-eviction-timeout=30m0s
                 --port=${service['tos.master.controller.port']}
                 "
       volumeMounts:
