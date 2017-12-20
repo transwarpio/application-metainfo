@@ -150,6 +150,33 @@ roles:
         targetPath: "/etc/${service.sid}/conf/service.conf"
         mode: "755"
 
+stages:
+  - type: Config
+    taskGroups:
+    - !<Create-Database>
+      dbPrefix: metastore
+      dbUserConfig: livy.jdbc.username
+      dbPasswordConfig: livy.jdbc.password
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Role>
+      roleType: "SOPHON_SERVER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SOPHON_SCHEDULER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SOPHON_REDIS"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+
+
+
 firstWizardConfigs:
 - midas.server.initial_heapsize
 - midas.server.heapsize
