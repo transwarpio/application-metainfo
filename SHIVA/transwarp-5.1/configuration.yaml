@@ -491,13 +491,23 @@
 # store.conf
 - name: tabletserver.store.datadirs
   recommendExpression: |
+    <#function diskSizeByMntGB mnt>
+      <#list disks?reverse as disk>
+        <#if mnt?contains(disk.mountPoint)>
+          <#return (disk.size / 1024 / 1024 / 1024)?floor>
+        </#if>
+      </#list>
+      <#return 0>
+    </#function>
     <#function localDir suffix>
       <#if rcmdMounts?size == 0>
         <#return suffix>
       <#else>
         <#local dirs = []>
         <#list rcmdMounts?sort as mnt>
-          <#local dirs = dirs + [mnt + suffix]>
+          <#if diskSizeByMntGB(mnt) gt 200>
+            <#local dirs = dirs + [mnt + suffix]>
+          </#if>
         </#list>
         <#return dirs?join(",")>
       </#if>
@@ -517,17 +527,19 @@
     <#function diskSizeByMntGB mnt>
       <#list disks?reverse as disk>
         <#if mnt?contains(disk.mountPoint)>
-         <#return (disk.size / 1024 / 1024 / 1024)?floor>
+          <#return (disk.size / 1024 / 1024 / 1024)?floor>
         </#if>
       </#list>
       <#return 0>
     </#function>
     <#assign capacity=2048>
     <#list rcmdMounts as mnt>
-     <#assign curCapacity = diskSizeByMntGB(mnt) / 2>
-     <#if curCapacity lt capacity>
-      <#assign capacity=curCapacity>
-     </#if>
+      <#assign curCapacity = diskSizeByMntGB(mnt) / 2>
+      <#if curCapacity gt 100>
+        <#if curCapacity lt capacity>
+          <#assign capacity=curCapacity>
+        </#if>
+      </#if>
     </#list>
     ${capacity?floor?c}
     </#compress>

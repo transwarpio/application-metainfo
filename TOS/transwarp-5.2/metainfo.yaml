@@ -31,12 +31,6 @@ roles:
         paths: ["/srv/kubernetes"]
         mode: "700"
     - directive: !<download>
-        url: "${transwarpRepo}/tos/kubelet/hyperkube"
-        targetPath: "/opt/kubernetes/bin/hyperkube"
-    - directive: !<chmod>
-        mode: "755"
-        path: "/opt/kubernetes/bin/hyperkube"
-    - directive: !<download>
         url: "${transwarpRepo}/tos/tos.tar.gz"
         targetPath: "/etc/${service.sid}/conf/tos.tar.gz"
     - directive: !<shell>
@@ -147,7 +141,7 @@ roles:
 - name: TOS_REGISTRY
   friendlyName: "TOS Registry"
   linkExpression: "http://${localhostname}:${service['tos.registry.ui.port']}/"
-  category: MASTER
+  category: SLAVE
   frontendOperations: ["Start", "Stop"]
   summaryPolicy: SOME
   autoAssign:
