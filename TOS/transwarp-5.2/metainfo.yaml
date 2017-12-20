@@ -323,9 +323,9 @@ healthChecks:
   method: !<DockerPsAndSystemctl>
     imageMap:
       TOS_MASTER:
-        DockerPs: ["boot.sh --data-d", "boot.sh apiserver", "boot.sh controller", "boot.sh scheduler"]
+        DockerPs: ["boot.sh --data-dir", "boot.sh apiserver", "boot.sh controller", "boot.sh scheduler"]
       TOS_REGISTRY:
-        DockerPs: ["/entrypoint.sh", "/root/start-apa"]
+        DockerPs: ["/entrypoint.sh", "/root/start-apache"]
       TOS_SLAVE:
         Systemctl: ["kubelet", "haproxy", "docker"]
 - category: VITAL_SIGN_CHECK
