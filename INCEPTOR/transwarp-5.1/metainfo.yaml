@@ -161,8 +161,13 @@ roles:
     requestsMemoryKey: executor.container.requests.memory
     requestsCpuKey: executor.container.requests.cpu
   nodeSpecificMounts:
-  - configKey: ngmr.localdir
-  - configKey: ngmr.fastdisk.dir
+  - type: DIR_CONF
+    configKey: ngmr.localdir
+  - type: DIR_CONF
+    configKey: ngmr.fastdisk.dir
+  - type: DEPENDENCY_DIR_CONF
+    dependencyType: SHIVA
+    configKey: tabletserver.store.datadirs
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}

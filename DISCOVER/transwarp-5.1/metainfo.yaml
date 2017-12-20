@@ -190,9 +190,9 @@ stages:
       summaryPolicy: ALL
       timeoutMinutes: 10
       dirs: ["/${service.sid}"]
-      user: "hive"
-      group: "hive"
-      mod: 711
+      user: "discover"
+      group: "hadoop"
+      mod: 777
 
 product: Discover
 
