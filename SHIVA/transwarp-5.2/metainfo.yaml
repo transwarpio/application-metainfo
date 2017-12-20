@@ -195,6 +195,7 @@ firstWizardConfigs:
 - webserver.memory.ratio
 - master.master.data_path
 - tabletserver.store.datadirs
+- store.capacity
 
 healthChecks:
 - category: DAEMON_CHECK
