@@ -24,7 +24,9 @@
     <@property "httpfs.hadoop.authentication.kerberos.principal" "httpfs/${localhostname?lower_case}@${service.realm}"/>
     <@property "httpfs.hadoop.authentication.kerberos.keytab" "${service.keytab}"/>
     </#if>
-    <#list service['httpfs-site.xml'] as key, value>
-        <@property key value/>
-    </#list>
+    <#if service['httpfs-site.xml']??>
+        <#list service['httpfs-site.xml'] as key, value>
+            <@property key value/>
+        </#list>
+    </#if>
 </configuration>
