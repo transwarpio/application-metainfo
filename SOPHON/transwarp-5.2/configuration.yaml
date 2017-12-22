@@ -48,6 +48,24 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+- name: livy.jdbc.username
+  recommendExpression: sophonuser
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: livy.jdbc.password
+  recommendExpression: password
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: PASSWORD
+
 #dieu.conf
 - name: dieu.docker.image.name
   recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-tensorflow:transwarp-5.2"
