@@ -4,10 +4,13 @@
 </#list>
 
 <#assign server_count=service.roles.SEARCH_SERVER?size>
-<#assign es_nodes=[] master_nodes=[] master_node_count=0>
+<#assign es_nodes=[] master_nodes=[] master_node_count=0 data_node_count=0>
 <#list service.roles.SEARCH_SERVER as server>
     <#if service[server.hostname]['node.master']="true">
         <#assign master_nodes+=[server.hostname] master_node_count+=1>
+    </#if>
+    <#if service[server.hostname]['node.data']="true">
+        <#assign data_node_count+=1>
     </#if>
     <#assign es_nodes+=[server.hostname]>
 </#list>
@@ -92,10 +95,10 @@ transport.tcp.port: ${service['transport.tcp.port']}
 #
 gateway.recover_after_time: ${service['gateway.recover_after_time']}
 gateway.recover_after_nodes: ${(server_count/2 +1)?int}
-gateway.recover_after_data_nodes: ${(server_count/2 +1)?int}
+gateway.recover_after_data_nodes: ${(data_node_count/2 +1)?int}
 gateway.recover_after_master_nodes: ${(master_node_count/2 +1)?int}
 gateway.expected_nodes: ${server_count}
-gateway.expected_data_nodes: ${server_count}
+gateway.expected_data_nodes: ${data_node_count}
 gateway.expected_master_nodes: ${master_node_count}
 #
 # For more information, see the documentation at:
