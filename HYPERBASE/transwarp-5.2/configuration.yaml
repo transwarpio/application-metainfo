@@ -715,3 +715,21 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: hbase.master.balancer.stochastic.maxRunningTime
+  recommendExpression: 300000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: hbase.master.balancer.regionLocationCacheTime
+  recommendExpression: 300
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
