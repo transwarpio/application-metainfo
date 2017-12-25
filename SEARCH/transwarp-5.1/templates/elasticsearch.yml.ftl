@@ -145,6 +145,32 @@ indices.fielddata.cache.size: ${service['indices.fielddata.cache.size']}
 index.store.type: ${service['index.store.type']}
 index.translog.durability: ${service['index.translog.durability']}
 
+discovery.zen.fd.ping_timeout: ${service['discovery.zen.fd.ping_timeout']}
+discovery.zen.fd.ping_retries: ${service['discovery.zen.fd.ping_retries']}
+discovery.zen.fd.ping_interval: ${service['discovery.zen.fd.ping_interval']}
+discovery.zen.ping_timeout: ${service['discovery.zen.ping_timeout']}
+cluster.routing.allocation.balance.shard: ${service['cluster.routing.allocation.balance.shard']}
+cluster.routing.allocation.balance.index: ${service['cluster.routing.allocation.balance.index']}
+index.unassigned.node_left.delayed_timeout: ${service['index.unassigned.node_left.delayed_timeout']}
+
+# slow log
+index.indexing.slowlog.level: info
+index.indexing.slowlog.threshold.index.debug: 2s
+index.indexing.slowlog.threshold.index.info: 5s
+index.indexing.slowlog.threshold.index.trace: 500ms
+index.indexing.slowlog.threshold.index.warn: 10s
+index.search.slowlog.threshold.fetch.debug: 500ms
+index.search.slowlog.threshold.fetch.info: 800ms
+index.search.slowlog.threshold.fetch.trace: 200ms
+index.search.slowlog.threshold.fetch.warn: 1s
+index.search.slowlog.threshold.query.debug: 2s
+index.search.slowlog.threshold.query.info: 5s
+index.search.slowlog.threshold.query.trace: 500ms
+index.search.slowlog.threshold.query.warn: 10s
+
+index.number_of_shards: 10
+index.number_of_replicas: 1
+
 transport.type: netty3
 http.type: netty3
 

@@ -309,3 +309,66 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: discovery.zen.fd.ping_timeout
+  recommendExpression: 120s
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: discovery.zen.fd.ping_retries
+  recommendExpression: 6
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: discovery.zen.fd.ping_interval
+  recommendExpression: 30s
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: discovery.zen.ping_timeout
+  recommendExpression: 100s
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: cluster.routing.allocation.balance.shard
+  recommendExpression: 0.001
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: cluster.routing.allocation.balance.index
+  recommendExpression: 0.999
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: index.unassigned.node_left.delayed_timeout
+  recommendExpression: 10m
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
