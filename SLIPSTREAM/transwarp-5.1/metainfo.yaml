@@ -87,11 +87,6 @@ roles:
   env:
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
-  deleteOpCondition:
-    deletable:
-      number: 2
-    reject:
-      number: 1
   mountPaths: []
   summaryPolicy: SOME
   autoAssign:
