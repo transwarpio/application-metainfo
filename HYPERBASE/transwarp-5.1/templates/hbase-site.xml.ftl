@@ -126,6 +126,8 @@
 <@property "hbase.cluster.distributed" service['hbase.cluster.distributed']/>
 <@property "hbase.regionserver.global.memstore.lowerLimit" service['hbase.regionserver.global.memstore.lowerLimit']/>
 <@property "hbase.hregion.majorcompaction.cron" service['hbase.hregion.majorcompaction.cron']/>
+<@property "hbase.master.balancer.stochastic.maxRunningTime" service['hbase.master.balancer.stochastic.maxRunningTime']/>
+<@property "hbase.master.balancer.regionLocationCacheTime" service['hbase.master.balancer.regionLocationCacheTime']/>
 
 <#--Take properties from the context-->
 <#if service['hbase-site.xml']??>
