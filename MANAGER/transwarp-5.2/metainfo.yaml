@@ -11,14 +11,10 @@ roles:
   friendlyName: "Zookeeper Server"
   labelPrefix: "zookeeper-server"
   category: MASTER
-  frontendOperations: ["Start", "Scaleout"]
+  frontendOperations: ["Start", "Move"]
   deleteOpCondition:
-    deletable:
-      number: 4
-    movable:
-      number: 3
     reject:
-      number: 2
+      number: 3
   env: []
   mountPaths: []
   summaryPolicy: MAJOR
@@ -97,10 +93,8 @@ roles:
   category: MASTER
   frontendOperations: ["Start"]
   deleteOpCondition:
-    deletable:
-      number: 3
     reject:
-      number: 2
+      number: 3
   env: []
   mountPaths: []
   summaryPolicy: MAJOR
@@ -169,12 +163,10 @@ roles:
   friendlyName: "Manager Server"
   labelPrefix: "manager-server"
   category: MASTER
-  frontendOperations: ["Start"]
+  frontendOperations: ["Start", "Move"]
   deleteOpCondition:
-    deletable:
-      number: 2
     reject:
-      number: 1
+      number: 2
   env: []
   mountPaths: []
   summaryPolicy: MAJOR
@@ -240,6 +232,21 @@ roles:
     directives:
     - directive: !<shell>
         script: "/etc/init.d/transwarp-manager stop"
+
+jobs:
+  - type: MoveManagerRole
+    stages:
+    - Install
+    - SyncDir
+    - ConfigAgentRepo
+    - ConfigManagerRole
+    - StartManagerRole
+  - type: MoveManagerHARole
+    stages:
+    - Install
+    - ConfigManagerHARole
+    - ConfigManagerRole
+    - StartManagerHARole
 
 firstWizardConfigs:
 - tickTime
