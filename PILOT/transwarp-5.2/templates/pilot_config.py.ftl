@@ -35,6 +35,8 @@ GUARDIAN_HTTP_PROTOCOL = '${guardianProtocol}'
 GUARDIAN_SERVER = '${guardianHost}:${guardianPort}'
 </#if>
 
+GUARDIAN_CLIENT_JAR = '/usr/local/lib/guardian-client-2.0-transwarp-5.2.0-SNAPSHOT.jar'
+GUARDIAN_SITE_PATH = '/etc/${service.sid}/conf/'
 
 # License check
 <#if dependencies.LICENSE_SERVICE??>
