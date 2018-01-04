@@ -9,7 +9,7 @@ build_application-metainfo() {
     fi
 
     META_SRC_DIR="$WORKSPACE"
-    TARGET_DIR="$META_SRC_DIR/target"
+    TARGET_DIR="/root/target"
 
     mkdir -p "$TARGET_DIR"
 
