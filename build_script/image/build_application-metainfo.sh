@@ -39,6 +39,7 @@ build_application-metainfo() {
         git remote rm origin
         git remote add origin https://github.com/transwarpio/application-metainfo.git
         git fetch origin
+        git checkout dev
         git branch --set-upstream-to=origin/dev dev
 
 
