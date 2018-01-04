@@ -16,6 +16,13 @@ roles:
   labelPrefix: "zookeeper-server"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Move", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 4
+    movable:
+      number: 3
+    reject:
+      number: 2
   env:
   - name: ZOOKEEPER_CONF_DIR
     value: /etc/${service.sid}/conf
