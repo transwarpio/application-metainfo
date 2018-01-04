@@ -38,6 +38,8 @@ build_application-metainfo() {
         cd "$META_DST_DIR"
         git remote rm origin
         git remote add origin https://github.com/transwarpio/application-metainfo.git
+        git fetch origin
+        git branch --set-upstream-to=origin/dev dev
 
 
         echo "building $VERSION image ..."
