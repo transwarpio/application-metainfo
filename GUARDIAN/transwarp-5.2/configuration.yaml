@@ -1,4 +1,132 @@
 ---
+# txsql
+- name: data.dir
+  recommendExpression: "/${service.sid}/txsql/data/"
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: mysql.rw.port
+  recommendExpression: 3316
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: binlog.port
+  recommendExpression: 6000
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: mysql.local.port
+  recommendExpression: 13306
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: binlogsvr.rpc.port
+  recommendExpression: 17000
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: paxos.port
+  recommendExpression: 8001
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: txsql.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: txsql.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: txsql.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: txsql.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: txsql.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: root.password
+  recommendExpression: ${(service['root.password']??)?then(service['root.password'],((.now?long * .now?long)%987654321)?c)}
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: HIDDEN
+# service level
+- name: guardian.database.driver
+  recommendExpression: com.mysql.jdbc.Driver
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
 # apacheds
 - name: guardian.apacheds.data.dir
   recommendExpression: "/${service.sid}/data/"
@@ -147,6 +275,86 @@
   valueType: STRING
   scope: !<RoleTypes>
     roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.server.audit.dao.impl
+  recommendExpression: io.transwarp.guardian.persistence.dao.impl.AuditRecordDaoFileImpl
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+# cas config server
+- name: cas.config.server.port
+  recommendExpression: 8310
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [CAS_CONFIG_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: cas.config.server.username
+  recommendExpression: config-user
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [CAS_CONFIG_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: cas.config.server.password
+  recommendExpression: Transwarp!
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [CAS_CONFIG_SERVER]
+  onDeps: []
+  groups: []
+  visibility: WRITE_ONLY
+
+- name: cas.server.ssl.port
+  recommendExpression: 8393
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [CAS_CONFIG_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: cas.server.http.port
+  recommendExpression: 8390
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [CAS_CONFIG_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: cas.server.http.enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [CAS_CONFIG_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: cas.mgmt.server.port
+  recommendExpression: 8373
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [CAS_CONFIG_SERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
