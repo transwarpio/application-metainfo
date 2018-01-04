@@ -19,18 +19,25 @@ build_application-metainfo() {
         META_DST_DIR="$TARGET_DIR/$VERSION"
 
         cd "$META_SRC_DIR"
-        dirs=()
-        while IFS=  read -r -d $'\0'; do
-          dirs+=("$REPLY")
-        done < <(find . -name "$VERSION" -print0)
+#        dirs=()
+#        while IFS=  read -r -d $'\0'; do
+#          dirs+=("$REPLY")
+#        done < <(find . -name "$VERSION" -print0)
         if [ -d "$META_DST_DIR" ]; then
           rm -rf "$META_DST_DIR"
         fi
-        mkdir -p "$META_DST_DIR"
-        for dir in "${dirs[@]}"; do
-          mkdir -p "$META_DST_DIR/$dir"
-          cp -rp $dir/* "$META_DST_DIR/$dir/"
-        done
+#        mkdir -p "$META_DST_DIR"
+#        for dir in "${dirs[@]}"; do
+#          mkdir -p "$META_DST_DIR/$dir"
+#          cp -rp $dir/* "$META_DST_DIR/$dir/"
+#        done
+
+        cp -rp . "$META_DST_DIR"
+
+        # configure git remote options
+        cd "$META_DST_DIR"
+        git remote rm origin
+        git remote add origin https://github.com/transwarpio/application-metainfo.git
 
 
         echo "building $VERSION image ..."
