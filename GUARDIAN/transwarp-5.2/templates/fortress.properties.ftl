@@ -53,21 +53,25 @@ admin.user=uid=admin,ou=system
 # LDAP admin root pass is encrypted using 'encrypt' target in build.xml:
 admin.pw=${service['guardian.ds.root.password']}
 
+# LDAP connection timeout in ms:
+connection.timeout = 10000
+
+# This is min/max settings for LDAP administrator pool connections that have read/write access to all nodes under suffix:
+min.admin.conn=1
+max.admin.conn=10
+
+# This is min/max connection pool settings for LDAP User authentication connection pool:
+min.user.conn=1
+max.user.conn=10
+
 # These credentials are used for read/write access to all nodes under slapd access log suffix:
 log.admin.user=cn=Manager,cn=log
 # For corresponding log user:
 log.admin.pw=secret
 
-# Connection pool configuration
-# Max connections for admin & user pool
-# max.conn=-1
-# Max idle connection for admin & user pool
-# max.idle.conn=50
-
-# Max connections for log pool
-# log.max.conn=-1
-# Max idle connection for log pool
-# log.max.idle.conn=20
+# This is min/max settings for LDAP connections to read slapo access log:
+min.log.conn=1
+max.log.conn=3
 
 # This node contains fortress properties stored on behalf of connecting LDAP clients:
 config.realm=DEFAULT
