@@ -1,5 +1,0 @@
-*Bug fix
- *WARP-19828: Fix table column type incorrect using txCreateTable.
- *WARP-19875: Grant permission to user who is the table owner to read the data.
- *WARP-19687: Fix the help document for txPolynomialExpansion.
- *WARP-19222: Discover Notebook deprecated port 8989.
