@@ -38,6 +38,10 @@ build_application-metainfo() {
         # configure git remote options
         cd "$META_DST_DIR"
         git remote rm origin
+        git remote add origin https://minhao.zou%40transwarp.io:sophon2016@github.com/transwarpio/application-metainfo.git
+        git checkout -b sophon
+        git push origin sophon
+        git remote rm origin # clean password
         git remote add origin https://github.com/transwarpio/application-metainfo.git
         git fetch origin
         git checkout sophon
