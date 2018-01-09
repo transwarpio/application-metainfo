@@ -40,8 +40,8 @@ build_application-metainfo() {
         git remote rm origin
         git remote add origin https://github.com/transwarpio/application-metainfo.git
         git fetch origin
-        git checkout master
-        git branch --set-upstream-to=origin/master master
+        git checkout sophon
+        git branch --set-upstream-to=origin/sophon sophon
 
 
         echo "building $VERSION image ..."
