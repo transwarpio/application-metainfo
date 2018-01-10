@@ -21,6 +21,20 @@ export GUARDIAN_DS_HA_MASTER_HOST=${master}
 export GUARDIAN_DS_HA_MASTER_PORT=${service['guardian.apacheds.ldap.port']}
 </#if>
 
+<#if service.roles["GUARDIAN_TXSQL_SERVER"]??>
+<#assign hostPorts = []>
+<#list service.roles["GUARDIAN_TXSQL_SERVER"] as r>
+    <#assign hostPorts = hostPorts + [r.hostname + ':' + service['mysql.rw.port']]>
+</#list>
+export DEPEND_ON_TXSQL=true
+export GUARDIAN_TXSQL_CONNECTION_USERNAME=root
+export GUARDIAN_TXSQL_CONNECTION_PASSWORD=${service['root.password']}
+export TXSQL_SERVERS=${hostPorts?join(",")}
+export MYSQL_DATABASE=guardian
+<#else>
+export DEPEND_ON_TXSQL=false
+</#if>
+
 export GUARDIAN_LOG_DIR=/var/log/${service.sid}
 export GUARDIAN_AUDIT_FILE=guardian-server.audit
 export GUARDIAN_SERVER_KEY_STORE=/srv/guardian/server.keystore
