@@ -11,7 +11,7 @@
   visibility: READ_WRITE
 
 - name: mysql.rw.port
-  recommendExpression: 3316
+  recommendExpression: 8320
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
@@ -21,7 +21,7 @@
   visibility: READ_WRITE
 
 - name: binlog.port
-  recommendExpression: 6000
+  recommendExpression: 8321
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
@@ -31,7 +31,7 @@
   visibility: READ_WRITE
 
 - name: mysql.local.port
-  recommendExpression: 13306
+  recommendExpression: 8323
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
@@ -41,7 +41,7 @@
   visibility: READ_WRITE
 
 - name: binlogsvr.rpc.port
-  recommendExpression: 17000
+  recommendExpression: 8324
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
@@ -51,7 +51,7 @@
   visibility: READ_WRITE
 
 - name: paxos.port
-  recommendExpression: 8001
+  recommendExpression: 8325
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
