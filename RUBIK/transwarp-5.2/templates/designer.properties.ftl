@@ -1,4 +1,5 @@
 #server port
+designer.server.host=${localhostname}
 designer.server.port=${service['designer.server.port']}
 designer.authentication.enableguardian=${(service.auth == "kerberos")?c}
 #connection pool
@@ -25,3 +26,7 @@ service.checker.sleep.interval.min=${service['service.checker.sleep.interval.min
     <#assign license_servers += [(server.hostname + ":" + dependencies.LICENSE_SERVICE[server.hostname]["zookeeper.client.port"])]>
 </#list>
 license.server.quorum=${license_servers?join(",")}
+
+<#assign casServerSslPort=dependencies.GUARDIAN['cas.server.ssl.port']>
+<#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']}:${casServerSslPort}">
+cas.server.address=${casServerName}
