@@ -27,6 +27,10 @@ service.checker.sleep.interval.min=${service['service.checker.sleep.interval.min
 </#list>
 license.server.quorum=${license_servers?join(",")}
 
-<#assign casServerSslPort=dependencies.GUARDIAN['cas.server.ssl.port']>
-<#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']}:${casServerSslPort}">
-cas.server.address=${casServerName}
+<#if dependencies.GUARDIAN??>
+    <#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']}:${casServerSslPort}">
+    <#if dependencies.GUARDIAN['cas.server.ssl.port']??>
+        <#assign casServerSslPort=dependencies.GUARDIAN['cas.server.ssl.port']>
+        cas.server.address=${casServerName}
+    </#if>
+</#if>
