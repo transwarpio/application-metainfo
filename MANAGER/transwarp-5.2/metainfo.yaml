@@ -241,12 +241,22 @@ jobs:
     - ConfigAgentRepo
     - ConfigManagerRole
     - StartManagerRole
-  - type: MoveManagerHARole
+  - type: MoveManagerZookeeperRole
     stages:
     - Install
-    - ConfigManagerHARole
+    - ConfigManagerZookeeperRole
     - ConfigManagerRole
-    - StartManagerHARole
+    - StartManagerZookeeperRole
+    - RollingStartManagerZookeeperRole
+    - RestartManagerRole
+  - type: MoveManagerTxSQLRole
+    stages:
+    - Install
+    - ConfigManagerTxSQLRole
+    - ConfigManagerRole
+    - StartManagerTxSQLRole
+    - RollingStartManagerTxSQLRole
+    - RestartManagerRole
 
 firstWizardConfigs:
 - tickTime
