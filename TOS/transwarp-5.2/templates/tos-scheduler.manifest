@@ -22,9 +22,6 @@ spec:
       - name: SCHEDULER_PARAMS
         value: "--leader-elect=true
                 --kubeconfig=/srv/kubernetes/kubeconfig
-                --alsologtostderr=true
-                --logtostderr=false
-                --log_dir=/var/log/kubernetes/scheduler
                 --address=0.0.0.0
                 --port=${service['tos.master.scheduler.port']}
                 "
