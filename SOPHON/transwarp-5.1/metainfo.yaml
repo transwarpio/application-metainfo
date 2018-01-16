@@ -22,10 +22,10 @@ dependencies:
     maxVersion: transwarp-5.1
     optional: true
 roles:
-- name: SOPHON_REDIS
+- name: REDIS_SERVER
   dockerImage: "transwarp/sophon-redis:transwarp-5.1"
-  friendlyName: "Sophon Redis"
-  labelPrefix: "sophon-redis"
+  friendlyName: "Redis Server"
+  labelPrefix: "redis-server"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
@@ -34,8 +34,8 @@ roles:
     reject:
       number: 1
   env:
-  - name: MIDAS_REDIS_PORT
-    value: ${service['midas.redis.port']}
+  - name: REDIS_CONF_DIR
+    value: /etc/${service.sid}/conf
   mountPaths: []
   resources:
     limitsMemoryKey: redis.container.limits.memory
