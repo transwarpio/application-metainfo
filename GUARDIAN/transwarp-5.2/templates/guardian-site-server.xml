@@ -10,8 +10,8 @@
 <configuration>
 		<@property "guardian.server.ldap.type" "APACHEDS" />
         <@property "guardian.server.kerberos.principal" "guardian/guardian" />
-		<@property "guardian.server.kerberos.password.store" "/etc/guardian/conf/guardian-auth.jks" />
-		<@property "guardian.server.kerberos.keytab" "/etc/guardian/conf/guardian.keytab" />
+		<@property "guardian.server.kerberos.password.store" "/etc/${service.sid}/conf/guardian-auth.jks" />
+		<@property "guardian.server.kerberos.keytab" "/etc/${service.sid}/conf/guardian.keytab" />
 		<@property "guardian.server.war.location" "/usr/lib/guardian/webui/guardian-server.war" />
 		<@property "guardian.server.db.location" "/var/lib/guardian/guardian.db" />
 		<@property "guardian.server.bind.host" "0.0.0.0" />
@@ -22,10 +22,23 @@
 		<@property "guardian.allow.read.everything" "true"/>
         <@property "guardian.server.audit.enabled" "${service['guardian.server.audit.enabled']}"/>
         <@property "guardian.server.audit.level" "${service['guardian.server.audit.level']}"/>
+		<@property "guardian.server.audit.dao.impl" "${service['guardian.server.audit.dao.impl']}"/>
+		<@property "guardian.server.cache.enabled" "${service['guardian.server.cache.enabled']}"/>
 
         <@property "guardian.skip.check.access.with.service" "true"/>
 		<@property "guardian.server.spnego.auth.filter.class" "io.transwarp.guardian.plugins.filter.SpnegoAuthFilter"/>
 		<@property "guardian.server.spnego.keytab" "/etc/${service.sid}/conf/guardian.keytab"/>
+
+		<#if service.roles["GUARDIAN_TXSQL_SERVER"]??>
+		<#assign hostPorts = []>
+        <#list service.roles["GUARDIAN_TXSQL_SERVER"] as r>
+          <#assign hostPorts = hostPorts + [r.hostname + ':' + service['mysql.rw.port']]>
+        </#list>
+        <#assign txsql = hostPorts?join(",")>
+		<@property "guardian.txsql.connection.url" "jdbc:mysql://${txsql}/guardian?allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true"/>
+		<@property "guardian.txsql.connection.username" "root"/>
+		<@property "guardian.txsql.connection.password" "${service['root.password']}"/>
+		</#if>
 
 </configuration>
 

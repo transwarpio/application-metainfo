@@ -60,7 +60,7 @@
   visibility: READ_WRITE
 
 - name: root.password
-  recommendExpression: ${(service['root.password']??)?then(service['root.password'],((.now?long * .now?long)%987654321)?c)}
+  recommendExpression: ${(service['root.password']??)?then(service['root.password'],((.now?long * .now?long)%987654321)?abs?c)}
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}

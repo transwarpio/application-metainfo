@@ -47,9 +47,6 @@ spec:
                 --client_ca_file=/srv/kubernetes/ca.crt
                 --tls_cert_file=/srv/kubernetes/server.cert
                 --tls_private_key_file=/srv/kubernetes/server.key
-                --alsologtostderr=true
-                --logtostderr=false
-                --log_dir=/var/log/kubernetes/apiserver
                 --basic-auth-file=/srv/kubernetes/auth
                 "
       volumeMounts:
