@@ -1,6 +1,6 @@
 ---
 name: REDIS
-version: 4.0.6
+version: transwarp-5.1.1-final
 global: false
 namePrefix: redis
 friendlyName: "redis"
