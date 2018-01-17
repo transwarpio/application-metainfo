@@ -154,9 +154,17 @@ export JAVAX_JDO_OPTION_CONNECTIONURL=jdbc:mysql://${hostPorts?join(",")}/metast
 export JAVAX_JDO_OPTION_CONNECTION_USERNAME=${service['javax.jdo.option.ConnectionUserName']}
 export JAVAX_JDO_OPTION_CONNECTION_PASSWORD=${service['javax.jdo.option.ConnectionPassword']}
 <#if dependencies.INCEPTOR??>
-export HIVE_METASTORE_SERVER=${dependencies.INCEPTOR.roles.INCEPTOR_METASTORE[0]['hostname']}
+<#assign metastoreUris = []/>
+<#list dependencies.INCEPTOR.roles["INCEPTOR_METASTORE"] as role>
+  <#assign metastoreUris += [role.hostname]>
+</#list>
+export HIVE_METASTORE_SERVER=${metastoreUris?join(",")}
 <#else>
-export HIVE_METASTORE_SERVER=${service.roles.INCEPTOR_METASTORE[0]['hostname']}
+<#assign metastoreUris = []/>
+<#list service.roles["INCEPTOR_METASTORE"] as role>
+  <#assign metastoreUris += [role.hostname]>
+</#list>
+export HIVE_METASTORE_SERVER=${metastoreUris?join(",")}
 </#if>
 export SPARK_DRIVER_ADDR=${service.roles.INCEPTOR_SERVER[0]['hostname']}
 export EXECUTOR_ID_PATH=/${service.sid}/executorID
