@@ -308,7 +308,7 @@
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
-    roleTypes: [SOPHON_REDIS]
+    roleTypes: [REDIS_SERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -318,7 +318,7 @@
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [SOPHON_REDIS]
+    roleTypes: [REDIS_SERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -328,7 +328,7 @@
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
-    roleTypes: [SOPHON_REDIS]
+    roleTypes: [REDIS_SERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -338,7 +338,7 @@
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [SOPHON_REDIS]
+    roleTypes: [REDIS_SERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -369,7 +369,7 @@
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>
-    roleTypes: [SOPHON_REDIS]
+    roleTypes: [REDIS_SERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE

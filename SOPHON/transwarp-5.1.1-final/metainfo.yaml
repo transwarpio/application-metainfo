@@ -170,7 +170,7 @@ stages:
       summaryPolicy: SOME
       timeoutMinutes: 1
     - !<Role>
-      roleType: "SOPHON_REDIS"
+      roleType: "REDIS_SERVER"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
