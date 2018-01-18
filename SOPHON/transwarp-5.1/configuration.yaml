@@ -242,6 +242,17 @@
   groups: []
   visibility: READ_WRITE
 
+- name: redis.port
+  recommendExpression: 6379
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [REDIS_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+
 - name: server.container.limits.memory
   recommendExpression: -1
   defaultValue: null
@@ -332,6 +343,27 @@
   groups: []
   visibility: READ_WRITE
 
+
+- name: redis.bind
+  recommendExpression: 0.0.0.0
+  defaultValue: null
+  valueType: HOST
+  scope: !<RoleTypes>
+    roleTypes: [REDIS_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: redis.password
+  recommendExpression: transwarp-redis-01
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [REDIS_SERVER]
+  onDeps: []
+  groups: []
+  visibility: PASSWORD
+
 - name: redis.memory.ratio
   recommendExpression: -1
   defaultValue: null
@@ -408,4 +440,3 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
-
