@@ -25,7 +25,7 @@ roles:
 - name: SOPHON_REDIS
   dockerImage: "transwarp/sophon-redis:transwarp-5.1"
   friendlyName: "Redis Server"
-  labelPrefix: "redis-server"
+  labelPrefix: "sophon-redis"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
