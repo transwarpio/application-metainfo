@@ -5,6 +5,10 @@ global: false
 namePrefix: Sophon
 friendlyName: "Sophon"
 dependencies:
+  - name: GUARDIAN
+    minVersion: transwarp-5.1
+    maxVersion: transwarp-5.1
+    optional: true
   - name: HDFS
     minVersion: transwarp-5.1
     maxVersion: transwarp-5.1
@@ -13,7 +17,39 @@ dependencies:
     minVersion: transwarp-5.1
     maxVersion: transwarp-5.1
     optional: false
+  - name: TXSQL
+    minVersion: transwarp-5.1
+    maxVersion: transwarp-5.1
+    optional: true
 roles:
+- name: REDIS_SERVER
+  dockerImage: "transwarp/sophon-redis:transwarp-5.1"
+  friendlyName: "Redis Server"
+  labelPrefix: "redis-server"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+  - name: REDIS_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: redis.container.limits.memory
+    limitsCpuKey: redis.container.limits.cpu
+    requestsMemoryKey: redis.container.requests.memory
+    requestsCpuKey: redis.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations: []
 - name: SOPHON_SERVER
   dockerImage: "transwarp/sophon-server:transwarp-5.1"
   friendlyName: "Sophon Server"
@@ -76,34 +112,6 @@ roles:
         templatePath: "sophon-env.sh"
         targetPath: "/etc/${service.sid}/conf/sophon-env.sh"
         mode: "755"
-- name: SOPHON_REDIS
-  dockerImage: "transwarp/sophon-redis:transwarp-5.1"
-  friendlyName: "Sophon Redis"
-  labelPrefix: "sophon-redis"
-  category: MASTER
-  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
-  deleteOpCondition:
-    deletable:
-      number: 2
-    reject:
-      number: 1
-  env:
-  - name: MIDAS_REDIS_PORT
-    value: ${service['midas.redis.port']}
-  mountPaths: []
-  resources:
-    limitsMemoryKey: redis.container.limits.memory
-    limitsCpuKey: redis.container.limits.cpu
-    requestsMemoryKey: redis.container.requests.memory
-    requestsCpuKey: redis.container.requests.cpu
-  summaryPolicy: ALL
-  autoAssign:
-  - advice: !<NumSeq> {"numSeq": [1]}
-  suggestion:
-  - criteria: !<Range> {"min": 1}
-  validation:
-  - criteria: !<Range> {"min": 1}
-  operations: []
 - name: SOPHON_SCHEDULER
   dockerImage: "transwarp/sophon-scheduler:transwarp-5.1"
   friendlyName: "Sophon Scheduler"
@@ -141,6 +149,32 @@ roles:
         templatePath: "service.conf"
         targetPath: "/etc/${service.sid}/conf/service.conf"
         mode: "755"
+
+stages:
+  - type: Config
+    taskGroups:
+    - !<Create-Database>
+      dbPrefix: metastore
+      dbUserConfig: livy.jdbc.username
+      dbPasswordConfig: livy.jdbc.password
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Role>
+      roleType: "SOPHON_SERVER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SOPHON_SCHEDULER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SOPHON_REDIS"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+
 
 firstWizardConfigs:
 - midas.server.initial_heapsize

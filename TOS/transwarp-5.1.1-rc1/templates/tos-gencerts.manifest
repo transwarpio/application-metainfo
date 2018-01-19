@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tos-gencerts-${service.sid}
+  namespace: kube-system
+spec:
+  priority: 200
+  hostNetwork: true
+  containers:
+  - name: tos-gencerts-${service.sid}
+    image: transwarp/gencerts:transwarp-5.1.1-rc1
+    imagePullPolicy: IfNotPresent
+    securityContext:
+      privileged: true
+    args:
+    - /usr/bin/entry.sh
+    env:
+    - name: TZ
+      value: "Asia/Shanghai"
+    - name: EXTAR_OPTS
+      value: "DNS:registy,"
+    volumeMounts:
+    - name: certs
+      mountPath: /srv/kubernetes
+      readOnly: false
+  restartPolicy: OnFailure
+  volumes:
+    - name: certs
+      hostPath:
+        path: /srv/kubernetes

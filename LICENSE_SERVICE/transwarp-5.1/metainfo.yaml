@@ -15,7 +15,14 @@ roles:
   # compatible with legacy init.d script name "zookeeper-server-transwarp_license_cluster"
   labelPrefix: "zookeeper-server"
   category: MASTER
-  frontendOperations: ["Start", "Stop", "Move"]
+  frontendOperations: ["Start", "Stop", "Move", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 4
+    movable:
+      number: 3
+    reject:
+      number: 2
   env:
   - name: ZOOKEEPER_CONF_DIR
     value: /etc/${service.sid}/conf
@@ -63,9 +70,6 @@ stages:
       timeoutMinutes: 10
       roleType: LICENSE_NODE
       operation: Start
-    - !<Wait-Healthy>
-      summaryPolicy: ALL
-      timeoutMinutes: 10
     - !<Upload-License>
       summaryPolicy: ALL
       timeoutMinutes: 10

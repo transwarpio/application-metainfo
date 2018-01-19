@@ -6,6 +6,10 @@ namePrefix: Slipstream
 friendlyName: "Slipstream"
 dockerImage: "transwarp/inceptor:transwarp-5.1"
 dependencies:
+  - name: GUARDIAN
+    minVersion: transwarp-5.1
+    maxVersion: transwarp-5.1
+    optional: true
   - name: ZOOKEEPER
     minVersion: transwarp-5.1
     maxVersion: transwarp-5.1
@@ -37,6 +41,10 @@ dependencies:
     optional: true
     preferred: true
 user: hive
+plugins:
+  - provider: GUARDIAN
+    version: 0.12.0+500.51250
+    useTar: false
 roles:
 - name: INCEPTOR_METASTORE
   friendlyName: "Inceptor Metastore"
@@ -70,6 +78,23 @@ roles:
   - criteria: !<Range> {"min": 1}
   validation:
   - criteria: !<Range> {"min": 1}
+  operations: []
+- name: INCEPTOR_HISTORYSERVER
+  friendlyName: "Inceptor History Server"
+  labelPrefix: "inceptor-historyserver"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  env:
+  - name: INCEPTOR_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [0]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 0}
   operations: []
 - name: INCEPTOR_SERVER
   friendlyName: "Inceptor Server"
@@ -177,6 +202,11 @@ stages:
       summaryPolicy: SOME
       timeoutMinutes: 1
     - !<Role>
+      roleType: "INCEPTOR_HISTORYSERVER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
       roleType: "INCEPTOR_SERVER"
       operation: Config
       summaryPolicy: SOME
@@ -223,6 +253,11 @@ firstWizardConfigs:
 - executor.container.requests.cpu
 - executor.memory.ratio
 - executor.number.eachnode
+- history.localdir
+- historyserver.memory.initial.mb
+- historyserver.memory.max.mb
+- slipstream.historyserver.akka.listen.port
+- slipstream.historyserver.restful.listen.port
 
 pages:
 - roles
@@ -233,8 +268,8 @@ pages:
 - plugin
 
 principals:
-- HTTP
 - hive
+- HTTP
 
 healthChecks:
 - category: DAEMON_CHECK

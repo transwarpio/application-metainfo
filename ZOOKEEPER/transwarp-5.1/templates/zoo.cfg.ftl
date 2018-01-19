@@ -24,4 +24,6 @@ clientPort=${service['zookeeper.client.port']}
     ${key}=${service['zoo_cfg'][key]}
 </#list>
 
+autopurge.purgeInterval=1
+autopurge.snapRetainCount=10
 </#compress>

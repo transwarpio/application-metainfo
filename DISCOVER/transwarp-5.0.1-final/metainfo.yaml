@@ -1,0 +1,229 @@
+---
+name: DISCOVER
+version: transwarp-5.0.1-final
+global: false
+namePrefix: Discover
+friendlyName: Discover
+dependencies:
+  - name: ZOOKEEPER
+    minVersion: transwarp-5.0.1-final
+    maxVersion: transwarp-5.0.1-final
+    optional: false
+  - name: HDFS
+    minVersion: transwarp-5.0.1-final
+    maxVersion: transwarp-5.0.1-final
+    optional: false
+  - name: YARN
+    minVersion: transwarp-5.0.1-final
+    maxVersion: transwarp-5.0.1-final
+    optional: false
+roles:
+- name: DISCOVER_IDE
+  friendlyName: "Discover IDE"
+  labelPrefix: "discover-ide"
+  dockerImage: "transwarp/rstudio:transwarp-5.0.1-final"
+  linkExpression: "http://${localhostname}:8787/"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    reject:
+      number: 1
+  env:
+  - name: DISCOVER_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths:
+  - mountPath: /var/home
+    hostPath: ${service['discover.ide.home.dir']}
+    name: home
+  resources:
+    limitsMemoryKey: discover.ide.container.limits.memory
+    limitsCpuKey: discover.ide.container.limits.cpu
+    requestsMemoryKey: discover.ide.container.requests.memory
+    requestsCpuKey: discover.ide.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf/spark", "/etc/${service.sid}/conf/notebook", "/var/run/${service.sid}", "${service['discover.ide.home.dir']}"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "discover-context-env.properties"
+        targetPath: "/etc/${service.sid}/conf/spark/discover-context-env.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "spark-defaults.conf"
+        targetPath: "/etc/${service.sid}/conf/spark/spark-defaults.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "spark-env.sh"
+        targetPath: "/etc/${service.sid}/conf/spark/spark-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "guardian-site.xml"
+        targetPath: "/etc/${service.sid}/conf/spark/guardian-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "zeppelin-env.sh"
+        targetPath: "/etc/${service.sid}/conf/notebook/zeppelin-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "zeppelin-site.xml"
+        targetPath: "/etc/${service.sid}/conf/notebook/zeppelin-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "shiro.ini"
+        targetPath: "/etc/${service.sid}/conf/notebook/shiro.ini"
+        mode: "755"
+- name: DISCOVER_NOTEBOOK
+  friendlyName: "Discover Notebook"
+  labelPrefix: "discover-notebook"
+  dockerImage: "transwarp/notebook:transwarp-5.0.1-final"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    reject:
+      number: 1
+  linkExpression: "http://${localhostname}:${service['zeppelin.server.port']}/"
+  env:
+  - name: DISCOVER_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths:
+  - mountPath: ${service['zeppelin.notebook.dir']}
+    hostPath: ${service['zeppelin.notebook.dir']}
+    name: data
+  - mountPath: /var/home
+    hostPath: ${service['discover.ide.home.dir']}
+    name: home
+  resources:
+    limitsMemoryKey: notebook.container.limits.memory
+    limitsCpuKey: notebook.container.limits.cpu
+    requestsMemoryKey: notebook.container.requests.memory
+    requestsCpuKey: notebook.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf/spark", "/etc/${service.sid}/conf/notebook", "${service['zeppelin.notebook.dir']}", "${service['discover.ide.home.dir']}"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "discover-context-env.properties"
+        targetPath: "/etc/${service.sid}/conf/spark/discover-context-env.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "spark-defaults.conf"
+        targetPath: "/etc/${service.sid}/conf/spark/spark-defaults.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "spark-env.sh"
+        targetPath: "/etc/${service.sid}/conf/spark/spark-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "guardian-site.xml"
+        targetPath: "/etc/${service.sid}/conf/spark/guardian-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "zeppelin-env.sh"
+        targetPath: "/etc/${service.sid}/conf/notebook/zeppelin-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "zeppelin-site.xml"
+        targetPath: "/etc/${service.sid}/conf/notebook/zeppelin-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "shiro.ini"
+        targetPath: "/etc/${service.sid}/conf/notebook/shiro.ini"
+        mode: "755"
+- name: DISCOVER_LOCAL-CRAN
+  friendlyName: "Discover Local-Cran"
+  labelPrefix: "discover-local-cran"
+  dockerImage: "transwarp/local-cran:transwarp-5.0.1-final"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    reject:
+      number: 1
+  linkExpression: "ftp://${localhostname}:${service['discover.local-cran.port']}"
+  summaryPolicy: ALL
+  env:
+  - name: FTP_PORT
+    value: ${service['discover.local-cran.port']}
+  mountPaths: []
+  resources:
+    limitsMemoryKey: local-cran.container.limits.memory
+    limitsCpuKey: local-cran.container.limits.cpu
+    requestsMemoryKey: local-cran.container.requests.memory
+    requestsCpuKey: local-cran.container.requests.cpu
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations: []
+
+product: Discover
+
+firstWizardConfigs:
+- discover.ide.home.dir
+- zeppelin.notebook.dir
+- zeppelin.server.port
+- discover.local-cran.port
+- discover.ide.container.limits.memory
+- discover.ide.container.limits.cpu
+- discover.ide.container.requests.memory
+- discover.ide.container.requests.cpu
+- discover.ide.memory.ratio
+- notebook.container.limits.memory
+- notebook.container.limits.cpu
+- notebook.container.requests.memory
+- notebook.container.requests.cpu
+- notebook.memory.ratio
+- local-cran.container.limits.memory
+- local-cran.container.limits.cpu
+- local-cran.container.requests.memory
+- local-cran.container.requests.cpu
+- local-cran.memory.ratio
+
+pages:
+- roles
+- configuration
+- operation
+- resource_allocation_discover
+- security
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}

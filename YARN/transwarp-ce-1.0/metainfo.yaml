@@ -197,6 +197,7 @@ roles:
 - name: YARN_TIMELINESERVER
   friendlyName: "Timeline Server"
   labelPrefix: "hadoop-yarn-timelineserver"
+  linkExpression: "http://${localhostname}:${service['timelineserver.http.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   readinessProbe:

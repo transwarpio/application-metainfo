@@ -21,7 +21,7 @@ roles:
 - name: DISCOVER_IDE
   friendlyName: "Discover IDE"
   labelPrefix: "discover-ide"
-  dockerImage: "transwarp/rstudio:transwarp-5.1"
+  dockerImage: "transwarp/discover-ide:transwarp-5.1"
   linkExpression: "http://${localhostname}:8787/"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
@@ -72,11 +72,6 @@ roles:
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "guardian-site.xml"
-        targetPath: "/etc/${service.sid}/conf/spark/guardian-site.xml"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
         templatePath: "zeppelin-env.sh"
         targetPath: "/etc/${service.sid}/conf/notebook/zeppelin-env.sh"
         mode: "755"
@@ -93,7 +88,7 @@ roles:
 - name: DISCOVER_NOTEBOOK
   friendlyName: "Discover Notebook"
   labelPrefix: "discover-notebook"
-  dockerImage: "transwarp/notebook:transwarp-5.1"
+  dockerImage: "transwarp/discover-notebook:transwarp-5.1"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
@@ -147,11 +142,6 @@ roles:
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "guardian-site.xml"
-        targetPath: "/etc/${service.sid}/conf/spark/guardian-site.xml"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
         templatePath: "zeppelin-env.sh"
         targetPath: "/etc/${service.sid}/conf/notebook/zeppelin-env.sh"
         mode: "755"
@@ -168,7 +158,7 @@ roles:
 - name: DISCOVER_LOCAL-CRAN
   friendlyName: "Discover Local-Cran"
   labelPrefix: "discover-local-cran"
-  dockerImage: "transwarp/local-cran:transwarp-5.1"
+  dockerImage: "transwarp/discover-localcran:transwarp-5.1"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
@@ -200,9 +190,9 @@ stages:
       summaryPolicy: ALL
       timeoutMinutes: 10
       dirs: ["/${service.sid}"]
-      user: "hive"
-      group: "hive"
-      mod: 711
+      user: "discover"
+      group: "hadoop"
+      mod: 777
 
 product: Discover
 
@@ -233,6 +223,9 @@ pages:
 - operation
 - resource_allocation_discover
 - security
+
+principals:
+- discover
 
 healthChecks:
 - category: DAEMON_CHECK

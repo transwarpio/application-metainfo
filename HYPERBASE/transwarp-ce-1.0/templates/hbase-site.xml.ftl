@@ -66,9 +66,54 @@
 <@property "hbase.regionserver.info.port" service['regionserver.info.port']/>
 <@property "hbase.master.report.ip" "false"/>
 <@property "hbase.regionserver.report.ip" "false"/>
+<@property "hbase.regionserver.replication.handler.count" service['hbase.regionserver.replication.handler.count']/>
+<@property "hbase.partition.ignore.unavailable.clusters" service['hbase.partition.ignore.unavailable.clusters']/>
+<@property "hbase.hstore.blockingStoreFiles" service['hbase.hstore.blockingStoreFiles']/>
+<@property "hbase.sservice.search.poolsize" service['hbase.sservice.search.poolsize']/>
+<@property "hbase.sservice.handler.count" service['hbase.sservice.handler.count']/>
+<@property "hbase.sservice.local.cacheinterval" service['hbase.sservice.local.cacheinterval']/>
+<@property "hbase.regionserver.fileSplitTimeout" service['hbase.regionserver.fileSplitTimeout']/>
+<@property "hbase.hregion.max.filesize" service['hbase.hregion.max.filesize']/>
+<@property "hbase.client.scanner.caching" service['hbase.client.scanner.caching']/>
+<@property "hbase.sservice.scheduler.poolsize" service['hbase.sservice.scheduler.poolsize']/>
+<@property "hbase.abort.disconected.batchmutate" service['hbase.abort.disconected.batchmutate']/>
+<@property "hbase.master.distributed.log.replay" service['hbase.master.distributed.log.replay']/>
+<@property "hbase.assignment.timeout.management" service['hbase.assignment.timeout.management']/>
+<@property "hbase.zookeeper.leaderport" service['hbase.zookeeper.leaderport']/>
+<@property "hbase.balancer.period" service['hbase.balancer.period']/>
+<@property "hbase.regionserver.handler.count" service['hbase.regionserver.handler.count']/>
+<@property "hbase.client.operation.timeout" service['hbase.client.operation.timeout']/>
+<@property "hbase.zookeeper.property.maxClientCnxns" service['hbase.zookeeper.property.maxClientCnxns']/>
+<@property "hbase.sservice.scheduler.frequency" service['hbase.sservice.scheduler.frequency']/>
+<@property "hbase.sservice.port" service['hbase.sservice.port']/>
+<@property "hbase.regionserver.lease.period" service['hbase.regionserver.lease.period']/>
+<@property "zookeeper.session.timeout" service['zookeeper.session.timeout']/>
+<@property "dfs.support.append" service['dfs.support.append']/>
+<@property "hbase.rpc.timeout" service['hbase.rpc.timeout']/>
+<@property "hbase.sservice.table.localrate" service['hbase.sservice.table.localrate']/>
+<@property "hbase.sservice.local.mergeinterval" service['hbase.sservice.local.mergeinterval']/>
+<@property "hbase.zookeeper.peerport" service['hbase.zookeeper.peerport']/>
+<@property "hbase.hregion.memstore.mslab.enabled" service['hbase.hregion.memstore.mslab.enabled']/>
+<@property "hbase.regionserver.global.memstore.upperLimit" service['hbase.regionserver.global.memstore.upperLimit']/>
+<@property "hbase.hregion.memstore.chunkpool.maxsize" service['hbase.hregion.memstore.chunkpool.maxsize']/>
+<@property "hbase.sservice.tolerable.timediff" service['hbase.sservice.tolerable.timediff']/>
+<@property "hbase.lightweight.snapshotmanager.enable" service['hbase.lightweight.snapshotmanager.enable']/>
+<@property "hbase.master.assignment.timeoutmonitor.period" service['hbase.master.assignment.timeoutmonitor.period']/>
+<@property "hbase.hregion.memstore.flush.size" service['hbase.hregion.memstore.flush.size']/>
+<@property "hbase.sservice.scan.pagesize" service['hbase.sservice.scan.pagesize']/>
+<@property "hbase.use.partition.table" service['hbase.use.partition.table']/>
+<@property "hbase.client.scanner.timeout.period" service['hbase.client.scanner.timeout.period']/>
+<@property "hbase.regionserver.info.bindAddress" service['hbase.regionserver.info.bindAddress']/>
+<@property "hfile.block.cache.size" service['hfile.block.cache.size']/>
+<@property "hbase.regions.slop" service['hbase.regions.slop']/>
+<@property "hbase.cluster.distributed" service['hbase.cluster.distributed']/>
+<@property "hbase.regionserver.global.memstore.lowerLimit" service['hbase.regionserver.global.memstore.lowerLimit']/>
+<@property "hbase.hregion.majorcompaction.cron" service['hbase.hregion.majorcompaction.cron']/>
 
 <#--Take properties from the context-->
+<#if service['hbase-site.xml']??>
 <#list service['hbase-site.xml'] as key, value>
     <@property key value/>
 </#list>
+</#if>
 </configuration>

@@ -1,0 +1,4 @@
+mybatis.config-location=classpath:config/mybatis-config.xml
+spring.datasource.initialize=false
+spring.datasource.validation-query=SELECT 1
+spring.datasource.test-while-idle=true

@@ -6,6 +6,14 @@ namePrefix: Workflow
 friendlyName: Workflow
 dockerImage: "transwarp/workflow:transwarp-5.1"
 dependencies:
+  - name: TRANSPORTER
+    minVersion: transwarp-5.1
+    maxVersion: transwarp-5.1
+    optional: true
+  - name: GUARDIAN
+    minVersion: transwarp-5.1
+    maxVersion: transwarp-5.1
+    optional: true
   - name: ZOOKEEPER
     minVersion: transwarp-5.1
     maxVersion: transwarp-5.1
@@ -111,6 +119,9 @@ pages:
 - configuration
 - operation
 - security
+
+principals:
+- workflow
 
 healthChecks:
 - category: DAEMON_CHECK

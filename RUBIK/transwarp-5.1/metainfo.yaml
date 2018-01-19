@@ -6,11 +6,19 @@ namePrefix: Rubik
 friendlyName: Rubik
 dockerImage: "transwarp/rubik:transwarp-5.1"
 dependencies:
+  - name: GUARDIAN
+    minVersion: transwarp-5.1
+    maxVersion: transwarp-5.1
+    optional: true
   - name: TXSQL
     minVersion: transwarp-5.1
     maxVersion: transwarp-5.1
     optional: false
   - name: NOTIFICATION
+    minVersion: transwarp-5.1
+    maxVersion: transwarp-5.1
+    optional: false
+  - name: WORKFLOW
     minVersion: transwarp-5.1
     maxVersion: transwarp-5.1
     optional: false
@@ -94,12 +102,19 @@ firstWizardConfigs:
 - rubik.container.requests.memory
 - rubik.container.requests.cpu
 - rubik.memory.ratio
+- workflow.connect.timeout
+- workflow.socket.timeout
+- workflow.client.username
+- workflow.client.password
 
 pages:
 - roles
 - configuration
 - operation
 - security
+
+principals:
+- rubik
 
 healthChecks:
 - category: DAEMON_CHECK

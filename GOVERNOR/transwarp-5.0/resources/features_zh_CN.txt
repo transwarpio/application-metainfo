@@ -1,0 +1,4 @@
+* 支持升级和回滚功能
+
+* ElasticSearch处于“yellow”状态时，允许governor服务启动。“yellow”状态的es服务不影响governor服务的正常使用
+* 构建Governor Image时不再访问外网

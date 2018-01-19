@@ -1,0 +1,52 @@
+{
+  "hint":{"metricName": "", "type":"INFO", "condition":"IS_NULL", "contentKey":""},
+  "summary": [
+    {
+      "tabTitle": "Basic",
+      "tabType": "SIMPLE",
+      "charts": [
+        {
+          "metrics": [{"name": "InceptorMLActiveTasks", "title": "Active Tasks"}],
+          "metricUnit": "Num"
+        }
+      ],
+      "metrics": [
+        {"name": "InceptorMLServer", "title":"Server"},
+        {"name": "InceptorMLExecutors", "title":"Executors"},
+        {"name": "InceptorMLCompletedTasks", "title":"Completed Tasks"},
+        {"name": "InceptorMLFailedTasks", "title":"Failed Tasks"}
+      ]
+    },
+    {
+      "tabTitle": "Session",
+      "tabType": "TABLE",
+      "charts": [
+        {
+          "metrics": [{"name": "InceptorMLActiveTasks", "title": "Active Tasks"}],
+          "metricUnit": "Num",
+          "metricType": "SERVICE"
+        }
+      ],
+      "table": {
+        "metricName": "InceptorMLSession",
+        "items":[
+          {"title": "User", "key": "nameServiceName"},
+          {"title": "Process ID", "key": "mountPoints"},
+          {"title": "Host Name", "key": "activeNameNode"},
+          {"title": "Inceptor Cluster", "key": "standbyNameNode"}
+        ]
+      }
+    }
+  ],
+  "heatMap":{
+    "roleType": "INCEPTOR_WORKER",
+    "metricName": "cpu_used",
+    "title": "CPU",
+    "metricUnit": "%"
+  },
+  "statistics":[
+    {"metricName": "InceptorMLShuffleRead", "title": "Shuffle Read"},
+    {"metricName": "InceptorMLShuffleWrite", "title": "Shuffle Write"},
+    {"metricName": "InceptorMLFailedTaskPercent", "title": "Failed/Total Task"}
+  ]
+}

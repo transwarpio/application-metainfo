@@ -4,7 +4,11 @@ version: transwarp-5.1
 global: false
 namePrefix: ZooKeeper
 friendlyName: "ZooKeeper"
-dependencies: []
+dependencies:
+  - name: GUARDIAN
+    minVersion: transwarp-5.1
+    maxVersion: transwarp-5.1
+    optional: true
 packages: ["zookeeper"]
 dockerImage: "transwarp/zookeeper:transwarp-5.1"
 user: zookeeper
@@ -99,8 +103,8 @@ pages:
 - security
 
 principals:
-- HTTP
 - zookeeper
+- HTTP
 
 healthChecks:
 - category: DAEMON_CHECK

@@ -6,6 +6,10 @@ namePrefix: Inceptor
 friendlyName: "Inceptor"
 dockerImage: "transwarp/inceptor:transwarp-5.1"
 dependencies:
+  - name: GUARDIAN
+    minVersion: transwarp-5.1
+    maxVersion: transwarp-5.1
+    optional: true
   - name: ZOOKEEPER
     minVersion: transwarp-5.1
     maxVersion: transwarp-5.1
@@ -36,12 +40,17 @@ dependencies:
     maxVersion: transwarp-5.1
     optional: true
     preferred: true
-  - name: RUBIK
+  - name: SHIVA
     minVersion: transwarp-5.1
     maxVersion: transwarp-5.1
     optional: true
-    preferred: false
+    preferred: true
 user: hive
+plugins:
+  - provider: GUARDIAN
+    version: 0.12.0+500.51250
+    useTar: false
+
 roles:
 - name: INCEPTOR_METASTORE
   friendlyName: "Inceptor Metastore"
@@ -152,8 +161,13 @@ roles:
     requestsMemoryKey: executor.container.requests.memory
     requestsCpuKey: executor.container.requests.cpu
   nodeSpecificMounts:
-  - configKey: ngmr.localdir
-  - configKey: ngmr.fastdisk.dir
+  - type: DIR_CONF
+    configKey: ngmr.localdir
+  - type: DIR_CONF
+    configKey: ngmr.fastdisk.dir
+  - type: DEPENDENCY_DIR_CONF
+    dependencyType: SHIVA
+    configKey: tabletserver.store.datadirs
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}
@@ -266,8 +280,8 @@ pages:
 - plugin
 
 principals:
-- HTTP
 - hive
+- HTTP
 - kafka
 
 healthChecks:

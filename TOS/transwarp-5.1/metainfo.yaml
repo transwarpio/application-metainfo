@@ -31,28 +31,10 @@ roles:
         paths: ["/srv/kubernetes"]
         mode: "700"
     - directive: !<download>
-        url: "${transwarpRepo}/tos/kubelet/hyperkube"
-        targetPath: "/opt/kubernetes/bin/hyperkube"
-    - directive: !<chmod>
-        mode: "755"
-        path: "/opt/kubernetes/bin/hyperkube"
-    - directive: !<download>
         url: "${transwarpRepo}/tos/tos.tar.gz"
         targetPath: "/etc/${service.sid}/conf/tos.tar.gz"
     - directive: !<shell>
         script: "docker load -i /etc/${service.sid}/conf/tos.tar.gz"
-    - directive: !<download>
-        url: "${transwarpRepo}/tos/haproxy/haproxy-systemd-wrapper"
-        targetPath: "/usr/sbin/haproxy-systemd-wrapper"
-    - directive: !<chmod>
-        mode: "755"
-        path: "/usr/sbin/haproxy-systemd-wrapper"
-    - directive: !<download>
-        url: "${transwarpRepo}/tos/haproxy/haproxy"
-        targetPath: "/usr/sbin/haproxy"
-    - directive: !<chmod>
-        mode: "755"
-        path: "/usr/sbin/haproxy"
   - type: Config
     directives:
     - directive: !<resource>
@@ -88,7 +70,7 @@ roles:
   - type: Start
     directives:
     - directive: !<shell>
-        script: "docker run --volume /srv/kubernetes/:/srv/kubernetes/ --net=host transwarp/gencerts:transwarp-5.1 /usr/bin/entry.sh"
+        script: "docker run --volume /srv/kubernetes/:/srv/kubernetes/ -e EXTAR_OPTS=DNS:${localhostname}, --net=host transwarp/gencerts:transwarp-5.1 /usr/bin/entry.sh"
     - directive: !<systemctl>
         action: EnableStart
         service: kubelet
@@ -117,7 +99,7 @@ roles:
   - type: Scaleout
     directives:
     - directive: !<shell>
-        script: "docker run --volume /srv/kubernetes/:/srv/kubernetes/ --net=host transwarp/gencerts:transwarp-5.1 /usr/bin/entry.sh"
+        script: "docker run --volume /srv/kubernetes/:/srv/kubernetes/ -e EXTAR_OPTS=DNS:${localhostname}, --net=host transwarp/gencerts:transwarp-5.1 /usr/bin/entry.sh"
     - directive: !<systemctl>
         action: EnableStart
         service: kubelet
@@ -147,7 +129,7 @@ roles:
 - name: TOS_REGISTRY
   friendlyName: "TOS Registry"
   linkExpression: "http://${localhostname}:${service['tos.registry.ui.port']}/"
-  category: MASTER
+  category: SLAVE
   frontendOperations: ["Start", "Stop"]
   summaryPolicy: SOME
   autoAssign:
@@ -329,9 +311,9 @@ healthChecks:
   method: !<DockerPsAndSystemctl>
     imageMap:
       TOS_MASTER:
-        DockerPs: ["boot.sh --data-dir", "boot.sh apiserver", "boot.sh controller", "boot.sh scheduler"]
+        DockerPs: ["boot.sh --data-d", "boot.sh apiserver", "boot.sh controller", "boot.sh scheduler"]
       TOS_REGISTRY:
-        DockerPs: ["/entrypoint.sh", "/root/start-apache"]
+        DockerPs: ["/entrypoint.sh", "/root/start-apa"]
       TOS_SLAVE:
         Systemctl: ["kubelet", "haproxy", "docker"]
 - category: VITAL_SIGN_CHECK
