@@ -247,7 +247,7 @@
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [REDIS_SERVER]
+    roleTypes: [SOPHON_REDIS]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -349,7 +349,7 @@
   defaultValue: null
   valueType: HOST
   scope: !<RoleTypes>
-    roleTypes: [REDIS_SERVER]
+    roleTypes: [SOPHON_REDIS]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -359,7 +359,7 @@
   defaultValue: null
   valueType: STRING
   scope: !<RoleTypes>
-    roleTypes: [REDIS_SERVER]
+    roleTypes: [SOPHON_REDIS]
   onDeps: []
   groups: []
   visibility: PASSWORD
