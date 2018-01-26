@@ -5,6 +5,24 @@ app:
   # indicates whether workflow works under access control
   access-control: ${(service.auth = "kerberos")?c}
 
+# the general control of enabling/disabling transporter-client
+<#if dependencies.TRANSPORTER?? && dependencies.TRANSPORTER.roles.TDT_SERVER?size gt 0>
+transporter.enabled: true
+
+<#--handle dependent.transporter-->
+<#assign transporter=dependencies.TRANSPORTER address=[]>
+<#list transporter.roles.TDT_SERVER as role>
+    <#assign address += [role.hostname + ":" + transporter["tdt.server.port"]]>
+</#list>
+<#assign address = address?join(",")>
+
+# the host of transporter
+transporter.address: ${address}
+
+<#else>
+transporter.enabled: false
+</#if>
+
 job:
   # the job plugin directory
       # if starts with slash, treat as absolute path;
@@ -37,11 +55,11 @@ schedule:
     plugin-retry-max-running: ${service['workflow.plugin.retry.max.running']}
     # delay of a job if max running number is met, in milliseconds
     delay-millis: ${service['workflow.max.running.delay.millis']}
-  cleansing:
-    #indicates how long ago the data should be deleted. Unit is the month
-    cleanTimeInterval: ${service['workflow.cleansing.cleanTimeInterval']}
-    #indicates how long a data-clean verification will happen in 30 days
-    examinationInterval: ${service['workflow.cleansing.examinationInterval']}
+  clean:
+    #indicates how long data cleaning will happen in days
+    interval-days: ${service['workflow.clean.interval.days']}
+    # size of thread pool of cleaning task
+    pool-size: 2
   recovery:
     # when server is initialized or failover, it reload all schedules from
     # persistence layer, this parameter controls the coverage of the recovery
