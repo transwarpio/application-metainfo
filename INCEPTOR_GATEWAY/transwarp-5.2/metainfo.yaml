@@ -1,0 +1,98 @@
+---
+name: INCEPTOR_GATEWAY
+version: transwarp-5.2
+global: false
+namePrefix: InceptorGateway
+friendlyName: "InceptorGateway"
+dockerImage: "transwarp/inceptor-gateway:transwarp-5.2"
+user: hive
+dependencies:
+  - name: INCEPTOR_GATEWAY
+    minVersion: transwarp-5.2
+    maxVersion: transwarp-5.2
+    optional: true
+    preferred: false
+plugins:
+  - provider: GUARDIAN
+    version: 0.12.0+500.51250
+    useTar: false
+
+roles:
+- name: INCEPTOR_GATEWAY
+  friendlyName: "Inceptor Gateway"
+  labelPrefix: "inceptor-gateway"
+  linkExpression: "http://${localhostname}:${service['inceptor.gateway.ui.port']}/"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  env:
+  - name: INCEPTORGATEWAY_CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: INCEPTOR_VERSION
+    value: ${service['inceptor.server.version']}
+  - name: GATEWAY_THRIFT_PORT
+    value: ${service['inceptor.gateway.port']}
+  - name: GATEWAY_UI_PORT
+    value: ${service['inceptor.gateway.ui.port']}
+  - name: GATEWAY_LOG_DIR
+    value: /var/log/${service.sid}/
+  mountPaths: []
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/run/${service.sid}"]
+        mode: "755"
+
+stages:
+  - type: Config
+    taskGroups:
+    - !<Role>
+      roleType: "INCEPTOR_GATEWAY"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+  - type: PreUpgrade
+    taskGroups:
+    - !<DockerRunPreUpgrade>
+        summaryPolicy: ALL
+        timeoutMinutes: 10
+        roleType: INCEPTOR_GATEWAY
+        node: Any
+  - type: PreRollback
+    taskGroups:
+    - !<DockerRunPreRollback>
+        summaryPolicy: ALL
+        timeoutMinutes: 10
+        roleType: INCEPTOR_GATEWAY
+        node: Any
+
+product: Inceptor
+
+firstWizardConfigs:
+- inceptor.server.version
+- inceptor.gateway.port
+- inceptor.gateway.ui.port
+
+pages:
+- summary
+- roles
+- configuration
+- resource_allocation
+- security
+- plugin
+
+principals:
+- hive
+- HTTP
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
