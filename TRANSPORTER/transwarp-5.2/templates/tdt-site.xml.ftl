@@ -27,14 +27,20 @@
 
     <@property "tdt.server.log.location" "/var/log/${service.sid}"/>
 	
-    <@property "tdt.rule.file.location" "/etc/${service.sid}/conf/rule.json"/>
-
 	<#assign license_servers=[]>
 	<#list dependencies.LICENSE_SERVICE.roles.LICENSE_NODE as server>
 		<#assign license_servers += [(server.hostname + ":" + dependencies.LICENSE_SERVICE[server.hostname]["zookeeper.client.port"])]>
 	</#list>
 	<#assign licenses=license_servers?join(",")>
     <@property "tdt.license.quorum" licenses/>
+
+<#if service.auth = "kerberos">
+  <#assign casServerUrl="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']}:${dependencies.GUARDIAN['cas.server.ssl.port']}${dependencies.GUARDIAN['cas.server.context.path']}">
+  <@property "tdt.cas.enable" "true"/>
+  <@property "tdt.cas.server.url" "${casServerUrl}"/>
+<#else>
+  <@property "tdt.cas.enable" "false"/>
+</#if>
 
 <#--Take properties from the context-->
 <#list service['tdt-site.xml'] as key, value>
