@@ -49,11 +49,8 @@
         <#assign guardian_servers += [("ldap://" + role.hostname + ":" + guardian["guardian.apacheds.ldap.port"])]>
     </#list>
     <@property "hive.server2.authentication.ldap.baseDN", "ou=People,${service.domain}"/>
+    <@property "hive.server2.authentication.ldap.extra.baseDNs", "ou=System,ou=People,${service.domain}"/>
     <@property "hive.server2.authentication.ldap.url" "${guardian_servers?join(' ')}"/>
-  <#if service.plugins?seq_contains("guardian")>
-    <#assign  authentication="CUSTOM">
-    <@property "hive.server2.custom.authentication.class" "io.transwarp.guardian.plugins.inceptor.GuardianLdapAuthProviderImpl"/>
-  </#if>
 </#if>
 <#assign  manager="NONE">
 <#if authentication != "NONE">
