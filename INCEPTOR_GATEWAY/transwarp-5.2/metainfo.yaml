@@ -6,16 +6,8 @@ namePrefix: InceptorGateway
 friendlyName: "InceptorGateway"
 dockerImage: "transwarp/inceptor-gateway:transwarp-5.2"
 user: hive
-dependencies:
-  - name: INCEPTOR_GATEWAY
-    minVersion: transwarp-5.2
-    maxVersion: transwarp-5.2
-    optional: true
-    preferred: false
-plugins:
-  - provider: GUARDIAN
-    version: 0.12.0+500.51250
-    useTar: false
+dependencies: []
+plugins: []
 
 roles:
 - name: INCEPTOR_GATEWAY
@@ -58,20 +50,6 @@ stages:
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
-  - type: PreUpgrade
-    taskGroups:
-    - !<DockerRunPreUpgrade>
-        summaryPolicy: ALL
-        timeoutMinutes: 10
-        roleType: INCEPTOR_GATEWAY
-        node: Any
-  - type: PreRollback
-    taskGroups:
-    - !<DockerRunPreRollback>
-        summaryPolicy: ALL
-        timeoutMinutes: 10
-        roleType: INCEPTOR_GATEWAY
-        node: Any
 
 product: Inceptor
 
@@ -84,13 +62,6 @@ pages:
 - summary
 - roles
 - configuration
-- resource_allocation
-- security
-- plugin
-
-principals:
-- hive
-- HTTP
 
 healthChecks:
 - category: DAEMON_CHECK
