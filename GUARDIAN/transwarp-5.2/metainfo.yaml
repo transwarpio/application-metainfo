@@ -264,6 +264,7 @@ jobs:
     - Install
     - GenKeystore
     - Config
+    - Bootstrap
     - Start
     - GenKeytab
   - type: Start
@@ -274,6 +275,12 @@ jobs:
     stages:
     - GenKeystore
     - Config
+stages:
+  - type: Bootstrap
+    taskGroups:
+    - !<Change-Password>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
 
 firstWizardConfigs:
 - guardian.server.port
