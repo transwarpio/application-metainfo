@@ -298,6 +298,18 @@ filebeat.prospectors:
   exclude_lines: ['^DBG']
   exclude_files: ['.gz$']
 
+- type: log
+  paths:
+    -  /hadoop/txsql/log/*.log
+  fields:
+    service: txsql
+  fields_under_root: true
+  scan_frequency: 3s
+  close_eof: false
+  harvester_buffer_size: 1048576
+  exclude_lines: ['^DBG']
+  exclude_files: ['.gz$']
+
 <#if service['filebeat.yml']??>
 <#list service['filebeat.yml'] as key, value>
 - type: log

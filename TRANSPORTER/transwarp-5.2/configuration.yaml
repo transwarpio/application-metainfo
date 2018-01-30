@@ -1,12 +1,3 @@
-- name: tdt.server.host
-  recommendExpression: 0.0.0.0
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: ["tdt-site.xml"]
-  visibility: READ_WRITE  
-
 - name: tdt.server.port
   recommendExpression: 8100
   defaultValue: null
@@ -53,7 +44,7 @@
   visibility: READ_WRITE
   
 - name: tdt.task.live.time
-  recommendExpression: 2hour
+  recommendExpression: 12hour
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
@@ -61,26 +52,8 @@
   groups: ["tdt-site.xml"]
   visibility: READ_WRITE  
   
-- name: tdt.task.failure.retry.times
-  recommendExpression: 1
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: ["tdt-site.xml"]
-  visibility: READ_WRITE    
-  
-- name: tdt.task.failure.retry.period
-  recommendExpression: 30sec
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: ["tdt-site.xml"]
-  visibility: READ_WRITE      
-  
 - name: tdt.task.scavenger.check.period
-  recommendExpression: 10min
+  recommendExpression: 30min
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
@@ -97,14 +70,23 @@
   groups: ["tdt-site.xml"]
   visibility: READ_WRITE       
   
-- name: tdt.task.max.concurrence.size
+- name: tdt.task.max.concurrent.size
   recommendExpression: 100
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: ["tdt-site.xml"]
-  visibility: READ_WRITE         
+  visibility: READ_WRITE
+
+- name: tdt.thread.max.concurrent.size
+  recommendExpression: 20
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE
 
 - name: tdt.container.limits.memory
   recommendExpression: -1

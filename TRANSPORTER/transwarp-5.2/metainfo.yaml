@@ -90,7 +90,7 @@ stages:
     - !<Create-Database-in-Inceptor>
       summaryPolicy: ALL
       timeoutMinutes: 5
-      dbNames: ["tdt", "tdt_results"]
+      dbNames: ["tdt", "tdt_samples"]
   - type: PreUpgrade
     taskGroups:
     - !<DockerRunPreUpgrade>
@@ -109,16 +109,16 @@ stages:
 product: Studio
 
 firstWizardConfigs:
-- tdt.server.host
 - tdt.server.port
 - tdt.persistence.user.name
 - tdt.persistence.password
+- tdt.inceptor.ldap.username
+- tdt.inceptor.ldap.password
 - tdt.task.live.time
-- tdt.task.failure.retry.times
-- tdt.task.failure.retry.period
 - tdt.task.scavenger.check.period
 - tdt.task.max.accept.size
-- tdt.task.max.concurrence.size
+- tdt.task.max.concurrent.size
+- tdt.thread.max.concurrent.size
 - tdt.container.limits.memory
 - tdt.container.limits.cpu
 - tdt.container.requests.memory
