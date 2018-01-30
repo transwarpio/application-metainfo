@@ -187,8 +187,24 @@ roles:
     - directive: !<mkdirs>
         paths: ["/var/${service.sid}", "/var/lib/transwarp-manager/master/pub/transwarp"]
         mode: "755"
-    - directive: !<shell>
-        script: "yum install transwarp-manager mariadb-server git createrepo -y"
+    - directive: !<package>
+        action: Install
+        name: transwarp-manager
+    - directive: !<package>
+        action: Install
+        name: git-core
+    - directive: !<package>
+        action: Install
+        name: createrepo
+    # mariadb-server for RHEL, mariadb for SLES
+    - necessary: false
+      directive: !<package>
+        action: Install
+        name: mariadb
+    - necessary: false
+      directive: !<package>
+        action: Install
+        name: mariadb-server
   - type: Config
     directives:
     - directive: !<shell>
@@ -201,8 +217,6 @@ roles:
           sed -i 's/hostname.*/hostname = ${localIp}/g' /etc/transwarp-manager/master/application.conf
     - directive: !<shell>
         script: "sed -i 's/ha.enabled.*/ha.enabled = true/g' /etc/transwarp-manager/master/application.conf"
-    - directive: !<shell>
-        script: "yum clean all && createrepo /var/lib/transwarp-manager/master/pub/transwarp"
     - directive: !<shell>
         script: |
           <#assign quorums=[]>
