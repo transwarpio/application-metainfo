@@ -47,7 +47,7 @@ plugins:
     useTar: false
 roles:
 - name: INCEPTOR_METASTORE
-  friendlyName: "Inceptor Metastore"
+  friendlyName: "Slipstream Metastore"
   labelPrefix: "inceptor-metastore"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
@@ -80,7 +80,7 @@ roles:
   - criteria: !<Range> {"min": 1}
   operations: []
 - name: INCEPTOR_HISTORYSERVER
-  friendlyName: "Inceptor History Server"
+  friendlyName: "Slipstream History Server"
   labelPrefix: "inceptor-historyserver"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
@@ -97,7 +97,7 @@ roles:
   - criteria: !<Range> {"min": 0}
   operations: []
 - name: INCEPTOR_SERVER
-  friendlyName: "Inceptor Server"
+  friendlyName: "Slipstream Server"
   labelPrefix: "inceptor-server"
   linkExpression: "http://${localhostname}:${service['inceptor.ui.port']}/"
   category: MASTER
@@ -144,7 +144,7 @@ roles:
         paths: ["/var/lock/subsys/${service.sid}"]
         mode: "755"
 - name: INCEPTOR_EXECUTOR
-  friendlyName: "Inceptor Executor"
+  friendlyName: "Slipstream Executor"
   labelPrefix: "inceptor-executor"
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
