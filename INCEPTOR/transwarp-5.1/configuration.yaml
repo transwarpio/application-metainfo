@@ -658,7 +658,7 @@
   visibility: READ_WRITE
 
 - name: rubik.connection.database
-  recommendExpression: rubik1
+  recommendExpression: rubik_rubik1
   defaultValue: ""
   valueType: STRING
   scope: !<ServiceLevel> {}
