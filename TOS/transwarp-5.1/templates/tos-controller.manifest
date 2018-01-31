@@ -26,6 +26,7 @@ spec:
                 --service-account-private-key-file=/srv/kubernetes/server.key
                 --kubeconfig=/srv/kubernetes/kubeconfig
                 --address=0.0.0.0
+                --pod-eviction-timeout=30m0s
                 --port=${service['tos.master.controller.port']}
                 "
       volumeMounts:
