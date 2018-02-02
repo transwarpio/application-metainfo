@@ -1,0 +1,103 @@
+---
+name: NOTIFICATION
+version: transwarp-5.1.2-rc1
+global: false
+namePrefix: Notification
+friendlyName: Notification
+dockerImage: "transwarp/notification:transwarp-5.1.2-rc1"
+dependencies:
+  - name: TXSQL
+    minVersion: transwarp-5.1.2-rc1
+    maxVersion: transwarp-5.1.2-rc1
+    optional: false
+roles:
+- name: NOTIFICATION_SERVER
+  friendlyName: "Notification Server"
+  labelPrefix: "notification-server"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+  - name: NOTIFICATION_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: notification.container.limits.memory
+    limitsCpuKey: notification.container.limits.cpu
+    requestsMemoryKey: notification.container.requests.memory
+    requestsCpuKey: notification.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "dataSource.properties"
+        targetPath: "/etc/${service.sid}/conf/dataSource.properties"
+        mode: "600"
+stages:
+  - type: Config
+    taskGroups:
+    - !<Create-Database>
+      dbPrefix: notification
+      dbUserConfig: javax.jdo.option.ConnectionUserName
+      dbPasswordConfig: javax.jdo.option.ConnectionPassword
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Role>
+      roleType: "NOTIFICATION_SERVER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+  - type: PreUpgrade
+    taskGroups:
+    - !<DockerRunPreUpgrade>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      roleType: NOTIFICATION_SERVER
+      node: Any
+  - type: PreRollback
+    taskGroups:
+    - !<DockerRunPreRollback>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      roleType: NOTIFICATION_SERVER
+      node: Any
+
+product: Studio
+
+firstWizardConfigs:
+- notification.http.port
+- javax.jdo.option.ConnectionUserName
+- javax.jdo.option.ConnectionPassword
+- notification.container.limits.memory
+- notification.container.limits.cpu
+- notification.container.requests.memory
+- notification.container.requests.cpu
+- notification.memory.ratio
+
+pages:
+- roles
+- configuration
+- operation
+
+principals:
+- notification
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 10
+  method: !<Builtin> {}
