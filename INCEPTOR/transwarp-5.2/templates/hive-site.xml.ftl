@@ -96,7 +96,7 @@
     <#assign mysqlHostPorts = [service.roles.INCEPTOR_MYSQL[0]['hostname'] + ":" + service['mysql.port']]/>
 </#if>
 
-    <#assign dbconnectionstring="jdbc:mysql://" + mysqlHostPorts?join(",") + "/metastore_" + service.sid + "?createDatabaseIfNotExist=true&amp;user=" + service['javax.jdo.option.ConnectionUserName'] + "&amp;password=" + service['javax.jdo.option.ConnectionPassword'] + "&amp;characterEncoding=UTF-8">
+    <#assign dbconnectionstring="jdbc:mysql://" + mysqlHostPorts?join(",") + "/metastore_" + service.sid + "?failOverReadOnly=false&createDatabaseIfNotExist=true&amp;user=" + service['javax.jdo.option.ConnectionUserName'] + "&amp;password=" + service['javax.jdo.option.ConnectionPassword'] + "&amp;characterEncoding=UTF-8">
     <@property "hive.stats.dbconnectionstring" dbconnectionstring/>
     <#assign scratchdir="hdfs://" + dependencies.HDFS.nameservices[0] + "/" + service.sid + "/tmp/hive">
     <@property "hive.exec.scratchdir" scratchdir/>
@@ -120,7 +120,7 @@
     </#list>
     <@property "mapred.job.tracker" rmHostPorts?join(",")/>
 </#if>
-    <#assign connectionURL="jdbc:mysql://" + mysqlHostPorts?join(",") + "/metastore_" + service.sid + "?createDatabaseIfNotExist=false&amp;characterEncoding=UTF-8">
+    <#assign connectionURL="jdbc:mysql://" + mysqlHostPorts?join(",") + "/metastore_" + service.sid + "?failOverReadOnly=false&createDatabaseIfNotExist=false&amp;characterEncoding=UTF-8">
     <@property "javax.jdo.option.ConnectionURL" connectionURL/>
     <#if dependencies.LICENSE_SERVICE??>
     <#assign  license=dependencies.LICENSE_SERVICE license_servers=[]>
