@@ -176,7 +176,10 @@ roles:
   env:
     - name: GUARDIAN_CONF_DIR
       value: /etc/${service.sid}/conf
-  mountPaths: []
+  mountPaths:
+  - mountPath: /var/lib/configuration-server
+    hostPath: /var/lib/cas-configuration-server
+    name: config-server
   operations:
     - type: Config
       directives:
@@ -286,10 +289,15 @@ firstWizardConfigs:
 - guardian.server.port
 - guardian.apacheds.ldap.port
 - guardian.apacheds.kdc.port
+- guardian.ds.kdc.ticket.lifetime
+- guardian.ds.kdc.renew.lifetime
 - guardian.apacheds.data.dir
 - guardian.client.cache.enabled
 - guardian.ds.realm
 - guardian.ds.domain
+- guardian.server.cas.authentication.enabled
+- guardian.server.cas.server.host
+- guardian.server.access.token.authentication.enabled
 - cas.config.server.port
 - cas.server.ssl.port
 - cas.server.http.port

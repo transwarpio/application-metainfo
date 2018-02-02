@@ -18,6 +18,18 @@
     <value>${guardian['guardian.client.cache.enabled']}</value>
 </property>
 <property>
+    <name>guardian.client.cache.expired.time</name>
+    <value>${guardian['guardian.client.cache.expired.time']}</value>
+</property>
+<property>
+    <name>guardian.client.cache.size</name>
+    <value>${guardian['guardian.client.cache.size']}</value>
+</property>
+<property>
+    <name>guardian.client.cache.update.period</name>
+    <value>${guardian['guardian.client.cache.update.period']}</value>
+</property>
+<property>
     <name>guardian.server.tls.enabled</name>
     <value>${guardian['guardian.server.tls.enabled']}</value>
 </property>
