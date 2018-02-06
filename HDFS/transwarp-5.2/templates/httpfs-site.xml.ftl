@@ -7,6 +7,14 @@
 </property>
 </#macro>
 <configuration>
+<#--handle CAS-->
+<#if service.auth = "kerberos">
+    <#if dependencies.GUARDIAN['cas.server.ssl.port']??>
+        <#assign casServerSslPort=dependencies.GUARDIAN['cas.server.ssl.port']>
+        <#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']}:${casServerSslPort}">
+        <@property "dfs.httpfs.cas.enabled" "true"/>
+    </#if>
+</#if>
     <@property "httpfs.hadoop.config.dir" "/etc/${service.sid}/conf"/>
     <@property "httpfs.proxyuser.hue.groups" "*"/>
     <@property "httpfs.proxyuser.hue.hosts" "*"/>
