@@ -157,6 +157,47 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: guardian.ds.kdc.clock.skew
+  recommendExpression: 300000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_APACHEDS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.ds.kdc.ticket.lifetime
+  recommendExpression: 86400000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_APACHEDS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.ds.kdc.renew.lifetime
+  recommendExpression: 604800000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_APACHEDS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.ds.krb.keyring.enable
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_APACHEDS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 # guardian-server
 - name: guardian.server.port
   recommendExpression: 8380
@@ -259,10 +300,47 @@
   groups: []
   visibility: READ_WRITE
 
+- name: guardian.client.cache.expired.time
+  recommendExpression: 30000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.client.cache.size
+  recommendExpression: 150000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.client.cache.update.period
+  recommendExpression: 30000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: guardian.server.cache.enabled
   recommendExpression: true
   defaultValue: null
   valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.server.cache.expired.time
+  recommendExpression: 3600000
+  defaultValue: null
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [GUARDIAN_SERVER]
   onDeps: []
@@ -298,6 +376,67 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: guardian.server.cookie.expired.time
+  recommendExpression: 3600000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.allow.read.everything
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.skip.check.access.with.service
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.server.cas.authentication.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.server.cas.server.host
+  recommendExpression: ""
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.server.access.token.authentication.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 # cas config server
 - name: cas.config.server.port
   recommendExpression: 8310
