@@ -45,6 +45,7 @@
     <url-pattern>/*</url-pattern>
   </servlet-mapping>
 <#--handle AccessToken-->
+<#if service.auth = "kerberos">
 <#assign guardian=dependencies.GUARDIAN guardian_servers=[]>
 <#if guardian['guardian.server.tls.enabled'] = "true">
     <#assign begin="https">
@@ -54,7 +55,6 @@
 <#list guardian.roles["GUARDIAN_SERVER"] as role>
 <#assign guardian_servers += [(begin + "://" + role.hostname + ":" + guardian["guardian.server.port"])]>
 </#list>
-<#if service.auth = "kerberos">
   <filter>
     <filter-name>AccessTokenFilter</filter-name>
     <filter-class>io.transwarp.guardian.plugins.filter.AccessTokenFilter</filter-class>
@@ -116,6 +116,10 @@
               <!--<filter-class>org.apache.hadoop.security.authentication.server.Cas30ProxyReceivingTicketValidationFilter4Cas</filter-class>-->
               <init-param>
                 <param-name>encodeServiceUrl</param-name>
+                <param-value>false</param-value>
+              </init-param>
+              <init-param>
+                <param-name>redirectAfterValidation</param-name>
                 <param-value>false</param-value>
               </init-param>
               <init-param>
