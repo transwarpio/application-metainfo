@@ -19,7 +19,7 @@ JAVA_OPTS="$JAVA_OPTS -Xms${(memory/2)?floor}g -Xmx${memory?floor}g"
 JAVA_OPTS="$JAVA_OPTS -Xms2g -Xmx${service['webserver.memory']}g"
 </#if>
 
-JAVA_OPTS="$JAVA_OPTS -Dmaster_group=$MASTER_GROUP -Dhttp_port=${service['http.port']}"
+JAVA_OPTS="$JAVA_OPTS -Dmaster_group=$MASTER_GROUP -Dhttp_port=${service['http.port']} -Dconf=/etc/${service.sid}/conf/webserver_master_group"
 
 if [ ! -x "$JAVA" ]; then
     echo "Could not find any executable java binary. Please install java in your PATH or set JAVA_HOME"

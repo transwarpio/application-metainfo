@@ -35,18 +35,6 @@ roles:
         targetPath: "/etc/${service.sid}/conf/tos.tar.gz"
     - directive: !<shell>
         script: "docker load -i /etc/${service.sid}/conf/tos.tar.gz"
-    - directive: !<download>
-        url: "${transwarpRepo}/tos/haproxy/haproxy-systemd-wrapper"
-        targetPath: "/usr/sbin/haproxy-systemd-wrapper"
-    - directive: !<chmod>
-        mode: "755"
-        path: "/usr/sbin/haproxy-systemd-wrapper"
-    - directive: !<download>
-        url: "${transwarpRepo}/tos/haproxy/haproxy"
-        targetPath: "/usr/sbin/haproxy"
-    - directive: !<chmod>
-        mode: "755"
-        path: "/usr/sbin/haproxy"
   - type: Config
     directives:
     - directive: !<resource>
@@ -323,9 +311,9 @@ healthChecks:
   method: !<DockerPsAndSystemctl>
     imageMap:
       TOS_MASTER:
-        DockerPs: ["boot.sh --data-dir", "boot.sh apiserver", "boot.sh controller", "boot.sh scheduler"]
+        DockerPs: ["boot.sh --data-d", "boot.sh apiserver", "boot.sh controller", "boot.sh scheduler"]
       TOS_REGISTRY:
-        DockerPs: ["/entrypoint.sh", "/root/start-apache"]
+        DockerPs: ["/entrypoint.sh", "/root/start-apa"]
       TOS_SLAVE:
         Systemctl: ["kubelet", "haproxy", "docker"]
 - category: VITAL_SIGN_CHECK

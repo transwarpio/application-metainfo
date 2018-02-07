@@ -77,7 +77,7 @@
 
 <property>
     <name>hive.stats.dbconnectionstring</name>
-    <value>jdbc:mysql://tw-node1204:3316,tw-node1205:3316,tw-node1206:3316/metastore_inceptor1?createDatabaseIfNotExist=true&amp;user=inceptoruser&amp;password=password&amp;characterEncoding=UTF-8&amp;failOverReadOnly=false</value>
+    <value>jdbc:mysql://tw-node1204:3316,tw-node1205:3316,tw-node1206:3316/metastore_inceptor1?failOverReadOnly=false&amp;createDatabaseIfNotExist=true&amp;user=inceptoruser&amp;password=password&amp;characterEncoding=UTF-8</value>
 </property>
 <property>
     <name>hive.exec.scratchdir</name>
@@ -97,7 +97,7 @@
 </property>
 <property>
     <name>javax.jdo.option.ConnectionURL</name>
-    <value>jdbc:mysql://tw-node1204:3316,tw-node1205:3316,tw-node1206:3316/metastore_inceptor1?failOverReadOnly=false&createDatabaseIfNotExist=false&amp;characterEncoding=UTF-8</value>
+    <value>jdbc:mysql://tw-node1204:3316,tw-node1205:3316,tw-node1206:3316/metastore_inceptor1?failOverReadOnly=false&amp;createDatabaseIfNotExist=false&amp;characterEncoding=UTF-8</value>
 </property>
 <property>
     <name>license.zookeeper.quorum</name>

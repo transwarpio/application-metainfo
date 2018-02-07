@@ -2,7 +2,7 @@
 <#list service.roles["GUARDIAN_TXSQL_SERVER"] as r>
     <#assign hostPorts = hostPorts + [r.hostname + ':' + service['mysql.rw.port']]>
 </#list>
-export CAS_SERVICEREGISTRY_JPA_URL=jdbc:mysql://${hostPorts?join(",")}/cas?createDatabaseIfNotExist=true&autoReconnect=true&useSSL=false&characterEncoding=UTF-8
+export CAS_SERVICEREGISTRY_JPA_URL=jdbc:mysql://${hostPorts?join(",")}/cas?createDatabaseIfNotExist=true&autoReconnect=true&failOverReadOnly=false&useSSL=false&characterEncoding=UTF-8
 export CAS_SERVICEREGISTRY_JPA_USER=root
 export CAS_SERVICEREGISTRY_JPA_PASSWORD=${service['root.password']}
 export CAS_SERVICEREGISTRY_JPA_DRIVERCLASS=${service['guardian.database.driver']}
