@@ -36,7 +36,7 @@
 		  <#assign casServerName="https://${service.roles.CAS_SERVER[0]['hostname']}:${casServerSslPort}">
 		<#else>
 		  <#assign casServerName="https://${service['guardian.server.cas.server.host']}:${casServerSslPort}">
-		<#/if>
+		</#if>
 		<#assign casServerPrefix="${casServerName}${service['cas.server.context.path']}">
 		<@property "guardian.server.cas.authentication.enabled" "${service['guardian.server.cas.authentication.enabled']}"/>
 		<@property "guardian.server.cas.server.url.prefix" "${casServerPrefix}"/>
