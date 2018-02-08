@@ -451,8 +451,8 @@
 - name: yarn.nodemanager.resource.cpu-vcores
   #  recommendExpression: 6
   recommendExpression: |
-    <#if numCores gt 6>
-    ${numCores}
+    <#if (numCores / 3) gt 6>
+    ${(numCores / 3)?floor?c}
     <#else>
     6
     </#if>
@@ -467,7 +467,18 @@
 
 - name: yarn.nodemanager.resource.memory-mb
 #  recommendExpression: 6
-  recommendExpression: ${(memBytes / 1024 / 1024 / 2)?floor?c}
+  recommendExpression: |
+    <#if numCores gt 6>
+      <#assign vcores=(numCores / 3)?floor>
+    <#else>
+      <#assign vcores=1>
+    </#if>
+    <#assign expectedMem=(vcores * 4 * 1024) halfMem=(memBytes / 1024 / 1024 / 2)?floor>
+    <#if expectedMem gt halfMem>
+    ${halfMem?c}
+    <#else>
+    ${expectedMem?c}
+    </#if>
   defaultValue: null
   valueType: "MB"
   scope: !<RoleTypes>
