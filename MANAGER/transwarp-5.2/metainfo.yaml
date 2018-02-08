@@ -10,6 +10,7 @@ roles:
 - name: MANAGER_ZOOKEEPER_SERVER
   friendlyName: "Zookeeper Server"
   labelPrefix: "zookeeper-server"
+  dockerImage: "transwarp/zookeeper:transwarp-5.2"
   category: MASTER
   frontendOperations: ["Start", "Move"]
   deleteOpCondition:
@@ -62,6 +63,9 @@ roles:
         templatePath: "zookeeper-log4j.properties"
         targetPath: "/etc/${service.sid}/conf/log4j.properties"
         mode: "755"
+  # Here we use 'docker run' to start zookeeper and txsql instead of using k8s.
+  # Because if k8s crashed, zookeeper and txsql will be down.
+  # Therefore, we can not login 8180 any more.
   - type: Start
     directives:
     - directive: !<shell>
@@ -90,8 +94,9 @@ roles:
 - name: MANAGER_TXSQL_SERVER
   friendlyName: "TxSQL Server"
   labelPrefix: "txsql-server"
+  dockerImage: "transwarp/txsql:transwarp-5.2"
   category: MASTER
-  frontendOperations: ["Start"]
+  frontendOperations: ["Start", "Move"]
   deleteOpCondition:
     reject:
       number: 3
@@ -223,7 +228,7 @@ roles:
           <#assign txsqlHostPorts = txsqlHostPorts + [role.hostname + ':' + service['mysql.rw.port']]>
           </#list>
           <#assign txsqlHostPort = txsqlHostPorts?join(",")>
-          sed -i 's/localhost:3308/${txsqlHostPort}/g' /etc/transwarp-manager/master/db.properties
+          sed -i 's/io.transwarp.manager.db.url.*/io.transwarp.manager.db.url=jdbc:mysql:\/\/${txsqlHostPort}\/transwarp_manager?autoReconnect=true\&failOverReadOnly=false\&createDatabaseIfNotExist=false\&characterEncoding=UTF-8/g' /etc/transwarp-manager/master/db.properties
   - type: Start
     directives:
     - directive: !<shell>
@@ -245,17 +250,17 @@ jobs:
     stages:
     - Install
     - ConfigManagerZookeeperRole
-    - ConfigManagerRole
     - StartManagerZookeeperRole
     - RollingStartManagerZookeeperRole
+    - ConfigManagerRole
     - RestartManagerRole
   - type: MoveManagerTxSQLRole
     stages:
     - Install
     - ConfigManagerTxSQLRole
-    - ConfigManagerRole
     - StartManagerTxSQLRole
     - RollingStartManagerTxSQLRole
+    - ConfigManagerRole
     - RestartManagerRole
 
 firstWizardConfigs:
