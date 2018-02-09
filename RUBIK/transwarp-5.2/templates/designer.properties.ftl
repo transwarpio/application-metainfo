@@ -30,7 +30,7 @@ license.server.quorum=${license_servers?join(",")}
     designer.server.host=${localhostname}
     <#if dependencies.GUARDIAN['cas.server.ssl.port']??>
         <#assign casServerSslPort=dependencies.GUARDIAN['cas.server.ssl.port']>
-        <#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']}:${casServerSslPort}">
+        <#assign casServerName="${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']}:${casServerSslPort}">
         cas.server.address=${casServerName}
     </#if>
 </#if>
