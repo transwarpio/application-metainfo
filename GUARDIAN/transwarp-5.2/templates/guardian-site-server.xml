@@ -31,16 +31,20 @@
 		<@property "guardian.server.spnego.auth.filter.class" "io.transwarp.guardian.plugins.filter.SpnegoAuthFilter"/>
 		<@property "guardian.server.spnego.keytab" "/etc/${service.sid}/conf/guardian.keytab"/>
 
-		<#assign casServerSslPort=service['cas.server.ssl.port']>
-		<#if service['guardian.server.cas.server.host']?matches("^\\s*$")>
-		  <#assign casServerName="https://${service.roles.CAS_SERVER[0]['hostname']}:${casServerSslPort}">
+		<#if service.roles["CAS_SERVER"]??>
+		  <#assign casServerSslPort=service['cas.server.ssl.port']>
+		  <#if service['guardian.server.cas.server.host']?matches("^\\s*$")>
+		    <#assign casServerName="https://${service.roles.CAS_SERVER[0]['hostname']}:${casServerSslPort}">
+		  <#else>
+		    <#assign casServerName="https://${service['guardian.server.cas.server.host']}:${casServerSslPort}">
+		  </#if>
+		  <#assign casServerPrefix="${casServerName}${service['cas.server.context.path']}">
+		  <@property "guardian.server.cas.authentication.enabled" "${service['guardian.server.cas.authentication.enabled']}"/>
+		  <@property "guardian.server.cas.server.url.prefix" "${casServerPrefix}"/>
+		  <@property "guardian.server.cas.server.login.url" "${casServerPrefix}/login"/>
 		<#else>
-		  <#assign casServerName="https://${service['guardian.server.cas.server.host']}:${casServerSslPort}">
+		  <@property "guardian.server.cas.authentication.enabled" "false"/>
 		</#if>
-		<#assign casServerPrefix="${casServerName}${service['cas.server.context.path']}">
-		<@property "guardian.server.cas.authentication.enabled" "${service['guardian.server.cas.authentication.enabled']}"/>
-		<@property "guardian.server.cas.server.url.prefix" "${casServerPrefix}"/>
-		<@property "guardian.server.cas.server.login.url" "${casServerPrefix}/login"/>
 
 		<@property "guardian.server.access.token.authentication.enabled" "${service['guardian.server.access.token.authentication.enabled']}"/>
 
