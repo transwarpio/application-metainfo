@@ -5,6 +5,22 @@ app:
   # indicates whether workflow works under access control
   access-control: ${(service.auth = "kerberos")?c}
 
+<#if service.auth = "kerberos" && dependencies.GUARDIAN['cas.server.ssl.port']??>
+<#assign casServerSslPort=dependencies.GUARDIAN['cas.server.ssl.port']>
+<#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']}:${casServerSslPort}">
+<#assign casServerContextPath="${dependencies.GUARDIAN['cas.server.context.path']}">
+<#assign casServerPrefix="${casServerName}/${casServerContextPath}">
+cas:
+  enable: true
+  server:
+    prefix: ${casServerPrefix}
+    login: "/login"
+    logout: "/logout"
+<#else>
+cas:
+  enable: false
+</#if>
+
 # the general control of enabling/disabling transporter-client
 <#if dependencies.TRANSPORTER?? && dependencies.TRANSPORTER.roles.TDT_SERVER?size gt 0>
 transporter.enabled: true
