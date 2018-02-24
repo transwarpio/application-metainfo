@@ -77,7 +77,7 @@
 </#if>
 <#--handle CAS-->
 <#if service.auth = "kerberos">
-    <#if dependencies.GUARDIAN['cas.server.ssl.port']??>
+    <#if dependencies.GUARDIAN?? && dependencies.GUARDIAN.roles.CAS_SERVER??>
         <#assign casServerSslPort=dependencies.GUARDIAN['cas.server.ssl.port']>
         <#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']}:${casServerSslPort}">
         <@property "dfs.cas.enabled" "true"/>
