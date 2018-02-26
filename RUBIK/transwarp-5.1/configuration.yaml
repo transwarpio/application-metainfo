@@ -7,6 +7,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: designer.global.session.timeout.secs
+  recommendExpression: 3600
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: connectionpool.expiretime
   recommendExpression: 30
   defaultValue: null
