@@ -25,18 +25,23 @@ password = service['javax.jdo.option.ConnectionPassword']>
 SQLALCHEMY_DATABASE_URI = 'mysql://${username}:${password}@${mysqlHostPort}/pilot_${service.sid}?charset=utf8'
 
 
-# The guardian config
-GUARDIAN_AUTH = ${(service.auth = "kerberos")?string("True", "False")}
+# CAS
 <#if service.auth = "kerberos">
-    <#assign guardianPort = dependencies.GUARDIAN["guardian.server.port"]>
-    <#assign guardianProtocol = (guardianPort = "8380")?string("https", "http")>
-    <#assign guardianHost = dependencies.GUARDIAN.roles.GUARDIAN_SERVER?sort_by("id")[0].hostname>
-GUARDIAN_HTTP_PROTOCOL = '${guardianProtocol}'
-GUARDIAN_SERVER = '${guardianHost}:${guardianPort}'
+    <#if dependencies.GUARDIAN['cas.server.ssl.port']??>
+        <#assign casServerSslPort=dependencies.GUARDIAN['cas.server.ssl.port']>
+        <#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']}:${casServerSslPort}">
+CAS_AUTH = True
+CAS_SERVER = '${casServerName}'
+CAS_URL_PREFIX = '${dependencies.GUARDIAN[“cas.server.context.path”]}'
+    <#else>
+CAS_AUTH = False
+    </#if>
 </#if>
 
-GUARDIAN_CLIENT_JAR = '/usr/local/lib/guardian-client-2.0-transwarp-5.2.0-SNAPSHOT.jar'
-GUARDIAN_SITE_PATH = '/etc/${service.sid}/conf/'
+
+# The guardian config
+GUARDIAN_AUTH = ${(service.auth = "kerberos")?string("True", "False")}
+
 
 # License check
 <#if dependencies.LICENSE_SERVICE??>
