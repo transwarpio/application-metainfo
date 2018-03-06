@@ -132,6 +132,13 @@ dependency.title.INCEPTOR=\u5171\u4EABMetaStore
 | autoAssign | 创建服务时，自动为服务推荐角色的策略。为了扩展性，这是一个数组，每个元素有一个advice字段，例如：`!<EachNode> {}`表示在当前集群中所有未分配同类角色的节点上推荐该角色；也可指定默认推荐角色的数量，例如`!<NumSeq> {"numSeq": [5, 3, 1]}`表示依次以5个、3个、1个的数量尝试推荐不大于可用节点个数的角色 | |
 | suggestion | 修改服务的角色时，当角色的數量不满足要求时，给出警告，但仍可能允许使用这个分配。这是一个数组，每个元素有个criteria字段，可组合不同的建议，例如，`!<Range> {"min": 2}`表示建议至少分配2个角色；`!<Range> {"min": 3, "oddity": true}`表示建议至少分配3个或以上的奇数个角色 | |
 | validation | 修改服务的角色时，要求角色必须满足的要求。这是一个数组，每个元素有一个criteria字段，可组合不同的约束。例如，`!<Range> {"min": 1}`表示至少分配一个角色 | |
+| deleteOpCondition | 删除服务的角色时，要求角色必须满足删除要求。这个要求有3种：deletable/movable/reject分别表示删除/迁移/拒绝删除需要满足的要求。每个要求中又有4类约束规则：number/decommission/minMaster/health分别表示数量/退役/最小master数量/健康状况，其中decommission目前用于datanode和nodemanager，minMaster/health用于es的检查，其他服务的角色的检查主要是number。例如，zookeepe角色的检查条件`deleteOpCondition:
+    deletable:
+      number: 4
+    movable:
+      number: 3
+    reject:
+      number: 2`zookeeper角色大于等于4个时才允许删除一个，有3个时需要迁移，有两个时拒绝删除 | |
 
 ### 模板渲染与数据模型
 目前服务标准化中所有的模板均通过Apache FreeMarker引擎渲染，模板的书写参考http://freemarker.org/docs/dgui.html
