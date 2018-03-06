@@ -32,7 +32,7 @@ SQLALCHEMY_DATABASE_URI = 'mysql://${username}:${password}@${mysqlHostPort}/pilo
         <#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']}:${casServerSslPort}">
 CAS_AUTH = True
 CAS_SERVER = '${casServerName}'
-CAS_URL_PREFIX = '${dependencies.GUARDIAN[“cas.server.context.path”]}'
+CAS_URL_PREFIX = '${dependencies.GUARDIAN["cas.server.context.path"]}'
     <#else>
 CAS_AUTH = False
     </#if>
