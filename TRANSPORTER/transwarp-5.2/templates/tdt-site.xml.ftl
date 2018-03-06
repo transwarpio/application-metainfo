@@ -13,20 +13,20 @@
 
 <#if dependencies.INCEPTOR.auth="kerberos">
   <@property "tdt.inceptor.principal" "hive/${inceptor_server}@${service.realm}"/>
-	 <#if dependencies.INCEPTOR['hive.server2.authentication'] == "LDAP">
+  <#if dependencies.INCEPTOR['hive.server2.authentication'] == "LDAP">
     <@property "tdt.inceptor.auth.mode" "LDAP"/>
-	 <#else>
+  <#else>
     <@property "tdt.inceptor.auth.mode" "KERBEROS"/>
-	 </#if>
+  </#if>
 <#else>
   <@property "tdt.inceptor.auth.mode" "NONE"/>
-</#if>	
-  <@property "tdt.server.log.location" "/var/log/${service.sid}"/>
-	 <#assign license_servers=[]>
-	 <#list dependencies.LICENSE_SERVICE.roles.LICENSE_NODE as server>
-		  <#assign license_servers += [(server.hostname + ":" + dependencies.LICENSE_SERVICE[server.hostname]["zookeeper.client.port"])]>
-	 </#list>
-	 <#assign licenses=license_servers?join(",")>
+</#if>  
+<@property "tdt.server.log.location" "/var/log/${service.sid}"/>
+  <#assign license_servers=[]>
+  <#list dependencies.LICENSE_SERVICE.roles.LICENSE_NODE as server>
+     <#assign license_servers += [(server.hostname + ":" + dependencies.LICENSE_SERVICE[server.hostname]["zookeeper.client.port"])]>
+  </#list>
+  <#assign licenses=license_servers?join(",")>
   <@property "tdt.license.quorum" licenses/>
 
 <#if service.auth = "kerberos">
@@ -39,8 +39,17 @@
   <@property "tdt.cas.enable" "false"/>
 </#if>
 
+<#--handle dependent.zookeeper-->
+<#if dependencies.ZOOKEEPER??>
+    <#assign zookeeper=dependencies.ZOOKEEPER quorum=[]>
+    <#list zookeeper.roles.ZOOKEEPER as role>
+        <#assign quorum += [role.hostname]>
+    </#list>
+    <@property "tdt.zookeeper.quorum" quorum?join(",")/>
+</#if>
+
 <#--Take properties from the context-->
 <#list service['tdt-site.xml'] as key, value>
-	 <@property key value/>
+   <@property key value/>
 </#list>
 </configuration>

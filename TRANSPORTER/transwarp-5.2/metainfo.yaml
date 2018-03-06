@@ -22,6 +22,17 @@ dependencies:
     minVersion: transwarp-5.2
     maxVersion: transwarp-5.2
     optional: false
+  - name: ZOOKEEPER
+    minVersion: transwarp-5.2
+    maxVersion: transwarp-5.2
+    optional: true
+  - name: KAFKA
+    minVersion: transwarp-5.2
+    maxVersion: transwarp-5.2
+    optional: true
+  - name: HYPERBASE
+    minVersion: transwarp-5.2
+    maxVersion: transwarp-5.2
 roles:
 - name: TDT_SERVER
   friendlyName: "Transporter Server"
@@ -66,6 +77,10 @@ roles:
         action: Link
         from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
         to: "/etc/${service.sid}/conf/hadoop/core-site.xml"
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HYPERBASE.sid}/conf/hbase-site.xml"
+        to: "/etc/${service.sid}/conf/hadoop/hbase-site.xml"
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "db.properties"
@@ -124,6 +139,7 @@ firstWizardConfigs:
 - tdt.container.requests.memory
 - tdt.container.requests.cpu
 - tdt.memory.ratio
+- tdt.kafka.bootstrap.servers
 
 principals:
 - tdt
