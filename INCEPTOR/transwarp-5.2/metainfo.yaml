@@ -266,6 +266,11 @@ firstWizardConfigs:
 - executor.container.requests.cpu
 - executor.memory.ratio
 - executor.number.eachnode
+- hive.server2.authentication.cas.allowedProxyChains
+- hive.server2.authentication.cas.enabled
+- hive.server2.authentication.guardian.token.enabled
+- hive.server2.authentication.cas.acceptAnyProxy
+- hive.server2.authentication.cas.allow.proxy
 
 dashboardMetrics:
 - InceptorSqlActiveTasks
