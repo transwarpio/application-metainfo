@@ -198,7 +198,7 @@ stages:
   - type: PreDeleteAfterStop
     taskGroups:
     - !<DockerRunPreDelete>
-      summaryPolicy: ALL
+      summaryPolicy: NONE
       timeoutMinutes: 10
       roleType: HYPERBASE_MASTER
       node: Any
