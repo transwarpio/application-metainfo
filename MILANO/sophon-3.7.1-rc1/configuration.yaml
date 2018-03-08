@@ -1,0 +1,413 @@
+---
+- name: filebeat.host
+  recommendExpression: "0.0.0.0"
+  defaultValue: null
+  valueType: HOST
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: filebeat.port
+  recommendExpression: 9600 
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: filebeat.container.limits.memory
+  recommendExpression: 1
+  defaultValue: 2 
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [FILEBEAT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: filebeat.container.limits.cpu
+  recommendExpression: 1
+  defaultValue: 2 
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [FILEBEAT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: filebeat.container.requests.memory
+  recommendExpression: 0.5
+  defaultValue: 2 
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [FILEBEAT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: filebeat.container.requests.cpu
+  recommendExpression: 0.5
+  defaultValue: 1
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [FILEBEAT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: filebeat.memory.ratio
+  recommendExpression: 0.8
+  defaultValue: 0.8
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [FILEBEAT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logstash.host
+  recommendExpression: "0.0.0.0"
+  defaultValue: null
+  valueType: HOST
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logstash.port
+  recommendExpression: 9601
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logstash.full_message
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logstash.worker_num
+  recommendExpression: "1"
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logstash.batch_size
+  recommendExpression: "20480"
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logstash.heap_size
+  recommendExpression: "2g"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logstash.index_pattern
+  recommendExpression: "logs-%{+YYYY-MM-dd}"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logstash.container.limits.memory
+  recommendExpression: 3
+  defaultValue: 3
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [LOGSTASH]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logstash.container.limits.cpu
+  recommendExpression: 1
+  defaultValue: 2
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [LOGSTASH]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logstash.container.requests.memory
+  recommendExpression: 1
+  defaultValue: 2 
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [LOGSTASH]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logstash.container.requests.cpu
+  recommendExpression: 0.5 
+  defaultValue: 1
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [LOGSTASH]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logstash.memory.ratio
+  recommendExpression: 0.8
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [LOGSTASH]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kibana.host
+  recommendExpression: "0.0.0.0"
+  defaultValue: null
+  valueType: HOST
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kibana.port
+  recommendExpression: 5601
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kibana.container.limits.memory
+  recommendExpression: 2
+  defaultValue: 2 
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [KIBANA]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kibana.container.limits.cpu
+  recommendExpression: 1
+  defaultValue: 2
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [KIBANA]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kibana.container.requests.memory
+  recommendExpression: 1
+  defaultValue: 2 
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [KIBANA]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kibana.container.requests.cpu
+  recommendExpression: 0.5 
+  defaultValue: 1
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [KIBANA]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kibana.memory.ratio
+  recommendExpression: 0.8
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [KIBANA]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.manager.host
+  recommendExpression: "0.0.0.0"
+  defaultValue: null
+  valueType: HOST
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.manager.port
+  recommendExpression: 8199
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.manager.container.limits.memory
+  recommendExpression: 2
+  defaultValue: 2 
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_MANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.manager.container.limits.cpu
+  recommendExpression: 1
+  defaultValue: 2
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_MANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.manager.container.requests.memory
+  recommendExpression: 1
+  defaultValue: 2 
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_MANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.manager.container.requests.cpu
+  recommendExpression: 0.5 
+  defaultValue: 1
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_MANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.manager.memory.ratio
+  recommendExpression: 0.8
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_MANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: crontab.enable
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: crontab.index.prefix
+  recommendExpression: "logs-"
+  defaultValue: "logs-"
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: crontab.retention.days
+  recommendExpression: 3
+  defaultValue: 3
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: crontab.persisted.retention.days
+  recommendExpression: 365
+  defaultValue: 365
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: crontab.schedule.time
+  recommendExpression: "* 0 * * * "
+  defaultValue: "* 0 * * * "
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: crontab.container.limits.memory
+  recommendExpression: 1
+  defaultValue: 2
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [CRONTAB]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: crontab.container.limits.cpu
+  recommendExpression: 1
+  defaultValue: 2
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [CRONTAB]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: crontab.container.requests.memory
+  recommendExpression: 0.5
+  defaultValue: 2
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [CRONTAB]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: crontab.container.requests.cpu
+  recommendExpression: 0.5
+  defaultValue: 1
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [CRONTAB]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: crontab.memory.ratio
+  recommendExpression: 0.8
+  defaultValue: 0.8
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [CRONTAB]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
