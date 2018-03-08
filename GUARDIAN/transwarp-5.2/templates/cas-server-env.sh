@@ -1,5 +1,3 @@
-export DEBUG=1
-
 export CAS_SERVER_UNPACK_WAR=true
 export CAS_SERVER_UNPACK_DIR=/var/lib/cas-server/unpacked_war
 export CAS_SERVER_TRUSTED_STORE=/srv/cas-server/trusted.keystore
