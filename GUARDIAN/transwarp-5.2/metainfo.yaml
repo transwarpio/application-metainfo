@@ -179,12 +179,12 @@ roles:
     - name: CONFIG_SERVER_LOG_LEVEL
       value: info
   mountPaths:
-  - mountPath: /var/lib/configuration-server
-    hostPath: /var/lib/cas-configuration-server
-    name: config-server
-  - mountPath: /var/log/configuration-server
-    hostPath: /var/log/configuration-server
-    name: config-server-log
+    - mountPath: /var/lib/configuration-server
+      hostPath: /var/lib/cas-configuration-server
+      name: config-server
+    - mountPath: /var/log/configuration-server
+      hostPath: /var/log/configuration-server
+      name: config-server-log
   operations:
     - type: Config
       directives:
@@ -219,9 +219,9 @@ roles:
     - mountPath: /srv/cas-server
       hostPath: /srv/cas-server
       name: srv
-  - mountPath: /var/log/cas-server
-    hostPath: /var/log/cas-server
-    name: cas-server-log
+    - mountPath: /var/log/cas-server
+      hostPath: /var/log/cas-server
+      name: cas-server-log
   operations:
     - type: Install
       directives:
