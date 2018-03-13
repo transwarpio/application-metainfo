@@ -40,11 +40,6 @@ dependencies:
     maxVersion: sophon-3.7.1-rc1
     optional: true
     preferred: true
-  - name: SHIVA
-    minVersion: sophon-3.7.1-rc1
-    maxVersion: sophon-3.7.1-rc1
-    optional: true
-    preferred: true
 user: hive
 plugins:
   - provider: GUARDIAN
