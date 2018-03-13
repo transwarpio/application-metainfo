@@ -1,6 +1,9 @@
 #server port
 designer.server.port=${service['designer.server.port']}
 designer.authentication.enableguardian=${(service.auth == "kerberos")?c}
+
+guardian.permission.component=${service.sid}
+
 #connection pool
 connectionpool.expiretime=${service['connectionpool.expiretime']}
 #max group size
