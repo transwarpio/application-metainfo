@@ -322,7 +322,7 @@
   visibility: READ_WRITE
 
 - name: datanode.memory
-  recommendExpression: 4096
+  recommendExpression: 8192
   defaultValue: null
   valueType: MB
   isNodeSpecific: true

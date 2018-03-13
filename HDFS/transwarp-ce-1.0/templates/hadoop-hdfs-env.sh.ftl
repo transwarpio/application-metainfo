@@ -97,7 +97,7 @@ export HADOOP_ZKFC_OPTS="-Xmx${zkfcMemory?floor}m $HADOOP_ZKFC_OPTS"
     <#if service[.data_model["localhostname"]]?? && service[.data_model["localhostname"]]['datanode.memory']??>
         <#assign datanodeMemory=service[.data_model["localhostname"]]['datanode.memory']?trim?number>
     <#else>
-        <#assign datanodeMemory=4096>
+        <#assign datanodeMemory=8192>
     </#if>
 </#if>
 export DATANODE_MEMORY=${datanodeMemory?floor}m
