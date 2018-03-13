@@ -68,14 +68,18 @@
 </#if>
 
 <#-- handle inceptor scheduler -->
-<#if service.plugins?seq_contains("guardian")>
-    <@property "spark.guardian.enabled" "true"/>
-</#if>
 <#if service['inceptor.scheduler.enabled'] = "true">
     <@property "inceptor.scheduler.enabled" "true"/>
-    <@property "inceptor.scheduler.config" "/etc/${service.sid}/conf/inceptor-scheduler.xml"/>
+    <#if service.plugins?seq_contains("guardian")>
+        <@property "spark.guardian.enabled" "true"/>
+    <#else>
+        <@property "inceptor.scheduler.config" "/etc/${service.sid}/conf/inceptor-scheduler.xml"/>
+    </#if>
 <#else>
     <@property "inceptor.scheduler.enabled" "false"/>
+    <#if service.plugins?seq_contains("guardian")>
+        <@property "spark.guardian.enabled" "true"/>
+    </#if>
 </#if>
 
 <#if service.plugins?seq_contains("governor")>
