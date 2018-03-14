@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tos-controller-${service.sid}
+  namespace: kube-system
+spec:
+  hostNetwork: true
+  containers:
+    - name: tos-controller-${service.sid}
+      image: transwarp/hyperkube:sophon-3.7.1-rc2
+      imagePullPolicy: IfNotPresent
+      securityContext:
+        privileged: true
+      resources:
+        requests:
+          memory: "1Gi"
+          cpu: "1"
+      command:
+        - boot.sh
+        - controller
+      env:
+      - name: CONTROLLER_PARAMS
+        value: "--v=4
+                --leader-elect=true
+                --root-ca-file=/srv/kubernetes/ca.crt
+                --service-account-private-key-file=/srv/kubernetes/server.key
+                --kubeconfig=/srv/kubernetes/kubeconfig
+                --address=0.0.0.0
+                --pod-eviction-timeout=30m0s
+                --port=${service['tos.master.controller.port']}
+                "
+      volumeMounts:
+      - name: ctlkubelog
+        mountPath: /var/log/kubernetes/controller
+        readOnly: false
+      - name: kubernetes
+        mountPath: /var/run/kubernetes/
+        readOnly: false
+      - name: srvkube
+        mountPath: /srv/kubernetes/
+        readOnly: true
+      - name: transwarphosts
+        mountPath: /etc/transwarp/conf
+        readOnly: true
+  volumes:
+    - name: ctlkubelog
+      hostPath:
+        path: /var/log/kubernetes/controller
+    - name: kubernetes
+      hostPath:
+        path: /var/run/kubernetes/
+    - name: srvkube
+      hostPath:
+        path: /srv/kubernetes/
+    - name: transwarphosts
+      hostPath:
+        path: /etc/transwarp/conf

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-IN_PROGRESS_VERSION=transwarp-5.1.2-final
-TAG_VERSION=sophon-3.7.1-rc1
+IN_PROGRESS_VERSION=sophon-3.7.1-rc1
+TAG_VERSION=sophon-3.7.1-rc2
 
 set -e
 
