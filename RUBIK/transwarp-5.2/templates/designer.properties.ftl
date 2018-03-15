@@ -1,7 +1,7 @@
 #server port
 designer.server.port=${service['designer.server.port']}
 designer.authentication.enableguardian=${(service.auth == "kerberos")?c}
-
+designer.global.session.timeout.secs=${service['designer.global.session.timeout.secs']}
 guardian.permission.component=${service.sid}
 
 #connection pool
