@@ -59,7 +59,6 @@ firstWizardConfigs:
 - inceptor.gateway.ui.port
 
 pages:
-- summary
 - roles
 - configuration
 
