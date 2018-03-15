@@ -1,6 +1,6 @@
 - name: inceptor.server.version
-  recommendExpression: "tdh51"
-  defaultValue: "tdh51"
+  recommendExpression: "tdh52"
+  defaultValue: "tdh52"
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
