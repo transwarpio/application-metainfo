@@ -53,7 +53,7 @@
     <@property "hive.server2.authentication.ldap.url" "${guardian_servers?join(' ')}"/>
 </#if>
 
-<#if dependencies.GUARDIAN??>
+<#if dependencies.GUARDIAN?? && dependencies.GUARDIAN.roles.CAS_SERVER??>
     <#assign  guardian=dependencies.GUARDIAN guardian_servers=[]>
     <#list guardian.roles["GUARDIAN_SERVER"] as role>
         <#assign guardian_servers += [("https://" + role.hostname + ":" + guardian["guardian.server.port"])]>

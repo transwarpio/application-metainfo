@@ -46,6 +46,16 @@
     <@property "hive.server2.custom.authentication.class" "io.transwarp.guardian.plugins.inceptor.GuardianLdapAuthProviderImpl"/>
   </#if>
 </#if>
+
+<#if dependencies.GUARDIAN?? && dependencies.GUARDIAN.roles.CAS_SERVER??>
+    <#assign  guardian=dependencies.GUARDIAN guardian_servers=[]>
+    <#list guardian.roles["GUARDIAN_SERVER"] as role>
+        <#assign guardian_servers += [("https://" + role.hostname + ":" + guardian["guardian.server.port"])]>
+    </#list>
+    <@property "hive.server2.authentication.guardian.url" "${guardian_servers?join(' ')}"/>
+    <@property "hive.server2.authentication.cas.prefix" 'https://' + guardian.roles.CAS_SERVER[0]['hostname'] + ':' + guardian['cas.server.ssl.port'] + guardian['cas.server.context.path']/>
+</#if>
+
 <#assign  manager="NONE">
 <#if authentication != "NONE">
     <@property "hive.server2.authentication" authentication/>
