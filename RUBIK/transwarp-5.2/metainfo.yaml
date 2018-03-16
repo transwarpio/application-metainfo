@@ -94,6 +94,7 @@ product: Studio
 
 firstWizardConfigs:
 - designer.server.port
+- designer.global.session.timeout.secs
 - javax.jdo.option.ConnectionUserName
 - javax.jdo.option.ConnectionPassword
 - rubik.memory
