@@ -16,6 +16,10 @@ roles:
   deleteOpCondition:
     reject:
       number: 3
+  deleteOpCleanDirs:
+    fromPath:
+    - key: /var/${service.sid}/zookeeper
+      featureFile: myid
   env: []
   mountPaths: []
   summaryPolicy: MAJOR
@@ -100,6 +104,10 @@ roles:
   deleteOpCondition:
     reject:
       number: 3
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: data.dir
+      featureFile: node_init.log
   env: []
   mountPaths: []
   summaryPolicy: MAJOR
