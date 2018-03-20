@@ -320,7 +320,7 @@ stages:
     taskGroups:
     - !<FormakZK>
       summaryPolicy: ALL
-      timeoutMinutes: 1
+      timeoutMinutes: 10
   - type: Start
     taskGroups:
     - !<Upload-License>
