@@ -41,6 +41,12 @@ CAS_AUTH = False
 
 # The guardian config
 GUARDIAN_AUTH = ${(service.auth = "kerberos")?string("True", "False")}
+<#if service.auth = "kerberos">
+    <#assign guardianPort = dependencies.GUARDIAN["guardian.server.port"]>
+    <#assign guardianProtocol = (guardianPort = "8380")?string("https", "http")>
+    <#assign guardianHost = dependencies.GUARDIAN.roles.GUARDIAN_SERVER?sort_by("id")[0].hostname>
+GUARDIAN_SERVER = '${guardianProtocol}://${guardianHost}:${guardianPort}'
+</#if>
 
 
 # License check
@@ -63,9 +69,17 @@ FILE_ROBOT_SERVER = '${filerobotServer}'
 LOAD_EXAMPLES = ${(service['pilot.load.examples'] = "true")?string("True", "False")}
 
 
+# Incpetor server
+<#assign inceptorHosts = []/>
+<#list dependencies.INCEPTOR.roles['INCEPTOR_SERVER'] as role>
+    <#assign inceptorHosts = inceptorHosts + [role.hostname]>
+</#list>
+<#assign inceptorHosts = inceptorHosts?join(",")>
+DEFAULT_INCEPTOR_SERVER = '${inceptorHosts}:${dependencies.INCEPTOR['hive.server2.thrift.port']}'
+
+
 # hdfs
 DEFAULT_HTTPFS = '${dependencies.HDFS.roles.HDFS_HTTPFS[0]['hostname']}'
-DEFAULT_HDFS_CONN_NAME = 'default_{}'.format(DEFAULT_HTTPFS)
 
 
 # Set this API key to enable Mapbox visualizations
