@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-IN_PROGRESS_VERSION=sophon-3.7.1-rc1
-TAG_VERSION=sophon-3.7.1-rc2
+IN_PROGRESS_VERSION=sophon-3.7.1-rc2
+TAG_VERSION=sophon-3.7.1-final
 
 set -e
 
