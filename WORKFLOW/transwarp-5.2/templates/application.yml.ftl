@@ -5,6 +5,8 @@ app:
   # indicates whether workflow works under access control
   access-control: ${(service.auth = "kerberos")?c}
 
+workflow.address: ${localhostname}:${service['workflow.http.port']}
+
 <#if service.auth = "kerberos" && dependencies.GUARDIAN['cas.server.ssl.port']??>
 <#assign casServerSslPort=dependencies.GUARDIAN['cas.server.ssl.port']>
 <#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']}:${casServerSslPort}">
