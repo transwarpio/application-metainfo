@@ -7,9 +7,13 @@ app:
 
 <#if service.auth = "kerberos" && dependencies.GUARDIAN['cas.server.ssl.port']??>
 <#assign casServerSslPort=dependencies.GUARDIAN['cas.server.ssl.port']>
-<#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']}:${casServerSslPort}">
+  <#if dependencies.GUARDIAN['guardian.server.cas.server.host']?matches("^\\s*$")>
+    <#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['ip']}:${casServerSslPort}">
+  <#else>
+    <#assign casServerName="https://${dependencies.GUARDIAN['guardian.server.cas.server.host']}:${casServerSslPort}">
+  </#if>
 <#assign casServerContextPath="${dependencies.GUARDIAN['cas.server.context.path']}">
-<#assign casServerPrefix="${casServerName}/${casServerContextPath}">
+<#assign casServerPrefix="${casServerName}${casServerContextPath}">
 cas:
   enable: true
   server:

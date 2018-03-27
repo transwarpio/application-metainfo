@@ -33,7 +33,11 @@ license.server.quorum=${license_servers?join(",")}
     designer.server.host=${localhostname}
     <#if dependencies.GUARDIAN['cas.server.ssl.port']??>
         <#assign casServerSslPort=dependencies.GUARDIAN['cas.server.ssl.port']>
-        <#assign casServerName="${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']}:${casServerSslPort}">
+        <#if dependencies.GUARDIAN['guardian.server.cas.server.host']?matches("^\\s*$")>
+            <#assign casServerName="${dependencies.GUARDIAN.roles.CAS_SERVER[0]['ip']}:${casServerSslPort}">
+        <#else>
+            <#assign casServerName="${dependencies.GUARDIAN['guardian.server.cas.server.host']}:${casServerSslPort}">
+        </#if>
         cas.server.address=${casServerName}
     </#if>
 </#if>

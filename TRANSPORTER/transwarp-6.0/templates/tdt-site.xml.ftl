@@ -32,7 +32,13 @@
 <#if service.auth = "kerberos">
   <@property "tdt.server.principal" "tdt/${localhostname?lower_case}@${service.realm}"/>
   <@property "tdt.server.keytab" "${service.keytab}"/>
-  <#assign casServerUrl="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']}:${dependencies.GUARDIAN['cas.server.ssl.port']}${dependencies.GUARDIAN['cas.server.context.path']}">
+    <#assign casServerSslPort=dependencies.GUARDIAN['cas.server.ssl.port']>
+    <#if dependencies.GUARDIAN['guardian.server.cas.server.host']?matches("^\\s*$")>
+      <#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['ip']}:${casServerSslPort}">
+    <#else>
+      <#assign casServerName="https://${dependencies.GUARDIAN['guardian.server.cas.server.host']}:${casServerSslPort}">
+    </#if>
+    <#assign casServerUrl="${casServerName}${dependencies.GUARDIAN['cas.server.context.path']}">
   <@property "tdt.cas.enable" "true"/>
   <@property "tdt.cas.server.url" "${casServerUrl}"/>
 <#else>

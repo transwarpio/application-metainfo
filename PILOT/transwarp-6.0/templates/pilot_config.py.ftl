@@ -25,6 +25,24 @@ password = service['javax.jdo.option.ConnectionPassword']>
 SQLALCHEMY_DATABASE_URI = 'mysql://${username}:${password}@${mysqlHostPort}/pilot_${service.sid}?charset=utf8'
 
 
+# CAS
+<#if service.auth = "kerberos">
+    <#if dependencies.GUARDIAN['cas.server.ssl.port']??>
+        <#assign casServerSslPort=dependencies.GUARDIAN['cas.server.ssl.port']>
+        <#if dependencies.GUARDIAN['guardian.server.cas.server.host']?matches("^\\s*$")>
+            <#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['ip']}:${casServerSslPort}">
+        <#else>
+            <#assign casServerName="https://${dependencies.GUARDIAN['guardian.server.cas.server.host']}:${casServerSslPort}">
+        </#if>
+CAS_AUTH = True
+CAS_SERVER = '${casServerName}'
+CAS_URL_PREFIX = '${dependencies.GUARDIAN["cas.server.context.path"]}'
+    <#else>
+CAS_AUTH = False
+    </#if>
+</#if>
+
+
 # The guardian config
 GUARDIAN_AUTH = ${(service.auth = "kerberos")?string("True", "False")}
 <#if service.auth = "kerberos">
