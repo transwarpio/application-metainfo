@@ -68,7 +68,11 @@
 <#if service.auth = "kerberos">
     <#if dependencies.GUARDIAN?? && dependencies.GUARDIAN.roles.CAS_SERVER??>
         <#assign casServerSslPort=dependencies.GUARDIAN['cas.server.ssl.port']>
-        <#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']}:${casServerSslPort}">
+        <#if dependencies.GUARDIAN['guardian.server.cas.server.host']?matches("^\\s*$")>
+          <#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['ip']}:${casServerSslPort}">
+        <#else>
+          <#assign casServerName="https://${dependencies.GUARDIAN['guardian.server.cas.server.host']}:${casServerSslPort}">
+        </#if>
           <filter>
             <filter-name>CAS Single Sign Out Filter</filter-name>
             <filter-class>org.jasig.cas.client.session.SingleSignOutFilter</filter-class>

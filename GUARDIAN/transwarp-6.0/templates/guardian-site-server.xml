@@ -34,7 +34,7 @@
 		<#if service.roles["CAS_SERVER"]??>
 		  <#assign casServerSslPort=service['cas.server.ssl.port']>
 		  <#if service['guardian.server.cas.server.host']?matches("^\\s*$")>
-		    <#assign casServerName="https://${service.roles.CAS_SERVER[0]['hostname']}:${casServerSslPort}">
+		    <#assign casServerName="https://${service.roles.CAS_SERVER[0]['ip']}:${casServerSslPort}">
 		  <#else>
 		    <#assign casServerName="https://${service['guardian.server.cas.server.host']}:${casServerSslPort}">
 		  </#if>
