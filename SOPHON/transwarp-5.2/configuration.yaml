@@ -48,6 +48,7 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
 - name: livy.jdbc.username
   recommendExpression: sophonuser
   defaultValue: null
@@ -68,7 +69,7 @@
 
 #dieu.conf
 - name: dieu.docker.image.name
-  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-tensorflow:transwarp-5.2"
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-tensorflow:transwarp-5.1.2-final"
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
@@ -241,6 +242,17 @@
   groups: []
   visibility: READ_WRITE
 
+- name: redis.port
+  recommendExpression: 6379
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_REDIS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+
 - name: server.container.limits.memory
   recommendExpression: -1
   defaultValue: null
@@ -331,6 +343,27 @@
   groups: []
   visibility: READ_WRITE
 
+
+- name: redis.bind
+  recommendExpression: 0.0.0.0
+  defaultValue: null
+  valueType: HOST
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_REDIS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: redis.password
+  recommendExpression: transwarp-redis-01
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_REDIS]
+  onDeps: []
+  groups: []
+  visibility: PASSWORD
+
 - name: redis.memory.ratio
   recommendExpression: -1
   defaultValue: null
@@ -407,4 +440,3 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
-
