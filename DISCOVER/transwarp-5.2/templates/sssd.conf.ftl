@@ -1,3 +1,4 @@
+<#if service.auth = "kerberos">
 <#if dependencies.GUARDIAN??>
 <#assign  guardian=dependencies.GUARDIAN guardian_servers=[]>
 <#list guardian.roles["GUARDIAN_APACHEDS"] as role>
@@ -22,4 +23,5 @@ ldap_default_authtok = ${dependencies.GUARDIAN['guardian.ds.root.password']}
 
 ldap_user_object_class = inetOrgPerson
 ldap_group_object_class = configGroup
+</#if>
 </#if>
