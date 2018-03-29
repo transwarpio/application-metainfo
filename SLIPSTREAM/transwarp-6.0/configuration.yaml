@@ -728,6 +728,20 @@
   groups: []
   visibility: READ_WRITE
 
+- name: spark.morphling.zookeeper.quorum
+  recommendExpression: |
+    <#assign zookeeper=dependencies['ZOOKEEPER'] quorum=[]>
+    <#list zookeeper.roles.ZOOKEEPER as role>
+        <#assign quorum += [role.hostname]>
+    </#list>
+    ${quorum?join(",")}
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: ['ZOOKEEPER']
+  groups: []
+  visibility: READ_WRITE
+
 - name: spark.morphling.zookeeper.session.timeout
   recommendExpression: 10000
   defaultValue: null

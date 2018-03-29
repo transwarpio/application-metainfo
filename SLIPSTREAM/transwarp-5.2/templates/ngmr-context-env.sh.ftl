@@ -22,8 +22,11 @@ export MORPHLING_TASKSTATE_CHECKPOINT_DIRECTORY_KEY=${service['spark.morphling.t
 <#list zookeeper.roles.ZOOKEEPER as role>
     <#assign quorum += [role.hostname]>
 </#list>
+<#if service['spark.morphling.zookeeper.quorum']??>
+export MORPHLING_ZOOKEEPER_QUORUM_KEY=${service['spark.morphling.zookeeper.quorum']}
+<#else>
 export MORPHLING_ZOOKEEPER_QUORUM_KEY=${quorum?join(",")}
-
+</#if>
 export MORPHLING_ZOOKEEPER_SESSION_TIMEOUT=${service['spark.morphling.zookeeper.session.timeout']}
 export MORPHLING_ZOOKEEPER_CONNECTION_TIMEOUT=${service['spark.morphling.zookeeper.connect.timeout']}
 export MORPHLING_ZOOKEEPER_MAX_RETRY_TIMES=${service['spark.morphling.zookeeper.max.retries']}
