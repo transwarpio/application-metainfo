@@ -69,7 +69,7 @@
 
 #dieu.conf
 - name: dieu.docker.image.name
-  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-tensorflow:transwarp-5.1.2-final"
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-tensorflow:transwarp-5.2"
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
