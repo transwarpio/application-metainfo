@@ -1,3 +1,49 @@
+## Set the Access-Control-Allow-Origin header
+#
+#  Use '*' to allow any origin to access your server.
+#
+#  Takes precedence over allow_origin_pat.
+c.NotebookApp.allow_origin = '*'
+
+## Whether to allow the user to run the notebook as root.
+c.NotebookApp.allow_root = True
+
+## The IP address the notebook server will listen on.
+c.NotebookApp.ip = '0.0.0.0'
+
+
+## Whether to open in a browser after starting. The specific browser used is
+#  platform dependent and determined by the python standard library `webbrowser`
+#  module, unless it is overridden using the --browser (NotebookApp.browser)
+#  configuration option.
+c.NotebookApp.open_browser = False
+
+## Hashed password to use for web authentication.
+#
+#  To generate, type in a python/IPython shell:
+#
+#    from notebook.auth import passwd; passwd()
+#
+#  The string should be of the form type:salt:hashed-password.
+c.NotebookApp.password = ''
+
+## Token used for authenticating first-time connections to the server.
+#
+#  When no password is enabled, the default is to generate a new, random token.
+#
+#  Setting to an empty string disables authentication altogether, which is NOT
+#  RECOMMENDED.
+#c.NotebookApp.token = '<generated>'
+c.NotebookApp.token = ''
+
+## Supply overrides for the tornado.web.Application that the Jupyter notebook
+#  uses.
+c.NotebookApp.tornado_settings = {
+    'headers': {
+        'Content-Security-Policy': "frame-ancestors http://${service.roles.SOPHON_WEB[0].hostname}:${service['sophon.server.port']} 'self' "
+    }
+}
+
 # Configuration file for jupyter-notebook.
 
 #------------------------------------------------------------------------------
@@ -13,7 +59,7 @@
 #c.Application.log_format = '[%(name)s]%(highlevel)s %(message)s'
 
 ## Set the log level by value or name.
-#c.Application.log_level = 10
+#c.Application.log_level = 30
 
 #------------------------------------------------------------------------------
 # JupyterApp(Application) configuration
@@ -40,12 +86,6 @@
 ## Set the Access-Control-Allow-Credentials: true header
 #c.NotebookApp.allow_credentials = False
 
-## Set the Access-Control-Allow-Origin header
-#
-#  Use '*' to allow any origin to access your server.
-#
-#  Takes precedence over allow_origin_pat.
-c.NotebookApp.allow_origin = 'http://localhost:3000'
 
 ## Use a regular expression for the Access-Control-Allow-Origin header
 #
@@ -57,6 +97,7 @@ c.NotebookApp.allow_origin = 'http://localhost:3000'
 #
 #  Ignored if allow_origin is set.
 #c.NotebookApp.allow_origin_pat = ''
+
 
 ## DEPRECATED use base_url
 #c.NotebookApp.base_project_url = '/'
@@ -83,7 +124,7 @@ c.NotebookApp.allow_origin = 'http://localhost:3000'
 #c.NotebookApp.config_manager_class = 'notebook.services.config.manager.ConfigManager'
 
 ## The notebook manager class to use.
-#c.NotebookApp.contents_manager_class = 'notebook.services.contents.filemanager.FileContentsManager'
+#c.NotebookApp.contents_manager_class = 'notebook.services.contents.largefilemanager.LargeFileManager'
 
 ## Extra keyword arguments to pass to `set_secure_cookie`. See tornado's
 #  set_secure_cookie docs for details.
@@ -143,19 +184,18 @@ c.NotebookApp.allow_origin = 'http://localhost:3000'
 ##
 #c.NotebookApp.file_to_run = ''
 
-## Use minified JS file or not, mainly use during dev to avoid JS recompilation
+## Deprecated: Use minified JS file or not, mainly use during dev to avoid JS
+#  recompilation
 #c.NotebookApp.ignore_minified_js = False
 
-## (bytes/sec) Maximum rate at which messages can be sent on iopub before they
-#  are limited.
-#c.NotebookApp.iopub_data_rate_limit = 0
+## (bytes/sec) Maximum rate at which stream output can be sent on iopub before
+#  they are limited.
+#c.NotebookApp.iopub_data_rate_limit = 1000000
 
-## (msg/sec) Maximum rate at which messages can be sent on iopub before they are
+## (msgs/sec) Maximum rate at which messages can be sent on iopub before they are
 #  limited.
-#c.NotebookApp.iopub_msg_rate_limit = 0
+#c.NotebookApp.iopub_msg_rate_limit = 1000
 
-## The IP address the notebook server will listen on.
-c.NotebookApp.ip = '0.0.0.0'
 
 ## Supply extra arguments that will be passed to Jinja environment.
 #c.NotebookApp.jinja_environment_options = {}
@@ -182,6 +222,9 @@ c.NotebookApp.ip = '0.0.0.0'
 ## The logout handler class to use.
 #c.NotebookApp.logout_handler_class = 'notebook.auth.logout.LogoutHandler'
 
+## The MathJax.js configuration file that is to be used.
+#c.NotebookApp.mathjax_config = 'TeX-AMS-MML_HTMLorMML-full,Safe'
+
 ## A custom url for MathJax.js. Should be in the form of a case-sensitive url to
 #  MathJax, for example:  /static/components/MathJax/MathJax.js
 #c.NotebookApp.mathjax_url = ''
@@ -194,20 +237,13 @@ c.NotebookApp.ip = '0.0.0.0'
 ## The directory to use for notebooks and kernels.
 #c.NotebookApp.notebook_dir = ''
 
-## Whether to open in a browser after starting. The specific browser used is
-#  platform dependent and determined by the python standard library `webbrowser`
-#  module, unless it is overridden using the --browser (NotebookApp.browser)
-#  configuration option.
-c.NotebookApp.open_browser = False
-
-## Hashed password to use for web authentication.
+## Forces users to use a password for the Notebook server. This is useful in a
+#  multi user environment, for instance when everybody in the LAN can access each
+#  other's machine through ssh.
 #
-#  To generate, type in a python/IPython shell:
-#
-#    from notebook.auth import passwd; passwd()
-#
-#  The string should be of the form type:salt:hashed-password.
-c.NotebookApp.password = ''
+#  In such a case, server the notebook server on localhost is not secure since
+#  any user can connect to the notebook server via ssh.
+#c.NotebookApp.password_required = False
 
 ## The port the notebook server will listen on.
 #c.NotebookApp.port = 8888
@@ -219,7 +255,7 @@ c.NotebookApp.password = ''
 #c.NotebookApp.pylab = 'disabled'
 
 ## (sec) Time window used to  check the message and data rate limits.
-#c.NotebookApp.rate_limit_window = 1.0
+#c.NotebookApp.rate_limit_window = 3
 
 ## Reraise exceptions encountered loading server extensions?
 #c.NotebookApp.reraise_server_extension_failures = False
@@ -234,22 +270,10 @@ c.NotebookApp.password = ''
 #  details.
 #c.NotebookApp.ssl_options = {}
 
-## Token used for authenticating first-time connections to the server.
-#
-#  When no password is enabled, the default is to generate a new, random token.
-#
-#  Setting to an empty string disables authentication altogether, which is NOT
-#  RECOMMENDED.
-#c.NotebookApp.token = '<generated>'
-c.NotebookApp.token = ''
+## Supply overrides for terminado. Currently only supports "shell_command".
+#c.NotebookApp.terminado_settings = {}
 
-## Supply overrides for the tornado.web.Application that the Jupyter notebook
-#  uses.
-c.NotebookApp.tornado_settings = {
-    'headers': {
-        'Content-Security-Policy': "frame-ancestors http://localhost:3000 'self' "  #sophonweb ip port
-    }
-}
+
 ## Whether to trust or not X-Scheme/X-Forwarded-Proto and X-Real-Ip/X-Forwarded-
 #  For headerssent by the upstream reverse proxy. Necessary if the proxy handles
 #  SSL
@@ -257,6 +281,25 @@ c.NotebookApp.tornado_settings = {
 
 ## DEPRECATED, use tornado_settings
 #c.NotebookApp.webapp_settings = {}
+
+## Specify Where to open the notebook on startup. This is the
+#  `new` argument passed to the standard library method `webbrowser.open`.
+#  The behaviour is not guaranteed, but depends on browser support. Valid
+#  values are:
+#      2 opens a new tab,
+#      1 opens a new window,
+#      0 opens in an existing window.
+#  See the `webbrowser.open` documentation for details.
+#c.NotebookApp.webbrowser_open_new = 2
+
+## Set the tornado compression options for websocket connections.
+#
+#  This value will be returned from
+#  :meth:`WebSocketHandler.get_compression_options`. None (default) will disable
+#  compression. A dict (even an empty one) will enable compression.
+#
+#  See the tornado docs for WebSocketHandler.get_compression_options for details.
+#c.NotebookApp.websocket_compression_options = None
 
 ## The base URL for websockets, if it differs from the HTTP server (hint: it
 #  almost certainly doesn't).
@@ -321,6 +364,9 @@ c.NotebookApp.tornado_settings = {
 #  line.
 #c.KernelManager.kernel_cmd = []
 
+## Time to wait for a kernel to terminate before killing it, in seconds.
+#c.KernelManager.shutdown_wait_time = 5.0
+
 #------------------------------------------------------------------------------
 # Session(Configurable) configuration
 #------------------------------------------------------------------------------
@@ -375,7 +421,7 @@ c.NotebookApp.tornado_settings = {
 #c.Session.copy_threshold = 65536
 
 ## Debug output in the Session
-#c.Session.debug = True
+#c.Session.debug = False
 
 ## The maximum number of digests to remember.
 #
@@ -412,7 +458,7 @@ c.NotebookApp.tornado_settings = {
 #c.Session.unpacker = 'json'
 
 ## Username for the Session. Default is your system username.
-#c.Session.username = 'qhsong'
+#c.Session.username = 'root'
 
 #------------------------------------------------------------------------------
 # MultiKernelManager(LoggingConfigurable) configuration
@@ -432,6 +478,34 @@ c.NotebookApp.tornado_settings = {
 #------------------------------------------------------------------------------
 
 ## A KernelManager that handles notebook mapping and HTTP error handling
+
+## Whether messages from kernels whose frontends have disconnected should be
+#  buffered in-memory.
+#
+#  When True (default), messages are buffered and replayed on reconnect, avoiding
+#  lost messages due to interrupted connectivity.
+#
+#  Disable if long-running kernels will produce too much output while no
+#  frontends are connected.
+#c.MappingKernelManager.buffer_offline_messages = True
+
+## Whether to consider culling kernels which are busy. Only effective if
+#  cull_idle_timeout is not 0.
+#c.MappingKernelManager.cull_busy = False
+
+## Whether to consider culling kernels which have one or more connections. Only
+#  effective if cull_idle_timeout is not 0.
+#c.MappingKernelManager.cull_connected = False
+
+## Timeout (in seconds) after which a kernel is considered idle and ready to be
+#  culled.  Values of 0 or lower disable culling. The minimum timeout is 300
+#  seconds (5 minutes). Positive values less than the minimum value will be set
+#  to the minimum.
+#c.MappingKernelManager.cull_idle_timeout = 0
+
+## The interval (in seconds) on which to check for idle kernels exceeding the
+#  cull timeout value.
+#c.MappingKernelManager.cull_interval = 300
 
 ##
 #c.MappingKernelManager.root_dir = ''
@@ -463,6 +537,23 @@ c.NotebookApp.tornado_settings = {
 ##
 #c.ContentsManager.checkpoints_kwargs = {}
 
+## handler class to use when serving raw file requests.
+#
+#  Default is a fallback that talks to the ContentsManager API, which may be
+#  inefficient, especially for large files.
+#
+#  Local files-based ContentsManagers can use a StaticFileHandler subclass, which
+#  will be much more efficient.
+#
+#  Access to these files should be Authenticated.
+#c.ContentsManager.files_handler_class = 'notebook.files.handlers.FilesHandler'
+
+## Extra parameters to pass to files_handler_class.
+#
+#  For example, StaticFileHandlers generally expect a `path` argument specifying
+#  the root directory from which to serve files.
+#c.ContentsManager.files_handler_params = {}
+
 ## Glob patterns to hide in file and directory listings.
 #c.ContentsManager.hide_globs = ['__pycache__', '*.pyc', '*.pyo', '.DS_Store', '*.so', '*.dylib', '*~']
 
@@ -482,6 +573,9 @@ c.NotebookApp.tornado_settings = {
 #  - path: the API path of the save destination
 #  - contents_manager: this ContentsManager instance
 #c.ContentsManager.pre_save_hook = None
+
+##
+#c.ContentsManager.root_dir = '/'
 
 ## The base name used when creating untitled directories.
 #c.ContentsManager.untitled_directory = 'Untitled Folder'
@@ -552,10 +646,6 @@ c.NotebookApp.tornado_settings = {
 ## The hashing algorithm used to sign notebooks.
 #c.NotebookNotary.algorithm = 'sha256'
 
-## The number of notebook signatures to cache. When the number of signatures
-#  exceeds this value, the oldest 25% of signatures will be culled.
-#c.NotebookNotary.cache_size = 65535
-
 ## The sqlite file in which to store notebook signatures. By default, this will
 #  be in your Jupyter data directory. You can set it to ':memory:' to disable
 #  sqlite writing to the filesystem.
@@ -566,6 +656,10 @@ c.NotebookApp.tornado_settings = {
 
 ## The file where the secret key is stored.
 #c.NotebookNotary.secret_file = ''
+
+## A callable returning the storage backend for notebook signatures. The default
+#  uses an SQLite database.
+#c.NotebookNotary.store_factory = traitlets.Undefined
 
 #------------------------------------------------------------------------------
 # KernelSpecManager(LoggingConfigurable) configuration
