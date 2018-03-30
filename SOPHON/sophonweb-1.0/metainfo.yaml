@@ -134,8 +134,8 @@ roles:
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "jupyter_notebook_config.py.template"
-        targetPath: "/etc/${service.sid}/conf/jupyter_notebook_config.py.template"
+        templatePath: "jupyter_notebook_config.py"
+        targetPath: "/etc/${service.sid}/conf/jupyter_notebook_config.py"
         mode: "755"
 
 stages:
