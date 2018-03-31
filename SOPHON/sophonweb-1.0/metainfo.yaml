@@ -32,7 +32,7 @@ dependencies:
   - name: KONG
     minVersion: sophonweb-1.0
     maxVersion: sophonweb-1.0
-    optional: true
+    optional: false
 roles:
 - name: SOPHON_REDIS
   dockerImage: "transwarp/sophon-redis:sophonweb-1.0"
