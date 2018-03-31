@@ -28,9 +28,9 @@ roles:
   - name: KONG_DATABASE
     value: mysql
   - name: KONG_MYSQL_HOST
-    value: <#if dependencies.TXSQL??>${dependencies.TXSQL.roles.TXSQL_SERVER[0].hostname}<#else>0.0.0.0</#if>
+    value: ${service['mysql.host']}
   - name: KONG_MYSQL_PORT
-    value: <#if dependencies.TXSQL??>${dependencies.TXSQL['mysql.rw.port']}<#else>3306</#if>
+    value: ${service['mysql.port']}
   - name: KONG_MYSQL_PASSWORD
     value: ${service['mysql.password']}
   - name: KONG_MYSQL_USER

@@ -129,4 +129,20 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+- name: mysql.host
+  recommendExpression: "0.0.0.0"
+  defaultValue: null
+  valueType: HOST
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: mysql.port
+  recommendExpression: 3306
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
 
