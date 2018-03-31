@@ -34,6 +34,8 @@ HADOOP_CONF_DIR=/etc/yarn1/conf
 LIVY_LOG_DIR=/var/log/midas
 DIEU_HOME=/usr/lib/sophon
 DIEU_CONF_DIR=/etc/${service.sid}/conf
+PYSPARK_PYTHON=python3
+PYSPARK_DRIVER_PYTHON=python3
 # for Jupyter notebook running on server
 unset XDG_RUNTIME_DIR
 <#if service.auth = "kerberos">
