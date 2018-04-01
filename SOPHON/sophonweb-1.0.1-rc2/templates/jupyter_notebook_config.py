@@ -40,7 +40,7 @@ c.NotebookApp.token = ''
 #  uses.
 c.NotebookApp.tornado_settings = {
     'headers': {
-        'Content-Security-Policy': "frame-ancestors http://${service.roles.SOPHON_WEB[0].hostname}:${service['sophon.server.port']} 'self' "
+        'Content-Security-Policy': "frame-ancestors http://*:${service['sophon.server.port']} 'self' "
     }
 }
 
