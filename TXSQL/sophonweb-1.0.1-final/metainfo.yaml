@@ -1,0 +1,78 @@
+---
+name: TXSQL
+version: sophonweb-1.0.1-final
+global: false
+namePrefix: TxSQL
+friendlyName: "TxSQL"
+dockerImage: "transwarp/txsql:sophonweb-1.0.1-final"
+dependencies: []
+user: mysql
+roles:
+- name: TXSQL_SERVER
+  friendlyName: "TxSQL Server"
+  labelPrefix: "txsql-server"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 3
+    reject:
+      number: 2
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - mysql -h `hostname` -uroot -P${service['mysql.rw.port']} -p"${service['root.password']}" -e "select 1 from dual"  > /dev/null && echo ok
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  env:
+  - name: CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: txsql.container.limits.memory
+    limitsCpuKey: txsql.container.limits.cpu
+    requestsMemoryKey: txsql.container.requests.memory
+    requestsCpuKey: txsql.container.requests.cpu
+  nodeSpecificMounts:
+    - configKey: data.dir
+  summaryPolicy: MAJOR
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [5, 3, 1]}
+  suggestion:
+  - criteria: !<Range> {"min": 3, "oddity": true}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "db.properties"
+        targetPath: "/etc/${service.sid}/conf/db.properties"
+        mode: "600"
+
+firstWizardConfigs:
+- data.dir
+- mysql.rw.port
+- binlog.port
+- mysql.local.port
+- binlogsvr.rpc.port
+- paxos.port
+- txsql.container.limits.memory
+- txsql.container.limits.cpu
+- txsql.container.requests.memory
+- txsql.container.requests.cpu
+- txsql.memory.ratio
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 15
+  method: !<Builtin> {}

@@ -1,41 +1,41 @@
 ---
 name: SOPHON
-version: sophonweb-1.0
+version: sophonweb-1.0.1-final
 global: false
 namePrefix: Sophon
 friendlyName: "Sophon-web"
 dependencies:
   - name: GUARDIAN
-    minVersion: sophonweb-1.0
-    maxVersion: sophonweb-1.0
+    minVersion: sophonweb-1.0.1-final
+    maxVersion: sophonweb-1.0.1-final
     optional: true
   - name: INCEPTOR
-    minVersion: sophonweb-1.0
-    maxVersion: sophonweb-1.0
+    minVersion: sophonweb-1.0.1-final
+    maxVersion: sophonweb-1.0.1-final
     optional: true
   - name: HDFS
-    minVersion: sophonweb-1.0
-    maxVersion: sophonweb-1.0
+    minVersion: sophonweb-1.0.1-final
+    maxVersion: sophonweb-1.0.1-final
     optional: false
   - name: YARN
-    minVersion: sophonweb-1.0
-    maxVersion: sophonweb-1.0
+    minVersion: sophonweb-1.0.1-final
+    maxVersion: sophonweb-1.0.1-final
     optional: false
   - name: TXSQL
-    minVersion: sophonweb-1.0
-    maxVersion: sophonweb-1.0
+    minVersion: sophonweb-1.0.1-final
+    maxVersion: sophonweb-1.0.1-final
     optional: true
   - name: WORKFLOW
-    minVersion: sophonweb-1.0
-    maxVersion: sophonweb-1.0
+    minVersion: sophonweb-1.0.1-final
+    maxVersion: sophonweb-1.0.1-final
     optional: true
   - name: KONG
-    minVersion: sophonweb-1.0
-    maxVersion: sophonweb-1.0
+    minVersion: sophonweb-1.0.1-final
+    maxVersion: sophonweb-1.0.1-final
     optional: true
 roles:
 - name: SOPHON_REDIS
-  dockerImage: "transwarp/sophon-redis:sophonweb-1.0"
+  dockerImage: "transwarp/sophon-redis:sophonweb-1.0.1-final"
   friendlyName: "Redis Server"
   labelPrefix: "sophon-redis"
   category: MASTER
@@ -63,7 +63,7 @@ roles:
   - criteria: !<Range> {"min": 1, "max": 1}
   operations: []
 - name: SOPHON_WEB
-  dockerImage: "transwarp/sophon-web:sophonweb-1.0"
+  dockerImage: "transwarp/sophon-web:sophonweb-1.0.1-final"
   friendlyName: "Sophon web"
   labelPrefix: "sophon-web"
   category: MASTER
