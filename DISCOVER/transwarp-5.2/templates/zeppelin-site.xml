@@ -30,7 +30,7 @@
     <@property key value/>
 </#list>
 <property>
-<name> zeppelin.cas.open.status</name>
+    <name>zeppelin.cas.open.status</name>
 <#if service.auth = "kerberos">
     <value>true</value>
 <#else>
