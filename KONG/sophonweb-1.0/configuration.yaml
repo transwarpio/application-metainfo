@@ -9,7 +9,7 @@
   visibility: READ_WRITE
 
 - name: kong.proxy.port
-  recommendExpression: 8000
+  recommendExpression: 8003
   defaultValue: null
   valueType: PORT
   scope: !<ServiceLevel> {}
@@ -27,7 +27,7 @@
   visibility: READ_WRITE
 
 - name: kong.admin.port
-  recommendExpression: 8001
+  recommendExpression: 8004
   defaultValue: null
   valueType: PORT
   scope: !<ServiceLevel> {}
@@ -45,7 +45,7 @@
   visibility: READ_WRITE
 
 - name: kong.k8s.client.port
-  recommendExpression: 8002
+  recommendExpression: 8006
   defaultValue: null
   valueType: PORT
   scope: !<ServiceLevel> {}

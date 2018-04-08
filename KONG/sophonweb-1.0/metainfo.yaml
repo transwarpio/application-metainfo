@@ -4,10 +4,7 @@ version: sophonweb-1.0
 global: false
 namePrefix: Kong
 friendlyName: "Kong"
-dependencies:
-- name: TXSQL
-  minVersion: sophonweb-1.0
-  maxVersion: sophonweb-1.0
+dependencies: []
 dockerImage: "transwarp/kong:sophonweb-1.0"
 roles:
 - name: KONG_SERVER
@@ -46,7 +43,10 @@ roles:
     requestsMemoryKey: server.container.requests.memory
     requestsCpuKey: server.container.requests.cpu
   summaryPolicy: SOME
-  mountPaths: []
+  mountPaths:
+  - mountPath: /var/lib/mysql
+    hostPath: /var/${service.sid}/mysql
+    name: mysqldata
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
   suggestion:
