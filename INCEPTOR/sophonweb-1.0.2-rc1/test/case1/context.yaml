@@ -1,0 +1,209 @@
+---
+#can not be null
+clusters:
+  - autocluster
+
+# can be null
+racks:
+  - /default-rack
+
+#can not be null
+nodes:
+  - hostname: tw-node1204
+    ipaddr: 172.16.1.204
+    cluster: autocluster
+    rack: /default-rack
+    hardwareInfo:
+      numCores: 4
+      cpu:  "8 Core/2.09 GHz" #in format "%d Cores/%.2f GHz"
+      memBytes: 16658358272
+      disk: "3 Disks/125.0G" #in format "%d Disks/%.1f GB"
+      rcmdMounts: # comma delimited, SORTED recommended mounts
+        - /mnt/disk1
+        - /mnt/disk2
+      fsMapping:
+        - fs: /dev/sda1
+          mountPoint: /
+          size: 16658358272
+          avail: 16658358272
+          infstab: true
+        - fs: /dev/sdb1
+          mountPoint: /home
+          size: 16658358272
+          avail: 16658358272
+          infstab: true
+
+  - hostname: tw-node1205
+    ipaddr: 172.16.1.205
+    cluster: autocluster
+    rack: /default-rack
+    hardwareInfo:
+      numCores: 4
+      cpu:  "8 Core/2.09 GHz" #in format "%d Cores/%.2f GHz"
+      memBytes: 16658358272
+      disk: "3 Disks/125.0G" #in format "%d Disks/%.1f GB"
+      rcmdMounts: # comma delimited, SORTED recommended mounts
+        - /mnt/disk1
+        - /mnt/disk2
+      fsMapping:
+        - fs: /dev/sda1
+          mountPoint: /
+          size: 16658358272
+          avail: 16658358272
+          infstab: true
+        - fs: /dev/sdb1
+          mountPoint: /home
+          size: 16658358272
+          avail: 16658358272
+          infstab: true
+
+  - hostname: tw-node1206
+    ipaddr: 172.16.1.206
+    cluster: autocluster
+    rack: /default-rack
+    hardwareInfo:
+      numCores: 4
+      cpu:  "8 Core/2.09 GHz" #in format "%d Cores/%.2f GHz"
+      memBytes: 16658358272
+      disk: "3 Disks/125.0G" # in format "%d Disks/%.1f GB"
+      rcmdMounts: # comma delimited, SORTED recommended mounts
+        - /mnt/disk1
+        - /mnt/disk2
+      fsMapping:
+        - fs: /dev/sda1
+          mountPoint: /
+          size: 16658358272
+          avail: 16658358272
+          infstab: true
+        - fs: /dev/sdb1
+          mountPoint: /home
+          size: 16658358272
+          avail: 16658358272
+          infstab: true
+
+managerNodes:
+  - tw-node1204
+
+#can not be null
+version: sophonweb-1.0.2-rc1
+
+# do not change services order
+# modify "toInstall" field to enable/disable service test
+services:
+  - type: TOS
+    cluster: null
+    toInstall: true
+    enableKrbs: false # always false
+
+  - type: LICENSE_SERVICE
+    cluster: null
+    toInstall: true
+    enableKrbs: false # always false
+
+  - type: GUARDIAN
+    cluster: null
+    toInstall: true
+    enableKrbs: true # always true
+
+  - type: ZOOKEEPER
+    cluster: autocluster
+    toInstall: true
+    enableKrbs: true
+
+  - type: HDFS
+    cluster: autocluster
+    toInstall: true
+    enableKrbs: true
+
+  - type: YARN
+    cluster: autocluster
+    toInstall: true
+    enableKrbs: true
+
+  - type: SEARCH
+    cluster: autocluster
+    toInstall: true
+    enableKrbs: true
+
+  - type: HYPERBASE
+    cluster: autocluster
+    toInstall: true
+    enableKrbs: true
+
+  - type: TXSQL
+    cluster: autocluster
+    toInstall: true
+    enableKrbs: true
+
+  - type: NOTIFICATION
+    cluster: autocluster
+    toInstall: true
+    enableKrbs: true
+
+  - type: SHIVA
+    cluster: autocluster
+    toInstall: true
+    enableKrbs: true
+
+  - type: INCEPTOR
+    cluster: autocluster
+    toInstall: true
+    enableKrbs: true
+
+  - type: TRANSPORTER
+    cluster: autocluster
+    toInstall: true
+    enableKrbs: true
+
+  - type: SLIPSTREAM
+    cluster: autocluster
+    toInstall: true
+    enableKrbs: true
+
+  - type: KAFKA
+    cluster: autocluster
+    toInstall: true
+    enableKrbs: true
+
+  - type: WORKFLOW
+    cluster: autocluster
+    toInstall: true
+    enableKrbs: true
+
+  - type: RUBIK
+    cluster: autocluster
+    toInstall: true
+    enableKrbs: true
+
+  - type: GOVERNOR
+    cluster: autocluster
+    toInstall: true
+    enableKrbs: true
+
+  - type: DISCOVER
+    cluster: autocluster
+    toInstall: true
+    enableKrbs: true
+
+  - type: SOPHON
+    cluster: autocluster
+    toInstall: true
+    enableKrbs: true
+
+  - type: PILOT
+    cluster: autocluster
+    toInstall: true
+    enableKrbs: true
+
+  - type: MILANO
+    cluster: autocluster
+    toInstall: true
+    enableKrbs: true
+
+  - type: DASHBOARD
+    cluster: null
+    toInstall: true
+    enableKrbs: false # always false
+
+configs:
+  - INCEPTOR
