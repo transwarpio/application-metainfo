@@ -35,7 +35,7 @@ roles:
       number: 1
   env:
    - name: REDIS_CONF_DIR
-    value: /etc/${service.sid}/conf
+     value: /etc/${service.sid}/conf
   mountPaths: []
   resources:
     limitsMemoryKey: redis.container.limits.memory
