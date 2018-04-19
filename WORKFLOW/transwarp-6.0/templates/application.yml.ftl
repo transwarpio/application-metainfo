@@ -27,6 +27,21 @@ cas:
   enable: false
 </#if>
 
+<#--handle dependent.zookeeper-->
+<#if dependencies.ZOOKEEPER??>
+  <#assign zookeeper=dependencies.ZOOKEEPER quorums=[]>
+  <#list zookeeper.roles.ZOOKEEPER as role>
+    <#assign quorums += [role.hostname + ":" + zookeeper["zookeeper.client.port"]]>
+  </#list>
+  <#assign quorum = quorums?join(",")>
+</#if>
+agent-discovery:
+  enable: true
+  zkQuorum: ${quorum}
+  zkSessionTimeoutMillis: 120000
+  zNodeBase: ${service.sid}
+  zNodeRegistry: registry
+
 # the general control of enabling/disabling transporter-client
 <#if dependencies.TRANSPORTER?? && dependencies.TRANSPORTER.roles.TDT_SERVER?size gt 0>
 transporter.enabled: true
