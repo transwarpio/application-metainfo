@@ -876,7 +876,14 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
-
+- name: slipstream.gateway.akka.port
+  recommendExpression: 33456
+  defaultValue: 33456
+  valueType: PORT
+  scope: !<RoleTypes>
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
 - name: historyserver.memory.max.mb
   recommendExpression: 1024
   defaultValue: null
@@ -929,12 +936,88 @@
         <#return dirs?join(",")>
       </#if>
     </#function>
-    ${localDir("/historyserver/" + service['sid'])}
+    ${localDir("/" + service['sid']+"/historyserver")}
   isNodeSpecific: true
   defaultValue: null
   valueType: ABSOLUTE_PATH
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_HISTORYSERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: slipstream.studio.eventstore.basedir
+  isNodeSpecific: true
+  recommendExpression: |
+      <#function localDir suffix>
+        <#if rcmdMounts?size == 0>
+          <#return suffix>
+        <#else>
+          <#local dirs = []>
+          <#list rcmdMounts?sort as mnt>
+           <#local dirs = dirs + [mnt + suffix]>
+          </#list>
+          <#return dirs?join(",")>
+        </#if>
+      </#function>
+      ${localDir("/" + service['sid'] + "/slipstreamstudio" )}
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SLIPSTREAMSTUDIO]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: slipstream.studio.eventstore.rotation.hours
+  recommendExpression: 336
+  defaultValue: 336
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SLIPSTREAMSTUDIO]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: slipstream.studio.druid.username
+  recommendExpression: ""
+  defaultValue: ""
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SLIPSTREAMSTUDIO]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: slipstream.studio.druid.password
+  recommendExpression: ""
+  defaultValue: ""
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SLIPSTREAMSTUDIO]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: slipstream.studio.akkaserver.port
+  recommendExpression: 30030
+  defaultValue: 30030
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SLIPSTREAMSTUDIO]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: alert.service.client.akka.port
+  recommendExpression: 30090
+  defaultValue: 30090
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SLIPSTREAMSTUDIO]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: slipstream.studio.http.port
+  recommendExpression: 9091
+  defaultValue: 9091
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SLIPSTREAMSTUDIO]
   onDeps: []
   groups: []
   visibility: READ_WRITE

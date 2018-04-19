@@ -88,6 +88,8 @@ roles:
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
   mountPaths: []
+  nodeSpecificMounts:
+  - configKey: history.localdir
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [0]}
@@ -177,7 +179,79 @@ roles:
   validation:
   - criteria: !<EachNode> {}
   operations: []
-
+- name: INCEPTOR_SLIPSTREAMSTUDIO
+  dockerImage: "transwarp/slipstream-studio:transwarp-6.0"
+  friendlyName: "Slipstream Studio"
+  labelPrefix: "inceptor-slipstreamstudio"
+  linkExpression: "http://${service.roles.INCEPTOR_SLIPSTREAMSTUDIO[0]['hostname']}:${service['slipstream.studio.http.port']}/"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 1
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: slipstream.studio.eventstore.basedir
+      featureFile: latestEvent
+    fromPath:
+    - key: /etc/${service.sid}/conf/slipstreamstudio
+      featureFile: slipstream_confdesc.properties
+  env:
+  - name: INCEPTOR_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  nodeSpecificMounts:
+    - configKey: slipstream.studio.eventstore.basedir
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [0]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 0}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf/slipstreamstudio"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "slipstreamstudio/slipstream_akka.properties.ftl"
+        targetPath: "/etc/${service.sid}/conf/slipstreamstudio/slipstream_akka.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "slipstreamstudio/slipstream_datasource.properties.ftl"
+        targetPath: "/etc/${service.sid}/conf/slipstreamstudio/slipstream_datasource.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "slipstreamstudio/slipstream_monitor.properties.ftl"
+        targetPath: "/etc/${service.sid}/conf/slipstreamstudio/slipstream_monitor.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "slipstreamstudio/slipstreamstudio-env.sh.ftl"
+        targetPath: "/etc/${service.sid}/conf/slipstreamstudio/slipstreamstudio-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "hive-env.sh.ftl"
+        targetPath: "/etc/${service.sid}/conf/slipstreamstudio/hive-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "slipstreamstudio/slipstream_confdesc.properties.raw"
+        targetPath: "/etc/${service.sid}/conf/slipstreamstudio/slipstream_confdesc.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "slipstreamstudio/logback.xml.raw"
+        targetPath: "/etc/${service.sid}/conf/slipstreamstudio/logback.xml"
+        mode: "755"
 stages:
   - type: Bootstrap
     taskGroups:
@@ -213,6 +287,11 @@ stages:
       timeoutMinutes: 1
     - !<Role>
       roleType: "INCEPTOR_EXECUTOR"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "INCEPTOR_SLIPSTREAMSTUDIO"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1

@@ -180,12 +180,22 @@ roles:
   - criteria: !<EachNode> {}
   operations: []
 - name: INCEPTOR_SLIPSTREAMSTUDIO
-  dockerImage: "transwarp/slipstreamstudio:transwarp-5.2"
+  dockerImage: "transwarp/slipstream-studio:transwarp-5.2"
   friendlyName: "Slipstream Studio"
   labelPrefix: "inceptor-slipstreamstudio"
   linkExpression: "http://${service.roles.INCEPTOR_SLIPSTREAMSTUDIO[0]['hostname']}:${service['slipstream.studio.http.port']}/"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 1
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: slipstream.studio.eventstore.basedir
+      featureFile: latestEvent
+    fromPath:
+    - key: /etc/${service.sid}/conf/slipstreamstudio
+      featureFile: slipstream_confdesc.properties
   env:
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
