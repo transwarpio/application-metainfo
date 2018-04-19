@@ -490,3 +490,19 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+- name: sophon.jupyter.port
+  recommendExpression: 8082
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: sophon.jupyter.api.port
+  recommendExpression: 8083
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
