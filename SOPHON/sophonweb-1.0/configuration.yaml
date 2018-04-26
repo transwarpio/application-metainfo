@@ -490,7 +490,7 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
-- name: sophon.jupyter.port
+- name: sophon.visit.port
   recommendExpression: 8082
   defaultValue: null
   valueType: PORT
@@ -498,7 +498,7 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
-- name: sophon.jupyter.api.port
+- name: sophon.proxy.api.port
   recommendExpression: 8083
   defaultValue: null
   valueType: PORT
