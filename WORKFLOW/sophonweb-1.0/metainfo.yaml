@@ -41,6 +41,9 @@ roles:
   - mountPath: /var/lib/workflow
     hostPath: /var/lib/${service.sid}
     name: data
+  - mountPath: /plugins/job/machine_learning
+    hostPath: /etc/machine_learning/
+    name: sophonconf
   resources:
     limitsMemoryKey: workflow.container.limits.memory
     limitsCpuKey: workflow.container.limits.cpu
