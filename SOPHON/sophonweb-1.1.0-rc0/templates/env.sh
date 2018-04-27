@@ -30,7 +30,10 @@ SPARK_HOME=/usr/lib/spark2
 SPARK_USER=hive
 HADOOP_USER_NAME=hive
 MIDAS_SERVER_JAVA_OPTS="-Xms512m -Xmx1024m -XX:PermSize=128m"
-HADOOP_CONF_DIR=/etc/yarn1/conf
+HADOOP_CONF_DIR=/etc/${dependencies.YARN.sid}/conf
+<#if dependencies.HYPERBASE??>
+HYPERBASE_CONF_DIR=/etc/${dependencies.HYPERBASE.sid}/conf
+</#if>
 LIVY_LOG_DIR=/var/log/midas
 DIEU_HOME=/usr/lib/sophon
 DIEU_CONF_DIR=/etc/${service.sid}/conf
