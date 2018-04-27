@@ -880,7 +880,7 @@
   recommendExpression: 33456
   defaultValue: 33456
   valueType: PORT
-  scope: !<RoleTypes>
+  scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
   visibility: READ_WRITE
