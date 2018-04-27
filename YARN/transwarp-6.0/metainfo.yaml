@@ -341,3 +341,8 @@ healthChecks:
 - category: VITAL_SIGN_CHECK
   intervalSeconds: 10
   method: !<Builtin> {}
+
+customConfigFiles:
+- capacity_scheduler
+- mapred_site
+- yarn-site.xml
