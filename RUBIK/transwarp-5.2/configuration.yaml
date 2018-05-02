@@ -231,3 +231,23 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: inceptor.database.username
+  recommendExpression: inceptor
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [RUBIK_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: inceptor.database.password
+  recommendExpression: 123
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [RUBIK_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
