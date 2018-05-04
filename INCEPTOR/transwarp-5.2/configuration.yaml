@@ -622,6 +622,50 @@
   groups: []
   visibility: READ_WRITE
 
+- name: rubik.connection.url
+  recommendExpression: |
+    <#compress>
+    <#assign mysqlHostPorts = []/>
+    <#list dependencies.TXSQL.roles['TXSQL_SERVER'] as role>
+        <#assign mysqlHostPorts = mysqlHostPorts + [role.hostname + ':' + dependencies.TXSQL['mysql.rw.port']]>
+    </#list>
+    <#assign mysqlHostPort = mysqlHostPorts?join(",")>
+    ${mysqlHostPort}
+    </#compress>
+  defaultValue: ""
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: ['TXSQL']
+  groups: []
+  visibility: READ_WRITE
+
+- name: rubik.connection.username
+  recommendExpression: inceptor
+  defaultValue: ""
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: rubik.connection.password
+  recommendExpression: 123
+  defaultValue: ""
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: rubik.connection.database
+  recommendExpression: rubik_rubik1
+  defaultValue: ""
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 # guardian cas
 - name: hive.server2.authentication.cas.allowedProxyChains
   recommendExpression: ""
