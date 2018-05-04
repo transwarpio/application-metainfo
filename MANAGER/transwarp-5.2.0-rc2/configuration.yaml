@@ -1,0 +1,160 @@
+# zookeeper configuration
+- name: zookeeper.client.port
+  recommendExpression: 2111
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [MANAGER_ZOOKEEPER_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.peer.communicate.port
+  recommendExpression: 2777
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [MANAGER_ZOOKEEPER_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.leader.elect.port
+  recommendExpression: 3777
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [MANAGER_ZOOKEEPER_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.jmxremote.port
+  recommendExpression: 9800
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [MANAGER_ZOOKEEPER_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tickTime
+  recommendExpression: 9000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [MANAGER_ZOOKEEPER_SERVER]
+  onDeps: []
+  groups: [zoo_cfg]
+  visibility: READ_WRITE
+
+- name: initLimit
+  recommendExpression: 10
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [MANAGER_ZOOKEEPER_SERVER]
+  onDeps: []
+  groups: [zoo_cfg]
+  visibility: READ_WRITE
+
+- name: syncLimit
+  recommendExpression: 5
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [MANAGER_ZOOKEEPER_SERVER]
+  onDeps: []
+  groups: [zoo_cfg]
+  visibility: READ_WRITE
+
+- name: maxClientCnxns
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [MANAGER_ZOOKEEPER_SERVER]
+  onDeps: []
+  groups: [zoo_cfg]
+  visibility: READ_WRITE
+
+- name: zookeeper.server.memory
+  recommendExpression: 512
+  defaultValue: null
+  valueType: MB
+  scope: !<RoleTypes>
+    roleTypes: [MANAGER_ZOOKEEPER_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# txsql configuration
+- name: data.dir
+  recommendExpression: /var/lib/transwarp-manager/master/data/txsql
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [MANAGER_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: mysql.rw.port
+  recommendExpression: 3366
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [MANAGER_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: binlog.port
+  recommendExpression: 6111
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [MANAGER_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: mysql.local.port
+  recommendExpression: 13366
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [MANAGER_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: binlogsvr.rpc.port
+  recommendExpression: 17111
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [MANAGER_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: paxos.port
+  recommendExpression: 8111
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [MANAGER_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: root.password
+  recommendExpression: ${(service['root.password']??)?then(service['root.password'],((.now?long * .now?long)%987654321)?c)}
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: HIDDEN
