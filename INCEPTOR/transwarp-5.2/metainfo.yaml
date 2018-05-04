@@ -137,13 +137,13 @@ roles:
     - directive: !<mkdirs>
         paths: ["/var/lock/subsys/${service.sid}", "/var/run/${service.sid}"]
         mode: "755"
-  - type: config
+  - type: Config
     directives:
     - directive: !<resource>
-        templatetype: freemarker
-        templatepath: "datasource.properties"
-        targetpath: "/etc/${service.sid}/conf/datasource.properties"
-        mode: "644"
+        templateType: FreeMarker
+        templatePath: "dataSource.properties"
+        targetPath: "/etc/${service.sid}/conf/dataSource.properties"
+        mode: "600"
 
 - name: INCEPTOR_EXECUTOR
   friendlyName: "Inceptor Executor"
