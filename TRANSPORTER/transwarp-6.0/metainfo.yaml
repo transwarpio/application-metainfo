@@ -22,11 +22,23 @@ dependencies:
     minVersion: transwarp-6.0
     maxVersion: transwarp-6.0
     optional: false
+  - name: ZOOKEEPER
+    minVersion: transwarp-6.0
+    maxVersion: transwarp-6.0
+    optional: true
+  - name: KAFKA
+    minVersion: transwarp-6.0
+    maxVersion: transwarp-6.0
+    optional: true
+  - name: HYPERBASE
+    minVersion: transwarp-6.0
+    maxVersion: transwarp-6.0
+    optional: true
 roles:
 - name: TDT_SERVER
   friendlyName: "Transporter Server"
   labelPrefix: "transporter-server"
-  linkExpression: "http://${localhostname}:${service['tdt.server.port']}"  
+  linkExpression: "http://${localhostname}:${service['tdt.server.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
@@ -66,6 +78,10 @@ roles:
         action: Link
         from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
         to: "/etc/${service.sid}/conf/hadoop/core-site.xml"
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HYPERBASE.sid}/conf/hbase-site.xml"
+        to: "/etc/${service.sid}/conf/hadoop/hbase-site.xml"
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "db.properties"
@@ -124,6 +140,7 @@ firstWizardConfigs:
 - tdt.container.requests.memory
 - tdt.container.requests.cpu
 - tdt.memory.ratio
+- tdt.kafka.bootstrap.servers
 
 principals:
 - tdt

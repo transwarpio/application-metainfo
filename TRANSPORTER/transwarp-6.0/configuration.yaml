@@ -137,3 +137,12 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: tdt.kafka.bootstrap.servers
+  recommendExpression: null
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE
