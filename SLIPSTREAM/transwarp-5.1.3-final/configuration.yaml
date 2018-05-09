@@ -1,0 +1,943 @@
+- name: hive.exec.scratchdir
+  recommendExpression: |
+    <#function hdfsUri path>
+      <#local hdfs=dependencies['HDFS']>
+      <#if hdfs['nameservices']?? && hdfs['nameservices']?size gt 0>
+        <#local hostPort=hdfs['nameservices'][0]>
+      <#else>
+        <#local host=hdfs['roles']['HDFS_NAMENODE'][0]['hostname']>
+        <#if hdfs['namenode.rpc-port']??>
+          <#local port=hdfs['namenode.rpc-port']>
+        </#if>
+        <#if hdfs[host]?? && hdfs[host]['namenode.rpc-port']??>
+          <#local port=hdfs[host]['namenode.rpc-port']>
+        </#if>
+        <#local hostPort=host + ':' + port>
+      </#if>
+      <#return 'hdfs://' + hostPort + path>
+    </#function>
+    ${hdfsUri("/" + service['sid'] + '/tmp/hive')}
+  defaultValue: "/tmp/hive-${user.name}"
+  valueType: URI
+  scope: !<ServiceLevel> {}
+  onDeps: ['HDFS']
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.metastore.warehouse.dir
+  recommendExpression: |
+    <#function hdfsUri path>
+      <#local hdfs=dependencies['HDFS']>
+      <#if hdfs['nameservices']?? && hdfs['nameservices']?size gt 0>
+        <#local hostPort=hdfs['nameservices'][0]>
+      <#else>
+        <#local host=hdfs['roles']['HDFS_NAMENODE'][0]['hostname']>
+        <#if hdfs['namenode.rpc-port']??>
+          <#local port=hdfs['namenode.rpc-port']>
+        </#if>
+        <#if hdfs[host]?? && hdfs[host]['namenode.rpc-port']??>
+          <#local port=hdfs[host]['namenode.rpc-port']>
+        </#if>
+        <#local hostPort=host + ':' + port>
+      </#if>
+      <#return 'hdfs://' + hostPort + path>
+    </#function>
+    ${hdfsUri("/" + service['sid'] + '/user/hive/warehouse')}
+  defaultValue: "/user/hive/warehouse"
+  valueType: URI
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: ['HDFS']
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.metastore.execute.setugi
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.hwi.war.file
+  recommendExpression: lib/hive-hwi-0.8.1.war
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: plsql.compile.dml.check.semantic
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: javax.jdo.option.ConnectionPassword
+  recommendExpression: password
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: PASSWORD
+
+- name: hive.server2.session.check.interval
+  recommendExpression: 60000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.users.in.admin.role
+  recommendExpression: hive,hue
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: mapreduce.framework.name
+  recommendExpression: yarn
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hbase.client.scanner.caching
+  recommendExpression: 500
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: datanucleus.autoStartMechanism
+  recommendExpression: SchemaTable
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.input.format
+  recommendExpression: org.apache.hadoop.hive.ql.io.HiveInputFormat
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.aux.jars.path
+  recommendExpression: ""
+  defaultValue: ""
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.server2.idle.session.timeout
+  recommendExpression: 14400000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: datanucleus.fixedDatastore
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: javax.jdo.option.ConnectionDriverName
+  recommendExpression: com.mysql.jdbc.Driver
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: javax.jdo.option.ConnectionUserName
+  recommendExpression: slipstreamuser
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.exec.dynamic.partition
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.exec.compress.output
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.server2.authentication
+  recommendExpression: NONE
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: hive.server2.idle.operation.timeout
+  recommendExpression: 28800000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: datanucleus.autoCreateSchema
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.exec.compress.intermediate
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.server2.logging.operation.enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.server2.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: ngmr.fastdisk.dir
+  recommendExpression: /mnt/ramdisk/ngmr
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER, INCEPTOR_EXECUTOR]
+  isNodeSpecific: true
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.localdir
+  recommendExpression: |
+    <#function localDir suffix>
+      <#if rcmdMounts?size == 0>
+        <#return suffix>
+      <#else>
+        <#local dirs = []>
+        <#list rcmdMounts?sort as mnt>
+         <#local dirs = dirs + [mnt + suffix]>
+        </#list>
+        <#return dirs?join(",")>
+      </#if>
+    </#function>
+    ${localDir("/hadoop/ngmr/" + service['sid'])}
+  isNodeSpecific: true
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER, INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.fastdisk.size
+  recommendExpression: 0.5
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER, INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.cache.size
+  recommendExpression: 0.5
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER, INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.executors.perjob
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: inceptor.ui.port
+  recommendExpression: 4044
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: inceptor.metastore.memory
+  recommendExpression: 4096
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: inceptor.server.memory
+  recommendExpression: 8192
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# min(32000m, total_memory_size / 2)
+- name: inceptor.executor.memory
+  recommendExpression: |
+    <#assign  thirdMemMB = (memBytes/1048576/2)?int>
+    <#if thirdMemMB <= 32000>
+      ${thirdMemMB?int}
+    <#else>
+      32000
+    </#if>
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: inceptor.executor.cores
+  recommendExpression: |
+    <#if (numCores/2)?int gt 10>
+      ${(numCores/2)?int}
+    <#else>
+      10
+    </#if>
+  defaultValue: null
+  valueType: NON_NEG_INT
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: hive.server2.thrift.port
+  recommendExpression: 10010
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.metastore.port
+  recommendExpression: 9093
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: mysql.port
+  recommendExpression: 3306
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: mysql.datadir
+  recommendExpression: /hadoop/mysql
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_MYSQL]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.number.eachnode
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: metastore.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: metastore.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: metastore.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: metastore.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: metastore.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.engine.mode
+  recommendExpression: morphling
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.network.sndrcv.buffer
+  recommendExpression: 0
+  defaultValue: null
+  valueType: BYTES
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.network.server.num.threads
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.network.client.num.threads
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.network.num.buffers
+  recommendExpression: 10240
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.network.server.backlog
+  recommendExpression: 5
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.network.client.timeout
+  recommendExpression: 120
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.memsegment.size
+  recommendExpression: 32768
+  defaultValue: null
+  valueType: BYTES
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.io.mode
+  recommendExpression: NIO
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.io.directbufs
+  recommendExpression: true
+  defaultValue: BOOL
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.io.num.connection.perpeer
+  recommendExpression: 5
+  defaultValue: BOOL
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.recovery.mode
+  recommendExpression: standalone
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.taskstate.backend
+  recommendExpression: filesystem
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.taskstate.checkpoint.directory
+  recommendExpression: |
+    <#function hdfsUri path>
+      <#local hdfs=dependencies['HDFS']>
+      <#if hdfs['nameservices']?? && hdfs['nameservices']?size gt 0>
+        <#local hostPort=hdfs['nameservices'][0]>
+      <#else>
+        <#local host=hdfs['roles']['HDFS_NAMENODE'][0]['hostname']>
+        <#if hdfs['namenode.rpc-port']??>
+          <#local port=hdfs['namenode.rpc-port']>
+        </#if>
+        <#if hdfs[host]?? && hdfs[host]['namenode.rpc-port']??>
+          <#local port=hdfs[host]['namenode.rpc-port']>
+        </#if>
+        <#local hostPort=host + ':' + port>
+      </#if>
+      <#return 'hdfs://' + hostPort + path>
+    </#function>
+    ${hdfsUri("/" + service['sid'] + '/checkpoints')}
+  defaultValue: null
+  valueType: URI
+  scope: !<ServiceLevel> {}
+  onDeps: ['HDFS']
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.zookeeper.session.timeout
+  recommendExpression: 10000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.zookeeper.quorum
+  recommendExpression: |
+    <#compress>
+    <#assign zookeeper=dependencies['ZOOKEEPER'] quorum=[]>
+    <#list zookeeper.roles.ZOOKEEPER as role>
+        <#assign quorum += [role.hostname]>
+    </#list>
+    ${quorum?join(",")}
+    </#compress>
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: ['ZOOKEEPER']
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.zookeeper.connect.timeout
+  recommendExpression: 5000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.zookeeper.max.retries
+  recommendExpression: 3
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.zookeeper.retry.wait
+  recommendExpression: 5000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.zookeeper.root.path
+  recommendExpression: /morphling
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.zookeeper.namespace
+  recommendExpression: /${service['sid']}
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.zookeeper.checkpoints.path
+  recommendExpression: /checkpoints
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.submitted.job.path
+  recommendExpression: /runningjobs
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.morphling.completed.checkpoints.storage.dir
+  recommendExpression: |
+    <#function hdfsUri path>
+      <#local hdfs=dependencies['HDFS']>
+      <#if hdfs['nameservices']?? && hdfs['nameservices']?size gt 0>
+        <#local hostPort=hdfs['nameservices'][0]>
+      <#else>
+        <#local host=hdfs['roles']['HDFS_NAMENODE'][0]['hostname']>
+        <#if hdfs['namenode.rpc-port']??>
+          <#local port=hdfs['namenode.rpc-port']>
+        </#if>
+        <#if hdfs[host]?? && hdfs[host]['namenode.rpc-port']??>
+          <#local port=hdfs[host]['namenode.rpc-port']>
+        </#if>
+        <#local hostPort=host + ':' + port>
+      </#if>
+      <#return 'hdfs://' + hostPort + path>
+    </#function>
+    ${hdfsUri("/" + service['sid'] + '/complete')}
+  defaultValue: null
+  valueType: URI
+  scope: !<ServiceLevel> {}
+  onDeps: ['HDFS']
+  groups: []
+  visibility: READ_WRITE
+
+# inceptor scheduler
+- name: inceptor.scheduler.enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.driver.port
+  recommendExpression: 52888
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: EXTRA_DRIVER_OPTS
+  recommendExpression: ""
+  defaultValue: ""
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: EXTRA_EXECUTOR_OPTS
+  recommendExpression: ""
+  defaultValue: ""
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: historyserver.memory.max.mb
+  recommendExpression: 1024
+  defaultValue: null
+  valueType: MB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_HISTORYSERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: historyserver.memory.initial.mb
+  recommendExpression: 256
+  defaultValue: null
+  valueType: MB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_HISTORYSERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: slipstream.historyserver.akka.listen.port
+  recommendExpression: 23456
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_HISTORYSERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: slipstream.historyserver.restful.listen.port
+  recommendExpression: 9099
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: history.localdir
+  recommendExpression: |
+    <#function localDir suffix>
+      <#if rcmdMounts?size == 0>
+        <#return suffix>
+      <#else>
+        <#local dirs = []>
+        <#list rcmdMounts?sort as mnt>
+         <#local dirs = dirs + [mnt + suffix]>
+        </#list>
+        <#return dirs?join(",")>
+      </#if>
+    </#function>
+    ${localDir("/historyserver/" + service['sid'])}
+  isNodeSpecific: true
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_HISTORYSERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+

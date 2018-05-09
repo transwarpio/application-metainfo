@@ -132,6 +132,28 @@ dependency.title.INCEPTOR=\u5171\u4EABMetaStore
 | autoAssign | 创建服务时，自动为服务推荐角色的策略。为了扩展性，这是一个数组，每个元素有一个advice字段，例如：`!<EachNode> {}`表示在当前集群中所有未分配同类角色的节点上推荐该角色；也可指定默认推荐角色的数量，例如`!<NumSeq> {"numSeq": [5, 3, 1]}`表示依次以5个、3个、1个的数量尝试推荐不大于可用节点个数的角色 | |
 | suggestion | 修改服务的角色时，当角色的數量不满足要求时，给出警告，但仍可能允许使用这个分配。这是一个数组，每个元素有个criteria字段，可组合不同的建议，例如，`!<Range> {"min": 2}`表示建议至少分配2个角色；`!<Range> {"min": 3, "oddity": true}`表示建议至少分配3个或以上的奇数个角色 | |
 | validation | 修改服务的角色时，要求角色必须满足的要求。这是一个数组，每个元素有一个criteria字段，可组合不同的约束。例如，`!<Range> {"min": 1}`表示至少分配一个角色 | |
+| deleteOpCondition | 删除服务的角色时，要求角色必须满足删除要求。这个要求有3种：deletable/movable/reject分别表示删除/迁移/拒绝删除需要满足的要求。每个要求中又有4类约束规则：number/decommission/minMaster/health分别表示数量/退役/最小master数量/健康状况，其中decommission目前用于datanode和nodemanager，minMaster/health用于es的检查，其他服务的角色的检查主要是number。 | zookeepe角色的检查条件,见“例1” |
+| deleteOpCleanDirs | 删除服务角色时，需要清理的数据文件或目录。数据文件或目录的来源有2种，都是可选的:fromConfig/fromPath分别表示从配置项中解析/指定目录。每种来源都是一个数组，数组中每个元素又有两个必填字段：key和featureFile分别表示配置项/路径和特征文件(夹)。 特征文件(夹)用于校验要删除的目录是否符合要求。 | HDFS的datanode角色删除数据,见“例2” |
+
+例1：zookeepe角色的检查条件，表示“zookeeper角色大于等于4个时才允许删除一个，有3个时需要迁移，有两个时拒绝删除”
+
+`deleteOpCondition:
+    deletable:
+      number: 4
+    movable:
+      number: 3
+    reject:
+      number: 2`
+      
+例2：HDFS的datanode角色删除数据的配置
+
+`deleteOpCleanDirs:
+     fromConfig:
+     - key: dfs.datanode.data.dir
+       featureFile: in_use.lock
+     fromPath:
+     - key: /var/run/${service.sid}
+       featureFile: dn_socket`
 
 ### 模板渲染与数据模型
 目前服务标准化中所有的模板均通过Apache FreeMarker引擎渲染，模板的书写参考http://freemarker.org/docs/dgui.html
@@ -287,6 +309,7 @@ stages:
 | Stop | 先按角色类型出现**相反**的顺序，分解为多个Kubectl-Label(action=RemoveLabel)，然后按角色类型出现**相反**的顺序，分解为多个Kubectl(action=Stop) |
 | Scaleout | 先按角色类型出现的顺序，分解为多个Kubectl-Label(action=AddLabel)，然后按角色类型出现的顺序，分解为多个Kubectl(action=Scaleout) |
 | MoveRole | 先按角色类型出现的顺序，分解为多个Kubectl-Label(action=AddLabel)，然后按角色类型出现的顺序，分解为多个Kubectl(action=MoveRole) |
+| PreDeleteAfterStop | 按角色类型出现的顺序，分解为多个DockerRunPreDelete |
 
 #### TaskGroup的分解
 TaskGroup最终按类型和参数分解为多个并行的Task。在metainfo.yaml中用`!<类型>`区分TaskGroup的类型，所有TaskGroup都有这些字段：
@@ -338,6 +361,13 @@ TaskGroup最终按类型和参数分解为多个并行的Task。在metainfo.yaml
   * dbNames 创建的数据库的列表，如TDT服务指定了`["tdt", "tdt_results"]`
 * Wait-Healthy
   只产生一个Task，该Task等待整个服务进入HEALTHY状态
+* DockerRunPreDelete
+  将根据roleType字段指定类型的角色，分解成多个Docker Run Task。
+  参数字段包含：
+  * summaryPolicy
+  * timeoutMinutes
+  * roleType 操作作用的角色类型，将根据该类型的角色分解Task
+  * node 操作作用的节点的选择方式，Any表示任意一个节点上执行，Each表示所有节点上执行
 
 #### Role Task执行的实际操作
 前面已经介绍过，在metainfo.yaml的roles字段指定了不同类型的角色。
