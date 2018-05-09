@@ -31,7 +31,14 @@
   onDeps: []
   groups: []
   visibility: PASSWORD
-
+- name: livy.file.local-dir-whitelist
+  recommendExpression: "/usr/lib/sophon"
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
 #dieu.conf
 - name: dieu.docker.image.name
   recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-tensorflow:sophonweb-1.1"
