@@ -7,39 +7,6 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
-- name: livy.scheduler.port
-  recommendExpression: 9996
-  defaultValue: null
-  valueType: PORT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-- name: livy.storage.basedir
-  recommendExpression: "/user/midas"
-  defaultValue: null
-  valueType: ABSOLUTE_PATH
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-- name: livy.file.local-dir-whitelist
-  recommendExpression: "/usr/lib/midas"
-  defaultValue: null
-  valueType: ABSOLUTE_PATH
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-- name: livy.server.port
-  recommendExpression: 6066
-  defaultValue: null
-  valueType: PORT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
 - name: livy.server.user.manager.open
   recommendExpression: false
   defaultValue: null
@@ -48,7 +15,6 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
-
 - name: livy.jdbc.username
   recommendExpression: sophonuser
   defaultValue: null
@@ -57,7 +23,6 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
-
 - name: livy.jdbc.password
   recommendExpression: password
   defaultValue: null
@@ -109,30 +74,6 @@
   groups: []
   visibility: READ_WRITE
 # midas-env.sh
-- name: midas.server.initial_heapsize
-  recommendExpression: 512
-  defaultValue: null
-  valueType: MB
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-- name: midas.server.heapsize
-  recommendExpression: 1024
-  defaultValue: null
-  valueType: MB
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-- name: midas.server.permsize
-  recommendExpression: 128
-  defaultValue: null
-  valueType: MB
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
 # spark-defaults.conf
 - name: spark.executor.memory
   recommendExpression: 2048
@@ -373,92 +314,8 @@
   groups: []
   visibility: PASSWORD
 
-- name: redis.memory.ratio
-  recommendExpression: -1
-  defaultValue: null
-  valueType: FLOAT
-  scope: !<RoleTypes>
-    roleTypes: [SOPHON_REDIS]
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: scheduler.container.limits.memory
-  recommendExpression: -1
-  defaultValue: null
-  valueType: GB
-  scope: !<RoleTypes>
-    roleTypes: [SOPHON_SCHEDULER]
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: scheduler.container.limits.cpu
-  recommendExpression: -1
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<RoleTypes>
-    roleTypes: [SOPHON_SCHEDULER]
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: scheduler.container.requests.memory
-  recommendExpression: -1
-  defaultValue: null
-  valueType: GB
-  scope: !<RoleTypes>
-    roleTypes: [SOPHON_SCHEDULER]
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: scheduler.container.requests.cpu
-  recommendExpression: -1
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<RoleTypes>
-    roleTypes: [SOPHON_SCHEDULER]
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: scheduler.memory.ratio
-  recommendExpression: -1
-  defaultValue: null
-  valueType: FLOAT
-  scope: !<RoleTypes>
-    roleTypes: [SOPHON_SCHEDULER]
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-#for sophon inceptor plugin
-- name: sophon.inceptor.ldap.username
-  recommendExpression: "hiveuser"
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-- name: sophon.inceptor.ldap.password
-  recommendExpression: "password"
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: PASSWORD
-- name: sophon.samples.type
-  recommendExpression: "inceptor"
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
 - name: sophon.server.port
-  recommendExpression: 8066
+  recommendExpression: 8082
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -491,7 +348,7 @@
   groups: []
   visibility: READ_WRITE
 - name: sophon.visit.port
-  recommendExpression: 8082
+  recommendExpression: 8066
   defaultValue: null
   valueType: PORT
   scope: !<ServiceLevel> {}
