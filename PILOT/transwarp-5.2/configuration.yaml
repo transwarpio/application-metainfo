@@ -43,15 +43,6 @@
   groups: []
   visibility: READ_WRITE
 
-- name: pilot.mapbox.key
-  recommendExpression: The key to enable Mapbox visualizations (See www.mapbox.com)
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
 - name: javax.jdo.option.ConnectionUserName
   recommendExpression: pilotuser
   defaultValue: null
