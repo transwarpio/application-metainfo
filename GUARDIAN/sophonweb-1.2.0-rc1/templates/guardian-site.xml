@@ -1,0 +1,44 @@
+<#assign guardian=pluginProvider.service guardian_servers=[]>
+<#list guardian.roles["GUARDIAN_SERVER"] as role>
+<#assign guardian_servers += [(role.hostname + ":" + guardian["guardian.server.port"])]>
+</#list>
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+<property>
+    <name>guardian.server.address</name>
+    <value>${guardian_servers?join(";")}</value>
+</property>
+<property>
+    <name>guardian.connection.client.impl</name>
+    <value>REST</value>
+</property>
+<property>
+    <name>guardian.client.cache.enabled</name>
+    <value>${guardian['guardian.client.cache.enabled']}</value>
+</property>
+<property>
+    <name>guardian.server.tls.enabled</name>
+    <value>${guardian['guardian.server.tls.enabled']}</value>
+</property>
+<property>
+    <name>guardian.client.auth.mode</name>
+    <value>SPNEGO</value>
+</property>
+<property>
+    <name>guardian.permission.component</name>
+    <value>${pluginUser.service.sid}</value>
+</property>
+<property>
+    <name>guardian.client.principal</name>
+    <value>${pluginUser.service.masterPrincipal}/${hostname}</value>
+</property>
+<property>
+    <name>guardian.client.keytab</name>
+    <value>${pluginUser.service.keytab}</value>
+</property>
+<property>
+    <name>guardian.client.http.principal</name>
+    <value>guardian/guardian</value>
+</property>
+</configuration>
