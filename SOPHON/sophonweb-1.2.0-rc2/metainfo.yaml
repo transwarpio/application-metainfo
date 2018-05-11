@@ -1,0 +1,200 @@
+---
+name: SOPHON
+version: sophonweb-1.2.0-rc2
+global: false
+namePrefix: Sophon
+friendlyName: "Sophon-web"
+dependencies:
+  - name: GUARDIAN
+    minVersion: sophonweb-1.2.0-rc2
+    maxVersion: sophonweb-1.2.0-rc2
+    optional: true
+  - name: INCEPTOR
+    minVersion: sophonweb-1.2.0-rc2
+    maxVersion: sophonweb-1.2.0-rc2
+    optional: true
+  - name: HDFS
+    minVersion: sophonweb-1.2.0-rc2
+    maxVersion: sophonweb-1.2.0-rc2
+    optional: false
+  - name: YARN
+    minVersion: sophonweb-1.2.0-rc2
+    maxVersion: sophonweb-1.2.0-rc2
+    optional: false
+  - name: TXSQL
+    minVersion: sophonweb-1.2.0-rc2
+    maxVersion: sophonweb-1.2.0-rc2
+    optional: true
+  - name: WORKFLOW
+    minVersion: sophonweb-1.2.0-rc2
+    maxVersion: sophonweb-1.2.0-rc2
+    optional: true
+  - name: KONG
+    minVersion: sophonweb-1.2.0-rc2
+    maxVersion: sophonweb-1.2.0-rc2
+    optional: true
+  - name: HYPERBASE
+    minVersion: sophonweb-1.2.0-rc2
+    maxVersion: sophonweb-1.2.0-rc2
+    optional: true
+roles:
+- name: SOPHON_REDIS
+  dockerImage: "transwarp/sophon-redis:sophonweb-1.2.0-rc2"
+  friendlyName: "Redis Server"
+  labelPrefix: "sophon-redis"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+  - name: REDIS_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: redis.container.limits.memory
+    limitsCpuKey: redis.container.limits.cpu
+    requestsMemoryKey: redis.container.requests.memory
+    requestsCpuKey: redis.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1, "max": 1}
+  operations: []
+- name: SOPHON_WEB
+  dockerImage: "transwarp/sophon-web:sophonweb-1.2.0-rc2"
+  friendlyName: "Sophon web"
+  labelPrefix: "sophon-web"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+  - name: KRB_ENABLE
+    value: <#if service.auth == "kerberos">true<#else>false</#if>
+  - name: SOPHON_CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: SOPHON_SERVICE_ID
+    value: ${service.sid}
+  mountPaths:
+  - mountPath: /home/root/sophon
+    hostPath: /var/${service.sid}
+    name: flowdir
+
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1, "max": 1}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "sophon.conf"
+        targetPath: "/etc/${service.sid}/conf/sophon.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "dieu.conf"
+        targetPath: "/etc/${service.sid}/conf/dieu.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "env.sh"
+        targetPath: "/etc/${service.sid}/conf/env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/log4j.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "application.properties"
+        targetPath: "/etc/${service.sid}/conf/application.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "spark-defaults.conf"
+        targetPath: "/etc/${service.sid}/conf/spark-defaults.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "apiservice.conf"
+        targetPath: "/etc/${service.sid}/conf/apiservice.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "jupyter_notebook_config.py"
+        targetPath: "/etc/${service.sid}/conf/jupyter_notebook_config.py"
+        mode: "755"
+
+stages:
+  - type: Config
+    taskGroups:
+    - !<Create-Database>
+      dbPrefix: metastore
+      dbUserConfig: livy.jdbc.username
+      dbPasswordConfig: livy.jdbc.password
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Role>
+      roleType: "SOPHON_WEB"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SOPHON_REDIS"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+
+
+firstWizardConfigs:
+- spark.executor.heapsize
+- spark.executor.permsize
+- spark.executor.max_permsize
+- spark.driver.heapsize
+- spark.driver.permsize
+- spark.driver.max_permsize
+- server.container.limits.memory
+- server.container.limits.cpu
+- server.container.requests.memory
+- server.container.requests.cpu
+- server.memory.ratio
+- redis.container.limits.memory
+- redis.container.limits.cpu
+- redis.container.requests.memory
+- redis.container.requests.cpu
+
+product: Sophon
+
+principals:
+- hive
+
+pages:
+- roles
+- configuration
+- operation
+- security
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 30
+  method: !<K8sPod> {}
