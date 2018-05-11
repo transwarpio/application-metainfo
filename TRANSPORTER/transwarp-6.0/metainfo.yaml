@@ -82,6 +82,7 @@ roles:
         action: Link
         from: "/etc/${dependencies.HYPERBASE.sid}/conf/hbase-site.xml"
         to: "/etc/${service.sid}/conf/hadoop/hbase-site.xml"
+      necessary: false
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "db.properties"
