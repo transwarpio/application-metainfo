@@ -33,6 +33,7 @@ dependencies:
   - name: HYPERBASE
     minVersion: transwarp-5.2
     maxVersion: transwarp-5.2
+    optional: true
 roles:
 - name: TDT_SERVER
   friendlyName: "Transporter Server"
