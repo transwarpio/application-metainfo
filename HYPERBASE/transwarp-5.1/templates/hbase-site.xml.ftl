@@ -120,7 +120,11 @@
 <@property "hbase.sservice.scan.pagesize" service['hbase.sservice.scan.pagesize']/>
 <@property "hbase.use.partition.table" service['hbase.use.partition.table']/>
 <@property "hbase.client.scanner.timeout.period" service['hbase.client.scanner.timeout.period']/>
+<@property "hbase.master.info.bindAddress" service['hbase.master.info.bindAddress']/>
 <@property "hbase.regionserver.info.bindAddress" service['hbase.regionserver.info.bindAddress']/>
+<@property "hbase.thrift.info.bindAddress" service['hbase.thrift.info.bindAddress']/>
+<@property "hbase.master.ipc.address" service['hbase.master.ipc.address'] />
+<@property "hbase.regionserver.ipc.address" service['hbase.regionserver.ipc.address'] />
 <@property "hfile.block.cache.size" service['hfile.block.cache.size']/>
 <@property "hbase.regions.slop" service['hbase.regions.slop']/>
 <@property "hbase.cluster.distributed" service['hbase.cluster.distributed']/>
