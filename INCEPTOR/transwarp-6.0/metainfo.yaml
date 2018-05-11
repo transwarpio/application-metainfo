@@ -81,9 +81,23 @@ roles:
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
   suggestion:
-  - criteria: !<Range> {"min": 1}
+  - when: !<WhenDependency>
+      depType: INCEPTOR_METASTORE
+      present: true
+    criteria: !<Range> {"max": 0}
+  - when: !<WhenDependency>
+      depType: INCEPTOR_METASTORE
+      present: false
+    criteria: !<Range> {"min": 2}
   validation:
-  - criteria: !<Range> {"min": 1}
+  - when: !<WhenDependency>
+      depType: INCEPTOR_METASTORE
+      present: true
+    criteria: !<Range> {"max": 0}
+  - when: !<WhenDependency>
+      depType: INCEPTOR_METASTORE
+      present: false
+    criteria: !<Range> {"min": 1}
   operations:
   - type: Install
     directives:

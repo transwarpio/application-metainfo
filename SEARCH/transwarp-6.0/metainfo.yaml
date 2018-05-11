@@ -32,7 +32,7 @@ roles:
   suggestion:
   - criteria: !<Range> {"min": 1, "max": 1}
   validation:
-  - criteria: !<Range> {"min": 0}
+  - criteria: !<Range> {"min": 1}
   operations: []
 
 roleGroups:
@@ -42,6 +42,8 @@ roleGroups:
     autoAssign:
       - advice: !<NumSeq> {"numSeq": [1]}
     suggestion:
+      - criteria: !<Range> {"min": 1}
+    validation:
       - criteria: !<Range> {"min": 1}
     roles:
     - name: SEARCH_SERVER
