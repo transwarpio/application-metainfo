@@ -84,9 +84,3 @@ DEFAULT_INCEPTOR_SERVER = '${inceptorHosts}:${dependencies.INCEPTOR['hive.server
 
 # hdfs
 DEFAULT_HTTPFS = '${dependencies.HDFS.roles.HDFS_HTTPFS[0]['hostname']}'
-
-
-# Set this API key to enable Mapbox visualizations
-# You need to register to mapbox.com to get the API key
-# https://www.mapbox.com/developers/api/#access-tokens
-MAPBOX_API_KEY = '${service['pilot.mapbox.key']}'
