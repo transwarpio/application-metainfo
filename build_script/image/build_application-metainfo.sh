@@ -13,7 +13,7 @@ build_application-metainfo() {
 
     mkdir -p "$TARGET_DIR"
 
-    for VERSION in transwarp-5.1.4-final; do
+    for VERSION in udsafe-5.1.2-final; do
         echo "preparing $VERSION ..."
 
         META_DST_DIR="$TARGET_DIR/$VERSION"
@@ -40,8 +40,8 @@ build_application-metainfo() {
         git remote rm origin
         git remote add origin https://github.com/transwarpio/application-metainfo.git
         git fetch origin
-        git checkout master
-        git branch --set-upstream-to=origin/master master
+        git checkout udsafe-5.1.2-final
+        git branch --set-upstream-to=origin/udsafe-5.1.2-final udsafe-5.1.2-final
 
 
         echo "building $VERSION image ..."

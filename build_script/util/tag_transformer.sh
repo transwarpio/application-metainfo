@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-IN_PROGRESS_VERSION=transwarp-5.1.3-final
-TAG_VERSION=transwarp-5.1.4-final
+IN_PROGRESS_VERSION=transwarp-5.1.2-final
+TAG_VERSION=udsafe-5.1.2-final
 
 set -e
 

@@ -1,8 +1,0 @@
-*Improvement
- *WARP-16400: using default quota while user get nothing from guardian
-
-*New featuers
- *WARP-17512: Add txApply distribute function 
-
-*Bug fix
- *WARP-17856: txSqlConnect function need to set keytabPath in simple mode

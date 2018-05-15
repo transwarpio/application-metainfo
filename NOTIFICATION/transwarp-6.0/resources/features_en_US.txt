@@ -1,2 +1,0 @@
-* Add client for Notification
-* Support save message to kafka

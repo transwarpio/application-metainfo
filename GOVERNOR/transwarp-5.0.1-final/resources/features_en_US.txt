@@ -1,4 +1,0 @@
-* Add support for upgrade and rollback
-
-* Allow governor server startup when the ElasticSearch is yellow status
-* Remove the dependence on the external network when build governor image
