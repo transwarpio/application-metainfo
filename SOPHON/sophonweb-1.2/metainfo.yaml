@@ -52,7 +52,10 @@ roles:
   env:
   - name: REDIS_CONF_DIR
     value: /etc/${service.sid}/conf
-  mountPaths: []
+  mountPaths:
+  - mountPath: /data
+    hostPath: /var/${service.sid}/redis
+    name: redisdir
   resources:
     limitsMemoryKey: redis.container.limits.memory
     limitsCpuKey: redis.container.limits.cpu
