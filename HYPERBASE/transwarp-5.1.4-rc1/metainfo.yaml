@@ -1,0 +1,252 @@
+---
+name: HYPERBASE
+version: transwarp-5.1.4-rc1
+global: false
+namePrefix: Hyperbase
+friendlyName: "Hyperbase"
+dockerImage: "transwarp/hbase:transwarp-5.1.4-rc1"
+dependencies:
+  - name: GUARDIAN
+    minVersion: transwarp-5.1.4-rc1
+    maxVersion: transwarp-5.1.4-rc1
+    optional: true
+  - name: ZOOKEEPER
+    minVersion: transwarp-5.1.4-rc1
+    maxVersion: transwarp-5.1.4-rc1
+    optional: false
+  - name: HDFS
+    minVersion: transwarp-5.1.4-rc1
+    maxVersion: transwarp-5.1.4-rc1
+    optional: false
+  - name: YARN
+    minVersion: transwarp-5.1.4-rc1
+    maxVersion: transwarp-5.1.4-rc1
+    optional: false
+  - name: SEARCH
+    minVersion: transwarp-5.1.4-rc1
+    maxVersion: transwarp-5.1.4-rc1
+    optional: true
+    preferred: true
+user: hbase
+plugins:
+  - provider: GUARDIAN
+    version: 0.98.6+500.51250
+    useTar: false
+roles:
+- name: HYPERBASE_MASTER
+  friendlyName: "Hyperbase Master"
+  labelPrefix: "hyperbase-master"
+  linkExpression: "http://${localhostname}:${service['master.info.port']}/?user.name=hyperbase"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 3
+    movable:
+      number: 2
+    reject:
+      number: 1
+  readinessProbe:
+    probe: !<httpGet>
+      path: /
+      port: ${service['master.info.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  env:
+  - name: HBASE_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: master.container.limits.memory
+    limitsCpuKey: master.container.limits.cpu
+    requestsMemoryKey: master.container.requests.memory
+    requestsCpuKey: master.container.requests.cpu
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [3, 2, 1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/lock/subsys/${service.sid}"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "jmxremote.access"
+        targetPath: "/etc/${service.sid}/conf/jmxremote.access"
+        mode: "600"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "jmxremote.passwd"
+        targetPath: "/etc/${service.sid}/conf/jmxremote.passwd"
+        mode: "600"
+- name: HYPERBASE_REGIONSERVER
+  friendlyName: "Region Server"
+  labelPrefix: "hyperbase-regionserver"
+  linkExpression: "http://${localhostname}:${service['regionserver.info.port']}/?user.name=hyperbase"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 3
+    reject:
+      number: 2
+  readinessProbe:
+    probe: !<httpGet>
+      path: /
+      port: ${service['regionserver.info.port']}
+      scheme: HTTP
+  env:
+  - name: HBASE_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: regionserver.container.limits.memory
+    limitsCpuKey: regionserver.container.limits.cpu
+    requestsMemoryKey: regionserver.container.requests.memory
+    requestsCpuKey: regionserver.container.requests.cpu
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<EachNode> {}
+  suggestion:
+  - criteria: !<EachNode> {}
+  validation:
+  - criteria: !<EachNode> {}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/lock/subsys/${service.sid}"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "jmxremote.access"
+        targetPath: "/etc/${service.sid}/conf/jmxremote.access"
+        mode: "600"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "jmxremote.passwd"
+        targetPath: "/etc/${service.sid}/conf/jmxremote.passwd"
+        mode: "600"
+- name: HYPERBASE_THRIFT
+  friendlyName: "Hyperbase Thrift"
+  labelPrefix: "hyperbase-thrift"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /
+      port: 9095
+      scheme: HTTP
+  env:
+  - name: HBASE_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: thrift.container.limits.memory
+    limitsCpuKey: thrift.container.limits.cpu
+    requestsMemoryKey: thrift.container.requests.memory
+    requestsCpuKey: thrift.container.requests.cpu
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/lock/subsys/${service.sid}"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "jmxremote.access"
+        targetPath: "/etc/${service.sid}/conf/jmxremote.access"
+        mode: "600"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "jmxremote.passwd"
+        targetPath: "/etc/${service.sid}/conf/jmxremote.passwd"
+        mode: "600"
+
+stages:
+  - type: Bootstrap
+    taskGroups:
+    - !<Create-Dir-in-HDFS>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      dirs: ["/${service.sid}"]
+      user: "hbase"
+      group: "hbase"
+      mod: 711
+
+product: Hyperbase
+
+firstWizardConfigs:
+- hbase.rootdir
+- hregion.index.path
+- master.port
+- master.info.port
+- master.jmx.port
+- regionserver.port
+- regionserver.info.port
+- regionserver.jmx.port
+- zookeeper.session.timeout
+- master.memory
+- regionserver.memory
+- thrift.memory
+- master.container.limits.memory
+- master.container.limits.cpu
+- master.container.requests.memory
+- master.container.requests.cpu
+- master.memory.ratio
+- regionserver.container.limits.memory
+- regionserver.container.limits.cpu
+- regionserver.container.requests.memory
+- regionserver.container.requests.cpu
+- regionserver.memory.ratio
+- thrift.container.limits.memory
+- thrift.container.limits.cpu
+- thrift.container.requests.memory
+- thrift.container.requests.cpu
+- thrift.memory.ratio
+
+dashboardMetrics:
+- HyperBaseReadRequestsRate
+- HyperBaseWriteRequestsRate
+
+pages:
+- summary
+- roles
+- configuration
+- operation
+- security
+- plugin
+
+principals:
+- hbase
+- HTTP
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 10
+  method: !<Builtin> {}
