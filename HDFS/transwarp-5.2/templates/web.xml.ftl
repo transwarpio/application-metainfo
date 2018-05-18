@@ -134,6 +134,10 @@
                 <param-name>casServerUrlPrefix</param-name>
                 <param-value>${casServerName}/cas</param-value>
               </init-param>
+              <init-param>
+                <param-name>hostnameVerifier</param-name>
+                <param-value>org.jasig.cas.client.ssl.AnyHostnameVerifier</param-value>
+              </init-param>
               <!--<init-param>
                 <param-name>serverName</param-name>
                 <param-value>http://172.16.130.69:14000/</param-value>
