@@ -451,7 +451,43 @@
   groups: []
   visibility: READ_WRITE
 
+- name: hbase.master.info.bindAddress
+  recommendExpression: 0.0.0.0
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: hbase.regionserver.info.bindAddress
+  recommendExpression: 0.0.0.0
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: hbase.thrift.info.bindAddress
+  recommendExpression: 0.0.0.0
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: hbase.master.ipc.address
+  recommendExpression: 0.0.0.0
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: hbase.regionserver.ipc.address
   recommendExpression: 0.0.0.0
   defaultValue: null
   valueType: STRING
