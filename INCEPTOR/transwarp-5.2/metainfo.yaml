@@ -143,7 +143,7 @@ roles:
         templateType: FreeMarker
         templatePath: "dataSource.properties"
         targetPath: "/etc/${service.sid}/conf/dataSource.properties"
-        mode: "600"
+        mode: "644"
 
 - name: INCEPTOR_EXECUTOR
   friendlyName: "Inceptor Executor"
