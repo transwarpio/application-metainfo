@@ -16,6 +16,9 @@ roles:
       number: 3
     reject:
       number: 2
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: data.dir
   readinessProbe:
     probe: !<exec>
       command:
@@ -72,6 +75,10 @@ roles:
   deleteOpCondition:
     movable:
       number: 2
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: guardian.apacheds.data.dir
+      featureFile: partitions
   summaryPolicy: SOME
   dockerImage: "transwarp/apacheds:transwarp-6.0"
   autoAssign:
