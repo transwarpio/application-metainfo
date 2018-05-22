@@ -1,7 +1,7 @@
 ---
 name: MONITOR
 version: transwarp-6.0
-global: false
+global: true
 namePrefix: Monitor
 friendlyName: "Monitor"
 dependencies: []
