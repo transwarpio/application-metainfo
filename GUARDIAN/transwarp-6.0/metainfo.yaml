@@ -291,6 +291,13 @@ stages:
     - !<Change-Password>
       summaryPolicy: ALL
       timeoutMinutes: 2
+  - type: PreUpgrade
+    taskGroups:
+    - !<DockerRunPreUpgrade>
+      summaryPolicy: ALL 
+      timeoutMinutes: 10
+      roleType: GUARDIAN_SERVER
+      node: Each
 
 firstWizardConfigs:
 - guardian.server.port
