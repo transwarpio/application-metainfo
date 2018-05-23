@@ -98,6 +98,7 @@ roles:
   - name: CODIS_FE
     friendlyName: "Codis FE"
     labelPrefix: "codis-fe"
+    linkExpression: "http://${localhostname}:${service['codis.fe.port']}/"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete"]
     deleteOpCondition:
