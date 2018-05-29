@@ -82,38 +82,6 @@
   visibility: READ_WRITE
 # midas-env.sh
 # spark-defaults.conf
-- name: spark.executor.memory
-  recommendExpression: 2048
-  defaultValue: null
-  valueType: MB
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-- name: spark.driver.memory
-  recommendExpression: 18432
-  defaultValue: null
-  valueType: MB
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-- name: spark.executor.cores
-  recommendExpression: 2
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-- name: spark.executor.instances
-  recommendExpression: 1
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
 - name: spark.yarn.queue
   recommendExpression: "default"
   defaultValue: null
