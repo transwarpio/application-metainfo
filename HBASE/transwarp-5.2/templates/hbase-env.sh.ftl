@@ -144,3 +144,5 @@ export KEYTAB=/etc/${service.sid}/conf/hbase.keytab
 export KRB_PLUGIN_ENABLE=true
 export KRB_OPTS="-Djava.security.krb5.conf=/etc/${service.sid}/conf/krb5.conf -Djava.security.auth.login.config=/etc/${service.sid}/conf/jaas.conf"
 </#if>
+
+export HBASE_MASTER_OPTS="$HBASE_MASTER_OPTS -Duser.dir=/etc/${service.sid}/conf"
