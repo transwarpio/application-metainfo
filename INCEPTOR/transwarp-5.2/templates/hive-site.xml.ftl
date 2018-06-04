@@ -83,6 +83,7 @@
     <@property "inceptor.scheduler.enabled" "true"/>
     <#if service.plugins?seq_contains("guardian")>
         <@property "spark.guardian.enabled" "true"/>
+        <@property "spark.ui.guardian.enabled" "true"/>
     <#else>
         <@property "inceptor.scheduler.config" "/etc/${service.sid}/conf/inceptor-scheduler.xml"/>
     </#if>
@@ -90,6 +91,7 @@
     <@property "inceptor.scheduler.enabled" "false"/>
     <#if service.plugins?seq_contains("guardian")>
         <@property "spark.guardian.enabled" "true"/>
+        <@property "spark.ui.guardian.enabled" "true"/>
     </#if>
 </#if>
 
