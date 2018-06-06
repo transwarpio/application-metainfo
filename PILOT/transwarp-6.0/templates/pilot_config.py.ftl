@@ -4,12 +4,6 @@ PILOT_WORKERS = ${service['pilot.server.worker.number']}
 # The port of server
 PILOT_WEBSERVER_PORT = ${service['pilot.desktop.http.port']}
 
-# Maximum number of rows returned when creating slice
-ROW_LIMIT = 5000
-
-# Maximum number of rows returned in the SQL editor
-SQL_MAX_ROW = 10000
-
 
 # The SQLAlchemy connection string.
 # Mysql database should be existed and change its charset to 'utf8':
@@ -84,9 +78,3 @@ DEFAULT_INCEPTOR_SERVER = '${inceptorHosts}:${dependencies.INCEPTOR['hive.server
 
 # hdfs
 DEFAULT_HTTPFS = '${dependencies.HDFS.roles.HDFS_HTTPFS[0]['hostname']}'
-
-
-# Set this API key to enable Mapbox visualizations
-# You need to register to mapbox.com to get the API key
-# https://www.mapbox.com/developers/api/#access-tokens
-MAPBOX_API_KEY = '${service['pilot.mapbox.key']}'
