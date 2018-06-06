@@ -4,12 +4,6 @@ PILOT_WORKERS = ${service['pilot.server.worker.number']}
 # The port of server
 PILOT_WEBSERVER_PORT = ${service['pilot.desktop.http.port']}
 
-# Maximum number of rows returned when creating slice
-ROW_LIMIT = 5000
-
-# Maximum number of rows returned in the SQL editor
-SQL_MAX_ROW = 10000
-
 
 # The SQLAlchemy connection string.
 # Mysql database should be existed and change its charset to 'utf8':
