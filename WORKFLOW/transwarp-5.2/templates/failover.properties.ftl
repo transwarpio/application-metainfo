@@ -22,7 +22,7 @@ master.port=${service['workflow.http.port']}
     <#assign quorum = quorums?join(",")>
 </#if>
 zk.quorum=${quorum}
-zk.session.timeout.millis=180000
+zk.session.timeout.millis=120000
 znode.base=${service.sid}
 znode.master=master
 znode.backup.master=backup-master
