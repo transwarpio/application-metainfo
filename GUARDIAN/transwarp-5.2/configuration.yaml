@@ -517,3 +517,43 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: cas.ticket.st.numberOfUses
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [CAS_CONFIG_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: cas.ticket.st.timeToKillInSeconds
+  recommendExpression: 10
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [CAS_CONFIG_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: cas.ticket.pt.numberOfUses
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [CAS_CONFIG_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: cas.ticket.pt.timeToKillInSeconds
+  recommendExpression: 10
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [CAS_CONFIG_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

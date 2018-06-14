@@ -342,6 +342,10 @@ firstWizardConfigs:
 - txsql.container.requests.memory
 - txsql.container.requests.cpu
 - txsql.memory.ratio
+- cas.ticket.st.numberOfUses
+- cas.ticket.st.timeToKillInSeconds
+- cas.ticket.pt.numberOfUses
+- cas.ticket.pt.timeToKillInSeconds
 
 principals:
 - guardian/guardian
