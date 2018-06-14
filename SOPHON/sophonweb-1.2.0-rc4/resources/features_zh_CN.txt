@@ -1,7 +1,0 @@
-* 为自然语言处理添加TXSQL依赖，自动添加相关数据
-
-* 优化客户端交互界面 
-
-* Bugs fixed:
-   * [WARP-19465]: 修复读取空的transactional ORC 和Parquet表失败问题。
-   * [WARP-18000]: 修复客户端数据库链接显示异常问题。
