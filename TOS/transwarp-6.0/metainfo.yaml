@@ -335,3 +335,5 @@ firstWizardConfigs:
 - tos.master.dashboard.password
 - tos.registry.ui.port
 - tos.registry.port
+- service.cluster.ip.range
+- cluster.dns.ip
