@@ -148,3 +148,21 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: cluster.dns.ip
+  recommendExpression: 10.10.10.10
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: service.cluster.ip.range
+  recommendExpression: 10.10.10.0/24
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
