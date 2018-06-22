@@ -50,3 +50,9 @@ export CAS_MGMT_SERVERNAME=https://${service.roles.CAS_ADMIN_SERVER[0]['hostname
 export CAS_MGMT_SERVER_SSL_KEYSTORE=file:/srv/cas-admin-server/server.keystore
 export CAS_MGMT_SERVER_SSL_KEYSTOREPASSWORD=changeit
 export CAS_MGMT_SERVER_SSL_KEYPASSWORD=changeit
+
+export CAS_TICKET_ST_NUMBEROFUSES=${service['cas.ticket.st.numberOfUses']}
+export CAS_TICKET_ST_TIMETOKILLINSECONDS=${service['cas.ticket.st.timeToKillInSeconds']}
+
+export CAS_TICKET_PT_NUMBEROFUSES=${service['cas.ticket.pt.numberOfUses']}
+export CAS_TICKET_PT_TIMETOKILLINSECONDS=${service['cas.ticket.pt.timeToKillInSeconds']}
