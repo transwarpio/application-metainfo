@@ -148,7 +148,7 @@ roles:
   readinessProbe:
     probe: !<httpGet>
       path: /
-      port: 9095
+      port: ${service['thrift.info.port']}
       scheme: HTTP
   env:
   - name: HBASE_CONF_DIR
@@ -226,6 +226,8 @@ firstWizardConfigs:
 - thrift.container.requests.memory
 - thrift.container.requests.cpu
 - thrift.memory.ratio
+- regionserver.thrift.port
+- thrift.info.port
 
 dashboardMetrics:
 - HyperBaseReadRequestsRate

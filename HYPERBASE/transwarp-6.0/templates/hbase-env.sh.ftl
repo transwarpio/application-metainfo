@@ -106,6 +106,8 @@ export HBASE_REGIONSERVER_OPTS="$HBASE_REGIONSERVER_OPTS -Xms${(regionserverMemo
 export HBASE_THRIFT_SERVER_MEMORY=${thriftMemory?floor}m
 export HBASE_THRIFT_OPTS="$HBASE_THRIFT_OPTS -Xmx${thriftMemory?floor}m"
 
+export HBASE_HBCK_OPTS="-Xms${(regionserverMemory/2)?floor}m -Xmx${regionserverMemory?floor}m -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps"
+
 #other roles heap size has been set in opts, chronos server do not set specific the java opts, use hbase heapsize instead.
 export HBASE_HEAPSIZE="1024m"
 
@@ -159,3 +161,5 @@ export KEYTAB=/etc/${service.sid}/conf/hyperbase.keytab
 export KRB_PLUGIN_ENABLE=true
 export KRB_OPTS="-Djava.security.krb5.conf=/etc/${service.sid}/conf/krb5.conf -Djava.security.auth.login.config=/etc/${service.sid}/conf/jaas.conf"
 </#if>
+
+export HBASE_MASTER_OPTS="$HBASE_MASTER_OPTS -Duser.dir=/etc/${service.sid}/conf"
