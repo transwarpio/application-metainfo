@@ -150,15 +150,6 @@
   groups: []
   visibility: READ_WRITE
 
-- name: hbase.coprocessor.master.classes
-  recommendExpression: null
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
 - name: hbase.master.distributed.log.replay
   recommendExpression: true
   defaultValue: null
