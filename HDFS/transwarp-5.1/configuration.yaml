@@ -584,7 +584,7 @@
   visibility: READ_WRITE
 
 - name: transwarp.docker.enable
-  recommendExpression: false
+  recommendExpression: true
   defaultValue: null
   valueType: BOOL
   scope: !<ServiceLevel> {}
