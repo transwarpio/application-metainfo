@@ -73,6 +73,11 @@ roles:
           templatePath: "mirror.conf"
           targetPath: "/etc/${service.sid}/conf/mirror.conf"
           mode: "755"
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "logback.xml"
+          targetPath: "/etc/${service.sid}/conf/logback.xml"
+          mode: "755"
 
 stages:
   - type: Config
