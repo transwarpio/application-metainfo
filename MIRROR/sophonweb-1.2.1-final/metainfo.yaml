@@ -70,13 +70,8 @@ roles:
           mode: "755"
       - directive: !<resource>
           templateType: FreeMarker
-          templatePath: "inceptor.properties"
-          targetPath: "/etc/${service.sid}/conf/inceptor.properties"
-          mode: "755"
-      - directive: !<resource>
-          templateType: FreeMarker
-          templatePath: "hdfs.properties"
-          targetPath: "/etc/${service.sid}/conf/hdfs.properties"
+          templatePath: "mirror.conf"
+          targetPath: "/etc/${service.sid}/conf/mirror.conf"
           mode: "755"
 
 stages:
@@ -107,6 +102,7 @@ firstWizardConfigs:
 - mirror.userprofile.container.requests.memory
 - mirror.userprofile.container.requests.cpu
 - mirror.userprofile.hdfs.main.username
+- mirror.userprofile.id.column
 
 product: Mirror
 
