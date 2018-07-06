@@ -17,15 +17,6 @@
   groups: []
   visibility: PASSWORD
 
-- name: mirror.userprofile.redis.port
-  recommendExpression: 6379
-  defaultValue: null
-  valueType: PORT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
 #application.yml
 - name: mirror.userprofile.port
   recommendExpression: 8888
@@ -36,7 +27,16 @@
   groups: []
   visibility: READ_WRITE
 
-#inceptor.properties
+#mirror.conf
+- name: mirror.userprofile.hdfs.main.username
+  recommendExpression: hdfs
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: mirror.userprofile.inceptor.database.prod
   recommendExpression: mirror_prod
   defaultValue: null
@@ -114,52 +114,3 @@
   groups: []
   visibility: READ_WRITE
 
-- name: redis.container.limits.memory
-  recommendExpression: -1
-  defaultValue: null
-  valueType: GB
-  scope: !<RoleTypes>
-    roleTypes: [MIRROR_REDIS]
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: redis.container.limits.cpu
-  recommendExpression: -1
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<RoleTypes>
-    roleTypes: [MIRROR_REDIS]
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: redis.container.requests.memory
-  recommendExpression: -1
-  defaultValue: null
-  valueType: GB
-  scope: !<RoleTypes>
-    roleTypes: [MIRROR_REDIS]
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: redis.container.requests.cpu
-  recommendExpression: -1
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<RoleTypes>
-    roleTypes: [MIRROR_REDIS]
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-# hdfs.properties
-- name: mirror.userprofile.hdfs.main.username
-  recommendExpression: hdfs
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE

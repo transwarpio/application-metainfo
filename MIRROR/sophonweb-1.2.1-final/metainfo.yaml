@@ -21,6 +21,11 @@ dependencies:
     minVersion: sophonweb-1.2.1-final
     maxVersion: sophonweb-1.2.1-final
     optional: false
+  - name: SEARCH
+    minVersion: sophonweb-1.2.1-final
+    maxVersion: sophonweb-1.2.1-final
+    optional: false
+
 roles:
   - name: MIRROR_USERPROFILE
     friendlyName: "Mirror userprofile"
@@ -37,6 +42,8 @@ roles:
     env:
     - name: MIRROR_CONF_DIR
       value: /etc/${service.sid}/conf
+    - name: MIRROR_SERVICE_ID
+      value: ${service.sid}
     mountPaths: []
     resources:
       limitsMemoryKey: mirror.userprofile.container.limits.memory
@@ -75,8 +82,8 @@ roles:
           mode: "755"
       - directive: !<resource>
           templateType: FreeMarker
-          templatePath: "logback.xml"
-          targetPath: "/etc/${service.sid}/conf/logback.xml"
+          templatePath: "log4j.properties"
+          targetPath: "/etc/${service.sid}/conf/log4j.properties"
           mode: "755"
 
 stages:
