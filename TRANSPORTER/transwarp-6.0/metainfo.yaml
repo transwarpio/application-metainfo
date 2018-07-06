@@ -157,3 +157,6 @@ healthChecks:
 - category: DAEMON_CHECK
   intervalSeconds: 10
   method: !<K8sPod> {}
+
+customConfigFiles:
+- tdt-site.xml
