@@ -107,7 +107,6 @@ firstWizardConfigs:
 - mirror.userprofile.container.requests.memory
 - mirror.userprofile.container.requests.cpu
 - mirror.userprofile.hdfs.main.username
-- mirror.userprofile.id.column
 
 product: Mirror
 
