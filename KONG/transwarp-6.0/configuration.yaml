@@ -18,7 +18,7 @@
   visibility: READ_WRITE
 
 - name: kong.proxy_ssl.port
-  recommendExpression: 8443
+  recommendExpression: 8445
   defaultValue: null
   valueType: PORT
   scope: !<ServiceLevel> {}
