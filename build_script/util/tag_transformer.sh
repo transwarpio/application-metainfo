@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-IN_PROGRESS_VERSION=sophonweb-1.2
-TAG_VERSION=sophonweb-1.2.1-final
+IN_PROGRESS_VERSION=sophonweb-1.3
+TAG_VERSION=sophonweb-1.3.0-rc0
 
 set -e
 
