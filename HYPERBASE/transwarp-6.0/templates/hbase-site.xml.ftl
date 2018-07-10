@@ -46,8 +46,8 @@
 
 <#if service.plugins?seq_contains("guardian")>
     <@property "hbase.service.id" service.sid/>
-    <#assign coprocessorRegion=",org.apache.hadoop.hbase.security.token.TokenProvider,io.transwarp.guardian.plugins.hyperbase.GuardianAccessController,org.apache.hadoop.hbase.security.access.SecureBulkLoadEndpoint"/>
-    <#assign coprocessorMaster=",io.transwarp.guardian.plugins.hyperbase.GuardianAccessController"/>
+    <#assign coprocessorRegion=",org.apache.hadoop.hbase.security.token.TokenProvider,org.apache.hadoop.hbase.security.access.GuardianAccessController,org.apache.hadoop.hbase.security.access.SecureBulkLoadEndpoint"/>
+    <#assign coprocessorMaster=",org.apache.hadoop.hbase.security.access.GuardianAccessController"/>
 </#if>
 
     <#assign esRegionCoprocessor=dependencies.SEARCH???string(",org.apache.hadoop.hyperbase.fulltextindex.coprocessor.EsRegionCoprocessor", "")>
