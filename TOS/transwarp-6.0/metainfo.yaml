@@ -67,6 +67,11 @@ roles:
         templatePath: "haproxy"
         targetPath: "/etc/sysconfig/haproxy"
         mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "resolv.conf"
+        targetPath: "/etc/transwarp/conf/resolv.conf"
+        mode: "755"
   - type: Start
     directives:
     - directive: !<shell>
