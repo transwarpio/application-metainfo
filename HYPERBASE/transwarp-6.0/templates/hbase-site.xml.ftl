@@ -40,6 +40,7 @@
     <@property "hbase.rest.authentication.kerberos.principal" "hbase/_HOST@" + service.realm/>
     <@property "hbase.rest.authentication.kerberos.keytab" service.keytab/>
     <@property "hbase.security.authorization" "true"/>
+    <@property "hbase.rootdir.perms" "711"/>
     <#assign coprocessorRegion=",org.apache.hadoop.hbase.security.token.TokenProvider,org.apache.hadoop.hbase.security.access.AccessController,org.apache.hadoop.hbase.security.access.SecureBulkLoadEndpoint"/>
     <#assign coprocessorMaster=",org.apache.hadoop.hbase.security.access.AccessController"/>
 </#if>
