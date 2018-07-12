@@ -314,7 +314,7 @@
   onDeps: []
   groups: []
   visibility: PASSWORD
-- name: sophon.guardian.status
+- name: sophon.enable.kerberos
   recommendExpression: false
   defaultValue: null
   valueType: BOOL
