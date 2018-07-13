@@ -1,27 +1,27 @@
-gatewayroot.logger=INFO,RFA
-gatewaylog.dir=/var/log/gateway/
-gatewaylog.file=inceptor-gateway.log
+gateway.root.logger=INFO,RFA
+gateway.log.dir=/var/log/gateway/
+gateway.log.file=inceptor-gateway.log
 
 # Define the root logger to the system property "hadoop.root.logger".
-log4j.rootLogger=${gatewayroot.logger}
+log4j.rootLogger=${gateway.root.logger}
 
 # Set everything to be logged to the console
 log4j.appender.console=org.apache.log4j.ConsoleAppender
 log4j.appender.console.target=System.err
 log4j.appender.console.layout=org.apache.log4j.PatternLayout
-log4j.appender.console.layout.ConversionPattern=%d{yy/MM/dd HH:mm:ss} %p %c: %m%n
+log4j.appender.console.layout.ConversionPattern=%d{yy/MM/dd HH:mm:ss,SSS} %p %c: %m%n
 
 
 # output to file
 log4j.appender.RFA=org.apache.log4j.RollingFileAppender
-log4j.appender.RFA.File=${gatewaylog.dir}/${gatewaylog.file}
+log4j.appender.RFA.File=${gateway.log.dir}/${gateway.log.file}
 # The MaxFileSize can be 512KB
 log4j.appender.RFA.MaxFileSize=10MB
 # Keep three backup files.
 log4j.appender.RFA.MaxBackupIndex=1024
 # Pattern to output: date priority [category] - message
 log4j.appender.RFA.layout=org.apache.log4j.PatternLayout
-log4j.appender.RFA.layout.ConversionPattern=%d{yy/MM/dd HH:mm:ss} %p %c: %m%n
+log4j.appender.RFA.layout.ConversionPattern=%d{yy/MM/dd HH:mm:ss,SSS} %p %c: %m%n
 
 # Ignore messages below warning level from Jetty, because it's a bit verbose
 log4j.logger.org.eclipse.jetty=WARN
