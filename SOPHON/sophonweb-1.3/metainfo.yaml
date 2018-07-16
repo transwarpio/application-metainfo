@@ -71,6 +71,7 @@ roles:
   operations: []
 - name: SOPHON_WEB
   dockerImage: "transwarp/sophon-web:sophonweb-1.3"
+  linkExpression: "http://${localhostname}:${service['sophon.visit.port']}/"
   friendlyName: "Sophon web"
   labelPrefix: "sophon-web"
   category: MASTER
