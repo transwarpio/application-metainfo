@@ -138,15 +138,7 @@
   groups: []
   visibility: READ_WRITE
 - name: mysql.port
-  recommendExpression: 3306
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-- name: mysql.port
-  recommendExpression: 3306
+  recommendExpression: 3307
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
