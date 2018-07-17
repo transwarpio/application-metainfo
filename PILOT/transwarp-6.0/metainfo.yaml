@@ -76,7 +76,7 @@ roles:
     frontendOperations: ["Start", "Stop", "Delete"]
     readinessProbe:
       probe: !<httpGet>
-        path: /
+        path: /health/
         port: ${service['pilot.desktop.http.port']}
         scheme: HTTP
       failureThreshold: 3
