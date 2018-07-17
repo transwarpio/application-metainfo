@@ -123,6 +123,7 @@ firstWizardConfigs:
 - kong.mysql.database
 - mysql.username
 - mysql.password
+- mysql.port
 - kong-dashboard.port
 - server.container.limits.memory
 - server.container.limits.cpu
