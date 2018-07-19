@@ -129,6 +129,7 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
 - name: mysql.host
   recommendExpression: "0.0.0.0"
   defaultValue: null
@@ -137,6 +138,7 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
 - name: mysql.port
   recommendExpression: 3307
   defaultValue: null
@@ -145,6 +147,7 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
 - name: kong-dashboard.port
   recommendExpression: 8848
   defaultValue: null
