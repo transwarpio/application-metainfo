@@ -102,12 +102,6 @@ stages:
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
-  - type: Bootstrap
-    taskGroups:
-    - !<Create-Database-in-Inceptor>
-      summaryPolicy: ALL
-      timeoutMinutes: 5
-      dbNames: ["tdt", "tdt_samples"]
   - type: PreUpgrade
     taskGroups:
     - !<DockerRunPreUpgrade>
