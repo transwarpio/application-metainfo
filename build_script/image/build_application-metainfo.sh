@@ -37,6 +37,7 @@ build_application-metainfo() {
 
         # configure git remote options
         cd "$META_DST_DIR"
+        git config --global http.proxy 'http://172.16.0.249:3128'
         git remote rm origin
         git remote add origin https://minhao.zou%40transwarp.io:sophon2016@github.com/transwarpio/application-metainfo.git
         git checkout -b sophon
