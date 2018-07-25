@@ -81,9 +81,9 @@ roles:
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
   suggestion:
-  - criteria: !<EachNode> {}
+  - criteria: !<Range> {"min": 1, "max": 1}
   validation:
-  - criteria: !<EachNode> {}
+  - criteria: !<Range> {"min": 0}
   operations: []
 
 stages:
@@ -129,3 +129,6 @@ healthChecks:
 - category: DAEMON_CHECK
   intervalSeconds: 30
   method: !<K8sPod> {}
+
+customConfigFiles:
+- elasticsearch.yml

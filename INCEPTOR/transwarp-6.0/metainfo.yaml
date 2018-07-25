@@ -291,3 +291,6 @@ healthChecks:
 - category: VITAL_SIGN_CHECK
   intervalSeconds: 10
   method: !<Builtin> {}
+
+customConfigFiles:
+- hive-site.xml

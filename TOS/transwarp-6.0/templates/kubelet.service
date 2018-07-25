@@ -7,7 +7,7 @@ Wants=docker.socket
 ExecStart=/opt/kubernetes/bin/hyperkube kubelet \
     --v=4 \
     --address=0.0.0.0 \
-    --cluster_dns=10.10.10.10 \
+    --cluster_dns=${service['cluster.dns.ip']} \
     --cluster_domain=transwarp.local \
     --port=${service['tos.slave.kubelet.port']} \
     --config=/opt/kubernetes/manifests-multi \
@@ -19,7 +19,9 @@ ExecStart=/opt/kubernetes/bin/hyperkube kubelet \
     --require-kubeconfig \
     --allow_privileged=true \
     --host-network-sources=* \
-    --hostname-override=${localhostname}
+    --hostname-override=${localhostname} \
+    --network-plugin=cni \
+    --network-plugin-dir=/etc/cni/net.d
 
 KillMode=process
 Restart=always

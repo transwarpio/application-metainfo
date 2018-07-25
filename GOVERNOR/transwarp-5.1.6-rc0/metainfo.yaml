@@ -1,0 +1,142 @@
+---
+name: GOVERNOR
+version: transwarp-5.1.6-rc0
+global: false
+namePrefix: Governor
+friendlyName: Governor
+dockerImage: "transwarp/governor:transwarp-5.1.6-rc0"
+dependencies:
+  - name: GUARDIAN
+    minVersion: transwarp-5.1.6-rc0
+    maxVersion: transwarp-5.1.6-rc0
+    optional: true
+  - name: HYPERBASE
+    minVersion: transwarp-5.1.6-rc0
+    maxVersion: transwarp-5.1.6-rc0
+    optional: false
+  - name: SEARCH
+    minVersion: transwarp-5.1.6-rc0
+    maxVersion: transwarp-5.1.6-rc0
+    optional: false
+  - name: KAFKA
+    minVersion: transwarp-5.1.6-rc0
+    maxVersion: transwarp-5.1.6-rc0
+    optional: false
+  - name: ZOOKEEPER
+    minVersion: transwarp-5.1.6-rc0
+    maxVersion: transwarp-5.1.6-rc0
+    optional: false
+  - name: HDFS
+    minVersion: transwarp-5.1.6-rc0
+    maxVersion: transwarp-5.1.6-rc0
+    optional: false
+  - name: NOTIFICATION
+    minVersion: transwarp-5.1.6-rc0
+    maxVersion: transwarp-5.1.6-rc0
+    optional: false
+  - name: TXSQL
+    minVersion: transwarp-5.1.6-rc0
+    maxVersion: transwarp-5.1.6-rc0
+    optional: false
+roles:
+- name: GOVERNOR_SERVER
+  friendlyName: "Governor Server"
+  labelPrefix: "governor-server"
+  linkExpression: "http://${localhostname}:${service['governor.http.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+  - name: ATLAS_CONF
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: governor.container.limits.memory
+    limitsCpuKey: governor.container.limits.cpu
+    requestsMemoryKey: governor.container.requests.memory
+    requestsCpuKey: governor.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
+        to: "/etc/${service.sid}/conf/hdfs-site.xml"
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
+        to: "/etc/${service.sid}/conf/core-site.xml"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "dataSource.properties"
+        targetPath: "/etc/${service.sid}/conf/dataSource.properties"
+        mode: "600"
+stages:
+  - type: Config
+    taskGroups:
+    - !<Create-Database>
+      dbPrefix: governor
+      dbUserConfig: javax.jdo.option.ConnectionUserName
+      dbPasswordConfig: javax.jdo.option.ConnectionPassword
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Role>
+      roleType: "GOVERNOR_SERVER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+  - type: PreUpgrade
+    taskGroups:
+    - !<DockerRunPreUpgrade>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      roleType: GOVERNOR_SERVER
+      node: Any
+  - type: PreRollback
+    taskGroups:
+    - !<DockerRunPreRollback>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      roleType: GOVERNOR_SERVER
+      node: Any
+
+product: Studio
+
+firstWizardConfigs:
+- governor.http.port
+- javax.jdo.option.ConnectionUserName
+- javax.jdo.option.ConnectionPassword
+- governor.container.limits.memory
+- governor.container.limits.cpu
+- governor.container.requests.memory
+- governor.container.requests.cpu
+- governor.memory.ratio
+
+pages:
+- roles
+- configuration
+- operation
+- security
+
+principals:
+- kafka
+- hbase
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 10
+  method: !<Builtin> {}

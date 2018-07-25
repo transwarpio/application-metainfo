@@ -40,19 +40,20 @@
     <@property "hbase.rest.authentication.kerberos.principal" "hbase/_HOST@" + service.realm/>
     <@property "hbase.rest.authentication.kerberos.keytab" service.keytab/>
     <@property "hbase.security.authorization" "true"/>
+    <@property "hbase.rootdir.perms" "711"/>
     <#assign coprocessorRegion=",org.apache.hadoop.hbase.security.token.TokenProvider,org.apache.hadoop.hbase.security.access.AccessController,org.apache.hadoop.hbase.security.access.SecureBulkLoadEndpoint"/>
     <#assign coprocessorMaster=",org.apache.hadoop.hbase.security.access.AccessController"/>
 </#if>
 
 <#if service.plugins?seq_contains("guardian")>
     <@property "hbase.service.id" service.sid/>
-    <#assign coprocessorRegion=",org.apache.hadoop.hbase.security.token.TokenProvider,io.transwarp.guardian.plugins.hyperbase.GuardianAccessController,org.apache.hadoop.hbase.security.access.SecureBulkLoadEndpoint"/>
-    <#assign coprocessorMaster=",io.transwarp.guardian.plugins.hyperbase.GuardianAccessController"/>
+    <#assign coprocessorRegion=",org.apache.hadoop.hbase.security.token.TokenProvider,org.apache.hadoop.hbase.security.access.GuardianAccessController,org.apache.hadoop.hbase.security.access.SecureBulkLoadEndpoint"/>
+    <#assign coprocessorMaster=",org.apache.hadoop.hbase.security.access.GuardianAccessController"/>
 </#if>
 
     <#assign esRegionCoprocessor=dependencies.SEARCH???string(",org.apache.hadoop.hyperbase.fulltextindex.coprocessor.EsRegionCoprocessor", "")>
     <@property "hbase.coprocessor.region.classes" service['hbase.coprocessor.region.classes'] + esRegionCoprocessor + coprocessorRegion/>
-    <@property "hbase.coprocessor.master.classes" service['hbase.coprocessor.master.classes'] + coprocessorMaster/>
+    <@property "hbase.coprocessor.master.classes" coprocessorMaster/>
 
     <#assign path="hdfs://" + dependencies.HDFS.nameservices[0] + "/" + service.sid + "_hregionindex">
     <@property "hregion.index.path" path/>
@@ -73,6 +74,8 @@
     <@property "hbase.regionserver.info.port" service['regionserver.info.port']/>
     <@property "hbase.master.report.ip" "false"/>
     <@property "hbase.regionserver.report.ip" "false"/>
+    <@property "hbase.regionserver.thrift.port" service['regionserver.thrift.port']/>
+    <@property "hbase.thrift.info.port" service['thrift.info.port']/>
 <#if dependencies.SEARCH??>
     <#assign es_nodes=[]>
     <#list dependencies.SEARCH.roles.SEARCH_SERVER as server>
@@ -111,7 +114,6 @@
 <@property "hbase.sservice.local.mergeinterval" service['hbase.sservice.local.mergeinterval']/>
 <@property "hbase.zookeeper.peerport" service['hbase.zookeeper.peerport']/>
 <@property "hbase.hregion.memstore.mslab.enabled" service['hbase.hregion.memstore.mslab.enabled']/>
-<@property "hbase.regionserver.global.memstore.upperLimit" service['hbase.regionserver.global.memstore.upperLimit']/>
 <@property "hbase.hregion.memstore.chunkpool.maxsize" service['hbase.hregion.memstore.chunkpool.maxsize']/>
 <@property "hbase.sservice.tolerable.timediff" service['hbase.sservice.tolerable.timediff']/>
 <@property "hbase.lightweight.snapshotmanager.enable" service['hbase.lightweight.snapshotmanager.enable']/>
@@ -128,10 +130,38 @@
 <@property "hfile.block.cache.size" service['hfile.block.cache.size']/>
 <@property "hbase.regions.slop" service['hbase.regions.slop']/>
 <@property "hbase.cluster.distributed" service['hbase.cluster.distributed']/>
-<@property "hbase.regionserver.global.memstore.lowerLimit" service['hbase.regionserver.global.memstore.lowerLimit']/>
 <@property "hbase.hregion.majorcompaction.cron" service['hbase.hregion.majorcompaction.cron']/>
 <@property "hbase.master.balancer.stochastic.maxRunningTime" service['hbase.master.balancer.stochastic.maxRunningTime']/>
 <@property "hbase.master.balancer.regionLocationCacheTime" service['hbase.master.balancer.regionLocationCacheTime']/>
+<@property "hbase.regionserver.thread.split" service['hbase.regionserver.thread.split']/>
+<@property "hbase.regionserver.hlog.blocksize" service['hbase.regionserver.hlog.blocksize']/>
+<@property "hbase.regionserver.maxlogs" service['hbase.regionserver.maxlogs']/>
+<@property "hbase.master.wait.on.regionservers.mintostart" service['hbase.master.wait.on.regionservers.mintostart']/>
+<@property "hbase.regionserver.storefile.refresh.period" service['hbase.regionserver.storefile.refresh.period']/>
+<@property "hbase.hstore.flusher.count" service['hbase.hstore.flusher.count']/>
+<@property "hbase.master.preload.tabledescriptors" service['hbase.master.preload.tabledescriptors']/>
+<@property "hbase.hregion.preclose.flush.size" service['hbase.hregion.preclose.flush.size']/>
+<@property "hbase.hstore.compaction.kv.max" service['hbase.hstore.compaction.kv.max']/>
+<@property "hbase.regionserver.thread.compaction.small" service['hbase.regionserver.thread.compaction.small']/>
+<@property "hbase.regionserver.thread.compaction.large" service['hbase.regionserver.thread.compaction.large']/>
+<@property "hbase.hstore.compaction.max.size" service['hbase.hstore.compaction.max.size']/>
+<@property "hbase.hstore.compaction.min" service['hbase.hstore.compaction.min']/>
+<@property "hbase.hstore.compaction.max" service['hbase.hstore.compaction.max']/>
+<@property "hbase.hstore.compaction.ratio" service['hbase.hstore.compaction.ratio']/>
+<@property "hbase.hregion.majorcompaction" service['hbase.hregion.majorcompaction']/>
+<@property "hbase.hstore.defaultengine.compactionpolicy.class" service['hbase.hstore.defaultengine.compactionpolicy.class']/>
+<@property "hbase.regionserver.global.memstore.size.lower.limit" service['hbase.regionserver.global.memstore.size.lower.limit']/>
+<@property "hbase.regionserver.global.memstore.size" service['hbase.regionserver.global.memstore.size']/>
+<@property "hbase.regionserver.thread.compaction.throttle" service['hbase.regionserver.thread.compaction.throttle']/>
+<@property "hbase.hstore.blockingWaitTime" service['hbase.hstore.blockingWaitTime']/>
+<@property "hbase.regionserver.metahandler.count" service['hbase.regionserver.metahandler.count']/>
+<@property "hbase.master.executor.openregion.threads" service['hbase.master.executor.openregion.threads']/>
+<@property "hbase.master.executor.closeregion.threads" service['hbase.master.executor.closeregion.threads']/>
+<@property "hbase.regionserver.executor.openregion.threads" service['hbase.regionserver.executor.openregion.threads']/>
+<@property "hbase.regionserver.executor.closeregion.threads" service['hbase.regionserver.executor.closeregion.threads']/>
+<@property "hbase.hregion.memstore.block.multiplier" service['hbase.hregion.memstore.block.multiplier']/>
+<@property "hbase.client.meta.operation.timeout" service['hbase.client.meta.operation.timeout']/>
+<@property "hbase.client.write.buffer" service['hbase.client.write.buffer']/>
 
 <#--Take properties from the context-->
 <#if service['hbase-site.xml']??>

@@ -19,7 +19,7 @@
         {"name": "PendingReplicationBlocks", "title":"Pending Replication Blocks"},
         {"name": "CorruptBlocks", "title":"Corrupt Blocks"},
         {"name": "ScheduledReplicationBlocks", "title":"Scheduled Replication Blocks"},
-        {"name": "CapacityTotal", "title":"Total Blocks"},
+        {"name": "NameNodeBlocksTotal", "title":"Total Blocks"},
         {"name": "UnderReplicatedBlocks", "title":"Under Replicated Blocks"}
       ]
     },
@@ -66,7 +66,7 @@
     "metricUnit": "%"
   },
   "statistics":[
-    {"metricName": "CapacityTotal", "title": "Total Blocks"},
+    {"metricName": "NameNodeBlocksTotal", "title": "Total Blocks"},
     {"metricName": "CorruptBlocks", "title": "Corrupt Blocks"},
     {"metricName": "PendingReplicationBlocks", "title": "Pending Replication Blocks"},
     {"metricName": "UnderReplicatedBlocks", "title": "Under Replicated Blocks"}
