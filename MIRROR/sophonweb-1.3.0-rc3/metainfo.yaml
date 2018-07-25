@@ -1,0 +1,133 @@
+---
+name: MIRROR
+version: sophonweb-1.3.0-rc3
+global: false
+namePrefix: Mirror
+friendlyName: "Mirror"
+dependencies:
+  - name: INCEPTOR
+    minVersion: sophonweb-1.3.0-rc3
+    maxVersion: sophonweb-1.3.0-rc3
+    optional: false
+  - name: TXSQL
+    minVersion: sophonweb-1.3.0-rc3
+    maxVersion: sophonweb-1.3.0-rc3
+    optional: false
+  - name: HDFS
+    minVersion: sophonweb-1.3.0-rc3
+    maxVersion: sophonweb-1.3.0-rc3
+    optional: false
+  - name: SOPHON
+    minVersion: sophonweb-1.3.0-rc3
+    maxVersion: sophonweb-1.3.0-rc3
+    optional: false
+  - name: SEARCH
+    minVersion: sophonweb-1.3.0-rc3
+    maxVersion: sophonweb-1.3.0-rc3
+    optional: false
+
+roles:
+  - name: MIRROR_USERPROFILE
+    friendlyName: "Mirror userprofile"
+    labelPrefix: "mirror-userprofile"
+    dockerImage: "transwarp/sophon-st:sophonweb-1.3.0-rc3"
+    linkExpression: "http://${localhostname}:${service['mirror.userprofile.port']}/"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+    deleteOpCondition:
+      deletable:
+        number: 2
+      reject:
+        number: 1
+    env:
+    - name: MIRROR_CONF_DIR
+      value: /etc/${service.sid}/conf
+    - name: MIRROR_SERVICE_ID
+      value: ${service.sid}
+    mountPaths: []
+    resources:
+      limitsMemoryKey: mirror.userprofile.container.limits.memory
+      limitsCpuKey: mirror.userprofile.container.limits.cpu
+      requestsMemoryKey: mirror.userprofile.container.requests.memory
+      requestsCpuKey: mirror.userprofile.container.requests.cpu
+    summaryPolicy: ALL
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations:
+    - type: Config
+      directives:
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "application.properties"
+          targetPath: "/etc/${service.sid}/conf/application.properties"
+          mode: "755"
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "application-prod.properties"
+          targetPath: "/etc/${service.sid}/conf/application-prod.properties"
+          mode: "755"
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "application.yml"
+          targetPath: "/etc/${service.sid}/conf/application.yml"
+          mode: "755"
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "mirror.conf"
+          targetPath: "/etc/${service.sid}/conf/mirror.conf"
+          mode: "755"
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "log4j.properties"
+          targetPath: "/etc/${service.sid}/conf/log4j.properties"
+          mode: "755"
+
+stages:
+  - type: Config
+    taskGroups:
+    - !<Create-Database>
+      dbPrefix: mirror
+      dbUserConfig: javax.jdo.option.ConnectionUserName
+      dbPasswordConfig: javax.jdo.option.ConnectionPassword
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Role>
+      roleType: "MIRROR_USERPROFILE"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+
+firstWizardConfigs:
+- mirror.userprofile.port
+- javax.jdo.option.ConnectionUserName
+- javax.jdo.option.ConnectionPassword
+- mirror.userprofile.inceptor.ldap.username
+- mirror.userprofile.inceptor.ldap.password
+- mirror.userprofile.inceptor.database.prod
+- mirror.userprofile.inceptor.database.check
+- mirror.userprofile.container.limits.memory
+- mirror.userprofile.container.limits.cpu
+- mirror.userprofile.container.requests.memory
+- mirror.userprofile.container.requests.cpu
+- mirror.userprofile.hdfs.main.username
+
+product: Mirror
+
+principals:
+- mirror
+
+pages:
+- roles
+- configuration
+- operation
+- security
+
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 30
+  method: !<K8sPod> {}
