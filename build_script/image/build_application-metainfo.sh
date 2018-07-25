@@ -36,13 +36,13 @@ build_application-metainfo() {
         cp -rp . "$META_DST_DIR"
 
         # configure git remote options
-#        git config --global http.proxy 'http://172.16.0.249:3128'
-#        export http_proxy=http://172.16.0.249:3128
-#        export https_proxy=http://172.16.0.249:3128
+        git config --global http.proxy 'http://172.16.0.249:3128'
+        export http_proxy=http://172.16.0.249:3128
+        export https_proxy=http://172.16.0.249:3128
         cd "$META_DST_DIR"
         git remote rm origin
         git remote add origin https://github.com/transwarpio/application-metainfo.git
-#        http_proxy=http://172.16.0.249:3128 https_proxy=http://172.16.0.249:3128 git fetch origin
+        http_proxy=http://172.16.0.249:3128 https_proxy=http://172.16.0.249:3128 git fetch origin
         git checkout dev
         git branch --set-upstream-to=origin/dev dev
 
