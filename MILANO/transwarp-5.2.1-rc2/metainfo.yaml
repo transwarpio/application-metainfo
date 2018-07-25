@@ -1,0 +1,334 @@
+---
+name: MILANO
+version: transwarp-5.2.1-rc2
+global: false
+namePrefix: Milano
+friendlyName: "Milano"
+
+dependencies:
+- name: KAFKA
+  minVersion: transwarp-5.2.1-rc2
+  maxVersion: transwarp-5.2.1-rc2
+- name: SEARCH
+  minVersion: transwarp-5.2.1-rc2
+  maxVersion: transwarp-5.2.1-rc2
+- name: ZOOKEEPER
+  minVersion: transwarp-5.2.1-rc2
+  maxVersion: transwarp-5.2.1-rc2
+
+roles:
+- name: MILANO_FILEBEAT
+  friendlyName: "Filebeat"
+  labelPrefix: "filebeat"
+  dockerImage: "transwarp/filebeat:transwarp-5.2.1-rc2"
+  linkExpression: "http://${localhostname}:${service['filebeat.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  env:
+  - name: FILEBEAT_CONF_DIR
+    value: /etc/${service.sid}/conf
+  resources:
+    limitsMemoryKey: filebeat.container.limits.memory
+    limitsCpuKey: filebeat.container.limits.cpu
+    requestsMemoryKey: filebeat.container.requests.memory
+    requestsCpuKey: filebeat.container.requests.cpu
+  summaryPolicy: SOME
+  mountPaths:
+  - mountPath: /var/log
+    hostPath: /var/log
+    name: cntr-log-path
+  - mountPath: /var/run/${service.sid}/filebeat
+    hostPath: /hadoop/milano/${service.sid}/filebeat
+    name: cntr-run-path
+  autoAssign:
+  - advice: !<EachNode> {}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/hadoop/milano/${service.sid}/filebeat","/etc/${service.sid}/conf"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "settings/filebeat.yml.ftl"
+        targetPath: "/etc/${service.sid}/conf/filebeat.yml"
+        mode: "655"
+- name: MILANO_LOGSTASH
+  friendlyName: "Logstash"
+  labelPrefix: "logstash"
+  dockerImage: "transwarp/logstash:transwarp-5.2.1-rc2"
+  linkExpression: "http://${localhostname}:${service['logstash.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  env:
+  - name: LOGSTASH_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths:
+  - mountPath: /var/run/${service.sid}/logstash
+    hostPath: /hadoop/milano/${service.sid}/logstash
+    name: cntr-run-path
+  resources:
+    limitsMemoryKey: logstash.container.limits.memory
+    limitsCpuKey: logstash.container.limits.cpu
+    requestsMemoryKey: logstash.container.requests.memory
+    requestsCpuKey: logstash.container.requests.cpu
+  summaryPolicy: SOME
+  mountPaths: []
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [3, 2]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf/config","/etc/${service.sid}/conf/settings","/etc/${service.sid}/conf/patterns","/etc/${service.sid}/conf/setting","/etc/${service.sid}/conf/temp","/hadoop/milano/${service.sid}/logstash"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "config/logstash-jaas.conf.ftl"
+        targetPath: "/etc/${service.sid}/conf/logstash-jaas.conf"
+        mode: "666"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "config/b-filter.conf.ftl"
+        targetPath: "/etc/${service.sid}/conf/config/b-filter.conf"
+        mode: "666"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "config/b-output.conf.ftl"
+        targetPath: "/etc/${service.sid}/conf/config/b-output.conf"
+        mode: "666"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "config/b-input.conf.ftl"
+        targetPath: "/etc/${service.sid}/conf/config/b-input.conf"
+        mode: "666"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "patterns/grok_patterns"
+        targetPath: "/etc/${service.sid}/conf/patterns/grok_patterns"
+        mode: "666"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "patterns/tdh_patterns"
+        targetPath: "/etc/${service.sid}/conf/patterns/tdh_patterns"
+        mode: "666"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "temp/mappings.txt"
+        targetPath: "/etc/${service.sid}/conf/temp/mappings.txt"
+        mode: "666"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "settings/logstash.yml.ftl"
+        targetPath: "/etc/${service.sid}/conf/settings/logstash.yml"
+        mode: "666"
+- name: MILANO_KIBANA
+  friendlyName: "Kibana"
+  labelPrefix: "kibana"
+  dockerImage: "transwarp/kibana:transwarp-5.2.1-rc2"
+  linkExpression: "http://${localhostname}:${service['kibana.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  env:
+  - name: KIBANA_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: kibana.container.limits.memory
+    limitsCpuKey: kibana.container.limits.cpu
+    requestsMemoryKey: kibana.container.requests.memory
+    requestsCpuKey: kibana.container.requests.cpu
+  summaryPolicy: SOME
+  mountPaths: []
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf", "/etc/${service.sid}/settings"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "settings/kibana-init.sh.ftl"
+        targetPath: "/etc/${service.sid}/settings/kibana-init.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "settings/kibana-index.json.ftl"
+        targetPath: "/etc/${service.sid}/settings/kibana-index.json"
+        mode: "666"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "settings/kibana-demo.json.ftl"
+        targetPath: "/etc/${service.sid}/settings/kibana-demo.json"
+        mode: "666"
+    - directive: !<shell>
+        script: "bash -e /etc/${service.sid}/settings/kibana-init.sh"
+- name: MILANO_KAFKA_MANAGER
+  friendlyName: "KafkaManager"
+  labelPrefix: "kafka-manager"
+  dockerImage: "transwarp/kafka-manager:transwarp-5.2.1-rc2"
+  linkExpression: "http://${localhostname}:${service['kafka.manager.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  env:
+  - name: KAFKA_MANAGER_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: kafka.manager.container.limits.memory
+    limitsCpuKey: kafka.manager.container.limits.cpu
+    requestsMemoryKey: kakfa.manager.container.requests.memory
+    requestsCpuKey: kafka.manager.container.requests.cpu
+  summaryPolicy: SOME
+  mountPaths: []
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf", "/etc/${service.sid}/conf/settings"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "config/kafka-manager-jaas.conf.ftl"
+        targetPath: "/etc/${service.sid}/conf/kafka-manager-jaas.conf"
+        mode: "666"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "settings/kafka-manager-consumer.properties.ftl"
+        targetPath: "/etc/${service.sid}/conf/kafka-manager-consumer.properties"
+        mode: "666"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "settings/kafka-manager-init.sh.ftl"
+        targetPath: "/etc/${service.sid}/conf/settings/kafka-manager-init.sh"
+        mode: "755"
+- name: MILANO_CRONTAB
+  friendlyName: "Crontab"
+  labelPrefix: "crontab"
+  dockerImage: "transwarp/crontab:transwarp-5.2.1-rc2"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  env:
+  - name: CRONTAB_CONF_DIR
+    value: /etc/${service.sid}/conf
+  resources:
+    limitsMemoryKey: crontab.container.limits.memory
+    limitsCpuKey: crontab.container.limits.cpu
+    requestsMemoryKey: crontab.container.requests.memory
+    requestsCpuKey: crontab.container.requests.cpu
+  summaryPolicy: SOME
+  mountPaths:
+  - mountPath: /var/log
+    hostPath: /var/log/${service.sid}/crontabs
+    name: cntr-log-path
+  - mountPath: /etc/crontabs
+    hostPath: /etc/${service.sid}/conf/crontabs
+    name: cntr-conf-path
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf/crontabs"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "config/crontabs.conf.ftl"
+        targetPath: "/etc/${service.sid}/conf/crontabs/root"
+        mode: "666"
+
+product: Studio
+
+firstWizardConfigs:
+- filebeat.port
+- filebeat.container.limits.memory
+- filebeat.container.limits.cpu
+- filebeat.container.requests.memory
+- filebeat.container.requests.cpu
+- filebeat.memory.ratio
+- logstash.port
+- logstash.full_message
+- logstash.worker_num
+- logstash.batch_size
+- logstash.heap_size
+- logstash.index_pattern
+- logstash.container.limits.memory
+- logstash.container.limits.cpu
+- logstash.container.requests.memory
+- logstash.container.requests.cpu
+- logstash.memory.ratio
+- kibana.port
+- kibana.container.limits.memory
+- kibana.container.limits.cpu
+- kibana.container.requests.memory
+- kibana.container.requests.cpu
+- kafka.manager.port
+- kafka.manager.container.limits.memory
+- kafka.manager.container.limits.cpu
+- kafka.manager.container.requests.memory
+- kafka.manager.container.requests.cpu
+- crontab.enable
+- crontab.index.prefix
+- crontab.retention.days
+- crontab.persisted.retention.days
+- crontab.schedule.time
+- crontab.container.limits.memory
+- crontab.container.limits.cpu
+- crontab.container.requests.memory
+- crontab.container.requests.cpu
+
+dashboardMetrics:
+- AllTopicBytesOutPerSec
+
+pages:
+- summary
+- roles
+- configuration
+- operation
+- security
+
+principals:
+- kafka
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 30
+  method: !<K8sPod> {}
+#- category: VITAL_SIGN_CHECK
+#  intervalSeconds: 10
+#  method: !<Builtin> {}

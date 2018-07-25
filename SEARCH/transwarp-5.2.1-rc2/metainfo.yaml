@@ -1,0 +1,131 @@
+---
+name: SEARCH
+version: transwarp-5.2.1-rc2
+global: false
+namePrefix: Search
+friendlyName: "Search"
+dependencies: []
+roles:
+- name: SEARCH_SERVER
+  friendlyName: "Search Server"
+  labelPrefix: "search-server"
+  dockerImage: "transwarp/search:transwarp-5.2.1-rc2"
+  linkExpression: "http://${localhostname}:${service['http.port']}/_cluster/health?pretty=true"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      minMaster: false
+      health: ["yellow", "green"]
+    reject:
+      number: 2
+  env:
+  - name: LOG_DIR
+    value: /var/log/${service.sid}
+  - name: CONF_DIR
+    value: /etc/${service.sid}/conf
+  summaryPolicy: MAJOR
+  mountPaths: []
+  resources:
+    limitsMemoryKey: search.container.limits.memory
+    limitsCpuKey: search.container.limits.cpu
+    requestsMemoryKey: search.container.requests.memory
+    requestsCpuKey: search.container.requests.cpu
+  nodeSpecificMounts:
+  - configKey: path.data
+  autoAssign:
+  - advice: !<EachNode> {}
+  suggestion:
+  - criteria: !<EachNode> {}
+  validation:
+  - criteria: !<EachNode> {}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "jvm.options"
+        targetPath: "/etc/${service.sid}/conf/jvm.options"
+        mode: "600"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "elasticsearch-env"
+        targetPath: "/etc/${service.sid}/conf/elasticsearch-env"
+        mode: "600"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "elasticsearch.yml"
+        targetPath: "/etc/${service.sid}/conf/elasticsearch.yml"
+        mode: "600"
+- name: SEARCH_HEAD
+  friendlyName: "Search Head"
+  labelPrefix: "search-head"
+  dockerImage: "transwarp/search-head:transwarp-5.2.1-rc2"
+  linkExpression: "http://${localhostname}:${service['head.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  env:
+  - name: HEAD_PORT
+    value: ${service['head.port']}
+  - name: HEAD_TARGET_HOST
+    value: ${service.roles.SEARCH_SERVER[0].hostname}:${service['http.port']}
+  - name: HEAD_LOG_DIR
+    value: /var/log/head
+  summaryPolicy: NONE
+  mountPaths: []
+  resources:
+    limitsMemoryKey: search.head.container.limits.memory
+    limitsCpuKey: search.head.container.limits.cpu
+    requestsMemoryKey: search.head.container.requests.memory
+    requestsCpuKey: search.head.container.requests.cpu
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1, "max": 1}
+  validation:
+  - criteria: !<Range> {"min": 0}
+  operations: []
+
+stages:
+  - type: PreUpgrade
+    taskGroups:
+    - !<DockerRunPreUpgrade>
+        summaryPolicy: ALL
+        timeoutMinutes: 86400
+        roleType: SEARCH_SERVER
+        node: Each
+  - type: PreRollback
+    taskGroups:
+    - !<DockerRunPreRollback>
+        summaryPolicy: ALL
+        timeoutMinutes: 86400
+        roleType: SEARCH_SERVER
+        node: Each
+
+firstWizardConfigs:
+- cluster.name
+- path.data
+- node.master
+- node.data
+- http.port
+- transport.tcp.port
+- head.port
+- network.bind_host
+- network.publish_host
+- es.heap.size
+- search.container.limits.memory
+- search.container.limits.cpu
+- search.container.requests.memory
+- search.container.requests.cpu
+- search.head.container.limits.memory
+- search.head.container.limits.cpu
+- search.head.container.requests.memory
+- search.head.container.requests.cpu
+- search.memory.ratio
+
+product: Search
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 30
+  method: !<K8sPod> {}
