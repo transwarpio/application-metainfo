@@ -56,7 +56,7 @@
     roleTypes: [REDIS_SERVER]
   onDeps: []
   groups: []
-  visibility: PASSWORD
+  visibility: STRING
 
 - name: redis.port
   recommendExpression: 6379
