@@ -164,11 +164,6 @@ roles:
         templatePath: "guardian-env.sh"
         targetPath: "/etc/${service.sid}/conf/guardian-env.sh"
         mode: "600"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "application.properties"
-        targetPath: "/etc/${service.sid}/conf/application.properties"
-        mode: "600"
 - name: CAS_CONFIG_SERVER
   friendlyName: "CAS Configuration Server"
   labelPrefix: "cas-config-server"

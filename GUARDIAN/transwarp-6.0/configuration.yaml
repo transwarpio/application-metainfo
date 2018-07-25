@@ -378,9 +378,9 @@
   visibility: READ_WRITE
 
 - name: guardian.server.cookie.expired.time
-  recommendExpression: 1h
+  recommendExpression: 3600000
   defaultValue: null
-  valueType: STRING
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [GUARDIAN_SERVER]
   onDeps: []
