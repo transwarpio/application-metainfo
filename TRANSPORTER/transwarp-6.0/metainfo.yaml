@@ -68,6 +68,9 @@ roles:
     - directive: !<mkdirs>
         paths: ["/etc/${service.sid}/conf/hadoop"]
         mode: "755"
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf/canal/conf/spring"]
+        mode: "755"
   - type: Config
     directives:
     - directive: !<link>
@@ -88,6 +91,16 @@ roles:
         templatePath: "db.properties"
         targetPath: "/etc/${service.sid}/conf/db.properties"
         mode: "600"
+    - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "canal.properties"
+            targetPath: "/etc/${service.sid}/conf/canal/conf/canal.properties"
+            mode: "600"
+    - directive: !<resource>
+                templateType: FreeMarker
+                templatePath: "default-instance.xml"
+                targetPath: "/etc/${service.sid}/conf/canal/conf/spring/default-instance.xml"
+                mode: "600"
 stages:
   - type: Config
     taskGroups:
