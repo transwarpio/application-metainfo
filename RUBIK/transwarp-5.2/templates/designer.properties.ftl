@@ -29,6 +29,7 @@ service.checker.sleep.interval.min=${service['service.checker.sleep.interval.min
 </#list>
 license.server.quorum=${license_servers?join(",")}
 rubik.rest.api.detail=${service['rubik.rest.api.detail']}
+cube.build.create.sql.max.size=${service['cube.build.create.sql.max.size']}
 <#if service.auth = "kerberos">
     designer.server.host=${localhostname}
     <#if dependencies.GUARDIAN['cas.server.ssl.port']??>

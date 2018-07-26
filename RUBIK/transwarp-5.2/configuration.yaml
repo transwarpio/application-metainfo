@@ -7,6 +7,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: cube.build.create.sql.max.size
+  recommendExpression: 512
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: designer.global.session.timeout.secs
   recommendExpression: 3600
   defaultValue: null
