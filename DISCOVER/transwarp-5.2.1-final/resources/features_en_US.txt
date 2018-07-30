@@ -1,0 +1,34 @@
+*Improvement
+ *WARP-17184：Discover spark upgrade to spark2.2
+ *WARP-17523：Discover base os upgrade to CentOS7.2
+ *WARP-15288：Discover Notebook enable python3
+
+*New featuers
+ 1.Distributed Data Preprocessing & Distributed Feature Engineering 
+ *WARP-16740：Distributed computing Information Entropy
+ *WARP-17442：Distributed computing Gini Impurity
+ *WARP-15401：Statistical function txMode
+ *WARP-15391：Statistical function txTable
+ *WARP-15370：Imputation methods for missing value txFillna
+ *WARP-15368：Non-numeric encoding txStringIndex
+ *WARP-15405：Automatic data preprocessing method txPreProcessing
+ *WARP-16482：Feature extraction from ID number txParseID
+ *WARP-16496：Continuous feature discretization method txDiscretizer 
+ *WARP-15406：Feature selection method txDeviationCloFilter
+ *WARP-17378：Transform non-normal column method txColumnTransform
+ *WARP-16727：Automatic feature engineering method txFeatureEngineering
+ 2.Discover-lib add new machine learning algorithm
+ *WARP-17185：Unsupervised outlier detection algorithm txIsolationForest
+ *WARP-17188：Classification algorithm txGBTLR
+ *WARP-17351：Recommendation algorithm based on bayesian personalized sorting txBPR
+ *WARP-17352：Unsupervised outlier detection algorithm txLOF
+ *WARP-17353：Density-based clustering method txDBScan
+ 3.Model evaluation and model optimization
+ *WARP-15409：Cross validation method txCrossValidator
+ *WARP-15410：Overparameter adjustment method txTrainValidationSplit
+ 4.Discover Notebook add new Interpreter
+ *WARP-17171：Add Tensorflow Interpreter in Discover Notebook
+
+*Bug fix
+ *WARP-17856: txSqlConnect function need to set keytabPath in simple mode
+ *WARP-16400: using default quota while user get nothing from guardian
