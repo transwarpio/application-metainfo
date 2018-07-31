@@ -44,6 +44,8 @@ roles:
       value: /etc/${service.sid}/conf
     - name: MIRROR_SERVICE_ID
       value: ${service.sid}
+    - name: HADOOP_CONF_DIR
+      value: /etc/${dependencies.HDFS.sid}/conf
     mountPaths: []
     resources:
       limitsMemoryKey: mirror.userprofile.container.limits.memory
