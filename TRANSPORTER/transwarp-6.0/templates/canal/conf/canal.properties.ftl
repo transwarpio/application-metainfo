@@ -1,3 +1,10 @@
+<#if dependencies.ZOOKEEPER??>
+    <#assign zookeeper=dependencies.ZOOKEEPER quorums=[]>
+    <#list zookeeper.roles.ZOOKEEPER as role>
+        <#assign quorums += [role.hostname + ":" + zookeeper["zookeeper.client.port"]]>
+    </#list>
+    <#assign quorum = quorums?join(",")>
+</#if>
 #################################################
 ######### 		common argument		############# 
 #################################################
@@ -5,7 +12,7 @@ canal.id= 1
 canal.ip= 127.0.0.1
 canal.port= 11113
 canal.rpc.port=11110
-canal.zkServers=${service['tdt.zookeeper.quorum']}
+canal.zkServers=${quorum}
 # flush data to zk
 canal.zookeeper.flush.period = 1000
 # flush meta cursor/parse position to file
@@ -65,4 +72,5 @@ canal.instance.global.lazy = false
 #canal.instance.global.manager.address = 127.0.0.1:1099
 #canal.instance.global.spring.xml = classpath:canal/conf/spring/memory-instance.xml
 #canal.instance.global.spring.xml = classpath:canal/conf/spring/file-instance.xml
-canal.instance.global.spring.xml = classpath:/etc/${service.sid}/conf/canal/conf/default-instance.xml
+#canal.instance.global.spring.xml = classpath:canal/conf/spring/default-instance.xml
+canal.instance.global.spring.xml = file:/etc/${service.sid}/conf/canal/conf/spring/default-instance.xml
