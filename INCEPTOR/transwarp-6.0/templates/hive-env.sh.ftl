@@ -132,6 +132,11 @@ export HIVE_SERVER2="true"
 </#if>
 export INCEPTOR_LICENSE_ZOOKEEPER_QUORUM=${quorum}
 export INCEPTOR_UI_PORT=${service['inceptor.ui.port']}
+<#assign inceptorExecutorCount = 0>
+<#if (service.roles.INCEPTOR_EXECUTOR)??>
+    <#assign inceptorExecutorCount = service.roles.INCEPTOR_EXECUTOR?size * service["executor.number.eachnode"]?number>
+</#if>
+export INCEPTOR_EXECUTOR_COUNT=${inceptorExecutorCount}
 <#if dependencies.INCEPTOR??>
 export METASTORE_PORT=${dependencies.INCEPTOR['hive.metastore.port']}
 <#else>
