@@ -137,6 +137,14 @@ roles:
     - directive: !<mkdirs>
         paths: ["/var/lock/subsys/${service.sid}", "/var/run/${service.sid}"]
         mode: "755"
+  - type: config
+    directives:
+    - directive: !<resource>
+        templatetype: freemarker
+        templatepath: "datasource.properties"
+        targetpath: "/etc/${service.sid}/conf/datasource.properties"
+        mode: "644"
+
 - name: INCEPTOR_EXECUTOR
   friendlyName: "Inceptor Executor"
   labelPrefix: "inceptor-executor"
@@ -266,6 +274,11 @@ firstWizardConfigs:
 - executor.container.requests.cpu
 - executor.memory.ratio
 - executor.number.eachnode
+- rubik.connection.url
+- rubik.connection.username
+- rubik.connection.password
+- rubik.connection.database
+
 
 dashboardMetrics:
 - InceptorSqlActiveTasks
