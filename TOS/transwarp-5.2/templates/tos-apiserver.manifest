@@ -42,7 +42,7 @@ spec:
                 --allow_privileged=true
                 --cors_allowed_origins=.*
                 --enable-swagger-ui
-                --admission_control=ResourceQuota
+                --admission_control=ServiceAccount,ResourceQuota
                 --service-cluster-ip-range=${service['service.cluster.ip.range']}
                 --client_ca_file=/srv/kubernetes/ca.crt
                 --tls_cert_file=/srv/kubernetes/server.cert
