@@ -88,6 +88,15 @@
   groups: ["tdt-site.xml"]
   visibility: READ_WRITE
 
+- name: tdt.canal.max.shard.number
+  recommendExpression: 100
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE
+
 - name: tdt.container.limits.memory
   recommendExpression: -1
   defaultValue: null

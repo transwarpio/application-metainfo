@@ -38,7 +38,13 @@
         </sift>
     </appender>
 
+    <logger name="com.alibaba.otter.canal.server.netty" level="WARN"/>
+
     <logger name="io.transwarp.transporter.operator.task" level="INFO">
+        <appender-ref ref="SIFT"/>
+    </logger>
+
+    <logger name="io.transwarp.transporter.canal" level="INFO">
         <appender-ref ref="SIFT"/>
     </logger>
 
