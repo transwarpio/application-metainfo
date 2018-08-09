@@ -120,7 +120,12 @@ execute(){
     done
 }
 parameter=$1
-case $parameter in
-    -h|--help|"") echo "usage is createUpgrade <version>" ;;
-    *) execute $parameter
-esac
+if [ "$#" != "1" ]; then
+    echo "usage is createUpgrade <version>"
+    exit 1
+else
+    case $parameter in
+        -h|--help|"") echo "usage is createUpgrade <version>" ;;
+        *) execute $parameter
+    esac
+fi
