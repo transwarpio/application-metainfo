@@ -85,7 +85,7 @@
   defaultValue: null
   valueType: STRING
   scope: !<RoleTypes>
-    roleTypes: [CODIS_PROXY]
+    roleTypes: [CODIS_FE]
   onDeps: []
   groups: []
   visibility: PASSWORD

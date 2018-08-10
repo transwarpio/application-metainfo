@@ -81,7 +81,7 @@ roles:
     - name: DASHBOARD_ADDR
       value: ${service.roles.CODIS_DASHBOARD[0].hostname}:18080
     - name: SESSION_AUTH
-      value: ${service['codis.proxy.auth']}
+      value: ${service['codis.fe.auth']}
     - name: PRODUCT_AUTH
       value: ${service['codis.cluster.auth']}
     mountPaths: []
@@ -198,7 +198,7 @@ firstWizardConfigs:
 - codis.server.container.requests.cpu
 - codis.product.name
 - codis.fe.port
-- codis.proxy.auth
+- codis.fe.auth
 - codis.cluster.auth
 
 dashboardMetrics: []
