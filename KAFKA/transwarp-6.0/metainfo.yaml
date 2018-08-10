@@ -58,6 +58,25 @@ roles:
   validation:
   - criteria: !<EachNode> {}
   operations: []
+- name: KAFKA_REST
+  dockerImage: "transwarp/kafka-rest:transwarp-6.0"
+  friendlyName: "Kafka Rest"
+  labelPrefix: "kafka-rest"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  env:
+  - name: KAFKA_REST_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  nodeSpecificMounts: []
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [0]}
+  suggestion:
+  - criteria: !<Range> {"min": 0}
+  validation:
+  - criteria: !<Range> {"min": 0}
+  operations: []
 
 firstWizardConfigs:
 - listeners
@@ -72,6 +91,8 @@ firstWizardConfigs:
 - kafka.container.requests.memory
 - kafka.container.requests.cpu
 - kafka.memory.ratio
+- kafka.rest.port
+- kafka.rest.memory
 
 dashboardMetrics:
 - AllTopicsBytesOutPerSec
@@ -97,3 +118,4 @@ healthChecks:
 
 customConfigFiles:
 - server.properties
+- kafka-rest.properties
