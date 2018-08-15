@@ -1,0 +1,1 @@
+SERVER_ID=${.data_model['node.id']}
