@@ -1,5 +1,24 @@
 - name: data.dir
-  recommendExpression: /hadoop/txsql
+  recommendExpression: |
+    <#function localDir suffix>
+      <#if rcmdMounts?size == 0>
+        <#return suffix>
+      <#else>
+        <#return (rcmdMounts?sort)[0] + suffix >
+      </#if>
+    </#function>
+    ${localDir("/hadoop/" + service['sid'])}
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [TXSQL_SERVER]
+  isNodeSpecific: true
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: log.dir
+  recommendExpression: ${"/var/log/" + service['sid']}
   defaultValue: null
   valueType: ABSOLUTE_PATH
   scope: !<RoleTypes>

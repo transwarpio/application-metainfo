@@ -5,6 +5,7 @@
 TxSQLNodes=(${quorums?join(' ')})
 
 DATA_DIR=${service['data.dir']}
+LOG_DIR=${service['log.dir']}
 
 SQL_RW_PORT=${service['mysql.rw.port']}
 BINLOG_PORT=${service['binlog.port']}

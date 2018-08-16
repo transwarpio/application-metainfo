@@ -12,7 +12,7 @@ roles:
   friendlyName: "TxSQL Server"
   labelPrefix: "txsql-server"
   category: MASTER
-  frontendOperations: ["Start", "Stop", "Delete", "Move"]
+  frontendOperations: ["Start", "Stop", "Delete"]
   deleteOpCondition:
     deletable:
       number: 3
@@ -39,7 +39,10 @@ roles:
     requestsMemoryKey: txsql.container.requests.memory
     requestsCpuKey: txsql.container.requests.cpu
   nodeSpecificMounts:
-    - configKey: data.dir
+  - type: DIR_CONF
+    configKey: data.dir
+  - type: DIR_CONF
+    configKey: log.dir
   summaryPolicy: MAJOR
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [5, 3, 1]}
@@ -58,6 +61,7 @@ roles:
 
 firstWizardConfigs:
 - data.dir
+- log.dir
 - mysql.rw.port
 - binlog.port
 - mysql.local.port
