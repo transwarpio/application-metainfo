@@ -82,6 +82,10 @@ roles:
         from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
         to: "/etc/${service.sid}/conf/hadoop/core-site.xml"
     - directive: !<link>
+            action: Link
+            from: "/etc/${dependencies.KAFKA.sid}/conf/jaas.conf"
+            to: "/etc/${service.sid}/conf/jaas.conf"
+    - directive: !<link>
         action: Link
         from: "/etc/${dependencies.HYPERBASE.sid}/conf/hbase-site.xml"
         to: "/etc/${service.sid}/conf/hadoop/hbase-site.xml"
@@ -115,12 +119,6 @@ stages:
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
-  - type: Bootstrap
-    taskGroups:
-    - !<Create-Database-in-Inceptor>
-      summaryPolicy: ALL
-      timeoutMinutes: 5
-      dbNames: ["tdt", "tdt_samples"]
   - type: PreUpgrade
     taskGroups:
     - !<DockerRunPreUpgrade>
