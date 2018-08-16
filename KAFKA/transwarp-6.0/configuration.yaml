@@ -519,3 +519,25 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: kafka.rest.port
+  recommendExpression: 8082
+  defaultValue: null
+  valueType: PORT
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_REST]
+  onDeps: []
+  groups: ['kafka-rest.properties']
+  visibility: READ_WRITE
+
+- name: kafka.rest.memory
+  recommendExpression: 256
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_REST]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

@@ -37,5 +37,6 @@ export MORPHLING_ZOOKEEPER_CHECKPOINTS_PATH=${service['spark.morphling.zookeeper
 export MORPHLING_SUBMITTED_JOB_PATH=${service['spark.morphling.submitted.job.path']}
 
 export MORPHLING_COMPLETED_CHECKPOINTS_STORAGE_DIR=${service['spark.morphling.completed.checkpoints.storage.dir']}
+export SLIPSTREAM_METRICS_GATEWAY_HOST=${service.roles.INCEPTOR_SERVER[0]['hostname']}
 
 </#if>
