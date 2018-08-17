@@ -1,0 +1,10 @@
+name: HADOOP
+services:
+- ZOOKEEPER
+- HDFS
+- YARN
+- KMS
+- KAFKA
+- OOZIE
+- SQOOP
+- HUE

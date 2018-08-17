@@ -76,7 +76,6 @@ stages:
       file: "dashboard-deployment.yaml"
 
 
-product: "TOS"
 
 healthChecks:
 - category: DAEMON_CHECK

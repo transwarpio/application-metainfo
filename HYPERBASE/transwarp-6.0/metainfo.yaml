@@ -196,7 +196,6 @@ stages:
       group: "hbase"
       mod: 711
 
-product: Hyperbase
 
 firstWizardConfigs:
 - hbase.rootdir

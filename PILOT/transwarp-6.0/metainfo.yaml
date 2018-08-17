@@ -142,7 +142,6 @@ stages:
       roleType: PILOT_SERVER
       node: Any
 
-product: Studio
 
 firstWizardConfigs:
 - filerobot.desktop.http.port
