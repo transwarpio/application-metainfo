@@ -736,7 +736,7 @@
   visibility: READ_WRITE
 
 - name: thrift.info.port
-  recommendExpression: 9095
+  recommendExpression: 19095
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
