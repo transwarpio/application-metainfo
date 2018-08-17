@@ -160,7 +160,14 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
-
+- name: offsets.retention.minutes
+  recommendExpression: 10080
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
 - name: log.retention.bytes
   recommendExpression: -1
   defaultValue: null

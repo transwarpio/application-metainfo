@@ -40,6 +40,11 @@ dependencies:
     maxVersion: sophonweb-2.0
     optional: true
     preferred: true
+  - name: SHIVA
+    minVersion: sophonweb-2.0
+    maxVersion: sophonweb-2.0
+    optional: true
+    preferred: true
 user: hive
 plugins:
   - provider: GUARDIAN
@@ -273,6 +278,11 @@ firstWizardConfigs:
 - rubik.connection.username
 - rubik.connection.password
 - rubik.connection.database
+- hive.server2.authentication.cas.allowedProxyChains
+- hive.server2.authentication.cas.enabled
+- hive.server2.authentication.guardian.token.enabled
+- hive.server2.authentication.cas.acceptAnyProxy
+- hive.server2.authentication.cas.allow.proxy
 
 dashboardMetrics:
 - InceptorSqlActiveTasks

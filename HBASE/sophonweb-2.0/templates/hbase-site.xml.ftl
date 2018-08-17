@@ -84,7 +84,6 @@
 <@property "hbase.sservice.local.mergeinterval" service['hbase.sservice.local.mergeinterval']/>
 <@property "hbase.zookeeper.peerport" service['hbase.zookeeper.peerport']/>
 <@property "hbase.hregion.memstore.mslab.enabled" service['hbase.hregion.memstore.mslab.enabled']/>
-<@property "hbase.regionserver.global.memstore.upperLimit" service['hbase.regionserver.global.memstore.upperLimit']/>
 <@property "hbase.hregion.memstore.chunkpool.maxsize" service['hbase.hregion.memstore.chunkpool.maxsize']/>
 <@property "hbase.sservice.tolerable.timediff" service['hbase.sservice.tolerable.timediff']/>
 <@property "hbase.lightweight.snapshotmanager.enable" service['hbase.lightweight.snapshotmanager.enable']/>
@@ -93,12 +92,48 @@
 <@property "hbase.sservice.scan.pagesize" service['hbase.sservice.scan.pagesize']/>
 <@property "hbase.use.partition.table" service['hbase.use.partition.table']/>
 <@property "hbase.client.scanner.timeout.period" service['hbase.client.scanner.timeout.period']/>
+<@property "hbase.master.info.bindAddress" service['hbase.master.info.bindAddress']/>
 <@property "hbase.regionserver.info.bindAddress" service['hbase.regionserver.info.bindAddress']/>
+<@property "hbase.thrift.info.bindAddress" service['hbase.thrift.info.bindAddress']/>
+<@property "hbase.master.ipc.address" service['hbase.master.ipc.address'] />
+<@property "hbase.regionserver.ipc.address" service['hbase.regionserver.ipc.address'] />
 <@property "hfile.block.cache.size" service['hfile.block.cache.size']/>
 <@property "hbase.regions.slop" service['hbase.regions.slop']/>
 <@property "hbase.cluster.distributed" service['hbase.cluster.distributed']/>
-<@property "hbase.regionserver.global.memstore.lowerLimit" service['hbase.regionserver.global.memstore.lowerLimit']/>
 <@property "hbase.hregion.majorcompaction.cron" service['hbase.hregion.majorcompaction.cron']/>
+<@property "hbase.master.balancer.stochastic.maxRunningTime" service['hbase.master.balancer.stochastic.maxRunningTime']/>
+<@property "hbase.master.balancer.regionLocationCacheTime" service['hbase.master.balancer.regionLocationCacheTime']/>
+<@property "hbase.regionserver.thread.split" service['hbase.regionserver.thread.split']/>
+<@property "hbase.regionserver.hlog.blocksize" service['hbase.regionserver.hlog.blocksize']/>
+<@property "hbase.regionserver.maxlogs" service['hbase.regionserver.maxlogs']/>
+<@property "hbase.master.wait.on.regionservers.mintostart" service['hbase.master.wait.on.regionservers.mintostart']/>
+<@property "hbase.regionserver.storefile.refresh.period" service['hbase.regionserver.storefile.refresh.period']/>
+<@property "hbase.hstore.flusher.count" service['hbase.hstore.flusher.count']/>
+<@property "hbase.master.preload.tabledescriptors" service['hbase.master.preload.tabledescriptors']/>
+<@property "hbase.hregion.preclose.flush.size" service['hbase.hregion.preclose.flush.size']/>
+<@property "hbase.hstore.compaction.kv.max" service['hbase.hstore.compaction.kv.max']/>
+<@property "hbase.regionserver.thread.compaction.small" service['hbase.regionserver.thread.compaction.small']/>
+<@property "hbase.regionserver.thread.compaction.large" service['hbase.regionserver.thread.compaction.large']/>
+<@property "hbase.hstore.compaction.max.size" service['hbase.hstore.compaction.max.size']/>
+<@property "hbase.hstore.compaction.min" service['hbase.hstore.compaction.min']/>
+<@property "hbase.hstore.compaction.max" service['hbase.hstore.compaction.max']/>
+<@property "hbase.hstore.compaction.ratio" service['hbase.hstore.compaction.ratio']/>
+<@property "hbase.hregion.majorcompaction" service['hbase.hregion.majorcompaction']/>
+<@property "hbase.hstore.defaultengine.compactionpolicy.class" service['hbase.hstore.defaultengine.compactionpolicy.class']/>
+<@property "hbase.regionserver.global.memstore.size.lower.limit" service['hbase.regionserver.global.memstore.size.lower.limit']/>
+<@property "hbase.regionserver.global.memstore.size" service['hbase.regionserver.global.memstore.size']/>
+<@property "hbase.regionserver.thread.compaction.throttle" service['hbase.regionserver.thread.compaction.throttle']/>
+<@property "hbase.hstore.blockingWaitTime" service['hbase.hstore.blockingWaitTime']/>
+<@property "dfs.blocksize" service['dfs.blocksize']/>
+<@property "hbase.regionserver.metahandler.count" service['hbase.regionserver.metahandler.count']/>
+<@property "hbase.master.executor.openregion.threads" service['hbase.master.executor.openregion.threads']/>
+<@property "hbase.master.executor.closeregion.threads" service['hbase.master.executor.closeregion.threads']/>
+<@property "hbase.regionserver.executor.openregion.threads" service['hbase.regionserver.executor.openregion.threads']/>
+<@property "hbase.regionserver.executor.closeregion.threads" service['hbase.regionserver.executor.closeregion.threads']/>
+<@property "hbase.hregion.memstore.block.multiplier" service['hbase.hregion.memstore.block.multiplier']/>
+<@property "hbase.client.meta.operation.timeout" service['hbase.client.meta.operation.timeout']/>
+<@property "hbase.client.write.buffer" service['hbase.client.write.buffer']/>
+<@property "ipc.client.connect.max.retries.on.timeouts" service['ipc.client.connect.max.retries.on.timeouts']/>
 
 <#--Take properties from the context-->
 <#if service['hbase-site.xml']??>

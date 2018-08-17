@@ -6,6 +6,10 @@ namePrefix: Workflow
 friendlyName: Workflow
 dockerImage: "transwarp/workflow:sophonweb-2.0"
 dependencies:
+  - name: TRANSPORTER
+    minVersion: sophonweb-2.0
+    maxVersion: sophonweb-2.0
+    optional: true
   - name: GUARDIAN
     minVersion: sophonweb-2.0
     maxVersion: sophonweb-2.0

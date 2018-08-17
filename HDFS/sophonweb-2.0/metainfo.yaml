@@ -93,6 +93,13 @@ roles:
         decommission: true
       reject:
         number: 2
+    deleteOpCleanDirs:
+      fromConfig:
+      - key: dfs.datanode.data.dir
+        featureFile: in_use.lock
+      fromPath:
+      - key: /var/run/${service.sid}
+        featureFile: dn_socket
     env:
     - name: HDFS_HA_NAMENODE_SERVICE
       value: |
@@ -184,6 +191,21 @@ roleGroups:
             number: 3
           reject:
             number: 2
+        deleteOpCleanDirs:
+          fromPath:
+          - key: |
+              <#assign dirs=[]>
+              <#if service.nameservices?? && service.nameservices?size gt 0>
+                <#list service.nameservices as ns>
+                  <#list service[ns]['HDFS_JOURNALNODE'] as jn>
+                    <#if jn.hostname == .data_model["localhostname"]>
+                      <#assign dirs += ['/hadoop/journal/' + ns]>
+                    </#if>
+                  </#list>
+                </#list>
+              </#if>
+              ${dirs?join(",")}
+            featureFile: in_use.lock
         env:
         - name: HADOOP_PID_DIR
           value: /var/run/${service.sid}/
@@ -229,6 +251,13 @@ roleGroups:
             number: 2
           reject:
             number: 1
+        deleteOpCleanDirs:
+          fromConfig:
+          - key: dfs.namenode.name.dir
+            featureFile: in_use.lock
+          fromPath:
+          - key: /var/namenode_format/is_formated.identifier
+            featureFile: is_formated.identifier
         env:
         - name: HDFS_HA_NAMENODE_SERVICE
           value: |
@@ -291,7 +320,7 @@ stages:
     taskGroups:
     - !<FormakZK>
       summaryPolicy: ALL
-      timeoutMinutes: 1
+      timeoutMinutes: 10
   - type: Start
     taskGroups:
     - !<Upload-License>

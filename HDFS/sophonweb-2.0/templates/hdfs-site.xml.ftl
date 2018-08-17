@@ -75,6 +75,21 @@
     <#assign namenode=(namenode_use_wildcard == "true")?string("0.0.0.0", service.roles['HDFS_NAMENODE'][0].hostname)>
     <@property "dfs.namenode.http-address"  namenode + default_nn_http_port/>
 </#if>
+<#--handle CAS-->
+<#if service.auth = "kerberos">
+    <#if dependencies.GUARDIAN?? && dependencies.GUARDIAN.roles.CAS_SERVER??>
+        <#assign casServerSslPort=dependencies.GUARDIAN['cas.server.ssl.port']>
+        <#if dependencies.GUARDIAN['guardian.server.cas.server.host']?matches("^\\s*$")>
+            <#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['ip']}:${casServerSslPort}">
+        <#else>
+            <#assign casServerName="https://${dependencies.GUARDIAN['guardian.server.cas.server.host']}:${casServerSslPort}">
+        </#if>
+        <@property "dfs.cas.enabled" "true"/>
+        <@property "dfs.cas.login.path" "${casServerName}/cas/login"/>
+        <@property "dfs.cas.prefix.path" "${casServerName}/cas"/>
+    </#if>
+    <@property "dfs.accesstoken.enabled" "true"/>
+</#if>
 <#--handle journalnode-->
 <#assign useWildcard=service['journalnode.use.wildcard']
          rpcPort=service['journalnode.rpc-port']

@@ -88,17 +88,8 @@
   groups: []
   visibility: READ_WRITE
 
-- name: workflow.cleansing.cleanTimeInterval
-  recommendExpression: 12
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: workflow.cleansing.examinationInterval
-  recommendExpression: 30
+- name: workflow.clean.interval.days
+  recommendExpression: 1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
@@ -179,7 +170,7 @@
   visibility: READ_WRITE
 
 - name: workflow.session.timeout.seconds
-  recommendExpression: 1800
+  recommendExpression: 7200
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}

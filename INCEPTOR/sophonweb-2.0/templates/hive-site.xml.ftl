@@ -52,6 +52,16 @@
     <@property "hive.server2.authentication.ldap.extra.baseDNs", "ou=System,ou=People,${service.domain}"/>
     <@property "hive.server2.authentication.ldap.url" "${guardian_servers?join(' ')}"/>
 </#if>
+
+<#if dependencies.GUARDIAN?? && dependencies.GUARDIAN.roles.CAS_SERVER??>
+    <#assign  guardian=dependencies.GUARDIAN guardian_servers=[]>
+    <#list guardian.roles["GUARDIAN_SERVER"] as role>
+        <#assign guardian_servers += [("https://" + role.hostname + ":" + guardian["guardian.server.port"])]>
+    </#list>
+    <@property "hive.server2.authentication.guardian.url" "${guardian_servers?join(' ')}"/>
+    <@property "hive.server2.authentication.cas.prefix" 'https://' + guardian.roles.CAS_SERVER[0]['hostname'] + ':' + guardian['cas.server.ssl.port'] + guardian['cas.server.context.path']/>
+</#if>
+
 <#assign  manager="NONE">
 <#if authentication != "NONE">
     <@property "hive.server2.authentication" authentication/>
@@ -61,21 +71,28 @@
 </#if>
 <#if service.plugins?seq_contains("guardian")>
     <@property "hive.metastore.event.listeners" "io.transwarp.guardian.plugins.inceptor.GuardianMetaStoreListener"/>
+    <@property "plsql.link.hooks" "org.apache.hadoop.hive.ql.pl.parse.hooks.PLAnonExecHook"/>
+    <@property "hive.exec.pre.hooks" "io.transwarp.guardian.plugins.inceptor.GuardianPLFunctionHook"/>
     <#assign  manager="io.transwarp.guardian.plugins.inceptor.GuardianHiveAuthorizerFactory">
 </#if>
 <#if manager != "NONE">
     <@property "hive.security.authorization.manager" manager/>
 </#if>
 
-<#-- handle inceptor scheduler -->
-<#if service.plugins?seq_contains("guardian")>
-    <@property "spark.guardian.enabled" "true"/>
-</#if>
 <#if service['inceptor.scheduler.enabled'] = "true">
     <@property "inceptor.scheduler.enabled" "true"/>
-    <@property "inceptor.scheduler.config" "/etc/${service.sid}/conf/inceptor-scheduler.xml"/>
+    <#if service.plugins?seq_contains("guardian")>
+        <@property "spark.guardian.enabled" "true"/>
+        <@property "spark.ui.guardian.enabled" "true"/>
+    <#else>
+        <@property "inceptor.scheduler.config" "/etc/${service.sid}/conf/inceptor-scheduler.xml"/>
+    </#if>
 <#else>
     <@property "inceptor.scheduler.enabled" "false"/>
+    <#if service.plugins?seq_contains("guardian")>
+        <@property "spark.guardian.enabled" "true"/>
+        <@property "spark.ui.guardian.enabled" "true"/>
+    </#if>
 </#if>
 
 <#if service.plugins?seq_contains("governor")>

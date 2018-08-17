@@ -4,6 +4,7 @@ version: sophonweb-2.0
 global: true
 namePrefix: Dashboard
 friendlyName: Dashboard
+dockerImage: "transwarp/dashboard:sophonweb-2.0"
 dependencies: []
 user: root
 roles:
