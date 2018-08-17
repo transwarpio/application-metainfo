@@ -205,7 +205,6 @@ firstWizardConfigs:
 - scheduler.container.requests.cpu
 - scheduler.memory.ratio
 
-product: Sophon
 
 principals:
 - hive

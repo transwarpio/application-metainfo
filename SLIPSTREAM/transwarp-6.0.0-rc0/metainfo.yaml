@@ -296,7 +296,6 @@ stages:
       summaryPolicy: SOME
       timeoutMinutes: 1
 
-product: Stream
 
 firstWizardConfigs:
 - hive.server2.enabled

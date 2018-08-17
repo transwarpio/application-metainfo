@@ -263,7 +263,6 @@ stages:
       summaryPolicy: ALL
       timeoutMinutes: 5
 
-product: "TOS"
 
 healthChecks:
 - category: DAEMON_CHECK

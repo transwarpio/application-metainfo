@@ -323,7 +323,6 @@ jobs:
     stages:
     - Checkpoint
     - Stop
-product: Hadoop
 
 firstWizardConfigs:
 - dfs.namenode.name.dir

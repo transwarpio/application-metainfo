@@ -272,7 +272,6 @@ stages:
       group: "hadoop"
       mod: 1777
 
-product: Hadoop
 
 firstWizardConfigs:
 - yarn.nodemanager.local-dirs

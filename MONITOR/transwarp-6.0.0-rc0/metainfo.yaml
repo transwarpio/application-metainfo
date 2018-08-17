@@ -5,7 +5,6 @@ global: true
 namePrefix: Monitor
 friendlyName: "Monitor"
 dependencies: []
-product: TOS
 roles:
 - name: MONITOR_PROMETHEUS
   friendlyName: "Prometheus"

@@ -51,12 +51,26 @@ stages:
       summaryPolicy: SOME
       timeoutMinutes: 1
 
-product: Inceptor
 
 firstWizardConfigs:
 - inceptor.server.version
 - inceptor.gateway.port
 - inceptor.gateway.ui.port
+- inceptor.gateway.host
+- inceptor.gateway.conf.dir
+- inceptor.gateway.connection.failretry.ms
+- inceptor.gateway.system.timeout.ms
+- inceptor.gateway.thrift.min.workers
+- inceptor.gateway.thrift.max.workers
+- inceptor.gateway.session.idle.timeout.ms
+- inceptor.gateway.hive.parser.enabled
+- inceptor.gateway.hive.parser.warmup
+- inceptor.gateway.backend.server.default.version
+- inceptor.gateway.check.server.interval
+- inceptor.gateway.ha.slave.connect.retry.times
+- inceptor.gateway.ha.slave.retry.interval
+- inceptor.gateway.pick.server.mode
+- inceptor.gateway.conf.file.format
 
 pages:
 - roles

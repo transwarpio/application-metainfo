@@ -54,6 +54,16 @@
  <@property "tdt.zookeeper.quorum" quorum?join(",")/>
 </#if>
 
+<#--handle dependent.kafka-->
+<#if dependencies.KAFKA??>
+ <#assign kafka=dependencies.KAFKA kafkas=[]>
+ <#list kafka.roles.KAFKA_SERVER as role>
+  <#assign kafkas += [role.hostname + ":" + kafka[role.hostname]["listeners"]?split(":")[2]]>
+ </#list>
+ <#assign kafka_hosts = kafkas?join(",")>
+ <@property "tdt.kafka.bootstrap.servers" "${kafka_hosts}"/>
+</#if>
+
 <#--Take properties from the context-->
 <#list service['tdt-site.xml'] as key, value>
  <@property key value/>

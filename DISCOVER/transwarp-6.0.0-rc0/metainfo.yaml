@@ -194,7 +194,6 @@ stages:
       group: "hadoop"
       mod: 777
 
-product: Discover
 
 firstWizardConfigs:
 - discover.ide.home.dir
