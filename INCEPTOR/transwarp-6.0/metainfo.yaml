@@ -189,6 +189,40 @@ roles:
     - directive: !<mkdirs>
         paths: ["/var/run/${service.sid}"]
         mode: "755"
+- name: INCEPTOR_PROFILER
+  friendlyName: "Inceptor Profiler"
+  labelPrefix: "inceptor-profiler"
+  linkExpression: "http://${localhostname}:${service['inceptor.profiler.ui.port']}/candidates"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - netstat -an | grep ${service['inceptor.profiler.ui.port']} | grep LISTEN > /dev/null
+  env:
+  - name: INCEPTOR_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: profiler.container.limits.memory
+    limitsCpuKey: profiler.container.limits.cpu
+    requestsMemoryKey: profiler.container.requests.memory
+    requestsCpuKey: profiler.container.requests.cpu
+  summaryPolicy: NONE
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [0]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 0}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/run/${service.sid}"]
+        mode: "755"
 
 stages:
   - type: Bootstrap
@@ -222,6 +256,11 @@ stages:
       roleType: "INCEPTOR_EXECUTOR"
       operation: Config
       summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "INCEPTOR_PROFILER"
+      operation: Config
+      summaryPolicy: NONE
       timeoutMinutes: 1
   - type: PreUpgrade
     taskGroups:
@@ -278,7 +317,15 @@ firstWizardConfigs:
 - rubik.connection.username
 - rubik.connection.password
 - rubik.connection.database
-
+# inceptor profiler
+- inceptor.profiler.ui.port
+- profiler.stale.percent
+- inceptor.profiler.memory
+- profiler.container.limits.memory
+- profiler.container.limits.cpu
+- profiler.container.requests.memory
+- profiler.container.requests.cpu
+- profiler.memory.ratio
 
 dashboardMetrics:
 - InceptorSqlActiveTasks
