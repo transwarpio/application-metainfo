@@ -195,8 +195,14 @@ stages:
       user: "hbase"
       group: "hbase"
       mod: 711
+  - type: PreDeleteAfterStop
+    taskGroups:
+    - !<DockerRunPreDelete>
+      summaryPolicy: NONE
+      timeoutMinutes: 10
+      roleType: HYPERBASE_MASTER
+      node: Any
 
-product: Hyperbase
 
 firstWizardConfigs:
 - hbase.rootdir

@@ -90,7 +90,6 @@ stages:
       roleType: RUBIK_SERVER
       node: Any
 
-product: Studio
 
 firstWizardConfigs:
 - designer.server.port

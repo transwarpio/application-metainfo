@@ -6,7 +6,7 @@
     <schedulers>
         <scheduler>
             <name>FURION</name>
-            <configuration>/etc/inceptor/conf/furion.xml</configuration>
+            <configuration>/etc/${service.sid}/conf/furion.xml</configuration>
             <properties>
                 <is.default.pool>default</is.default.pool>
                 <is.quota.default.permitted.pools>*</is.quota.default.permitted.pools>
