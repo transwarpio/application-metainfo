@@ -136,7 +136,6 @@ stages:
       roleType: TDT_SERVER
       node: Any
 
-product: Studio
 
 firstWizardConfigs:
 - tdt.server.port

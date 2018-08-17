@@ -96,7 +96,6 @@ stages:
       roleType: WORKFLOW_SERVER
       node: Any
 
-product: Studio
 
 firstWizardConfigs:
 - workflow.http.port

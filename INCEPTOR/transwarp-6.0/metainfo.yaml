@@ -277,7 +277,6 @@ stages:
         roleType: INCEPTOR_METASTORE
         node: Any
 
-product: Inceptor
 
 firstWizardConfigs:
 - hive.server2.enabled

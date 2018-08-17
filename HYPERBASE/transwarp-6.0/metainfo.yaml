@@ -203,7 +203,6 @@ stages:
       roleType: HYPERBASE_MASTER
       node: Any
 
-product: Hyperbase
 
 firstWizardConfigs:
 - hbase.rootdir

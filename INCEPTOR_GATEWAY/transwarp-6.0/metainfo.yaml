@@ -51,7 +51,6 @@ stages:
       summaryPolicy: SOME
       timeoutMinutes: 1
 
-product: Inceptor
 
 firstWizardConfigs:
 - inceptor.server.version

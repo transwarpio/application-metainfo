@@ -111,7 +111,6 @@ stages:
       roleType: GOVERNOR_SERVER
       node: Any
 
-product: Studio
 
 firstWizardConfigs:
 - governor.http.port
