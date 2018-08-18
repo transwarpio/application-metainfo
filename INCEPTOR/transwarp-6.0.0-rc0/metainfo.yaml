@@ -141,8 +141,8 @@ roles:
     directives:
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "datasource.properties"
-        targetPath: "/etc/${service.sid}/conf/datasource.properties"
+        templatePath: "dataSource.properties"
+        targetPath: "/etc/${service.sid}/conf/dataSource.properties"
         mode: "644"
 
 - name: INCEPTOR_EXECUTOR
