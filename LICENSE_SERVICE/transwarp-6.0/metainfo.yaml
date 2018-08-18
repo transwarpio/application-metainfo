@@ -3,7 +3,7 @@ name: LICENSE_SERVICE
 version: transwarp-6.0
 global: true
 # compatible with legacy init.d script name "zookeeper-server-transwarp_license_cluster"
-namePrefix: Transwarp_License_Cluster
+namePrefix: License
 friendlyName: "License Service"
 dependencies: []
 packages: ["zookeeper"]
