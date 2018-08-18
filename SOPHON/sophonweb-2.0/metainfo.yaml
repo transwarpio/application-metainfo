@@ -20,7 +20,7 @@ dependencies:
   - name: YARN
     minVersion: sophonweb-2.0
     maxVersion: sophonweb-2.0
-    optional: false
+    optional: true
   - name: TXSQL
     minVersion: sophonweb-2.0
     maxVersion: sophonweb-2.0
@@ -115,11 +115,6 @@ roles:
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "dieu.conf"
-        targetPath: "/etc/${service.sid}/conf/dieu.conf"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
         templatePath: "env.sh"
         targetPath: "/etc/${service.sid}/conf/env.sh"
         mode: "755"
@@ -137,11 +132,6 @@ roles:
         templateType: FreeMarker
         templatePath: "spark-defaults.conf"
         targetPath: "/etc/${service.sid}/conf/spark-defaults.conf"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "apiservice.conf"
-        targetPath: "/etc/${service.sid}/conf/apiservice.conf"
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
@@ -171,6 +161,7 @@ stages:
 
 
 firstWizardConfigs:
+- sophon.nfs.ip
 - spark.executor.heapsize
 - spark.executor.permsize
 - spark.executor.max_permsize
