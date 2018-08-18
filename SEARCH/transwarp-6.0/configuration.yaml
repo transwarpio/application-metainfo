@@ -12,11 +12,11 @@
 - name: node.master
   recommendExpression: |
     <#compress>
-    <#assign servers=service.roles.SEARCH_SERVER?sort_by("id") hosts=[]>
+    <#assign servers=service.roles.SEARCH_SERVER?sort_by("id") roleIds=[]>
     <#list servers as server>
-      <#assign hosts+=[(server.hostname)]>
+      <#assign roleIds+=[(server.id)]>
     </#list>
-    <#if (hosts?seq_index_of(localhostname)<3)>true<#else>false</#if>
+    <#if (roleIds?seq_index_of(.data_model['role.id'])<3)>true<#else>false</#if>
     </#compress>
   defaultValue: null
   valueType: BOOL
@@ -26,6 +26,9 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
 
 - name: node.data
   recommendExpression: true
@@ -37,6 +40,9 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
 
 - name: path.data
   recommendExpression: |
@@ -51,7 +57,7 @@
         <#return dirs?join(",")>
       </#if>
     </#function>
-    ${localDir("/search/data")}
+    ${localDir("/search/" + roleGroupName +"/data")}
   defaultValue: null
   valueType: STRING
   isNodeSpecific: true
@@ -60,9 +66,12 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
 
 - name: path.logs
-  recommendExpression: /var/log/${service.sid}
+  recommendExpression: /var/log/${service.sid}/${roleGroupName}
   defaultValue: null
   valueType: STRING
   isNodeSpecific: true
@@ -71,6 +80,9 @@
   onDeps: []
   groups: []
   visibility: HIDDEN
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
 
 - name: network.bind_host
   recommendExpression: "0.0.0.0"
@@ -82,6 +94,9 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
 
 - name: network.publish_host
   recommendExpression: ${localhostname}
@@ -93,6 +108,9 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
 
 - name: gateway.recover_after_time
   recommendExpression: 5m
@@ -157,6 +175,9 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
 ## es.heap.size/4
 #- name: es.heap.newsize
 #  recommendExpression: |
@@ -266,22 +287,28 @@
   visibility: READ_WRITE
 
 - name: http.port
-  recommendExpression: 9200
+  recommendExpression: ${9200 + currentRoleGroupsCount - 1}
   defaultValue: null
   valueType: PORT
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
   visibility: READ_WRITE
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
 
 - name: transport.tcp.port
-  recommendExpression: 9300
+  recommendExpression: ${9300 + currentRoleGroupsCount - 1}
   defaultValue: null
   valueType: PORT
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
   visibility: READ_WRITE
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
 
 - name: index.shard.path.selector
   recommendExpression: tiered
@@ -368,6 +395,15 @@
   recommendExpression: 10m
   defaultValue: null
   valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: cluster.routing.allocation.same_shard.host
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []

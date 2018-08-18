@@ -6,13 +6,13 @@
 <#assign server_count=service.roles.SEARCH_SERVER?size>
 <#assign es_nodes=[] master_nodes=[] master_node_count=0 data_node_count=0>
 <#list service.roles.SEARCH_SERVER as server>
-    <#if service[server.hostname]['node.master']="true">
+    <#if service[server.id?c]['node.master']="true">
         <#assign master_nodes+=[server.hostname] master_node_count+=1>
     </#if>
-    <#if service[server.hostname]['node.data']="true">
+    <#if service[server.id?c]['node.data']="true">
         <#assign data_node_count+=1>
     </#if>
-    <#assign es_nodes+=[server.hostname]>
+    <#assign es_nodes+=[server.hostname + ":" + service[server.id?c]['transport.tcp.port']]>
 </#list>
 # ======================== Elasticsearch Configuration =========================
 #
@@ -36,7 +36,7 @@ cluster.name: ${service['cluster.name']}
 #
 # Use a descriptive name for the node:
 #
-node.name: ${localhostname}
+node.name: ${localhostname + "_" + roleGroupName}
 #
 # Add custom attributes to the node:
 #
@@ -111,7 +111,7 @@ gateway.expected_master_nodes: ${master_node_count}
 # Pass an initial list of hosts to perform discovery when new node is started:
 # The default list of hosts is ["127.0.0.1", "[::1]"]
 #
-discovery.zen.ping.unicast.hosts: ${es_nodes?join(",")}
+discovery.zen.ping.unicast.hosts: ${(es_nodes)?join(",")}
 #
 # Prevent the "split brain" by configuring the majority of nodes (total number of nodes / 2 + 1):
 #
@@ -155,6 +155,7 @@ discovery.zen.ping_timeout: ${service['discovery.zen.ping_timeout']}
 cluster.routing.allocation.balance.shard: ${service['cluster.routing.allocation.balance.shard']}
 cluster.routing.allocation.balance.index: ${service['cluster.routing.allocation.balance.index']}
 index.unassigned.node_left.delayed_timeout: ${service['index.unassigned.node_left.delayed_timeout']}
+cluster.routing.allocation.same_shard.host: ${service['cluster.routing.allocation.same_shard.host']}
 
 # slow log
 index.indexing.slowlog.level: info
