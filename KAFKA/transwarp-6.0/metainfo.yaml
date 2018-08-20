@@ -76,7 +76,19 @@ roles:
   - criteria: !<Range> {"min": 0}
   validation:
   - criteria: !<Range> {"min": 0}
-  operations: []
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "kafka-rest-env.sh"
+        targetPath: "/etc/${service.sid}/conf/kafka-rest-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "kafka-rest.properties"
+        targetPath: "/etc/${service.sid}/conf/kafka-rest.properties"
+        mode: "755"
 
 firstWizardConfigs:
 - listeners
