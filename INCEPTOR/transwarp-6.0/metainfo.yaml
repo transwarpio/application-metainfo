@@ -224,6 +224,41 @@ roles:
         paths: ["/var/run/${service.sid}"]
         mode: "755"
 
+- name: INCEPTOR_COMPACTOR
+  friendlyName: "Inceptor Compactor"
+  labelPrefix: "inceptor-compactor"
+  linkExpression: "http://${localhostname}:${service['inceptor.compactor.ui.port']}"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - netstat -an | grep ${service['inceptor.compactor.ui.port']} | grep LISTEN > /dev/null
+  env:
+  - name: INCEPTOR_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: compactor.container.limits.memory
+    limitsCpuKey: compactor.container.limits.cpu
+    requestsMemoryKey: compactor.container.requests.memory
+    requestsCpuKey: compactor.container.requests.cpu
+  summaryPolicy: NONE
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [0]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 0}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/run/${service.sid}"]
+        mode: "755"
+
 stages:
   - type: Bootstrap
     taskGroups:
@@ -259,6 +294,11 @@ stages:
       timeoutMinutes: 1
     - !<Role>
       roleType: "INCEPTOR_PROFILER"
+      operation: Config
+      summaryPolicy: NONE
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "INCEPTOR_COMPACTOR"
       operation: Config
       summaryPolicy: NONE
       timeoutMinutes: 1
@@ -325,6 +365,15 @@ firstWizardConfigs:
 - profiler.container.requests.memory
 - profiler.container.requests.cpu
 - profiler.memory.ratio
+# inceptor compactor
+- inceptor.compactor.ui.port
+- inceptor.compactor.memory
+- compactor.container.limits.memory
+- compactor.container.limits.cpu
+- compactor.container.requests.memory
+- compactor.container.requests.cpu
+- compactor.memory.ratio
+
 
 dashboardMetrics:
 - InceptorSqlActiveTasks

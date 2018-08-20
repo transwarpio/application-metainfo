@@ -94,6 +94,19 @@ log4j.appender.RFAPROFILER.layout.ConversionPattern=%d{ISO8601} %p %c{2}: %m%n
 log4j.appender.RFAPROFILER.MaxFileSize=64MB
 log4j.appender.RFAPROFILER.MaxBackupIndex=16
 
+#
+# Inceptor Compactor Logging
+#
+io.transwarp.inceptor.compactor.logger=INFO,RFACOMPACTOR
+log4j.logger.io.transwarp.inceptor.compactor=${io.transwarp.inceptor.compactor.logger}
+log4j.additivity.io.transwarp.inceptor.compactor=false
+log4j.appender.RFACOMPACTOR=org.apache.log4j.RollingFileAppender
+log4j.appender.RFACOMPACTOR.File=${hive.log.dir}/inceptor-compactor.log
+log4j.appender.RFACOMPACTOR.layout=org.apache.log4j.PatternLayout
+log4j.appender.RFACOMPACTOR.layout.ConversionPattern=%d{ISO8601} %p %c{2}: %m%n
+log4j.appender.RFACOMPACTOR.MaxFileSize=64MB
+log4j.appender.RFACOMPACTOR.MaxBackupIndex=16
+
 #custom logging levels
 #log4j.logger.xxx=DEBUG
 
