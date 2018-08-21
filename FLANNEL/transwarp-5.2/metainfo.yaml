@@ -193,7 +193,7 @@ stages:
     - !<Kubectl-Label>
       summaryPolicy: ALL
       timeoutMinutes: 2
-      action: AddLabel
+      action: RemoveLabel
       roleType: FLANNELD
       labelPrefix: "flanneld"
       labelValue: "true"

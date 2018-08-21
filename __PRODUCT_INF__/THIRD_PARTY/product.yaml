@@ -1,4 +1,5 @@
 name: THIRD_PARTY
+ordinal: 40
 services:
 - CODIS
 - HBASE
