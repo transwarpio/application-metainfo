@@ -1,4 +1,5 @@
 name: HADOOP
+ordinal: 10
 services:
 - ZOOKEEPER
 - HDFS
