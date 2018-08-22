@@ -12,7 +12,7 @@ roles:
   labelPrefix: "zookeeper-server"
   dockerImage: "transwarp/zookeeper:transwarp-6.0"
   category: MASTER
-  frontendOperations: ["Start", "Move"]
+  frontendOperations: ["Start"]
   deleteOpCondition:
     reject:
       number: 3
@@ -100,7 +100,7 @@ roles:
   labelPrefix: "txsql-server"
   dockerImage: "transwarp/txsql:transwarp-6.0"
   category: MASTER
-  frontendOperations: ["Start", "Move"]
+  frontendOperations: ["Start"]
   deleteOpCondition:
     reject:
       number: 3
