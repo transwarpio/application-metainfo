@@ -215,8 +215,8 @@ always-show-logo yes
 #
 #   save ""
 
-save 900 1
-save 300 10
+save 300 1
+save 180 5
 save 60 10000
 
 # By default Redis will stop accepting writes if RDB snapshots are enabled

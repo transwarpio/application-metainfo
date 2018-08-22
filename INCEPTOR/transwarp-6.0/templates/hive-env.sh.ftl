@@ -127,6 +127,19 @@ export INCEPTOR_METASTORE_MEMORY=${metastoreMemory?floor}
 </#if>
 export INCEPTOR_PROFILER_MEMORY=${profilerMemory?floor}
 
+<#if service['compactor.container.limits.memory'] != "-1" && service['compactor.memory.ratio'] != "-1">
+  <#assign limitsMemory = service['compactor.container.limits.memory']?number
+    memoryRatio = service['compactor.memory.ratio']?number
+    compactorMemory = limitsMemory * memoryRatio * 1024>
+<#else>
+  <#if service[.data_model["localhostname"]]['inceptor.compactor.memory']??>
+    <#assign compactorMemory=service[.data_model["localhostname"]]['inceptor.compactor.memory']?trim?number>
+  <#else>
+    <#assign compactorMemory=8192>
+  </#if>
+</#if>
+export INCEPTOR_COMPACTOR_MEMORY=${compactorMemory?floor}
+
 export HIVE_PORT=${service['hive.server2.thrift.port']}
 
 export HADOOP_CONF_DIR=/etc/${dependencies.HDFS.sid}/conf:/etc/${dependencies.YARN.sid}/conf
@@ -153,9 +166,11 @@ export INCEPTOR_EXECUTOR_COUNT=${inceptorExecutorCount}
 <#if dependencies.INCEPTOR??>
 export METASTORE_PORT=${dependencies.INCEPTOR['hive.metastore.port']}
 export PROFILER_PORT=${dependencies.INCEPTOR['inceptor.profiler.ui.port']}
+export COMPACTOR_PORT=${dependencies.INCEPTOR['inceptor.compactor.ui.port']}
 <#else>
 export METASTORE_PORT=${service['hive.metastore.port']}
 export PROFILER_PORT=${service['inceptor.profiler.ui.port']}
+export COMPACTOR_PORT=${service['inceptor.compactor.ui.port']}
 </#if>
 
 <#if dependencies.ZOOKEEPER??>
@@ -190,6 +205,7 @@ export SPARK_DRIVER_ADDR=${service.roles.INCEPTOR_SERVER[0]['hostname']}
 export EXECUTOR_ID_PATH=/${service.sid}/executorID
 export METASTORE_ID=metastore_${service.sid}
 export PROFILER_ID=profiler_${service.sid}
+export COMPACTOR_ID=compactor_${service.sid}
 
 <#if service.plugins?seq_contains("guardian")>
 cp /etc/${service.sid}/conf/krb5.conf /etc

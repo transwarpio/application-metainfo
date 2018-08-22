@@ -29,14 +29,25 @@
 SPARK_HOME=/usr/lib/spark2
 SPARK_USER=hive
 HADOOP_USER_NAME=hive
+MIDAS_SERVER_JAVA_OPTS="-Xms512m -Xmx1024m -XX:PermSize=128m"
 
-<#if service['server.container.limits.memory'] != "-1" && service['server.memory.ratio'] != "-1">
-  <#assign limitsMemory = service['server.container.limits.memory']?number
-    memoryRatio = service['server.memory.ratio']?number
-    memory = limitsMemory * memoryRatio * 1024>
-MIDAS_SERVER_JAVA_OPTS="-Xms${(memory/2)?floor}m -Xmx${memory?floor}m -XX:PermSize=${(memory/8)?floor}m -Dmidas.log.dir=/var/log/${service.sid}"
-<#else>
-MIDAS_SERVER_JAVA_OPTS="-Xms${service['midas.server.initial_heapsize']}m -Xmx${service['midas.server.heapsize']}m -XX:PermSize=${service['midas.server.permsize']}m -Dmidas.log.dir=/var/log/${service.sid}"
-</#if>
+<#if dependencies.YARN??>
 HADOOP_CONF_DIR=/etc/${dependencies.YARN.sid}/conf
-LIVY_LOG_DIR=/var/log/${service.sid}
+<#else>
+HADOOP_CONF_DIR=/etc/${dependencies.HDFS.sid}/conf
+</#if>
+
+<#if dependencies.HYPERBASE??>
+HYPERBASE_CONF_DIR=/etc/${dependencies.HYPERBASE.sid}/conf
+</#if>
+
+LIVY_LOG_DIR=/var/log/midas
+DIEU_HOME=/usr/lib/sophon
+DIEU_CONF_DIR=/etc/${service.sid}/conf
+PYSPARK_PYTHON=python3
+PYSPARK_DRIVER_PYTHON=python3
+# for Jupyter notebook running on server
+unset XDG_RUNTIME_DIR
+<#if service.auth = "kerberos">
+cp /etc/${service.sid}/conf/krb5.conf /etc/
+</#if>

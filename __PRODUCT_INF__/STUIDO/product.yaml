@@ -1,4 +1,5 @@
 name: STUDIO
+ordinal: 30
 services:
 - TXSQL
 - PILOT
