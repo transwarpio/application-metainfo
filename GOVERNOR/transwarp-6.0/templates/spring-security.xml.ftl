@@ -89,9 +89,9 @@
     </security:http>
 
     <beans:bean id="preflightFilter" class="org.apache.atlas.web.filters.PreflightFilter" />
-
-    <beans:bean id="accessTokenFilter" class="org.apache.atlas.web.filters.AccessTokenAuthFilter"/>
-
+    <#if isToken == "true">
+        <beans:bean id="accessTokenFilter" class="org.apache.atlas.web.filters.AccessTokenAuthFilter"/>
+    </#if>
     <security:global-method-security
                 pre-post-annotations="enabled" />
 
