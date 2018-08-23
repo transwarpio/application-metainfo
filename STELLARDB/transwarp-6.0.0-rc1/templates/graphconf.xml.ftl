@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property>
+        <name>graph.data.dirs</name>
+        <value>${service['graph.data.dirs']}</value>
+    </property>
+    <property>
+        <name>graph.raft.dirs</name>
+        <value>${service['graph.raft.dirs']}</value>
+    </property>
+    <property>
+        <name>graph.zk.quorum</name>
+        <value>${service['graph.zk.quorum']}</value>
+    </property>
+    <property>
+        <name>graph.master.port</name>
+        <value>${service['graph.master.port']}</value>
+    </property>
+    <property>
+        <name>graph.master.ui.port</name>
+        <value>${service['graph.master.ui.port']}</value>
+    </property>
+    <property>
+        <name>graph.worker.port</name>
+        <value>${service['graph.worker.port']}</value>
+    </property>
+    <property>
+        <name>graph.worker.ui.port</name>
+        <value>${service['graph.worker.ui.port']}</value>
+    </property>
+    <property>
+        <name>graph.zk.base_path</name>
+        <value>${service['graph.zk.base_path']}</value>
+    </property>
+    <property>
+        <name>graph.raft.server.port</name>
+        <value>${service['graph.raft.server.port']}</value>
+    </property>
+</configuration>

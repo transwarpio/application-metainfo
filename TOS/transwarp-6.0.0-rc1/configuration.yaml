@@ -1,0 +1,209 @@
+---
+- name: tos.master.etcd.port
+  recommendExpression: 4001
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+# for tos ha
+- name: tos.master.leader.elect.port
+  recommendExpression: 4002
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tos.master.apiserver.port
+  recommendExpression: 8080
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tos.master.apiserver.secure.port
+  recommendExpression: 8553
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tos.master.scheduler.port
+  recommendExpression: 10251
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tos.master.controller.port
+  recommendExpression: 10252
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tos.slave.kubelet.port
+  recommendExpression: 10250
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_SLAVE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tos.slave.kubelet.healthzport
+  recommendExpression: 10248
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_SLAVE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+# TODO tos.haproxy.port
+
+- name: tos.master.dashboard.username
+  recommendExpression: dashboard
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tos.master.dashboard.password
+  recommendExpression: password
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: PASSWORD
+
+- name: tos.master.etcd.heartbeat.interval
+  recommendExpression: 250
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tos.master.etcd.election.timeout
+  recommendExpression: 1250
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tos.registry.ui.port
+  recommendExpression: 8081
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_REGISTRY]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tos.registry.port
+  recommendExpression: 5000
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_REGISTRY]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tos.master.etcd.initial.cluster.state
+  recommendExpression: new
+  defaultValue: null
+  valueType: STRING
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [TOS_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: cluster.dns.ip
+  recommendExpression: 10.10.10.10
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: service.cluster.ip.range
+  recommendExpression: 10.10.10.0/24
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: dragonfly.supernode.tomcat.http.port
+  recommendExpression: 80
+  defaultValue:
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [DF_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: dragonfly.supernode.nginx.peer.port
+  recommendExpression: 8001
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [DF_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: dragonfly.supernode.nginx.rest.port
+  recommendExpression: 8002
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [DF_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: dragonfly.enabled
+  recommendExpression: true
+  defaultValue: false
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+
