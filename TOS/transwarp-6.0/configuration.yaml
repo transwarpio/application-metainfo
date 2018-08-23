@@ -166,3 +166,44 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: dragonfly.supernode.tomcat.http.port
+  recommendExpression: 80
+  defaultValue:
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [DF_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: dragonfly.supernode.nginx.peer.port
+  recommendExpression: 8001
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [DF_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: dragonfly.supernode.nginx.rest.port
+  recommendExpression: 8002
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [DF_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: dragonfly.enabled
+  recommendExpression: true
+  defaultValue: false
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+

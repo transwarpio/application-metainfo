@@ -97,7 +97,7 @@
   visibility: READ_WRITE
 
 - name: hive.users.in.admin.role
-  recommendExpression: hive,hue
+  recommendExpression: hive,hue,slipstream
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
