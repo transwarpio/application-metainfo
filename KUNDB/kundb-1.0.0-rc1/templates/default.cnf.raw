@@ -38,7 +38,7 @@ query_cache_type = 0
 query_cache_size = 0
 # all db instances should start in read-only mode - once the db is started and
 # fully functional, we'll push it into read-write mode
-#read-only
+read-only
 read_buffer_size = 1M
 read_rnd_buffer_size = 1M
 server-id = {{.ServerID}}

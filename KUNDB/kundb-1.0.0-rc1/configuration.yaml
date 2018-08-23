@@ -55,7 +55,7 @@
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
-  visibility: HIDDEN
+  visibility: READ_WRITE
 
 - name: shard.default_dbname 
   recommendExpression: vt_jzpt 
@@ -115,6 +115,7 @@
   groups: [master_mysql56.cnf, master_mariadb.cnf]
   visibility: READ_WRITE
 
+
 - name: replica.mysql.innodb_buffer_pool_size
   recommendExpression: 128M 
   defaultValue: 128M 
@@ -128,7 +129,7 @@
 
 - name: rdonly.mysql.innodb_buffer_pool_size
   recommendExpression: 128M 
-  defaultValue: null
+  defaultValue: 128M 
   valueType: MB
   isNodeSpecific: true
   scope: !<RoleTypes>
