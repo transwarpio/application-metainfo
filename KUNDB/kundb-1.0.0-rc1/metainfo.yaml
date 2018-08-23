@@ -1,10 +1,10 @@
 ---
 name: KUNDB 
-version: transwarp-1.0.0-rc1
+version: kundb-1.0.0-rc1
 global: false
 namePrefix: kundb 
 friendlyName: "KunDB"
-dockerImage: "transwarp/kundb:transwarp-1.0.0-rc1"
+dockerImage: "transwarp/kundb:kundb-1.0.0-rc1"
 dependencies: 
   - name: ZOOKEEPER
     minVersion: transwarp-6.0.0-rc0
