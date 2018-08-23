@@ -1,0 +1,16 @@
+* New Feature:
+  * Add graphics user interface for ease of use.
+  * Support workflow task scheduler
+  * Integrate with Guardian access control system.
+  * Support load data from RDBMS.
+  * Support unload data from Inceptor.
+
+* Improvement:
+  * Performance improvement in job processing.
+  * Finer job processing control.
+  * Extend supported OGG version.
+  * Add support for range partition.
+
+* Bug Fix:
+  * Fix potential memory leak issue.
+  * Fix inconsistent dataflow status issue under certain circumstances
