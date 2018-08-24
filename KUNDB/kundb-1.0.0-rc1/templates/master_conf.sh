@@ -13,7 +13,7 @@ export SHARD_NUM=${shardNum}
       <#assign masternode = service[sn]["KUNTABLET_MASTER"]>
         <#list masternode as mnode>
           <#if mnode.hostname == .data_model["localhostname"] && groupIds[shardIndex] == .data_model["role.groupId"]>
-export SHARD_ID =${groupIds[shardIndex]}
+export SHARD_ID=${groupIds[shardIndex]}
 export SHARD_INDEX=${shardIndex}
 export PORT_BASE=${service['master.port_base']}
 export GRPC_PORT_BASE=${service['master.grpc.port_base']}

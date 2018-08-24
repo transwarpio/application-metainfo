@@ -15,7 +15,7 @@ export SHARD_NUM=${shardNum}
       <#assign rdonlynode = service[sn]["KUNTABLET_RDONLY"] roleIndex += 1>
         <#list rdonlynode as rnode>
           <#if rnode.hostname == .data_model["localhostname"] && groupIds[shardIndex] == .data_model["role.groupId"]>
-export SHARD_ID =${groupIds[shardIndex]}
+export SHARD_ID=${groupIds[shardIndex]}
 export SHARD_INDEX=${shardIndex}		
 export PORT_BASE=${service['rdonly.port_base']}
 export GRPC_PORT_BASE=${service['rdonly.grpc.port_base']}
