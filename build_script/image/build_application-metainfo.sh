@@ -36,7 +36,7 @@ build_application-metainfo() {
         cp -rp . "$META_DST_DIR"
 
         # configure git remote options
-        git config --global http.proxy 'http://172.16.0.249:3128'
+        git config --global http.proxy 'http://172.16.2.14:7777'
         export http_proxy=http://172.16.2.14:7777
         export https_proxy=http://172.16.2.14:7777
         cd "$META_DST_DIR"
