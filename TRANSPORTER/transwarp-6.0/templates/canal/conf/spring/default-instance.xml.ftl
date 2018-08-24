@@ -67,7 +67,7 @@
 		<property name="targetMethod" value="getZkClient" />
 		<property name="arguments">
 			<list>
-				<value>${r'${canal.zkServers:'}${quorum}}</value>
+				<value>${r'${canal.zkServers:'}${quorum?if_exists}}</value>
 			</list>
 		</property>
 	</bean>

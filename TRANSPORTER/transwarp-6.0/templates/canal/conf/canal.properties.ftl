@@ -12,7 +12,7 @@ canal.id= 1
 canal.ip= 127.0.0.1
 canal.port= 11113
 canal.rpc.port=11110
-canal.zkServers=${quorum}
+canal.zkServers=${quorum?if_exists}
 # flush data to zk
 canal.zookeeper.flush.period = 1000
 # flush meta cursor/parse position to file
