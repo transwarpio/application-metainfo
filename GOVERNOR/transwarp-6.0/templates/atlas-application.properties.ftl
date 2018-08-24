@@ -58,7 +58,7 @@ atlas.graph.index.search.directory=${sys:atlas.home}/data/es
     <#assign search=dependencies.SEARCH searches=[] searchesWithPort=[]>
     <#list search.roles.SEARCH_SERVER as role>
         <#assign searches += [role.hostname]>
-        <#assign searchesWithPort += [role.hostname + ":9200"]>
+        <#assign searchesWithPort += [role.hostname + ":" + search[role.id?c]['http.port']]>
     </#list>
 </#if>
 atlas.graph.index.search.hostname=${searches?join(",")}
