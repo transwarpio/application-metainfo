@@ -82,9 +82,10 @@ roles:
         from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
         to: "/etc/${service.sid}/conf/hadoop/core-site.xml"
     - directive: !<link>
-            action: Link
-            from: "/etc/${dependencies.KAFKA.sid}/conf/jaas.conf"
-            to: "/etc/${service.sid}/conf/jaas.conf"
+        action: Link
+        from: "/etc/${dependencies.KAFKA.sid}/conf/jaas.conf"
+        to: "/etc/${service.sid}/conf/jaas.conf"
+      necessary: false
     - directive: !<link>
         action: Link
         from: "/etc/${dependencies.HYPERBASE.sid}/conf/hbase-site.xml"
