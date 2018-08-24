@@ -161,3 +161,21 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: inceptor.gateway.used.slipstream
+  recommendExpression: false
+  defaultValue: false
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: inceptor.gateway.audit.max.sql.length
+  recommendExpression: 128
+  defaultValue: 128
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
