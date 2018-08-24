@@ -168,7 +168,7 @@
   visibility: READ_WRITE
 
 - name: dragonfly.supernode.tomcat.http.port
-  recommendExpression: 80
+  recommendExpression: 8451
   defaultValue:
   valueType: PORT
   scope: !<RoleTypes>
@@ -178,7 +178,7 @@
   visibility: READ_WRITE
 
 - name: dragonfly.supernode.nginx.peer.port
-  recommendExpression: 8001
+  recommendExpression: 8452
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
@@ -188,7 +188,7 @@
   visibility: READ_WRITE
 
 - name: dragonfly.supernode.nginx.rest.port
-  recommendExpression: 8002
+  recommendExpression: 8453
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
@@ -198,7 +198,7 @@
   visibility: READ_WRITE
 
 - name: dragonfly.enabled
-  recommendExpression: true
+  recommendExpression: false
   defaultValue: false
   valueType: BOOL
   scope: !<ServiceLevel> {}
