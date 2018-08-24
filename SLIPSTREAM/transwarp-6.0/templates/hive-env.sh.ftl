@@ -122,7 +122,14 @@ export HIVE_SERVER2="true"
 </#if>
 export INCEPTOR_LICENSE_ZOOKEEPER_QUORUM=${quorum}
 export INCEPTOR_UI_PORT=${service['inceptor.ui.port']}
-<#if dependencies.INCEPTOR??>
+<#assign inceptorExecutorCount = 0>
+<#if (service.roles.INCEPTOR_EXECUTOR)??>
+    <#assign inceptorExecutorCount = service.roles.INCEPTOR_EXECUTOR?size * service["executor.number.eachnode"]?number>
+</#if>
+export INCEPTOR_EXECUTOR_COUNT=${inceptorExecutorCount}
+<#if dependencies.SLIPSTREAM??>
+export METASTORE_PORT=${dependencies.SLIPSTREAM['hive.metastore.port']}
+<#elseif dependencies.INCEPTOR??>
 export METASTORE_PORT=${dependencies.INCEPTOR['hive.metastore.port']}
 <#else>
 export METASTORE_PORT=${service['hive.metastore.port']}
@@ -143,7 +150,9 @@ export MYSQL_SERVER_PORT=${hostPorts?join(",")}
 export JAVAX_JDO_OPTION_CONNECTIONURL=jdbc:mysql://${hostPorts?join(",")}/metastore_${service.sid}
 export JAVAX_JDO_OPTION_CONNECTION_USERNAME=${service['javax.jdo.option.ConnectionUserName']}
 export JAVAX_JDO_OPTION_CONNECTION_PASSWORD=${service['javax.jdo.option.ConnectionPassword']}
-<#if dependencies.INCEPTOR??>
+<#if dependencies.SLIPSTREAM??>
+export HIVE_METASTORE_SERVER=${dependencies.SLIPSTREAM.roles.INCEPTOR_METASTORE[0]['hostname']}
+<#elseif dependencies.INCEPTOR??>
 export HIVE_METASTORE_SERVER=${dependencies.INCEPTOR.roles.INCEPTOR_METASTORE[0]['hostname']}
 <#else>
 export HIVE_METASTORE_SERVER=${service.roles.INCEPTOR_METASTORE[0]['hostname']}

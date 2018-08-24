@@ -102,7 +102,12 @@
     <@property "hive.exec.scratchdir" scratchdir/>
     <@property "inceptor.ui.port" "${service['inceptor.ui.port']}"/>
 <#assign uris = []/>
-<#if dependencies.INCEPTOR??>
+<#if dependencies.SLIPSTREAM??>
+    <#list dependencies.SLIPSTREAM.roles["INCEPTOR_METASTORE"] as role>
+        <#assign uris += [("thrift://" + role.hostname + ":" + dependencies.SLIPSTREAM["hive.metastore.port"])]>
+    </#list>
+    <@property "hive.metastore.service.id" "${dependencies.SLIPSTREAM.sid}"/>
+<#elseif dependencies.INCEPTOR??>
     <#list dependencies.INCEPTOR.roles["INCEPTOR_METASTORE"] as role>
         <#assign uris += [("thrift://" + role.hostname + ":" + dependencies.INCEPTOR["hive.metastore.port"])]>
     </#list>
