@@ -145,6 +145,14 @@ roles:
     - directive: !<mkdirs>
         paths: ["/var/lock/subsys/${service.sid}"]
         mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "dataSource.properties"
+        targetPath: "/etc/${service.sid}/conf/dataSource.properties"
+        mode: "644"
+
 - name: INCEPTOR_EXECUTOR
   friendlyName: "Slipstream Executor"
   labelPrefix: "inceptor-executor"
@@ -336,6 +344,11 @@ firstWizardConfigs:
 - historyserver.memory.max.mb
 - slipstream.historyserver.akka.listen.port
 - slipstream.historyserver.restful.listen.port
+- rubik.connection.url
+- rubik.connection.username
+- rubik.connection.password
+- rubik.connection.database
+
 
 pages:
 - roles
