@@ -161,7 +161,6 @@ stages:
 
 
 firstWizardConfigs:
-- sophon.nfs.ip
 - spark.executor.heapsize
 - spark.executor.permsize
 - spark.executor.max_permsize
