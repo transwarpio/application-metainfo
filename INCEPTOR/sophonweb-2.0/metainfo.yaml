@@ -40,11 +40,6 @@ dependencies:
     maxVersion: sophonweb-2.0
     optional: true
     preferred: true
-  - name: SHIVA
-    minVersion: sophonweb-2.0
-    maxVersion: sophonweb-2.0
-    optional: true
-    preferred: true
 user: hive
 plugins:
   - provider: GUARDIAN

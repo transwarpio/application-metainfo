@@ -306,16 +306,24 @@
   visibility: READ_WRITE
 
 # notebook
-- name: sophon.nfs.ip
-  recommendExpression: 172.16.3.51
+- name: sophon.k8s.tensorflow.image.name
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-cpu:sophonweb-2.0"
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
-  onDeps: []
+  onDeps: ['TOS']
   groups: []
   visibility: READ_WRITE
-- name: sophon.k8s.tensorflow.image.name
+- name: sophon.k8s.jupyter.cpu.image.name
   recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-cpu:sophonweb-2.0"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: ['TOS']
+  groups: []
+  visibility: READ_WRITE
+- name: sophon.k8s.jupyter.gpu.image.name
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-gpu:sophonweb-2.0"
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
