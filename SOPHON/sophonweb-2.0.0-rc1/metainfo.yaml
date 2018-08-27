@@ -9,6 +9,10 @@ dependencies:
     minVersion: sophonweb-2.0.0-rc1
     maxVersion: sophonweb-2.0.0-rc1
     optional: true
+  - name: ZOOKEEPER
+    minVersion: sophonweb-2.0.0-rc1
+    maxVersion: sophonweb-2.0.0-rc1
+    optional: true
   - name: INCEPTOR
     minVersion: sophonweb-2.0.0-rc1
     maxVersion: sophonweb-2.0.0-rc1
@@ -161,7 +165,6 @@ stages:
 
 
 firstWizardConfigs:
-- sophon.nfs.ip
 - spark.executor.heapsize
 - spark.executor.permsize
 - spark.executor.max_permsize

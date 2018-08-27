@@ -9,6 +9,10 @@ dependencies:
     minVersion: sophonweb-2.0
     maxVersion: sophonweb-2.0
     optional: true
+  - name: ZOOKEEPER
+    minVersion: sophonweb-2.0
+    maxVersion: sophonweb-2.0
+    optional: true
   - name: INCEPTOR
     minVersion: sophonweb-2.0
     maxVersion: sophonweb-2.0
