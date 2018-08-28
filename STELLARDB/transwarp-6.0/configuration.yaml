@@ -1,16 +1,48 @@
 - name: graph.data.dirs
+  recommendExpression: |
+    <#function localDir suffix>
+      <#if rcmdMounts?size == 0>
+        <#return suffix>
+      <#else>
+        <#local dirs = []>
+        <#list rcmdMounts?sort as mnt>
+         <#local dirs = dirs + [mnt + suffix]>
+        </#list>
+        <#return dirs?join(",")>
+      </#if>
+    </#function>
+    ${localDir("/stellardb/graph/" + service['sid'])}
+  isNodeSpecific: true
+  defaultValue: null
   valueType: STRING
   scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
   onDeps: []
   groups: []
   visibility: READ_WRITE
 - name: graph.raft.dirs
+  recommendExpression: |
+    <#function localDir suffix>
+      <#if rcmdMounts?size == 0>
+        <#return suffix>
+      <#else>
+        <#local dirs = []>
+        <#list rcmdMounts?sort as mnt>
+         <#local dirs = dirs + [mnt + suffix]>
+        </#list>
+        <#return dirs?join(",")>
+      </#if>
+    </#function>
+    ${localDir("/stellardb/raft/" + service['sid'])}
+  isNodeSpecific: true
+  defaultValue: null
   valueType: STRING
   scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
   onDeps: []
   groups: []
   visibility: READ_WRITE
 - name: graph.zk.quorum
+  recommendExpression: localhost:2181
+  defaultValue: null
   valueType: STRING
   scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
   onDeps: []
@@ -18,7 +50,7 @@
   visibility: READ_WRITE
 - name: graph.master.port
   recommendExpression: 30909
-  defaultValue: 30909
+  defaultValue: null
   valueType: HOST_PORT
   scope: !<RoleTypes> {roleTypes: [STELLARDB_MASTER]}
   onDeps: []
@@ -26,7 +58,7 @@
   visibility: READ_WRITE
 - name: graph.master.ui.port
   recommendExpression: 50088
-  defaultValue: 50088
+  defaultValue: null
   valueType: HOST_PORT
   scope: !<RoleTypes> {roleTypes: [STELLARDB_MASTER]}
   onDeps: []
@@ -34,7 +66,7 @@
   visibility: READ_WRITE
 - name: graph.worker.port
   recommendExpression: 30815
-  defaultValue: 30815
+  defaultValue: null
   valueType: HOST_PORT
   scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
   onDeps: []
@@ -42,7 +74,7 @@
   visibility: READ_WRITE
 - name: graph.worker.ui.port
   recommendExpression: 50089
-  defaultValue: 50089
+  defaultValue: null
   valueType: HOST_PORT
   scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
   onDeps: []
@@ -50,7 +82,7 @@
   visibility: READ_WRITE
 - name: graph.zk.base_path
   recommendExpression: "/graph"
-  defaultValue: "/graph"
+  defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
@@ -58,7 +90,7 @@
   visibility: READ_WRITE
 - name: graph.raft.server.port
   recommendExpression: 1998
-  defaultValue: 1998
+  defaultValue: null
   valueType: HOST_PORT
   scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
   onDeps: []
