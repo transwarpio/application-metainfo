@@ -46,7 +46,7 @@ roles:
     - directive: !<resource>
         templateType: Raw
         templatePath: "df-client.service"
-        targetPath: "/var/lib/systemd/system/df-client.service"
+        targetPath: "/usr/lib/systemd/system/df-client.service"
         mode: "755"
   - type: Start
     directives:
