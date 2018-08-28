@@ -1,0 +1,16 @@
+{
+  "summary": [
+    {
+      "tabTitle": "Basic",
+      "tabType": "SIMPLE",
+      "charts": [
+        {
+          "metrics": [{"name": "InceptorOpenedSessions", "title": "Opened Sessions"}],
+          "metricUnit": "Num"
+        }
+      ],
+      "metrics": [
+        {"name": "InceptorSqlServer", "title":"Server"}
+      ]
+    }]
+}

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 IN_PROGRESS_VERSION=transwarp-6.0
-TAG_VERSION=transwarp-6.0.0-rc1
+TAG_VERSION=transwarp-6.0.0-rc2
 
 set -e
 
