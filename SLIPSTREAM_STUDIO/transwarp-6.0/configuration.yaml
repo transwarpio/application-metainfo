@@ -271,7 +271,7 @@
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_SLIPSTREAMSTUDIO]
   onDeps: []
-  groups: []
+  groups: ['studio.properties']
   visibility: READ_WRITE
 
 - name: slipstream.studio.project.repo.dir
@@ -295,7 +295,7 @@
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_SLIPSTREAMSTUDIO]
   onDeps: []
-  groups: []
+  groups: ['studio.properties']
   visibility: READ_WRITE
 
 - name: slipstream.studio.rules.resource.dir
