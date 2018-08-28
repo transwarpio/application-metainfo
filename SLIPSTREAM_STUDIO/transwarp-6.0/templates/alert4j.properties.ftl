@@ -13,6 +13,12 @@ email.sender.password=
 email.from.address=streaming@transwarp.io
 email.to.addresses=streaming@transwarp.io
 
+# -- akka --
+alert.service.studio.akka.host=${localhostname}
+alert.service.studio.akka.port=${service['slipstream.studio.akkaserver.port']}
+alert.service.studio.akka.actorsystemname=SlipstreamStudio
+alert.service.studio.akka.actorTimeout=120
+
 # -- 绑定的本地alert4j akka client的地址与端口. 如果别人要连过来得通过30090连.
 # -- slipstream绑定30090, monitor绑定30030., slipstream作为client连接monitor.
 alert.service.client.akka.host=${localhostname}

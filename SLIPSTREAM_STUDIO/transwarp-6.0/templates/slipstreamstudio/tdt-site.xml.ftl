@@ -7,14 +7,14 @@
 </property>
 </#macro>
 <configuration>
-  <#if dependencies.SLIPSTREAM??>
-    <#assign inceptor_server=dependencies.SLIPSTREAM.roles.INCEPTOR_SERVER[0]>
+  <#if dependencies.INCEPTOR_GATEWAY??>
+      <#assign gateway_host=dependencies.INCEPTOR_GATEWAY.roles.INCEPTOR_GATEWAY[0]['hostname']>
+      <#assign gateway_port=dependencies.INCEPTOR_GATEWAY['inceptor.gateway.ui.port']>
+      <@property "tdt.inceptor.address" "${gateway_host}:${gateway_port}"/>
+  <#elseif dependencies.SLIPSTREAM??>
+      <#assign inceptor_server=dependencies.SLIPSTREAM.roles.INCEPTOR_SERVER[0]>
       <#assign inceptor_url = inceptor_server['hostname'] + ":" + dependencies.SLIPSTREAM['hive.server2.thrift.port']>
       <@property "tdt.inceptor.address" "${inceptor_url}"/>
-  <#elseif dependencies.INCEPOR_GATEWAY??>
-    <#assign gateway_host=dependencies.INCEPOR_GATEWAY.roles.INCEPTOR_GATEWAY[0]['hostname']>
-    <#assign gateway_port=dependencies.INCEPOR_GATEWAY['inceptor.gateway.ui.port']>
-    <@property "tdt.inceptor.address" "${gateway_host}:${gateway_port}"/>
   </#if>
 
 <#if dependencies.TXSQL??>
