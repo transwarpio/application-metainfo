@@ -27,6 +27,9 @@ roles:
     - directive: !<mkdirs>
         paths: ["/usr/lib/dragonfly"]
         mode: "755"
+    - directive: !<mkdirs>
+        paths: ["/etc/dragonfly/conf"]
+        mode: "755"
     - directive: !<shell>
         script: "tar -zxvf /etc/${service.sid}/conf/df-client.tar.gz -C /usr/lib/dragonfly/"
     - directive: !<shell>
@@ -46,7 +49,7 @@ roles:
     - directive: !<resource>
         templateType: Raw
         templatePath: "df-client.service"
-        targetPath: "/var/lib/systemd/system/df-client.service"
+        targetPath: "/usr/lib/systemd/system/df-client.service"
         mode: "755"
   - type: Start
     directives:
