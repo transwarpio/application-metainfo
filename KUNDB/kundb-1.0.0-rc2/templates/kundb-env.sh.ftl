@@ -92,11 +92,10 @@ export MFED_SHARD_INDEX=${mfedIndex}
 #export CTLD_HOST=`hostname -I`
 export CTLD_HOST=${ctldHost}
 
-
-
-hostname=`hostname -f`
+export VTROOT=/vt
 export VTTOP=$VTROOT/src/github.com/youtube/vitess
 export VT_MYSQL_ROOT=/usr/local/mariadb
+export PATH=$PATH:$VT_MYSQL_ROOT/bin:$VTROOT/bin
 export MYSQL_FLAVOR=${service['mysql.flavor']}
 export KUNHOME=/vt/manager
 export KUNUSER="kundb"
@@ -111,8 +110,6 @@ else
 fi
 
 #export VTDATAROOT=/vt/vtdataroot
-export PATH=$PATH:$VT_MYSQL_ROOT/bin:$VTROOT/bin
-export VTROOT=/vt
 <#if service['data.localdir']??>
    <#assign datadir=service['data.localdir']>
 export VIR_DATA_DIR=${datadir}
