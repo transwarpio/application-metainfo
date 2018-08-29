@@ -36,7 +36,7 @@ roles:
   operations: []
 
 roleGroups:
-  - fieldName: nameservices
+  - fieldName: instancegroups
     namePrefix: instancegroup
     friendlyName: "Instance Group"
     autoAssign:
