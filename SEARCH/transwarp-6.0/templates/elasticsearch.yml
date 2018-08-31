@@ -61,7 +61,7 @@ path.data: ${service['path.data']}
 #
 # Path to log files:
 #
-path.logs: ${service['path.logs']}
+path.logs: /var/log/${service.sid}/${roleGroupName}
 #
 # ----------------------------------- Memory -----------------------------------
 #

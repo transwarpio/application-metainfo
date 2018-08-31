@@ -290,7 +290,8 @@
   recommendExpression: ${9200 + currentRoleGroupsCount - 1}
   defaultValue: null
   valueType: PORT
-  scope: !<ServiceLevel> {}
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -302,7 +303,8 @@
   recommendExpression: ${9300 + currentRoleGroupsCount - 1}
   defaultValue: null
   valueType: PORT
-  scope: !<ServiceLevel> {}
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
