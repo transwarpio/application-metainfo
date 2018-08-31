@@ -53,4 +53,14 @@
     <@property "guardian.server.access.token.authentication.enabled" "true"/>
 </#if>
 
+<!-- ABAC Authorization -->
+    <@property "guardian.abac.authorization.enabled" "${guardian['guardian.abac.authorization.enabled']}"/>
+
+<#--Take properties from the context-->
+<#if guardian['guardian-site-client.xml']??>
+    <#list guardian['guardian-site-client.xml'] as key, value>
+        <@property key value/>
+    </#list>
+</#if>
+
 </configuration>
