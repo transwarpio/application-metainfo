@@ -33,7 +33,7 @@ roles:
     - directive: !<shell>
         script: "tar -zxvf /etc/${service.sid}/conf/df-client.tar.gz -C /usr/lib/dragonfly/"
     - directive: !<shell>
-        script: "ln -s /usr/lib/dragonfly/df-client/dfdaemon /usr/bin/dfdaemon"
+        script: "ln -sf /usr/lib/dragonfly/df-client/dfdaemon /usr/bin/dfdaemon"
   - type: Config
     directives:
     - directive: !<resource>
