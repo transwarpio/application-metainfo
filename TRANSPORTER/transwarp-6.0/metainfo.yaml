@@ -83,8 +83,13 @@ roles:
         to: "/etc/${service.sid}/conf/hadoop/core-site.xml"
     - directive: !<link>
         action: Link
+        from: "/etc/${dependencies.KAFKA.sid}/conf/server.properties"
+        to: "/etc/${service.sid}/conf/hadoop/server.properties"
+      necessary: false
+    - directive: !<link>
+        action: Link
         from: "/etc/${dependencies.KAFKA.sid}/conf/jaas.conf"
-        to: "/etc/${service.sid}/conf/jaas.conf"
+        to: "/etc/${service.sid}/conf/hadoop/jaas.conf"
       necessary: false
     - directive: !<link>
         action: Link
