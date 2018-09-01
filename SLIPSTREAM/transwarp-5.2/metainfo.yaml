@@ -77,7 +77,7 @@ roles:
   suggestion:
   - criteria: !<Range> {"min": 1}
   validation:
-  - criteria: !<Range> {"min": 1}
+  - criteria: !<Range> {"min": 0}
   operations: []
 - name: INCEPTOR_HISTORYSERVER
   friendlyName: "Slipstream History Server"
@@ -177,7 +177,7 @@ roles:
   suggestion:
   - criteria: !<EachNode> {}
   validation:
-  - criteria: !<EachNode> {}
+  - criteria: !<Range> {"min": 1}
   operations: []
 - name: INCEPTOR_SLIPSTREAMSTUDIO
   dockerImage: "transwarp/slipstream-studio:transwarp-5.2"

@@ -56,7 +56,7 @@ roles:
   suggestion:
   - criteria: !<EachNode> {}
   validation:
-  - criteria: !<EachNode> {}
+  - criteria: !<Range> {"min": 1}
   operations: []
 - name: KAFKA_REST
   dockerImage: "transwarp/kafka-rest:transwarp-6.0"

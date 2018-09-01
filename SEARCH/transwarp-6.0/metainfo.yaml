@@ -77,7 +77,7 @@ roleGroups:
       suggestion:
       - criteria: !<EachNode> {}
       validation:
-      - criteria: !<EachNode> {}
+      - criteria: !<Range> {"min": 1}
       operations:
       - type: Config
         directives:
