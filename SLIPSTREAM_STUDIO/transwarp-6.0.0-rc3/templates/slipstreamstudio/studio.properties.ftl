@@ -33,7 +33,7 @@ slipstream.restclient.max.total=500
 <#if dependencies.SLIPSTREAM??>
 <#assign slipstream_server=dependencies.SLIPSTREAM.roles.INCEPTOR_SERVER[0]['hostname']>
 slipstream.restclient.server.address=${slipstream_server}:${dependencies.SLIPSTREAM['inceptor.ui.port']}
-hive.service.id=${dependencies.SLIPSTREAM.sid}
+slipstream.service.id=${dependencies.SLIPSTREAM.sid}
 <#if dependencies.SLIPSTREAM.roles.INCEPTOR_HISTORYSERVER??>
 <#assign historyserver=dependencies.SLIPSTREAM.roles.INCEPTOR_HISTORYSERVER[0]['hostname']>
 slipstream.restclient.history.address=${historyserver}:${dependencies.SLIPSTREAM['slipstream.historyserver.akka.listen.port']}
