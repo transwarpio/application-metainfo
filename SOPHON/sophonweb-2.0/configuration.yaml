@@ -1,4 +1,4 @@
-# midas.conf
+# sophon.conf
 - name: livy.cache.type
   recommendExpression: "simple"
   defaultValue: null
@@ -328,5 +328,15 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: ['TOS']
+  groups: []
+  visibility: READ_WRITE
+
+# yarn or kuberenets
+- name: sophon.resource.type
+  recommendExpression: "yarn"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
   groups: []
   visibility: READ_WRITE
