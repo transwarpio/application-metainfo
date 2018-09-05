@@ -95,7 +95,7 @@
   visibility: READ_WRITE
 
 - name: logstash.worker_num
-  recommendExpression: "1"
+  recommendExpression: "6"
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
@@ -104,7 +104,7 @@
   visibility: READ_WRITE
 
 - name: logstash.batch_size
-  recommendExpression: "20480"
+  recommendExpression: "10240"
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
@@ -113,7 +113,7 @@
   visibility: READ_WRITE
 
 - name: logstash.heap_size
-  recommendExpression: "2g"
+  recommendExpression: "8g"
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
@@ -131,8 +131,8 @@
   visibility: READ_WRITE
 
 - name: logstash.container.limits.memory
-  recommendExpression: 3
-  defaultValue: 3
+  recommendExpression: 10
+  defaultValue: 10
   valueType: GB
   scope: !<RoleTypes>
     roleTypes: [LOGSTASH]
@@ -141,8 +141,8 @@
   visibility: READ_WRITE
 
 - name: logstash.container.limits.cpu
-  recommendExpression: 1
-  defaultValue: 2
+  recommendExpression: 4
+  defaultValue: 4
   valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [LOGSTASH]
@@ -161,8 +161,8 @@
   visibility: READ_WRITE
 
 - name: logstash.container.requests.cpu
-  recommendExpression: 0.5 
-  defaultValue: 1
+  recommendExpression: 4
+  defaultValue: 4
   valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [LOGSTASH]
