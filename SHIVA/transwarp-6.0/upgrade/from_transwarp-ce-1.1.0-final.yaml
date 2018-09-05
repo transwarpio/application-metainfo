@@ -1,3 +1,4 @@
 ---
 fromVersion: transwarp-ce-1.1.0-final
 rolling: false
+rollbackable: false
