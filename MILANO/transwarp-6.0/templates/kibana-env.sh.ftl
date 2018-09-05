@@ -3,7 +3,7 @@ export KIBANA_HOST=${localhostname}
 <#if dependencies.SEARCH??>
     <#assign search=dependencies.SEARCH searches=[] searchesWithPort=[]>
     <#list search.roles.SEARCH_SERVER as role>
-        <#assign searchesWithPort = [role.hostname + ":" + search[role.id?c]['transport.tcp.port']]>
+        <#assign searchesWithPort = [role.hostname + ":" + search[role.id?c]['http.port']]>
     </#list>
 </#if>
 export ELASTICSEARCH_URL=${searchesWithPort[0]}
