@@ -93,6 +93,13 @@ roles:
         decommission: true
       reject:
         number: 2
+    deleteOpCleanDirs:
+      fromConfig:
+      - key: dfs.datanode.data.dir
+        featureFile: in_use.lock
+      fromPath:
+      - key: /var/run/${service.sid}
+        featureFile: dn_socket
     env:
     - name: HDFS_HA_NAMENODE_SERVICE
       value: |
