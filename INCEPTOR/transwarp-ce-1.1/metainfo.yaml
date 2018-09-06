@@ -150,7 +150,7 @@ roles:
   suggestion:
   - criteria: !<EachNode> {}
   validation:
-  - criteria: !<EachNode> {}
+  - criteria: !<Range> {"min": 0}
   operations:
   - type: Install
     directives:

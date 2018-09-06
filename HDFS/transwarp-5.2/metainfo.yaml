@@ -69,7 +69,7 @@ roles:
     suggestion:
     - criteria: !<Range> {"min": 1}
     validation:
-    - criteria: !<Range> {"min": 1}
+    - criteria: !<Range> {"min": 0}
     operations: []
   - name: HDFS_DATANODE
     friendlyName: "Data Node"

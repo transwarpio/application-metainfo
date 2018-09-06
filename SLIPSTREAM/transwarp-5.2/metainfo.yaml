@@ -177,7 +177,7 @@ roles:
   suggestion:
   - criteria: !<EachNode> {}
   validation:
-  - criteria: !<Range> {"min": 1}
+  - criteria: !<Range> {"min": 0}
   operations: []
 - name: INCEPTOR_SLIPSTREAMSTUDIO
   dockerImage: "transwarp/slipstream-studio:transwarp-5.2"
