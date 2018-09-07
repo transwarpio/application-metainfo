@@ -49,8 +49,8 @@ build_application-metainfo() {
         git remote rm origin
         git remote add origin https://github.com/transwarpio/application-metainfo.git
         http_proxy=http://172.16.2.14:7777 https_proxy=http://172.16.2.14:7777 git fetch origin
-        git checkout dev
-        git branch --set-upstream-to=origin/dev dev
+        git checkout master
+        git branch --set-upstream-to=origin/master master
 
 
         echo "building $VERSION image ..."
