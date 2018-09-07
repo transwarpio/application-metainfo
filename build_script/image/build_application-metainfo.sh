@@ -43,7 +43,7 @@ build_application-metainfo() {
         # push to github
         curl -o /tmp/push_dev.sh http://172.16.2.71/pub/application-metainfo/push_dev.sh
         export BRANCH=master
-        bash /tmp/push_dev.sh
+        bash -x /tmp/push_dev.sh
         rm -f /tmp/push_dev.sh
         # set git remote for upgrade
         git remote rm origin
