@@ -13,7 +13,7 @@ build_application-metainfo() {
 
     mkdir -p "$TARGET_DIR"
 
-    for VERSION in transwarp-5.2.2-final; do
+    for VERSION in final; do
         echo "preparing $VERSION ..."
 
         META_DST_DIR="$TARGET_DIR/$VERSION"
@@ -36,15 +36,21 @@ build_application-metainfo() {
         cp -rp . "$META_DST_DIR"
 
         # configure git remote options
-        git config --global http.proxy 'http://172.16.0.249:3128'
-        export http_proxy=http://172.16.0.249:3128
-        export https_proxy=http://172.16.0.249:3128
+        git config --global http.proxy 'http://172.16.2.14:7777'
+        export http_proxy=http://172.16.2.14:7777
+        export https_proxy=http://172.16.2.14:7777
         cd "$META_DST_DIR"
+        # push to github
+        curl -o /tmp/push_dev.sh http://172.16.2.71/pub/application-metainfo/push_dev.sh
+        export BRANCH=dev
+        bash /tmp/push_dev.sh
+        rm -f /tmp/push_dev.sh
+        # set git remote for upgrade
         git remote rm origin
         git remote add origin https://github.com/transwarpio/application-metainfo.git
-        http_proxy=http://172.16.0.249:3128 https_proxy=http://172.16.0.249:3128 git fetch origin
-        git checkout master
-        git branch --set-upstream-to=origin/master master
+        http_proxy=http://172.16.2.14:7777 https_proxy=http://172.16.2.14:7777 git fetch origin
+        git checkout dev
+        git branch --set-upstream-to=origin/dev dev
 
 
         echo "building $VERSION image ..."
