@@ -41,6 +41,7 @@ build_application-metainfo() {
         export https_proxy=http://172.16.2.14:7777
         cd "$META_DST_DIR"
         # push to github
+        git checkout master
         curl -o /tmp/push_dev.sh http://172.16.2.71/pub/application-metainfo/push_dev.sh
         export BRANCH=master
         bash -x /tmp/push_dev.sh
