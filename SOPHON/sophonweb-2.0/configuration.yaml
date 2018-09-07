@@ -306,7 +306,7 @@
   visibility: READ_WRITE
 
 # notebook
-- name: sophon.k8s.tensorflow.image.name
+- name: sophon.k8s.tensorboard.image.name
   recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-cpu:sophonweb-2.0"
   defaultValue: null
   valueType: STRING
