@@ -42,7 +42,7 @@ build_application-metainfo() {
         cd "$META_DST_DIR"
         # push to github
         curl -o /tmp/push_dev.sh http://172.16.2.71/pub/application-metainfo/push_dev.sh
-        export BRANCH=dev
+        export BRANCH=master
         bash /tmp/push_dev.sh
         rm -f /tmp/push_dev.sh
         # set git remote for upgrade
