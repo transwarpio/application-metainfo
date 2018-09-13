@@ -4,7 +4,7 @@ version: argodb-1.0.0-rc1
 global: false
 namePrefix: ArgodbComputing
 friendlyName: "ArgodbComputing"
-dockerImage: "transwarp/inceptor:transwarp-6.0.0-final"
+dockerImage: "transwarp/argodb-inceptor:argodb-1.0.0-rc1"
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.0.0-rc1
