@@ -726,7 +726,7 @@
   visibility: READ_WRITE
 
 - name: regionserver.thrift.port
-  recommendExpression: 9090
+  recommendExpression: 19090
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
