@@ -25,6 +25,24 @@ umask 0022
 current_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 function copy_files {
+    echo "copy service clients ..."
+    if [ -d $TDH_CLIENT_DIR ]; then
+        rm -rf $TDH_CLIENT_DIR
+    fi
+    mkdir -p $TDH_CLIENT_DIR
+    \cp -rpf $current_dir/../tdh_client/* $TDH_CLIENT_DIR/
+
+    if [ ! -d $TDH_PLUGIN_DIR ]; then
+        mkdir -p $TDH_PLUGIN_DIR
+    fi
+    if [ -d $current_dir/../plugin ]; then
+        \cp -rpf $current_dir/../plugin/* $TDH_PLUGIN_DIR/
+    fi
+
+    if [ ! -d $FTP_DIR/service_client ]; then
+        mkdir -p $FTP_DIR/service_client
+    fi
+    \cp -rpf $current_dir/../service_client/* $FTP_DIR/service_client
 
     if [ ! -d $META_DIR ]; then
         mkdir -p $META_DIR
