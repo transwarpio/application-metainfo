@@ -177,7 +177,7 @@ index.number_of_replicas: 1
 transport.type: netty3
 http.type: netty3
 
-action.auto_create_index: false
+action.auto_create_index: +logs-*, +persisted-*, -*
 
 <#if service['elasticsearch.yml']??>
 <#list service['elasticsearch.yml'] as key, value>
