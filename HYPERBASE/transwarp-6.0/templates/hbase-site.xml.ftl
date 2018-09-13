@@ -163,6 +163,9 @@
 <@property "hbase.client.meta.operation.timeout" service['hbase.client.meta.operation.timeout']/>
 <@property "hbase.client.write.buffer" service['hbase.client.write.buffer']/>
 
+<@property "mapred.child.env" "JAVA_HOME=/usr/java/jdk1.8.0_25"/>
+<@property "yarn.app.mapreduce.am.env" "JAVA_HOME=/usr/java/jdk1.8.0_25"/>
+
 <#--Take properties from the context-->
 <#if service['hbase-site.xml']??>
 <#list service['hbase-site.xml'] as key, value>
