@@ -24,7 +24,7 @@ dependencies:
   - name: YARN
     minVersion: sophonweb-2.0
     maxVersion: sophonweb-2.0
-    optional: true
+    optional: false
   - name: TXSQL
     minVersion: sophonweb-2.0
     maxVersion: sophonweb-2.0
