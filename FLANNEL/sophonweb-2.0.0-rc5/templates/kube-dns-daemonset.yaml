@@ -1,0 +1,155 @@
+<#assign
+  tosService=dependencies.TOS
+  registryServer=tosService.roles['TOS_REGISTRY'][0].hostname
+  registryPort=tosService['tos.registry.port']
+>
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  labels:
+    transwarp.name: kube-dns-${service.sid}
+  name: kube-dns-${service.sid}
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      transwarp.name: kube-dns-${service.sid}
+  template:
+    metadata:
+      labels:
+        transwarp.name: kube-dns-${service.sid}
+    spec:
+      containers:
+      - args:
+        - --domain=transwarp.local
+        - --dns-port=${service['kube.dns.kubedns.dnsport']}
+        - --config-map=kube-dns
+        - --healthz-port=${service['kube.dns.kubedns.healthzport']}
+        - --kubecfg-file=/srv/kubernetes/kubeconfig
+        - --v=4
+        env:
+        - name: TZ
+          value: "Asia/Shanghai"
+        image: ${registryServer}:${registryPort}/transwarp/kubedns:sophonweb-2.0.0-rc5
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 5
+          httpGet:
+            path: /healthz-kubedns
+            port: ${service['kube.dns.healthz.port']}
+            scheme: HTTP
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: kubedns
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /readiness
+            port: ${service['kube.dns.kubedns.healthzport']}
+            scheme: HTTP
+          initialDelaySeconds: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        volumeMounts:
+        - mountPath: /etc/resolv.conf
+          name: resolv
+        - mountPath: /srv/kubernetes/
+          name: srvkube
+          readOnly: true
+
+      - args:
+        - --dnsmasq-port=${service['kube.dns.dnsmasq.port']}
+        - --v=2
+        - --logtostderr
+        env:
+        - name: TZ
+          value: "Asia/Shanghai"
+        image: ${registryServer}:${registryPort}/transwarp/dnsmasq-metrics:sophonweb-2.0.0-rc5
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 5
+          httpGet:
+            path: /metrics
+            port: ${service['kube.dns.dnsmasq.metrics.port']}
+            scheme: HTTP
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: dnsmasq-metrics
+      - args:
+        - --cmd=nslookup kubernetes.default.svc.transwarp.local 127.0.0.1:${service['kube.dns.dnsmasq.port']} >/dev/null
+        - --url=/healthz-dnsmasq
+        - --cmd=nslookup kubernetes.default.svc.transwarp.local 127.0.0.1:${service['kube.dns.kubedns.dnsport']} >/dev/null
+        - --url=/healthz-kubedns
+        - --port=${service['kube.dns.healthz.port']}
+        - --quiet
+        env:
+        - name: TZ
+          value: "Asia/Shanghai"
+        image: ${registryServer}:${registryPort}/transwarp/exechealthz:sophonweb-2.0.0-rc5
+        imagePullPolicy: IfNotPresent
+        name: healthz
+      - args:
+        - dnsmasq
+        - --user=root
+        - -k
+        - --cache-size=1000
+        - --no-resolv
+        - --no-poll
+        - --log-queries
+        - --log-facility=/dev/stdout
+        - --neg-ttl=15
+        - --max-ttl=15
+        - --max-cache-ttl=15
+        - -N
+        - -p
+        - "${service['kube.dns.dnsmasq.port']}"
+        - --no-hosts
+        - -o
+        - --server=/.lan/127.0.0.1#${service['kube.dns.kubedns.dnsport']}
+        - --server=/.local/127.0.0.1#${service['kube.dns.kubedns.dnsport']}
+        - --server=/.arpa/127.0.0.1#${service['kube.dns.kubedns.dnsport']}
+        - --server=/.com/114.114.114.114
+        - --server=/.net/114.114.114.114
+        - --server=/.org/114.114.114.114
+        - --server=/.gov/114.114.114.114
+        - --server=/.edu/114.114.114.114
+        - --server=/.info/114.114.114.114
+        - --server=/.cn/114.114.114.114
+        - --server=/.io/114.114.114.114
+        - --server=127.0.0.1#${service['kube.dns.kubedns.dnsport']}
+        env:
+        - name: TZ
+          value: "Asia/Shanghai"
+        image: ${registryServer}:${registryPort}/transwarp/kube-dnsmasq:sophonweb-2.0.0-rc5
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 5
+          httpGet:
+            path: /healthz-dnsmasq
+            port: ${service['kube.dns.healthz.port']}
+            scheme: HTTP
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: dnsmasq
+      dnsPolicy: Default
+      hostNetwork: true
+      nodeSelector:
+        kube-dns-${service.sid}: "true"
+      priority: 200
+      restartPolicy: Always
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - hostPath:
+          path: /dev/null
+        name: resolv
+      - hostPath:
+          path: /srv/kubernetes/
+        name: srvkube
