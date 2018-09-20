@@ -396,7 +396,7 @@ healthChecks:
   method: !<Builtin> {}
 
 customConfigFiles:
-- core-size.xml
+- core-site.xml
 - hdfs-site.xml
 - httpfs-site.xml
 
