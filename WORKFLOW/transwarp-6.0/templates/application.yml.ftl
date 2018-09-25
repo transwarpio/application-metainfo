@@ -117,3 +117,11 @@ cookie.remember-me.days: ${service['workflow.cookie.rememberme.days']}
 
 # http cookie max-age in hours
 cookie.max-age.hours: ${service['workflow.cookie.maxage.hours']}
+
+# http upload file size
+spring:
+  http:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
