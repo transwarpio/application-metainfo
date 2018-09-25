@@ -1,6 +1,9 @@
 #server port
 designer.server.port=${service['designer.server.port']}
 designer.authentication.enableguardian=${(service.auth == "kerberos")?c}
+designer.global.session.timeout.secs=${service['designer.global.session.timeout.secs']}
+guardian.permission.component=${service.sid}
+
 #connection pool
 connectionpool.expiretime=${service['connectionpool.expiretime']}
 #max group size
@@ -25,12 +28,17 @@ service.checker.sleep.interval.min=${service['service.checker.sleep.interval.min
     <#assign license_servers += [(server.hostname + ":" + dependencies.LICENSE_SERVICE[server.hostname]["zookeeper.client.port"])]>
 </#list>
 license.server.quorum=${license_servers?join(",")}
-
+rubik.rest.api.detail=${service['rubik.rest.api.detail']}
+cube.build.create.sql.max.size=${service['cube.build.create.sql.max.size']}
 <#if service.auth = "kerberos">
     designer.server.host=${localhostname}
     <#if dependencies.GUARDIAN['cas.server.ssl.port']??>
         <#assign casServerSslPort=dependencies.GUARDIAN['cas.server.ssl.port']>
-        <#assign casServerName="${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']}:${casServerSslPort}">
+        <#if dependencies.GUARDIAN['guardian.server.cas.server.host']?matches("^\\s*$")>
+            <#assign casServerName="${dependencies.GUARDIAN.roles.CAS_SERVER[0]['ip']}:${casServerSslPort}">
+        <#else>
+            <#assign casServerName="${dependencies.GUARDIAN['guardian.server.cas.server.host']}:${casServerSslPort}">
+        </#if>
         cas.server.address=${casServerName}
     </#if>
 </#if>

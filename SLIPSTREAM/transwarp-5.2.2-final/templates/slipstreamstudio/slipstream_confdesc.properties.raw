@@ -1,0 +1,33 @@
+slipstream.config.desc.streamsql.use.eventtime=是否使用事件时间切分窗口
+slipstream.config.desc.stream.id=流任务名，即jobId
+slipstream.config.desc.streamsql.max.running.sql=Slipstream最多可以运行多少条SQL
+slipstream.config.desc.streamsql.max.running.task=Slipstream最多可以运行多少个任务
+
+slipstream.config.desc.morphling.maxlag.on.disorder=设置事件时间乱序情况下可容忍的最大延迟，-1表示数据有序，无乱序
+slipstream.config.desc.morphling.infinitewindow.reduce.tasks=无限滑动窗口默认的Reduce Task数量
+slipstream.config.desc.morphling.result.auto.flush=是否自动Sink。开启该开关后，只要有数据产生就立刻flush到目标表
+slipstream.config.desc.morphling.hdfs.flush.size=数据批量刷新到目标表时的batch大小，默认每产生10万条数据刷新一次。该参数与morphling.hdfs.flush.interval.ms的配置项相辅相成，按先满足的条件执行
+slipstream.config.desc.morphling.hdfs.flush.interval.ms=数据刷新到目标表的频率，默认每60秒刷新一次。该参数与morphling.hdfs.flush.size的配置项相辅相成，按先满足的条件执行
+slipstream.config.desc.morphling.task.max.failures=任务失败重试次数，-1表示不进行重试恢复
+slipstream.config.desc.morphling.job.enable.checkpoint=决定该任务是否启用HA
+slipstream.config.desc.morphling.job.checkpoint.interval=Checkpoint的频率。单位：毫秒
+slipstream.config.desc.morphling.job.enable.auto.failover=是否允许失败任务自动恢复，配合morphling.task.max.failues使用
+slipstream.config.desc.morphling.job.enable.wal.sink=是否开启WALSink功能，开启后将保证Exactly-Once语义
+slipstream.config.desc.morphling.wal.sink.committer.type=WAL Sink依赖的外部数据库类型
+slipstream.config.desc.morphling.wal.sink.voltdb.jdbc.url=WAL Sink配置的数据库的JDBC URL
+slipstream.config.desc.morphling.metrics.enabled=任务是否开启metrics收集
+
+slipstream.config.desc.mapred.reduce.tasks=reduce任务数量
+
+
+
+
+
+
+
+
+
+
+
+
+

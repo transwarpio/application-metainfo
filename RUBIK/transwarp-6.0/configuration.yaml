@@ -7,6 +7,24 @@
   groups: []
   visibility: READ_WRITE
 
+- name: cube.build.create.sql.max.size
+  recommendExpression: 512
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: designer.global.session.timeout.secs
+  recommendExpression: 3600
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: connectionpool.expiretime
   recommendExpression: 30
   defaultValue: null
@@ -27,6 +45,15 @@
 
 - name: cube.group.optimize
   recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: rubik.rest.api.detail
+  recommendExpression: false
   defaultValue: null
   valueType: BOOL
   scope: !<ServiceLevel> {}
@@ -215,6 +242,26 @@
 
 - name: workflow.client.password
   recommendExpression: Transwarp4T
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [RUBIK_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: inceptor.database.username
+  recommendExpression: inceptor
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [RUBIK_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: inceptor.database.password
+  recommendExpression: 123
   defaultValue: null
   valueType: STRING
   scope: !<RoleTypes>

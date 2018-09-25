@@ -1,0 +1,120 @@
+# Copyright 2011 The Apache Software Foundation
+#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Define some default values that can be overridden by system properties
+guardian.root.logger=INFO, RFA
+guardian.log.dir=.
+guardian.log.file=guardian.log
+guardian.audit.file=guardian.audit
+
+# Define the root logger to the system property "guardian.root.logger".
+log4j.rootLogger=${guardian.root.logger}
+
+# Logging Threshold
+log4j.threshold=ALL
+
+# Null Appender
+log4j.appender.NullAppender=org.apache.log4j.varia.NullAppender
+
+#
+# Rolling File Appender - cap space usage at 1gb.
+#
+guardian.log.maxfilesize=64MB
+guardian.log.maxbackupindex=16
+log4j.appender.RFA=org.apache.log4j.RollingFileAppender
+log4j.appender.RFA.File=${guardian.log.dir}/${guardian.log.file}
+
+log4j.appender.RFA.MaxFileSize=${guardian.log.maxfilesize}
+log4j.appender.RFA.MaxBackupIndex=${guardian.log.maxbackupindex}
+
+log4j.appender.RFA.layout=org.apache.log4j.PatternLayout
+
+# Pattern format: Date LogLevel LoggerName LogMessage
+log4j.appender.RFA.layout.ConversionPattern=%d{ISO8601} %p %c: %m%n
+# Debugging Pattern format
+#log4j.appender.RFA.layout.ConversionPattern=%d{ISO8601} %-5p %c{2}: (%F:%M(%L)) - %m%n
+
+# for audit
+log4j.logger.AuditLogger=INFO, audit
+log4j.additivity.AuditLogger=false
+
+log4j.appender.audit=org.apache.log4j.RollingFileAppender
+log4j.appender.audit.File=${guardian.log.dir}/${guardian.audit.file}
+log4j.appender.audit.Append=true
+
+log4j.appender.audit.MaxFileSize=${guardian.log.maxfilesize}
+log4j.appender.audit.MaxBackupIndex=${guardian.log.maxbackupindex}
+
+log4j.appender.audit.layout=org.apache.log4j.PatternLayout
+
+# Pattern format: Date LogLevel LoggerName LogMessage
+log4j.appender.audit.layout.ConversionPattern=%m%n
+
+#
+# Daily Rolling File Appender
+#
+
+log4j.appender.DRFA=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.DRFA.File=${guardian.log.dir}/${guardian.log.file}
+
+# Rollver at midnight
+log4j.appender.DRFA.DatePattern=.yyyy-MM-dd
+
+# 30-day backup
+#log4j.appender.DRFA.MaxBackupIndex=30
+log4j.appender.DRFA.layout=org.apache.log4j.PatternLayout
+
+# Pattern format: Date LogLevel LoggerName LogMessage
+log4j.appender.DRFA.layout.ConversionPattern=%d{ISO8601} %p %c: %m%n
+# Debugging Pattern format
+#log4j.appender.DRFA.layout.ConversionPattern=%d{ISO8601} %-5p %c{2}: (%F:%M(%L)) - %m%n
+
+
+#
+# console
+# Add "console" to rootlogger above if you want to use this
+#
+
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.target=System.err
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%d %p %c{2}: %m%n
+
+#
+#Security appender
+#
+guardian.security.logger=DEBUG,NullAppender
+guardian.security.log.maxfilesize=64MB
+guardian.security.log.maxbackupindex=16
+log4j.category.SecurityLogger=${guardian.security.logger}
+guardian.security.log.file=SecurityAuth-${user.name}.audit
+log4j.appender.RFAS=org.apache.log4j.RollingFileAppender
+log4j.appender.RFAS.File=${guardian.log.dir}/${guardian.security.log.file}
+log4j.appender.RFAS.layout=org.apache.log4j.PatternLayout
+log4j.appender.RFAS.layout.ConversionPattern=%d{ISO8601} %p %c: %m%n
+log4j.appender.RFAS.MaxFileSize=${guardian.security.log.maxfilesize}
+log4j.appender.RFAS.MaxBackupIndex=${guardian.security.log.maxbackupindex}
+
+#
+# Daily Rolling Security appender
+#
+log4j.appender.DRFAS=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.DRFAS.File=${guardian.log.dir}/${guardian.security.log.file}
+log4j.appender.DRFAS.layout=org.apache.log4j.PatternLayout
+log4j.appender.DRFAS.layout.ConversionPattern=%d{ISO8601} %p %c: %m%n
+log4j.appender.DRFAS.DatePattern=.yyyy-MM-dd

@@ -4,6 +4,7 @@ version: transwarp-5.2
 global: true
 namePrefix: Dashboard
 friendlyName: Dashboard
+dockerImage: "transwarp/dashboard:transwarp-5.2"
 dependencies: []
 user: root
 roles:

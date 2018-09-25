@@ -68,7 +68,7 @@ roles:
   suggestion:
   - criteria: !<Range> {"min": 1}
   validation:
-  - criteria: !<Range> {"min": 1}
+  - criteria: !<Range> {"min": 0}
   operations:
   - type: Install
     directives:
@@ -149,7 +149,7 @@ roles:
   suggestion:
   - criteria: !<EachNode> {}
   validation:
-  - criteria: !<EachNode> {}
+  - criteria: !<Range> {"min": 0}
   operations:
   - type: Install
     directives:

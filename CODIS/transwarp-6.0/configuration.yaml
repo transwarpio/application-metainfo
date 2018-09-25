@@ -80,6 +80,16 @@
   groups: []
   visibility: READ_WRITE
 
+- name: codis.proxy.auth
+  recommendExpression: ""
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [CODIS_PROXY]
+  onDeps: []
+  groups: []
+  visibility: PASSWORD
+
 #fe
 - name: codis.fe.container.limits.memory
   recommendExpression: -1
@@ -180,3 +190,13 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: codis.cluster.auth
+  recommendExpression: ""
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [CODIS_PROXY, CODIS_SERVER, CODIS_DASHBOARD]
+  onDeps: []
+  groups: []
+  visibility: PASSWORD

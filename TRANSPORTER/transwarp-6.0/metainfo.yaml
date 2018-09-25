@@ -22,11 +22,23 @@ dependencies:
     minVersion: transwarp-6.0
     maxVersion: transwarp-6.0
     optional: false
+  - name: ZOOKEEPER
+    minVersion: transwarp-6.0
+    maxVersion: transwarp-6.0
+    optional: true
+  - name: KAFKA
+    minVersion: transwarp-6.0
+    maxVersion: transwarp-6.0
+    optional: true
+  - name: HYPERBASE
+    minVersion: transwarp-6.0
+    maxVersion: transwarp-6.0
+    optional: true
 roles:
 - name: TDT_SERVER
   friendlyName: "Transporter Server"
   labelPrefix: "transporter-server"
-  linkExpression: "http://${localhostname}:${service['tdt.server.port']}"  
+  linkExpression: "http://${localhostname}:${service['tdt.server.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
@@ -56,6 +68,9 @@ roles:
     - directive: !<mkdirs>
         paths: ["/etc/${service.sid}/conf/hadoop"]
         mode: "755"
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf/canal/conf/spring"]
+        mode: "755"
   - type: Config
     directives:
     - directive: !<link>
@@ -66,10 +81,35 @@ roles:
         action: Link
         from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
         to: "/etc/${service.sid}/conf/hadoop/core-site.xml"
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.KAFKA.sid}/conf/server.properties"
+        to: "/etc/${service.sid}/conf/hadoop/server.properties"
+      necessary: false
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.KAFKA.sid}/conf/jaas.conf"
+        to: "/etc/${service.sid}/conf/hadoop/jaas.conf"
+      necessary: false
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HYPERBASE.sid}/conf/hbase-site.xml"
+        to: "/etc/${service.sid}/conf/hadoop/hbase-site.xml"
+      necessary: false
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "db.properties"
         targetPath: "/etc/${service.sid}/conf/db.properties"
+        mode: "600"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "canal/conf/canal.properties.ftl"
+        targetPath: "/etc/${service.sid}/conf/canal/conf/canal.properties"
+        mode: "600"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "canal/conf/spring/default-instance.xml.ftl"
+        targetPath: "/etc/${service.sid}/conf/canal/conf/spring/default-instance.xml"
         mode: "600"
 stages:
   - type: Config
@@ -85,12 +125,6 @@ stages:
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
-  - type: Bootstrap
-    taskGroups:
-    - !<Create-Database-in-Inceptor>
-      summaryPolicy: ALL
-      timeoutMinutes: 5
-      dbNames: ["tdt", "tdt_samples"]
   - type: PreUpgrade
     taskGroups:
     - !<DockerRunPreUpgrade>
@@ -106,7 +140,6 @@ stages:
       roleType: TDT_SERVER
       node: Any
 
-product: Studio
 
 firstWizardConfigs:
 - tdt.server.port
@@ -124,6 +157,7 @@ firstWizardConfigs:
 - tdt.container.requests.memory
 - tdt.container.requests.cpu
 - tdt.memory.ratio
+- tdt.kafka.bootstrap.servers
 
 principals:
 - tdt
@@ -139,3 +173,6 @@ healthChecks:
 - category: DAEMON_CHECK
   intervalSeconds: 10
   method: !<K8sPod> {}
+
+customConfigFiles:
+- tdt-site.xml

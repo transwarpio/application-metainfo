@@ -12,10 +12,14 @@ roles:
   labelPrefix: "zookeeper-server"
   dockerImage: "transwarp/zookeeper:transwarp-6.0"
   category: MASTER
-  frontendOperations: ["Start", "Move"]
+  frontendOperations: ["Start"]
   deleteOpCondition:
     reject:
       number: 3
+  deleteOpCleanDirs:
+    fromPath:
+    - key: /var/${service.sid}/zookeeper
+      featureFile: myid
   env: []
   mountPaths: []
   summaryPolicy: MAJOR
@@ -96,10 +100,14 @@ roles:
   labelPrefix: "txsql-server"
   dockerImage: "transwarp/txsql:transwarp-6.0"
   category: MASTER
-  frontendOperations: ["Start", "Move"]
+  frontendOperations: ["Start"]
   deleteOpCondition:
     reject:
       number: 3
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: data.dir
+      featureFile: node_init.log
   env: []
   mountPaths: []
   summaryPolicy: MAJOR

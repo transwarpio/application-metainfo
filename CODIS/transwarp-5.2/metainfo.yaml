@@ -35,6 +35,8 @@ roles:
           </#list>
         </#if>
         ${zookeepers?join(",")}
+    - name: PRODUCT_AUTH
+      value: ${service['codis.cluster.auth']}
     mountPaths: []
     resources:
       limitsMemoryKey: codis.dashboard.container.limits.memory
@@ -78,6 +80,10 @@ roles:
         ${zookeepers?join(",")}
     - name: DASHBOARD_ADDR
       value: ${service.roles.CODIS_DASHBOARD[0].hostname}:18080
+    - name: SESSION_AUTH
+      value: ${service['codis.proxy.auth']}
+    - name: PRODUCT_AUTH
+      value: ${service['codis.cluster.auth']}
     mountPaths: []
     resources:
       limitsMemoryKey: codis.proxy.container.limits.memory
@@ -98,6 +104,7 @@ roles:
   - name: CODIS_FE
     friendlyName: "Codis FE"
     labelPrefix: "codis-fe"
+    linkExpression: "http://${localhostname}:${service['codis.fe.port']}/"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete"]
     deleteOpCondition:
@@ -153,6 +160,8 @@ roles:
       value: /etc/${service.sid}/conf
     - name: DASHBOARD_ADDR
       value: ${service.roles.CODIS_DASHBOARD[0].hostname}:18080
+    - name: PRODUCT_AUTH
+      value: ${service['codis.cluster.auth']}
     mountPaths: []
     resources:
       limitsMemoryKey: codis.server.container.limits.memory
@@ -189,6 +198,8 @@ firstWizardConfigs:
 - codis.server.container.requests.cpu
 - codis.product.name
 - codis.fe.port
+- codis.proxy.auth
+- codis.cluster.auth
 
 dashboardMetrics: []
 

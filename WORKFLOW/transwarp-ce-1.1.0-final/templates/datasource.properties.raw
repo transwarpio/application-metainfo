@@ -1,0 +1,2 @@
+mybatis.config-location=classpath:config/mybatis-config.xml
+spring.datasource.initialize=false

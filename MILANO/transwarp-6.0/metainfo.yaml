@@ -272,7 +272,6 @@ roles:
         targetPath: "/etc/${service.sid}/conf/crontabs/root"
         mode: "666"
 
-product: Studio
 
 firstWizardConfigs:
 - filebeat.port
@@ -332,3 +331,6 @@ healthChecks:
 #- category: VITAL_SIGN_CHECK
 #  intervalSeconds: 10
 #  method: !<Builtin> {}
+
+customConfigFiles:
+- b-index-prefix.conf

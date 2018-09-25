@@ -4,7 +4,6 @@ version: transwarp-6.0
 global: false
 namePrefix: Shiva
 friendlyName: "Shiva"
-product: Shiva
 dependencies: []
 roles:
 - name: SHIVA_MASTER
@@ -41,6 +40,15 @@ roles:
       decommission: false
     reject:
       number: 2
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: master.master.data_path
+      featureFile: master.lock
+    - key: master.log.log_dir
+      featureFile: master.log
+    fromPath:
+    - key: /etc/${service.sid}/conf
+      featureFile: master.conf
   mountPaths: []
   operations:
   - type: Config
@@ -93,6 +101,10 @@ roles:
       number: 2
     reject:
       number: 1
+  deleteOpCleanDirs:
+    fromPath:
+    - key: /etc/${service.sid}/conf
+      featureFile: master.conf
   mountPaths: []
   operations:
   - type: Config
@@ -154,6 +166,15 @@ roles:
       decommission: false
     reject:
       number: 2
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: tabletserver.store.datadirs
+      featureFile: .trash
+    - key: tabletserver.log.log_dir
+      featureFile: tabletserver.log
+    fromPath:
+    - key: /etc/${service.sid}/conf
+      featureFile: tabletserver.conf
   mountPaths: []
   operations:
   - type: Config

@@ -83,7 +83,7 @@ roles:
   suggestion:
   - criteria: !<Range> {"min": 1}
   validation:
-  - criteria: !<Range> {"min": 1}
+  - criteria: !<Range> {"min": 0}
   operations:
   - type: Install
     directives:
@@ -137,6 +137,14 @@ roles:
     - directive: !<mkdirs>
         paths: ["/var/lock/subsys/${service.sid}", "/var/run/${service.sid}"]
         mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "dataSource.properties"
+        targetPath: "/etc/${service.sid}/conf/dataSource.properties"
+        mode: "644"
+
 - name: INCEPTOR_EXECUTOR
   friendlyName: "Inceptor Executor"
   labelPrefix: "inceptor-executor"
@@ -174,7 +182,7 @@ roles:
   suggestion:
   - criteria: !<EachNode> {}
   validation:
-  - criteria: !<EachNode> {}
+  - criteria: !<Range> {"min": 0}
   operations:
   - type: Install
     directives:
@@ -266,6 +274,10 @@ firstWizardConfigs:
 - executor.container.requests.cpu
 - executor.memory.ratio
 - executor.number.eachnode
+- rubik.connection.url
+- rubik.connection.username
+- rubik.connection.password
+- rubik.connection.database
 - hive.server2.authentication.cas.allowedProxyChains
 - hive.server2.authentication.cas.enabled
 - hive.server2.authentication.guardian.token.enabled

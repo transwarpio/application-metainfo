@@ -7,6 +7,137 @@ friendlyName: TOS
 dependencies: []
 user: root
 roles:
+- name: DF_CLIENT
+  friendlyName: "DF Client"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<EachNode> {}
+  suggestion:
+  - criteria: !<EachNode> {}
+  validation:
+  - criteria: !<Range> {"min": 0}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<download>
+        url: "${transwarpRepo}/tos/df-client.tar.gz"
+        targetPath: "/etc/${service.sid}/conf/df-client.tar.gz"
+    - directive: !<mkdirs>
+        paths: ["/usr/lib/dragonfly"]
+        mode: "755"
+    - directive: !<mkdirs>
+        paths: ["/etc/dragonfly/conf"]
+        mode: "755"
+    - directive: !<shell>
+        script: "tar -zxvf /etc/${service.sid}/conf/df-client.tar.gz -C /usr/lib/dragonfly/"
+    - directive: !<shell>
+        script: "ln -sf /usr/lib/dragonfly/df-client/dfdaemon /usr/bin/dfdaemon"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "client.conf"
+        targetPath: "/etc/dragonfly/conf/client.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "df-client"
+        targetPath: "/usr/bin/df-client"
+        mode: "755"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "df-client.service"
+        targetPath: "/usr/lib/systemd/system/df-client.service"
+        mode: "755"
+  - type: Start
+    directives:
+    - directive: !<systemctl>
+        action: EnableStart
+        service: df-client
+        sleepSec: 2
+  - type: Scaleout
+    directives:
+    - directive: !<systemctl>
+        action: EnableStart
+        service: df-client
+        sleepSec: 2
+  - type: Stop
+    directives:
+    - directive: !<systemctl>
+        action: DisableStop
+        service: df-client
+        sleepSec: 2
+  - type: Delete
+    directives:
+    - directive: !<systemctl>
+        action: DisableStop
+        service: df-client
+        sleepSec: 2
+    - directive: !<shell>
+        script: "rm -rf /usr/lib/dragonfly/"
+    - directive: !<shell>
+        script: "rm -f /usr/bin/dfdaemon"
+
+- name: DF_MASTER
+  friendlyName: "DF Master"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq>
+      numSeq: [3,2,1]
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 0}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<download>
+        url: "${transwarpRepo}/tos/df-master.tar.gz"
+        targetPath: "/etc/${service.sid}/conf/df-master.tar.gz"
+    - directive: !<shell>
+        script: "docker load -i /etc/${service.sid}/conf/df-master.tar.gz"
+    - directive: !<mkdirs>
+        paths: ["/etc/dragonfly/conf"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "nginx.conf"
+        targetPath: "/etc/dragonfly/conf/nginx.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "application.properties"
+        targetPath: "/etc/dragonfly/conf/application.properties"
+        mode: "755"
+  - type: Start
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "dragonfly-master.manifest"
+        targetPath: "/opt/kubernetes/manifests-multi/dragonfly-master.manifest"
+        mode: "755"
+  - type: Scaleout
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "dragonfly-master.manifest"
+        targetPath: "/opt/kubernetes/manifests-multi/dragonfly-master.manifest"
+        mode: "755"
+  - type: Stop
+    directives:
+    - directive: !<shell>
+        script: "rm -f /opt/kubernetes/manifests-multi/dragonfly-master.manifest"
+  - type: Delete
+    directives:
+    - directive: !<shell>
+        script: "rm -f /opt/kubernetes/manifests-multi/dragonfly-master.manifest"
+
 - name: TOS_SLAVE
   friendlyName: "TOS Slave"
   category: SLAVE
@@ -66,6 +197,11 @@ roles:
         templateType: Raw
         templatePath: "haproxy"
         targetPath: "/etc/sysconfig/haproxy"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "resolv.conf"
+        targetPath: "/etc/transwarp/conf/resolv.conf"
         mode: "755"
   - type: Start
     directives:
@@ -299,11 +435,20 @@ stages:
       timeoutMinutes: 2
       roleType: TOS_MASTER
       operation: Start
+    - !<Role>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: DF_MASTER
+      operation: Start
+    - !<Role>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: DF_CLIENT
+      operation: Start
     - !<Wait-Healthy>
       summaryPolicy: ALL
       timeoutMinutes: 12
 
-product: TOS
 
 healthChecks:
 - category: DAEMON_CHECK
@@ -316,6 +461,10 @@ healthChecks:
         DockerPs: ["/entrypoint.sh", "/root/start-apa"]
       TOS_SLAVE:
         Systemctl: ["kubelet", "haproxy", "docker"]
+      DF_MASTER:
+        DockerPs: ["/root/start.sh"]
+      DF_CLIENT:
+        Systemctl: ["df-client"]
 - category: VITAL_SIGN_CHECK
   intervalSeconds: 10
   method: !<Builtin> {}
@@ -335,3 +484,9 @@ firstWizardConfigs:
 - tos.master.dashboard.password
 - tos.registry.ui.port
 - tos.registry.port
+- service.cluster.ip.range
+- cluster.dns.ip
+- dragonfly.enabled
+- dragonfly.supernode.tomcat.http.port
+- dragonfly.supernode.nginx.peer.port
+- dragonfly.supernode.nginx.rest.port

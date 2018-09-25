@@ -121,7 +121,7 @@ roles:
   suggestion:
   - criteria: !<EachNode> {}
   validation:
-  - criteria: !<EachNode> {}
+  - criteria: !<Range> {"min": 1}
   operations:
   - type: Install
     directives:
@@ -148,7 +148,7 @@ roles:
   readinessProbe:
     probe: !<httpGet>
       path: /
-      port: 9095
+      port: ${service['thrift.info.port']}
       scheme: HTTP
   env:
   - name: HBASE_CONF_DIR
@@ -195,8 +195,14 @@ stages:
       user: "hbase"
       group: "hbase"
       mod: 711
+  - type: PreDeleteAfterStop
+    taskGroups:
+    - !<DockerRunPreDelete>
+      summaryPolicy: NONE
+      timeoutMinutes: 10
+      roleType: HYPERBASE_MASTER
+      node: Any
 
-product: Hyperbase
 
 firstWizardConfigs:
 - hbase.rootdir
@@ -226,6 +232,8 @@ firstWizardConfigs:
 - thrift.container.requests.memory
 - thrift.container.requests.cpu
 - thrift.memory.ratio
+- regionserver.thrift.port
+- thrift.info.port
 
 dashboardMetrics:
 - HyperBaseReadRequestsRate
@@ -250,3 +258,6 @@ healthChecks:
 - category: VITAL_SIGN_CHECK
   intervalSeconds: 10
   method: !<Builtin> {}
+
+customConfigFiles:
+- hbase-site.xml

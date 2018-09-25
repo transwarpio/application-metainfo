@@ -1,0 +1,68 @@
+---
+name: INCEPTOR_GATEWAY
+version: transwarp-5.2.1-rc2
+global: false
+namePrefix: InceptorGateway
+friendlyName: "InceptorGateway"
+dockerImage: "transwarp/inceptor-gateway:transwarp-5.2.1-rc2"
+user: hive
+dependencies: []
+plugins: []
+
+roles:
+- name: INCEPTOR_GATEWAY
+  friendlyName: "Inceptor Gateway"
+  labelPrefix: "inceptor-gateway"
+  linkExpression: "http://${localhostname}:${service['inceptor.gateway.ui.port']}/"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  env:
+  - name: INCEPTORGATEWAY_CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: INCEPTOR_VERSION
+    value: ${service['inceptor.server.version']}
+  - name: GATEWAY_THRIFT_PORT
+    value: ${service['inceptor.gateway.port']}
+  - name: GATEWAY_UI_PORT
+    value: ${service['inceptor.gateway.ui.port']}
+  - name: GATEWAY_LOG_DIR
+    value: /var/log/${service.sid}/
+  mountPaths: []
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/run/${service.sid}"]
+        mode: "755"
+
+stages:
+  - type: Config
+    taskGroups:
+    - !<Role>
+      roleType: "INCEPTOR_GATEWAY"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+
+product: Inceptor
+
+firstWizardConfigs:
+- inceptor.server.version
+- inceptor.gateway.port
+- inceptor.gateway.ui.port
+
+pages:
+- roles
+- configuration
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}

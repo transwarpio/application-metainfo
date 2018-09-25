@@ -23,7 +23,7 @@ spec:
         value: "--v=4
                 --leader-elect=true
                 --root-ca-file=/srv/kubernetes/ca.crt
-                --service-account-private-key-file=/srv/kubernetes/server.key
+                --service-account-private-key-file=/srv/kubernetes/service_account.key
                 --kubeconfig=/srv/kubernetes/kubeconfig
                 --address=0.0.0.0
                 --pod-eviction-timeout=30m0s

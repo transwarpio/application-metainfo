@@ -4,6 +4,7 @@ version: transwarp-6.0
 global: true
 namePrefix: Dashboard
 friendlyName: Dashboard
+dockerImage: "transwarp/dashboard:transwarp-6.0"
 dependencies: []
 user: root
 roles:
@@ -75,7 +76,6 @@ stages:
       file: "dashboard-deployment.yaml"
 
 
-product: "TOS"
 
 healthChecks:
 - category: DAEMON_CHECK

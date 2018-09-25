@@ -1,0 +1,11 @@
+name: STUDIO
+ordinal: 30
+services:
+- TXSQL
+- PILOT
+- NOTIFICATION
+- GOVERNOR
+- TRANSPORTER
+- WORKFLOW
+- RUBIK
+- MILANO

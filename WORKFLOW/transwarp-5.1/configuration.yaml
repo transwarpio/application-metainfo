@@ -179,7 +179,7 @@
   visibility: READ_WRITE
 
 - name: workflow.session.timeout.seconds
-  recommendExpression: 1800
+  recommendExpression: 7200
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}

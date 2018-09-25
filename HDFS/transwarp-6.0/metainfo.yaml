@@ -69,7 +69,7 @@ roles:
     suggestion:
     - criteria: !<Range> {"min": 1}
     validation:
-    - criteria: !<Range> {"min": 1}
+    - criteria: !<Range> {"min": 0}
     operations: []
   - name: HDFS_DATANODE
     friendlyName: "Data Node"
@@ -93,6 +93,13 @@ roles:
         decommission: true
       reject:
         number: 2
+    deleteOpCleanDirs:
+      fromConfig:
+      - key: dfs.datanode.data.dir
+        featureFile: in_use.lock
+      fromPath:
+      - key: /var/run/${service.sid}
+        featureFile: dn_socket
     env:
     - name: HDFS_HA_NAMENODE_SERVICE
       value: |
@@ -291,7 +298,7 @@ stages:
     taskGroups:
     - !<FormakZK>
       summaryPolicy: ALL
-      timeoutMinutes: 1
+      timeoutMinutes: 10
   - type: Start
     taskGroups:
     - !<Upload-License>
@@ -323,7 +330,6 @@ jobs:
     stages:
     - Checkpoint
     - Stop
-product: Hadoop
 
 firstWizardConfigs:
 - dfs.namenode.name.dir
@@ -388,3 +394,9 @@ healthChecks:
 - category: VITAL_SIGN_CHECK
   intervalSeconds: 10
   method: !<Builtin> {}
+
+customConfigFiles:
+- core-size.xml
+- hdfs-site.xml
+- httpfs-site.xml
+

@@ -48,7 +48,7 @@ roles:
   suggestion:
   - criteria: !<EachNode> {}
   validation:
-  - criteria: !<EachNode> {}
+  - criteria: !<Range> {"min": 1}
   operations: []
 
 firstWizardConfigs:

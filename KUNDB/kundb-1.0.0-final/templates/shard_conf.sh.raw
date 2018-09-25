@@ -1,0 +1,43 @@
+#!/bin/bash 
+set -x
+shardNum=$1
+shardIndex=$2
+ubinput=$3
+groupIndex=$4
+
+echo $shardNum
+if [ $shardNum -eq 1 ]; then
+  shard=0
+else
+  shardRange=$((256/$shardNum))
+  echo $shardRange
+  minus="-"
+  shardTail="00000000000000"
+  echo $shardPre
+  maxIndex=$(($shardNum - 1)) 
+  echo $maxIndex
+  
+  if [ $shardIndex -eq 0 ]; then
+    printf -v shardPre '%x' $shardRange
+    shard=${minus}${shardPre}${shardTail}
+  
+  elif [ $shardIndex -eq $maxIndex ]; then
+    shardTmp=$(($shardRange * $maxIndex )) 
+    printf -v shardPre '%x' $shardTmp
+    shard=${shardPre}${shardTail}${minus}
+
+  else
+    shardTmp1=$(($shardRange * $shardIndex)) 
+    shardTmp2=$(($shardRange * $(($shardIndex + 1)))) 
+    echo $shardTmp1
+    echo $shardTmp2
+    printf -v shardMid1 '%x' $shardTmp1
+    printf -v shardMid2 '%x' $shardTmp2
+    shard=${shardMid1}${shardTail}${minus}${shardMid2}${shardTail}
+  fi    
+  echo $shard
+fi
+uidBase=$(($ubinput + $((10 * $groupIndex))))
+
+export SHARD=$shard
+export SHARD_UIDBASE=$uidBase 

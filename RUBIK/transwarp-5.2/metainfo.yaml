@@ -70,6 +70,12 @@ stages:
       dbPasswordConfig: javax.jdo.option.ConnectionPassword
       timeoutMinutes: 5
       summaryPolicy: SOME
+    - !<Create-Database>
+      dbPrefix: rubik
+      dbUserConfig: inceptor.database.username
+      dbPasswordConfig: inceptor.database.password
+      timeoutMinutes: 5
+      summaryPolicy: SOME
     - !<Role>
       roleType: "RUBIK_SERVER"
       operation: Config
@@ -94,6 +100,7 @@ product: Studio
 
 firstWizardConfigs:
 - designer.server.port
+- designer.global.session.timeout.secs
 - javax.jdo.option.ConnectionUserName
 - javax.jdo.option.ConnectionPassword
 - rubik.memory
@@ -106,6 +113,8 @@ firstWizardConfigs:
 - workflow.socket.timeout
 - workflow.client.username
 - workflow.client.password
+- inceptor.database.username
+- inceptor.database.password
 
 pages:
 - roles

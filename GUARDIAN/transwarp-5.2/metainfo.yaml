@@ -16,6 +16,9 @@ roles:
       number: 3
     reject:
       number: 2
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: data.dir
   readinessProbe:
     probe: !<exec>
       command:
@@ -72,6 +75,10 @@ roles:
   deleteOpCondition:
     movable:
       number: 2
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: guardian.apacheds.data.dir
+      featureFile: partitions
   summaryPolicy: SOME
   dockerImage: "transwarp/apacheds:transwarp-5.2"
   autoAssign:
@@ -299,6 +306,13 @@ stages:
     - !<Change-Password>
       summaryPolicy: ALL
       timeoutMinutes: 2
+  - type: PreUpgrade
+    taskGroups:
+    - !<DockerRunPreUpgrade>
+      summaryPolicy: ALL 
+      timeoutMinutes: 10
+      roleType: GUARDIAN_SERVER
+      node: Each
 
 firstWizardConfigs:
 - guardian.server.port
@@ -328,6 +342,10 @@ firstWizardConfigs:
 - txsql.container.requests.memory
 - txsql.container.requests.cpu
 - txsql.memory.ratio
+- cas.ticket.st.numberOfUses
+- cas.ticket.st.timeToKillInSeconds
+- cas.ticket.pt.numberOfUses
+- cas.ticket.pt.timeToKillInSeconds
 
 principals:
 - guardian/guardian
