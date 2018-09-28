@@ -1,6 +1,6 @@
 ---
 name: SMARTBI
-version: transwarp-5.2
+version: transwarp-6.0
 global: false
 namePrefix: Smartbi
 friendlyName: Smartbi
@@ -52,7 +52,7 @@ roles:
     friendlyName: "Smartbi Tomcat"
     labelPrefix: "smartbi-tomcat"
     dockerImage: "transwarp/smartbi-tomcat:transwarp-6.0"
-    linkExpression: "http://${localhostname}:${service['smartbi.tomcat.http.port']/smartbi}"
+    linkExpression: "http://${localhostname}:${service['smartbi.tomcat.http.port']}/smartbi"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete"]
     readinessProbe:
