@@ -142,6 +142,11 @@ roles:
         templatePath: "jupyter_notebook_config.py"
         targetPath: "/etc/${service.sid}/conf/jupyter_notebook_config.py"
         mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "scheduler.xml"
+        targetPath: "/etc/${service.sid}/conf/scheduler.xml"
+        mode: "755"
 
 stages:
   - type: Config
