@@ -40,7 +40,7 @@
   groups: []
   visibility: READ_WRITE
 - name: driver.docker.image.name
-  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-driver:sophonweb-2.0"
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-driver:sophonweb-2.1.0-rc0"
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
@@ -307,7 +307,7 @@
 
 # notebook
 - name: sophon.k8s.tensorboard.image.name
-  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-cpu:sophonweb-2.0"
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-cpu:sophonweb-2.1.0-rc0"
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
@@ -315,7 +315,7 @@
   groups: []
   visibility: READ_WRITE
 - name: sophon.k8s.jupyter.cpu.image.name
-  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-cpu:sophonweb-2.0"
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-cpu:sophonweb-2.1.0-rc0"
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
@@ -323,7 +323,7 @@
   groups: []
   visibility: READ_WRITE
 - name: sophon.k8s.jupyter.gpu.image.name
-  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-gpu:sophonweb-2.0"
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-gpu:sophonweb-2.1.0-rc0"
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
