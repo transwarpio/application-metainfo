@@ -174,15 +174,13 @@ roleGroups:
         category: MASTER
         frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
         readinessProbe:
-          probe: !<httpGet>
-            path: /
-            port: ${service['journalnode.http-port']}
-            scheme: HTTP
+          probe: !<tcpSocket>
+            port: ${service['journalnode.rpc-port']}
           failureThreshold: 3
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 3
+          periodSeconds: 30
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 15
         deleteOpCondition:
           deletable:
             number: 4
@@ -237,14 +235,14 @@ roleGroups:
         frontendOperations: ["Start", "Stop", "Move"]
         readinessProbe:
           probe: !<httpGet>
-            path: /dfshealth.html
+            path: /jmx?qry=Hadoop:servie=NameNode,name=NameNodeInfo&&user.name=xxx
             port: ${service['namenode.http-port']}
             scheme: HTTP
           failureThreshold: 3
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 3
+          periodSeconds: 30
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 15
         deleteOpCondition:
           movable:
             number: 2
@@ -413,8 +411,34 @@ healthChecks:
   intervalSeconds: 5
   method: !<K8sPod> {}
 - category: VITAL_SIGN_CHECK
-  intervalSeconds: 10
-  method: !<Builtin> {}
+  intervalSeconds: 15
+  method: !<Probe>
+    roles:
+    - roleType: HDFS_JOURNALNODE
+      from: !<readiness> {}
+    - roleType: HDFS_NAMENODE
+      from: !<readiness> {}
+    - roleType: HDFS_DATANODE
+      from: !<master>
+        roleType: HDFS_NAMENODE
+        execOn: Each
+        aggregate: Union
+        command: |
+          curl --connect-timeout 15 --max-time 15 "http://`hostname`:${service['namenode.http-port']}/jmx?qry=Hadoop:service=NameNode,name=NameNodeInfo&&user.name=xxx" | python -c "
+          STATE_MAP = {
+            'In Service': 'SUCCESSFUL',
+            'Decommission In Progress': 'DECOMMISSIONING',
+            'Decommissioned': 'DECOMMISSIONED',
+          }
+
+          import sys; import json; jmx=json.loads(sys.stdin.read());
+          liveNodeJson = jmx[u'beans'][0][u'LiveNodes']
+          liveNodeMap = json.loads(liveNodeJson)
+          for node in liveNodeMap:
+            nodeInfo = liveNodeMap[node]
+            host = node.split(':')[0]
+            print host, STATE_MAP.get(nodeInfo[u'adminState'], 'FAILED')
+          "
 
 customConfigFiles:
 - core-site.xml

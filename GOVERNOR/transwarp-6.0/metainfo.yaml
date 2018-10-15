@@ -49,6 +49,16 @@ roles:
       number: 2
     reject:
       number: 1
+  readinessProbe:
+    probe: !<httpGet>
+      path: /
+      port: ${service['governor.http.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 3
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 15
   env:
   - name: ATLAS_CONF
     value: /etc/${service.sid}/conf
@@ -136,5 +146,9 @@ healthChecks:
   intervalSeconds: 5
   method: !<K8sPod> {}
 - category: VITAL_SIGN_CHECK
-  intervalSeconds: 10
-  method: !<Builtin> {}
+  intervalSeconds: 15
+  method: !<Probe>
+    roles:
+    - roleType: GOVERNOR_SERVER
+      from: !<readiness> {}
+

@@ -124,8 +124,38 @@ healthChecks:
   intervalSeconds: 5
   method: !<K8sPod> {}
 - category: VITAL_SIGN_CHECK
-  intervalSeconds: 10
-  method: !<Builtin> {}
+  intervalSeconds: 15
+  method: !<Probe>
+    roles:
+    - roleType: KAFKA_SERVER
+      from: !<dependency>
+        depType: ZOOKEEPER
+        roleType: ZOOKEEPER
+        execOn: Each
+        aggregate: Union
+        command: |
+          <#assign zkPort = dependencies.ZOOKEEPER["zookeeper.client.port"]>
+          python -c "import os; import subprocess; import socket; import json
+          FNULL = open(os.devnull, 'w')
+
+          lsout = subprocess.check_output(['/usr/lib/zookeeper/bin/zkCli.sh', '-server', socket.gethostname() + ':${zkPort}', 'ls', '/brokers/ids'])
+          for line in lsout.splitlines():
+            try:
+              ids = json.loads(line)
+              break
+            except:
+              pass
+
+          for id in ids:
+            brokerout = subprocess.check_output(['/usr/lib/zookeeper/bin/zkCli.sh', '-server', socket.gethostname() + ':${zkPort}', 'get', '/brokers/ids/'+str(id)], stderr=FNULL)
+            for line in brokerout.splitlines():
+              try:
+                broker = json.loads(line)
+                for endpoint in broker[u'endpoints']:
+                  print endpoint[endpoint.find(':')+3: endpoint.rfind(':')], 'SUCCESSFUL'
+              except:
+                pass
+          "
 
 customConfigFiles:
 - server.properties

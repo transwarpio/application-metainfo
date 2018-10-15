@@ -24,6 +24,19 @@ roles:
       number: 1
     reject:
       number: 1
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - |
+          curl --connect-timeout 15 --max-time 15 "http://`hostname`:${service['kunctld.debug.port']}/check/status" | tee /tmp/check-kunctld
+          grep '"healthy"' /tmp/check-kunctld
+    failureThreshold: 3
+    initialDelaySeconds: 3
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 15
   env:
   - name: TRANSWARP_ZOOKEEPER_QUORUM
     value: |
@@ -62,6 +75,19 @@ roles:
       number: 1
     reject:
       number: 1
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - |
+          curl --connect-timeout 15 --max-time 15 "http://`hostname`:${service['kungate.debug.port']}/check/status" | tee /tmp/check-kungate
+          grep '"healthy"' /tmp/check-kungate
+    failureThreshold: 3
+    initialDelaySeconds: 3
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 15
   env:
   - name: TRANSWARP_ZOOKEEPER_QUORUM
     value: |
@@ -100,6 +126,19 @@ roles:
       number: 1
     reject:
       number: 1
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - |
+          curl --connect-timeout 15 --max-time 15 "http://`hostname`:${service['computenode.debug.port']}/check/status" | tee /tmp/check-computenode
+          grep '"healthy"' /tmp/check-computenode
+    failureThreshold: 3
+    initialDelaySeconds: 3
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 15
   env:
   - name: TRANSWARP_ZOOKEEPER_QUORUM
     value: |
@@ -171,6 +210,20 @@ roleGroups:
             number: 1
           reject:
             number: 1
+        readinessProbe:
+          probe: !<exec>
+            command:
+            - /bin/bash
+            - -c
+            - |
+                source /etc/${service.sid}/${roleGroupName}/conf/master_conf.sh
+                curl --connect-timeout 15 --max-time 15 "http://`hostname`:$PORT/check/status" | tee /tmp/check-kuntablet-master
+                grep '"healthy"' /tmp/check-kuntablet-master
+          failureThreshold: 3
+          initialDelaySeconds: 3
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 15
         env:
         - name: TRANSWARP_ZOOKEEPER_QUORUM
           value: |
@@ -221,6 +274,20 @@ roleGroups:
             number: 1
           reject:
             number: 1
+        readinessProbe:
+          probe: !<exec>
+            command:
+            - /bin/bash
+            - -c
+            - |
+                source /etc/${service.sid}/${roleGroupName}/conf/replica_conf.sh
+                curl --connect-timeout 15 --max-time 15 "http://`hostname`:$PORT/check/status" | tee /tmp/check-kuntablet-replica
+                grep '"healthy"' /tmp/check-kuntablet-replica
+          failureThreshold: 3
+          initialDelaySeconds: 3
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 15
         env:
         - name: TRANSWARP_ZOOKEEPER_QUORUM
           value: |
@@ -271,6 +338,20 @@ roleGroups:
             number: 1
           reject:
             number: 1
+        readinessProbe:
+          probe: !<exec>
+            command:
+            - /bin/bash
+            - -c
+            - |
+                source /etc/${service.sid}/${roleGroupName}/conf/rdonly_conf.sh
+                curl --connect-timeout 15 --max-time 15 "http://`hostname`:$PORT/check/status" | tee /tmp/check-kuntablet-rdonly
+                grep '"healthy"' /tmp/check-kuntablet-rdonly
+          failureThreshold: 3
+          initialDelaySeconds: 3
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 15
         env:
         - name: TRANSWARP_ZOOKEEPER_QUORUM
           value: |

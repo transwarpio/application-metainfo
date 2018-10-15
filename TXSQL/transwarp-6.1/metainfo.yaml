@@ -23,12 +23,12 @@ roles:
       command:
       - /bin/bash
       - -c
-      - mysql -h `hostname` -uroot -P${service['mysql.rw.port']} -p"${service['root.password']}" -e "select 1 from dual"  > /dev/null && echo ok
+      - "MYSQL_PWD=$(grep db.password /etc/${service.sid}/conf/db.properties | cut -d'=' -f2) mysql -h`hostname` -P${service['mysql.rw.port']} -uroot -e'select 1 from dual'"
     failureThreshold: 3
-    initialDelaySeconds: 10
-    periodSeconds: 10
+    initialDelaySeconds: 3
+    periodSeconds: 30
     successThreshold: 1
-    timeoutSeconds: 1
+    timeoutSeconds: 15
   env:
   - name: CONF_DIR
     value: /etc/${service.sid}/conf
@@ -79,4 +79,7 @@ healthChecks:
   method: !<K8sPod> {}
 - category: VITAL_SIGN_CHECK
   intervalSeconds: 15
-  method: !<Builtin> {}
+  method: !<Probe>
+    roles:
+    - roleType: TXSQL_SERVER
+      from: !<readiness> {}
