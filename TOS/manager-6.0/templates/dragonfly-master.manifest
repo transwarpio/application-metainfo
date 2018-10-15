@@ -8,7 +8,7 @@ spec:
   hostNetwork: true
   containers:
   - name: dragonfly-master-${service.sid}
-    image: transwarp/dragonfly-master:transwarp-6.0
+    image: transwarp/dragonfly-master:manager-6.0
     imagePullPolicy: IfNotPresent
     securityContext:
       privileged: true

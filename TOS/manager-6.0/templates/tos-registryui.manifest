@@ -9,7 +9,7 @@ spec:
   restartPolicy: OnFailure
   containers:
   - name: tos-registryui-${service.sid}
-    image: transwarp/registryui:transwarp-6.0
+    image: transwarp/registryui:manager-6.0
     imagePullPolicy: IfNotPresent
     securityContext:
       privileged: true

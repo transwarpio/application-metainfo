@@ -14,7 +14,7 @@ spec:
   hostNetwork: true
   containers:
     - name: tos-apiserver-${service.sid}
-      image: transwarp/hyperkube:transwarp-6.0
+      image: transwarp/hyperkube:manager-6.0
       imagePullPolicy: IfNotPresent
       securityContext:
         privileged: true

@@ -8,7 +8,7 @@ spec:
   hostNetwork: true
   containers:
   - name: tos-gencerts-${service.sid}
-    image: transwarp/gencerts:transwarp-6.0
+    image: transwarp/gencerts:manager-6.0
     imagePullPolicy: IfNotPresent
     securityContext:
       privileged: true

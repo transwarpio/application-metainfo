@@ -23,7 +23,7 @@ spec:
         flanneld-${service.sid}: "true"
       containers:
       - name: flanneld
-        image: ${registryServer}:${registryPort}/transwarp/flanneld:transwarp-6.0
+        image: ${registryServer}:${registryPort}/transwarp/flanneld:manager-6.0
         imagePullPolicy: IfNotPresent
         command:
         - entrypoint.sh

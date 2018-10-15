@@ -1,10 +1,10 @@
 ---
 name: DASHBOARD
-version: transwarp-6.0
+version: manager-6.0
 global: true
 namePrefix: Dashboard
 friendlyName: Dashboard
-dockerImage: "transwarp/dashboard:transwarp-6.0"
+dockerImage: "transwarp/dashboard:manager-6.0"
 dependencies: []
 user: root
 roles:

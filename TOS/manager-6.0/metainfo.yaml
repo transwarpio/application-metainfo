@@ -1,6 +1,6 @@
 ---
 name: TOS
-version: transwarp-6.0
+version: manager-6.0
 global: true
 namePrefix: TOS
 friendlyName: TOS
@@ -206,7 +206,7 @@ roles:
   - type: Start
     directives:
     - directive: !<shell>
-        script: "docker run --volume /srv/kubernetes/:/srv/kubernetes/ -e EXTAR_OPTS=DNS:${localhostname}, --net=host transwarp/gencerts:transwarp-6.0 /usr/bin/entry.sh"
+        script: "docker run --volume /srv/kubernetes/:/srv/kubernetes/ -e EXTAR_OPTS=DNS:${localhostname}, --net=host transwarp/gencerts:manager-6.0 /usr/bin/entry.sh"
     - directive: !<systemctl>
         action: EnableStart
         service: kubelet
@@ -235,7 +235,7 @@ roles:
   - type: Scaleout
     directives:
     - directive: !<shell>
-        script: "docker run --volume /srv/kubernetes/:/srv/kubernetes/ -e EXTAR_OPTS=DNS:${localhostname}, --net=host transwarp/gencerts:transwarp-6.0 /usr/bin/entry.sh"
+        script: "docker run --volume /srv/kubernetes/:/srv/kubernetes/ -e EXTAR_OPTS=DNS:${localhostname}, --net=host transwarp/gencerts:manager-6.0 /usr/bin/entry.sh"
     - directive: !<systemctl>
         action: EnableStart
         service: kubelet
