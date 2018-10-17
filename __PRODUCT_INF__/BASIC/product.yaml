@@ -1,4 +1,4 @@
-name: HADOOP
+name: BASIC
 ordinal: 10
 services:
 - ZOOKEEPER
