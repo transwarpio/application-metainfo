@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 IN_PROGRESS_VERSION=manager-6.0
-TAG_VERSION=manager-6.0.1810a-rc0
+TAG_VERSION=manager-6.0.1810a-final
 
 set -e
 
