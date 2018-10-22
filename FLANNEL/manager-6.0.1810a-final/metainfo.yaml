@@ -1,0 +1,284 @@
+---
+name: FLANNEL
+version: manager-6.0.1810a-final
+global: true
+namePrefix: Flannel
+friendlyName: Flannel
+dependencies: []
+user: root
+roles:
+- name: FLANNELD
+  friendlyName: "Flanneld"
+  labelPrefix: "flanneld"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Scaleout"]
+  deleteOpCleanDirs:
+    fromPath:
+    - key: /etc/cni/net.d
+      featureFile: overlay.conf
+    - key: /opt/cni/bin
+      featureFile: flannel
+  summaryPolicy: SOME
+  dockerImage: "transwarp/flanneld:manager-6.0.1810a-final"
+  autoAssign:
+  - advice: !<EachNode> {}
+  suggestion:
+  - criteria: !<EachNode> {}
+  validation:
+  - criteria: !<EachNode> {}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/run/hadoop-flannel", "/var/run/flannel", "/run/flannel", "/etc/cni/net.d/", "/opt/cni/bin/"]
+        mode: "755"
+    - directive: !<download>
+        url: "${transwarpRepo}/tos/cni/bridge"
+        targetPath: "/opt/cni/bin/bridge"
+    - directive: !<chmod>
+        mode: "755"
+        path: "/opt/cni/bin/bridge"
+    - directive: !<download>
+        url: "${transwarpRepo}/tos/cni/cnitool"
+        targetPath: "/opt/cni/bin/cnitool"
+    - directive: !<chmod>
+        mode: "755"
+        path: "/opt/cni/bin/cnitool"
+    - directive: !<download>
+        url: "${transwarpRepo}/tos/cni/dhcp"
+        targetPath: "/opt/cni/bin/dhcp"
+    - directive: !<chmod>
+        mode: "755"
+        path: "/opt/cni/bin/dhcp"
+    - directive: !<download>
+        url: "${transwarpRepo}/tos/cni/flannel"
+        targetPath: "/opt/cni/bin/flannel"
+    - directive: !<chmod>
+        mode: "755"
+        path: "/opt/cni/bin/flannel"
+    - directive: !<download>
+        url: "${transwarpRepo}/tos/cni/host-local"
+        targetPath: "/opt/cni/bin/host-local"
+    - directive: !<chmod>
+        mode: "755"
+        path: "/opt/cni/bin/host-local"
+    - directive: !<download>
+        url: "${transwarpRepo}/tos/cni/ipvlan"
+        targetPath: "/opt/cni/bin/ipvlan"
+    - directive: !<chmod>
+        mode: "755"
+        path: "/opt/cni/bin/ipvlan"
+    - directive: !<download>
+        url: "${transwarpRepo}/tos/cni/loopback"
+        targetPath: "/opt/cni/bin/loopback"
+    - directive: !<chmod>
+        mode: "755"
+        path: "/opt/cni/bin/loopback"
+    - directive: !<download>
+        url: "${transwarpRepo}/tos/cni/macvlan"
+        targetPath: "/opt/cni/bin/macvlan"
+    - directive: !<chmod>
+        mode: "755"
+        path: "/opt/cni/bin/macvlan"
+    - directive: !<download>
+        url: "${transwarpRepo}/tos/cni/noop"
+        targetPath: "/opt/cni/bin/noop"
+    - directive: !<chmod>
+        mode: "755"
+        path: "/opt/cni/bin/noop"
+    - directive: !<download>
+        url: "${transwarpRepo}/tos/cni/ptp"
+        targetPath: "/opt/cni/bin/ptp"
+    - directive: !<chmod>
+        mode: "755"
+        path: "/opt/cni/bin/ptp"
+    - directive: !<download>
+        url: "${transwarpRepo}/tos/cni/tuning"
+        targetPath: "/opt/cni/bin/tuning"
+    - directive: !<chmod>
+        mode: "755"
+        path: "/opt/cni/bin/tuning"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "overlay.conf"
+        targetPath: "/etc/cni/net.d/overlay.conf"
+        mode: "755"
+
+- name: KUBE_DNS
+  friendlyName: "Kube Dns"
+  labelPrefix: "kube-dns"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 4
+    movable:
+      number: 3
+    reject:
+      number: 2
+  summaryPolicy: SOME
+  dockerImage: "transwarp/kubedns:manager-6.0.1810a-final"
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [3, 2, 1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations: []
+
+stages:
+  - type: Config
+    taskGroups:
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "flanneld-daemonset.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "toshost-configmap.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "kube-dns-service.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "kube-dns-daemonset.yaml"
+  - type: Start
+    taskGroups:
+    - !<Kubectl-Label>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      action: AddLabel
+      roleType: FLANNELD
+      labelPrefix: "flanneld"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Start
+      file: "flanneld-daemonset.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Start
+      file: "toshost-configmap.yaml"
+    - !<Kubectl-Label>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      action: AddLabel
+      roleType: KUBE_DNS
+      labelPrefix: "kube-dns"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Start
+      file: "kube-dns-service.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Start
+      file: "kube-dns-daemonset.yaml"
+    - !<Wait-Healthy>
+      summaryPolicy: ALL
+      timeoutMinutes: 5
+  - type: Stop
+    taskGroups:
+    - !<Kubectl-Label>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      action: RemoveLabel
+      roleType: FLANNELD
+      labelPrefix: "flanneld"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Stop
+      file: "flanneld-daemonset.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Stop
+      file: "toshost-configmap.yaml"
+    - !<Kubectl-Label>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      action: RemoveLabel
+      roleType: KUBE_DNS
+      labelPrefix: "kube-dns"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Stop
+      file: "kube-dns-service.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Stop
+      file: "kube-dns-daemonset.yaml"
+  - type: Scaleout
+    taskGroups:
+    - !<Kubectl-Label>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      action: AddLabel
+      roleType: FLANNELD
+      labelPrefix: "flanneld"
+      labelValue: "true"
+    - !<Kubectl-Label>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      action: AddLabel
+      roleType: KUBE_DNS
+      labelPrefix: "kube-dns"
+      labelValue: "true"
+    - !<Wait-Healthy>
+      summaryPolicy: ALL
+      timeoutMinutes: 5
+  - type: MoveRole
+    taskGroups:
+    - !<Kubectl-Label>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      action: AddLabel
+      roleType: FLANNELD
+      labelPrefix: "flanneld"
+      labelValue: "true"
+    - !<Kubectl-Label>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      action: AddLabel
+      roleType: KUBE_DNS
+      labelPrefix: "kube-dns"
+      labelValue: "true"
+    - !<Wait-Healthy>
+      summaryPolicy: ALL
+      timeoutMinutes: 5
+
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {"namespace": "kube-system"}
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 10
+  method: !<Builtin> {}
+
+firstWizardConfigs:
+- flannel.config.network
+- flannel.config.subnetlen
+- flannel.config.subnetmin
+- flannel.config.subnetmax
+- kube.dns.dnsmasq.port
+- kube.dns.kubedns.dnsport
+- kube.dns.kubedns.healthzport
+- kube.dns.dnsmasq.metrics.port
+- kube.dns.healthz.port

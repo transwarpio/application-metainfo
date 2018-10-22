@@ -4,3 +4,4 @@ services:
 - CODIS
 - HBASE
 - REDIS
+- SMARTBI
