@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-IN_PROGRESS_VERSION=manager-6.0
-TAG_VERSION=manager-6.0.1810a-final
+IN_PROGRESS_VERSION=transwarp-6.0
+TAG_VERSION=transwarp-6.1
 
 set -e
 
