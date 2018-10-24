@@ -8,7 +8,6 @@ dockerImage: "transwarp/governor:transwarp-6.1"
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
     optional: true
   - name: HYPERBASE
     minVersion: transwarp-6.1

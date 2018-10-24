@@ -7,7 +7,6 @@ friendlyName: "Sophon-web"
 dependencies:
   - name: GUARDIAN
     minVersion: sophon-2.0
-    maxVersion: sophon-2.0
     optional: true
   - name: INCEPTOR
     minVersion: sophon-2.0
