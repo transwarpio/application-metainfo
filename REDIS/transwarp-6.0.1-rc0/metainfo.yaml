@@ -1,0 +1,60 @@
+---
+name: REDIS
+version: transwarp-6.0.1-rc0
+global: false
+namePrefix: redis
+friendlyName: "redis"
+dependencies: []
+dockerImage: "transwarp/redis:transwarp-6.0.1-rc0"
+roles:
+  - name: REDIS_SERVER
+    friendlyName: "Redis Server"
+    labelPrefix: "redis-server"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete"]
+    deleteOpCondition:
+      deletable:
+        number: 2
+      reject:
+        number: 1
+    env:
+    - name: REDIS_CONF_DIR
+      value: /etc/${service.sid}/conf
+    mountPaths: []
+    resources:
+      limitsMemoryKey: redis.container.limits.memory
+      limitsCpuKey: redis.container.limits.cpu
+      requestsMemoryKey: redis.container.requests.memory
+      requestsCpuKey: redis.container.requests.cpu
+    nodeSpecificMounts: []
+
+    summaryPolicy: SOME
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations: []
+
+firstWizardConfigs:
+- redis.container.limits.memory
+- redis.container.limits.cpu
+- redis.container.requests.memory
+- redis.container.requests.cpu
+- redis.bind
+- redis.password
+- redis.port
+
+dashboardMetrics: []
+
+pages:
+- summary
+- roles
+- configuration
+- operation
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
