@@ -8,7 +8,6 @@ dockerImage: "transwarp/slipstream-studio:transwarp-6.1"
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
     optional: true
   - name: HDFS
     minVersion: transwarp-6.1

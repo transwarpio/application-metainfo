@@ -8,7 +8,6 @@ dockerImage: "transwarp/hbase:transwarp-5.2"
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-5.2
-    maxVersion: transwarp-5.2
     optional: true
   - name: ZOOKEEPER
     minVersion: transwarp-5.2

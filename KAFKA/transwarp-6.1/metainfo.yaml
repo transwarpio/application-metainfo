@@ -7,7 +7,6 @@ friendlyName: "Kafka"
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
     optional: true
   - name: ZOOKEEPER
     minVersion: transwarp-6.1

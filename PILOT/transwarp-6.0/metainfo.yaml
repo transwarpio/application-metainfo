@@ -7,7 +7,6 @@ friendlyName: Pilot
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.0
-    maxVersion: transwarp-6.0
     optional: true
   - name: INCEPTOR
     minVersion: transwarp-6.0

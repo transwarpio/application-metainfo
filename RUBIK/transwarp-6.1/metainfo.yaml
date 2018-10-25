@@ -8,7 +8,6 @@ dockerImage: "transwarp/rubik:transwarp-6.1"
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
     optional: true
   - name: TXSQL
     minVersion: transwarp-6.1
