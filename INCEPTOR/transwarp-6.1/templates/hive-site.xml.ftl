@@ -107,6 +107,14 @@
     <#list dependencies.TXSQL.roles['TXSQL_SERVER'] as role>
         <#assign mysqlHostPorts = mysqlHostPorts + [role.hostname + ':' + dependencies.TXSQL['mysql.rw.port']]>
     </#list>
+    <#assign mysqlHostPorts = mysqlHostPorts?sort
+             i = mysqlHostPorts?seq_index_of(localhostname + ':' + dependencies.TXSQL['mysql.rw.port'])>
+    <#if i lt 0>
+        <#assign i = .now?long % dependencies.TXSQL.roles['TXSQL_SERVER']?size>
+    </#if>
+    <#if i gt 0>
+        <#assign mysqlHostPorts = mysqlHostPorts[i..] + mysqlHostPorts[0..i-1]>
+    </#if>
 <#else>
     <#assign mysqlHostPorts = [service.roles.INCEPTOR_MYSQL[0]['hostname'] + ":" + service['mysql.port']]/>
 </#if>
