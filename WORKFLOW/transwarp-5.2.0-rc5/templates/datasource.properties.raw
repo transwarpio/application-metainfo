@@ -1,5 +1,0 @@
-mybatis.config-location=classpath:config/mybatis-config.xml
-spring.datasource.initialize=false
-spring.datasource.test-while-idle=true
-spring.datasource.validation-query=SELECT 1
-spring.datasource.time-between-eviction-runs-millis=3600000

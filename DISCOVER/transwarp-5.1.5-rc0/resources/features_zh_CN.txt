@@ -1,5 +1,0 @@
-*Bug fix
- *WARP-19828: 修复txCreateTable函数保存的表字段类型全为string的问题。
- *WARP-19875: 对表owner默认赋予数据的读权限。
- *WARP-19687: 修复txPolynomialExpansion函数的帮助文档。
- *WARP-19222: Discover Notebook标准案例 弃用8989端口。

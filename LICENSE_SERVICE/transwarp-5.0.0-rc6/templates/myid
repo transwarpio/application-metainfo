@@ -1,6 +1,0 @@
-<#assign hosts=service['roles']['LICENSE_NODE']>
-<#list hosts as host>
-<#if host.hostname == localhostname>
-${host.id}
-</#if>
-</#list>

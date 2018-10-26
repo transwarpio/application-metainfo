@@ -1,4 +1,0 @@
-* 添加REST API版本支持
-* 升级ElasticSearch版本到5.4.1
-
-* 修改Kafka版本为0.10.2.0-transwarp-5.2.1-rc0.0，支持tos安全环境

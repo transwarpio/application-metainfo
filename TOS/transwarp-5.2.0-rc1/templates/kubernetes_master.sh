@@ -1,2 +1,0 @@
-export KUBERNETES_MASTER="http://127.0.0.1:6443"
-alias kubectl="kubectl -s https://127.0.0.1:6443 --certificate-authority=/srv/kubernetes/ca.crt --client-certificate=/srv/kubernetes/kubecfg.crt  --client-key=/srv/kubernetes/kubecfg.key"
