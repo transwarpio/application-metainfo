@@ -1,4 +1,0 @@
-* Add support for rest api version
-* Upgrade ElasticSearch version to 5.4.1
-
-* Change kafka version to 0.10.2.0-transwarp-5.2.1-final.0, support security in tos
