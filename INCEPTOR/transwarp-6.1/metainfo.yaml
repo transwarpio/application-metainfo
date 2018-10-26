@@ -304,7 +304,7 @@ stages:
       roleType: "INCEPTOR_EXECUTOR"
       operation: Config
       summaryPolicy: SOME
-      timeoutMinutes: 1
+      timeoutMinutes: 2
     - !<Role>
       roleType: "INCEPTOR_PROFILER"
       operation: Config
