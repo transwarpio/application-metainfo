@@ -1,6 +1,6 @@
 <#assign etcd_servers=[]>
 <#list service.roles.TOS_MASTER as tos_master>
-<#assign etcd_servers+=["http://" + tos_master.hostname + ":" + service['tos.master.etcd.port']]>
+<#assign etcd_servers+=["https://" + tos_master.hostname + ":" + service['tos.master.etcd.port']]>
 <#if tos_master.hostname == .data_model["localhostname"]>
 <#assign localIp=tos_master.ip>
 </#if>
@@ -13,66 +13,77 @@ metadata:
 spec:
   hostNetwork: true
   containers:
-    - name: tos-apiserver-${service.sid}
-      image: transwarp/hyperkube:manager-6.0
-      imagePullPolicy: IfNotPresent
-      securityContext:
-        privileged: true
-      resources:
-        requests:
-          memory: "4Gi"
-          cpu: "1"
-      command:
-        - boot.sh
-        - apiserver
-      env:
-      - name: ETCD_SERVERS
-        value: ${etcd_servers?join(',')}
-      - name: APISERVER_PARAMS
-        value: "--v=4
-                --etcd_servers=${etcd_servers?join(',')}
-                --apiserver-count=${service.roles.TOS_MASTER?size}
-                --insecure-bind-address=0.0.0.0
-                --insecure-port=${service['tos.master.apiserver.port']}
-                --bind-address=0.0.0.0
-                --advertise-address=${localIp}
-                --secure-port=${service['tos.master.apiserver.secure.port']}
-                --licence-enable=false
-                --runtime_config=api/v1
-                --allow_privileged=true
-                --cors_allowed_origins=.*
-                --enable-swagger-ui
-                --admission_control=ServiceAccount,ResourceQuota
-                --service-account-key-file=/srv/kubernetes/service_account.key
-                --service-cluster-ip-range=${service['service.cluster.ip.range']}
-                --client_ca_file=/srv/kubernetes/ca.crt
-                --tls_cert_file=/srv/kubernetes/server.cert
-                --tls_private_key_file=/srv/kubernetes/server.key
-                --basic-auth-file=/srv/kubernetes/auth
-                "
-      volumeMounts:
-      - name: apikubelog
-        mountPath: /var/log/kubernetes/apiserver
-        readOnly: false
-      - name: kubernetes
-        mountPath: /var/run/kubernetes/
-        readOnly: false
-      - name: srvkube
-        mountPath: /srv/kubernetes
-        readOnly: true
-      - name: transwarphosts
-        mountPath: /etc/transwarp/conf
-        readOnly: true
-  volumes:
+  - name: tos-apiserver-${service.sid}
+    image: transwarp/hyperkube:manager-6.0
+    imagePullPolicy: IfNotPresent
+    command:
+    - hyperkube
+    - apiserver
+    - --v=6
+    - --etcd_servers=${etcd_servers?join(',')}
+    - --etcd-cafile=/etc/kubernetes/ssl/etcd-ca.pem
+    - --etcd-certfile=/etc/kubernetes/ssl/etcd.pem
+    - --etcd-keyfile=/etc/kubernetes/ssl/etcd-key.pem
+    - --apiserver-count=${service.roles.TOS_MASTER?size}
+    - --insecure-bind-address=127.0.0.1
+    - --insecure-port=${service['tos.master.apiserver.port']}
+    - --bind-address=${localIp}
+    - --secure-port=${service['tos.master.apiserver.secure.port']}
+    - --runtime_config=api/all
+    - --runtime_config=admissionregistration.k8s.io/v1alpha1
+    - --runtime_config=settings.k8s.io/v1alpha1
+    - --runtime-config=scheduling.k8s.io/v1alpha1=true
+    - --kubelet-https=true
+    - --admission_control=NamespaceLifecycle,NamespaceExists,LimitRanger,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,ResourceQuota,NodeRestriction,ServiceAccount,Initializers,PodPreset,Priority,PersistentVolumeClaimResize
+    - --authorization-mode=Node,RBAC
+    - --token-auth-file=/etc/kubernetes/ssl/token.csv
+    - --service-account-key-file=/etc/kubernetes/ssl/service-account.pem
+    - --service-cluster-ip-range=${service['service.cluster.ip.range']}
+    - --client_ca_file=/etc/kubernetes/ssl/ca.pem
+    - --tls_cert_file=/etc/kubernetes/ssl/kubernetes.pem
+    - --tls_private_key_file=/etc/kubernetes/ssl/kubernetes-key.pem
+    - --requestheader-client-ca-file=/etc/kubernetes/ssl/ca.pem
+    - --requestheader-allowed-names=aggregator,kubernetes
+    - --requestheader-extra-headers-prefix="X-Remote-Extra-"
+    - --requestheader-group-headers=X-Remote-Group
+    - --requestheader-username-headers=X-Remote-User
+    - --enable-swagger-ui=true
+    - --allow_privileged=true
+    - --feature-gates=AdvancedAuditing=true,MountPropagation=true,PersistentLocalVolumes=true,SupportIPVSProxyMode=true,BlockVolume=true,PodPriority=true,ExpandPersistentVolumes=true
+    - --audit-policy-file=/etc/kubernetes/ssl/audit-policy.yaml
+    - --audit-log-maxage=30
+    - --audit-log-maxbackup=3
+    - --audit-log-maxsize=100
+    - --audit-log-path=/var/log/kubernetes/audit.log
+    - --event-ttl=12h
+    - --licence-enable=false
+    env:
+    - name: TZ
+      value: "Asia/Shanghai"
+    livenessProbe:
+      httpGet:
+        host: 127.0.0.1
+        port: 8080
+        path: /healthz
+      initialDelaySeconds: 60
+      timeoutSeconds: 60
+    volumeMounts:
     - name: apikubelog
-      hostPath:
-        path: /var/log/kubernetes/apiserver
+      mountPath: /var/log/kubernetes/
+      readOnly: false
     - name: kubernetes
-      hostPath:
-        path: /var/run/kubernetes/
+      mountPath: /var/run/kubernetes/
+      readOnly: false
     - name: srvkube
-      hostPath:
-        path: /srv/kubernetes
-    - name: transwarphosts
-      hostPath:
-        path: /etc/transwarp/conf
+      mountPath: /etc/kubernetes/ssl
+      readOnly: true
+  volumes:
+  - name: apikubelog
+    hostPath:
+      path: /var/log/kubernetes/
+  - name: kubernetes
+    hostPath:
+      path: /var/run/${service.sid}
+  - name: srvkube
+    hostPath:
+      path: /srv/kubernetes/

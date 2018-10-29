@@ -1,3 +1,10 @@
+<#assign master="false">
+<#assign hosts=service['roles']['TOS_MASTER']>
+<#list hosts as host>
+  <#if host.hostname == localhostname>
+    <#assign master="true">
+  </#if>
+</#list>
 [Unit]
 Description=Kubernetes Kubelet
 After=docker.service docker.socket
@@ -5,23 +12,33 @@ Wants=docker.socket
 
 [Service]
 ExecStart=/opt/kubernetes/bin/hyperkube kubelet \
-    --v=4 \
+    --logtostderr=true \
+    --v=6 \
     --address=0.0.0.0 \
     --cluster_dns=${service['cluster.dns.ip']} \
     --cluster_domain=transwarp.local \
     --port=${service['tos.slave.kubelet.port']} \
-    --config=/opt/kubernetes/manifests-multi \
-    --kubeconfig=/srv/kubernetes/kubeconfig \
-    --api_servers=https://127.0.0.1:6443 \
+    --hostname_override=${localhostname} \
+    --log_dir=/var/log/kubernetes \
+    --pod-manifest-path=/opt/kubernetes/manifests-multi \
     --pod-infra-container-image=transwarp/pause:manager-6.0 \
+    --network-plugin=cni \
     --resolv-conf=/dev/null \
     --max-pods=200 \
+    --volume-stats-agg-period=0 \
+    --node-labels=<#if master == "true">master=true,</#if>worker=true \
+    --fail-swap-on=false \
+    --runtime-cgroups=/systemd/system.slice \
+    --kubelet-cgroups=/systemd/system.slice \
+<#if master == "true">
+    --kubeconfig=/srv/kubernetes/kubeconfig \
+    --feature-gates=BlockVolume=true,MountPropagation=true,PersistentLocalVolumes=true,VolumeScheduling=true,LocalStorageCapacityIsolation=true,PodPriority=true,DevicePlugins=true \
+<#else>
     --require-kubeconfig \
-    --allow_privileged=true \
-    --host-network-sources=* \
-    --hostname-override=${localhostname} \
-    --network-plugin=cni \
-    --network-plugin-dir=/etc/cni/net.d
+    --bootstrap-kubeconfig=/srv/kubernetes/bootstrap.kubeconfig \
+    --feature-gates=RotateKubeletClientCertificate=true,RotateKubeletServerCertificate=true,BlockVolume=true,MountPropagation=true,PersistentLocalVolumes=true,VolumeScheduling=true,LocalStorageCapacityIsolation=true,PodPriority=true,DevicePlugins=true \
+</#if>
+    --allow_privileged=true
 
 KillMode=process
 Restart=always

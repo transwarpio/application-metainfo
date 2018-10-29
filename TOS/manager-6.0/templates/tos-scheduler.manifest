@@ -4,30 +4,33 @@ metadata:
   name: tos-scheduler-${service.sid}
   namespace: kube-system
 spec:
+  priorityClassName: system-priority
   hostNetwork: true
   containers:
     - name: tos-scheduler-${service.sid}
       image: transwarp/hyperkube:manager-6.0
       imagePullPolicy: IfNotPresent
-      securityContext:
-        privileged: true
-      resources:
-        requests:
-          memory: "1Gi"
-          cpu: "1"
       command:
-        - boot.sh
+        - hyperkube
         - scheduler
+        - --feature-gates=PodPriority=true
+        - --v=4
+        - --kubeconfig=/srv/kubernetes/kubeconfig
+        - --leader-elect
+        - --profiling
+        - --logtostderr=true
+        - --log_dir=/var/log/kubernetes/
       env:
-      - name: SCHEDULER_PARAMS
-        value: "--leader-elect=true
-                --kubeconfig=/srv/kubernetes/kubeconfig
-                --address=0.0.0.0
-                --port=${service['tos.master.scheduler.port']}
-                "
+      - name: TZ
+        value: "Asia/Shanghai"
+      livenessProbe:
+        httpGet:
+          host: 127.0.0.1
+          port: 10251
+          path: /healthz
       volumeMounts:
       - name: schkubelog
-        mountPath: /var/log/kubernetes/scheduler
+        mountPath: /var/log/kubernetes/
         readOnly: false
       - name: kubernetes
         mountPath: /var/run/kubernetes/
@@ -35,19 +38,13 @@ spec:
       - name: srvkube
         mountPath: /srv/kubernetes/
         readOnly: true
-      - name: transwarphosts
-        mountPath: /etc/transwarp/conf
-        readOnly: true
   volumes:
     - name: schkubelog
       hostPath:
-        path: /var/log/kubernetes/scheduler
+        path: /var/log/kubernetes/
     - name: kubernetes
       hostPath:
-        path: /var/run/kubernetes/
+        path: /var/run/${service.sid}
     - name: srvkube
       hostPath:
         path: /srv/kubernetes/
-    - name: transwarphosts
-      hostPath:
-        path: /etc/transwarp/conf

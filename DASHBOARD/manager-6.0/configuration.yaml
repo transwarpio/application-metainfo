@@ -1,5 +1,5 @@
 - name: tos.master.dashboard.port
-  recommendExpression: 9190
+  recommendExpression: 31990
   defaultValue: null
   valueType: PORT
   scope: !<ServiceLevel> {}
