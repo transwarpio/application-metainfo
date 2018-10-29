@@ -6,9 +6,10 @@ metadata:
   name: kubernetes-dashboard
   namespace: kube-system
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
   - port: ${service['tos.master.dashboard.port']}
-    targetPort: ${service['tos.master.dashboard.port']}
+    targetPort: https
+    nodePort: ${service['tos.master.dashboard.port']}
   selector:
     name: kubernetes-dashboard

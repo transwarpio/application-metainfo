@@ -78,7 +78,16 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
-# TODO tos.haproxy.port
+
+- name: tos.haproxy.port
+  recommendExpression: 6443
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [TOS_SLAVE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
 
 - name: tos.master.dashboard.username
   recommendExpression: dashboard
@@ -206,4 +215,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: nvidia.docker.support.enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes:
+    - TOS_SLAVE
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
 

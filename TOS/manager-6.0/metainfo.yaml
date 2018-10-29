@@ -153,7 +153,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/opt/kubernetes/bin/", "/var/log/kubernetes/kubelet", "/opt/kubernetes/manifests-multi"]
+        paths: ["/opt/kubernetes/bin/", "/var/log/kubernetes/", "/opt/kubernetes/manifests-multi", "/opt/kubernetes/registry-certs", "/etc/cni/net.d/"]
         mode: "755"
     - directive: !<mkdirs>
         paths: ["/var/run/${service.sid}"]
@@ -174,10 +174,15 @@ roles:
         targetPath: "/etc/profile.d/kubernetes_master.sh"
         mode: "755"
     - directive: !<resource>
-        templateType: Raw
-        templatePath: "kubeconfig"
+        templateType: FreeMarker
+        templatePath: "proxy.kubeconfig"
         targetPath: "/srv/kubernetes/kubeconfig"
-        mode: "600"
+        mode: "664"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "bootstrap.kubeconfig"
+        targetPath: "/srv/kubernetes/bootstrap.kubeconfig"
+        mode: "664"
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "kubelet.service"
@@ -194,26 +199,28 @@ roles:
         targetPath: "/etc/${service.sid}/conf/haproxy.cfg"
         mode: "755"
     - directive: !<resource>
-        templateType: Raw
-        templatePath: "haproxy"
-        targetPath: "/etc/sysconfig/haproxy"
-        mode: "755"
-    - directive: !<resource>
         templateType: FreeMarker
         templatePath: "resolv.conf"
         targetPath: "/etc/transwarp/conf/resolv.conf"
         mode: "755"
-  - type: Start
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "overlay.conf"
+        targetPath: "/etc/cni/net.d/overlay.conf"
+        mode: "755"
+  - type: Bootstrap
     directives:
-    - directive: !<shell>
-        script: "docker run --volume /srv/kubernetes/:/srv/kubernetes/ -e EXTAR_OPTS=DNS:${localhostname}, --net=host transwarp/gencerts:manager-6.0 /usr/bin/entry.sh"
-    - directive: !<systemctl>
-        action: EnableStart
-        service: kubelet
-        sleepSec: 2
     - directive: !<systemctl>
         action: EnableStart
         service: haproxy
+        sleepSec: 2
+  - type: Start
+    directives:
+    - directive: !<shell>
+        script: "docker run --volume /opt/kubernetes/registry-certs/:/srv/kubernetes/ -e EXTAR_OPTS=DNS:${localhostname}, --net=host transwarp/gencerts:manager-6.0 /usr/bin/entry.sh"
+    - directive: !<systemctl>
+        action: EnableStart
+        service: kubelet
         sleepSec: 2
     - directive: !<resource>
         templateType: FreeMarker
@@ -235,7 +242,7 @@ roles:
   - type: Scaleout
     directives:
     - directive: !<shell>
-        script: "docker run --volume /srv/kubernetes/:/srv/kubernetes/ -e EXTAR_OPTS=DNS:${localhostname}, --net=host transwarp/gencerts:manager-6.0 /usr/bin/entry.sh"
+        script: "docker run --volume /opt/kubernetes/registry-certs/:/srv/kubernetes/ -e EXTAR_OPTS=DNS:${localhostname}, --net=host transwarp/gencerts:manager-6.0 /usr/bin/entry.sh"
     - directive: !<systemctl>
         action: EnableStart
         service: kubelet
@@ -273,15 +280,12 @@ roles:
       numSeq: [1]
       mates: ["TRANSWARP_MANAGER_MASTER"] #REGISTRY_SERVER is strictly adhered to Manager
   suggestion:
-  - criteria: !<OnManagerNode> {"roleType": "TOS_REGISTRY"}
+  - criteria: !<Range> {"min": 1, "max": 1}
   validation:
-  - criteria: !<OnManagerNode> {"roleType": "TOS_REGISTRY"}
+  - criteria: !<Range> {"min": 1, "max": 1} #TODO must at TRANSWARP_MANAGER_MASTER nodes
   operations:
   - type: Install
     directives:
-    - directive: !<mkdirs>
-        paths: ["/var/etcd/data"]
-        mode: "755"
     - directive: !<mkdirs>
         paths: ["/srv/kubernetes"]
         mode: "700"
@@ -316,6 +320,7 @@ roles:
         script: "rm -f /opt/kubernetes/manifests-multi/tos-registry.manifest"
     - directive: !<shell>
         script: "rm -f /opt/kubernetes/manifests-multi/tos-registryui.manifest"
+
 - name: TOS_MASTER
   friendlyName: "TOS Master"
   category: MASTER
@@ -338,12 +343,12 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/var/run/${service.sid}"]
+        paths: ["/var/run/${service.sid}", "/var/etcd/data"]
         mode: "755"
   - type: Config
     directives:
     - directive: !<resource>
-        templateType: Raw
+        templateType: FreeMarker
         templatePath: "kubeconfig"
         targetPath: "/srv/kubernetes/kubeconfig"
         mode: "600"
@@ -352,8 +357,26 @@ roles:
         templatePath: "auth"
         targetPath: "/srv/kubernetes/auth"
         mode: "600"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "audit-policy.yaml"
+        targetPath: "/srv/kubernetes/audit-policy.yaml"
+        mode: "600"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "token.csv"
+        targetPath: "/srv/kubernetes/token.csv"
+        mode: "600"
   - type: Start
     directives:
+    - directive: !<systemctl>
+        action: EnableStart
+        service: kubelet
+        sleepSec: 2
+    - directive: !<systemctl>
+        action: EnableStart
+        service: haproxy
+        sleepSec: 2
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "tos-etcd.manifest"
@@ -418,8 +441,108 @@ roles:
         script: "rm -f /opt/kubernetes/manifests-multi/tos-scheduler.manifest"
 
 stages:
+  - type: Bootstrap
+    taskGroups:
+    - !<Gen-TLS-Certs>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+  - type: Config
+    taskGroups:
+    - !<Role>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      roleType: TOS_SLAVE
+      operation: Config
+    - !<Role>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: TOS_REGISTRY
+      operation: Config
+    - !<Role>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      roleType: TOS_MASTER
+      operation: Config
+    - !<Role>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      roleType: DF_MASTER
+      operation: Config
+    - !<Role>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      roleType: DF_CLIENT
+      operation: Config
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 1
+      templateType: Raw
+      templateFile: "priority/high-priority.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 1
+      templateType: Raw
+      templateFile: "priority/medium-priority.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 1
+      templateType: Raw
+      templateFile: "priority/low-priority.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 1
+      templateType: Raw
+      templateFile: "priority/system-priority.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 1
+      templateType: Raw
+      templateFile: "rbac/clusterrole-rbac.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 1
+      templateType: Raw
+      templateFile: "rbac/clusterrolebinding-rbac.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 1
+      templateType: Raw
+      templateFile: "rbac/system-node-proxier.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "nvidia-device-plugin-ds.yaml"
   - type: Start
     taskGroups:
+    - !<Role>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: TOS_MASTER
+      operation: Start
+    - !<Role>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      roleType: TOS_SLAVE
+      operation: Bootstrap
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      action: Start
+      file: "priority/"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      action: Start
+      file: "rbac/"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      action: Start
+      file: "nvidia-device-plugin-ds.yaml"
+    - !<Enable-Nvidia-Docker>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
     - !<Role>
       summaryPolicy: SOME
       timeoutMinutes: 2
@@ -429,11 +552,6 @@ stages:
       summaryPolicy: SOME
       timeoutMinutes: 2
       roleType: TOS_REGISTRY
-      operation: Start
-    - !<Role>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      roleType: TOS_MASTER
       operation: Start
     - !<Role>
       summaryPolicy: SOME
@@ -456,7 +574,7 @@ healthChecks:
   method: !<DockerPsAndSystemctl>
     imageMap:
       TOS_MASTER:
-        DockerPs: ["boot.sh --data-d", "boot.sh apiserver", "boot.sh controller", "boot.sh scheduler"]
+        DockerPs: ["etcd --data-d", "hyperkube apiserver", "hyperkube controller", "hyperkube scheduler"]
       TOS_REGISTRY:
         DockerPs: ["/entrypoint.sh", "/root/start-apa"]
       TOS_SLAVE:
@@ -490,3 +608,4 @@ firstWizardConfigs:
 - dragonfly.supernode.tomcat.http.port
 - dragonfly.supernode.nginx.peer.port
 - dragonfly.supernode.nginx.rest.port
+- nvidia.docker.support.enabled

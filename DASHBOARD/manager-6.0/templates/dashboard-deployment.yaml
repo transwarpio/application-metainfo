@@ -13,46 +13,71 @@ metadata:
 spec:
   replicas: ${service.roles.DASHBOARD?size}
   revisionHistoryLimit: 10
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
   template:
     metadata:
       labels:
         name: kubernetes-dashboard
     spec:
+      serviceAccount: kubernetes-dashboard
+      serviceAccountName: kubernetes-dashboard
       hostNetwork: true
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes-dashboard
+                operator: Exists
       containers:
       - name: kubernetes-dashboard
         image: ${registryServer}:${registryPort}/transwarp/dashboard:manager-6.0
         imagePullPolicy: Always
         ports:
-        - containerPort: ${service['tos.master.dashboard.port']}
+        - name: https
+          containerPort: 8443
           protocol: TCP
         args:
           # Uncomment the following line to manually specify Kubernetes API server Host
           # If not specified, Dashboard will attempt to auto discover the API server and connect
           # to it. Uncomment only if the default does not work.
-          - /dashboard
-          - --apiserver-host=https://${tosService.roles.TOS_MASTER[0].hostname}:${tosService['tos.master.apiserver.secure.port']}
-          - --kubeconfig=/srv/kubernetes/kubeconfig
-          - --port=${service['tos.master.dashboard.port']}
+        - --auto-generate-certificates
         livenessProbe:
           httpGet:
+            scheme: HTTPS
             path: /
-            port: ${service['tos.master.dashboard.port']}
+            port: 8443
           initialDelaySeconds: 30
           timeoutSeconds: 30
         resources:
           limits:
-            memory: "1Gi"
-            cpu: "0.2"
+            cpu: 300m
+            memory: 200Mi
           requests:
-            memory: "0Gi"
-            cpu: "0"
+            cpu: 300m
+            memory: 200Mi
         volumeMounts:
-        - mountPath: "/srv/kubernetes"
-          name: "certs"
-      nodeSelector:
-        kubernetes-${service.sid}: "true"
+        - mountPath: /certs
+          name: kubernetes-dashboard-certs
+        - mountPath: /tmp
+          name: tmp-volume
+      tolerations:
+      - effect: NoExecute
+        key: node.kubernetes.io/not-ready
+        operator: Exists
+        tolerationSeconds: 300
+      - effect: NoExecute
+        key: node.kubernetes.io/unreachable
+        operator: Exists
+        tolerationSeconds: 300
       volumes:
-      - hostPath:
-          path: "/srv/kubernetes"
-        name: "certs"
+      - name: kubernetes-dashboard-certs
+        secret:
+          defaultMode: 420
+          secretName: kubernetes-dashboard
+      - emptyDir: {}
+        name: tmp-volume

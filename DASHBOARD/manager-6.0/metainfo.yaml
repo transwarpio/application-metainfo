@@ -11,7 +11,7 @@ roles:
 - name: DASHBOARD
   friendlyName: "Dashboard"
   labelPrefix: "kubernetes"
-  linkExpression: "https://${dependencies.TOS.roles.TOS_MASTER[0].hostname}:${dependencies.TOS['tos.master.apiserver.secure.port']}/ui"
+  linkExpression: "https://${service.roles.DASHBOARD[0].hostname}:${service['tos.master.dashboard.port']}"
   category: MASTER
   frontendOperations: []
   summaryPolicy: ALL
@@ -26,6 +26,26 @@ roles:
 stages:
   - type: Config
     taskGroups:
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "role.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "rolebinding.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "serviceaccount.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "secret.yaml"
     - !<Resource-on-Manager>
       summaryPolicy: ALL
       timeoutMinutes: 2
@@ -49,12 +69,32 @@ stages:
       summaryPolicy: SOME
       timeoutMinutes: 10
       action: Start
-      file: "dashboard-service.yaml"
+      file: "role.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Start
+      file: "rolebinding.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Start
+      file: "secret.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Start
+      file: "serviceaccount.yaml"
     - !<Kubectl>
       summaryPolicy: SOME
       timeoutMinutes: 10
       action: Start
       file: "dashboard-deployment.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Start
+      file: "dashboard-service.yaml"
   - type: Stop
     taskGroups:
     - !<Kubectl-Label>
@@ -64,6 +104,26 @@ stages:
       roleType: DASHBOARD
       labelPrefix: "kubernetes"
       labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Stop
+      file: "role.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Stop
+      file: "rolebinding.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Stop
+      file: "secret.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Stop
+      file: "serviceaccount.yaml"
     - !<Kubectl>
       summaryPolicy: SOME
       timeoutMinutes: 10
