@@ -1,73 +1,80 @@
-<#assign
-  tosService=dependencies.TOS
-  registryServer=tosService.roles['TOS_REGISTRY'][0].hostname
-  registryPort=tosService['tos.registry.port']
->
 <#assign etcd_servers=[]>
-<#list tosService.roles.TOS_MASTER as tos_master>
-<#assign etcd_servers+=["http://" + tos_master.hostname + ":" + dependencies.TOS['tos.master.etcd.port']]>
+<#list dependencies.TOS.roles.TOS_MASTER as tos_master>
+<#assign etcd_servers+=["https://" + tos_master.hostname + ":" + dependencies.TOS['tos.master.etcd.port']]>
 </#list>
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: flanneld-${service.sid}
   namespace: kube-system
 spec:
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 100%
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      transwarp.name: flanneld-${service.sid}
   template:
     metadata:
       labels:
         transwarp.name: flanneld-${service.sid}
     spec:
       hostNetwork: true
-      nodeSelector:
-        flanneld-${service.sid}: "true"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: flanneld-${service.sid}
+                operator: Exists
       containers:
-      - name: flanneld
-        image: ${registryServer}:${registryPort}/transwarp/flanneld:manager-6.0
-        imagePullPolicy: IfNotPresent
-        command:
-        - entrypoint.sh
+      - command:
+        - bash
+        - -c
+        - |
+          set -ex
+          flanneld \
+          -etcd-endpoints=${etcd_servers?join(',')} \
+          -etcd-prefix=/coreos.com/network \
+          -etcd-cafile=/srv/ssl/ca.pem \
+          -etcd-keyfile=/srv/ssl/etcd-key.pem \
+          -etcd-certfile=/srv/ssl/etcd.pem \
+          -iface=${r'${FLANNELD_IFACE}'} \
+          --v=2 \
+          -ip-masq \
+          -watch-networks
         env:
         - name: TZ
-          value: "Asia/Shanghai"
-        - name: FLANNEL_CIDR
-          value: ${tosService.roles.TOS_MASTER[0].ip}
-        - name: ETCD_URL
-          value: ${etcd_servers?join(',')}
-        - name: FLANNEL_CONFIG_NETWORK
-          value: ${service['flannel.config.network']}
-        - name: FLANNEL_CONFIG_SUBNETLEN
-          value: "${service['flannel.config.subnetlen']}"
-        - name: FLANNEL_CONFIG_SUBNETMIN
-          value: ${service['flannel.config.subnetmin']}
-        - name: FLANNEL_CONFIG_SUBNETMAX
-          value: ${service['flannel.config.subnetmax']}
-        - name: MULTINETWORK
-          value: overlay
-        - name: FLANNEL_CONFIG_TYPE
-          value: vxlan
+          value: Asia/Shanghai
+        - name: FLANNELD_IFACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.hostIP
+        image: ${registryServer}:${registryPort}/transwarp/flanneld:manager-6.0
+        imagePullPolicy: IfNotPresent
+        name: tos-flanneld-${service.sid}
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+          requests:
+            cpu: 500m
+            memory: 500Mi
         securityContext:
           privileged: true
         volumeMounts:
-        - mountPath: /var/run/hadoop-flannel
-          name: hadoop-flannel
-        - mountPath: /run/flannel/
+        - mountPath: /run/flannel/networks
           name: run
-        - mountPath: /var/run/flannel/
-          name: varrun
-        - mountPath: /etc/cni/net.d/
-          name: cniconf
+        - mountPath: /srv/ssl
+          name: etcd-tls
       restartPolicy: Always
       volumes:
-      - hostPath:
-          path: /var/run/hadoop-flannel
-        name: hadoop-flannel
-      - hostPath:
-          path: /run/flannel/
-        name: run
-      - hostPath:
-          path: /var/run/flannel/
-        name: varrun
-      - hostPath:
-          path: /etc/cni/net.d/
-        name: cniconf
+      - name: run
+        hostPath:
+          path: /run/flannel/networks
+          type: ""
+      - name: etcd-tls
+        hostPath:
+          path: /srv/kubernetes

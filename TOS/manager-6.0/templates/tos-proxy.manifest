@@ -4,23 +4,24 @@ metadata:
   name: tos-proxy-${service.sid}
   namespace: kube-system
 spec:
+  priorityClassName: system-priority
   hostNetwork: true
   containers:
   - name: tos-proxy-${service.sid}
     image: transwarp/hyperkube:manager-6.0
     imagePullPolicy: IfNotPresent
-    securityContext:
-      privileged: true
     command:
     - hyperkube
     - proxy
     - --kubeconfig=/srv/kubernetes/kubeconfig
     - --v=2
     - --masquerade-all
-    - --resource-container=""
-    - --alsologtostderr=true
-    - --logtostderr=false
-    - --log_dir=/var/log/kubernetes/proxy
+    - --feature-gates=SupportIPVSProxyMode=true
+    - --proxy-mode=ipvs
+    - --cluster-cidr=${service['service.cluster.ip.range']}
+    env:
+      - name: TZ
+        value: "Asia/Shanghai"
     securityContext:
       privileged: true
     volumeMounts:
@@ -30,6 +31,9 @@ spec:
     - name: srvkube
       mountPath: /srv/kubernetes/
       readOnly: true
+    - name: libmod
+      mountPath: /lib/modules
+      readOnly: true
   volumes:
     - name: proxykubelog
       hostPath:
@@ -37,3 +41,6 @@ spec:
     - name: srvkube
       hostPath:
         path: /srv/kubernetes/
+    - name: libmod
+      hostPath:
+        path: /lib/modules

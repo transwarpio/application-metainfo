@@ -14,12 +14,10 @@ roles:
   frontendOperations: ["Start", "Stop", "Scaleout"]
   deleteOpCleanDirs:
     fromPath:
-    - key: /etc/cni/net.d
-      featureFile: overlay.conf
     - key: /opt/cni/bin
       featureFile: flannel
   summaryPolicy: SOME
-  dockerImage: "transwarp/flanneld:manager-6.0"
+  dockerImage: "${registryServer}:${registryPort}/transwarp/flanneld:manager-6.0"
   autoAssign:
   - advice: !<EachNode> {}
   suggestion:
@@ -98,11 +96,6 @@ roles:
     - directive: !<chmod>
         mode: "755"
         path: "/opt/cni/bin/tuning"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "overlay.conf"
-        targetPath: "/etc/cni/net.d/overlay.conf"
-        mode: "755"
 
 - name: KUBE_DNS
   friendlyName: "Kube Dns"
@@ -117,7 +110,7 @@ roles:
     reject:
       number: 2
   summaryPolicy: SOME
-  dockerImage: "transwarp/kubedns:manager-6.0"
+  dockerImage: "${registryServer}:${registryPort}/transwarp/coredns:manager-6.0"
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [3, 2, 1]}
   suggestion:
@@ -127,6 +120,41 @@ roles:
   operations: []
 
 stages:
+  - type: Bootstrap
+    taskGroups:
+    - !<Shell-On-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      script: |
+        <#assign etcd_servers=[]>
+        <#list dependencies.TOS.roles.TOS_MASTER as tos_master>
+          <#assign etcd_servers+=["https://" + tos_master.hostname + ":" + dependencies.TOS['tos.master.etcd.port']]>
+        </#list>
+        <#assign
+            ETCD_URL=etcd_servers?join(',')
+            FLANNEL_CONFIG_NETWORK=service['flannel.config.network']
+            FLANNEL_CONFIG_SUBNETLEN=service['flannel.config.subnetlen']
+            FLANNEL_CONFIG_SUBNETMIN=service['flannel.config.subnetmin']
+            FLANNEL_CONFIG_SUBNETMAX=service['flannel.config.subnetmax']
+            CONFIG_URL="/coreos.com/network/overlay/config"
+            CONFIG_SECURITY_URL="/coreos.com/network/overlay/securityrules"
+        >
+        ETCDCTL_API=3 /usr/local/bin/etcdctl \
+        --cacert=/srv/kubernetes/etcd-ca.pem \
+        --cert=/srv/kubernetes/etcd.pem \
+        --key=/srv/kubernetes/etcd-key.pem \
+        --endpoints ${ETCD_URL} put ${CONFIG_URL} \
+          "{ \"Network\": \"${FLANNEL_CONFIG_NETWORK}\",\
+             \"SubnetLen\": ${FLANNEL_CONFIG_SUBNETLEN},\
+             \"SubnetMin\": \"${FLANNEL_CONFIG_SUBNETMIN}\",\
+             \"SubnetMax\": \"${FLANNEL_CONFIG_SUBNETMAX}\", \
+             \"Backend\": { \"Type\": \"vxlan\", \"VNI\": 1} }"
+        [ -n "${CONFIG_SECURITY_URL}" ] && \
+          ETCDCTL_API=3 /usr/local/bin/etcdctl \
+          --cacert=/srv/kubernetes/etcd-ca.pem \
+          --cert=/srv/kubernetes/etcd.pem \
+          --key=/srv/kubernetes/etcd-key.pem \
+          --endpoints ${ETCD_URL} put ${CONFIG_SECURITY_URL} "[]"
   - type: Config
     taskGroups:
     - !<Resource-on-Manager>
@@ -143,12 +171,22 @@ stages:
       summaryPolicy: ALL
       timeoutMinutes: 2
       templateType: FreeMarker
-      templateFile: "kube-dns-service.yaml"
+      templateFile: "coredns-conf-cm.yaml"
     - !<Resource-on-Manager>
       summaryPolicy: ALL
       timeoutMinutes: 2
       templateType: FreeMarker
-      templateFile: "kube-dns-daemonset.yaml"
+      templateFile: "coredns-entrypoint-cm.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "coredns-service.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "coredns-daemonset.yaml"
   - type: Start
     taskGroups:
     - !<Kubectl-Label>
@@ -179,12 +217,22 @@ stages:
       summaryPolicy: SOME
       timeoutMinutes: 10
       action: Start
-      file: "kube-dns-service.yaml"
+      file: "coredns-conf-cm.yaml"
     - !<Kubectl>
       summaryPolicy: SOME
       timeoutMinutes: 10
       action: Start
-      file: "kube-dns-daemonset.yaml"
+      file: "coredns-entrypoint-cm.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Start
+      file: "coredns-daemonset.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Start
+      file: "coredns-service.yaml"
     - !<Wait-Healthy>
       summaryPolicy: ALL
       timeoutMinutes: 5
@@ -218,12 +266,22 @@ stages:
       summaryPolicy: SOME
       timeoutMinutes: 10
       action: Stop
-      file: "kube-dns-service.yaml"
+      file: "coredns-service.yaml"
     - !<Kubectl>
       summaryPolicy: SOME
       timeoutMinutes: 10
       action: Stop
-      file: "kube-dns-daemonset.yaml"
+      file: "coredns-daemonset.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Stop
+      file: "coredns-entrypoint-cm.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Stop
+      file: "coredns-conf-cm.yaml"
   - type: Scaleout
     taskGroups:
     - !<Kubectl-Label>
