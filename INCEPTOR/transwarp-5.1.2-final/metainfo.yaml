@@ -222,7 +222,7 @@ stages:
       roleType: "INCEPTOR_EXECUTOR"
       operation: Config
       summaryPolicy: SOME
-      timeoutMinutes: 1
+      timeoutMinutes: 2
   - type: PreUpgrade
     taskGroups:
     - !<DockerRunPreUpgrade>

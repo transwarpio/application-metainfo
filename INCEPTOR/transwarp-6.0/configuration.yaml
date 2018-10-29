@@ -949,7 +949,7 @@
   onDeps: []
   groups: ["compactor-site.xml"]
   visibility: READ_WRITE
-- name: compactor.partial.scan.candidates.producer.initial.delay.minute
+- name: compactor.partial.scan.producer.initial.delay.minute
   recommendExpression: 1
   defaultValue: null
   valueType: NON_NEG_INT
@@ -958,7 +958,7 @@
   onDeps: []
   groups: ["compactor-site.xml"]
   visibility: READ_WRITE
-- name: compactor.partial.scan.candidates.producer.delay.interval.minute
+- name: compactor.partial.scan.producer.delay.interval.minute
   recommendExpression: 2
   defaultValue: null
   valueType: NON_NEG_INT
