@@ -6,40 +6,40 @@ namePrefix: Sophon
 friendlyName: "Sophon-web"
 dependencies:
   - name: GUARDIAN
-    minVersion: sophon-2.0.0-rc1
-    maxVersion: sophon-2.0.0-rc1
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.0-final
     optional: true
   - name: ZOOKEEPER
-    minVersion: sophon-2.0.0-rc1
-    maxVersion: sophon-2.0.0-rc1
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.0-final
     optional: true
   - name: INCEPTOR
-    minVersion: sophon-2.0.0-rc1
-    maxVersion: sophon-2.0.0-rc1
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.0-final
     optional: true
   - name: HDFS
-    minVersion: sophon-2.0.0-rc1
-    maxVersion: sophon-2.0.0-rc1
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.0-final
     optional: false
   - name: YARN
-    minVersion: sophon-2.0.0-rc1
-    maxVersion: sophon-2.0.0-rc1
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.0-final
     optional: false
   - name: TXSQL
-    minVersion: sophon-2.0.0-rc1
-    maxVersion: sophon-2.0.0-rc1
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.0-final
     optional: true
   - name: WORKFLOW
-    minVersion: sophon-2.0.0-rc1
-    maxVersion: sophon-2.0.0-rc1
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.0-final
     optional: true
   - name: KONG
-    minVersion: sophon-2.0.0-rc1
-    maxVersion: sophon-2.0.0-rc1
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.0-final
     optional: true
   - name: HYPERBASE
-    minVersion: sophon-2.0.0-rc1
-    maxVersion: sophon-2.0.0-rc1
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.0-final
     optional: true
 roles:
 - name: SOPHON_REDIS

@@ -330,6 +330,15 @@
   onDeps: ['TOS']
   groups: []
   visibility: READ_WRITE
+- name: sophon.apiservice.image.name
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-apiserver:sophon-2.0.0-rc1"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: ['TOS']
+  groups: []
+  visibility: READ_WRITE
+
 
 # yarn or kuberenets
 - name: sophon.resource.type
