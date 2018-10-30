@@ -17,7 +17,7 @@ roles:
     - key: /opt/cni/bin
       featureFile: flannel
   summaryPolicy: SOME
-  dockerImage: "${registryServer}:${registryPort}/transwarp/flanneld:manager-6.0.1811a-rc1"
+  dockerImage: "transwarp/flanneld:manager-6.0.1811a-rc1"
   autoAssign:
   - advice: !<EachNode> {}
   suggestion:
@@ -110,7 +110,7 @@ roles:
     reject:
       number: 2
   summaryPolicy: SOME
-  dockerImage: "${registryServer}:${registryPort}/transwarp/coredns:manager-6.0.1811a-rc1"
+  dockerImage: "transwarp/coredns:manager-6.0.1811a-rc1"
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [3, 2, 1]}
   suggestion:
