@@ -29,12 +29,12 @@ roles:
       command:
       - /bin/bash
       - -c
-      - echo ruok | nc localhost ${service['zookeeper.client.port']} > /dev/null && echo ok
+      - "echo stat | nc localhost ${service['zookeeper.client.port']} > /tmp/staty; cat /tmp/staty; grep -qE 'Mode: (follower|leader|standalone)' /tmp/staty"
     failureThreshold: 3
-    initialDelaySeconds: 10
-    periodSeconds: 10
+    initialDelaySeconds: 3
+    periodSeconds: 30
     successThreshold: 1
-    timeoutSeconds: 1
+    timeoutSeconds: 15
   env:
   - name: ZOOKEEPER_CONF_DIR
     value: /etc/${service.sid}/conf
@@ -110,8 +110,11 @@ healthChecks:
   intervalSeconds: 5
   method: !<K8sPod> {}
 - category: VITAL_SIGN_CHECK
-  intervalSeconds: 10
-  method: !<Builtin> {}
+  intervalSeconds: 15
+  method: !<Probe>
+    roles:
+    - roleType: ZOOKEEPER
+      from: !<readiness> {}
 
 customConfigFiles:
 - zoo_cfg

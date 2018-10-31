@@ -116,9 +116,14 @@ roles:
       number: 1
   readinessProbe:
     probe: !<httpGet>
-      path: /
+      path: /executors/json/
       port: ${service['inceptor.ui.port']}
       scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 3
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 15
   env:
   - name: TRANSWARP_ZOOKEEPER_QUORUM
     value: |

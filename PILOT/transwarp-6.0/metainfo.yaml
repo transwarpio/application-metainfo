@@ -38,10 +38,10 @@ roles:
         port: ${service['filerobot.desktop.http.port']}
         scheme: HTTP
       failureThreshold: 3
-      initialDelaySeconds: 10
-      periodSeconds: 10
+      initialDelaySeconds: 3
+      periodSeconds: 30
       successThreshold: 1
-      timeoutSeconds: 1
+      timeoutSeconds: 15
     env:
     - name: FILEROBOT_CONF_DIR
       value: /etc/${service.sid}/conf
@@ -79,10 +79,10 @@ roles:
         port: ${service['pilot.desktop.http.port']}
         scheme: HTTP
       failureThreshold: 3
-      initialDelaySeconds: 10
-      periodSeconds: 10
+      initialDelaySeconds: 3
+      periodSeconds: 30
       successThreshold: 1
-      timeoutSeconds: 1
+      timeoutSeconds: 15
     env:
     - name: PILOT_CONF_DIR
       value: /etc/${service.sid}/conf
