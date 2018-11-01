@@ -10,7 +10,9 @@ set -e
 
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 WORKSPACE="${SCRIPT_DIR}/../.."
+RELEASE_DATE_FILE="${WORKSPACE}/release-date.csv"
 
+rm -f "${RELEASE_DATE_FILE}"
 for service_dir in "${WORKSPACE}"/*; do
     if [ -d "${service_dir}/${MANAGER_PROGRESS_VERSION}" ]; then
         rm -rf "${service_dir}/${MANAGER_TAG_VERSION}"
@@ -32,4 +34,15 @@ for service_dir in "${WORKSPACE}"/*; do
             fi
         done
     fi
+
+
+    for version_dir in "$service_dir"/*; do
+        if [ -e "${version_dir}/metainfo.yaml" ]; then
+            cd "${version_dir}";
+            if release_date=$(git log -1 --format='%at' -- .); then
+                echo $(basename "${service_dir}"),$(basename "${version_dir}"),${release_date} >> "${RELEASE_DATE_FILE}"
+            fi
+            cd - >/dev/null
+        fi
+    done
 done
