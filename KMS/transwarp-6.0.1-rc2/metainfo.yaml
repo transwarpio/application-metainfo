@@ -1,0 +1,86 @@
+---
+name: KMS
+version: transwarp-6.0.1-rc2
+global: false
+namePrefix: KMS
+friendlyName: KMS
+dockerImage: "transwarp/kms:transwarp-6.0.1-rc2"
+dependencies:
+  - name: TXSQL
+    minVersion: transwarp-5.1
+    maxVersion: transwarp-6.0.1-rc2
+    optional: false
+
+roles:
+- name: KMS_SERVER
+  friendlyName: "KMS Server"
+  labelPrefix: "kms-server"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+  - name: KMS_CONFIG
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: kms.container.limits.memory
+    limitsCpuKey: kms.container.limits.cpu
+    requestsMemoryKey: kms.container.requests.memory
+    requestsCpuKey: kms.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Config
+    directives: []
+
+stages:
+  - type: Config
+    taskGroups:
+    - !<Create-Database>
+      dbPrefix: kms
+      dbUserConfig: javax.jdo.option.ConnectionUserName
+      dbPasswordConfig: javax.jdo.option.ConnectionPassword
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Role>
+      roleType: "KMS_SERVER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+
+
+firstWizardConfigs:
+- kms.http.port
+- kms.admin.port
+- ranger.db.encrypt.key.password
+- javax.jdo.option.ConnectionUserName
+- javax.jdo.option.ConnectionPassword
+- kms.container.limits.memory
+- kms.container.limits.cpu
+- kms.container.requests.memory
+- kms.container.requests.cpu
+- kms.memory.ratio
+
+pages:
+- roles
+- configuration
+- operation
+- security
+
+principals:
+- kms
+- HTTP
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}

@@ -4,7 +4,7 @@ MANAGER_PROGRESS_VERSION=manager-6.0
 MANAGER_TAG_VERSION=manager-6.0.1811a-rc1
 LAST_STABLE_VERSION=transwarp-6.0.0-final
 TDH_PROGRESS_VERSION=transwarp-6.0
-TDH_TAG_VERSION=transwarp-6.0.1-rc1
+TDH_TAG_VERSION=transwarp-6.0.1-rc2
 
 set -e
 
@@ -39,7 +39,7 @@ for service_dir in "${WORKSPACE}"/*; do
     for version_dir in "$service_dir"/*; do
         if [ -e "${version_dir}/metainfo.yaml" ]; then
             cd "${version_dir}";
-            if release_date=$(git log -1 --format='%at' -- .); then
+            if release_date=$(git log -1 --format='%at' -- .) && [ ! -z "${release_date}" ]; then
                 echo $(basename "${service_dir}"),$(basename "${version_dir}"),${release_date} >> "${RELEASE_DATE_FILE}"
             fi
             cd - >/dev/null
