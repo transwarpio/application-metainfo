@@ -220,6 +220,10 @@ roles:
         script: "docker run --volume /opt/kubernetes/registry-certs/:/srv/kubernetes/ -e EXTAR_OPTS=DNS:${localhostname}, --net=host transwarp/gencerts:manager-6.0.1811a-rc1 /usr/bin/entry.sh"
     - directive: !<systemctl>
         action: EnableStart
+        service: haproxy
+        sleepSec: 2
+    - directive: !<systemctl>
+        action: EnableStart
         service: kubelet
         sleepSec: 2
     - directive: !<resource>
