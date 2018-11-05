@@ -118,6 +118,9 @@ cookie.remember-me.days: ${service['workflow.cookie.rememberme.days']}
 # http cookie max-age in hours
 cookie.max-age.hours: ${service['workflow.cookie.maxage.hours']}
 
+# folder for internationalization files
+spring.messages.basename: "classpath:i18n/locale"
+
 # http upload file size
 spring:
   http:
