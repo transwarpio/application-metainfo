@@ -1,0 +1,215 @@
+---
+name: CODIS
+version: transwarp-5.2.3-rc0
+global: false
+namePrefix: codis
+friendlyName: "Codis"
+dependencies:
+  - name: ZOOKEEPER
+    minVersion: transwarp-5.2.3-rc0
+    maxVersion: transwarp-5.2.3-rc0
+    optional: false
+dockerImage: "transwarp/codis-all:transwarp-5.2.3-rc0"
+roles:
+  - name: CODIS_DASHBOARD
+    friendlyName: "Codis Dashboard"
+    labelPrefix: "codis-dashboard"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete"]
+    deleteOpCondition:
+      deletable:
+        number: 2
+      reject:
+        number: 1
+    env:
+    - name: CODIS_ROLE
+      value: dashboard
+    - name: PRODUCT_NAME
+      value: ${service['codis.product.name']}
+    - name: ZOOKEEPER_ADDR
+      value: |
+        <#assign zookeepers=[]>
+        <#if dependencies.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?size gt 0>
+          <#list dependencies.ZOOKEEPER.roles.ZOOKEEPER as zookeeper>
+            <#assign zookeepers += [zookeeper.hostname]>
+          </#list>
+        </#if>
+        ${zookeepers?join(",")}
+    - name: PRODUCT_AUTH
+      value: ${service['codis.cluster.auth']}
+    mountPaths: []
+    resources:
+      limitsMemoryKey: codis.dashboard.container.limits.memory
+      limitsCpuKey: codis.dashboard.container.limits.cpu
+      requestsMemoryKey: codis.dashboard.container.requests.memory
+      requestsCpuKey: codis.dashboard.container.requests.cpu
+    nodeSpecificMounts: []
+
+    summaryPolicy: SOME
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations: []
+
+  - name: CODIS_PROXY
+    friendlyName: "Codis Proxy"
+    labelPrefix: "codis-proxy"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete"]
+    deleteOpCondition:
+      deletable:
+        number: 2
+      reject:
+        number: 1
+    env:
+    - name: CODIS_ROLE
+      value: proxy
+    - name: PRODUCT_NAME
+      value: ${service['codis.product.name']}
+    - name: ZOOKEEPER_ADDR
+      value: |
+        <#assign zookeepers=[]>
+        <#if dependencies.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?size gt 0>
+          <#list dependencies.ZOOKEEPER.roles.ZOOKEEPER as zookeeper>
+            <#assign zookeepers += [zookeeper.hostname]>
+          </#list>
+        </#if>
+        ${zookeepers?join(",")}
+    - name: DASHBOARD_ADDR
+      value: ${service.roles.CODIS_DASHBOARD[0].hostname}:18080
+    - name: SESSION_AUTH
+      value: ${service['codis.proxy.auth']}
+    - name: PRODUCT_AUTH
+      value: ${service['codis.cluster.auth']}
+    mountPaths: []
+    resources:
+      limitsMemoryKey: codis.proxy.container.limits.memory
+      limitsCpuKey: codis.proxy.container.limits.cpu
+      requestsMemoryKey: codis.proxy.container.requests.memory
+      requestsCpuKey: codis.proxy.container.requests.cpu
+    nodeSpecificMounts: []
+
+    summaryPolicy: SOME
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations: []
+
+  - name: CODIS_FE
+    friendlyName: "Codis FE"
+    labelPrefix: "codis-fe"
+    linkExpression: "http://${localhostname}:${service['codis.fe.port']}/"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete"]
+    deleteOpCondition:
+      deletable:
+        number: 2
+      reject:
+        number: 1
+    env:
+    - name: CODIS_ROLE
+      value: fe
+    - name: ZOOKEEPER_ADDR
+      value: |
+        <#assign zookeepers=[]>
+        <#if dependencies.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?size gt 0>
+          <#list dependencies.ZOOKEEPER.roles.ZOOKEEPER as zookeeper>
+            <#assign zookeepers += [zookeeper.hostname]>
+          </#list>
+        </#if>
+        ${zookeepers?join(",")}
+    - name: FE_PORT
+      value: ${service['codis.fe.port']}
+    mountPaths: []
+    resources:
+      limitsMemoryKey: codis.fe.container.limits.memory
+      limitsCpuKey: codis.fe.container.limits.cpu
+      requestsMemoryKey: codis.fe.container.requests.memory
+      requestsCpuKey: codis.fe.container.requests.cpu
+    nodeSpecificMounts: []
+
+    summaryPolicy: SOME
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations: []
+
+  - name: CODIS_SERVER
+    friendlyName: "Codis Server"
+    labelPrefix: "codis-server"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete"]
+    deleteOpCondition:
+      deletable:
+        number: 2
+      reject:
+        number: 1
+    env:
+    - name: CODIS_ROLE
+      value: server
+    - name: CODIS_EXT_DIR
+      value: /etc/${service.sid}/conf
+    - name: DASHBOARD_ADDR
+      value: ${service.roles.CODIS_DASHBOARD[0].hostname}:18080
+    - name: PRODUCT_AUTH
+      value: ${service['codis.cluster.auth']}
+    mountPaths: []
+    resources:
+      limitsMemoryKey: codis.server.container.limits.memory
+      limitsCpuKey: codis.server.container.limits.cpu
+      requestsMemoryKey: codis.server.container.requests.memory
+      requestsCpuKey: codis.server.container.requests.cpu
+    nodeSpecificMounts: []
+
+    summaryPolicy: SOME
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations: []
+
+firstWizardConfigs:
+- codis.dashboard.container.limits.memory
+- codis.dashboard.container.limits.cpu
+- codis.dashboard.container.requests.memory
+- codis.dashboard.container.requests.cpu
+- codis.proxy.container.limits.memory
+- codis.proxy.container.limits.cpu
+- codis.proxy.container.requests.memory
+- codis.proxy.container.requests.cpu
+- codis.fe.container.limits.memory
+- codis.fe.container.limits.cpu
+- codis.fe.container.requests.memory
+- codis.fe.container.requests.cpu
+- codis.server.container.limits.memory
+- codis.server.container.limits.cpu
+- codis.server.container.requests.memory
+- codis.server.container.requests.cpu
+- codis.product.name
+- codis.fe.port
+- codis.proxy.auth
+- codis.cluster.auth
+
+dashboardMetrics: []
+
+pages:
+- summary
+- roles
+- configuration
+- operation
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
