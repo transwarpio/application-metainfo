@@ -87,6 +87,7 @@ slipstream.studio.rules.resource.dir=hdfs://${dependencies.HDFS.nameservices[0]}
 slipstream.studio.algorithm.hdfs.jar.dir=hdfs://${dependencies.HDFS.nameservices[0]}${service['slipstream.studio.algorithm.hdfs.jar.dir']}
 slipstream.studio.algorithm.hdfs.tmp.jar.dir=hdfs://${dependencies.HDFS.nameservices[0]}${service['slipstream.studio.algorithm.hdfs.tmp.jar.dir']}
 
+slipstream.studio.external.address=http://${service.roles.INCEPTOR_SLIPSTREAMSTUDIO[0]['ip']}:${service['slipstream.studio.http.port']}
 ############################# Custom and Other ###############################
 <#list service['studio.properties'] as key, value>
 ${key}=${value}
