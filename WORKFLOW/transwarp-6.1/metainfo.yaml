@@ -34,10 +34,12 @@ roles:
     reject:
       number: 1
   readinessProbe:
-    probe: !<httpGet>
-      path: /
-      port: ${service['workflow.http.port']}
-      scheme: HTTP
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - |
+          curl --fail --connect-timeout 15 --max-time 15 "http://`hostname`:${service['workflow.http.port']}/"
     failureThreshold: 3
     initialDelaySeconds: 3
     periodSeconds: 30
