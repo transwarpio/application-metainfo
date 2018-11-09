@@ -166,6 +166,10 @@
     </#if>
     <@property "hive.service.type" "INCEPTOR"/>
     <@property "hive.service.id" "${service.sid}"/>
+
+<#--extra properties-->
+    <@property "fs.trash.interval" 1440/>
+
 <#--Take properties from the context-->
 <#list service['hive-site.xml'] as key, value>
     <@property key value/>
