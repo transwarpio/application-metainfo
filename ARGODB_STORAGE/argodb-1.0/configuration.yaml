@@ -1674,6 +1674,15 @@
   groups: ["core-site.xml"]
   visibility: READ_WRITE
 
+#- name: ladder.master.port
+#  recommendExpression: 19998
+#  defaultValue: null
+#  valueType: NON_NEG_INT
+#  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER]}
+#  onDeps: []
+#  groups: ["ladder-site.properties"]
+#  visibility: READ_WRITE
+
 - name: ladder.master.web.port
   recommendExpression: 19999
   defaultValue: null
@@ -1747,6 +1756,24 @@
   onDeps: []
   groups: ["ladder-site.properties"]
   visibility: READ_WRITE
+
+#- name: ladder.worker.port
+#  recommendExpression: 29998
+#  defaultValue: null
+#  valueType: NON_NEG_INT
+#  scope: !<RoleTypes> {roleTypes: [LADDER_WORKER]}
+#  onDeps: []
+#  groups: ["ladder-site.properties"]
+#  visibility: READ_WRITE
+
+#- name: ladder.worker.data.port
+#  recommendExpression: 29999
+#  defaultValue: null
+#  valueType: NON_NEG_INT
+#  scope: !<RoleTypes> {roleTypes: [LADDER_WORKER]}
+#  onDeps: []
+#  groups: ["ladder-site.properties"]
+#  visibility: READ_WRITE
 
 - name: ladder.worker.web.port
   recommendExpression: 30000
