@@ -488,11 +488,8 @@ env:
     
     | 字段 | 用途 |
     |---|---|
-    | type | |Manager 6.0 1811b 新增: 支持挂载 nfs 和 pvc, 新增字段 type 来识别三种挂载|
-             |type = HOST_PATH_CONF || NFS_CONF || PVC_CONF, 分别代表三种不同的挂载 hostPath, nfs, persistentVolumeClaim|
-             |没有 type 字段 默认为 HOST_PATH_CONF　类型, 如需特殊挂载路径, 需要声明 type|  
     | mountPath | 容器挂载点路径的模板（服务级别上下文）|
-    | hostPath || nfs || persistentVolumeClaim | 主机路径的模板（服务级别上下文）|
+    | hostPath | 主机路径的模板（服务级别上下文）|
     | name | 挂载卷的标识符，由小写字母组成，同一服务中不应重复 |
     
     例如，HDFS的DataNode需要挂载主机上的`/var/run/${service.sid}`到容器中的`/var/run/${service.sid}`，其在DataNode角色的mountPaths字段里指定了：
@@ -502,16 +499,6 @@ env:
        hostPath: /var/run/${service.sid}
        name: hdfssocketdir
     ```
-    例如，SOPHON 的 SOPHON_WEB 需要挂载网络文件系统(nfs)到容器中的` /sophon/project`，其在 SOPHON_WEB 角色的 mountPaths 字段里指定了：
-    ```yaml
-    mountPaths:
-    - type: NFS_CONF
-      mountPath: /sophon/project
-      nfs:
-        server: ${service['sophon.nfs.ip']}
-        path: "/"
-      name: nfs
-    ```    
 
 * 角色/节点级别自定义挂载卷
 
