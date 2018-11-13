@@ -488,9 +488,9 @@ env:
     
     | 字段 | 用途 |
     |---|---|
-    | type |Manager 6.0 1811b 新增: 支持挂载 nfs 和 pvc, 新增字段 type 来识别三种挂载|
-    |      |type = HOST_PATH_CONF 或 NFS_CONF 或 PVC_CONF, 分别代表三种不同的挂载 hostPath, nfs, persistentVolumeClaim|
-    |      |没有 type 字段 默认为 HOST_PATH_CONF, 如需特殊挂载, 需要声明 type|  
+    | type | |Manager 6.0 1811b 新增: 支持挂载 nfs 和 pvc, 新增字段 type 来识别三种挂载|
+             |type = HOST_PATH_CONF || NFS_CONF || PVC_CONF, 分别代表三种不同的挂载 hostPath, nfs, persistentVolumeClaim|
+             |没有 type 字段 默认为 HOST_PATH_CONF　类型, 如需特殊挂载路径, 需要声明 type|  
     | mountPath | 容器挂载点路径的模板（服务级别上下文）|
     | hostPath || nfs || persistentVolumeClaim | 主机路径的模板（服务级别上下文）|
     | name | 挂载卷的标识符，由小写字母组成，同一服务中不应重复 |
