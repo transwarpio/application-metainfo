@@ -29,7 +29,7 @@
     <@property "guardian.connection.client.impl" "REST"/>
 
 <!-- CAS Authentication -->
-<#if pluginUser.service.auth = "kerberos" && guardian.roles["CAS_SERVER"]??>
+<#if guardian.roles["CAS_SERVER"]??>
     <#assign casServerSslPort=guardian['cas.server.ssl.port']>
     <#if guardian['guardian.server.cas.server.host']?matches("^\\s*$")>
         <#assign casServerName="https://${guardian.roles.CAS_SERVER[0]['ip']}:${casServerSslPort}">
@@ -37,23 +37,19 @@
         <#assign casServerName="https://${guardian['guardian.server.cas.server.host']}:${casServerSslPort}">
     </#if>
     <#assign casServerPrefix="${casServerName}${guardian['cas.server.context.path']}">
-    <@property "guardian.server.cas.authentication.enabled" "true"/>
+    <@property "guardian.server.cas.authentication.enabled" "${guardian['guardian.server.cas.authentication.enabled']}"/>
     <@property "guardian.server.cas.server.url.prefix" "${casServerPrefix}"/>
     <@property "guardian.server.cas.server.login.url" "${casServerPrefix}/login"/>
 <#else>
     <@property "guardian.server.cas.authentication.enabled" "false"/>
 </#if>
 
-<!-- Access Token Authentication -->
-<#if pluginUser.service.auth = "kerberos">
-    <@property "guardian.server.access.token.authentication.enabled" "true"/>
+    <!-- Access Token Authentication -->
+    <@property "guardian.server.access.token.authentication.enabled" "${guardian['guardian.server.access.token.authentication.enabled']}"/>
     <@property "guardian.server.access.token.server.address" "${guardian_address}"/>
     <@property "guardian.server.access.token.server.tls.enabled" "${guardian['guardian.server.tls.enabled']}"/>
-<#else>
-    <@property "guardian.server.access.token.authentication.enabled" "true"/>
-</#if>
 
-<!-- ABAC Authorization -->
+    <!-- ABAC Authorization -->
     <@property "guardian.abac.authorization.enabled" "${guardian['guardian.abac.authorization.enabled']}"/>
 
 <#--Take properties from the context-->
