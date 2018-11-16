@@ -17,7 +17,7 @@
   valueType: STRING
   scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
   onDeps: []
-  groups: []
+  groups: ["graphconf.xml"]
   visibility: READ_WRITE
 - name: graph.raft.dirs
   recommendExpression: |
@@ -38,7 +38,7 @@
   valueType: STRING
   scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
   onDeps: []
-  groups: []
+  groups: ["graphconf.xml"]
   visibility: READ_WRITE
 - name: graph.zk.quorum
   recommendExpression: localhost:2181
@@ -46,7 +46,7 @@
   valueType: STRING
   scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
   onDeps: []
-  groups: []
+  groups: ["graphconf.xml"]
   visibility: READ_WRITE
 - name: graph.master.port
   recommendExpression: 30909
@@ -54,7 +54,7 @@
   valueType: HOST_PORT
   scope: !<RoleTypes> {roleTypes: [STELLARDB_MASTER]}
   onDeps: []
-  groups: []
+  groups: ["graphconf.xml"]
   visibility: READ_WRITE
 - name: graph.master.ui.port
   recommendExpression: 50088
@@ -62,7 +62,7 @@
   valueType: HOST_PORT
   scope: !<RoleTypes> {roleTypes: [STELLARDB_MASTER]}
   onDeps: []
-  groups: []
+  groups: ["graphconf.xml"]
   visibility: READ_WRITE
 - name: graph.worker.port
   recommendExpression: 30815
@@ -70,7 +70,7 @@
   valueType: HOST_PORT
   scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
   onDeps: []
-  groups: []
+  groups: ["graphconf.xml"]
   visibility: READ_WRITE
 - name: graph.worker.ui.port
   recommendExpression: 50089
@@ -78,7 +78,7 @@
   valueType: HOST_PORT
   scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
   onDeps: []
-  groups: []
+  groups: ["graphconf.xml"]
   visibility: READ_WRITE
 - name: graph.zk.base_path
   recommendExpression: "/graph"
@@ -86,7 +86,7 @@
   valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: []
+  groups: ["graphconf.xml"]
   visibility: READ_WRITE
 - name: graph.raft.server.port
   recommendExpression: 1998
@@ -94,5 +94,5 @@
   valueType: HOST_PORT
   scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
   onDeps: []
-  groups: []
+  groups: ["graphconf.xml"]
   visibility: READ_WRITE
