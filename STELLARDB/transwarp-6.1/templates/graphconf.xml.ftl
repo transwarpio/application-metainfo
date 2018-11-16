@@ -1,39 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <configuration>
-    <property>
-        <name>graph.data.dirs</name>
-        <value>${service['graph.data.dirs']}</value>
-    </property>
-    <property>
-        <name>graph.raft.dirs</name>
-        <value>${service['graph.raft.dirs']}</value>
-    </property>
-    <property>
-        <name>graph.zk.quorum</name>
-        <value>${service['graph.zk.quorum']}</value>
-    </property>
-    <property>
-        <name>graph.master.port</name>
-        <value>${service['graph.master.port']}</value>
-    </property>
-    <property>
-        <name>graph.master.ui.port</name>
-        <value>${service['graph.master.ui.port']}</value>
-    </property>
-    <property>
-        <name>graph.worker.port</name>
-        <value>${service['graph.worker.port']}</value>
-    </property>
-    <property>
-        <name>graph.worker.ui.port</name>
-        <value>${service['graph.worker.ui.port']}</value>
-    </property>
-    <property>
-        <name>graph.zk.base_path</name>
-        <value>${service['graph.zk.base_path']}</value>
-    </property>
-    <property>
-        <name>graph.raft.server.port</name>
-        <value>${service['graph.raft.server.port']}</value>
-    </property>
+<#--Simple macro definition-->
+<#macro property key value>
+<property>
+  <name>${key}</name>
+  <value>${value}</value>
+</property>
+</#macro>
+<#--------------------------->
+<#--Take properties from the context-->
+<#list service['graphconf.xml'] as key, value>
+  <@property key value/>
+</#list>
 </configuration>
