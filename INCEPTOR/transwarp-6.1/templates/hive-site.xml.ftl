@@ -139,6 +139,19 @@
         <#assign uris += [("thrift://" + role.hostname + ":" + service["hive.metastore.port"])]>
     </#list>
 </#if>
+<#assign i = -1>
+<#list uris as uri>
+    <#if uri?contains(localhostname)>
+        <#assign i=uri?index>
+        <#break>
+    </#if>
+</#list>
+<#if i lt 0>
+    <#assign i = .now?long % uris?size>
+</#if>
+<#if i gt 0>
+    <#assign uris = uris[i..] + uris[0..i-1]>
+</#if>
     <@property "hive.metastore.uris" uris?join(",")/>
 <#if dependencies.YARN??>
     <#assign rmHostPorts = []/>
