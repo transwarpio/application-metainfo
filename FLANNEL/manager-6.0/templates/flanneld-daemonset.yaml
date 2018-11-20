@@ -2,6 +2,11 @@
 <#list dependencies.TOS.roles.TOS_MASTER as tos_master>
 <#assign etcd_servers+=["https://" + tos_master.hostname + ":" + dependencies.TOS['tos.master.etcd.port']]>
 </#list>
+<#assign
+  tosService=dependencies.TOS
+  registryServer=tosService.roles['TOS_REGISTRY'][0].hostname
+  registryPort=tosService['tos.registry.port']
+>
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
