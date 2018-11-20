@@ -30,7 +30,7 @@ spec:
         env:
         - name: TZ
           value: "Asia/Shanghai"
-        image: ${registryServer}:${registryPort}/transwarp/kubedns:manager-6.0.1810a-rc0
+        image: ${registryServer}:${registryPort}/transwarp/kubedns:manager-6.0.1810a-final
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 5
@@ -67,7 +67,7 @@ spec:
         env:
         - name: TZ
           value: "Asia/Shanghai"
-        image: ${registryServer}:${registryPort}/transwarp/dnsmasq-metrics:manager-6.0.1810a-rc0
+        image: ${registryServer}:${registryPort}/transwarp/dnsmasq-metrics:manager-6.0.1810a-final
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 5
@@ -90,7 +90,7 @@ spec:
         env:
         - name: TZ
           value: "Asia/Shanghai"
-        image: ${registryServer}:${registryPort}/transwarp/exechealthz:manager-6.0.1810a-rc0
+        image: ${registryServer}:${registryPort}/transwarp/exechealthz:manager-6.0.1810a-final
         imagePullPolicy: IfNotPresent
         name: healthz
       - args:
@@ -125,7 +125,7 @@ spec:
         env:
         - name: TZ
           value: "Asia/Shanghai"
-        image: ${registryServer}:${registryPort}/transwarp/kube-dnsmasq:manager-6.0.1810a-rc0
+        image: ${registryServer}:${registryPort}/transwarp/kube-dnsmasq:manager-6.0.1810a-final
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 5
