@@ -43,12 +43,17 @@ build_application-metainfo() {
         # push to github
         curl -o /tmp/push_dev.sh http://172.16.2.71/pub/application-metainfo/push_dev.sh
         export BRANCH=sophon-base
-        bash /tmp/push_dev.sh
-        rm -f /tmp/push_dev.sh
+        #bash /tmp/push_dev.sh
+        #rm -f /tmp/push_dev.sh
         # set git remote for upgrade
         git remote rm origin
+        git remote add origin https://minhao.zou%40transwarp.io:sophon2016@github.com/transwarpio/application-metainfo.git
+        git checkout -b sophon-base
+        git push origin sophon-base
+
+        git remote rm origin
         git remote add origin https://github.com/transwarpio/application-metainfo.git
-        http_proxy=http://172.16.2.14:7777 https_proxy=http://172.16.2.14:7777 git fetch origin
+        #http_proxy=http://172.16.2.14:7777 https_proxy=http://172.16.2.14:7777 git fetch origin
         git checkout sophon-base
         git branch --set-upstream-to=origin/sophon-base sophon-base
 
