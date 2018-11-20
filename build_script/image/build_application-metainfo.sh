@@ -64,7 +64,7 @@ build_application-metainfo() {
         rm -rf application-metainfo
         mv "$VERSION" application-metainfo
         ls application-metainfo
-        echo 'FROM 172.16.1.41:5000/release/basefs:latest
+        echo 'FROM 172.16.1.99/transwarp/basefs:latest
 
 RUN mkdir -p /root/application-metainfo
 ADD application-metainfo /root/application-metainfo
