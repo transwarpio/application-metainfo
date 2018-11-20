@@ -53,6 +53,7 @@ build_application-metainfo() {
 
         git remote rm origin
         git remote add origin https://github.com/transwarpio/application-metainfo.git
+        git fetch origin
         #http_proxy=http://172.16.2.14:7777 https_proxy=http://172.16.2.14:7777 git fetch origin
         git checkout sophon-base
         git branch --set-upstream-to=origin/sophon-base sophon-base
