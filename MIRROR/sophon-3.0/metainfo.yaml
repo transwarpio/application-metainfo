@@ -1,0 +1,195 @@
+---
+name: MIRROR
+version: sophon-3.0
+global: false
+namePrefix: Mirror
+friendlyName: "Mirror"
+dependencies:
+  - name: INCEPTOR
+    minVersion: sophon-3.0
+    maxVersion: sophon-3.0
+    optional: false
+  - name: TXSQL
+    minVersion: sophon-3.0
+    maxVersion: sophon-3.0
+    optional: false
+  - name: HDFS
+    minVersion: sophon-3.0
+    maxVersion: sophon-3.0
+    optional: false
+  - name: SEARCH
+    minVersion: sophon-3.0
+    maxVersion: sophon-3.0
+    optional: false
+  - name: WORKFLOW
+    minVersion: sophon-3.0
+    maxVersion: sophon-3.0
+    optional: false
+  - name: GUARDIAN
+    minVersion: sophon-3.0
+    maxVersion: sophon-3.0
+    optional: true
+  - name: YARN
+    minVersion: sophon-3.0
+    maxVersion: sophon-3.0
+    optional: false
+
+roles:
+  - name: MIRROR_USERPROFILE_BACKEND
+    friendlyName: "Mirror backend"
+    labelPrefix: "mirror-backend"
+    dockerImage: "transwarp/mirror-userprofile:sophon-3.0"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+    deleteOpCondition:
+      deletable:
+        number: 2
+      reject:
+        number: 1
+    env:
+    - name: MIRROR_CONF_DIR
+      value: /etc/${service.sid}/conf
+    - name: MIRROR_SERVICE_ID
+      value: ${service.sid}
+    - name: YARN_CONF_DIR
+      value: /etc/${dependencies.YARN.sid}/conf
+    mountPaths: []
+    resources:
+      limitsMemoryKey: mirror.userprofile.backend.limits.memory
+      limitsCpuKey: mirror.userprofile.backend.limits.cpu
+      requestsMemoryKey: mirror.userprofile.backend.requests.memory
+      requestsCpuKey: mirror.userprofile.backend.requests.cpu
+    summaryPolicy: ALL
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations:
+    - type: Config
+      directives:
+      - directive: !<link>
+          action: Link
+          from: "/etc/${dependencies.INCEPTOR.sid}/conf/hive-site.xml"
+          to: "/etc/${service.sid}/conf/hive-site.xml"
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "application.properties"
+          targetPath: "/etc/${service.sid}/conf/application.properties"
+          mode: "755"
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "application-prod.properties"
+          targetPath: "/etc/${service.sid}/conf/application-prod.properties"
+          mode: "755"
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "log4j2.xml"
+          targetPath: "/etc/${service.sid}/conf/log4j2.xml"
+          mode: "755"
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "mirror.conf"
+          targetPath: "/etc/${service.sid}/conf/mirror.conf"
+          mode: "755"
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "workflow-client.properties"
+          targetPath: "/etc/${service.sid}/conf/workflow-client.properties"
+          mode: "755"
+
+  - name: MIRROR_USERPROFILE_FRONTEND
+    friendlyName: "Mirror frontend"
+    labelPrefix: "mirror-frontend"
+    dockerImage: "transwarp/sophon-st:sophon-3.0"
+    linkExpression: "http://${localhostname}:${service['mirror.userprofile.frontend.port']}"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+    deleteOpCondition:
+      deletable:
+        number: 2
+      reject:
+        number: 1
+    env:
+    - name: API_URL
+      value: "http://${service.roles.MIRROR_USERPROFILE_BACKEND[0]['hostname']}:${service['mirror.userprofile.backend.port']}"
+    - name: PORT
+      value: "${service['mirror.userprofile.frontend.port']}"
+    mountPaths: []
+    resources:
+      limitsMemoryKey: mirror.userprofile.frontend.limits.memory
+      limitsCpuKey: mirror.userprofile.frontend.limits.cpu
+      requestsMemoryKey: mirror.userprofile.frontend.requests.memory
+      requestsCpuKey: mirror.userprofile.frontend.requests.cpu
+    summaryPolicy: ALL
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations: []
+
+stages:
+  - type: Config
+    taskGroups:
+    - !<Create-Database>
+      dbPrefix: mirror
+      dbUserConfig: javax.jdo.option.ConnectionUserName
+      dbPasswordConfig: javax.jdo.option.ConnectionPassword
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Role>
+      roleType: "MIRROR_USERPROFILE_BACKEND"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "MIRROR_USERPROFILE_FRONTEND"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+
+firstWizardConfigs:
+- mirror.userprofile.backend.port
+- mirror.userprofile.frontend.port
+- javax.jdo.option.ConnectionUserName
+- javax.jdo.option.ConnectionPassword
+- mirror.distributed.database.type
+- mirror.superuser.username
+- mirror.superuser.password
+- mirror.userprofile.inceptor.ldap.username
+- mirror.userprofile.inceptor.ldap.password
+- mirror.userprofile.backend.limits.memory
+- mirror.userprofile.backend.limits.cpu
+- mirror.userprofile.backend.requests.memory
+- mirror.userprofile.backend.requests.cpu
+- mirror.userprofile.frontend.limits.memory
+- mirror.userprofile.frontend.limits.cpu
+- mirror.userprofile.frontend.requests.memory
+- mirror.userprofile.frontend.requests.cpu
+- workflow.client.username
+- workflow.client.password
+- workflow.domain.id
+- spark.sql.warehouse.dir
+- task.pool.size
+- task.max.concurrency
+- task.timeout
+- mirror.execute.cycle
+
+product: Mirror
+
+principals:
+- mirror
+
+pages:
+- roles
+- configuration
+- operation
+- security
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 30
+  method: !<K8sPod> {}
