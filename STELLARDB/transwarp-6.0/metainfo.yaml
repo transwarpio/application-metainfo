@@ -134,3 +134,6 @@ healthChecks:
 - category: DAEMON_CHECK
   intervalSeconds: 30
   method: !<K8sPod> {}
+
+customConfigFiles:
+- graphconf.xml

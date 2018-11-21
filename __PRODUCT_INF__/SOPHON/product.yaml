@@ -3,3 +3,4 @@ ordinal: 50
 services:
 - SOPHON
 - MIRROR
+- KONG
