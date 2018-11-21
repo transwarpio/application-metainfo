@@ -128,3 +128,6 @@ spring:
       enabled: true
       max-file-size: 50MB
       max-request-size: 50MB
+
+# Download workflow nesting limit
+nest.layer.limit: 10
