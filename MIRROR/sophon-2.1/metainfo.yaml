@@ -1,6 +1,6 @@
 ---
 name: MIRROR
-version: sophon-3.0
+version: sophon-2.1
 global: false
 namePrefix: Mirror
 friendlyName: "Mirror"
@@ -38,7 +38,7 @@ roles:
   - name: MIRROR_USERPROFILE_BACKEND
     friendlyName: "Mirror backend"
     labelPrefix: "mirror-backend"
-    dockerImage: "transwarp/mirror-userprofile:sophon-3.0"
+    dockerImage: "transwarp/mirror-userprofile:sophon-2.1"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
     deleteOpCondition:
@@ -102,7 +102,7 @@ roles:
   - name: MIRROR_USERPROFILE_FRONTEND
     friendlyName: "Mirror frontend"
     labelPrefix: "mirror-frontend"
-    dockerImage: "transwarp/sophon-st:sophon-3.0"
+    dockerImage: "transwarp/sophon-st:sophon-2.1"
     linkExpression: "http://${localhostname}:${service['mirror.userprofile.frontend.port']}"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]

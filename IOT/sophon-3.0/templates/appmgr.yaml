@@ -7,7 +7,7 @@ mysql:
     username: "${service['thingercloud.db.username']}"
     password: "${service['thingercloud.db.password']}"
     host: "${dependencies.TXSQL.roles.TXSQL_SERVER[0]['hostname']}"
-    port: " ${dependencies.TXSQL['mysql.rw.port']}"
+    port: "${dependencies.TXSQL['mysql.rw.port']}"
     db_name: "thingercloud_${service.sid}"
     max_idle: 5
     max_conn: 10
