@@ -1,0 +1,7 @@
+<#compress>
+<#assign roles=service['roles']['LADDER_WORKER'] size=roles?size>
+<#list 1..size as n>
+    <#assign role=roles[n_index]>
+    ${role.hostname}
+</#list>
+</#compress>
