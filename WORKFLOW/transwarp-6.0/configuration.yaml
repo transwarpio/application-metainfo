@@ -35,7 +35,7 @@
   visibility: READ_WRITE
   
 - name: workflow.global.max.running
-  recommendExpression: 100
+  recommendExpression: 2000
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
@@ -44,7 +44,7 @@
   visibility: READ_WRITE
 
 - name: workflow.recover.max.running
-  recommendExpression: 20
+  recommendExpression: 500
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
@@ -53,7 +53,7 @@
   visibility: READ_WRITE
 
 - name: workflow.in.wf.max.running
-  recommendExpression: 20
+  recommendExpression: 200
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
