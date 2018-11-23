@@ -167,6 +167,39 @@ stages:
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "rbac/role.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "rbac/rolebinding.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "rbac/serviceaccount.yaml"
+  - type: Start
+    taskGroups:
+    - !<Role>
+      roleType: "SOPHON_WEB"
+      operation: Start
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SOPHON_REDIS"
+      operation: Start
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      action: Start
+      file: "rbac/"
+
 
 
 firstWizardConfigs:
