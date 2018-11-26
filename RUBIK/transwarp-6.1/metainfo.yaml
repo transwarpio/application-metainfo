@@ -17,10 +17,6 @@ dependencies:
     minVersion: transwarp-6.1
     maxVersion: transwarp-6.1
     optional: false
-  - name: WORKFLOW
-    minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
-    optional: false
 roles:
 - name: RUBIK_SERVER
   friendlyName: "Rubik Server"
@@ -119,10 +115,6 @@ firstWizardConfigs:
 - rubik.container.requests.memory
 - rubik.container.requests.cpu
 - rubik.memory.ratio
-- workflow.connect.timeout
-- workflow.socket.timeout
-- workflow.client.username
-- workflow.client.password
 - inceptor.database.username
 - inceptor.database.password
 
@@ -145,3 +137,4 @@ healthChecks:
     roles:
     - roleType: RUBIK_SERVER
       from: !<readiness> {}
+
