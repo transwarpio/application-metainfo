@@ -11,7 +11,7 @@ export MAXMEMSIZE=${memory?floor}m
 
 export LOG_DIR=/var/log/${service.sid}
 export RUBIK_CONF_DIR=/etc/${service.sid}/conf
-
+export RUBIK_SERVER_PORT=${service['designer.server.port']}
 <#assign hostPorts = []>
 <#assign txsql = dependencies['TXSQL']>
 <#list txsql.roles['TXSQL_SERVER'] as r>
