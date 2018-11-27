@@ -128,3 +128,12 @@ spring:
       enabled: true
       max-file-size: 50MB
       max-request-size: 50MB
+
+# agent settings
+agent:
+  status-update:
+    # size of thread pool of status update task
+    pool-size: 100
+  connection-check:
+    # size of thread pool of connection check task
+    pool-size: 2

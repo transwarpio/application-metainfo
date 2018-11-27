@@ -131,3 +131,12 @@ spring:
 
 # Download workflow nesting limit
 nest.layer.limit: 10
+
+# agent settings
+agent:
+  status-update:
+    # size of thread pool of status update task
+    pool-size: 100
+  connection-check:
+    # size of thread pool of connection check task
+    pool-size: 2
