@@ -1,0 +1,654 @@
+{
+  "CommonExcludeGroup": [
+    "TABLEFILTER",
+    "STREAMTABLEFILTER",
+    "JDBCBUNCH",
+    "JDBCSYNC",
+    "HBASESTREAM",
+    "SYNCKAFKA",
+    "SYNCHDFS",
+    "STREAMJDBC",
+    "BINARYFILE"
+  ],
+  "CommonFSConnectionGroup": [
+    "HDFS",
+    "FTP",
+    "SFTP"
+  ],
+  "Rules": [
+    {
+      "ComponentSubType": "BINARYFILE",
+      "ComponentType": "READER",
+      "InDegree": 0,
+      "OutDegree": 1,
+      "Exclude": [],
+      "Neighbour": [
+        "BINARYFILE"
+      ],
+      "Distance": [],
+      "EnableConnections": [
+        "${CommonFSConnectionGroup}",
+        "LOCAL"
+      ]
+    },
+    {
+      "ComponentSubType": "CSV",
+      "ComponentType": "READER",
+      "InDegree": 0,
+      "OutDegree": 1,
+      "Exclude": [
+        "${CommonExcludeGroup}"
+      ],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "${CommonFSConnectionGroup}",
+        "LOCAL"
+      ]
+    },
+    {
+      "ComponentSubType": "FIXEDWIDTHCSV",
+      "ComponentType": "READER",
+      "InDegree": 0,
+      "OutDegree": 1,
+      "Exclude": [
+        "${CommonExcludeGroup}"
+      ],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "${CommonFSConnectionGroup}",
+        "LOCAL"
+      ]
+    },
+    {
+      "ComponentSubType": "TEXT",
+      "ComponentType": "READER",
+      "InDegree": 0,
+      "OutDegree": 1,
+      "Exclude": [
+        "${CommonExcludeGroup}"
+      ],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "${CommonFSConnectionGroup}",
+        "LOCAL"
+      ]
+    },
+    {
+      "ComponentSubType": "INCEPTOR",
+      "ComponentType": "READER",
+      "InDegree": 0,
+      "OutDegree": 1,
+      "Exclude": [
+        "${CommonExcludeGroup}"
+      ],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "INCEPTOR"
+      ]
+    },
+    {
+      "ComponentSubType": "JDBC",
+      "ComponentType": "READER",
+      "InDegree": 0,
+      "OutDegree": 1,
+      "Exclude": [],
+      "Neighbour": [
+        "JDBCBUNCH"
+      ],
+      "Distance": [],
+      "EnableConnections": [
+        "JDBC"
+      ]
+    },
+    {
+      "ComponentSubType": "SYNCJSON",
+      "ComponentType": "READER",
+      "InDegree": 0,
+      "OutDegree": 1,
+      "Exclude": [],
+      "Neighbour": [
+        "TABLEFILTER"
+      ],
+      "Distance": [
+        "ORCTRANSACTIONSYNC",
+        "HOLOTRANSACTIONSYNC",
+        "JDBCSYNC"
+      ],
+      "EnableConnections": [
+        "${CommonFSConnectionGroup}"
+      ]
+    },
+    {
+      "ComponentSubType": "SYNCCSV",
+      "ComponentType": "READER",
+      "InDegree": 0,
+      "OutDegree": 1,
+      "Exclude": [],
+      "Neighbour": [
+        "TABLEFILTER"
+      ],
+      "Distance": [
+        "ORCTRANSACTIONSYNC",
+        "HOLOTRANSACTIONSYNC",
+        "JDBCSYNC"
+      ],
+      "EnableConnections": [
+        "${CommonFSConnectionGroup}"
+      ]
+    },
+    {
+      "ComponentSubType": "SYNCMYSQL",
+      "ComponentType": "READER",
+      "InDegree": 0,
+      "OutDegree": "MAXVALUE",
+      "Exclude": [],
+      "Neighbour": [
+        "SYNCKAFKA",
+        "SYNCHDFS"
+      ],
+      "Distance": [],
+      "EnableConnections": [
+        "ZOOKEEPER"
+      ]
+    },
+    {
+      "ComponentSubType": "SYNCDB",
+      "ComponentType": "READER",
+      "InDegree": 0,
+      "OutDegree": "MAXVALUE",
+      "Exclude": [],
+      "Neighbour": [
+        "STREAMTABLEFILTER"
+      ],
+      "Distance": [
+        "HBASESTREAM"
+      ],
+      "EnableConnections": [
+        "KAFKA"
+      ]
+    },
+    {
+      "ComponentSubType": "STREAMJDBC",
+      "ComponentType": "READER",
+      "InDegree": 0,
+      "OutDegree": "MAXVALUE",
+      "Exclude": [],
+      "Neighbour": [
+        "STREAMJDBC"
+      ],
+      "Distance": [],
+      "EnableConnections": [
+        "JDBC"
+      ]
+    },
+    {
+      "ComponentSubType": "AGGREGATION",
+      "ComponentType": "TRANSFORMER",
+      "InDegree": 1,
+      "OutDegree": 1,
+      "Exclude": [
+        "${CommonExcludeGroup}"
+      ],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": []
+    },
+    {
+      "ComponentSubType": "EXCEPT",
+      "ComponentType": "TRANSFORMER",
+      "InDegree": 2,
+      "OutDegree": 1,
+      "Exclude": [
+        "${CommonExcludeGroup}"
+      ],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": []
+    },
+    {
+      "ComponentSubType": "FILTER",
+      "ComponentType": "TRANSFORMER",
+      "InDegree": 1,
+      "OutDegree": 1,
+      "Exclude": [
+        "${CommonExcludeGroup}"
+      ],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": []
+    },
+    {
+      "ComponentSubType": "INTERSECT",
+      "ComponentType": "TRANSFORMER",
+      "InDegree": 2,
+      "OutDegree": 1,
+      "Exclude": [
+        "${CommonExcludeGroup}"
+      ],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": []
+    },
+    {
+      "ComponentSubType": "UNION",
+      "ComponentType": "TRANSFORMER",
+      "InDegree": 2,
+      "OutDegree": 1,
+      "Exclude": [
+        "${CommonExcludeGroup}"
+      ],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": []
+    },
+    {
+      "ComponentSubType": "ORDERBY",
+      "ComponentType": "TRANSFORMER",
+      "InDegree": 2,
+      "OutDegree": 1,
+      "Exclude": [
+        "${CommonExcludeGroup}"
+      ],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": []
+    },
+    {
+      "ComponentSubType": "COLUMNMAP",
+      "ComponentType": "TRANSFORMER",
+      "InDegree": 1,
+      "OutDegree": 1,
+      "Exclude": [
+        "${CommonExcludeGroup}"
+      ],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": []
+    },
+    {
+      "ComponentSubType": "CROSSJOIN",
+      "ComponentType": "TRANSFORMER",
+      "InDegree": 2,
+      "OutDegree": 1,
+      "Exclude": [
+        "${CommonExcludeGroup}"
+      ],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": []
+    },
+    {
+      "ComponentSubType": "FULLOUTERJOIN",
+      "ComponentType": "TRANSFORMER",
+      "InDegree": 2,
+      "OutDegree": 1,
+      "Exclude": [
+        "${CommonExcludeGroup}"
+      ],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": []
+    },
+    {
+      "ComponentSubType": "INNERJOIN",
+      "ComponentType": "TRANSFORMER",
+      "InDegree": 2,
+      "OutDegree": 1,
+      "Exclude": [
+        "${CommonExcludeGroup}"
+      ],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": []
+    },
+    {
+      "ComponentSubType": "LEFTOUTERJOIN",
+      "ComponentType": "TRANSFORMER",
+      "InDegree": 2,
+      "OutDegree": 1,
+      "Exclude": [
+        "${CommonExcludeGroup}"
+      ],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": []
+    },
+    {
+      "ComponentSubType": "LEFTSEMIJOIN",
+      "ComponentType": "TRANSFORMER",
+      "InDegree": 2,
+      "OutDegree": 1,
+      "Exclude": [
+        "${CommonExcludeGroup}"
+      ],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": []
+    },
+    {
+      "ComponentSubType": "NATURALJOIN",
+      "ComponentType": "TRANSFORMER",
+      "InDegree": 2,
+      "OutDegree": 1,
+      "Exclude": [
+        "${CommonExcludeGroup}"
+      ],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": []
+    },
+    {
+      "ComponentSubType": "RIGHTOUTERJOIN",
+      "ComponentType": "TRANSFORMER",
+      "InDegree": 2,
+      "OutDegree": 1,
+      "Exclude": [
+        "${CommonExcludeGroup}"
+      ],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": []
+    },
+    {
+      "ComponentSubType": "ROWSIZELIMITER",
+      "ComponentType": "TRANSFORMER",
+      "InDegree": 1,
+      "OutDegree": 1,
+      "Exclude": [
+        "${CommonExcludeGroup}"
+      ],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": []
+    },
+    {
+      "ComponentSubType": "TABLEFILTER",
+      "ComponentType": "TRANSFORMER",
+      "InDegree": 1,
+      "OutDegree": 1,
+      "Exclude": [],
+      "Neighbour": [
+        "AGGREGATION",
+        "COLUMNMAP",
+        "CROSSJOIN",
+        "EXCEPT",
+        "FILTER",
+        "FULLOUTERJOIN",
+        "INNERJOIN",
+        "INTERSECT",
+        "LEFTOUTERJOIN",
+        "LEFTSEMIJOIN",
+        "NATURALJOIN",
+        "RIGHTOUTERJOIN",
+        "ROWSIZELIMITER",
+        "UNION",
+        "ORDERBY",
+        "JDBCSYNC",
+        "ORCTRANSACTIONSYNC",
+        "HOLOTRANSACTIONSYNC"
+      ],
+      "Distance": [
+        "JDBCSYNC",
+        "ORCTRANSACTIONSYNC",
+        "HOLOTRANSACTIONSYNC"
+      ],
+      "EnableConnections": []
+    },
+    {
+      "ComponentSubType": "STREAMTABLEFILTER",
+      "ComponentType": "TRANSFORMER",
+      "InDegree": 1,
+      "OutDegree": 1,
+      "Exclude": [],
+      "Neighbour": [
+        "HBASESTREAM"
+      ],
+      "Distance": [],
+      "EnableConnections": []
+    },
+    {
+      "ComponentSubType": "BINARYFILE",
+      "ComponentType": "WRITER",
+      "InDegree": 1,
+      "OutDegree": 0,
+      "Exclude": [],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "${CommonFSConnectionGroup}"
+      ]
+    },
+    {
+      "ComponentSubType": "CSV",
+      "ComponentType": "WRITER",
+      "InDegree": 1,
+      "OutDegree": 0,
+      "Exclude": [],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "INCEPTOR"
+      ]
+    },
+    {
+      "ComponentSubType": "FIXEDWIDTHCSV",
+      "ComponentType": "WRITER",
+      "InDegree": 1,
+      "OutDegree": 0,
+      "Exclude": [],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "INCEPTOR"
+      ]
+    },
+    {
+      "ComponentSubType": "JDBCBUNCH",
+      "ComponentType": "WRITER",
+      "InDegree": 1,
+      "OutDegree": 0,
+      "Exclude": [],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "JDBC"
+      ]
+    },
+    {
+      "ComponentSubType": "JDBCSYNC",
+      "ComponentType": "WRITER",
+      "InDegree": 1,
+      "OutDegree": 0,
+      "Exclude": [],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "JDBC"
+      ]
+    },
+    {
+      "ComponentSubType": "JDBC",
+      "ComponentType": "WRITER",
+      "InDegree": 1,
+      "OutDegree": 0,
+      "Exclude": [],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "JDBC"
+      ]
+    },
+    {
+      "ComponentSubType": "HOLODESK",
+      "ComponentType": "WRITER",
+      "InDegree": 1,
+      "OutDegree": 0,
+      "Exclude": [],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "INCEPTOR"
+      ]
+    },
+    {
+      "ComponentSubType": "HOLOTRANSACTION",
+      "ComponentType": "WRITER",
+      "InDegree": 1,
+      "OutDegree": 0,
+      "Exclude": [],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "INCEPTOR"
+      ]
+    },
+    {
+      "ComponentSubType": "HOLOTRANSACTIONSYNC",
+      "ComponentType": "WRITER",
+      "InDegree": 1,
+      "OutDegree": 0,
+      "Exclude": [],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "INCEPTOR"
+      ]
+    },
+    {
+      "ComponentSubType": "ORCTRANSACTIONSYNC",
+      "ComponentType": "WRITER",
+      "InDegree": 1,
+      "OutDegree": 0,
+      "Exclude": [],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "INCEPTOR"
+      ]
+    },
+    {
+      "ComponentSubType": "ORCTRANSACTION",
+      "ComponentType": "WRITER",
+      "InDegree": 1,
+      "OutDegree": 0,
+      "Exclude": [],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "INCEPTOR"
+      ]
+    },
+    {
+      "ComponentSubType": "ORC",
+      "ComponentType": "WRITER",
+      "InDegree": 1,
+      "OutDegree": 0,
+      "Exclude": [],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "INCEPTOR"
+      ]
+    },
+    {
+      "ComponentSubType": "TEXT",
+      "ComponentType": "WRITER",
+      "InDegree": 1,
+      "OutDegree": 0,
+      "Exclude": [],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "INCEPTOR"
+      ]
+    },
+    {
+      "ComponentSubType": "INCEPTOR",
+      "ComponentType": "WRITER",
+      "InDegree": 1,
+      "OutDegree": 0,
+      "Exclude": [],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "INCEPTOR"
+      ]
+    },
+    {
+      "ComponentSubType": "MULTICSV",
+      "ComponentType": "WRITER",
+      "InDegree": 1,
+      "OutDegree": 0,
+      "Exclude": [],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "${CommonFSConnectionGroup}"
+      ]
+    },
+    {
+      "ComponentSubType": "MULTIFWC",
+      "ComponentType": "WRITER",
+      "InDegree": 1,
+      "OutDegree": 0,
+      "Exclude": [],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "${CommonFSConnectionGroup}"
+      ]
+    },
+    {
+      "ComponentSubType": "HBASESTREAM",
+      "ComponentType": "WRITER",
+      "InDegree": "MAXVALUE",
+      "OutDegree": 0,
+      "Exclude": [],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "INCEPTOR"
+      ]
+    },
+    {
+      "ComponentSubType": "STREAMJDBC",
+      "ComponentType": "WRITER",
+      "InDegree": "MAXVALUE",
+      "OutDegree": 0,
+      "Exclude": [],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "INCEPTOR"
+      ]
+    },
+    {
+      "ComponentSubType": "SYNCHDFS",
+      "ComponentType": "WRITER",
+      "InDegree": "MAXVALUE",
+      "OutDegree": 0,
+      "Exclude": [],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "INCEPTOR"
+      ]
+    },
+    {
+      "ComponentSubType": "SYNCKAFKA",
+      "ComponentType": "WRITER",
+      "InDegree": "MAXVALUE",
+      "OutDegree": 0,
+      "Exclude": [],
+      "Neighbour": [],
+      "Distance": [],
+      "EnableConnections": [
+        "INCEPTOR"
+      ]
+    }
+  ]
+}
