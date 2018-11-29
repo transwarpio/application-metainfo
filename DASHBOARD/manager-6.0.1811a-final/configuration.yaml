@@ -1,0 +1,8 @@
+- name: tos.master.dashboard.port
+  recommendExpression: 31990
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

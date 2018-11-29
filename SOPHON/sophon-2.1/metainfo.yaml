@@ -96,6 +96,10 @@ roles:
   - mountPath: /home/root/sophon
     hostPath: /var/${service.sid}
     name: flowdir
+  - mountPath: /srv/kubernetes
+    hostPath: /srv/kubernetes
+    name: secure
+
 
   resources:
     limitsMemoryKey: server.container.limits.memory
@@ -199,10 +203,29 @@ stages:
       timeoutMinutes: 2
       action: Start
       file: "rbac/"
+  - type: Stop
+    taskGroups:
+    - !<Role>
+      roleType: "SOPHON_WEB"
+      operation: Stop
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SOPHON_REDIS"
+      operation: Stop
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Stop
+      file: "rbac/"
 
 
 
 firstWizardConfigs:
+- sophon.resource.type
+- sophon.enable.kerberos
 - spark.executor.heapsize
 - spark.executor.permsize
 - spark.executor.max_permsize

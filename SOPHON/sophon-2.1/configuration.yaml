@@ -349,3 +349,22 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+
+- name: spring.http.multipart.max-file-size
+  recommendExpression: "10240MB"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  
+- name: spring.http.multipart.max-request-size
+  recommendExpression: "10240MB"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
