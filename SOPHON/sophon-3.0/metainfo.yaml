@@ -1,6 +1,6 @@
 ---
 name: SOPHON
-version: sophon-2.1
+version: sophon-3.0
 global: false
 namePrefix: Sophon
 friendlyName: "Sophon-web"
@@ -43,7 +43,7 @@ dependencies:
     optional: true
 roles:
 - name: SOPHON_REDIS
-  dockerImage: "transwarp/sophon-redis:sophon-2.1"
+  dockerImage: "transwarp/sophon-redis:sophon-3.0"
   friendlyName: "Redis Server"
   labelPrefix: "sophon-redis"
   category: MASTER
@@ -74,7 +74,7 @@ roles:
   - criteria: !<Range> {"min": 1, "max": 1}
   operations: []
 - name: SOPHON_WEB
-  dockerImage: "transwarp/sophon-web:sophon-2.1"
+  dockerImage: "transwarp/sophon-web:sophon-3.0"
   linkExpression: "http://${localhostname}:${service['sophon.visit.port']}/"
   friendlyName: "Sophon web"
   labelPrefix: "sophon-web"

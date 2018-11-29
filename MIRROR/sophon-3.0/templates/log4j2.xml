@@ -1,11 +1,3 @@
-<#if dependencies.SEARCH??>
-    <#assign search=dependencies.SEARCH searches=[] searchesWithPort=[]>
-    <#list search.roles.SEARCH_SERVER as role>
-        <#assign searches += [role.hostname]>
-        <#assign searchesWithPort += [role.hostname + ":" + search[role.id?c]['http.port']]>
-    </#list>
-</#if>
-
 <?xml version="1.0" encoding="UTF-8"?>
 <!--日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
 <!--Configuration后面的status，这个用于设置log4j2自身内部的信息输出，可以不设置，当设置成trace时，你会看到log4j2内部各种详细输出-->
@@ -34,7 +26,7 @@
                     <Elasticsearch name="ESBatchForTask${r'${ctx:taskId}'}">
                         <IndexName indexName="task_${r'${ctx:taskId}'}" />
                         <AsyncBatchDelivery>
-                            <JestHttp serverUris="http://${searchesWithPort[0]}" />
+                            <JestHttp serverUris="http://${dependencies.SEARCH.roles.SEARCH_SERVER[0]['hostname']}:${dependencies.SEARCH['http.port']}" />
                         </AsyncBatchDelivery>
                     </Elasticsearch>
                 </Route>
@@ -52,4 +44,3 @@
         </Root>
     </Loggers>
 </configuration>
-
