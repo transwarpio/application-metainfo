@@ -186,60 +186,6 @@ stages:
       timeoutMinutes: 2
       templateType: FreeMarker
       templateFile: "rbac/serviceaccount.yaml"
-  - type: Start
-    taskGroups:
-    - !<Role>
-      roleType: "SOPHON_WEB"
-      operation: Start
-      summaryPolicy: SOME
-      timeoutMinutes: 1
-    - !<Role>
-      roleType: "SOPHON_REDIS"
-      operation: Start
-      summaryPolicy: SOME
-      timeoutMinutes: 1
-    - !<Kubectl>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      action: Start
-      file: "rbac/role.yaml"
-    - !<Kubectl>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      action: Start
-      file: "rbac/rolebinding.yaml"
-    - !<Kubectl>
-      summaryPolicy: SOME
-      timeoutMinutes: 2
-      action: Start
-      file: "rbac/serviceaccount.yaml"
-  - type: Stop
-    taskGroups:  
-    - !<Kubectl>
-      summaryPolicy: SOME
-      timeoutMinutes: 10
-      action: Stop
-      file: "rbac/role.yaml"
-    - !<Kubectl>
-      summaryPolicy: SOME
-      timeoutMinutes: 10
-      action: Stop
-      file: "rbac/rolebinding.yaml"
-    - !<Kubectl>
-      summaryPolicy: SOME
-      timeoutMinutes: 10
-      action: Stop
-      file: "rbac/serviceaccount.yaml"
-    - !<Role>
-      roleType: "SOPHON_REDIS"
-      operation: Stop
-      summaryPolicy: SOME
-      timeoutMinutes: 1
-    - !<Role>
-      roleType: "SOPHON_WEB"
-      operation: Stop
-      summaryPolicy: SOME
-      timeoutMinutes: 1
 
 
 
