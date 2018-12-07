@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 IN_PROGRESS_VERSION=sophon-2.1
-TAG_VERSION=sophon-2.1.0-rc1
+TAG_VERSION=sophon-2.1.0-rc2
 
 set -e
 
