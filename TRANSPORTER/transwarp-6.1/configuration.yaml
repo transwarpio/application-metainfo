@@ -25,8 +25,8 @@
   groups: ["tdt-site.xml"]
   visibility: PASSWORD
 
-- name: tdt.inceptor.ldap.username
-  recommendExpression: tdtuser
+- name: tdt.job.cleaning
+  recommendExpression: true
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
@@ -34,25 +34,7 @@
   groups: ["tdt-site.xml"]
   visibility: READ_WRITE
 
-- name: tdt.inceptor.ldap.password
-  recommendExpression: password
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: ["tdt-site.xml"]
-  visibility: READ_WRITE
-  
-- name: tdt.task.live.time
-  recommendExpression: 12hour
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: ["tdt-site.xml"]
-  visibility: READ_WRITE  
-  
-- name: tdt.task.scavenger.check.period
+- name: tdt.job.remover.check.period
   recommendExpression: 30min
   defaultValue: null
   valueType: STRING
@@ -61,7 +43,7 @@
   groups: ["tdt-site.xml"]
   visibility: READ_WRITE     
   
-- name: tdt.task.max.accept.size
+- name: tdt.job.max.accept.size
   recommendExpression: 10000
   defaultValue: null
   valueType: STRING
@@ -70,7 +52,7 @@
   groups: ["tdt-site.xml"]
   visibility: READ_WRITE       
   
-- name: tdt.task.max.concurrent.size
+- name: tdt.job.max.concurrent.size
   recommendExpression: 100
   defaultValue: null
   valueType: STRING
@@ -145,13 +127,4 @@
     roleTypes: [TDT_SERVER]
   onDeps: []
   groups: []
-  visibility: READ_WRITE
-
-- name: tdt.kafka.bootstrap.servers
-  recommendExpression: null
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: ["tdt-site.xml"]
   visibility: READ_WRITE

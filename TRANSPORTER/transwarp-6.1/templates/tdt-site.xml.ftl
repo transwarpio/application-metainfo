@@ -7,20 +7,7 @@
 </property>
 </#macro>
 <configuration>
-<#assign inceptor_server = dependencies.INCEPTOR.roles.INCEPTOR_SERVER[0]['hostname']>
-  <#assign inceptor_url = inceptor_server + ":" + dependencies.INCEPTOR['hive.server2.thrift.port']>
-  <@property "tdt.inceptor.address" "${inceptor_url}"/>
 
-<#if dependencies.INCEPTOR.auth="kerberos">
- <@property "tdt.inceptor.principal" "hive/${inceptor_server}@${service.realm}"/>
- <#if dependencies.INCEPTOR['hive.server2.authentication'] == "LDAP">
-  <@property "tdt.inceptor.auth.mode" "LDAP"/>
- <#else>
-  <@property "tdt.inceptor.auth.mode" "KERBEROS"/>
- </#if>
-<#else>
- <@property "tdt.inceptor.auth.mode" "NONE"/>
-</#if>
 <@property "tdt.server.log.location" "/var/log/${service.sid}"/>
   <#assign license_servers=[]>
   <#list dependencies.LICENSE_SERVICE.roles.LICENSE_NODE as server>
@@ -43,6 +30,18 @@
  <@property "tdt.cas.server.url" "${casServerUrl}"/>
 <#else>
  <@property "tdt.cas.enable" "false"/>
+</#if>
+
+<#--handle dependent.inceptor-->
+<#if dependencies.INCEPTOR??>
+ <#assign inceptor_server = dependencies.INCEPTOR.roles.INCEPTOR_SERVER[0]['hostname']>
+ <#assign inceptor_url = inceptor_server + ":" + dependencies.INCEPTOR['hive.server2.thrift.port']>
+ <@property "tdt.inceptor.address" "${inceptor_url}"/>
+ <#if dependencies.INCEPTOR.auth="kerberos">
+  <@property "tdt.inceptor.security" "true"/>
+ <#else>
+  <@property "tdt.inceptor.security" "false"/>
+ </#if>
 </#if>
 
 <#--handle dependent.zookeeper-->
