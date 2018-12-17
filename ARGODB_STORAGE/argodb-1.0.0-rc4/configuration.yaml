@@ -1472,7 +1472,7 @@
         </#if>
       </#if>
     </#list>
-    ${capacity?floor?c}
+    ${(capacity * 1000)?floor?c}
     </#compress>
   defaultValue: null
   valueType: STRING
