@@ -1,0 +1,26 @@
+micro:
+    svc_name: "thingercloud-appmgr"
+    consul_addr: "${service.roles.CONSUL[0]['hostname']}:${service['thingercloud.consul.port']}"
+    register_ttl: "10s"
+
+mysql:
+    username: "${service['thingercloud.db.username']}"
+    password: "${service['thingercloud.db.password']}"
+    host: "${dependencies.TXSQL.roles.TXSQL_SERVER[0]['hostname']}"
+    port: "${dependencies.TXSQL['mysql.rw.port']}"
+    db_name: "thingercloud_${service.sid}"
+    max_idle: 5
+    max_conn: 10
+
+walm:
+    host: "${localhostname}"
+    port: "9001"
+    namespace: "iot"
+    repo_name: "stable"
+
+log:
+    level: 6
+    output_dest: "file"
+    path: "/var/log/${service.sid}/thingercloud-appmgr"
+
+get_version_interval: 1
