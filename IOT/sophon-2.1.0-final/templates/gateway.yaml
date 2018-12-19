@@ -1,0 +1,11 @@
+server:
+    addr: ":${service['thingercloud.gateway.port']}"
+
+micro:
+    svc_name: "thingercloud-gateway"
+    consul_addr: "${service.roles.CONSUL[0]['hostname']}:${service['thingercloud.consul.port']}"
+
+log:
+    level: 6
+    output_dest: "file"
+    path: "/var/log/${service.sid}/thingercloud-gateway"
