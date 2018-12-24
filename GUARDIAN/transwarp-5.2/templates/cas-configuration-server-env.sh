@@ -10,7 +10,7 @@
 <#if i gt 0>
      <#assign hostPorts = hostPorts[i..] + hostPorts[0..i-1]>
 </#if>
-export CAS_SERVICEREGISTRY_JPA_URL=jdbc:mysql://${hostPorts?join(",")}/cas?createDatabaseIfNotExist=true&autoReconnect=true&failOverReadOnly=false&useSSL=false&characterEncoding=UTF-8
+export CAS_SERVICEREGISTRY_JPA_URL=jdbc:mysql://${hostPorts?join(",")}/cas?createDatabaseIfNotExist=true&autoReconnect=true&failOverReadOnly=false&useSSL=false&characterEncoding=UTF-8&connectTimeout=10000&retriesAllDown=0&secondsBeforeRetryMaster=0&queriesBeforeRetryMaster=0
 export CAS_SERVICEREGISTRY_JPA_USER=root
 export CAS_SERVICEREGISTRY_JPA_PASSWORD=${service['root.password']}
 export CAS_SERVICEREGISTRY_JPA_DRIVERCLASS=${service['guardian.database.driver']}
