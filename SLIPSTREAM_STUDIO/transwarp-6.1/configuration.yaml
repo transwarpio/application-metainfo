@@ -298,6 +298,16 @@
   groups: ['studio.properties']
   visibility: READ_WRITE
 
+- name: slipstream.guardian.token
+  isNodeSpecific: true
+  recommendExpression: null
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ['studio.properties']
+  visibility: READ_WRITE
+
 - name: slipstream.studio.rules.resource.dir
   recommendExpression: /${service['sid']}/rules/resource
   defaultValue: null
