@@ -16,6 +16,23 @@
         <#assign master_group += [master.ip + ":" + storage['shiva.master.rpc_service.master_service_port']]>
     </#list>
     <@property "ngmr.holodesk.shiva.mastergroup" master_group?join(",")/>
+</#if>
+
+<#if dependencies.HDFS??>
+    <#if dependencies['HDFS']['nameservices']?? && dependencies['HDFS']['nameservices']?size gt 0>
+        <#assign hostPort=dependencies['HDFS']['nameservices'][0]>
+    <#else>
+        <#assign host=dependencies['HDFS']['roles']['HDFS_NAMENODE'][0]['hostname']>
+        <#if dependencies['HDFS']['namenode.rpc-port']??>
+            <#assign port=dependencies['HDFS']['namenode.rpc-port']>
+        </#if>
+        <#if dependencies['HDFS'][host]?? && dependencies['HDFS'][host]['namenode.rpc-port']??>
+            <#assign port=dependencies['HDFS'][host]['namenode.rpc-port']>
+        </#if>
+        <#assign hostPort=host + ':' + port>
+    </#if>
+    <@property "fs.defaultFS" "hdfs://" + hostPort />
+<#elseif dependencies.ARGODB_STORAGE??>
     <#--TODO hardcoded port 19998-->
     <#assign scheme='ladder://' host=dependencies.ARGODB_STORAGE.roles.LADDER_MASTER[0]['hostname'] port='19998'>
     <@property "fs.defaultFS" scheme + host + ':' + port/>
@@ -44,6 +61,9 @@
     <@property "transwarp.docker.inceptor" service.roles.INCEPTOR_SERVER[0]['hostname'] + ':' + service['hive.server2.thrift.port']/>
     <@property "hive.server2.authentication.kerberos.principal"  "hive/_HOST@" + service.realm/>
     <@property "hive.server2.authentication.kerberos.keytab" service.keytab/>
+    <#if service.plugins?seq_contains("guardian")>
+        <@property "spark.ui.guardian.enabled" "true"/>
+    </#if>
 </#if>
 <#if service['hive.server2.authentication'] == "LDAP">
     <#assign  authentication="LDAP">
@@ -54,6 +74,9 @@
     <@property "hive.server2.authentication.ldap.baseDN", "ou=People,${service.domain}"/>
     <@property "hive.server2.authentication.ldap.extra.baseDNs", "ou=System,ou=People,${service.domain}"/>
     <@property "hive.server2.authentication.ldap.url" "${guardian_servers?join(' ')}"/>
+    <#if service.plugins?seq_contains("guardian")>
+        <@property "spark.ui.guardian.enabled" "true"/>
+    </#if>
 </#if>
 
 <#if dependencies.GUARDIAN?? && dependencies.GUARDIAN.roles.CAS_SERVER??>
@@ -108,6 +131,14 @@
     <#list dependencies.TXSQL.roles['TXSQL_SERVER'] as role>
         <#assign mysqlHostPorts = mysqlHostPorts + [role.hostname + ':' + dependencies.TXSQL['mysql.rw.port']]>
     </#list>
+    <#assign mysqlHostPorts = mysqlHostPorts?sort
+             i = mysqlHostPorts?seq_index_of(localhostname + ':' + dependencies.TXSQL['mysql.rw.port'])>
+    <#if i lt 0>
+        <#assign i = .now?long % dependencies.TXSQL.roles['TXSQL_SERVER']?size>
+    </#if>
+    <#if i gt 0>
+        <#assign mysqlHostPorts = mysqlHostPorts[i..] + mysqlHostPorts[0..i-1]>
+    </#if>
 <#else>
     <#assign mysqlHostPorts = [service.roles.INCEPTOR_MYSQL[0]['hostname'] + ":" + service['mysql.port']]/>
 </#if>

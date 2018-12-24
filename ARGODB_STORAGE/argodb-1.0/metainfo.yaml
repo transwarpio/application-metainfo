@@ -60,11 +60,25 @@ roles:
     requestsCpuKey: metastore.container.requests.cpu
   summaryPolicy: SOME
   autoAssign:
-  - advice: !<NumSeq> {"numSeq": [1]}
+  - advice: !<NumSeq> {"numSeq": [2, 1]}
   suggestion:
-  - criteria: !<Range> {"min": 1}
+  - when: !<WhenDependency>
+      depType: INCEPTOR_METASTORE
+      present: true
+    criteria: !<Range> {"max": 0}
+  - when: !<WhenDependency>
+      depType: INCEPTOR_METASTORE
+      present: false
+    criteria: !<Range> {"min": 2}
   validation:
-  - criteria: !<Range> {"min": 1}
+  - when: !<WhenDependency>
+      depType: INCEPTOR_METASTORE
+      present: true
+    criteria: !<Range> {"max": 0}
+  - when: !<WhenDependency>
+      depType: INCEPTOR_METASTORE
+      present: false
+    criteria: !<Range> {"min": 1}
   operations:
   - type: Install
     directives:
@@ -109,6 +123,15 @@ roles:
       decommission: false
     reject:
       number: 2
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: shiva.master.master.data_path
+      featureFile: master.lock
+    - key: shiva.master.log.log_dir
+      featureFile: master.log
+    fromPath:
+    - key: /etc/${service.sid}/conf/shiva
+      featureFile: master.conf
   mountPaths: []
   operations:
   - type: Install
@@ -166,6 +189,10 @@ roles:
       number: 2
     reject:
       number: 1
+  deleteOpCleanDirs:
+    fromPath:
+    - key: /etc/${service.sid}/conf/shiva
+      featureFile: master.conf
   mountPaths: []
   operations:
   - type: Install
@@ -232,6 +259,15 @@ roles:
       decommission: false
     reject:
       number: 2
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: shiva.tabletserver.store.datadirs
+      featureFile: .trash
+    - key: shiva.tabletserver.log.log_dir
+      featureFile: tabletserver.log
+    fromPath:
+    - key: /etc/${service.sid}/conf/shiva
+      featureFile: tabletserver.conf
   mountPaths: []
   operations:
   - type: Install

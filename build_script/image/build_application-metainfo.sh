@@ -32,6 +32,7 @@ build_application-metainfo() {
 #          cp -rp $dir/* "$META_DST_DIR/$dir/"
 #        done
 
+        rm -rf __OEM__/
         rm -rf *.md script build_script .gitlab-ci.yml
         cp -rp . "$META_DST_DIR"
 

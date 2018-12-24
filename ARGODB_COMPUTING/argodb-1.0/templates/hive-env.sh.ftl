@@ -145,6 +145,9 @@ export HIVE_PORT=${service['hive.server2.thrift.port']}
 <#if dependencies.HDFS??>
 export HADOOP_CONF_DIR=/etc/${dependencies.HDFS.sid}/conf
 </#if>
+<#if dependencies.HYPERBASE??>
+export HBASE_CONF_DIR=/etc/${dependencies.HYPERBASE.sid}/conf
+</#if>
 export HIVE_SERVER2="true"
 
 <#--handle dependent.zookeeper-->
@@ -169,7 +172,7 @@ export COMPACTOR_PORT=${(dependencies.INCEPTOR['inceptor.compactor.ui.port'])!99
 <#elseif dependencies.ARGODB_STORAGE??>
 export METASTORE_PORT=${dependencies.ARGODB_STORAGE['hive.metastore.port']}
 export PROFILER_PORT=${dependencies.ARGODB_STORAGE['inceptor.profiler.ui.port']}
-export PROFILER_PORT=${dependencies.ARGODB_STORAGE['inceptor.compactor.ui.port']}
+export COMPACTOR_PORT=${dependencies.ARGODB_STORAGE['inceptor.compactor.ui.port']}
 <#else>
 export METASTORE_PORT=${service['hive.metastore.port']}
 export PROFILER_PORT=${service['inceptor.profiler.ui.port']}

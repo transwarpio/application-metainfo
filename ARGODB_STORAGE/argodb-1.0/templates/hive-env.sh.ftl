@@ -142,6 +142,12 @@ export INCEPTOR_COMPACTOR_MEMORY=${compactorMemory?floor}
 
 export HIVE_PORT=${service['hive.server2.thrift.port']}
 
+<#if dependencies.HDFS??>
+export HADOOP_CONF_DIR=/etc/${dependencies.HDFS.sid}/conf
+</#if>
+<#if dependencies.HYPERBASE??>
+export HBASE_CONF_DIR=/etc/${dependencies.HYPERBASE.sid}/conf
+</#if>
 export HIVE_SERVER2="true"
 
 <#--handle dependent.zookeeper-->

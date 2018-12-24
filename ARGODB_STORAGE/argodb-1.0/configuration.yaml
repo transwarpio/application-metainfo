@@ -711,7 +711,7 @@
   groups: ["profiler-site.xml"]
   visibility: READ_WRITE
 - name: profiler.scanner.init.time.hhmm
-  recommendExpression: "24:00"
+  recommendExpression: "18:00"
   defaultValue: null
   valueType: STRING
   scope: !<RoleTypes>
@@ -1472,7 +1472,7 @@
         </#if>
       </#if>
     </#list>
-    ${capacity?floor?c}
+    ${(capacity * 1000)?floor?c}
     </#compress>
   defaultValue: null
   valueType: STRING
