@@ -44,6 +44,7 @@
     <Loggers>
         <Logger name = "io.searchbox.client.http.JestHttpClient" level="ERROR"></Logger>
         <Logger name = "io.searchbox.core.Bulk" level="ERROR"></Logger>
+        <Logger name = "org.apache.hadoop.yarn.util.RackResolver" level="ERROR"></Logger>
         <Root level="INFO">
             <appender-ref ref="Console"/>
             <appender-ref ref="RoutingToEs"/>

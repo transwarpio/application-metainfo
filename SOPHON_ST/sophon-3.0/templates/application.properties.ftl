@@ -16,7 +16,7 @@ mybatis.mapperLocations = classpath:/mapper/*.xml
 mybatis.type-aliases-package = io.transwarp.mirror.persistence.mybatis.model
 mybatis.configuration.mapUnderscoreToCamelCase=true
 
-server.port = ${service['backend.port']}
+server.port=${service['backend.port']}
 
 flyway.locations=classpath:/schema
 
