@@ -191,7 +191,7 @@ export TRANSWARP_ZOOKEEPER_PORT=${dependencies.ZOOKEEPER['zookeeper.client.port'
   <#assign hostPorts = hostPorts + [r.hostname + ':' + txsql['mysql.rw.port']]>
 </#list>
 export MYSQL_SERVER_PORT=${hostPorts?join(",")}
-export JAVAX_JDO_OPTION_CONNECTIONURL=jdbc:mysql://${hostPorts?join(",")}/metastore_${service.sid}
+export JAVAX_JDO_OPTION_CONNECTIONURL=jdbc:mysql://${hostPorts?join(",")}/metastore_${service.sid}?failOverReadOnly=false\&connectTimeout=10000\&retriesAllDown=0\&secondsBeforeRetryMaster=0\&queriesBeforeRetryMaster=0
 export JAVAX_JDO_OPTION_CONNECTION_USERNAME=${service['javax.jdo.option.ConnectionUserName']}
 export JAVAX_JDO_OPTION_CONNECTION_PASSWORD=${service['javax.jdo.option.ConnectionPassword']}
 
