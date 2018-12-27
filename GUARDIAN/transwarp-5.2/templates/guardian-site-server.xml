@@ -74,7 +74,7 @@
              <#assign hostPorts = hostPorts[i..] + hostPorts[0..i-1]>
         </#if>
         <#assign txsql = hostPorts?join(",")>
-        <@property "guardian.txsql.connection.url" "jdbc:mysql://${txsql}/guardian?allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true&amp;failOverReadOnly=false"/>
+        <@property "guardian.txsql.connection.url" "jdbc:mysql://${txsql}/guardian?allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true&amp;failOverReadOnly=false&connectTimeout=10000&retriesAllDown=0&secondsBeforeRetryMaster=0&queriesBeforeRetryMaster=0"/>
         <@property "guardian.txsql.connection.username" "root"/>
         <@property "guardian.txsql.connection.password" "${service['root.password']}"/>
     </#if>
