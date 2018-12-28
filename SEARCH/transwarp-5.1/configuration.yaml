@@ -51,7 +51,7 @@
         <#return dirs?join(",")>
       </#if>
     </#function>
-    ${localDir("/search/data")}
+    ${localDir("/search/${service.sid}/data")}
   defaultValue: null
   valueType: STRING
   isNodeSpecific: true
