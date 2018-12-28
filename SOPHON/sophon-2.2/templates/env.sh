@@ -31,8 +31,10 @@ SPARK_USER=hive
 HADOOP_USER_NAME=hive
 MIDAS_SERVER_JAVA_OPTS="-Xms512m -Xmx1024m -XX:PermSize=128m"
 
-<#if dependencies.YARN??>
+<#if service['sophon.resource.type'] = "yarn">
 HADOOP_CONF_DIR=/etc/${dependencies.YARN.sid}/conf
+<#else>
+HADOOP_CONF_DIR=/etc/${dependencies.HDFS.sid}/conf
 </#if>
 
 <#if dependencies.HYPERBASE??>
@@ -40,8 +42,6 @@ HYPERBASE_CONF_DIR=/etc/${dependencies.HYPERBASE.sid}/conf
 </#if>
 
 LIVY_LOG_DIR=/var/log/midas
-DIEU_HOME=/usr/lib/sophon
-DIEU_CONF_DIR=/etc/${service.sid}/conf
 PYSPARK_PYTHON=python3
 PYSPARK_DRIVER_PYTHON=python3
 # for Jupyter notebook running on server

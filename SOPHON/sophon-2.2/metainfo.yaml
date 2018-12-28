@@ -42,6 +42,71 @@ dependencies:
     maxVersion: transwarp-6.0.1-final
     optional: true
 roles:
+
+- name: SOPHON_PIP_REPO
+  dockerImage: "transwarp/sophon-pip-repo:sophon-2.2"
+  friendlyName: "Sophon PIP Repo"
+  labelPrefix: "sophon-pip-repo"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+  - name: REDIS_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths:
+  - mountPath: /data
+    hostPath: /var/${service.sid}/redis
+    name: redisdir
+  resources:
+    limitsMemoryKey: redis.container.limits.memory
+    limitsCpuKey: redis.container.limits.cpu
+    requestsMemoryKey: redis.container.requests.memory
+    requestsCpuKey: redis.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1, "max": 1}
+  operations: []
+
+
+- name: SOPHON_WEB_UI
+  dockerImage: "transwarp/sophon-web-ui:sophon-2.2"
+  friendlyName: "Sophon Web UI"
+  labelPrefix: "sophon-web-ui"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+  - name: SOPHON_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1, "max": 1}
+  operations: []
+
+
+
 - name: SOPHON_REDIS
   dockerImage: "transwarp/sophon-redis:sophon-2.2"
   friendlyName: "Redis Server"
