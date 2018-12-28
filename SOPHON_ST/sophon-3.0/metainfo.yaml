@@ -2,7 +2,7 @@
 name: SOPHON_ST
 version: sophon-3.0
 global: false
-namePrefix: Sophon-ST
+namePrefix: Sophon_ST
 friendlyName: "Sophon-ST"
 dependencies:
   - name: INCEPTOR
@@ -28,7 +28,7 @@ dependencies:
   - name: GUARDIAN
     minVersion: transwarp-5.2.2-final
     maxVersion: transwarp-6.0.1-final
-    optional: true
+    optional: false
   - name: YARN
     minVersion: transwarp-5.2.2-final
     maxVersion: transwarp-6.0.1-final
@@ -73,31 +73,6 @@ roles:
           action: Link
           from: "/etc/${dependencies.INCEPTOR.sid}/conf/hive-site.xml"
           to: "/etc/${service.sid}/conf/hive-site.xml"
-      - directive: !<resource>
-          templateType: FreeMarker
-          templatePath: "application.properties"
-          targetPath: "/etc/${service.sid}/conf/application.properties"
-          mode: "755"
-      - directive: !<resource>
-          templateType: FreeMarker
-          templatePath: "application-prod.properties"
-          targetPath: "/etc/${service.sid}/conf/application-prod.properties"
-          mode: "755"
-      - directive: !<resource>
-          templateType: FreeMarker
-          templatePath: "log4j2.xml"
-          targetPath: "/etc/${service.sid}/conf/log4j2.xml"
-          mode: "755"
-      - directive: !<resource>
-          templateType: FreeMarker
-          templatePath: "mirror.conf"
-          targetPath: "/etc/${service.sid}/conf/mirror.conf"
-          mode: "755"
-      - directive: !<resource>
-          templateType: FreeMarker
-          templatePath: "workflow-client.properties"
-          targetPath: "/etc/${service.sid}/conf/workflow-client.properties"
-          mode: "755"
 
   - name: SOPHON_ST_FRONTEND
     friendlyName: "Sophon-ST Frontend"
@@ -171,6 +146,8 @@ firstWizardConfigs:
 - workflow.client.password
 - workflow.domain.id
 - spark.sql.warehouse.dir
+- spark.executor.num
+- spark.executor.core
 - task.pool.size
 - task.max.concurrency
 - task.timeout

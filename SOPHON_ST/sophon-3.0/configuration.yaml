@@ -196,6 +196,24 @@
   groups: []
   visibility: READ_WRITE
 
+- name: spark.executor.num
+  recommendExpression: 4
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.executor.core
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: task.pool.size
   recommendExpression: 100
   defaultValue: null
