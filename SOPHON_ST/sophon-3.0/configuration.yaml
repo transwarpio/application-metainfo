@@ -224,7 +224,7 @@
   visibility: READ_WRITE
 
 - name: task.max.concurrency
-  recommendExpression: 10
+  recommendExpression: 5
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
