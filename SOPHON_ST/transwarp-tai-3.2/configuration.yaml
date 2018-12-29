@@ -241,6 +241,24 @@
   groups: []
   visibility: READ_WRITE
 
+- name: inceptor.ldap.username
+  recommendExpression: mirror
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: inceptor.ldap.password
+  recommendExpression: password
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: PASSWORD
+
 - name: execute.cycle
   recommendExpression: 3000
   defaultValue: null

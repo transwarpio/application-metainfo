@@ -151,6 +151,8 @@ firstWizardConfigs:
 - task.pool.size
 - task.max.concurrency
 - task.timeout
+- inceptor.ldap.username
+- inceptor.ldap.password
 - execute.cycle
 
 product: Sophon
