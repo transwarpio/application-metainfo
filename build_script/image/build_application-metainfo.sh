@@ -13,7 +13,7 @@ build_application-metainfo() {
 
     mkdir -p "$TARGET_DIR"
 
-    for VERSION in transwarp-tai-3.2-latest; do
+    for VERSION in transwarp-tai-3.2; do
         echo "preparing $VERSION ..."
 
         META_DST_DIR="$TARGET_DIR/$VERSION"
