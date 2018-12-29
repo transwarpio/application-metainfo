@@ -13,7 +13,7 @@ build_application-metainfo() {
 
     mkdir -p "$TARGET_DIR"
 
-    for VERSION in transwarp-sophonbase-latest; do
+    for VERSION in transwarp-tai-3.2-latest; do
         echo "preparing $VERSION ..."
 
         META_DST_DIR="$TARGET_DIR/$VERSION"
@@ -42,21 +42,21 @@ build_application-metainfo() {
         cd "$META_DST_DIR"
         # push to github
         curl -o /tmp/push_dev.sh http://172.16.2.71/pub/application-metainfo/push_dev.sh
-        export BRANCH=sophon-base
+        export BRANCH=transwarp-tai-3.2
         #bash /tmp/push_dev.sh
         #rm -f /tmp/push_dev.sh
         # set git remote for upgrade
         git remote rm origin
         git remote add origin https://minhao.zou%40transwarp.io:sophon2016@github.com/transwarpio/application-metainfo.git
-        git checkout -b sophon-base
-        git push origin sophon-base
+        git checkout -b transwarp-tai-3.2
+        git push origin transwarp-tai-3.2
 
         git remote rm origin
         git remote add origin https://github.com/transwarpio/application-metainfo.git
         git fetch origin
         #http_proxy=http://172.16.2.14:7777 https_proxy=http://172.16.2.14:7777 git fetch origin
-        git checkout sophon-base
-        git branch --set-upstream-to=origin/sophon-base sophon-base
+        git checkout transwarp-tai-3.2
+        git branch --set-upstream-to=origin/transwarp-tai-3.2 transwarp-tai-3.2
 
 
         echo "building $VERSION image ..."
