@@ -17,7 +17,7 @@
             <!--输出日志的格式-->
             <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
         </console>
-        <RollingFile name="RollingFileInfo" fileName="/var/log/${service.sid}/sophon-st.log" filePattern="/var/log/${service.sid}/${r'${$${date:yyyy-MM}}'}/%d{yyyy-MM-dd}-%i.log">
+        <RollingFile name="RollingFileInfo" fileName="/var/log/${service.sid}/sophon-st.log" filePattern="/var/log/${service.sid}/${r'$${date:yyyy-MM}'}/%d{yyyy-MM-dd}-%i.log">
             <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
             <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
             <PatternLayout pattern="[%d{HH:mm:ss:SSS}] [%p] - %l - %m%n"/>
