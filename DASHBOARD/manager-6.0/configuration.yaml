@@ -6,3 +6,12 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: dashboard.ssl.container.port
+  recommendExpression: 9443
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
