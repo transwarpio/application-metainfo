@@ -154,6 +154,7 @@ firstWizardConfigs:
 - inceptor.ldap.username
 - inceptor.ldap.password
 - execute.cycle
+- disable.cas.authorization
 
 product: Sophon
 

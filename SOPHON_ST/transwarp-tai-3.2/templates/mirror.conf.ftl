@@ -51,3 +51,4 @@ task.timeout=${service['task.timeout']}
 mirror.keytab=${service.keytab}
 mirror.principal=hive/${localhostname?lower_case}@${service.realm}
 cas.service.prefix=https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']}:${dependencies.GUARDIAN['cas.server.ssl.port']}${dependencies.GUARDIAN['cas.server.context.path']}
+disable.cas.authorization=${service['disable.cas.authorization']}

@@ -267,3 +267,12 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: disable.cas.authorization
+  recommendExpression: true
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
