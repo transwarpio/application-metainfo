@@ -9,7 +9,7 @@ spec:
   type: NodePort
   ports:
   - port: ${service['tos.master.dashboard.port']}
-    targetPort: https
+    targetPort: ${service['tos.master.dashboard.port']}
     nodePort: ${service['tos.master.dashboard.port']}
   selector:
     name: kubernetes-dashboard
