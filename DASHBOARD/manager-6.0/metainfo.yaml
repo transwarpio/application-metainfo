@@ -40,6 +40,16 @@ stages:
       summaryPolicy: ALL
       timeoutMinutes: 2
       templateType: FreeMarker
+      templateFile: "clusterrole.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "clusterrolebinding.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
       templateFile: "serviceaccount.yaml"
     - !<Resource-on-Manager>
       summaryPolicy: ALL
@@ -79,6 +89,16 @@ stages:
       summaryPolicy: SOME
       timeoutMinutes: 10
       action: Start
+      file: "clusterrole.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Start
+      file: "clusterrolebinding.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Start
       file: "secret.yaml"
     - !<Kubectl>
       summaryPolicy: SOME
@@ -114,6 +134,16 @@ stages:
       timeoutMinutes: 10
       action: Stop
       file: "rolebinding.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Stop
+      file: "clusterrole.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Stop
+      file: "clusterrolebinding.yaml"
     - !<Kubectl>
       summaryPolicy: SOME
       timeoutMinutes: 10
