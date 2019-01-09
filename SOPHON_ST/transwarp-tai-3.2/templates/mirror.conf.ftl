@@ -43,7 +43,6 @@ spark.executorEnv.JAVA_HOME=/usr/java/jdk1.8.0_25
 spark.executor.num=${service['spark.executor.num']}
 spark.executor.core=${service['spark.executor.core']}
 
-workflow.domain.id=0
 mirror.host=${service.roles.SOPHON_ST_BACKEND[0]['hostname']}
 task.pool.size=${service['task.pool.size']}
 task.max.concurrency=${service['task.pool.size']}
@@ -52,3 +51,23 @@ mirror.keytab=${service.keytab}
 mirror.principal=hive/${localhostname?lower_case}@${service.realm}
 cas.service.prefix=https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']}:${dependencies.GUARDIAN['cas.server.ssl.port']}${dependencies.GUARDIAN['cas.server.context.path']}
 disable.cas.authorization=${service['disable.cas.authorization']}
+
+workflow.domain.id=0
+<#assign workflowHostPorts = []/>
+<#list dependencies.WORKFLOW.roles['WORKFLOW_SERVER'] as role>
+<#assign workflowHostPorts = workflowHostPorts + [role.hostname + ':' + dependencies.WORKFLOW['workflow.http.port']]>
+</#list>
+<#assign workflowHostPort = workflowHostPorts?join(",")>
+# the workflow service location
+workflow.service.scheme=http
+workflow.service.host=${workflowHostPort}
+workflow.service.path=/api/v1/
+# the path of login module
+workflow.service.login=login
+# connect timeout in milliseconds
+workflow.connect.timeout=5000000
+# socket timeout in milliseconds
+workflow.socket.timeout=5000000
+workflow.client.username=${service['workflow.client.username']}
+workflow.client.password=${service['workflow.client.password']}
+workflow.client.token=${service['workflow.client.token']}
