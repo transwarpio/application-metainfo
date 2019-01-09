@@ -289,6 +289,14 @@
   groups: []
   visibility: READ_WRITE
 - name: sophon.visit.port
+  recommendExpression: 8067
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: sophon.ui.port
   recommendExpression: 8066
   defaultValue: null
   valueType: PORT
@@ -296,6 +304,7 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
 - name: sophon.proxy.api.port
   recommendExpression: 8083
   defaultValue: null
