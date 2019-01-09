@@ -144,6 +144,7 @@ firstWizardConfigs:
 - frontend.requests.cpu
 - workflow.client.username
 - workflow.client.password
+- workflow.client.token
 - workflow.domain.id
 - spark.sql.warehouse.dir
 - spark.executor.num
@@ -154,6 +155,7 @@ firstWizardConfigs:
 - inceptor.ldap.username
 - inceptor.ldap.password
 - execute.cycle
+- disable.cas.authorization
 
 product: Sophon
 

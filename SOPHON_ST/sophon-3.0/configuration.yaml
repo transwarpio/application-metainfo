@@ -161,6 +161,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: workflow.client.token
+  recommendExpression: null
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: workflow.domain.id
   recommendExpression: 0
   defaultValue: null
@@ -263,6 +272,15 @@
   recommendExpression: 3000
   defaultValue: null
   valueType: MILLISECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: disable.cas.authorization
+  recommendExpression: false
+  defaultValue: null
+  valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
