@@ -4,6 +4,7 @@ version: transwarp-6.1
 global: false
 namePrefix: HDFS
 friendlyName: HDFS
+rollingRestart: true
 dockerImage: "transwarp/hdfs:transwarp-6.1"
 user: hdfs
 dependencies:
