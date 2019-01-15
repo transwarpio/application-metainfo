@@ -4,6 +4,7 @@ version: transwarp-6.1
 global: false
 namePrefix: codis
 friendlyName: "Codis"
+rollingRestart: true
 dependencies:
   - name: ZOOKEEPER
     minVersion: transwarp-6.1
@@ -21,6 +22,17 @@ roles:
         number: 2
       reject:
         number: 1
+    readinessProbe:
+      probe: !<exec>
+       command:
+         - /bin/bash
+         - -c
+         - "ps -ef|grep -v grep| grep -q codis-dashboard"
+      failureThreshold: 3
+      initialDelaySeconds: 3
+      periodSeconds: 30
+      successThreshold: 1
+      timeoutSeconds: 15
     env:
     - name: CODIS_ROLE
       value: dashboard
@@ -64,6 +76,17 @@ roles:
         number: 2
       reject:
         number: 1
+    readinessProbe:
+      probe: !<exec>
+       command:
+         - /bin/bash
+         - -c
+         - "ps -ef|grep -v grep| grep -q codis-proxy"
+      failureThreshold: 3
+      initialDelaySeconds: 3
+      periodSeconds: 30
+      successThreshold: 1
+      timeoutSeconds: 15
     env:
     - name: CODIS_ROLE
       value: proxy
@@ -112,6 +135,17 @@ roles:
         number: 2
       reject:
         number: 1
+    readinessProbe:
+      probe: !<exec>
+       command:
+         - /bin/bash
+         - -c
+         - "ps -ef|grep -v grep| grep -q codis-fe"
+      failureThreshold: 3
+      initialDelaySeconds: 3
+      periodSeconds: 30
+      successThreshold: 1
+      timeoutSeconds: 15
     env:
     - name: CODIS_ROLE
       value: fe
@@ -153,6 +187,17 @@ roles:
         number: 2
       reject:
         number: 1
+    readinessProbe:
+      probe: !<exec>
+       command:
+         - /bin/bash
+         - -c
+         - "ps -ef|grep -v grep| grep -q codis-server"
+      failureThreshold: 3
+      initialDelaySeconds: 3
+      periodSeconds: 30
+      successThreshold: 1
+      timeoutSeconds: 15
     env:
     - name: CODIS_ROLE
       value: server
@@ -210,6 +255,15 @@ pages:
 - operation
 
 healthChecks:
-- category: DAEMON_CHECK
-  intervalSeconds: 5
-  method: !<K8sPod> {}
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 15
+  method: !<Probe>
+    roles:
+    - roleType: CODIS_DASHBOARD
+      from: !<readiness> {}
+    - roleType: CODIS_PROXY
+      from: !<readiness> {}
+    - roleType: CODIS_FE
+      from: !<readiness> {}
+    - roleType: CODIS_SERVER
+      from: !<readiness> {}
