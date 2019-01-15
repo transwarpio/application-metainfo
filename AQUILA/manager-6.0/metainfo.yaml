@@ -1,0 +1,46 @@
+---
+name: AQUILA
+version: manager-6.0
+global: true
+namePrefix: Aquila
+friendlyName: "Aquila"
+dependencies: []
+user: root
+
+roles:
+- name: AQUILA_SERVER
+  friendlyName: "Aquila Server"
+  labelPrefix: "aquila-server"
+  dockerImage: "transwarp/aquila:manager-6.0"
+  category: MASTER
+  frontendOperations: ["Start", "Stop"]
+  env: []
+  mountPaths: []
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  nodeSpecificMounts: []
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq>
+      numSeq: [1]
+      mates: ["MANAGER_SERVER"] #AQUILA_SERVER is strictly adhered to Manager
+  suggestion:
+  - criteria: !<OnManagerNode> {"roleType": "AQUILA_SERVER"}
+  validation:
+  - criteria: !<OnManagerNode> {"roleType": "AQUILA_SERVER"}
+  operations: []
+
+firstWizardConfigs: []
+
+pages:
+- roles
+- configuration
+- operation
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
