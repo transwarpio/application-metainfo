@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 MANAGER_PROGRESS_VERSION=manager-6.0
-MANAGER_TAG_VERSION=manager-6.0.1812a-rc1
+MANAGER_TAG_VERSION=manager-6.0.1812a-rc2
 LAST_STABLE_VERSION=transwarp-6.0.0-final
 TDH_PROGRESS_VERSION=transwarp-6.0
-TDH_TAG_VERSION=transwarp-6.0.1-rc3
+TDH_TAG_VERSION=transwarp-6.0.1-rc4
 
 set -e
 
