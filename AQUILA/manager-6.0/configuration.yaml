@@ -1,7 +1,39 @@
+## AQUILA_SERVER
+
+- name: server.web.port
+  recommendExpression: 8666
+  defaultValue: 8080
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.api.swagger.enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.log.app.level
+  recommendExpression: INFO
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: server.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [AQUILA_SERVER]
   onDeps: []
@@ -11,7 +43,7 @@
 - name: server.container.limits.cpu
   recommendExpression: 4
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [AQUILA_SERVER]
   onDeps: []
@@ -21,7 +53,7 @@
 - name: server.container.requests.memory
   recommendExpression: 1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [AQUILA_SERVER]
   onDeps: []
@@ -31,9 +63,81 @@
 - name: server.container.requests.cpu
   recommendExpression: 0.5
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# AQUILA_AGENT
+
+- name: agent.web.port
+  recommendExpression: 8668
+  defaultValue: 8080
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: agent.api.swagger.enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: agent.log.app.level
+  recommendExpression: INFO
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: agent.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: agent.container.limits.cpu
+  recommendExpression: 4
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: agent.container.requests.memory
+  recommendExpression: 1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.requests.cpu
+  recommendExpression: 0.5
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_AGENT]
   onDeps: []
   groups: []
   visibility: READ_WRITE

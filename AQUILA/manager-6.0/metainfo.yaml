@@ -6,16 +6,25 @@ namePrefix: Aquila
 friendlyName: "Aquila"
 dependencies: []
 user: root
+# TODO need generate manager password
 
 roles:
 - name: AQUILA_SERVER
   friendlyName: "Aquila Server"
   labelPrefix: "aquila-server"
   dockerImage: "transwarp/aquila:manager-6.0"
+  linkExpression: "http://${localhostname}:${service['server.web.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop"]
-  env: []
-  mountPaths: []
+  env:
+  - name: SERVER_CONF_DIR
+    value: /etc/${service.sid}/conf/server
+  - name: SERVER_LOG_DIR
+    value: /var/log/${service.sid}/server
+  mountPaths:
+  - mountPath: /tmp
+    hostPath: /tmp
+    name: temp
   resources:
     limitsMemoryKey: server.container.limits.memory
     limitsCpuKey: server.container.limits.cpu
@@ -26,14 +35,81 @@ roles:
   autoAssign:
   - advice: !<NumSeq>
       numSeq: [1]
-      mates: ["MANAGER_SERVER"] #AQUILA_SERVER is strictly adhered to Manager
   suggestion:
-  - criteria: !<OnManagerNode> {"roleType": "AQUILA_SERVER"}
+  - criteria: !<Range> {"min": 1}
   validation:
-  - criteria: !<OnManagerNode> {"roleType": "AQUILA_SERVER"}
-  operations: []
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/log/${service.sid}/server"]
+        mode: "750"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "server/application.yml.ftl"
+        targetPath: "/etc/${service.sid}/conf/server/application.yml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "server/log4j2.xml.ftl"
+        targetPath: "/etc/${service.sid}/conf/server/log4j2.xml"
+        mode: "755"
 
-firstWizardConfigs: []
+- name: AQUILA_AGENT
+  friendlyName: "Aquila Agent"
+  labelPrefix: "aquila-agent"
+  dockerImage: "transwarp/aquila:manager-6.0"
+  category: MASTER
+  frontendOperations: ["Start", "Stop"]
+  env:
+  - name: AGENT_CONF_DIR
+    value: /etc/${service.sid}/conf/agent
+  - name: AGENT_LOG_DIR
+    value: /var/log/${service.sid}/agent
+  mountPaths:
+  - mountPath: /tmp
+    hostPath: /tmp
+    name: temp
+  resources:
+    limitsMemoryKey: agent.container.limits.memory
+    limitsCpuKey: agent.container.limits.cpu
+    requestsMemoryKey: agent.container.requests.memory
+    requestsCpuKey: agent.container.requests.cpu
+  nodeSpecificMounts: []
+  summaryPolicy: SOME
+  autoAssign:
+    - advice: !<EachNode> {}
+  suggestion:
+    - criteria: !<EachNode> {}
+  validation:
+    - criteria: !<EachNode> {}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+       paths: ["/var/log/${service.sid}/agent"]
+       mode: "750"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "agent/application.yml.ftl"
+        targetPath: "/etc/${service.sid}/conf/agent/application.yml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "agent/log4j2.xml.ftl"
+        targetPath: "/etc/${service.sid}/conf/agent/log4j2.xml"
+        mode: "755"
+
+# MANAGER_PROXY is strictly adhered to Manager
+
+firstWizardConfigs:
+- server.web.port
+- agent.web.port
 
 pages:
 - roles
