@@ -24,3 +24,16 @@ log:
     path: "/var/log/${service.sid}/thingercloud-appmgr"
 
 get_version_interval: 1
+
+docker_hub:
+  registry:
+    address: "${localhostname}:5000"
+    enable: true
+    repo_prefix : "ai-model/"
+  harbor:
+    address: "172.16.1.99"
+    enable: true
+    project_name : "ai-model"
+
+# interval is the time interval to refresh models cache
+interval: "60s"

@@ -49,6 +49,43 @@ roles:
           targetPath: "/etc/${service.sid}/bin/consul-boot.sh"
           mode: "755"
 
+  - name: NSQD
+    friendlyName: "Nsqd"
+    labelPrefix: "thingercloud-nsqd"
+    dockerImage: "transwarp/nsq:sophon-3.0"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+    deleteOpCondition:
+      deletable:
+        number: 2
+      reject:
+        number: 1
+    env: []
+    mountPaths:
+      - mountPath: /bin/boot.sh
+        hostPath: /etc/${service.sid}/bin/nsqd-boot.sh
+        name: nsqdboot
+    resources:
+      limitsMemoryKey: thingercloud.nsqd.container.limits.memory
+      limitsCpuKey: thingercloud.nsqd.container.limits.cpu
+      requestsMemoryKey: thingercloud.nsqd.container.requests.memory
+      requestsCpuKey: thingercloud.nsqd.container.requests.cpu
+    summaryPolicy: ALL
+    autoAssign:
+      - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+      - criteria: !<Range> {"min": 1}
+    validation:
+      - criteria: !<Range> {"min": 1}
+    operations:
+      - type: Config
+        directives:
+          - directive: !<resource>
+              templateType: FreeMarker
+              templatePath: "nsqd-boot.sh"
+              targetPath: "/etc/${service.sid}/bin/nsqd-boot.sh"
+              mode: "755"
+
   - name: EDGEMGR
     friendlyName: "EdgeManager"
     labelPrefix: "thingercloud-edgemgr"
@@ -120,6 +157,42 @@ roles:
           templatePath: "appmgr.yaml"
           targetPath: "/etc/${service.sid}/conf/appmgr.yaml"
           mode: "755"
+
+  - name: HUB
+    friendlyName: "Hub"
+    labelPrefix: "thingercloud-hub"
+    dockerImage: "transwarp/thinger-hub:sophon-3.0"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+    deleteOpCondition:
+      deletable:
+        number: 2
+      reject:
+        number: 1
+    env:
+      - name: CONFIG_FILE
+        value: "/etc/${service.sid}/conf/cloud-hub.yaml"
+    mountPaths: []
+    resources:
+      limitsMemoryKey: thingercloud.hub.container.limits.memory
+      limitsCpuKey: thingercloud.hub.container.limits.cpu
+      requestsMemoryKey: thingercloud.hub.container.requests.memory
+      requestsCpuKey: thingercloud.hub.container.requests.cpu
+    summaryPolicy: ALL
+    autoAssign:
+      - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+      - criteria: !<Range> {"min": 1}
+    validation:
+      - criteria: !<Range> {"min": 1}
+    operations:
+      - type: Config
+        directives:
+          - directive: !<resource>
+              templateType: FreeMarker
+              templatePath: "cloud-hub.yaml"
+              targetPath: "/etc/${service.sid}/conf/cloud-hub.yaml"
+              mode: "755"
 
   - name: GATEWAY
     friendlyName: "Gateway"
@@ -205,12 +278,22 @@ stages:
       summaryPolicy: SOME
       timeoutMinutes: 1
     - !<Role>
+      roleType: "NSQD"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
       roleType: "EDGEMGR"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
     - !<Role>
       roleType: "APPMGR"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "HUB"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
@@ -238,6 +321,10 @@ firstWizardConfigs:
 - thingercloud.consul.container.limits.cpu
 - thingercloud.consul.container.requests.memory
 - thingercloud.consul.container.requests.cpu
+- thingercloud.nsqd.container.limits.memory
+- thingercloud.nsqd.container.limits.cpu
+- thingercloud.nsqd.container.requests.memory
+- thingercloud.nsqd.container.requests.cpu
 - thingercloud.edgemgr.container.limits.memory
 - thingercloud.edgemgr.container.limits.cpu
 - thingercloud.edgemgr.container.requests.memory
@@ -246,7 +333,10 @@ firstWizardConfigs:
 - thingercloud.appmgr.container.limits.cpu
 - thingercloud.appmgr.container.requests.memory
 - thingercloud.appmgr.container.requests.cpu
-
+- thingercloud.hub.container.limits.memory
+- thingercloud.hub.container.limits.cpu
+- thingercloud.hub.container.requests.memory
+- thingercloud.hub.container.requests.cpu
 product: IoT
 
 principals:
