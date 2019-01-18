@@ -30,7 +30,7 @@ SPARK_HOME=/usr/lib/spark2
 SPARK_USER=hive
 HADOOP_USER_NAME=hive
 MIDAS_SERVER_JAVA_OPTS="-Xms512m -Xmx1024m -XX:PermSize=128m"
-
+HDFS_CONF_DIR=/etc/${dependencies.HDFS.sid}/conf
 
 <#if service['sophon.resource.type'] = "yarn">
 HADOOP_CONF_DIR=/etc/${dependencies.YARN.sid}/conf

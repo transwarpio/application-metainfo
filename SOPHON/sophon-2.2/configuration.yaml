@@ -260,7 +260,7 @@
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [SOPHON_WEB]
+    roleTypes: [SOPHON_BASE]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -390,6 +390,15 @@
   recommendExpression: true
   defaultValue: null
   valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  
+- name: sophon.auth.cas.session.timeout
+  recommendExpression: "604800"
+  defaultValue: null
+  valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []

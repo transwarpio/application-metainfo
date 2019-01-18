@@ -43,11 +43,10 @@ dependencies:
     optional: true
 
 roles:
-- name: SOPHON_PYPI
-  dockerImage: "transwarp/sophon-pypi:sophon-2.2"
-  linkExpression: "http://${localhostname}:8036"
-  friendlyName: "Sophon pypi"
-  labelPrefix: "sophon-pypi"
+- name: SHARE_SERVER
+  dockerImage: "transwarp/share-server:sophon-2.2"
+  friendlyName: "Share Server"
+  labelPrefix: "share-server"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
@@ -55,11 +54,12 @@ roles:
       number: 2
     reject:
       number: 1
-  env: []
-  mountPaths:
-  - mountPath: /tmp/pypi
-    hostPath: /var/${service.sid}/pypi-server
-    name: pypi-dir
+  env: 
+  - name: SOPHON_CONF_DIR
+    value: /etc/${service.sid}/conf/share/
+  - name: SOPHON_SERVICE_ID
+    value: ${service.sid}
+  mountPaths: []
   resources:
     limitsMemoryKey: server.container.limits.memory
     limitsCpuKey: server.container.limits.cpu
@@ -72,9 +72,52 @@ roles:
   - criteria: !<Range> {"min": 1}
   validation:
   - criteria: !<Range> {"min": 1, "max": 1}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "share/share.conf"
+        targetPath: "/etc/${service.sid}/conf/share/share.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "share/share.properties"
+        targetPath: "/etc/${service.sid}/conf/share/share.properties"
+        mode: "755"
+
+- name: SOPHON_PYTHON_REPO
+  dockerImage: "transwarp/sophon-python-repo:sophon-2.2"
+  linkExpression: "http://${localhostname}:8036"
+  friendlyName: "Sophon python repo"
+  labelPrefix: "sophon-python-repo"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env: []
+  mountPaths:
+  - mountPath: /usr/libs/pypi
+    hostPath: /var/${service.sid}/pypi-server
+    name: pypi-dir
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 0}
+  validation:
+  - criteria: !<Range> {"min": 0, "max": 1}
   operations: []
 
-- name: SOPHON_R
+- name: SOPHON_R_REPO
   dockerImage: "transwarp/sophon-r-repo:sophon-2.2"
   linkExpression: "ftp://${localhostname}:8037/rlibs/src/contrib/"
   friendlyName: "Sophon R Repo"
@@ -100,9 +143,9 @@ roles:
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
   suggestion:
-  - criteria: !<Range> {"min": 1}
+  - criteria: !<Range> {"min": 0}
   validation:
-  - criteria: !<Range> {"min": 1, "max": 1}
+  - criteria: !<Range> {"min": 0, "max": 1}
   operations: []
 
 - name: SOPHON_WEB_UI
@@ -175,7 +218,8 @@ roles:
   validation:
   - criteria: !<Range> {"min": 1, "max": 1}
   operations: []
-- name: SOPHON_BASE
+
+- name: SOPHON_WEB
   dockerImage: "transwarp/sophon-web:sophon-2.2"
   friendlyName: "Sophon base"
   labelPrefix: "sophon-base"
@@ -260,6 +304,12 @@ stages:
       dbPasswordConfig: livy.jdbc.password
       timeoutMinutes: 5
       summaryPolicy: SOME
+    - !<Create-Database>
+      dbPrefix: metastore_share
+      dbUserConfig: livy.jdbc.username
+      dbPasswordConfig: livy.jdbc.password
+      timeoutMinutes: 5
+      summaryPolicy: SOME
     - !<Role>
       roleType: "SOPHON_WEB"
       operation: Config
@@ -267,6 +317,11 @@ stages:
       timeoutMinutes: 1
     - !<Role>
       roleType: "SOPHON_WEB_UI"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SHARE_SERVER"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
