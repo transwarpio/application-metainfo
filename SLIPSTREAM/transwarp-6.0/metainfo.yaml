@@ -188,7 +188,10 @@ roles:
       ${zookeepers?join(",")}
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
-  mountPaths: []
+  mountPaths:
+  - mountPath: /etc/slipstream/keytabs
+    hostPath: /etc/slipstream/keytabs
+    name: data
   resources:
     limitsMemoryKey: executor.container.limits.memory
     limitsCpuKey: executor.container.limits.cpu
