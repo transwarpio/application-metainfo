@@ -82,8 +82,8 @@ roles:
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "share/share.properties"
-        targetPath: "/etc/${service.sid}/conf/share/share.properties"
+        templatePath: "share/application.properties"
+        targetPath: "/etc/${service.sid}/conf/share/application.properties"
         mode: "755"
 
 - name: SOPHON_PYTHON_REPO
