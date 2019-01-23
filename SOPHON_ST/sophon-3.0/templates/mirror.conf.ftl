@@ -45,7 +45,7 @@ spark.executor.core=${service['spark.executor.core']}
 
 mirror.host=${service.roles.SOPHON_ST_BACKEND[0]['hostname']}
 task.pool.size=${service['task.pool.size']}
-task.max.concurrency=${service['task.pool.size']}
+task.max.concurrency=${service['task.max.concurrency']}
 task.timeout=${service['task.timeout']}
 mirror.keytab=${service.keytab}
 mirror.principal=hive/${localhostname?lower_case}@${service.realm}
