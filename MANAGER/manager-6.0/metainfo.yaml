@@ -247,10 +247,18 @@ roles:
         script: |
           <#assign txsqlHostPorts = []/>
           <#list service.roles['MANAGER_TXSQL_SERVER'] as role>
-          <#assign txsqlHostPorts = txsqlHostPorts + [role.hostname + ':' + service['mysql.rw.port']]>
+              <#assign txsqlHostPorts = txsqlHostPorts + [role.hostname + ':' + service['mysql.rw.port']]>
           </#list>
+          <#assign txsqlHostPorts = txsqlHostPorts?sort
+                   i = txsqlHostPorts?seq_index_of(localhostname + ':' + service['mysql.rw.port'])>
+          <#if i lt 0>
+              <#assign i = .now?long % service.roles['MANAGER_TXSQL_SERVER']?size>
+          </#if>
+          <#if i gt 0>
+              <#assign txsqlHostPorts = txsqlHostPorts[i..] + txsqlHostPorts[0..i-1]>
+          </#if>
           <#assign txsqlHostPort = txsqlHostPorts?join(",")>
-          sed -i 's/io.transwarp.manager.db.url.*/io.transwarp.manager.db.url=jdbc:mysql:\/\/${txsqlHostPort}\/transwarp_manager?autoReconnect=true\&failOverReadOnly=false\&createDatabaseIfNotExist=false\&characterEncoding=UTF-8/g' /etc/transwarp-manager/master/db.properties
+          sed -i 's/io.transwarp.manager.db.url.*/io.transwarp.manager.db.url=jdbc:mysql:\/\/${txsqlHostPort}\/transwarp_manager?autoReconnect=true\&createDatabaseIfNotExist=false\&characterEncoding=UTF-8\&failOverReadOnly=false\&connectTimeout=10000\&retriesAllDown=0\&secondsBeforeRetryMaster=0\&queriesBeforeRetryMaster=0/g' /etc/transwarp-manager/master/db.properties
   - type: Start
     directives:
     - directive: !<shell>
