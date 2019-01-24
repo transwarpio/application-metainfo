@@ -2,11 +2,6 @@
 <#list dependencies.TOS.roles.TOS_MASTER as tos_master>
 <#assign etcd_servers+=["https://" + tos_master.hostname + ":" + dependencies.TOS['tos.master.etcd.port']]>
 </#list>
-<#assign
-  tosService=dependencies.TOS
-  registryServer=tosService.roles['TOS_REGISTRY'][0].hostname
-  registryPort=tosService['tos.registry.port']
->
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -57,7 +52,7 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: status.hostIP
-        image: ${registryServer}:${registryPort}/transwarp/flanneld:manager-6.0
+        image: transwarp/flanneld:manager-6.0
         imagePullPolicy: IfNotPresent
         name: tos-flanneld-${service.sid}
         resources:
