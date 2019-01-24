@@ -166,6 +166,13 @@ roles:
         targetPath: "/etc/${service.sid}/conf/tos.tar.gz"
     - directive: !<shell>
         script: "docker load -i /etc/${service.sid}/conf/tos.tar.gz"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "docker-registry"
+        targetPath: "/etc/sysconfig/docker-registry"
+        mode: "755"
+    - directive: !<shell>
+        script: "systemctl restart docker"
   - type: Config
     directives:
     - directive: !<resource>
@@ -282,11 +289,11 @@ roles:
   autoAssign:
   - advice: !<NumSeq>
       numSeq: [1]
-      mates: ["TRANSWARP_MANAGER_MASTER"] #REGISTRY_SERVER is strictly adhered to Manager
+      mates: ["TRANSWARP_MANAGER_MASTER"] #REGISTRY_SERVER is no longer strictly adhered to Manager since 5.2.4 & 6.0.1901a
   suggestion:
-  - criteria: !<OnManagerNode> {"roleType": "TOS_REGISTRY"}
+  - criteria: !<Range> {"min": 1}
   validation:
-  - criteria: !<OnManagerNode> {"roleType": "TOS_REGISTRY"}
+  - criteria: !<Range> {"min": 1}
   operations:
   - type: Install
     directives:
@@ -301,6 +308,30 @@ roles:
         targetPath: "/etc/${service.sid}/conf/config.yml"
         mode: "755"
   - type: Start
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "tos-registry.manifest"
+        targetPath: "/opt/kubernetes/manifests-multi/tos-registry.manifest"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "tos-registryui.manifest"
+        targetPath: "/opt/kubernetes/manifests-multi/tos-registryui.manifest"
+        mode: "755"
+  - type: Scaleout
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "tos-registry.manifest"
+        targetPath: "/opt/kubernetes/manifests-multi/tos-registry.manifest"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "tos-registryui.manifest"
+        targetPath: "/opt/kubernetes/manifests-multi/tos-registryui.manifest"
+        mode: "755"
+  - type: MoveRole
     directives:
     - directive: !<resource>
         templateType: FreeMarker
