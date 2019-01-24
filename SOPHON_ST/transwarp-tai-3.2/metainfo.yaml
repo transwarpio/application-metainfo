@@ -28,7 +28,7 @@ dependencies:
   - name: GUARDIAN
     minVersion: transwarp-5.2.2-final
     maxVersion: transwarp-6.0.1-final
-    optional: false
+    optional: true
   - name: YARN
     minVersion: transwarp-5.2.2-final
     maxVersion: transwarp-6.0.1-final
