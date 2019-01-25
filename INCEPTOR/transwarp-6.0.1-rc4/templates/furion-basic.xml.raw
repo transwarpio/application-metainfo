@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<root weight="100">
+  <default weight="1" />
+  <system weight="100" maxCPURatio="20" />
+</root>

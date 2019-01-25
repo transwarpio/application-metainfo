@@ -1,5 +1,59 @@
-import os, re, sys
+import os, re, sys, shutil
 import json, yaml
+
+def replaceRcWithFinal():
+  print 'Replace service metainfo with final version ...'
+  for service in os.listdir('../'):
+    servicePath = '../{:s}'.format(service)
+    if not os.path.isdir(servicePath):
+      continue
+
+    for version in os.listdir(servicePath):
+      metaDir = os.path.join(servicePath, version)
+      if not os.path.isdir(metaDir):
+        continue
+
+      list = version.split('-')
+      if not list[-1].startswith('rc'):
+        continue
+
+      rcVersion = list.pop()
+      list.append('final')
+      finalVersion = '-'.join(list)
+      finalDir = os.path.join(servicePath, finalVersion)
+
+      if os.path.exists(finalDir):
+        print 'Replace %s %s with %s ...' % (service, version, finalVersion)
+        shutil.rmtree(metaDir)
+        shutil.copytree(finalDir, metaDir)
+
+        for (path, dirs, files) in os.walk(metaDir):
+          for file in files:
+            filePath = os.path.join(path, file)
+            f = open(filePath, 'r')
+            filedata = f.read()
+            f.close()
+
+            filedata = re.sub(finalVersion, version, filedata, flags=re.M)
+
+            f = open(filePath, 'w')
+            f.write(filedata)
+            f.close()
+
+      #Anyawy, replace final tag to current rc in metainfo
+      filePath = os.path.join(metaDir, 'metainfo.yaml')
+      if os.path.exists(filePath):
+        f = open(filePath, 'r')
+        filedata = f.read()
+        f.close()
+
+        repl = '-' + rcVersion
+        filedata = re.sub('-final', repl, filedata, flags=re.M)
+
+        f = open(filePath, 'w')
+        f.write(filedata)
+        f.close()
+  print 'Replace service metainfo with final version finished.'
 
 def replaceVersionTags(tags):
   print 'Replace service version and images tags ...'
@@ -217,3 +271,4 @@ if __name__ == "__main__":
       replaceServicesInfo(conf['services'])
     if conf.has_key('tags'):
       replaceVersionTags(conf['tags'])
+    replaceRcWithFinal()
