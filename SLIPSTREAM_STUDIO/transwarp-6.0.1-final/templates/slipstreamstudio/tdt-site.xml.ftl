@@ -9,7 +9,7 @@
 <configuration>
   <#if dependencies.INCEPTOR_GATEWAY??>
       <#assign gateway_host=dependencies.INCEPTOR_GATEWAY.roles.INCEPTOR_GATEWAY[0]['hostname']>
-      <#assign gateway_port=dependencies.INCEPTOR_GATEWAY['inceptor.gateway.ui.port']>
+      <#assign gateway_port=dependencies.INCEPTOR_GATEWAY['inceptor.gateway.port']>
       <@property "tdt.inceptor.address" "${gateway_host}:${gateway_port}"/>
   <#elseif dependencies.SLIPSTREAM??>
       <#assign inceptor_server=dependencies.SLIPSTREAM.roles.INCEPTOR_SERVER[0]>
