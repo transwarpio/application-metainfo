@@ -30,12 +30,13 @@
             <Routes pattern="${r'${ctx:taskId}'}">
                 <!-- This route is chosen if ThreadContext has value 'special' for key ROUTINGKEY. -->
                 <Route>
-                    <Elasticsearch name="ESBatchForTask${r'${ctx:taskId}'}">
-                        <IndexName indexName="task_${r'${ctx:taskId}'}" />
+                    <ESTask name="ESBatchForTask${r'${ctx:taskId}'}">
+                        <STRollingIndexName/>
+                        <TaskId taskId="${r'${ctx:taskId}'}" />
                         <AsyncBatchDelivery>
                             <JestHttp serverUris="http://${searchesWithPort[0]}" />
                         </AsyncBatchDelivery>
-                    </Elasticsearch>
+                    </ESTask>
                 </Route>
             </Routes>
         </Routing>
