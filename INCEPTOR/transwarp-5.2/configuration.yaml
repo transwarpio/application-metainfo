@@ -407,6 +407,26 @@
   groups: []
   visibility: READ_WRITE
 
+- name: mapreduce.map.memory.mb
+  recommendExpression: 2048
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: mapred.child.java.opts
+  recommendExpression: -agentpath:/usr/lib/hadoop/bin/libagent.so -Xmx4096m
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
 - name: mysql.port
   recommendExpression: 3306
   defaultValue: null

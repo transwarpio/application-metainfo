@@ -121,6 +121,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: dfs.namenode.handler.count
+  recommendExpression: 100
+  defaultValue: 10
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hdfs-site.xml"]
+  visibility: READ_WRITE
+
 - name: namenode.http-port
   recommendExpression: 50070
   defaultValue: null
@@ -201,6 +210,15 @@
     - HDFS_DATANODE
   onDeps: []
   groups: []
+  visibility: READ_WRITE
+
+- name: dfs.datanode.handler.count
+  recommendExpression: 30
+  defaultValue: 10
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hdfs-site.xml"]
   visibility: READ_WRITE
 
 - name: datanode.http-port
