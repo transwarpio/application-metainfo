@@ -45,11 +45,15 @@ spark.executor.core=${service['spark.executor.core']}
 
 mirror.host=${service.roles.SOPHON_ST_BACKEND[0]['hostname']}
 task.pool.size=${service['task.pool.size']}
-task.max.concurrency=${service['task.pool.size']}
+task.max.concurrency=${service['task.max.concurrency']}
 task.timeout=${service['task.timeout']}
 mirror.keytab=${service.keytab}
 mirror.principal=hive/${localhostname?lower_case}@${service.realm}
+<#if dependencies.GUARDIAN??>
+  <#if dependencies.GUARDIAN.roles.CAS_SERVER??>
 cas.service.prefix=https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']}:${dependencies.GUARDIAN['cas.server.ssl.port']}${dependencies.GUARDIAN['cas.server.context.path']}
+  </#if>
+</#if>
 disable.cas.authorization=${service['disable.cas.authorization']}
 
 workflow.domain.id=0
