@@ -31,9 +31,12 @@ SPARK_USER=hive
 HADOOP_USER_NAME=hive
 MIDAS_SERVER_JAVA_OPTS="-Xms512m -Xmx1024m -XX:PermSize=128m"
 
+<#if service['sophon.resource.type'] = "yarn">
+HADOOP_CONF_DIR=/etc/${dependencies.YARN.sid}/conf
+<#else>
 HADOOP_CONF_DIR=/etc/${dependencies.HDFS.sid}/conf
-YARN_CONF_DIR=/etc/${dependencies.YARN.sid}/conf
-
+SPARK_DIST_CLASSPATH=/usr/lib/sophon/hadoop-jars/*
+</#if>
 
 <#if dependencies.HYPERBASE??>
 HYPERBASE_CONF_DIR=/etc/${dependencies.HYPERBASE.sid}/conf
