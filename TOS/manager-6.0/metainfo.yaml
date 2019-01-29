@@ -4,6 +4,7 @@ version: manager-6.0
 global: true
 namePrefix: TOS
 friendlyName: TOS
+validateConfig: true
 dependencies: []
 user: root
 roles:

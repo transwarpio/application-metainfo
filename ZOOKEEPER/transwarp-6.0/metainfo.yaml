@@ -4,6 +4,7 @@ version: transwarp-6.0
 global: false
 namePrefix: ZooKeeper
 friendlyName: "ZooKeeper"
+validateConfig: true
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.0
