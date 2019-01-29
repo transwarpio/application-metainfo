@@ -1,2 +1,0 @@
-export KUBERNETES_MASTER="https://127.0.0.1:${service['tos.haproxy.port']}"
-alias kubectl="kubectl -s https://127.0.0.1:${service['tos.haproxy.port']} --certificate-authority=/srv/kubernetes/ca.pem --client-certificate=/srv/kubernetes/admin.pem  --client-key=/srv/kubernetes/admin-key.pem"
