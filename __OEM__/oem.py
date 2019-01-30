@@ -1,31 +1,49 @@
 import os, re, sys, shutil
 import json, yaml
 
-def replaceRcWithFinal():
-  print 'Replace service metainfo with final version ...'
+def replaceMetainfoWithLatestVersion():
+  print 'Replace service metainfo with latest version ...'
   for service in os.listdir('../'):
     servicePath = '../{:s}'.format(service)
     if not os.path.isdir(servicePath):
       continue
 
-    for version in os.listdir(servicePath):
+    versions = os.listdir(servicePath)
+    for version in versions:
       metaDir = os.path.join(servicePath, version)
       if not os.path.isdir(metaDir):
         continue
 
       list = version.split('-')
+      # final version or non-release version, just skip
       if not list[-1].startswith('rc'):
         continue
 
       rcVersion = list.pop()
-      list.append('final')
-      finalVersion = '-'.join(list)
-      finalDir = os.path.join(servicePath, finalVersion)
+      versionPrefix = '-'.join(list)
 
+      #find the latest version
+      latestVersion = version
+      finalVersion = versionPrefix + '-final'
+      finalDir = os.path.join(servicePath, finalVersion)
       if os.path.exists(finalDir):
-        print 'Replace %s %s with %s ...' % (service, version, finalVersion)
+        latestVersion = finalVersion
+      else:
+        for curVersion in versions:
+          if not curVersion.startswith(versionPrefix + '-'):
+            continue
+          latestNum = latestVersion.replace(versionPrefix + '-rc', '')
+          curNum = curVersion.replace(versionPrefix + '-rc', '')
+          if int(curNum) > int(latestNum):
+            latestVersion = curVersion
+
+      # need replace metainfo only if latest version is different from current version
+      if latestVersion != version:
+        # start replace metainfo with latest version
+        print 'Replace %s %s with %s ...' % (service, version, latestVersion)
         shutil.rmtree(metaDir)
-        shutil.copytree(finalDir, metaDir)
+        latestDir = os.path.join(servicePath, latestVersion)
+        shutil.copytree(latestDir, metaDir)
 
         for (path, dirs, files) in os.walk(metaDir):
           for file in files:
@@ -34,25 +52,11 @@ def replaceRcWithFinal():
             filedata = f.read()
             f.close()
 
-            filedata = re.sub(finalVersion, version, filedata, flags=re.M)
+            filedata = re.sub(latestVersion, version, filedata, flags=re.M)
 
             f = open(filePath, 'w')
             f.write(filedata)
             f.close()
-
-      #Anyawy, replace final tag to current rc in metainfo
-      filePath = os.path.join(metaDir, 'metainfo.yaml')
-      if os.path.exists(filePath):
-        f = open(filePath, 'r')
-        filedata = f.read()
-        f.close()
-
-        repl = '-' + rcVersion
-        filedata = re.sub('-final', repl, filedata, flags=re.M)
-
-        f = open(filePath, 'w')
-        f.write(filedata)
-        f.close()
   print 'Replace service metainfo with final version finished.'
 
 def replaceVersionTags(tags):
@@ -75,17 +79,17 @@ def replaceVersionTags(tags):
       filename = file
       for tag in tags:
         #replace image tags
-        pattern = r':{:s}-'.format(tag['original'])
+        pattern = r':{:s}-(?!manager)'.format(tag['original'])
         repl = r':{:s}-'.format(tag['replacement'])
         filedata = re.sub(pattern, repl, filedata, flags=re.M)
 
         #replace meta versions
-        pattern = r':\s+{:s}-'.format(tag['original'])
+        pattern = r':\s+{:s}-(?!manager)'.format(tag['original'])
         repl = r': {:s}-'.format(tag['replacement'])
         filedata = re.sub(pattern, repl, filedata, flags=re.M)
 
         #replace release date
-        pattern = r',{:s}-'.format(tag['original'])
+        pattern = r',{:s}-(?!manager)'.format(tag['original'])
         repl = r',{:s}-'.format(tag['replacement'])
         filedata = re.sub(pattern, repl, filedata, flags=re.M)
 
@@ -233,6 +237,40 @@ def replaceServicesInfo(services):
             f.close()
   print 'Replace metainfo for services finished.'
 
+# some services under manager uses the image of other product line,
+# so the docker image tag should be replaced with oem product tag
+# for example, license service use zk image
+def replaceDockerImageTagWithProductTag(company, managerTag, productTag):
+  print 'Replace service docker image tag with oem product tag ...'
+  for service in os.listdir('../'):
+    servicePath = '../{:s}'.format(service)
+    if not os.path.isdir(servicePath):
+      continue
+
+    for version in os.listdir(servicePath):
+      # only replace target version
+      if version != managerTag:
+        continue
+
+      metaDir = os.path.join(servicePath, version)
+      if not os.path.isdir(metaDir):
+        continue
+
+      filePath = os.path.join(metaDir, 'metainfo.yaml')
+      if os.path.exists(filePath):
+        f = open(filePath, 'r')
+        filedata = f.read()
+        f.close()
+
+        pattern = ':{:s}-\d+.\d+.\d+-\w+'.format(company)
+        repl = ':{:s}'.format(productTag)
+        filedata = re.sub(pattern, repl, filedata, flags=re.M)
+
+        f = open(filePath, 'w')
+        f.write(filedata)
+        f.close()
+  print 'Replace service docker image tag with oem product tag.'
+
 
 #for yaml load custom tags
 class GenericMapping:
@@ -271,4 +309,7 @@ if __name__ == "__main__":
       replaceServicesInfo(conf['services'])
     if conf.has_key('tags'):
       replaceVersionTags(conf['tags'])
-    replaceRcWithFinal()
+    replaceMetainfoWithLatestVersion()
+    managerTag = sys.argv[2]
+    productTag = sys.argv[3]
+    replaceDockerImageTagWithProductTag(company, managerTag, productTag)
