@@ -40,8 +40,11 @@ spark.sql.warehouse.dir=${service['spark.sql.warehouse.dir']}
 spark.master=yarn-client
 spark.yarn.appMasterEnv.JAVA_HOME=/usr/java/jdk1.8.0_25
 spark.executorEnv.JAVA_HOME=/usr/java/jdk1.8.0_25
-spark.executor.num=${service['spark.executor.num']}
-spark.executor.core=${service['spark.executor.core']}
+spark.executor.instances=${service['spark.executor.num']}
+spark.executor.cores=${service['spark.executor.core']}
+spark.yarn.keytab=${service.keytab}
+spark.yarn.principal=hive/${localhostname?lower_case}@${service.realm}
+enable.livy=${service['enable.livy']}
 
 mirror.host=${service.roles.SOPHON_ST_BACKEND[0]['hostname']}
 task.pool.size=${service['task.pool.size']}
