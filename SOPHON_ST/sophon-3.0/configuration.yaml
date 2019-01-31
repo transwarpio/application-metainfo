@@ -285,3 +285,12 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: enable.livy
+  recommendExpression: true
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
