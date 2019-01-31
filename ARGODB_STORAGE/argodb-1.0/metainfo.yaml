@@ -128,7 +128,7 @@ roles:
     - key: shiva.master.master.data_path
       featureFile: master.lock
     - key: shiva.master.log.log_dir
-      featureFile: master.log
+      featureFile: master.INFO
     fromPath:
     - key: /etc/${service.sid}/conf/shiva
       featureFile: master.conf
@@ -264,7 +264,7 @@ roles:
     - key: shiva.tabletserver.store.datadirs
       featureFile: .trash
     - key: shiva.tabletserver.log.log_dir
-      featureFile: tabletserver.log
+      featureFile: tabletserver.INFO
     fromPath:
     - key: /etc/${service.sid}/conf/shiva
       featureFile: tabletserver.conf
