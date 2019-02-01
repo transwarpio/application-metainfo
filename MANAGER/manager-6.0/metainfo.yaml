@@ -10,7 +10,7 @@ roles:
 - name: MANAGER_ZOOKEEPER_SERVER
   friendlyName: "Zookeeper Server"
   labelPrefix: "zookeeper-server"
-  dockerImage: "transwarp/zookeeper:transwarp-6.0.0-final"
+  dockerImage: "transwarp/zookeeper:transwarp-6.0.1-final"
   category: MASTER
   frontendOperations: ["Start"]
   deleteOpCondition:
@@ -92,7 +92,7 @@ roles:
 - name: MANAGER_TXSQL_SERVER
   friendlyName: "TxSQL Server"
   labelPrefix: "txsql-server"
-  dockerImage: "transwarp/txsql:transwarp-6.0.0-final"
+  dockerImage: "transwarp/txsql:transwarp-6.0.1-final"
   category: MASTER
   frontendOperations: ["Start"]
   deleteOpCondition:

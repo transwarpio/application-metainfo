@@ -1,30 +1,30 @@
 ---
 name: ARGODB_COMPUTING
-version: argodb-1.0
+version: argodb-1.0.0-final
 global: false
 namePrefix: ArgodbComputing
 friendlyName: "ArgodbComputing"
-dockerImage: "transwarp/argodb-inceptor:argodb-1.0"
+dockerImage: "transwarp/argodb-inceptor:argodb-1.0.0-final"
 dependencies:
   - name: GUARDIAN
-    minVersion: transwarp-6.0
+    minVersion: transwarp-6.0.0-final
     optional: true
   - name: ZOOKEEPER
-    minVersion: transwarp-6.0
+    minVersion: transwarp-6.0.0-final
     optional: false
   - name: TXSQL
-    minVersion: transwarp-6.0
+    minVersion: transwarp-6.0.0-final
     optional: false
   - name: ARGODB_STORAGE
-    minVersion: argodb-1.0
-    maxVersion: argodb-1.0
+    minVersion: argodb-1.0.0-final
+    maxVersion: argodb-1.0.0-final
     optional: false
   - name: INCEPTOR
-    minVersion: transwarp-6.0
+    minVersion: transwarp-6.0.0-final
     optional: true
     preferred: false
   - name: HDFS
-    minVersion: transwarp-6.0
+    minVersion: transwarp-6.0.0-final
     optional: true
     preferred: false
 user: hive
@@ -37,7 +37,7 @@ roles:
 - name: DBA_SERVICE
   friendlyName: "DBA Service"
   labelPrefix: "dbaservice"
-  dockerImage: "transwarp/argodb-watchman:argodb-1.0"
+  dockerImage: "transwarp/argodb-watchman:argodb-1.0.0-final"
   linkExpression: "http://${localhostname}:${service['dbaservice.ui.port']}/"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
