@@ -159,6 +159,7 @@ firstWizardConfigs:
 - execute.cycle
 - disable.cas.authorization
 - enable.livy
+- livy.server.session.timeout
 
 product: Sophon
 

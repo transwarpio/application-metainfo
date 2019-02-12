@@ -45,6 +45,7 @@ spark.executor.cores=${service['spark.executor.core']}
 spark.yarn.keytab=${service.keytab}
 spark.yarn.principal=hive/${localhostname?lower_case}@${service.realm}
 enable.livy=${service['enable.livy']}
+livy.server.session.timeout=${service['livy.server.session.timeout']}
 
 mirror.host=${service.roles.SOPHON_ST_BACKEND[0]['hostname']}
 task.pool.size=${service['task.pool.size']}
