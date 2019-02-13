@@ -223,6 +223,33 @@
   groups: []
   visibility: READ_WRITE
 
+- name: designing.spark.master
+  recommendExpression: local[*]
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: designing.spark.executor.num
+  recommendExpression: 4
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: designing.spark.executor.core
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: task.pool.size
   recommendExpression: 100
   defaultValue: null
@@ -287,7 +314,7 @@
   visibility: READ_WRITE
 
 - name: enable.livy
-  recommendExpression: false
+  recommendExpression: true
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}

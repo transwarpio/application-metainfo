@@ -151,6 +151,9 @@ firstWizardConfigs:
 - spark.sql.warehouse.dir
 - spark.executor.num
 - spark.executor.core
+- designing.spark.master
+- designing.spark.executor.num
+- designing.spark.executor.core
 - task.pool.size
 - task.max.concurrency
 - task.timeout

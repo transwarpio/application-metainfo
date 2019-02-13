@@ -44,6 +44,14 @@ spark.executor.instances=${service['spark.executor.num']}
 spark.executor.cores=${service['spark.executor.core']}
 spark.yarn.keytab=${service.keytab}
 spark.yarn.principal=hive/${localhostname?lower_case}@${service.realm}
+designing.spark.sql.warehouse.dir=${service['spark.sql.warehouse.dir']}
+designing.spark.master=${service['designing.spark.master']}
+designing.spark.yarn.appMasterEnv.JAVA_HOME=/usr/java/jdk1.8.0_25
+designing.spark.executorEnv.JAVA_HOME=/usr/java/jdk1.8.0_25
+designing.spark.executor.instances=${service['designing.spark.executor.num']}
+designing.spark.executor.cores=${service['designing.spark.executor.core']}
+designing.spark.yarn.keytab=${service.keytab}
+designing.spark.yarn.principal=hive/${localhostname?lower_case}@${service.realm}
 enable.livy=${service['enable.livy']}
 livy.server.session.timeout=${service['livy.server.session.timeout']}
 
