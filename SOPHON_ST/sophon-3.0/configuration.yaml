@@ -285,3 +285,21 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: enable.livy
+  recommendExpression: false
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: livy.server.session.timeout
+  recommendExpression: 1d
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
