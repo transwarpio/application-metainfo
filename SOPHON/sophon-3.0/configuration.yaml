@@ -260,7 +260,7 @@
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [SOPHON_WEB]
+    roleTypes: [SOPHON_BASE]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -289,6 +289,14 @@
   groups: []
   visibility: READ_WRITE
 - name: sophon.visit.port
+  recommendExpression: 8067
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: sophon.ui.port
   recommendExpression: 8066
   defaultValue: null
   valueType: PORT
@@ -296,6 +304,7 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
 - name: sophon.proxy.api.port
   recommendExpression: 8083
   defaultValue: null
@@ -364,6 +373,107 @@
   recommendExpression: "10240MB"
   defaultValue: null
   valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: sophon.data.preview.limit
+  recommendExpression: "5000"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: sophon.data.downloadable
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  
+- name: sophon.auth.cas.session.timeout
+  recommendExpression: "604800"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: api.docker.repo
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/api-service"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: r.repo.username
+  recommendExpression: sophonuser
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: r.repo.password
+  recommendExpression: password
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: PASSWORD
+
+- name: r.repo.username
+  recommendExpression: sophonuser
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: r.repo.password
+  recommendExpression: password
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: PASSWORD
+- name: r.repo.port
+  recommendExpression: 8037
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: python.repo.username
+  recommendExpression: sophonuser
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: python.repo.password
+  recommendExpression: password
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: PASSWORD
+- name: python.repo.port
+  recommendExpression: 8036
+  defaultValue: null
+  valueType: PORT
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
