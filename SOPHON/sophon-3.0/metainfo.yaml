@@ -85,7 +85,6 @@ roles:
         templatePath: "share/application.properties"
         targetPath: "/etc/${service.sid}/conf/share/application.properties"
         mode: "755"
-roles:
 - name: SOPHON_PYTHON_REPO
   dockerImage: "transwarp/sophon-python-repo:sophon-3.0"
   linkExpression: "http://${localhostname}:${service['python.repo.port']}"
@@ -308,6 +307,7 @@ roles:
         mode: "755"
 - name: APINAMANER
   dockerImage: "transwarp/apimanager:sophon-3.0"
+  linkExpression: "http://${localhostname}:8044/swagger-ui.html"
   friendlyName: "Api Manager"
   labelPrefix: "apimanager"
   category: MASTER
@@ -392,6 +392,11 @@ stages:
       timeoutMinutes: 1
     - !<Role>
       roleType: "SHARE_SERVER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "APINAMANER"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
