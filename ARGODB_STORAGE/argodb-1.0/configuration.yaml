@@ -1716,7 +1716,7 @@
 #  recommendExpression: 19998
 #  defaultValue: null
 #  valueType: NON_NEG_INT
-#  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER]}
+#  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
 #  onDeps: []
 #  groups: ["ladder-site.properties"]
 #  visibility: READ_WRITE
@@ -1725,7 +1725,7 @@
   recommendExpression: 19999
   defaultValue: null
   valueType: NON_NEG_INT
-  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER]}
+  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
   onDeps: []
   groups: ["ladder-site.properties"]
   visibility: READ_WRITE
@@ -1734,7 +1734,7 @@
   recommendExpression: -1
   defaultValue: null
   valueType: GB
-  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER]}
+  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -1743,7 +1743,7 @@
   recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
-  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER]}
+  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -1752,7 +1752,7 @@
   recommendExpression: -1
   defaultValue: null
   valueType: GB
-  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER]}
+  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -1761,7 +1761,7 @@
   recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
-  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER]}
+  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -1779,7 +1779,7 @@
   defaultValue: null
   valueType: STRING
   isNodeSpecific: true
-  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER]}
+  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
   onDeps: []
   groups: ["ladder-site.properties"]
   visibility: READ_WRITE
@@ -1790,7 +1790,7 @@
   defaultValue: null
   valueType: STRING
   isNodeSpecific: false
-  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER]}
+  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
   onDeps: []
   groups: ["ladder-site.properties"]
   visibility: READ_WRITE
@@ -1799,7 +1799,7 @@
 #  recommendExpression: 29998
 #  defaultValue: null
 #  valueType: NON_NEG_INT
-#  scope: !<RoleTypes> {roleTypes: [LADDER_WORKER]}
+#  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
 #  onDeps: []
 #  groups: ["ladder-site.properties"]
 #  visibility: READ_WRITE
@@ -1808,7 +1808,7 @@
 #  recommendExpression: 29999
 #  defaultValue: null
 #  valueType: NON_NEG_INT
-#  scope: !<RoleTypes> {roleTypes: [LADDER_WORKER]}
+#  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
 #  onDeps: []
 #  groups: ["ladder-site.properties"]
 #  visibility: READ_WRITE
@@ -1817,7 +1817,7 @@
   recommendExpression: 30000
   defaultValue: null
   valueType: NON_NEG_INT
-  scope: !<RoleTypes> {roleTypes: [LADDER_WORKER]}
+  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
   onDeps: []
   groups: ["ladder-site.properties"]
   visibility: READ_WRITE
@@ -1826,7 +1826,7 @@
   recommendExpression: -1
   defaultValue: null
   valueType: GB
-  scope: !<RoleTypes> {roleTypes: [LADDER_WORKER]}
+  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -1835,7 +1835,7 @@
   recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
-  scope: !<RoleTypes> {roleTypes: [LADDER_WORKER]}
+  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -1844,7 +1844,7 @@
   recommendExpression: -1
   defaultValue: null
   valueType: GB
-  scope: !<RoleTypes> {roleTypes: [LADDER_WORKER]}
+  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -1853,7 +1853,7 @@
   recommendExpression: -1
   defaultValue: null
   valueType: NON_NEG_INT
-  scope: !<RoleTypes> {roleTypes: [LADDER_WORKER]}
+  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -1864,7 +1864,7 @@
   defaultValue: null
   valueType: STRING
   isNodeSpecific: true
-  scope: !<RoleTypes> {roleTypes: [LADDER_WORKER]}
+  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
   onDeps: []
   groups: ["ladder-site.properties"]
   visibility: READ_WRITE
@@ -1886,7 +1886,7 @@
   defaultValue: null
   valueType: STRING
   isNodeSpecific: true
-  scope: !<RoleTypes> {roleTypes: [LADDER_WORKER]}
+  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
   onDeps: []
   groups: ["ladder-site.properties"]
   visibility: READ_WRITE
@@ -1897,7 +1897,7 @@
   defaultValue: null
   valueType: STRING
   isNodeSpecific: true
-  scope: !<RoleTypes> {roleTypes: [LADDER_WORKER]}
+  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
   onDeps: []
   groups: ["ladder-site.properties"]
   visibility: READ_WRITE
@@ -1908,7 +1908,7 @@
   defaultValue: null
   valueType: STRING
   isNodeSpecific: true
-  scope: !<RoleTypes> {roleTypes: [LADDER_WORKER]}
+  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
   onDeps: []
   groups: ["ladder-site.properties"]
   visibility: READ_WRITE
