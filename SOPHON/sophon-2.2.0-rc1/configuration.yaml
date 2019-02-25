@@ -1,0 +1,405 @@
+# sophon.conf
+- name: livy.cache.type
+  recommendExpression: "simple"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: livy.server.user.manager.open
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: livy.jdbc.username
+  recommendExpression: sophonuser
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: livy.jdbc.password
+  recommendExpression: password
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: PASSWORD
+- name: livy.file.local-dir-whitelist
+  recommendExpression: "/usr/lib/sophon"
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: driver.docker.image.name
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-driver:sophon-2.2.0-rc1"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: ['TOS']
+  groups: []
+  visibility: READ_WRITE
+# spark-defaults.conf
+- name: spark.yarn.queue
+  recommendExpression: "default"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: spark.sql.warehouse.dir
+  recommendExpression: "file:/usr/lib/midas/warehouse"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: spark.yarn.dist.archives
+  recommendExpression: "file:/usr/lib/spark2/R/lib/sparkr.zip#sparkr"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+#jvm options for park-default.conf
+- name: spark.executor.heapsize
+  recommendExpression: 2048
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: spark.executor.permsize
+  recommendExpression: 128
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: spark.executor.max_permsize
+  recommendExpression: 256
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: spark.driver.heapsize
+  recommendExpression: 2048
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: spark.driver.permsize
+  recommendExpression: 128
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: spark.driver.max_permsize
+  recommendExpression: 256
+  defaultValue: null
+  valueType: MB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# redis
+- name: midas.redis.port
+  recommendExpression: 6379
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: redis.port
+  recommendExpression: 6379
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_REDIS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+
+- name: server.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: redis.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_REDIS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: redis.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_REDIS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: redis.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_REDIS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: redis.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_REDIS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+
+- name: redis.bind
+  recommendExpression: 0.0.0.0
+  defaultValue: null
+  valueType: HOST
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_REDIS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: redis.password
+  recommendExpression: transwarp-redis-01
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_REDIS]
+  onDeps: []
+  groups: []
+  visibility: PASSWORD
+
+- name: sophon.server.port
+  recommendExpression: 8082
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_BASE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: sophon.kong.username
+  recommendExpression: "admin"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: sophon.kong.password
+  recommendExpression: "passwd"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: PASSWORD
+- name: sophon.enable.kerberos
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: sophon.visit.port
+  recommendExpression: 8067
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: sophon.ui.port
+  recommendExpression: 8066
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: sophon.proxy.api.port
+  recommendExpression: 8083
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# notebook
+- name: sophon.k8s.tensorboard.image.name
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-cpu:sophon-2.2.0-rc1"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: ['TOS']
+  groups: []
+  visibility: READ_WRITE
+- name: sophon.k8s.jupyter.cpu.image.name
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-cpu:sophon-2.2.0-rc1"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: ['TOS']
+  groups: []
+  visibility: READ_WRITE
+- name: sophon.k8s.jupyter.gpu.image.name
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-gpu:sophon-2.2.0-rc1"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: ['TOS']
+  groups: []
+  visibility: READ_WRITE
+- name: sophon.apiservice.image.name
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-apiserver:sophon-2.2.0-rc1"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: ['TOS']
+  groups: []
+  visibility: READ_WRITE
+
+
+# yarn or kuberenets
+- name: sophon.resource.type
+  recommendExpression: "yarn"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+
+- name: spring.http.multipart.max-file-size
+  recommendExpression: "10240MB"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  
+- name: spring.http.multipart.max-request-size
+  recommendExpression: "10240MB"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: sophon.data.preview.limit
+  recommendExpression: "5000"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: sophon.data.downloadable
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  
+- name: sophon.auth.cas.session.timeout
+  recommendExpression: "604800"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
