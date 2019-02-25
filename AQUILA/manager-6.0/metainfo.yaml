@@ -105,6 +105,30 @@ roles:
         targetPath: "/etc/${service.sid}/conf/agent/log4j2.xml"
         mode: "755"
 
+- name: NODE_EXPORTER
+  friendlyName: "Node Exporter"
+  labelPrefix: "node-exporter"
+  dockerImage: "transwarp/node-exporter:manager-6.0"
+  linkExpression: "http://${localhostname}:${service['aquila.node.exporter.web.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop"]
+  env:
+  - name: AQUILA_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths:
+  - mountPath: /host
+    hostPath: /
+    name: host-mount
+  nodeSpecificMounts: []
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<EachNode> {}
+  suggestion:
+  - criteria: !<EachNode> {}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations: []
+
 # MANAGER_PROXY is strictly adhered to Manager
 
 firstWizardConfigs:
