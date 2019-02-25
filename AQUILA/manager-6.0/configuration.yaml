@@ -141,3 +141,15 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: aquila.node.exporter.web.port
+  recommendExpression: 8670
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [NODE_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+
