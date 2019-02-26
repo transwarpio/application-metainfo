@@ -45,7 +45,7 @@ roles:
     - key: master.master.data_path
       featureFile: master.lock
     - key: master.log.log_dir
-      featureFile: master.log
+      featureFile: master_main.INFO
     fromPath:
     - key: /etc/${service.sid}/conf
       featureFile: master.conf
@@ -171,7 +171,7 @@ roles:
     - key: tabletserver.store.datadirs
       featureFile: .trash
     - key: tabletserver.log.log_dir
-      featureFile: tabletserver.log
+      featureFile: tabletserver_main.INFO
     fromPath:
     - key: /etc/${service.sid}/conf
       featureFile: tabletserver.conf
