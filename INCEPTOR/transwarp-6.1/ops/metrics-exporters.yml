@@ -1,0 +1,30 @@
+exporters:
+  - scope:
+      type: SERVICE  # 服务级别的exporter，将任选一个角色所在节点启动
+    startup:
+      type: REQUIRED # 需要Aquila来启动exporter（PROVIDED表示不需要）
+      labelPrefix: inceptor-exporter-from-txsql
+      k8sResources:
+        - inceptor-exporter-from-txsql-deployment.yml.ftl
+      configs:
+        - template: exporter-from-txsql.yml.ftl
+          mode: 600 # 由于该配置文件中含有密码，设定较严格的权限
+    scrape:
+      portConfig: exporter.from.txsql.port
+      scheme: http
+      interval: 1m
+  - scope:
+      type: ROLE # 角色级别的exporter
+      roleType: INCEPTOR_SERVER # 在每一个这种类型的角色节点启动一个exporter
+    startup:
+      type: REQUIRED
+      labelPrefix: inceptor-exporter-from-server
+      k8sResources:
+        - inceptor-exporter-from-server-deployment.yml.ftl
+      configs:
+        - template: exporter-from-server.yml.ftl
+          mode: 755
+    scrape:
+      portConfig: exporter.from.server.port
+      scheme: http
+      interval: 1m
