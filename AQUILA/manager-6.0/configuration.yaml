@@ -142,7 +142,7 @@
   groups: []
   visibility: READ_WRITE
 
-- name: aquila.node.exporter.web.port
+- name: node.exporter.web.port
   recommendExpression: 8670
   defaultValue: null
   valueType: PORT
