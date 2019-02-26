@@ -105,11 +105,11 @@ roles:
         targetPath: "/etc/${service.sid}/conf/agent/log4j2.xml"
         mode: "755"
 
-- name: NODE_EXPORTER
-  friendlyName: "Node Exporter"
-  labelPrefix: "node-exporter"
+- name: AQUILA_NODE_EXPORTER
+  friendlyName: "Aquila Node Exporter"
+  labelPrefix: "aquila-node-exporter"
   dockerImage: "transwarp/node-exporter:manager-6.0"
-  linkExpression: "http://${localhostname}:${service['aquila.node.exporter.web.port']}"
+  linkExpression: "http://${localhostname}:${service['node.exporter.web.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop"]
   env:
