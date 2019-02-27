@@ -5,6 +5,7 @@ global: false
 namePrefix: Slipstream
 friendlyName: "Slipstream"
 dockerImage: "transwarp/inceptor:transwarp-6.0"
+validateConfig: true
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.0
