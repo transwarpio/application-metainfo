@@ -67,7 +67,7 @@
 - name: mysql.datadir
   recommendExpression: /hadoop/mysql
   defaultValue: null
-  valueType: STRING
+  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_MYSQL]
   onDeps: []
@@ -90,7 +90,7 @@
       </#function>
       ${localDir("/" + service['sid'] + "/eventstore" )}
   defaultValue: null
-  valueType: STRING
+  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_SLIPSTREAMSTUDIO]
   onDeps: []
@@ -223,7 +223,7 @@
 - name: tdt.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [TDT_SERVER]
   onDeps: []
@@ -233,7 +233,7 @@
 - name: tdt.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [TDT_SERVER]
   onDeps: []
@@ -243,7 +243,7 @@
 - name: tdt.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [TDT_SERVER]
   onDeps: []
@@ -253,7 +253,7 @@
 - name: tdt.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [TDT_SERVER]
   onDeps: []
@@ -297,7 +297,7 @@
     </#function>
     ${localDir("/" + service['sid'] + "/projoutput" )}
   defaultValue: null
-  valueType: STRING
+  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_SLIPSTREAMSTUDIO]
   onDeps: []
@@ -321,7 +321,7 @@
     </#function>
     ${localDir("/" + service['sid'] + "/projrepo/default" )}
   defaultValue: null
-  valueType: STRING
+  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_SLIPSTREAMSTUDIO]
   onDeps: []
@@ -341,7 +341,7 @@
 - name: slipstream.studio.rules.resource.dir
   recommendExpression: /${service['sid']}/rules/resource
   defaultValue: null
-  valueType: STRING
+  valueType: ABSOLUTE_PATH
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
@@ -350,7 +350,7 @@
 - name: slipstream.studio.algorithm.hdfs.jar.dir
   recommendExpression: /${service['sid']}/algorithm_jar
   defaultValue: null
-  valueType: STRING
+  valueType: ABSOLUTE_PATH
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
@@ -359,7 +359,7 @@
 - name: slipstream.studio.algorithm.hdfs.tmp.jar.dir
   recommendExpression: /${service['sid']}/algorithm_tmp_jar
   defaultValue: null
-  valueType: STRING
+  valueType: ABSOLUTE_PATH
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []

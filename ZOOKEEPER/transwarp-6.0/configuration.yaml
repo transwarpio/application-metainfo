@@ -94,7 +94,7 @@
 - name: zookeeper.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [ZOOKEEPER]
   onDeps: []
@@ -104,7 +104,7 @@
 - name: zookeeper.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [ZOOKEEPER]
   onDeps: []
@@ -114,7 +114,7 @@
 - name: zookeeper.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [ZOOKEEPER]
   onDeps: []
@@ -124,7 +124,7 @@
 - name: zookeeper.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [ZOOKEEPER]
   onDeps: []

@@ -4,6 +4,7 @@ version: transwarp-6.1
 global: true
 namePrefix: Guardian
 friendlyName: Guardian
+validateConfig: true
 dependencies: []
 roles:
 - name: GUARDIAN_TXSQL_SERVER
