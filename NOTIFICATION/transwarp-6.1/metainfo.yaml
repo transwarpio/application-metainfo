@@ -5,7 +5,6 @@ global: false
 namePrefix: Notification
 friendlyName: Notification
 dockerImage: "transwarp/notification:transwarp-6.1"
-validateConfig: true
 dependencies:
   - name: TXSQL
     minVersion: transwarp-6.1

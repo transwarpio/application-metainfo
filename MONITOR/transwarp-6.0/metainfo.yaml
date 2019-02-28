@@ -4,7 +4,6 @@ version: transwarp-6.0
 global: true
 namePrefix: Monitor
 friendlyName: "Monitor"
-validateConfig: true
 dependencies: []
 roles:
 - name: MONITOR_PROMETHEUS
