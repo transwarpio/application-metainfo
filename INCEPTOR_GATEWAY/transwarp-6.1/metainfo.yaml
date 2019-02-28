@@ -6,9 +6,9 @@ namePrefix: InceptorGateway
 friendlyName: "InceptorGateway"
 dockerImage: "transwarp/inceptor-gateway:transwarp-6.1"
 user: hive
-validateConfig: true
 dependencies: []
 plugins: []
+
 roles:
 - name: INCEPTOR_GATEWAY
   friendlyName: "Inceptor Gateway"

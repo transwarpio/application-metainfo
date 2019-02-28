@@ -4,7 +4,6 @@ version: transwarp-6.0
 global: false
 namePrefix: Pilot
 friendlyName: Pilot
-validateConfig: true
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.0

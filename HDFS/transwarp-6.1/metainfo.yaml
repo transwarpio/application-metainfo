@@ -6,7 +6,6 @@ namePrefix: HDFS
 friendlyName: HDFS
 dockerImage: "transwarp/hdfs:transwarp-6.1"
 user: hdfs
-validateConfig: true
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.1

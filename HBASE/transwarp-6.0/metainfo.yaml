@@ -5,7 +5,6 @@ global: false
 namePrefix: HBase
 friendlyName: "HBase"
 dockerImage: "transwarp/hbase-os:transwarp-6.0"
-validateConfig: true
 dependencies:
   - name: ZOOKEEPER
     minVersion: transwarp-6.0

@@ -4,7 +4,6 @@ version: manager-6.0
 global: true
 namePrefix: Manager
 friendlyName: "Manager"
-validateConfig: true
 dependencies: []
 user: root
 roles:
