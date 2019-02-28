@@ -4,8 +4,8 @@ version: transwarp-6.1
 global: false
 namePrefix: Kong
 friendlyName: "Kong"
-validateConfig: true
 dependencies: []
+
 roles:
 - name: KONG_MYSQL
   friendlyName: "Kong Mysql"

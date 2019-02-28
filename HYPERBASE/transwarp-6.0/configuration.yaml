@@ -578,7 +578,7 @@
 - name: master.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [HYPERBASE_MASTER]
   onDeps: []
@@ -588,7 +588,7 @@
 - name: master.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [HYPERBASE_MASTER]
   onDeps: []
@@ -598,7 +598,7 @@
 - name: master.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [HYPERBASE_MASTER]
   onDeps: []
@@ -608,7 +608,7 @@
 - name: master.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [HYPERBASE_MASTER]
   onDeps: []
@@ -628,7 +628,7 @@
 - name: regionserver.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [HYPERBASE_REGIONSERVER]
   onDeps: []
@@ -638,7 +638,7 @@
 - name: regionserver.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [HYPERBASE_REGIONSERVER]
   onDeps: []
@@ -648,7 +648,7 @@
 - name: regionserver.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [HYPERBASE_REGIONSERVER]
   onDeps: []
@@ -658,7 +658,7 @@
 - name: regionserver.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [HYPERBASE_REGIONSERVER]
   onDeps: []
@@ -678,7 +678,7 @@
 - name: thrift.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [HYPERBASE_THRIFT]
   onDeps: []
@@ -688,7 +688,7 @@
 - name: thrift.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [HYPERBASE_THRIFT]
   onDeps: []
@@ -698,7 +698,7 @@
 - name: thrift.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [HYPERBASE_THRIFT]
   onDeps: []
@@ -708,7 +708,7 @@
 - name: thrift.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [HYPERBASE_THRIFT]
   onDeps: []

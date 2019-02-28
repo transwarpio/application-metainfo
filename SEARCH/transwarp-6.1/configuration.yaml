@@ -59,7 +59,7 @@
     </#function>
     ${localDir("/search/${service.sid}/${roleGroupName}/data")}
   defaultValue: null
-  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
+  valueType: STRING
   isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes: [SEARCH_SERVER]
@@ -199,7 +199,7 @@
 - name: search.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [SEARCH_SERVER]
   onDeps: []
@@ -209,7 +209,7 @@
 - name: search.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [SEARCH_SERVER]
   onDeps: []
@@ -219,7 +219,7 @@
 - name: search.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [SEARCH_SERVER]
   onDeps: []
@@ -229,7 +229,7 @@
 - name: search.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [SEARCH_SERVER]
   onDeps: []
@@ -239,7 +239,7 @@
 - name: search.head.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [SEARCH_SERVER]
   onDeps: []
@@ -249,7 +249,7 @@
 - name: search.head.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [SEARCH_SERVER]
   onDeps: []
@@ -259,7 +259,7 @@
 - name: search.head.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [SEARCH_SERVER]
   onDeps: []
@@ -269,7 +269,7 @@
 - name: search.head.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [SEARCH_SERVER]
   onDeps: []
