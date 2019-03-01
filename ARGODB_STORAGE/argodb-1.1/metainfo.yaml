@@ -309,9 +309,9 @@ roles:
       scheme: HTTP
   summaryPolicy: SOME
   autoAssign:
-  - advice: !<NumSeq> {"numSeq": [1]}
+  - advice: !<NumSeq> {"numSeq": [3]}
   suggestion:
-  - criteria: !<Range> {"min": 1}
+  - criteria: !<Range> {"min": 3, "oddity": true}
   validation:
   - criteria: !<Range> {"min": 1}
   resources:
