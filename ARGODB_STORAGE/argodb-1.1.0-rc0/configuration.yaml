@@ -1712,14 +1712,23 @@
   groups: ["core-site.xml"]
   visibility: READ_WRITE
 
-#- name: ladder.master.port
-#  recommendExpression: 19998
-#  defaultValue: null
-#  valueType: NON_NEG_INT
-#  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
-#  onDeps: []
-#  groups: ["ladder-site.properties"]
-#  visibility: READ_WRITE
+- name: ladder.master.raft.port
+  recommendExpression: 6001
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
+  onDeps: []
+  groups: ["ladder-site.properties"]
+  visibility: READ_WRITE
+
+- name: ladder.master.rpc.port
+  recommendExpression: 19998
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
+  onDeps: []
+  groups: ["ladder-site.properties"]
+  visibility: READ_WRITE
 
 - name: ladder.master.web.port
   recommendExpression: 19999
