@@ -136,13 +136,6 @@ studio-role:
 # folder for internationalization files
 spring.messages.basename: "classpath:i18n/locale"
 
-# http upload file size
-spring:
-  http:
-    multipart:
-      enabled: true
-      max-file-size: 50MB
-      max-request-size: 50MB
 
 # agent settings
 agent:
