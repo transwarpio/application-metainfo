@@ -1,7 +1,7 @@
 <#compress>
 <#noparse>
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="INFO" monitorInterval="30">
+<Configuration status="INFO" monitorInterval="60">
   <Properties>
     <Property name="LOG_PATTERN">
       %d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName} --- [%15.15t] %-40.40c{1.} : %m%n%ex
