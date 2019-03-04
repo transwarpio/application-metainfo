@@ -7,7 +7,7 @@ set -e
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 WORKSPACE="${SCRIPT_DIR}/../.."
 
-SERVICE_LIST=(SOPHON IOT SOPHON_ST)
+SERVICE_LIST=(SOPHON IOT SOPHON_ST WORKFLOW YARN)
 
 for service in "${SERVICE_LIST[@]}"; do
     if [ -d "${WORKSPACE}"/"${service}"/"${IN_PROGRESS_VERSION}" ]; then
