@@ -335,7 +335,7 @@ roles:
       number: 2
   deleteOpCleanDirs:
     fromPath:
-    - key: /var/ladder_format/is_formated.identifier
+    - key: /var/transwarp/data/ladder/is_formated.identifier
       featureFile: is_formated.identifier
   mountPaths:
   - mountPath: /var/ladder_format
@@ -407,7 +407,7 @@ roles:
       number: 2
   deleteOpCleanDirs:
     fromPath:
-    - key: /var/ladder_format/is_formated_worker.identifier
+    - key: /var/transwarp/data/ladder/is_formated_worker.identifier
       featureFile: is_formated_worker.identifier
   mountPaths:
   - mountPath: /var/ladder_format

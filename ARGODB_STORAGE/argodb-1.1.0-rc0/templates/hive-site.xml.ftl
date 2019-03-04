@@ -15,6 +15,12 @@
 </#list>
 <@property "ngmr.holodesk.shiva.mastergroup" master_group?join(",")/>
 
+<#assign ladder_masters_rpc=[]/>
+<#list service.roles.LADDER_MASTER as role>
+    <#assign ladder_masters_rpc += [role.hostname + ":" + service['ladder.master.rpc.port']]>
+</#list>
+<@property "ladder.master.rpc.server.addresslist" ladder_masters_rpc?join(",")/>
+
 <#if dependencies.HDFS??>
     <#if dependencies['HDFS']['nameservices']?? && dependencies['HDFS']['nameservices']?size gt 0>
         <#assign hostPort=dependencies['HDFS']['nameservices'][0]>
