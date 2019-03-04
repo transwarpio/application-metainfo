@@ -13,8 +13,8 @@
     </Console>
     <!-- Rolling File Appender -->
 </#noparse>
-    <RollingFile name="FileAppender" fileName="/var/log/${service.sid}/server/aquila-server.log"
-                 filePattern="/var/log/${service.sid}/server/aquila-server.log.%i">
+    <RollingFile name="FileAppender" fileName="/var/log/${service.sid}/manager-proxy/aquila-manager-proxy.log"
+                 filePattern="/var/log/${service.sid}/aquila-manager-proxy.log.%i">
 <#noparse>
       <PatternLayout>
         <Pattern>${LOG_PATTERN}</Pattern>
@@ -27,7 +27,7 @@
   </Appenders>
   <Loggers>
 </#noparse>
-    <Logger name="io.transwarp.aquila" level="${service['server.log.app.level']}" additivity="false">
+    <Logger name="io.transwarp.manager" level="${service['manager.proxy.log.app.level']}" additivity="false">
 <#noparse>
       <AppenderRef ref="FileAppender" />
     </Logger>

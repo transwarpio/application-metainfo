@@ -105,9 +105,61 @@ roles:
         targetPath: "/etc/${service.sid}/conf/agent/log4j2.xml"
         mode: "755"
 
+- name: AQUILA_MANAGER_PROXY
+  friendlyName: "Manager Proxy"
+  labelPrefix: "manager-proxy"
+  dockerImage: "transwarp/manager-proxy:manager-6.0"
+  category: MASTER
+  frontendOperations: ["Start", "Stop"]
+  env:
+    - name: PROXY_CONF_DIR
+      value: /etc/${service.sid}/conf/manager-proxy
+    - name: PROXY_LOG_DIR
+      value: /var/log/${service.sid}/manager-proxy
+  mountPaths:
+    - mountPath: /tmp
+      hostPath: /tmp
+      name: temp
+    - mountPath: /var/lib/transwarp-manager/master/content/meta/services
+      hostPath: /var/lib/transwarp-manager/master/content/meta/services
+      name: metainfo
+  resources:
+    limitsMemoryKey: manager.proxy.container.limits.memory
+    limitsCpuKey: manager.proxy.container.limits.cpu
+    requestsMemoryKey: manager.proxy.container.requests.memory
+    requestsCpuKey: manager.proxy.container.requests.cpu
+  nodeSpecificMounts: []
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq>
+      numSeq: [1]
+      mates: ["TRANSWARP_MANAGER_MASTER"] #REGISTRY_SERVER is strictly adhered to Manager
+  suggestion:
+    - criteria: !<OnManagerNode> {"roleType": "AQUILA_MANAGER_PROXY"}
+  validation:
+    - criteria: !<OnManagerNode> {"roleType": "AQUILA_MANAGER_PROXY"}
+  operations:
+    - type: Install
+      directives:
+        - directive: !<mkdirs>
+            paths: ["/var/log/${service.sid}/manager-proxy"]
+            mode: "750"
+    - type: Config
+      directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "manager-proxy/application.yml.ftl"
+            targetPath: "/etc/${service.sid}/conf/manager-proxy/application.yml"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "manager-proxy/log4j2.xml.ftl"
+            targetPath: "/etc/${service.sid}/conf/manager-proxy/log4j2.xml"
+            mode: "755"
+
 - name: AQUILA_NODE_EXPORTER
-  friendlyName: "Aquila Node Exporter"
-  labelPrefix: "aquila-node-exporter"
+  friendlyName: "Node Exporter"
+  labelPrefix: "node-exporter"
   dockerImage: "transwarp/node-exporter:manager-6.0"
   linkExpression: "http://${localhostname}:${service['node.exporter.web.port']}"
   category: MASTER
@@ -134,6 +186,8 @@ roles:
 firstWizardConfigs:
 - server.web.port
 - agent.web.port
+- manager.proxy.web.port
+- node.exporter.web.port
 
 pages:
 - roles
