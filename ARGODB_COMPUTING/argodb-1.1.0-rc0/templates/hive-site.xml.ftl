@@ -16,6 +16,11 @@
         <#assign master_group += [master.ip + ":" + storage['shiva.master.rpc_service.master_service_port']]>
     </#list>
     <@property "ngmr.holodesk.shiva.mastergroup" master_group?join(",")/>
+    <#assign ladder_masters_rpc=[]/>
+    <#list storage.roles.LADDER_MASTER as role>
+        <#assign ladder_masters_rpc += [role.hostname + ":" + storage['ladder.master.rpc.port']]>
+    </#list>
+    <@property "ladder.master.rpc.server.addresslist" ladder_masters_rpc?join(",")/>
 </#if>
 
 <#if dependencies.HDFS??>
