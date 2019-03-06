@@ -104,6 +104,3 @@ LOGLEVEL ([Aa]lert|ALERT|[Tt]race|TRACE|[Dd]ebug|DEBUG|[Nn]otice|NOTICE|[Ii]nfo|
 
 #
 TDH_TIMESTAMP (%{TIMESTAMP_ISO8601}|%{DATESTAMP}|\[%{TIMESTAMP_ISO8601}\]|\[%{DATESTAMP}\])
-
-#write by raojinfan,it`s a test
-TCC_GREEDYDATA .*?(?=-)
