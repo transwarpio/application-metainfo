@@ -64,7 +64,7 @@
 - name: yarn.scheduler.capacity.node-locality-delay
   recommendExpression: -1
   defaultValue: null
-  valueType: STRING
+  valueType: FLOAT
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: [capacity_scheduler]
@@ -433,7 +433,7 @@
 - name: yarn.application.classpath
   recommendExpression: /etc/${service.sid}/conf,/usr/lib/hadoop/*,/usr/lib/hadoop/lib/*,/usr/lib/hadoop-hdfs/*,/usr/lib/hadoop-hdfs/lib/*,/usr/lib/hadoop-yarn/*,/usr/lib/hadoop-yarn/lib/*,/usr/lib/hadoop-mapreduce/*,/usr/lib/hadoop-mapreduce/lib/*
   defaultValue: null
-  valueType: STRING
+  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: ["yarn-site.xml"]
@@ -469,9 +469,9 @@
 #  recommendExpression: 6
   recommendExpression: |
     <#if numCores gt 6>
-      <#assign vcores=(numCores / 3)?floor>
+    <#assign vcores=(numCores / 3)?floor>
     <#else>
-      <#assign vcores=1>
+    <#assign vcores=1>
     </#if>
     <#assign expectedMem=(vcores * 4 * 1024) halfMem=(memBytes / 1024 / 1024 / 2)?floor>
     <#if expectedMem gt halfMem>
@@ -503,7 +503,7 @@
     </#function>
     ${localDir("/hadoop/yarn/local")}
   defaultValue: null
-  valueType: STRING
+  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
   scope: !<RoleTypes>
     roleTypes: [YARN_NODEMANAGER]
   isNodeSpecific: true
@@ -651,7 +651,7 @@
 - name: resourcemanager.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [YARN_RESOURCEMANAGER]
   onDeps: []
@@ -661,7 +661,7 @@
 - name: resourcemanager.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [YARN_RESOURCEMANAGER]
   onDeps: []
@@ -671,7 +671,7 @@
 - name: resourcemanager.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [YARN_RESOURCEMANAGER]
   onDeps: []
@@ -681,7 +681,7 @@
 - name: resourcemanager.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [YARN_RESOURCEMANAGER]
   onDeps: []
@@ -701,7 +701,7 @@
 - name: nodemanager.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [YARN_RESOURCEMANAGER]
   onDeps: []
@@ -711,7 +711,7 @@
 - name: nodemanager.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [YARN_RESOURCEMANAGER]
   onDeps: []
@@ -721,7 +721,7 @@
 - name: nodemanager.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [YARN_RESOURCEMANAGER]
   onDeps: []
@@ -731,7 +731,7 @@
 - name: nodemanager.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [YARN_NODEMANAGER]
   onDeps: []
@@ -751,7 +751,7 @@
 - name: historyserver.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [YARN_HISTORYSERVER]
   onDeps: []
@@ -761,7 +761,7 @@
 - name: historyserver.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [YARN_HISTORYSERVER]
   onDeps: []
@@ -771,7 +771,7 @@
 - name: historyserver.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [YARN_HISTORYSERVER]
   onDeps: []
@@ -781,7 +781,7 @@
 - name: historyserver.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [YARN_HISTORYSERVER]
   onDeps: []
@@ -801,7 +801,7 @@
 - name: timelineserver.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [YARN_TIMELINESERVER]
   onDeps: []
@@ -811,7 +811,7 @@
 - name: timelineserver.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [YARN_TIMELINESERVER]
   onDeps: []
@@ -821,7 +821,7 @@
 - name: timelineserver.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [YARN_TIMELINESERVER]
   onDeps: []
@@ -831,7 +831,7 @@
 - name: timelineserver.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [YARN_TIMELINESERVER]
   onDeps: []

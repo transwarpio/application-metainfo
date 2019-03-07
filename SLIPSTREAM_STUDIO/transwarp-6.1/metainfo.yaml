@@ -5,6 +5,7 @@ global: false
 namePrefix: SlipstreamStudio
 friendlyName: "SlipstreamStudio"
 dockerImage: "transwarp/slipstream-studio:transwarp-6.1"
+validateConfig: true
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.1
