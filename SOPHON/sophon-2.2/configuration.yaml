@@ -403,3 +403,21 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: r.repo.port
+  recommendExpression: 8037
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  
+- name: python.repo.port
+  recommendExpression: 8036
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
