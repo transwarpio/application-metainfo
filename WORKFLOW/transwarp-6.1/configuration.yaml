@@ -109,7 +109,7 @@
 - name: workflow.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [WORKFLOW_SERVER]
   onDeps: []
@@ -119,7 +119,7 @@
 - name: workflow.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [WORKFLOW_SERVER]
   onDeps: []
@@ -129,7 +129,7 @@
 - name: workflow.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [WORKFLOW_SERVER]
   onDeps: []
@@ -139,7 +139,7 @@
 - name: workflow.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [WORKFLOW_SERVER]
   onDeps: []
