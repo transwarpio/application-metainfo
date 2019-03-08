@@ -19,6 +19,10 @@ dependencies:
     minVersion: argodb-1.1.0-rc1
     maxVersion: argodb-1.1.0-rc1
     optional: false
+  - name: DBA_SERVICE
+    minVersion: argodb-1.1.0-rc1
+    maxVersion: argodb-1.1.0-rc1
+    optional: false
   - name: INCEPTOR
     minVersion: transwarp-6.0
     optional: true
@@ -34,59 +38,6 @@ plugins:
     useTar: false
 
 roles:
-- name: DBA_SERVICE
-  friendlyName: "DBA Service"
-  labelPrefix: "dbaservice"
-  dockerImage: "transwarp/argodb-dbaservice:argodb-1.1.0-rc1"
-  linkExpression: "http://${localhostname}:${service['dbaservice.ui.port']}/"
-  category: MASTER
-  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
-  readinessProbe:
-    probe: !<httpGet>
-      path: /
-      port: ${service['dbaservice.ui.port']}
-      scheme: HTTP
-  env:
-  - name: WATCHMAN_CONF
-    value: /etc/${service.sid}/conf/dbaservice/application.yml
-  - name: AIOPS_CONF
-    value: /etc/${service.sid}/conf/dbaservice/aiops.yml
-  deleteOpCleanDirs:
-    fromPath:
-    - key: /etc/${service.sid}/conf/dbaservice
-      featureFile: application.yml
-  mountPaths: []
-  resources:
-    limitsMemoryKey: dbaservice.container.limits.memory
-    limitsCpuKey: dbaservice.container.limits.cpu
-    requestsMemoryKey: dbaservice.container.requests.memory
-    requestsCpuKey: dbaservice.container.requests.cpu
-  summaryPolicy: NONE
-  autoAssign:
-  - advice: !<NumSeq> {"numSeq": [1]}
-  suggestion:
-  - criteria: !<Range> {"min": 1}
-  validation:
-  - criteria: !<Range> {"min": 0}
-  operations:
-  - type: Install
-    directives:
-    - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf/dbaservice"]
-        mode: "755"
-  - type: Config
-    directives:
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "dbaservice/application.yml.ftl"
-        targetPath: "/etc/${service.sid}/conf/dbaservice/application.yml"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "dbaservice/aiops.yml.ftl"
-        targetPath: "/etc/${service.sid}/conf/dbaservice/aiops.yml"
-        mode: "755"
-
 - name: INCEPTOR_EXECUTOR
   friendlyName: "Inceptor Executor"
   labelPrefix: "inceptor-executor"
@@ -306,7 +257,6 @@ firstWizardConfigs:
 - inceptor.executor.memory
 - inceptor.server.memory
 - inceptor.ui.port
-- inceptor.dbaservice.enabled
 - javax.jdo.option.ConnectionPassword
 - javax.jdo.option.ConnectionUserName
 - ngmr.cache.size
@@ -339,13 +289,6 @@ firstWizardConfigs:
 - compactor.container.requests.memory
 - compactor.container.requests.cpu
 - compactor.memory.ratio
-# Watchman
-- dbaservice.container.limits.cpu
-- dbaservice.container.limits.memory
-- dbaservice.container.requests.cpu
-- dbaservice.container.requests.memory
-- dbaservice.ui.port
-- dbaservice.aiops.ui.port
 
 dashboardMetrics:
 - InceptorSqlActiveTasks

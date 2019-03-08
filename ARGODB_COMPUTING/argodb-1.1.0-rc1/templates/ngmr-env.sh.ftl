@@ -17,8 +17,9 @@ export NGMR_EXECUTORS_PERJOB=${service['ngmr.executors.perjob']}
 export INCEPTOR_LOG_DIR=/var/log/${service.sid}
 export SPARK_DRIVER_PORT=${service['spark.driver.port']}
 <#assign dbaServiceExtraDriverOpts="">
-<#if (service.roles.DBA_SERVICE)?? && ((service['inceptor.dbaservice.enabled'])!"false")="true">
-    <#assign dbaServiceExtraDriverOpts=" -Dinceptor.leviathan.studio.host=" + service.roles.DBA_SERVICE[0]['ip'] + " -Dinceptor.leviathan.studio.port=60606 -Dinceptor.leviathan.studio.name=receiver -Dinceptor.leviathan.studio.test.enabled=false -Dspark.ui.show.context.default=false">
+<#if dependencies.DBA_SERVICE??>
+    <#assign dbaservice=dependencies.DBA_SERVICE.roles.DBA_SERVICE_SERVER>
+    <#assign dbaServiceExtraDriverOpts=" -Dinceptor.leviathan.studio.host=" + dbaservice[0]['ip'] + " -Dinceptor.leviathan.studio.http.port=" + dependencies.DBA_SERVICE['dbaservice.ui.port'] + " -Dinceptor.leviathan.studio.port=60606 -Dinceptor.leviathan.studio.name=receiver -Dinceptor.leviathan.studio.test.enabled=false -Dspark.ui.show.context.default=false">
 </#if>
 export EXTRA_DRIVER_OPTS=" ${dbaServiceExtraDriverOpts + service['EXTRA_DRIVER_OPTS']} "
 EXTRA_EXECUTOR_OPTS=" ${service['EXTRA_EXECUTOR_OPTS']} "
