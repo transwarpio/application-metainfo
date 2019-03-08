@@ -321,6 +321,7 @@ roles:
     requestsCpuKey: ladder.master.container.requests.cpu
   nodeSpecificMounts:
   - configKey: ladder.master.journal.data_path
+  - configKey: ladder.master.raft.data_path
   - configKey: ladder.master.localfs.data_path
   env:
   - name: LADDER_CONF_DIR
@@ -564,6 +565,7 @@ firstWizardConfigs:
 - ladder.master.container.requests.memory
 - ladder.master.container.requests.cpu
 - ladder.master.journal.data_path
+- ladder.master.raft.data_path
 - ladder.master.localfs.data_path
 - ladder.worker.web.port
 - ladder.worker.container.limits.memory

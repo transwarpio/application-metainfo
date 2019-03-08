@@ -1797,6 +1797,24 @@
   groups: ["ladder-site.properties"]
   visibility: READ_WRITE
 
+- name: ladder.master.raft.data_path
+  recommendExpression: |
+    <#assign sorted = rcmdMounts?sort>
+    <#if sorted?size == 0>
+    /ladder/journal
+    <#elseif sorted?size == 1>
+    ${sorted?first}/ladder/raftlog
+    <#else>
+    ${sorted[0]}/ladder/raflog
+    </#if>
+  defaultValue: null
+  valueType: STRING
+  isNodeSpecific: true
+  scope: !<RoleTypes> {roleTypes: [LADDER_MASTER, LADDER_WORKER]}
+  onDeps: []
+  groups: ["ladder-site.properties"]
+  visibility: READ_WRITE
+
 - name: ladder.master.localfs.data_path
   recommendExpression: |
     /tmp/ladder/localfs
