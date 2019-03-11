@@ -9,6 +9,120 @@ user: root
 # TODO need generate manager password
 
 roles:
+- name: AQUILA_TXSQL_SERVER
+  friendlyName: "TxSQL Server"
+  labelPrefix: "txsql-server"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 3
+    reject:
+      number: 2
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: txsql.data.dir
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - "MYSQL_PWD=$(grep db.password /etc/${service.sid}/conf/db.properties | cut -d'=' -f2) mysql -h`hostname` -P${service['txsql.mysql.rw.port']} -uroot -e'select 1 from dual'"
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  env:
+  - name: CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: txsql.container.limits.memory
+    limitsCpuKey: txsql.container.limits.cpu
+    requestsMemoryKey: txsql.container.requests.memory
+    requestsCpuKey: txsql.container.requests.cpu
+  nodeSpecificMounts:
+    - configKey: txsql.data.dir
+  summaryPolicy: MAJOR
+  dockerImage: "transwarp/txsql:transwarp-6.0.1-final"
+  autoAssign:
+    - advice: !<NumSeq> {"numSeq": [5, 3, 1]}
+  suggestion:
+    - criteria: !<Range> {"min": 3, "oddity": true}
+  validation:
+    - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "txsql-db.properties"
+        targetPath: "/etc/${service.sid}/conf/db.properties"
+        mode: "600"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "txsql-install_conf.sh"
+        targetPath: "/etc/${service.sid}/conf/install_conf.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "txsql-txsql-env.sh"
+        targetPath: "/etc/${service.sid}/conf/txsql-env.sh"
+        mode: "755"
+
+- name: AQUILA_MANAGER_PROXY
+  friendlyName: "Manager Proxy"
+  labelPrefix: "manager-proxy"
+  dockerImage: "transwarp/manager-proxy:manager-6.0"
+  category: MASTER
+  frontendOperations: ["Start", "Stop"]
+  env:
+  - name: PROXY_CONF_DIR
+    value: /etc/${service.sid}/conf/manager-proxy
+  - name: PROXY_LOG_DIR
+    value: /var/log/${service.sid}/manager-proxy
+  mountPaths:
+  - mountPath: /tmp
+    hostPath: /tmp
+    name: temp
+  - mountPath: /var/lib/transwarp-manager/master/content/meta/services
+    hostPath: /var/lib/transwarp-manager/master/content/meta/services
+    name: metainfo
+  resources:
+    limitsMemoryKey: manager.proxy.container.limits.memory
+    limitsCpuKey: manager.proxy.container.limits.cpu
+    requestsMemoryKey: manager.proxy.container.requests.memory
+    requestsCpuKey: manager.proxy.container.requests.cpu
+  nodeSpecificMounts: []
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq>
+      numSeq: [1]
+      mates: ["TRANSWARP_MANAGER_MASTER"] #REGISTRY_SERVER is strictly adhered to Manager
+  suggestion:
+  - criteria: !<OnManagerNode> {"roleType": "AQUILA_MANAGER_PROXY"}
+  validation:
+  - criteria: !<OnManagerNode> {"roleType": "AQUILA_MANAGER_PROXY"}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/log/${service.sid}/manager-proxy"]
+        mode: "750"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "manager-proxy/application.yml.ftl"
+        targetPath: "/etc/${service.sid}/conf/manager-proxy/application.yml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "manager-proxy/log4j2.xml.ftl"
+        targetPath: "/etc/${service.sid}/conf/manager-proxy/log4j2.xml"
+        mode: "755"
+
 - name: AQUILA_SERVER
   friendlyName: "Aquila Server"
   labelPrefix: "aquila-server"
@@ -52,6 +166,11 @@ roles:
         templatePath: "server/application.yml.ftl"
         targetPath: "/etc/${service.sid}/conf/server/application.yml"
         mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "server/shadow.yml"
+        targetPath: "/etc/${service.sid}/conf/server/shadow.yml"
+        mode: "700"
     - directive: !<resource>
         templateType: FreeMarker
         templatePath: "server/log4j2.xml.ftl"
@@ -105,58 +224,6 @@ roles:
         targetPath: "/etc/${service.sid}/conf/agent/log4j2.xml"
         mode: "755"
 
-- name: AQUILA_MANAGER_PROXY
-  friendlyName: "Manager Proxy"
-  labelPrefix: "manager-proxy"
-  dockerImage: "transwarp/manager-proxy:manager-6.0"
-  category: MASTER
-  frontendOperations: ["Start", "Stop"]
-  env:
-    - name: PROXY_CONF_DIR
-      value: /etc/${service.sid}/conf/manager-proxy
-    - name: PROXY_LOG_DIR
-      value: /var/log/${service.sid}/manager-proxy
-  mountPaths:
-    - mountPath: /tmp
-      hostPath: /tmp
-      name: temp
-    - mountPath: /var/lib/transwarp-manager/master/content/meta/services
-      hostPath: /var/lib/transwarp-manager/master/content/meta/services
-      name: metainfo
-  resources:
-    limitsMemoryKey: manager.proxy.container.limits.memory
-    limitsCpuKey: manager.proxy.container.limits.cpu
-    requestsMemoryKey: manager.proxy.container.requests.memory
-    requestsCpuKey: manager.proxy.container.requests.cpu
-  nodeSpecificMounts: []
-  summaryPolicy: SOME
-  autoAssign:
-  - advice: !<NumSeq>
-      numSeq: [1]
-      mates: ["TRANSWARP_MANAGER_MASTER"] #REGISTRY_SERVER is strictly adhered to Manager
-  suggestion:
-    - criteria: !<OnManagerNode> {"roleType": "AQUILA_MANAGER_PROXY"}
-  validation:
-    - criteria: !<OnManagerNode> {"roleType": "AQUILA_MANAGER_PROXY"}
-  operations:
-    - type: Install
-      directives:
-        - directive: !<mkdirs>
-            paths: ["/var/log/${service.sid}/manager-proxy"]
-            mode: "750"
-    - type: Config
-      directives:
-        - directive: !<resource>
-            templateType: FreeMarker
-            templatePath: "manager-proxy/application.yml.ftl"
-            targetPath: "/etc/${service.sid}/conf/manager-proxy/application.yml"
-            mode: "755"
-        - directive: !<resource>
-            templateType: FreeMarker
-            templatePath: "manager-proxy/log4j2.xml.ftl"
-            targetPath: "/etc/${service.sid}/conf/manager-proxy/log4j2.xml"
-            mode: "755"
-
 - name: AQUILA_NODE_EXPORTER
   friendlyName: "Node Exporter"
   labelPrefix: "node-exporter"
@@ -188,6 +255,17 @@ firstWizardConfigs:
 - agent.web.port
 - manager.proxy.web.port
 - node.exporter.web.port
+- txsql.data.dir
+- txsql.mysql.rw.port
+- txsql.binlog.port
+- txsql.mysql.local.port
+- txsql.binlogsvr.rpc.port
+- txsql.paxos.port
+- txsql.container.limits.memory
+- txsql.container.limits.cpu
+- txsql.container.requests.memory
+- txsql.container.requests.cpu
+- txsql.memory.ratio
 
 pages:
 - roles

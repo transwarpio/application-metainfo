@@ -1,0 +1,2 @@
+spring.datasource:
+  password: "${service['txsql.root.password']}"
