@@ -509,7 +509,11 @@
             <#local dirs = dirs + [mnt + suffix]>
           </#if>
         </#list>
-        <#return dirs?join(",")>
+        <#if dirs?size == 0>
+          <#return suffix>
+        <#else>
+          <#return dirs?join(",")>
+        </#if>
       </#if>
     </#function>
     ${localDir("/shiva-tabletserver/data")}
