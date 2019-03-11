@@ -25,6 +25,36 @@
   groups: ["tdt-site.xml"]
   visibility: READ_WRITE
 
+- name: javax.jdo.option.ConnectionUrl
+  recommendExpression: |
+    <#function metastoreUrl path>
+      <#if dependencies.TXSQL??>
+        <#assign mysqlHostPorts = []/>
+          <#list dependencies.TXSQL.roles['TXSQL_SERVER'] as role>
+            <#assign mysqlHostPorts = mysqlHostPorts + [role.hostname + ':' + dependencies.TXSQL['mysql.rw.port']]>
+          </#list>
+      <#else>
+          <#assign mysqlHostPorts = [service.roles.INCEPTOR_MYSQL[0]['hostname'] + ":" + service['mysql.port']]/>
+      </#if>
+      <#return path + mysqlHostPorts?join(",") + "/metastore_" + dependencies.SLIPSTREAM.sid + "?characterEncoding=UTF-8">
+    </#function>
+    ${metastoreUrl("jdbc:mysql://")}
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: ['SLIPSTREAM']
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE
+
+- name: tdt.inceptor.auth.mode
+  recommendExpression: null
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE
+
 - name: mysql.port
   recommendExpression: 3306
   defaultValue: null
