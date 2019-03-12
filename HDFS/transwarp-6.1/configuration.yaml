@@ -28,7 +28,7 @@
     </#function>
     ${localDir("/hadoop/data")}
   defaultValue: file://${hadoop.tmp.dir}/dfs/data
-  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
+  valueType: STRING
   isNodeSpecific: true  # TODO work around before WARP-11503
   scope: !<RoleTypes>
     roleTypes:
@@ -60,7 +60,7 @@
     ${sorted[0]}/hadoop/namenode_dir,${sorted[1]}/hadoop/namenode_dir
     </#if>
   defaultValue: file://${hadoop.tmp.dir}/dfs/name
-  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
+  valueType: STRING
   isNodeSpecific: true # TODO work around before WARP-11503
   scope: !<RoleTypes>
       roleTypes:
@@ -354,7 +354,7 @@
 - name: namenode.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [HDFS_NAMENODE]
   onDeps: []
@@ -364,7 +364,7 @@
 - name: namenode.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [HDFS_NAMENODE]
   onDeps: []
@@ -374,7 +374,7 @@
 - name: namenode.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [HDFS_NAMENODE]
   onDeps: []
@@ -384,7 +384,7 @@
 - name: namenode.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [HDFS_NAMENODE]
   onDeps: []
@@ -404,7 +404,7 @@
 - name: zkfc.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [HDFS_NAMENODE]
   onDeps: []
@@ -414,7 +414,7 @@
 - name: zkfc.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [HDFS_NAMENODE]
   onDeps: []
@@ -424,7 +424,7 @@
 - name: zkfc.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [HDFS_NAMENODE]
   onDeps: []
@@ -434,7 +434,7 @@
 - name: zkfc.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [HDFS_NAMENODE]
   onDeps: []
@@ -454,7 +454,7 @@
 - name: journalnode.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [HDFS_JOURNALNODE]
   onDeps: []
@@ -464,7 +464,7 @@
 - name: journalnode.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [HDFS_JOURNALNODE]
   onDeps: []
@@ -474,7 +474,7 @@
 - name: journalnode.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [HDFS_JOURNALNODE]
   onDeps: []
@@ -484,7 +484,7 @@
 - name: journalnode.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [HDFS_JOURNALNODE]
   onDeps: []
@@ -504,7 +504,7 @@
 - name: datanode.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [HDFS_DATANODE]
   onDeps: []
@@ -514,7 +514,7 @@
 - name: datanode.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [HDFS_DATANODE]
   onDeps: []
@@ -524,7 +524,7 @@
 - name: datanode.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [HDFS_DATANODE]
   onDeps: []
@@ -534,7 +534,7 @@
 - name: datanode.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [HDFS_DATANODE]
   onDeps: []
@@ -554,7 +554,7 @@
 - name: httpfs.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [HDFS_HTTPFS]
   onDeps: []
@@ -564,7 +564,7 @@
 - name: httpfs.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [HDFS_HTTPFS]
   onDeps: []
@@ -574,7 +574,7 @@
 - name: httpfs.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [HDFS_HTTPFS]
   onDeps: []
@@ -584,7 +584,7 @@
 - name: httpfs.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [HDFS_HTTPFS]
   onDeps: []

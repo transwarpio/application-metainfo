@@ -3,7 +3,7 @@
 - name: master.log.log_dir
   recommendExpression: /var/log/${service.sid}
   defaultValue: null
-  valueType: ABSOLUTE_PATH
+  valueType: STRING
   scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
   onDeps: []
   groups: ["master.conf"]
@@ -47,7 +47,7 @@
     </#function>
     ${localDir("/shiva-master/data")}
   defaultValue: null
-  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
+  valueType: STRING
   isNodeSpecific: true
   scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
   onDeps: []
@@ -247,7 +247,7 @@
 - name: tabletserver.log.log_dir
   recommendExpression: /var/log/${service.sid}
   defaultValue: null
-  valueType: ABSOLUTE_PATH
+  valueType: STRING
   scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
   onDeps: []
   groups: ["tabletserver.conf"]
@@ -283,7 +283,7 @@
 - name: tabletserver.tabletserver.topology_conf
   recommendExpression: /etc/${service.sid}/conf/topology.conf
   defaultValue: null
-  valueType: ABSOLUTE_PATH
+  valueType: STRING
   scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
   onDeps: []
   groups: ["tabletserver.conf"]
@@ -292,7 +292,7 @@
 - name: tabletserver.tabletserver.store_conf
   recommendExpression: /etc/${service.sid}/conf/store.conf
   defaultValue: null
-  valueType: ABSOLUTE_PATH
+  valueType: STRING
   scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
   onDeps: []
   groups: ["tabletserver.conf"]
@@ -518,7 +518,7 @@
     </#function>
     ${localDir("/shiva-tabletserver/data")}
   defaultValue: null
-  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
+  valueType: STRING
   isNodeSpecific: true
   scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
   onDeps: []
@@ -577,7 +577,7 @@
 - name: master.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
   onDeps: []
   groups: []
@@ -586,7 +586,7 @@
 - name: master.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
   onDeps: []
   groups: []
@@ -595,7 +595,7 @@
 - name: master.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
   onDeps: []
   groups: []
@@ -604,7 +604,7 @@
 - name: master.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
   onDeps: []
   groups: []
@@ -622,7 +622,7 @@
 - name: tabletserver.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
   onDeps: []
   groups: []
@@ -631,7 +631,7 @@
 - name: tabletserver.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
   onDeps: []
   groups: []
@@ -640,7 +640,7 @@
 - name: tabletserver.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
   onDeps: []
   groups: []
@@ -649,7 +649,7 @@
 - name: tabletserver.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
   onDeps: []
   groups: []
@@ -676,7 +676,7 @@
 - name: webserver.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes> {roleTypes: [SHIVA_WEBSERVER]}
   onDeps: []
   groups: []
@@ -685,7 +685,7 @@
 - name: webserver.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes> {roleTypes: [SHIVA_WEBSERVER]}
   onDeps: []
   groups: []
@@ -694,7 +694,7 @@
 - name: webserver.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes> {roleTypes: [SHIVA_WEBSERVER]}
   onDeps: []
   groups: []
@@ -703,7 +703,7 @@
 - name: webserver.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT 
   scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
   onDeps: []
   groups: []

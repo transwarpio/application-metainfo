@@ -7,7 +7,6 @@ friendlyName: Dashboard
 dockerImage: "transwarp/dashboard:manager-6.0"
 dependencies: []
 user: root
-validateConfig: true
 roles:
 - name: DASHBOARD
   friendlyName: "Dashboard"

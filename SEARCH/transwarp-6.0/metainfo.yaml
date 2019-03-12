@@ -4,7 +4,6 @@ version: transwarp-6.0
 global: false
 namePrefix: Search
 friendlyName: "Search"
-validateConfig: true
 dependencies: []
 roles:
 - name: SEARCH_HEAD

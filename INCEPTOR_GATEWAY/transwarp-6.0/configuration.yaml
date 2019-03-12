@@ -28,7 +28,7 @@
 - name: inceptor.gateway.host
   recommendExpression: 0.0.0.0
   defaultValue: null
-  valueType: STRING
+  valueType: HOST_PORT
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
