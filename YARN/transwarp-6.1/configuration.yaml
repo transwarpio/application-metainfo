@@ -468,6 +468,7 @@
 - name: yarn.nodemanager.resource.memory-mb
 #  recommendExpression: 6
   recommendExpression: |
+    <#compress>
     <#if numCores gt 6>
     <#assign vcores=(numCores / 3)?floor>
     <#else>
@@ -479,8 +480,9 @@
     <#else>
     ${expectedMem?c}
     </#if>
+    </#compress>
   defaultValue: null
-  valueType: "MB"
+  valueType: MB
   scope: !<RoleTypes>
     roleTypes: [YARN_NODEMANAGER]
   isNodeSpecific : true
