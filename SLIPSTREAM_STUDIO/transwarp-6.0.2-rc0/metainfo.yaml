@@ -1,0 +1,214 @@
+---
+name: SLIPSTREAM_STUDIO
+version: transwarp-6.0.2-rc0
+global: false
+namePrefix: SlipstreamStudio
+friendlyName: "SlipstreamStudio"
+dockerImage: "transwarp/slipstream-studio:transwarp-6.0.2-rc0"
+validateConfig: true
+dependencies:
+  - name: GUARDIAN
+    minVersion: transwarp-6.0.2-rc0
+    optional: true
+  - name: HDFS
+    minVersion: transwarp-6.0.2-rc0
+    maxVersion: transwarp-6.0.2-rc0
+    optional: false
+  - name: TXSQL
+    minVersion: transwarp-6.0.2-rc0
+    maxVersion: transwarp-6.0.2-rc0
+    optional: false
+  - name: SLIPSTREAM
+    minVersion: transwarp-6.0.2-rc0
+    maxVersion: transwarp-6.0.2-rc0
+    optional: true
+    preferred: true
+  - name: INCEPTOR_GATEWAY
+    minVersion: transwarp-6.0.2-rc0
+    maxVersion: transwarp-6.0.2-rc0
+    optional: true
+    preferred: false
+user: slipstream
+plugins:
+  - provider: GUARDIAN
+    version: 0.12.0+500.51250
+    useTar: false
+roles:
+- name: INCEPTOR_SLIPSTREAMSTUDIO
+  friendlyName: "Slipstream Studio"
+  labelPrefix: "inceptor-slipstreamstudio"
+  linkExpression: "http://${service.roles.INCEPTOR_SLIPSTREAMSTUDIO[0]['hostname']}:${service['slipstream.studio.http.port']}/"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 1
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: slipstream.studio.eventstore.basedir
+      featureFile: latestEvent
+    fromPath:
+    - key: /etc/${service.sid}/conf/slipstreamstudio
+      featureFile: confdesc.properties
+  env:
+  - name: INCEPTOR_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  nodeSpecificMounts:
+    - configKey: slipstream.studio.eventstore.basedir
+    - configKey: slipstream.studio.projects.output.dir
+    - configKey: slipstream.studio.project.repo.dir
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf"]
+        mode: "755"
+    - directive: !<mkdirs>
+        paths: ["${service['slipstream.studio.projects.output.dir']}"]
+        mode: "755"
+    - directive: !<mkdirs>
+        paths: ["${service['slipstream.studio.project.repo.dir']}/default"]
+        mode: "755"
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
+        to: "/etc/${service.sid}/conf/hdfs-site.xml"
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
+        to: "/etc/${service.sid}/conf/core-site.xml"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "slipstreamstudio/slipstreamstudio-env.sh.ftl"
+        targetPath: "/etc/${service.sid}/conf/slipstreamstudio-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "slipstreamstudio/studio.properties.ftl"
+        targetPath: "/etc/${service.sid}/conf/studio.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "slipstreamstudio/db.properties"
+        targetPath: "/etc/${service.sid}/conf/db.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "slipstreamstudio/tdt-site.xml.ftl"
+        targetPath: "/etc/${service.sid}/conf/tdt-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "slipstreamstudio/confdesc.properties.raw"
+        targetPath: "/etc/${service.sid}/conf/confdesc.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "slipstreamstudio/logback.xml.raw"
+        targetPath: "/etc/${service.sid}/conf/logback.xml"
+        mode: "755"
+
+stages:
+  - type: Bootstrap
+    taskGroups:
+    - !<Create-Dir-in-HDFS>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      dirs: ["/${service.sid}"]
+      user: "hive"
+      group: "hive"
+      mod: 711
+  - type: Config
+    taskGroups:
+    - !<Create-Database>
+      dbPrefix: metastore
+      dbUserConfig: javax.jdo.option.ConnectionUserName
+      dbPasswordConfig: javax.jdo.option.ConnectionPassword
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Create-Database>
+      dbPrefix: tdt
+      dbUserConfig: tdt.persistence.user.name
+      dbPasswordConfig: tdt.persistence.password
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Role>
+      roleType: INCEPTOR_SLIPSTREAMSTUDIO
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Create-Dir-in-HDFS>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      dirs: ["${service['slipstream.studio.rules.resource.dir']}"]
+      user: "root"
+      group: "root"
+      mod: 711
+    - !<Create-Dir-in-HDFS>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      dirs: ["${service['slipstream.studio.algorithm.hdfs.jar.dir']}"]
+      user: "slipstream"
+      group: "slipstream"
+      mod: 711
+    - !<Create-Dir-in-HDFS>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      dirs: ["${service['slipstream.studio.algorithm.hdfs.tmp.jar.dir']}"]
+      user: "slipstream"
+      group: "slipstream"
+      mod: 711
+  - type: PreUpgrade
+    taskGroups:
+    - !<DockerRunPreUpgrade>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      roleType: INCEPTOR_SLIPSTREAMSTUDIO
+      node: Any
+  - type: PreRollback
+    taskGroups:
+    - !<DockerRunPreRollback>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      roleType: INCEPTOR_SLIPSTREAMSTUDIO
+      node: Any
+
+product: Stream
+
+firstWizardConfigs:
+- javax.jdo.option.ConnectionUserName
+- javax.jdo.option.ConnectionPassword
+- slipstream.studio.eventstore.basedir
+- slipstream.studio.projects.output.dir
+- slipstream.studio.project.repo.dir
+
+pages:
+- roles
+- configuration
+- operation
+- resource_allocation
+- security
+- plugin
+
+principals:
+- slipstream
+- HTTP
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
+
+customConfigFiles:
+- tdt-site.xml
+- studio.properties

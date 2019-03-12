@@ -1,0 +1,142 @@
+- name: zookeeper.client.port
+  recommendExpression: 2181
+  defaultValue: null
+  valueType: PORT
+#  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.peer.communicate.port
+  recommendExpression: 2888
+  defaultValue: null
+  valueType: PORT
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.leader.elect.port
+  recommendExpression: 3888
+  defaultValue: null
+  valueType: PORT
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.jmxremote.port
+  recommendExpression: 9911
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tickTime
+  recommendExpression: 9000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: [zoo_cfg]
+  visibility: READ_WRITE
+
+- name: initLimit
+  recommendExpression: 10
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: [zoo_cfg]
+  visibility: READ_WRITE
+
+- name: syncLimit
+  recommendExpression: 5
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: [zoo_cfg]
+  visibility: READ_WRITE
+
+- name: maxClientCnxns
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: [zoo_cfg]
+  visibility: READ_WRITE
+
+- name: zookeeper.server.memory
+  recommendExpression: 1024
+  defaultValue: null
+  valueType: MB
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

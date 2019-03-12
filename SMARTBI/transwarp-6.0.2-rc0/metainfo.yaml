@@ -1,0 +1,141 @@
+---
+name: SMARTBI
+version: transwarp-6.0.2-rc0
+global: false
+namePrefix: Smartbi
+friendlyName: Smartbi
+dependencies: []
+roles:
+  - name: SMARTBI_MYSQL
+    friendlyName: "Smartbi MySQL"
+    labelPrefix: "smartbi-mysql"
+    dockerImage: "transwarp/smartbi-mysql:transwarp-6.0.2-rc0"
+    linkExpression: ""
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete"]
+    readinessProbe:
+      probe: !<exec>
+        command:
+        - /bin/bash
+        - -c
+        - mysql -h `hostname` -uroot -P${service['smartbi.mysql.http.port']} -p"${service['root.password']}" -e "select 1 from dual"  > /dev/null && echo ok
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    env:
+    - name: CONF_DIR
+      value: /etc/${service.sid}/conf
+    mountPaths:
+    - mountPath: /etc/smartbi/conf
+      hostPath: /etc/${service.sid}/conf
+      name: conf-mysql
+    - mountPath: /var/lib/mysql
+      hostPath: /var/lib/${service.sid}/data/mysql
+      name: data-mysql
+    summaryPolicy: ALL
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations:
+    - type: Install
+      directives:
+      - directive: !<mkdirs>
+          paths: ["/var/lib/${service.sid}/data/mysql"]
+          mode: "777"
+
+  - name: SMARTBI_TOMCAT
+    friendlyName: "Smartbi Tomcat"
+    labelPrefix: "smartbi-tomcat"
+    dockerImage: "transwarp/smartbi-tomcat:transwarp-6.0.2-rc0"
+    linkExpression: "http://${localhostname}:${service['smartbi.tomcat.http.port']}/smartbi"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete"]
+    readinessProbe:
+      probe: !<httpGet>
+        path: /smartbi
+        port: ${service['smartbi.tomcat.http.port']}
+        scheme: HTTP
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    summaryPolicy: ALL
+    env:
+    - name: CONF_DIR
+      value: /etc/${service.sid}/conf
+    mountPaths:
+    - mountPath: /etc/smartbi/conf
+      hostPath: /etc/${service.sid}/conf
+      name: conf-tomcat
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations:
+    - type: Install
+      directives:
+      - directive: !<mkdirs>
+          paths: ["/etc/${service.sid}/conf"]
+          mode: "777"
+    - type: Config
+      directives:
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "datasources.xml"
+          targetPath: "/etc/${service.sid}/conf/datasources.xml"
+          mode: "755"
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "smartbi-config.xml"
+          targetPath: "/etc/${service.sid}/conf/smartbi-config.xml"
+          mode: "755"
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "eagle-config.xml"
+          targetPath: "/etc/${service.sid}/conf/eagle-config.xml"
+          mode: "755"
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "Smartbi-License.xml"
+          targetPath: "/etc/${service.sid}/conf/Smartbi-License.xml"
+          mode: "755"
+
+stages:
+  - type: Config
+    taskGroups:
+    - !<Role>
+      roleType: "SMARTBI_MYSQL"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SMARTBI_TOMCAT"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+
+product: Studio
+
+firstWizardConfigs:
+- smartbi.mysql.http.port
+- smartbi.tomcat.http.port
+
+
+pages:
+- roles
+- configuration
+- operation
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  intervalSeconds: 5
+  method: !<K8sPod> {}
