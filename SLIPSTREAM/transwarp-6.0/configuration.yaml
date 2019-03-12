@@ -356,12 +356,14 @@
 # min(32000m, total_memory_size / 2)
 - name: inceptor.executor.memory
   recommendExpression: |
+    <#compress>
     <#assign  thirdMemMB = (memBytes/1048576/2)?int>
     <#if thirdMemMB <= 32000>
       ${thirdMemMB?int}
     <#else>
       32000
     </#if>
+    </#compress>
   defaultValue: null
   valueType: MB
   isNodeSpecific: true
@@ -373,11 +375,13 @@
 
 - name: inceptor.executor.cores
   recommendExpression: |
+    <#compress>
     <#if (numCores/2)?int gt 10>
       ${(numCores/2)?int}
     <#else>
       10
     </#if>
+    </#compress>
   defaultValue: null
   valueType: NON_NEG_INT
   isNodeSpecific: true
