@@ -3,3 +3,4 @@ ordinal: 70
 services:
 - ARGODB_COMPUTING
 - ARGODB_STORAGE
+- DBA_SERVICE

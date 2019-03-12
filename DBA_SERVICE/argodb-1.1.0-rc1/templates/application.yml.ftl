@@ -13,7 +13,7 @@ watchman:
     port: ${service['dbaservice.aiops.ui.port']}
   server:
     port: ${service['dbaservice.ui.port']}
-    host: ${service.roles.DBA_SERVICE[0]['ip']} # this is watchman node ip!
+    host: ${service.roles.DBA_SERVICE_SERVER[0]['ip']} # this is watchman node ip!
   message:
     protocol: akka
     port: 60606
