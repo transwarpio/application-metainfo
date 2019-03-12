@@ -34,7 +34,7 @@ image_build:
     - bash -x script/jenkins_job_build.sh
     - ps aux | grep docker | grep -v "grep" |  awk '{print $2}' | xargs kill -9
   only:
-    - dev
+    - transwarp-6.0.2
   tags:
     - k8s
 
