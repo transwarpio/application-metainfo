@@ -299,12 +299,14 @@
 
 - name: namenode.memory
   recommendExpression: |
+    <#compress>
     <#assign halfMemMB = (memBytes/1048576/2)?int>
     <#if halfMemMB <= 24000>
-    ${halfMemMB?c}
+      ${halfMemMB?c}
     <#else>
-    24000
+      24000
     </#if>
+    </#compress>
   defaultValue: null
   valueType: MB
   isNodeSpecific: true
