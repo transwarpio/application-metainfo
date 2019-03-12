@@ -5,7 +5,6 @@ global: true
 namePrefix: Guardian
 friendlyName: Guardian
 dependencies: []
-validateConfig: true
 roles:
 - name: GUARDIAN_TXSQL_SERVER
   friendlyName: "TxSQL Server"

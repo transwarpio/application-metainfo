@@ -5,7 +5,6 @@ global: false
 namePrefix: Governor
 friendlyName: Governor
 dockerImage: "transwarp/governor:transwarp-6.0.2-rc0"
-validateConfig: true
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.0.2-rc0

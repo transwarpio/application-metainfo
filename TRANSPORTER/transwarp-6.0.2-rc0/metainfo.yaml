@@ -5,7 +5,6 @@ global: false
 namePrefix: Transporter
 friendlyName: Transwarp Data Transporter
 dockerImage: "transwarp/tdt:transwarp-6.0.2-rc0"
-validateConfig: true
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.0.2-rc0

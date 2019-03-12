@@ -4,7 +4,6 @@ version: transwarp-6.0.2-rc0
 global: false
 namePrefix: codis
 friendlyName: "Codis"
-validateConfig: true
 dependencies:
   - name: ZOOKEEPER
     minVersion: transwarp-6.0.2-rc0

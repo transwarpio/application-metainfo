@@ -4,7 +4,6 @@ version: transwarp-6.0.2-rc0
 global: false
 namePrefix: Shiva
 friendlyName: "Shiva"
-validateConfig: true
 dependencies: []
 roles:
 - name: SHIVA_MASTER

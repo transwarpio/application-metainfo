@@ -63,7 +63,7 @@
 - name: hive.hwi.war.file
   recommendExpression: lib/hive-hwi-0.8.1.war
   defaultValue: null
-  valueType: URI
+  valueType: ABSOLUTE_PATH
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: ["hive-site.xml"]
@@ -144,7 +144,7 @@
 - name: hive.aux.jars.path
   recommendExpression: ""
   defaultValue: ""
-  valueType: ABSOLUTE_PATH
+  valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: ["hive-site.xml"]
@@ -356,14 +356,12 @@
 # min(32000m, total_memory_size / 2)
 - name: inceptor.executor.memory
   recommendExpression: |
-    <#compress>
     <#assign  thirdMemMB = (memBytes/1048576/2)?int>
     <#if thirdMemMB <= 32000>
       ${thirdMemMB?int}
     <#else>
       32000
     </#if>
-    </#compress>
   defaultValue: null
   valueType: MB
   isNodeSpecific: true
@@ -375,13 +373,11 @@
 
 - name: inceptor.executor.cores
   recommendExpression: |
-    <#compress>
     <#if (numCores/2)?int gt 10>
       ${(numCores/2)?int}
     <#else>
       10
     </#if>
-    </#compress>
   defaultValue: null
   valueType: NON_NEG_INT
   isNodeSpecific: true
@@ -452,7 +448,7 @@
 - name: mysql.datadir
   recommendExpression: /hadoop/mysql
   defaultValue: null
-  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
+  valueType: STRING
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_MYSQL]
   onDeps: []
@@ -462,7 +458,7 @@
 - name: executor.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_EXECUTOR]
   onDeps: []
@@ -472,7 +468,7 @@
 - name: executor.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_EXECUTOR]
   onDeps: []
@@ -482,7 +478,7 @@
 - name: executor.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_EXECUTOR]
   onDeps: []
@@ -492,7 +488,7 @@
 - name: executor.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_EXECUTOR]
   onDeps: []
@@ -521,7 +517,7 @@
 - name: server.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_SERVER]
   onDeps: []
@@ -531,7 +527,7 @@
 - name: server.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_SERVER]
   onDeps: []
@@ -541,7 +537,7 @@
 - name: server.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_SERVER]
   onDeps: []
@@ -551,7 +547,7 @@
 - name: server.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_SERVER]
   onDeps: []
@@ -571,7 +567,7 @@
 - name: metastore.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_METASTORE]
   onDeps: []
@@ -581,7 +577,7 @@
 - name: metastore.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_METASTORE]
   onDeps: []
@@ -591,7 +587,7 @@
 - name: metastore.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_METASTORE]
   onDeps: []
@@ -601,7 +597,7 @@
 - name: metastore.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_METASTORE]
   onDeps: []
@@ -713,7 +709,7 @@
 - name: profiler.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_PROFILER]
   onDeps: []
@@ -722,7 +718,7 @@
 - name: profiler.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_PROFILER]
   onDeps: []
@@ -731,7 +727,7 @@
 - name: profiler.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_PROFILER]
   onDeps: []
@@ -740,7 +736,7 @@
 - name: profiler.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_PROFILER]
   onDeps: []
@@ -814,7 +810,7 @@
 - name: compactor.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_COMPACTOR]
   onDeps: []
@@ -823,7 +819,7 @@
 - name: compactor.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_COMPACTOR]
   onDeps: []
@@ -832,7 +828,7 @@
 - name: compactor.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_COMPACTOR]
   onDeps: []
@@ -841,7 +837,7 @@
 - name: compactor.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_COMPACTOR]
   onDeps: []
@@ -946,3 +942,4 @@
   onDeps: []
   groups: ["compactor-site.xml"]
   visibility: READ_WRITE
+
