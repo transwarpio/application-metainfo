@@ -1,0 +1,80 @@
+---
+name: DBA_SERVICE
+version: transwarp-5.2.4-rc0
+global: false
+namePrefix: DBAService
+friendlyName: "DBA Service"
+dockerImage: "transwarp/dbaservice:transwarp-5.2.4-rc0"
+dependencies: []
+
+roles:
+- name: DBA_SERVICE_SERVER
+  friendlyName: "DBA Service Server"
+  labelPrefix: "dbaservice-server"
+  linkExpression: "http://${localhostname}:${service['dbaservice.ui.port']}/"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /
+      port: ${service['dbaservice.ui.port']}
+      scheme: HTTP
+  env:
+  - name: WATCHMAN_CONF
+    value: /etc/${service.sid}/conf/application.yml
+  - name: AIOPS_CONF
+    value: /etc/${service.sid}/conf/aiops.yml
+  deleteOpCleanDirs:
+    fromPath:
+    - key: /etc/${service.sid}/conf
+      featureFile: application.yml
+  mountPaths: []
+  resources:
+    limitsMemoryKey: dbaservice.container.limits.memory
+    limitsCpuKey: dbaservice.container.limits.cpu
+    requestsMemoryKey: dbaservice.container.requests.memory
+    requestsCpuKey: dbaservice.container.requests.cpu
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 0}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/run/${service.sid}"]
+        mode: "755"
+
+stages:
+  - type: Config
+    taskGroups:
+    - !<Role>
+      roleType: "DBA_SERVICE_SERVER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+
+firstWizardConfigs:
+- dbaservice.container.limits.cpu
+- dbaservice.container.limits.memory
+- dbaservice.container.requests.cpu
+- dbaservice.container.requests.memory
+- dbaservice.ui.port
+- dbaservice.aiops.ui.port
+
+dashboardMetrics: []
+
+pages:
+- summary
+- roles
+- configuration
+- operation
+- resource_allocation
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}

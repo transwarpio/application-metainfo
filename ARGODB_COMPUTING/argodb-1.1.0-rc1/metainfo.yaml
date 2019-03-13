@@ -1,10 +1,10 @@
 ---
 name: ARGODB_COMPUTING
-version: argodb-1.1
+version: argodb-1.1.0-rc1
 global: false
 namePrefix: ArgodbComputing
 friendlyName: "ArgodbComputing"
-dockerImage: "transwarp/argodb-inceptor:argodb-1.1"
+dockerImage: "transwarp/argodb-inceptor:argodb-1.1.0-rc1"
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.0
@@ -16,12 +16,12 @@ dependencies:
     minVersion: transwarp-6.0
     optional: false
   - name: ARGODB_STORAGE
-    minVersion: argodb-1.1
-    maxVersion: argodb-1.1
+    minVersion: argodb-1.1.0-rc1
+    maxVersion: argodb-1.1.0-rc1
     optional: false
   - name: DBA_SERVICE
-    minVersion: argodb-1.1
-    maxVersion: argodb-1.1
+    minVersion: argodb-1.1.0-rc1
+    maxVersion: argodb-1.1.0-rc1
     optional: false
   - name: INCEPTOR
     minVersion: transwarp-6.0

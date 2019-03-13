@@ -1,10 +1,10 @@
 ---
 name: ARGODB_STORAGE
-version: argodb-1.1
+version: argodb-1.1.0-rc1
 global: false
 namePrefix: ArgodbStorage
 friendlyName: "ArgodbStorage"
-dockerImage: "transwarp/argodb-inceptor:argodb-1.1"
+dockerImage: "transwarp/argodb-inceptor:argodb-1.1.0-rc1"
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.0
@@ -92,7 +92,7 @@ roles:
 - name: SHIVA_MASTER
   friendlyName: "Shiva Master"
   labelPrefix: "shiva-master"
-  dockerImage: "transwarp/argodb-shiva-master:argodb-1.1"
+  dockerImage: "transwarp/argodb-shiva-master:argodb-1.1.0-rc1"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   readinessProbe:
@@ -150,7 +150,7 @@ roles:
 - name: SHIVA_WEBSERVER
   friendlyName: "Shiva Webserver"
   labelPrefix: "shiva-webserver"
-  dockerImage: "transwarp/argodb-shiva-webserver:argodb-1.1"
+  dockerImage: "transwarp/argodb-shiva-webserver:argodb-1.1.0-rc1"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete"]
   readinessProbe:
@@ -216,7 +216,7 @@ roles:
 - name: SHIVA_TABLETSERVER
   friendlyName: "Shiva Tablet Server"
   labelPrefix: "shiva-tabletserver"
-  dockerImage: "transwarp/argodb-shiva-tabletserver:argodb-1.1"
+  dockerImage: "transwarp/argodb-shiva-tabletserver:argodb-1.1.0-rc1"
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   readinessProbe:
@@ -299,7 +299,7 @@ roles:
 - name: LADDER_MASTER
   friendlyName: "Ladder Master"
   labelPrefix: "ladder-master"
-  dockerImage: "transwarp/argodb-ladder:argodb-1.1"
+  dockerImage: "transwarp/argodb-ladder:argodb-1.1.0-rc1"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   readinessProbe:
@@ -372,7 +372,7 @@ roles:
 - name: LADDER_WORKER
   friendlyName: "Ladder Worker"
   labelPrefix: "ladder-worker"
-  dockerImage: "transwarp/argodb-ladder:argodb-1.1"
+  dockerImage: "transwarp/argodb-ladder:argodb-1.1.0-rc1"
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   readinessProbe:
