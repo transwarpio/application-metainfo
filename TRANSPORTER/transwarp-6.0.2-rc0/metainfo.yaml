@@ -8,7 +8,7 @@ dockerImage: "transwarp/tdt:transwarp-6.0.2-rc0"
 validateConfig: true
 dependencies:
   - name: GUARDIAN
-    minVersion: transwarp-6.0.2-rc0
+    minVersion: transwarp-6.0.1-final
     optional: true
   - name: HDFS
     minVersion: transwarp-6.0.2-rc0
