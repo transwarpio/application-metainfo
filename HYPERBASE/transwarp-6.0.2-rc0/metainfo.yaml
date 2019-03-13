@@ -7,7 +7,7 @@ friendlyName: "Hyperbase"
 dockerImage: "transwarp/hbase:transwarp-6.0.2-rc0"
 dependencies:
   - name: GUARDIAN
-    minVersion: transwarp-6.0.2-rc0
+    minVersion: transwarp-6.0.1-final
     optional: true
   - name: ZOOKEEPER
     minVersion: transwarp-6.0.2-rc0

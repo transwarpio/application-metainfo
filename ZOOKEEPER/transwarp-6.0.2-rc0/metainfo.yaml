@@ -6,7 +6,7 @@ namePrefix: ZooKeeper
 friendlyName: "ZooKeeper"
 dependencies:
   - name: GUARDIAN
-    minVersion: transwarp-6.0.2-rc0
+    minVersion: transwarp-6.0.1-final
     optional: true
 packages: ["zookeeper"]
 dockerImage: "transwarp/zookeeper:transwarp-6.0.2-rc0"
