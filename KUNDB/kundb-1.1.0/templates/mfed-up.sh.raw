@@ -196,14 +196,21 @@ cd $KUNHOME && ./kunctl.sh InitMfed -mfed_alias $alias -vtgate_user vt_app -vtga
 sleep 2
     
 if [ ! -f "$VTDATAROOT/$tablet_dir/_init_mfed_master" ]; then
-      	  
+   count=0
    cd $KUNHOME && ./kunctl.sh ListAllTablets $CELLNAME | grep $alias| grep -q master
    while [ $? -ne 0 ]
    do
        echo "Mfed InitShardMaster ..."
-       cd $KUNHOME && timeout 10 ./kunctl.sh InitShardMaster -force $KEYSPACE/$SHARD $alias 
+       cd $KUNHOME && timeout 100 ./kunctl.sh InitShardMaster -force $KEYSPACE/$SHARD $alias 
        echo "------InitShardMaster over ------ "
        sleep 4	
+       count=$((count+1))
+
+       if [ $count -eq 5 ]; then
+          echo "Mfed InitShardMaster reach the maximum times"
+          break
+       fi
+
        cd $KUNHOME && ./kunctl.sh ListAllTablets $CELLNAME | grep $alias| grep -q master 
    done
 

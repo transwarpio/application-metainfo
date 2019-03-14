@@ -203,7 +203,8 @@ if [ $1 == "master" ]; then
        count=$((count+1))
         	
        if [ $count -eq 5 ]; then
-          echo "InitShardMaster reach the maximum times exit"
+          echo "InitShardMaster reach the maximum times"
+          break
        fi
        cd $KUNHOME && ./kunctl.sh ListAllTablets $CELLNAME |grep $alias | grep -q master
     done
