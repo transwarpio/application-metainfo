@@ -5,10 +5,10 @@
       "UserData": "mysql_user"
     }
   ],
- "jzpt": [
+ "vt_app": [
     {
       "Password": "123",
-      "UserData": "jzpt"
+      "UserData": "vt_app"
     }
   ],
   "vt_appdebug": [
