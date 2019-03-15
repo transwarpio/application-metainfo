@@ -1,9 +1,0 @@
-{
-  "LdapServer": "172.16.3.241:10389",
-  "LdapCA": "",
-  "Method": "mysql_clear_password",
-  "User": "uid=admin,ou=system",
-  "Password": "123",
-  "GroupQuery": "ou=people,dc=tdh",
-  "UserDnPattern":"uid=%s,ou=people,dc=tdh"
-}
