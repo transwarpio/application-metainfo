@@ -1,0 +1,118 @@
+#!/bin/bash
+
+# Copyright 2017 Google Inc.
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# This is an example script that starts a single vtgate.
+
+#set -e
+set -x
+
+if [ -f "$KUNDB_CONF_DIR/kundb-env.sh" ]; then
+   source $KUNDB_CONF_DIR/kundb-env.sh
+   source $KUNDB_CONF_DIR/get_dir.sh $VIR_DATA_DIR 
+else
+   echo "/etc/kundb1/conf/ is not exist cant start kundb"
+fi
+
+if [ ! -d "$VTDATAROOT/tmp/oltp" ]; then
+   mkdir -p $VTDATAROOT/tmp/oltp
+fi
+
+if [ ! -d "$VTDATAROOT/_kundb" ]; then
+   mkdir -p $VTDATAROOT/_kundb
+fi
+cell=$CELLNAME
+web_port=$KUNGATE_WEB_PORT
+grpc_port=$KUNGATE_GRPC_PORT
+mysql_server_port=$MYSQL_SERVER_PORT_BASE
+mfed=$1
+optional_args=$KUNGATE_OPTIONAL_ARGS 
+audit_sqls=$KUNGATE_AUDIT_SQLS
+server_impl=$KUNGATE_MYSQL_AUTH_SERVER_IMPL
+auth_plugin=$KUNGATE_KUNDB_AUTH_PLUGIN
+hostname=`hostname -f`
+
+#CA and key and so on
+
+# Start vtgate.
+$VTROOT/bin/vtgate \
+  $TOPOLOGY_FLAGS \
+  -log_dir $VTDATAROOT/tmp/oltp \
+  -port $web_port \
+  -grpc_max_message_size 1073741824 \
+  -grpc_client_max_recv_message_size 1073741824 \
+  -grpc_port $grpc_port \
+  -mysql_server_port $mysql_server_port \
+  -audit_sqls $audit_sqls \
+  -cell $cell \
+  -cells_to_watch $cell \
+  -tablet_types_to_wait MASTER,REPLICA \
+  -gateway_implementation discoverygateway \
+  -audit_filter="DCL, DDL, DML, CRUD, SHOW, SET, OTHER" \
+  -service_map 'grpc-vtgateservice' \
+  -pid_file $VTDATAROOT/tmp/vtgate.pid \
+  -lower_case_table_names=true \
+  -enable_offload_engines=true \
+  -skip_peak_log=false \
+  -skip_kungate_join=true \
+  -mfeds "$mfed" \
+  -mysql_auth_server_static_file "$KUNDB_CONF_DIR/mysql_auth_server_static_creds.json" \
+  -mysql_allow_clear_text_without_tls=true \
+  -mysql_auth_server_impl $server_impl\
+  -kundb_ldap_disable_tls=true \
+  -kundb_ldap_tls_skip_verify_host=true \
+  -mysql_ldap_auth_config_file "$KUNDB_CONF_DIR/guardian.json" \
+  -kundb_auth_plugin $auth_plugin\
+  -grpc_cert $KUNDB_CONF_DIR/vtgate-server-instance-cert.pem
+  -grpc_key $KUNDB_CONF_DIR/vtgate-server-instance-key.pem
+  $optional_tls_args \
+  > $VTDATAROOT/tmp/vtgate.out 2>&1 &
+
+echo "Access kungate at http://$hostname:$web_port/debug/status"
+
+#boot sequence
+keyspace="$KEYSPACE"
+OLD_IFS="$IFS"
+IFS=","
+export KEYSPACE_ARR=($keyspace)
+IFS="$OLD_IFS"
+echo ${KEYSPACE_ARR[@]}
+export KEYSPACE_NUM=${#KEYSPACE_ARR[@]}
+
+sleep 5
+mysql -h127.0.0.1 -uvt_app -p123 -P$mysql_server_port -e "select 1" 
+while [ $? -ne 0 ]
+do
+    echo " wait kungate starting..."
+    sleep 4	
+    count=$((count+1))
+    if [ $count -eq 5 ]; then
+      echo "mysql connetcion reach the maximum times exit"
+      break
+    fi
+    mysql -h127.0.0.1 -uvt_app -p123 -P$mysql_server_port -e "select 1" 
+done
+
+if [ ! -f "$VTDATAROOT/tmp/oltp/_init_sequence" ]; then
+  for ks in ${KEYSPACE_ARR[@]}; do
+
+     mysql -h127.0.0.1 -uvt_app -p123 -P$mysql_server_port -D$ks < seq_mata.sql
+     mysql -h127.0.0.1 -uvt_app -p123 -P$mysql_server_port -D$ks < nextvalue.sql
+  done
+  cd $VTDATAROOT/tmp/oltp && touch _init_sequence
+fi
+
+#disown -a
+wait
