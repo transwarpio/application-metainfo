@@ -1,6 +1,10 @@
 ## ----- framework specific configs -----
 server:
   port: ${service['server.web.port']}
+  compression:
+    enabled: true
+    mime-types: text/*,application/json,application/*+json,application/javascript
+    min-response-size: 10KB
   error:
     whitelabel:
       enabled: false
@@ -31,6 +35,12 @@ conf-gen:
 metrics:
   folders:
     special-folder-name: General
+  data-source:
+    predefined:
+      - id: 1
+        name: "Prometheus"
+        type: PROMETHEUS
+        url: http://172.16.1.104:9390 # TODO generation
 db:
   query:
     max-in-clause-size: 1000
