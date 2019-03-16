@@ -216,6 +216,32 @@
   groups: []
   visibility: READ_WRITE
 
+- name: kungate.audit_sqls
+  recommendExpression: 1
+  defaultValue: 1
+  valueType: BOOL 
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kungate.mysql_auth_server_impl
+  recommendExpression: ldap
+  defaultValue: ldap
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kungate.kundb_auth_plugin
+  recommendExpression: ldap
+  defaultValue: ldap
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
 
 - name: master.port_base 
   recommendExpression: 15000 
@@ -415,6 +441,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: orchestrator.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: kunctld.container.requests.memory
   recommendExpression: -1
   defaultValue: null
@@ -462,6 +497,15 @@
   visibility: READ_WRITE
 
 - name: KunGate.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: orchestrator.container.limits.memory
   recommendExpression: -1
   defaultValue: null
   valueType: GB
