@@ -1,10 +1,10 @@
 ---
 name: KUNDB 
-version: kundb-1.1.0
+version: kundb-1.1
 global: false
 namePrefix: kundb 
 friendlyName: "KunDB"
-dockerImage: "transwarp/kundb:kundb-1.1.0"
+dockerImage: "transwarp/kundb:kundb-1.1"
 dependencies: 
   - name: ZOOKEEPER
     minVersion: transwarp-6.0.0
@@ -16,7 +16,7 @@ roles:
 - name: ORCHESTRATOR 
   friendlyName: "Orchestrator"
   labelPrefix: "orchestrator"
-  dockerImage: "transwarp/orchestrator:orchestrator-1.1.0"
+  dockerImage: "transwarp/orchestrator:orchestrator-1.1"
   linkExpression: "http://${localhostname}:3000"
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
