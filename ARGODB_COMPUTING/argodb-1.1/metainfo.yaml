@@ -19,6 +19,10 @@ dependencies:
     minVersion: argodb-1.1
     maxVersion: argodb-1.1
     optional: false
+  - name: LADDER
+    minVersion: argodb-1.1
+    maxVersion: argodb-1.1
+    optional: false
   - name: DBA_SERVICE
     minVersion: argodb-1.1
     maxVersion: argodb-1.1

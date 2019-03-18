@@ -15,11 +15,13 @@
 </#list>
 <@property "ngmr.holodesk.shiva.mastergroup" master_group?join(",")/>
 
+<#if dependencies.LADDER??>
 <#assign ladder_masters_rpc=[]/>
-<#list service.roles.LADDER_MASTER as role>
-    <#assign ladder_masters_rpc += [role.hostname + ":" + service['ladder.master.rpc.port']]>
+<#list dependencies.LADDER.roles.LADDER_MASTER as role>
+    <#assign ladder_masters_rpc += [role.hostname + ":" + dependencies.LADDER['ladder.master.rpc.port']]>
 </#list>
 <@property "ladder.master.rpc.server.addresslist" ladder_masters_rpc?join(",")/>
+</#if>
 
 <#if dependencies.HDFS??>
     <#if dependencies['HDFS']['nameservices']?? && dependencies['HDFS']['nameservices']?size gt 0>
@@ -36,9 +38,7 @@
     </#if>
     <@property "fs.defaultFS" "hdfs://" + hostPort />
 <#else>
-    <#--TODO hardcoded port 19998-->
-    <#assign scheme='ladder://' host=service.roles.LADDER_MASTER[0]['hostname'] port='19998'>
-    <@property "fs.defaultFS" scheme + host + ':' + port/>
+    <@property "fs.defaultFS" "ladder://service"/>
 </#if>
 
 <#--handle dependent.zookeeper-->

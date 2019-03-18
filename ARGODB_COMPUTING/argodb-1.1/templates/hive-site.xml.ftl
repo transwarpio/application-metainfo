@@ -9,16 +9,19 @@
 <#--------------------------->
 <configuration>
 
-<#--handle dependent.shiva and ladder-->
+<#--handle dependencies.shiva-->
 <#if dependencies.ARGODB_STORAGE??>
     <#assign storage=dependencies.ARGODB_STORAGE master_group=[]>
     <#list storage.roles.SHIVA_MASTER as master>
         <#assign master_group += [master.ip + ":" + storage['shiva.master.rpc_service.master_service_port']]>
     </#list>
     <@property "ngmr.holodesk.shiva.mastergroup" master_group?join(",")/>
+</#if>
+
+<#if dependencies.LADDER??>
     <#assign ladder_masters_rpc=[]/>
-    <#list storage.roles.LADDER_MASTER as role>
-        <#assign ladder_masters_rpc += [role.hostname + ":" + storage['ladder.master.rpc.port']]>
+    <#list dependencies.LADDER.roles.LADDER_MASTER as role>
+        <#assign ladder_masters_rpc += [role.hostname + ":" + dependencies.LADDER['ladder.master.rpc.port']]>
     </#list>
     <@property "ladder.master.rpc.server.addresslist" ladder_masters_rpc?join(",")/>
 </#if>
@@ -38,9 +41,7 @@
     </#if>
     <@property "fs.defaultFS" "hdfs://" + hostPort />
 <#elseif dependencies.ARGODB_STORAGE??>
-    <#--TODO hardcoded port 19998-->
-    <#assign scheme='ladder://' host=dependencies.ARGODB_STORAGE.roles.LADDER_MASTER[0]['hostname'] port='19998'>
-    <@property "fs.defaultFS" scheme + host + ':' + port/>
+    <@property "fs.defaultFS" "ladder://service" />
 </#if>
 
 <#--handle dependent.zookeeper-->
