@@ -16,7 +16,7 @@ roles:
 - name: ORCHESTRATOR 
   friendlyName: "Orchestrator"
   labelPrefix: "orchestrator"
-  dockerImage: "transwarp/orchestrator:orchestrator-1.1"
+  dockerImage: "transwarp/kundb-orchestrator:orchestrator-1.1"
   linkExpression: "http://${localhostname}:3000"
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
