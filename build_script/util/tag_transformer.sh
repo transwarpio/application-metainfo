@@ -4,7 +4,7 @@ MANAGER_PROGRESS_VERSION=manager-6.0
 MANAGER_TAG_VERSION=manager-6.0.1812a-final
 LAST_STABLE_VERSION=transwarp-6.0.0-final
 TDH_PROGRESS_VERSION=transwarp-6.0
-TDH_TAG_VERSION=transwarp-6.0.1-final
+TDH_TAG_VERSION=transwarp-6.0.2-final
 
 set -e
 

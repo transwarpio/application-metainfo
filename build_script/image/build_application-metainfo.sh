@@ -47,11 +47,11 @@ build_application-metainfo() {
         bash -x /tmp/push_dev.sh
         rm -f /tmp/push_dev.sh
         # set git remote for upgrade
-        git remote rm origin
-        git remote add origin https://github.com/transwarpio/application-metainfo.git
-        http_proxy=http://172.16.2.14:7777 https_proxy=http://172.16.2.14:7777 git fetch origin
-        git checkout master
-        git branch --set-upstream-to=origin/master master
+#        git remote rm origin
+#        git remote add origin https://github.com/transwarpio/application-metainfo.git
+#        http_proxy=http://172.16.2.14:7777 https_proxy=http://172.16.2.14:7777 git fetch origin
+#        git checkout master
+#        git branch --set-upstream-to=origin/master master
 
 
         echo "building $VERSION image ..."
