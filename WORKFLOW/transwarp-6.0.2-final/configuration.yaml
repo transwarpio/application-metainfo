@@ -1,0 +1,247 @@
+- name: workflow.http.port
+  recommendExpression: 9091
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.access.control.enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.execute.pool.size
+  recommendExpression: 100
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  
+- name: workflow.verify.interval.millis
+  recommendExpression: 60000
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  
+- name: workflow.global.max.running
+  recommendExpression: 2000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.recover.max.running
+  recommendExpression: 500
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.in.wf.max.running
+  recommendExpression: 200
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.plugin.max.running
+  recommendExpression: 100
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.plugin.retry.max.running
+  recommendExpression: 100
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.max.running.delay.millis
+  recommendExpression: 600000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.clean.interval.days
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.recovery.seconds
+  recommendExpression: 86400
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.datasource.username
+  recommendExpression: "workflow"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.datasource.password
+  recommendExpression: "Workflow_123"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.datasource.initialize
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: javax.jdo.option.ConnectionUserName
+  recommendExpression: workflowuser
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: javax.jdo.option.ConnectionPassword
+  recommendExpression: password
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: PASSWORD
+
+- name: workflow.pseudo.username
+  recommendExpression: workflow
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.pseudo.password
+  recommendExpression: Transwarp4T
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.session.timeout.seconds
+  recommendExpression: 7200
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.cookie.rememberme.days
+  recommendExpression: 30
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.cookie.maxage.hours
+  recommendExpression: 24
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [WORKFLOW_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [WORKFLOW_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [WORKFLOW_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [WORKFLOW_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [WORKFLOW_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
