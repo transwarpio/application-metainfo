@@ -5,6 +5,4 @@
   </#list>
   <#assign master_group = masters?join(",")>
 export MASTER_GROUP=${master_group}
-export MASTER_SERVICE_PORT=${service["shiva.master.rpc_service.master_service_port"]}
-export TABLETSERVER_SERVICE_PORT=${service["shiva.tabletserver.rpc_service.manage_service_port"]}
 </#if>
