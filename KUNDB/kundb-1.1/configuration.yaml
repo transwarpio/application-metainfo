@@ -16,7 +16,7 @@
   defaultValue: null
   valueType: ABSOLUTE_PATH
   scope: !<RoleTypes>
-    roleTypes: [KUNCTLD, COMPUTE_NODE, KUNTABLET_MASTER, KUNTABLET_REPLICA, KUNTABLET_RDONLY, KUNGATE]
+    roleTypes: [ORCHESTRATOR, KUNCTLD, COMPUTE_NODE, KUNTABLET_MASTER, KUNTABLET_REPLICA, KUNTABLET_RDONLY, KUNGATE]
   onDeps: []
   groups: [kundb-env.sh]
   visibility: READ_WRITE

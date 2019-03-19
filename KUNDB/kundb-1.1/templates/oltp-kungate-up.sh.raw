@@ -75,8 +75,8 @@ $VTROOT/bin/vtgate \
   -kundb_ldap_tls_skip_verify_host=true \
   -mysql_ldap_auth_config_file "$KUNDB_CONF_DIR/guardian.json" \
   -kundb_auth_plugin $auth_plugin\
-  -grpc_cert $KUNDB_CONF_DIR/vtgate-server-instance-cert.pem
-  -grpc_key $KUNDB_CONF_DIR/vtgate-server-instance-key.pem
+  -grpc_cert $KUNDB_CONF_DIR/vtgate-server-instance-cert.pem \
+  -grpc_key $KUNDB_CONF_DIR/vtgate-server-instance-key.pem \
   $optional_tls_args \
   > $VTDATAROOT/tmp/vtgate.out 2>&1 &
 
