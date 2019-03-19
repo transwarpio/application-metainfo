@@ -234,7 +234,8 @@ if [ $1 == "master" ]; then
 
         printf -v alias '%s-%010d' $CELLNAME $SHARD_UIDBASE
         echo "InitMfed $alias ... "
-        cd $KUNHOME && ./kunctl.sh InitMfed -mfed_alias $alias -vtgate_host ${mfedHost[$i]} -vtgate_port $vtgate_port 
+        source $ROLE_CONF_DIR/sup_user_info.sh 
+        cd $KUNHOME && ./kunctl.sh InitMfed -mfed_alias $alias -vtgate_user $SUPUSER -vtgate_password $PASSWORD -vtgate_host ${mfedHost[$i]} -vtgate_port $vtgate_port 
     done
      
   else

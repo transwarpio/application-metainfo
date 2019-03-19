@@ -192,7 +192,8 @@ do
     cd $KUNHOME && ./kunctl.sh ListAllTablets $CELLNAME | grep -q $alias
 done
 echo "InitMfed $alias ... "
-cd $KUNHOME && ./kunctl.sh InitMfed -mfed_alias $alias -vtgate_user vt_app -vtgate_password 123 -vtgate_host `hostname -f` -vtgate_port $vtgate_port 
+source $KUNDB_CONF_DIR/sup_user_info.sh 
+cd $KUNHOME && ./kunctl.sh InitMfed -mfed_alias $alias -vtgate_user $SUPUSER -vtgate_password $PASSWORD -vtgate_host `hostname -f` -vtgate_port $vtgate_port 
 sleep 2
     
 if [ ! -f "$VTDATAROOT/$tablet_dir/_init_mfed_master" ]; then
