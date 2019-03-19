@@ -6,8 +6,8 @@
       "charts": [
         {
           "metrics": [
-            {"name": "AllTopicsBytesInPerSec", "title": "AllTopicsBytesOutPerSec"},
-            {"name": "AllTopicsBytesOutPerSec", "title": "AllTopicsBytesInPerSec"}
+            {"name": "AllTopicsBytesInPerSec", "title": "AllTopicsBytesInPerSec"},
+            {"name": "AllTopicsBytesOutPerSec", "title": "AllTopicsBytesOutPerSec"}
           ],
           "metricUnit": "MB/s"
         }
