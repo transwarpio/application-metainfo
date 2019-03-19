@@ -38,9 +38,9 @@
     <#if dependencies.SLIPSTREAM??>
         <@property "tdt.inceptor.principal" "hive/${dependencies.SLIPSTREAM.roles.INCEPTOR_SERVER[0]['hostname']}@${service.realm}"/>
         <#if dependencies.SLIPSTREAM['hive.server2.authentication'] == "LDAP">
-            <@assign mode="LDAP"/>
+            <#assign mode="LDAP"/>
         <#else>
-            <@assign mode="KERBEROS"/>
+            <#assign mode="KERBEROS"/>
         </#if>
     </#if>
 <#else>
