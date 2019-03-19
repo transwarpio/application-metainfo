@@ -190,6 +190,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: server.jdbc.connctor.timezone
+  recommendExpression: Asia/Shanghai
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 # AQUILA_AGENT
 
 - name: agent.web.port
@@ -322,9 +331,29 @@
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
-    roleTypes: [NODE_EXPORTER]
+    roleTypes: [AQUILA_NODE_EXPORTER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
 
+# AQUILA_TDH_EXPORTER
 
+- name: tdh.exporter.web.port
+  recommendExpression: 8692
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TDH_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tdh.exporter.metric.config.dir
+  recommendExpression: /etc/tdh-exporter
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TDH_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: HIDDEN

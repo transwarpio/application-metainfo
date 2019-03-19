@@ -253,6 +253,54 @@ roles:
   - criteria: !<Range> {"min": 1}
   operations: []
 
+- name: AQUILA_TDH_EXPORTER
+  friendlyName: "TDH Exporter"
+  labelPrefix: "tdh-exporter"
+  dockerImage: "transwarp/tdh-exporter:manager-6.0"
+  linkExpression: "http://${localhostname}:${service['tdh.exporter.web.port']}/metrics"
+  category: MASTER
+  frontendOperations: ["Start", "Stop"]
+  env:
+    - name: TDH_EXPORTER_CONF_DIR
+      value: /etc/${service.sid}/conf/tdh-exporter
+    - name: TDH_EXPORTER_LOG_DIR
+      value: /var/log/${service.sid}/tdh-exporter
+  mountPaths:
+    - mountPath: ${service['tdh.exporter.metric.config.dir']}
+      hostPath: ${service['tdh.exporter.metric.config.dir']}
+      name: config-mount
+  nodeSpecificMounts: []
+  summaryPolicy: SOME
+  autoAssign:
+    - advice: !<EachNode> {}
+  suggestion:
+    - criteria: !<EachNode> {}
+  validation:
+    - criteria: !<EachNode> {}
+  operations:
+    - type: Install
+      directives:
+        - directive: !<mkdirs>
+            paths: ["/var/log/${service.sid}/tdh-exporter"]
+            mode: "750"
+    - type: Config
+      directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "tdh-exporter/global-config.yml.ftl"
+            targetPath: "/etc/${service.sid}/conf/tdh-exporter/global-config.yml"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "tdh-exporter/env.sh.ftl"
+            targetPath: "/etc/${service.sid}/conf/tdh-exporter/env.sh"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "tdh-exporter/log4j2.xml.ftl"
+            targetPath: "/etc/${service.sid}/conf/tdh-exporter/log4j2.xml"
+            mode: "755"
+
 # MANAGER_PROXY is strictly adhered to Manager
 
 firstWizardConfigs:
@@ -260,6 +308,7 @@ firstWizardConfigs:
 - agent.web.port
 - manager.proxy.web.port
 - node.exporter.web.port
+- tdh.exporter.web.port
 - txsql.data.dir
 - txsql.mysql.rw.port
 - txsql.binlog.port
