@@ -1,10 +1,10 @@
 ---
 name: WORKFLOW
-version: sophon-2.3
+version: kg-2.3
 global: false
 namePrefix: Workflow
 friendlyName: Workflow
-dockerImage: "transwarp/workflow:sophon-2.3"
+dockerImage: "transwarp/workflow:kg-2.3"
 dependencies:
   - name: TRANSPORTER
     minVersion: transwarp-6.0.0-final

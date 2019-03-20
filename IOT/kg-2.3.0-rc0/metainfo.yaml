@@ -1,6 +1,6 @@
 ---
 name: IOT
-version: sophon-2.3
+version: kg-2.3.0-rc0
 global: false
 namePrefix: IoT
 friendlyName: "IoT"
@@ -14,7 +14,7 @@ roles:
   - name: CONSUL
     friendlyName: "Consul"
     labelPrefix: "thingercloud-consul"
-    dockerImage: "transwarp/consul:sophon-2.3"
+    dockerImage: "transwarp/consul:kg-2.3.0-rc0"
     linkExpression: "http://${localhostname}:${service['thingercloud.consul.port']}/"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
@@ -52,7 +52,7 @@ roles:
   - name: NSQD
     friendlyName: "Nsqd"
     labelPrefix: "thingercloud-nsqd"
-    dockerImage: "transwarp/nsq:sophon-2.3"
+    dockerImage: "transwarp/nsq:kg-2.3.0-rc0"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
     deleteOpCondition:
@@ -89,7 +89,7 @@ roles:
   - name: EDGEMGR
     friendlyName: "EdgeManager"
     labelPrefix: "thingercloud-edgemgr"
-    dockerImage: "transwarp/thingercloud-edgemgr:sophon-2.3"
+    dockerImage: "transwarp/thingercloud-edgemgr:kg-2.3.0-rc0"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
     deleteOpCondition:
@@ -125,7 +125,7 @@ roles:
   - name: APPMGR
     friendlyName: "AppManager"
     labelPrefix: "thingercloud-appmgr"
-    dockerImage: "transwarp/thingercloud-appmgr:sophon-2.3"
+    dockerImage: "transwarp/thingercloud-appmgr:kg-2.3.0-rc0"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
     deleteOpCondition:
@@ -161,7 +161,7 @@ roles:
   - name: HUB
     friendlyName: "Hub"
     labelPrefix: "thingercloud-hub"
-    dockerImage: "transwarp/thinger-hub:sophon-2.3"
+    dockerImage: "transwarp/thinger-hub:kg-2.3.0-rc0"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
     deleteOpCondition:
@@ -197,7 +197,7 @@ roles:
   - name: GATEWAY
     friendlyName: "Gateway"
     labelPrefix: "thingercloud-gateway"
-    dockerImage: "transwarp/thingercloud-gateway:sophon-2.3"
+    dockerImage: "transwarp/thingercloud-gateway:kg-2.3.0-rc0"
     linkExpression: "http://${localhostname}:${service['thingercloud.gateway.port']}/apidocs/"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
@@ -234,7 +234,7 @@ roles:
   - name: FRONTEND
     friendlyName: "Frontend"
     labelPrefix: "thingercloud-frontend"
-    dockerImage: "transwarp/thingercloud-frontend:sophon-2.3"
+    dockerImage: "transwarp/thingercloud-frontend:kg-2.3.0-rc0"
     linkExpression: "http://${localhostname}:${service['thingercloud.frontend.port']}/"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]

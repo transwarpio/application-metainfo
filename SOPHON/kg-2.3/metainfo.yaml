@@ -26,8 +26,8 @@ dependencies:
     maxVersion: transwarp-6.0.1-final
     optional: false
   - name: YARN
-    minVersion: sophon-2.2.0-final
-    maxVersion: sophon-2.3.0-final
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.1-final
     optional: false
   - name: TXSQL
     minVersion: transwarp-5.2.2-final

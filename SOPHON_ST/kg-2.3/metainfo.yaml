@@ -1,6 +1,6 @@
 ---
 name: SOPHON_ST
-version: sophon-2.3
+version: kg-2.3
 global: false
 namePrefix: Sophon_ST
 friendlyName: "Sophon-ST"
@@ -38,7 +38,7 @@ roles:
   - name: SOPHON_ST_BACKEND
     friendlyName: "Sophon-ST Backend"
     labelPrefix: "sophon-st-backend"
-    dockerImage: "transwarp/sophon-st-backend:sophon-2.3"
+    dockerImage: "transwarp/sophon-st-backend:kg-2.3"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
     deleteOpCondition:
@@ -79,7 +79,7 @@ roles:
   - name: SOPHON_ST_FRONTEND
     friendlyName: "Sophon-ST Frontend"
     labelPrefix: "sophon-st-frontend"
-    dockerImage: "transwarp/sophon-st-frontend:sophon-2.3"
+    dockerImage: "transwarp/sophon-st-frontend:kg-2.3"
     linkExpression: "http://${localhostname}:${service['frontend.port']}"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
