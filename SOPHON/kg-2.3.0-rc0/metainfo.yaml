@@ -5,9 +5,10 @@ global: false
 namePrefix: Sophon
 friendlyName: "Sophon-web"
 dependencies:
-  - name: SETLLARDB
+  - name: STELLARDB
     minVersion: kg-2.3.0-rc0
     maxVersion: kg-2.3.0-rc0
+    optional: false
   - name: GUARDIAN
     minVersion: transwarp-5.2.2-final
     maxVersion: transwarp-6.0.1-final
