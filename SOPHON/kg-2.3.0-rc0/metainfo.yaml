@@ -3,11 +3,11 @@ name: SOPHON
 version: kg-2.3.0-rc0
 global: false
 namePrefix: Sophon
-friendlyName: "Sophon-web"
+friendlyName: "Sophon"
 dependencies:
   - name: SETLLARDB
-    minVersion: kg-2.3.0-rc0
-    maxVersion: kg-2.3.0-rc0
+    minVersion: kg-2.3
+    maxVersion: kg-2.3
   - name: GUARDIAN
     minVersion: transwarp-5.2.2-final
     maxVersion: transwarp-6.0.1-final

@@ -3,7 +3,7 @@ name: SOPHON
 version: kg-2.3
 global: false
 namePrefix: Sophon
-friendlyName: "Sophon-web"
+friendlyName: "Sophon"
 dependencies:
   - name: SETLLARDB
     minVersion: kg-2.3
