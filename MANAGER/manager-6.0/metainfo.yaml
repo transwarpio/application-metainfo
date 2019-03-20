@@ -95,7 +95,7 @@ roles:
   labelPrefix: "txsql-server"
   dockerImage: "transwarp/txsql:transwarp-6.0.1-final"
   category: MASTER
-  frontendOperations: ["Start"]
+  frontendOperations: ["Start", "Move"]
   deleteOpCondition:
     reject:
       number: 3

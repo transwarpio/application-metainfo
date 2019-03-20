@@ -12,7 +12,7 @@ roles:
   friendlyName: "TxSQL Server"
   labelPrefix: "txsql-server"
   category: MASTER
-  frontendOperations: ["Start", "Stop", "Delete"]
+  frontendOperations: ["Start", "Stop", "Delete", "Move"]
   deleteOpCondition:
     deletable:
       number: 3

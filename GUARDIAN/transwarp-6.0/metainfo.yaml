@@ -241,7 +241,7 @@ roles:
   friendlyName: "CAS Admin Server"
   labelPrefix: "cas-admin-server"
   category: MASTER
-  frontendOperations: ["Start", "Stop", "Move", "Scaleout"]
+  frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   deleteOpCondition:
     movable:
       number: 1
