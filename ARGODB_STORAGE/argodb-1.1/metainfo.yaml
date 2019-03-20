@@ -15,6 +15,10 @@ dependencies:
   - name: TXSQL
     minVersion: transwarp-6.0
     optional: false
+  - name: LADDER
+    minVersion: argodb-1.1
+    maxVersion: argodb-1.1
+    optional: false
   - name: INCEPTOR
     minVersion: transwarp-6.0
     optional: true
@@ -172,16 +176,6 @@ roles:
     requestsMemoryKey: shiva.webserver.container.requests.memory
     requestsCpuKey: shiva.webserver.container.requests.cpu
   env:
-  - name: MASTER_GROUP
-    value: |
-      <#function master_group>
-        <#local group = []>
-        <#list service.roles["SHIVA_MASTER"] as r>
-          <#local group = group + [r.ip + ":" + service['shiva.master.rpc_service.master_service_port']]>
-        </#list>
-        <#return group?join(",")>
-      </#function>
-      ${master_group()}
   - name: CONF_DIR
     value: /etc/${service.sid}/conf/shiva
   deleteOpCondition:
@@ -212,6 +206,11 @@ roles:
         templatePath: "shiva/log4j.properties"
         targetPath: "/etc/${service.sid}/conf/shiva/log4j.properties"
         mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "shiva/shiva-env.sh.ftl"
+        targetPath: "/etc/${service.sid}/conf/shiva/shiva-env.sh"
+        mode: "755"
 
 - name: SHIVA_TABLETSERVER
   friendlyName: "Shiva Tablet Server"
@@ -241,18 +240,6 @@ roles:
   env:
   - name: CONF_DIR
     value: /etc/${service.sid}/conf/shiva
-  - name: LOG_DIR
-    value: /var/log/${service.sid}
-  - name: MASTER_GROUP
-    value: |
-      <#function master_group>
-        <#local group = []>
-        <#list service.roles["SHIVA_MASTER"] as r>
-          <#local group = group + [r.ip + ":" + service['shiva.master.rpc_service.master_service_port']]>
-        </#list>
-        <#return group?join(",")>
-      </#function>
-      ${master_group()}
   deleteOpCondition:
     deletable:
       number: 3
@@ -292,160 +279,10 @@ roles:
         templatePath: "shiva/topology.conf"
         targetPath: "/etc/${service.sid}/conf/shiva/topology.conf"
         mode: "755"
-
-##########
-# Ladder #
-##########
-- name: LADDER_MASTER
-  friendlyName: "Ladder Master"
-  labelPrefix: "ladder-master"
-  dockerImage: "transwarp/argodb-ladder:argodb-1.1"
-  category: MASTER
-  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
-  readinessProbe:
-    probe: !<httpGet>
-      path: /
-      port: ${service['ladder.master.web.port']}
-      scheme: HTTP
-  summaryPolicy: SOME
-  autoAssign:
-  - advice: !<NumSeq> {"numSeq": [3]}
-  suggestion:
-  - criteria: !<Range> {"min": 3, "oddity": true}
-  validation:
-  - criteria: !<Range> {"min": 1}
-  resources:
-    limitsMemoryKey: ladder.master.container.limits.memory
-    limitsCpuKey: ladder.master.container.limits.cpu
-    requestsMemoryKey: ladder.master.container.requests.memory
-    requestsCpuKey: ladder.master.container.requests.cpu
-  nodeSpecificMounts:
-  - configKey: ladder.master.journal.data_path
-  - configKey: ladder.master.raft.data_path
-  - configKey: ladder.master.localfs.data_path
-  env:
-  - name: LADDER_CONF_DIR
-    value: /etc/${service.sid}/conf/ladder
-  - name: LADDER_LOGS_DIR
-    value: /var/log/${service.sid}/ladder
-  deleteOpCondition:
-    deletable:
-      number: 3
-      decommission: false
-    reject:
-      number: 2
-  deleteOpCleanDirs:
-    fromPath:
-    - key: /var/transwarp/data/ladder/is_formated.identifier
-      featureFile: is_formated.identifier
-  mountPaths:
-  - mountPath: /var/ladder_format
-    hostPath: /var/transwarp/data/ladder
-    name: format
-  operations:
-  - type: Install
-    directives:
-    - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf/ladder"]
-        mode: "755"
-    - directive: !<mkdirs>
-        paths: ["/var/transwarp/data/ladder"]
-        mode: "755"
-  - type: Config
-    directives:
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "ladder/ladder-site.properties"
-        targetPath: "/etc/${service.sid}/conf/ladder/ladder-site.properties"
-        mode: "755"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "ladder/log4j.properties"
-        targetPath: "/etc/${service.sid}/conf/ladder/log4j.properties"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "ladder/workers"
-        targetPath: "/etc/${service.sid}/conf/ladder/workers"
-        mode: "755"
-
-- name: LADDER_WORKER
-  friendlyName: "Ladder Worker"
-  labelPrefix: "ladder-worker"
-  dockerImage: "transwarp/argodb-ladder:argodb-1.1"
-  category: SLAVE
-  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
-  readinessProbe:
-    probe: !<httpGet>
-      path: /
-      port: ${service['ladder.worker.web.port']}
-      scheme: HTTP
-  summaryPolicy: MAJOR
-  autoAssign:
-  - advice: !<EachNode> {}
-  suggestion:
-  - criteria: !<Range> {"min": 3, "oddity": true}
-  validation:
-  - criteria: !<Range> {"min": 1}
-  resources:
-    limitsMemoryKey: ladder.worker.container.limits.memory
-    limitsCpuKey: ladder.worker.container.limits.cpu
-    requestsMemoryKey: ladder.worker.container.requests.memory
-    requestsCpuKey: ladder.worker.container.requests.cpu
-  nodeSpecificMounts:
-  - configKey: ladder.worker.mem.data_path
-  - configKey: ladder.worker.hdd.data_path
-  env:
-  - name: LADDER_CONF_DIR
-    value: /etc/${service.sid}/conf/ladder
-  - name: LADDER_LOGS_DIR
-    value: /var/log/${service.sid}/ladder
-  deleteOpCondition:
-    deletable:
-      number: 3
-      decommission: false
-    reject:
-      number: 2
-  deleteOpCleanDirs:
-    fromPath:
-    - key: /var/transwarp/data/ladder/is_formated_worker.identifier
-      featureFile: is_formated_worker.identifier
-  mountPaths:
-  - mountPath: /var/ladder_format
-    hostPath: /var/transwarp/data/ladder
-    name: format
-  operations:
-  - type: Install
-    directives:
-    - directive: !<mkdirs>
-        paths: ["/etc/${service.sid}/conf/ladder"]
-        mode: "755"
-    - directive: !<mkdirs>
-        paths: ["/var/transwarp/data/ladder"]
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "ladder/ladder-mount.sh.ftl"
-        targetPath: "/etc/${service.sid}/conf/ladder/ladder-mount.sh"
-        mode: "755"
-    - directive: !<shell>
-        script: "bash -e /etc/${service.sid}/conf/ladder/ladder-mount.sh"
-  - type: Config
-    directives:
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "ladder/ladder-site.properties"
-        targetPath: "/etc/${service.sid}/conf/ladder/ladder-site.properties"
-        mode: "755"
-    - directive: !<resource>
-        templateType: Raw
-        templatePath: "ladder/log4j.properties"
-        targetPath: "/etc/${service.sid}/conf/ladder/log4j.properties"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "ladder/workers"
-        targetPath: "/etc/${service.sid}/conf/ladder/workers"
+        templatePath: "shiva/shiva-env.sh.ftl"
+        targetPath: "/etc/${service.sid}/conf/shiva/shiva-env.sh"
         mode: "755"
 
 stages:
@@ -484,16 +321,6 @@ stages:
       timeoutMinutes: 1
     - !<Role>
       roleType: "INCEPTOR_METASTORE"
-      operation: Config
-      summaryPolicy: SOME
-      timeoutMinutes: 1
-    - !<Role>
-      roleType: "LADDER_MASTER"
-      operation: Config
-      summaryPolicy: SOME
-      timeoutMinutes: 1
-    - !<Role>
-      roleType: "LADDER_WORKER"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
@@ -556,26 +383,6 @@ firstWizardConfigs:
 - shiva.webserver.container.requests.cpu
 - shiva.webserver.container.requests.memory
 - shiva.webserver.memory.ratio
-##########
-# Ladder #
-##########
-- ladder.master.web.port
-- ladder.master.container.limits.memory
-- ladder.master.container.limits.cpu
-- ladder.master.container.requests.memory
-- ladder.master.container.requests.cpu
-- ladder.master.journal.data_path
-- ladder.master.raft.data_path
-- ladder.master.localfs.data_path
-- ladder.worker.web.port
-- ladder.worker.container.limits.memory
-- ladder.worker.container.limits.cpu
-- ladder.worker.container.requests.memory
-- ladder.worker.container.requests.cpu
-- ladder.worker.mem.data_path
-- ladder.worker.hdd.data_path
-- ladder.worker.mem.size
-- ladder.worker.tieredstore.level1.dirs.quota
 
 dashboardMetrics:
 - InceptorSqlActiveTasks
