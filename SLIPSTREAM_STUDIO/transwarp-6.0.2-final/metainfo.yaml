@@ -7,7 +7,7 @@ friendlyName: "SlipstreamStudio"
 dockerImage: "transwarp/slipstream-studio:transwarp-6.0.2-final"
 dependencies:
   - name: GUARDIAN
-    minVersion: transwarp-6.0.2-final
+    minVersion: transwarp-6.0.1-final
     optional: true
   - name: HDFS
     minVersion: transwarp-6.0.2-final
