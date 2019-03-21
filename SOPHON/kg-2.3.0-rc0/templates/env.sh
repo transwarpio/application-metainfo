@@ -42,6 +42,10 @@ SPARK_DIST_CLASSPATH=/usr/lib/sophon/hadoop-jars/*
 HYPERBASE_CONF_DIR=/etc/${dependencies.HYPERBASE.sid}/conf
 </#if>
 
+<#if dependencies.STELLARDB??>
+STELLARDB_CONF_DIR=/etc/${dependencies.STELLARDB.sid}/conf
+</#if>
+
 LIVY_LOG_DIR=/var/log/midas
 PYSPARK_PYTHON=python3
 PYSPARK_DRIVER_PYTHON=python3

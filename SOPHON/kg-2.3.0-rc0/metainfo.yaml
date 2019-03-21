@@ -6,8 +6,8 @@ namePrefix: Sophon
 friendlyName: "Sophon"
 dependencies:
   - name: STELLARDB
-    minVersion: kg-2.3
-    maxVersion: kg-2.3
+    minVersion: kg-2.3.0-rc0
+    maxVersion: kg-2.3.0-rc0
     optional: false
   - name: GUARDIAN
     minVersion: transwarp-5.2.2-final
@@ -309,6 +309,7 @@ roles:
         templatePath: "scheduler.xml"
         targetPath: "/etc/${service.sid}/conf/scheduler.xml"
         mode: "755"
+
 - name: APINAMANER
   dockerImage: "transwarp/apimanager:kg-2.3.0-rc0"
   linkExpression: "http://${localhostname}:8044/swagger-ui.html"
@@ -362,6 +363,48 @@ roles:
         targetPath: "/etc/${service.sid}/conf/apimanager/application.properties"
         mode: "755"
 
+- name: KG_EXPLORER
+  dockerImage: "transwarp/kg-explorer:kg-2.3.0-rc0"
+  linkExpression: "http://${localhostname}:9000"
+  friendlyName: "kg explorer"
+  labelPrefix: "kg-explorer"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+  - name: SOPHON_CONF_DIR
+    value: /etc/${service.sid}/conf/kg/
+  - name: SOPHON_SERVICE_ID
+    value: ${service.sid}
+  mountPaths:
+  - mountPath: /srv/kubernetes
+    hostPath: /srv/kubernetes
+    name: secure
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1, "max": 1}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "kg/default.conf"
+        targetPath: "/etc/${service.sid}/conf/kg/default.conf"
+        mode: "755"
+
 
 stages:
   - type: Config
@@ -401,6 +444,11 @@ stages:
       timeoutMinutes: 1
     - !<Role>
       roleType: "APINAMANER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "KG_EXPLORER"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
