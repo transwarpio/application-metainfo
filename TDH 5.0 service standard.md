@@ -57,6 +57,8 @@ upgrade目录存放服务升级相关的信息；
 | namePrefix | 为服务实例自动生成名称时的前缀，由每个单词首字母大写的大小写字母组成 | ZooKeeper、Inceptor |
 | friendlyName | 显示在前端的表示服务类型的单词，可出现大小写字母、空格等 | "Inceptor"、"License Service" |
 | product | 在首次安装向导中，服务所属的TDH产品系列，若不属于任何产品，则省略该字段 | TOS、Hadoop、Hyperbase、Studio、Inceptor、Stream、Discover、Sophon |
+| rollingRestart | 服务是否支持滚动重启。若支持，则说明服务在滚动重启期间仍然具有可用性。若不支持滚动重启，则省略该字段 | true |
+| principals | 服务在Guardian中注册的principal，格式为`primary[/instance]`，若instance部分缺省则manager将自动补充为节点hostname。若服务不使用Guardian，则省略该字段 | hive、HTTP、guardian/guardian |
 
 ### 服务的依赖
 服务的依赖在metainfo.yaml的dependencies字段指定，内容为一个数组，数组的每个元素指定一个依赖项。每个依赖项包含以下字段：
@@ -154,6 +156,21 @@ dependency.title.INCEPTOR=\u5171\u4EABMetaStore
      fromPath:
      - key: /var/run/${service.sid}
        featureFile: dn_socket`
+       
+### 服务的页面展示
+服务需要展示的详情页面在metainfo.yaml的pages字段指定，内容为一个数组，数组的每个元素指定一个页面。目前可用的页面类型如下：
+
+| 值  | 页面及用途 |
+|---|---|
+| summary | 总览页面，用于展示服务自定义的一些监控指标 |
+| roles | 角色页面，用于展示服务所包含的角色，以及对角色进行操作 |
+| configuration | 配置参数页面，用于展示、修改和添加参数 |
+| operation | 操作页面，用于查看针对当前服务所做的操作历史情况 |
+| security | 安全页面,用于开启/关闭当前服务的Kerberos。如果服务未使用到Kerberos，则不应填写此值 |
+| plugin | 插件页面,用于展示当前服务的可用插件，已经进行开启/关闭插件操作。如果服务未使用任何插件，则不应填写此值 |
+| resource_allocation | 资源分配页面，目前只有inceptor服务中使用 |
+
+从 6.0 版本开始，前端默认为所有服务增加了一个用户展示的页面，无需服务在pages下指定
 
 ### 模板渲染与数据模型
 目前服务标准化中所有的模板均通过Apache FreeMarker引擎渲染，模板的书写参考http://freemarker.org/docs/dgui.html
