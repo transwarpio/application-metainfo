@@ -87,6 +87,16 @@ roles:
   env:
   - name: CONF_DIR
     value: /etc/${service.sid}/conf
+  - name: MASTER_GROUP
+    value: |
+      <#function master_group>
+        <#local group = []>
+        <#list service.roles["SHIVA_MASTER"] as r>
+          <#local group = group + [r.ip + ":" + service['master.rpc_service.master_service_port']]>
+        </#list>
+        <#return group?join(",")>
+      </#function>
+      ${master_group()}
   deleteOpCondition:
     deletable:
       number: 2
@@ -112,7 +122,7 @@ roles:
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "shiva-env.sh.ftl"
+        templatePath: "shiva-env.sh"
         targetPath: "/etc/${service.sid}/conf/shiva-env.sh"
         mode: "755"
 
@@ -144,6 +154,16 @@ roles:
   env:
   - name: CONF_DIR
     value: /etc/${service.sid}/conf
+  - name: MASTER_GROUP
+    value: |
+      <#function master_group>
+        <#local group = []>
+        <#list service.roles["SHIVA_MASTER"] as r>
+          <#local group = group + [r.ip + ":" + service['master.rpc_service.master_service_port']]>
+        </#list>
+        <#return group?join(",")>
+      </#function>
+      ${master_group()}
   deleteOpCondition:
     deletable:
       number: 3
@@ -180,7 +200,7 @@ roles:
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "shiva-env.sh.ftl"
+        templatePath: "shiva-env.sh"
         targetPath: "/etc/${service.sid}/conf/shiva-env.sh"
         mode: "755"
 
