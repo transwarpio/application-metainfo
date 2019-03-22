@@ -636,3 +636,30 @@
   onDeps: []
   groups: ["core-site.xml"]
   visibility: READ_WRITE
+
+- name: dfs.data.transfer.protection
+  recommendExpression: authentication
+  defaultValue: "authentication"
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hdfs-site.xml"]
+  visibility: READ_WRITE
+
+- name: dfs.client.read.shortcircuit
+  recommendExpression: true
+  defaultValue: true
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hdfs-site.xml"]
+  visibility: READ_WRITE
+
+- name: dfs.client.socket-timeout
+  recommendExpression: 120000
+  defaultValue: 120000
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hdfs-site.xml"]
+  visibility: READ_WRITE

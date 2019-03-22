@@ -64,3 +64,5 @@ export CAS_TICKET_ST_TIMETOKILLINSECONDS=${service['cas.ticket.st.timeToKillInSe
 
 export CAS_TICKET_PT_NUMBEROFUSES=${service['cas.ticket.pt.numberOfUses']}
 export CAS_TICKET_PT_TIMETOKILLINSECONDS=${service['cas.ticket.pt.timeToKillInSeconds']}
+
+export CAS_AUTHN_LDAP_DOMAIN=${service['guardian.ds.domain']}
