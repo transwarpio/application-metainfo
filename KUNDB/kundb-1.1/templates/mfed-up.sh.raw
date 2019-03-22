@@ -136,6 +136,7 @@ do
     count=$((count+1))
     if [ $count -eq 5 ]; then
       echo "mysql connetcion reach the maximum times exit"
+      break
     fi
     mysql --socket=$VTDATAROOT/$tablet_dir/mysql.sock -uroot -e "select 1"
 done
