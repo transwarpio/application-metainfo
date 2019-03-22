@@ -541,6 +541,22 @@ healthChecks:
   method: !<K8sPod> {}
 - category: VITAL_SIGN_CHECK
   intervalSeconds: 10
+  method: !<Probe>
+    roles:
+    - roleType: KUNCTLD 
+      from: !<readiness> {}
+    - roleType: ORCHESTRATOR  
+      from: !<readiness> {}
+    - roleType: KUNTABLET_RDONLY
+      from: !<readiness> {}
+    - roleType: KUNTABLET_REPLICA
+      from: !<readiness> {}
+    - roleType: KUNTABLET_MASTER
+      from: !<readiness> {}
+    - roleType: COMPUTE_NODE
+      from: !<readiness> {}
+    - roleType: KUNGATE 
+      from: !<readiness> {}
   method: !<Builtin> {}
 
 customConfigFiles:

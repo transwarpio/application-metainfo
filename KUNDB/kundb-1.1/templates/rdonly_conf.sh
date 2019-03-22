@@ -9,11 +9,8 @@ export GROUPID=$[$[$PORT-15100]/10]
   <#assign groupIds = service.groupIds>
 export SHARD_NUM=${shardNum}
     <#list service.Shard as sn>
-      <#if service[sn]["KUNTABLET_REPLICA"]??>
-      <#assign replicanode = service[sn]["KUNTABLET_REPLICA"]>
-      <#assign replicaNum = (replicanode?size) roleIndex = replicaNum>
         <#if service[sn]["KUNTABLET_RDONLY"]??>
-        <#assign rdonlynode = service[sn]["KUNTABLET_RDONLY"] roleIndex += 1>
+        <#assign rdonlynode = service[sn]["KUNTABLET_RDONLY"] roleIndex = 0>
           <#list rdonlynode as rnode>
             <#if rnode.hostname == .data_model["localhostname"] >
               <#if groupIds[shardIndex] == .data_model["role.groupId"]>
@@ -27,13 +24,13 @@ export LOCAL_SHARD_ID=${localShardId}
 export PORT_BASE=${service['rdonly.port_base']}
 export GRPC_PORT_BASE=${service['rdonly.grpc.port_base']}
 export MYSQL_PORT_BASE=${service['rdonly.mysql.port_base']}
-export UIDINDEX=${roleIndex}
+              <#assign realIndex =roleIndex + 5 > 
+export UIDINDEX=${realIndex}
               </#if>
             <#assign localShardId += 1>
             </#if>
             <#assign roleIndex += 1 > 
           </#list>
-        </#if>
       <#assign shardIndex += 1>
       </#if>
     </#list>
