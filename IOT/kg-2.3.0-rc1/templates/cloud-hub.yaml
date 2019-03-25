@@ -1,0 +1,18 @@
+hub:
+    hub_id: "cloud"
+    mode: "cloud"
+    addr: "127.0.0.1:4150"
+
+micro:
+    svc_name: "thingercloud-hub"
+    consul_addr: "${service.roles.CONSUL[0]['hostname']}:${service['thingercloud.consul.port']}"
+    register_ttl: "10s"
+
+store:
+    boltdb:
+        file: "/var/data/cloud-hub.db"
+
+logger:
+    level: 6
+    console: true
+    path: "/var/log/${service.sid}/cloud-hub.log"
