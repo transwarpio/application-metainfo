@@ -16,134 +16,8 @@
   groups: []
   visibility: READ_WRITE
 
-- name: ranger.db.encrypt.key.password
+- name: kms.db.encrypt.key.password
   recommendExpression: Str0ngPassw0rd
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: hadoop.kms.acl.create
-  recommendExpression: "*"
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: hadoop.kms.acl.delete
-  recommendExpression: "*"
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: hadoop.kms.acl.rollover
-  recommendExpression: "*"
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: hadoop.kms.acl.get
-  recommendExpression: "*"
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: hadoop.kms.acl.get_keys
-  recommendExpression: "*"
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: hadoop.kms.acl.get_metadata
-  recommendExpression: "*"
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: hadoop.kms.acl.set_key_material
-  recommendExpression: "*"
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: hadoop.kms.acl.generate_eek
-  recommendExpression: "*"
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: hadoop.kms.acl.decrypt_eek
-  recommendExpression: "*"
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: default.key.acl.management
-  recommendExpression: "*"
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: default.key.acl.management
-  recommendExpression: "*"
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: default.key.acl.generate_eek
-  recommendExpression: "*"
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: default.key.acl.decrypt_eek
-  recommendExpression: "*"
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: default.key.acl.read
-  recommendExpression: "*"
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
@@ -169,10 +43,226 @@
   groups: []
   visibility: PASSWORD
 
+- name: hadoop.kms.acl.CREATE
+  recommendExpression: "*"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
+- name: hadoop.kms.blacklist.CREATE
+  recommendExpression: "hdfs,admin"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
+- name: hadoop.kms.acl.DELETE
+  recommendExpression: "*"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
+- name: hadoop.kms.blacklist.DELETE
+  recommendExpression: "hdfs,admin"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
+- name: hadoop.kms.acl.ROLLOVER
+  recommendExpression: "*"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
+- name: hadoop.kms.blacklist.ROLLOVER
+  recommendExpression: "hdfs,admin"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: [kms-acls.xml]
+  groups: []
+  visibility: READ_WRITE
+
+- name: hadoop.kms.acl.GET
+  recommendExpression: "*"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
+- name: hadoop.kms.blacklist.GET
+  recommendExpression: "hdfs,admin"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
+- name: hadoop.kms.acl.GET_KEYS
+  recommendExpression: "*"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
+- name: hadoop.kms.blacklist.GET_KEYS
+  recommendExpression: "hdfs,admin"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
+- name: hadoop.kms.acl.GET_METADATA
+  recommendExpression: "*"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
+- name: hadoop.kms.blacklist.GET_METADATA
+  recommendExpression: "hdfs,admin"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
+- name: hadoop.kms.acl.SET_KEY_MATERIAL
+  recommendExpression: "*"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
+- name: hadoop.kms.blacklist.SET_KEY_MATERIAL
+  recommendExpression: "hdfs,admin"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
+- name: hadoop.kms.acl.GENERATE_EEK
+  recommendExpression: "*"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
+- name: hadoop.kms.blacklist.GENERATE_EEK
+  recommendExpression: "hdfs,admin"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
+- name: hadoop.kms.acl.DECRYPT_EEK
+  recommendExpression: "*"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
+- name: hadoop.kms.blacklist.DECRYPT_EEK
+  recommendExpression: "hdfs,admin"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
+- name: whitelist.key.acl.MANAGEMENT
+  recommendExpression: null
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
+- name: whitelist.key.acl.DECRYPT_EEK
+  recommendExpression: null
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
+- name: default.key.acl.MANAGEMENT
+  recommendExpression: null
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
+- name: default.key.acl.GENERATE_EEK
+  recommendExpression: null
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
+- name: default.key.acl.DECRYPT_EEK
+  recommendExpression: null
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
+- name: default.key.acl.READ
+  recommendExpression: null
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [kms-acls.xml]
+  visibility: READ_WRITE
+
 - name: kms.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [KMS_SERVER]
   onDeps: []
@@ -182,7 +272,7 @@
 - name: kms.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [KMS_SERVER]
   onDeps: []
@@ -192,7 +282,7 @@
 - name: kms.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: GB
   scope: !<RoleTypes>
     roleTypes: [KMS_SERVER]
   onDeps: []
@@ -202,7 +292,7 @@
 - name: kms.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: FLOAT
+  valueType: NON_NEG_INT
   scope: !<RoleTypes>
     roleTypes: [KMS_SERVER]
   onDeps: []

@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<#--Simple macro definition-->
+<#macro property key value>
+<property>
+    <name>${key}</name>
+    <value>${value}</value>
+</property>
+</#macro>
+<#--------------------------->
 <!--
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -18,118 +26,9 @@
 
   <!-- KMS ACLs -->
 
-  <property>
-    <name>hadoop.kms.acl.CREATE</name>
-    <value>${service['hadoop.kms.acl.create']}</value>
-    <description>
-      ACL for create-key operations.
-      If the user is not in the GET ACL, the key material is not returned
-      as part of the response.
-    </description>
-  </property>
-
-  <property>
-    <name>hadoop.kms.acl.DELETE</name>
-    <value>${service['hadoop.kms.acl.delete']}</value>
-    <description>
-      ACL for delete-key operations.
-    </description>
-  </property>
-
-  <property>
-    <name>hadoop.kms.acl.ROLLOVER</name>
-    <value>${service['hadoop.kms.acl.rollover']}</value>
-    <description>
-      ACL for rollover-key operations.
-      If the user is not in the GET ACL, the key material is not returned
-      as part of the response.
-    </description>
-  </property>
-
-  <property>
-    <name>hadoop.kms.acl.GET</name>
-    <value>${service['hadoop.kms.acl.get']}</value>
-    <description>
-      ACL for get-key-version and get-current-key operations.
-    </description>
-  </property>
-
-  <property>
-    <name>hadoop.kms.acl.GET_KEYS</name>
-    <value>${service['hadoop.kms.acl.get_keys']}</value>
-    <description>
-      ACL for get-keys operations.
-    </description>
-  </property>
-
-  <property>
-    <name>hadoop.kms.acl.GET_METADATA</name>
-    <value>${service['hadoop.kms.acl.get_metadata']}</value>
-    <description>
-      ACL for get-key-metadata and get-keys-metadata operations.
-    </description>
-  </property>
-
-  <property>
-    <name>hadoop.kms.acl.SET_KEY_MATERIAL</name>
-    <value>${service['hadoop.kms.acl.set_key_material']}</value>
-    <description>
-      Complementary ACL for CREATE and ROLLOVER operations to allow the client
-      to provide the key material when creating or rolling a key.
-    </description>
-  </property>
-
-  <property>
-    <name>hadoop.kms.acl.GENERATE_EEK</name>
-    <value>${service['hadoop.kms.acl.generate_eek']}</value>
-    <description>
-      ACL for generateEncryptedKey CryptoExtension operations.
-    </description>
-  </property>
-
-  <property>
-    <name>hadoop.kms.acl.DECRYPT_EEK</name>
-    <value>${service['hadoop.kms.acl.decrypt_eek']}</value>
-    <description>
-      ACL for decryptEncryptedKey CryptoExtension operations.
-    </description>
-  </property>
-
-  <property>
-    <name>default.key.acl.MANAGEMENT</name>
-    <value>${service['default.key.acl.management']}</value>
-    <description>
-      default ACL for MANAGEMENT operations for all key acls that are not
-      explicitly defined.
-    </description>
-  </property>
-
-  <property>
-    <name>default.key.acl.GENERATE_EEK</name>
-    <value>${service['default.key.acl.generate_eek']}</value>
-    <description>
-      default ACL for GENERATE_EEK operations for all key acls that are not
-      explicitly defined.
-    </description>
-  </property>
-
-  <property>
-    <name>default.key.acl.DECRYPT_EEK</name>
-    <value>${service['default.key.acl.decrypt_eek']}</value>
-    <description>
-      default ACL for DECRYPT_EEK operations for all key acls that are not
-      explicitly defined.
-    </description>
-  </property>
-
-  <property>
-    <name>default.key.acl.READ</name>
-    <value>${service['default.key.acl.read']}</value>
-    <description>
-      default ACL for READ operations for all key acls that are not
-      explicitly defined.
-    </description>
-  </property>
-
+<#--Take properties from the context-->
+<#list service['kms-acls.xml'] as key, value >
+    <@property key value/>
+</#list>
 
 </configuration>
