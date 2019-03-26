@@ -1,25 +1,59 @@
-spring:
-  data:
-    rest:
-      base-path: /api
-  thymeleaf:
-    prefix: classpath:/static/
+<#assign security_enabled="false">
+<#if service.auth="kerberos">
+  <#assign security_enabled="true">
+</#if>
 
-server:
-  port: ${r"${watchman.server.port}"}
+<#assign profile="normal">
+<#if security_enabled="true">
+  <#assign profile="security">
+</#if>
+
+spring.profiles.active: ${profile}
+
+server.port: ${r"${watchman.server.port}"}
+
+<#assign cas_server_host="127.0.0.1" cas_ssl_port="8393" context_path="/cas">
+<#if dependencies.GUARDIAN?? && dependencies.GUARDIAN.roles.CAS_SERVER??>
+  <#assign
+    cas_server_host=dependencies.GUARDIAN.roles.CAS_SERVER[0]['ip']
+    cas_ssl_port=dependencies.GUARDIAN['cas.server.ssl.port']
+    context_path=dependencies.GUARDIAN['cas.server.context.path']
+  >
+</#if>
+<#assign prefix="https://" + cas_server_host + ":" + cas_ssl_port + context_path>
+
+cas:
+  service:
+    login: ${prefix + "/login"}
+    logout: ${prefix + "/logout"}
+    prefix: ${prefix}
+
+<#assign guardian_config_path="">
+<#if dependencies.GUARDIAN??>
+  <#assign guardian_config_path="/etc/" + dependencies.GUARDIAN.sid + "/conf/guardian-site.xml">
+</#if>
+
+guardian:
+  config:
+    path: ${guardian_config_path}
+    additional-path: /etc/${service.sid}/conf/guardian-site.xml
 
 watchman:
+  serviceid: ${service.sid}
   aiops:
     port: ${service['dbaservice.aiops.ui.port']}
   server:
     port: ${service['dbaservice.ui.port']}
     host: ${service.roles.DBA_SERVICE_SERVER[0]['ip']} # this is watchman node ip!
+    home: http://${r"${watchman.server.host}"}:${r"${watchman.server.port}"}
+    security: /login/cas
   message:
     protocol: akka
     port: 60606
     receiver: receiver
   security:
-    enabled: ${service['dbaservice.security.enabled']}
+    enabled: ${security_enabled}
+    local.enabled: false
   users:
     - username: admin
       password: admin

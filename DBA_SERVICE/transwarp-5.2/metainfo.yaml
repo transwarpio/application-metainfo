@@ -6,6 +6,10 @@ namePrefix: DBAService
 friendlyName: "DBA Service"
 dockerImage: "transwarp/dbaservice:transwarp-5.2"
 dependencies: []
+dependencies:
+  - name: GUARDIAN
+    minVersion: transwarp-5.2
+    optional: true
 
 roles:
 - name: DBA_SERVICE_SERVER
@@ -73,6 +77,8 @@ pages:
 - configuration
 - operation
 - resource_allocation
+- security
+- plugin
 
 healthChecks:
 - category: DAEMON_CHECK
