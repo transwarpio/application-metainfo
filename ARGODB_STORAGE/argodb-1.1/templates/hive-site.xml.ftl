@@ -36,7 +36,10 @@
         </#if>
         <#assign hostPort=host + ':' + port>
     </#if>
-    <@property "fs.defaultFS" "hdfs://" + hostPort />
+    <@property "fs.defaultFS" "hdfs://" + hostPort/>
+<#elseif dependencies.LADDER??>
+    <#assign scheme='ladder://' host=dependencies.LADDER.roles.LADDER_MASTER[0]['hostname'] port='19998'>
+    <@property "fs.defaultFS" scheme + host + ':' + port/>
 <#else>
     <@property "fs.defaultFS" "ladder://service"/>
 </#if>
