@@ -94,7 +94,6 @@ export KEYSPACE_NUM=${#KEYSPACE_ARR[@]}
 sleep 30
 source $KUNDB_CONF_DIR/sup_user_info.sh 
 mysql -h127.0.0.1 -u$SUPUSER -p$PASSWORD --enable-cleartext-plugin -P$mysql_server_port -e "select 1" 
-sleep 3 
 while [ $? -ne 0 ]
 do
     echo " wait kungate starting..."
@@ -106,6 +105,7 @@ do
     fi
     mysql -h127.0.0.1 -u$SUPUSER -p$PASSWORD --enable-cleartext-plugin -P$mysql_server_port -e "select 1" 
 done
+sleep 3 
 
 if [ ! -f "$VTDATAROOT/tmp/oltp/_init_sequence" ]; then
   for ks in ${KEYSPACE_ARR[@]}; do

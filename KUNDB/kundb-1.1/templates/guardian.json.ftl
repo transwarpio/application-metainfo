@@ -1,5 +1,6 @@
 {
 <#if service['kungate.kundb_auth_plugin'] == "ldap">
+  <#if dependencies.GUARDIAN ??>
     <#assign  guardian=dependencies.GUARDIAN >
     <#list guardian.roles["GUARDIAN_APACHEDS"] as role>
      <#assign ldapServer = role.hostname + ":" + guardian["guardian.apacheds.ldap.port"]>
@@ -14,5 +15,6 @@
   <#assign dsDomain = guardian['guardian.ds.domain']>
   "GroupQuery": "ou=people,${dsDomain}",
   "UserDnPattern":"uid=%s,ou=people,${dsDomain}"
+  </#if>
 </#if>
 }

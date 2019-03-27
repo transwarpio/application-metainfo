@@ -107,6 +107,7 @@
   <#list service.roles.KUNCTLD as ctld>
     <#assign ctldHost = ctld.hostname> 
    "/usr/bin/vtctlclient -server ${ctldHost}:15999 TabletExternallyReparented {successorAlias}" 
+    <#break>
   </#list>
 </#if>
   ],
