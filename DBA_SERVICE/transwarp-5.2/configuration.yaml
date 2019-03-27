@@ -48,6 +48,16 @@
   groups: ["application.yml"]
   visibility: READ_WRITE
 
+- name: dbaservice.message.port
+  recommendExpression: 60606
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [DBA_SERVICE_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: dbaservice.aiops.ui.port
   recommendExpression: 8889
   defaultValue: null

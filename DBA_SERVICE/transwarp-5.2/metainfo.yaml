@@ -67,6 +67,7 @@ firstWizardConfigs:
 - dbaservice.container.requests.cpu
 - dbaservice.container.requests.memory
 - dbaservice.ui.port
+- dbaservice.message.port
 - dbaservice.aiops.ui.port
 
 dashboardMetrics: []

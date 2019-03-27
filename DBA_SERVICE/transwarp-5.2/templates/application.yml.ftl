@@ -49,7 +49,7 @@ watchman:
     security: /login/cas
   message:
     protocol: akka
-    port: 60606
+    port: ${service['dbaservice.message.port']}
     receiver: receiver
   security:
     enabled: ${security_enabled}
