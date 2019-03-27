@@ -204,7 +204,7 @@ roles:
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "shiva/shiva-env.sh.ftl"
+        templatePath: "shiva/shiva-env.sh"
         targetPath: "/etc/${service.sid}/conf/shiva/shiva-env.sh"
         mode: "755"
 
@@ -277,7 +277,7 @@ roles:
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "shiva/shiva-env.sh.ftl"
+        templatePath: "shiva/shiva-env.sh"
         targetPath: "/etc/${service.sid}/conf/shiva/shiva-env.sh"
         mode: "755"
 

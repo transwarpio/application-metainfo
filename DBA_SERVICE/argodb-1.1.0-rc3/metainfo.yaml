@@ -1,10 +1,10 @@
 ---
 name: DBA_SERVICE
-version: argodb-1.1
+version: argodb-1.1.0-rc3
 global: false
 namePrefix: DBAService
 friendlyName: "DBA Service"
-dockerImage: "transwarp/argodb-dbaservice:argodb-1.1"
+dockerImage: "transwarp/argodb-dbaservice:argodb-1.1.0-rc3"
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.0
