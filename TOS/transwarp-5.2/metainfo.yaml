@@ -135,7 +135,7 @@ roles:
   friendlyName: "TOS Registry"
   linkExpression: "http://${localhostname}:${service['tos.registry.ui.port']}/"
   category: SLAVE
-  frontendOperations: ["Start", "Stop"]
+  frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq>
