@@ -20,14 +20,6 @@ roles:
   linkExpression: "http://${localhostname}:3000"
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
-  readinessProbe:
-    probe: !<exec>
-      command:
-      - /bin/bash
-      - -c
-      - |
-        curl --connect-timeout 15 --max-time 15 "http://`hostname`:${service['kunctld.debug.port']}/check/status" | tee /tmp/check-kunctld
-        grep '"healthy"' /tmp/check-kunctld
   deleteOpCondition:
     deletable:
       number: 1
@@ -302,7 +294,7 @@ roleGroups:
               source /etc/${service.sid}/${roleGroupName}/conf/replica_conf.sh
               curl --connect-timeout 15 --max-time 15 "http://`hostname`:$PORT/check/status" | tee /tmp/check-kuntablet-replica
               grep '"healthy"' /tmp/check-kuntablet-replica
-        summaryPolicy: ALL 
+        summaryPolicy: SOME 
         deleteOpCondition:
           deletable:
             number: 1
@@ -544,8 +536,6 @@ healthChecks:
   method: !<Probe>
     roles:
     - roleType: KUNCTLD 
-      from: !<readiness> {}
-    - roleType: ORCHESTRATOR  
       from: !<readiness> {}
     - roleType: KUNTABLET_RDONLY
       from: !<readiness> {}

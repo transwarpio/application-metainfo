@@ -104,9 +104,14 @@
   "PostMasterFailoverProcesses": [
    "echo 'Recovered from {failureType} on {failureCluster}. Failed: {failedHost}:{failedPort}; Promoted: {successorHost}:{successorPort}' >> /tmp/recovery.log", 
 <#if service.roles.KUNCTLD??>
+  <#assign ctldNum = (service.roles.KUNCTLD?size) ctldIndex = 0>
   <#list service.roles.KUNCTLD as ctld>
-    <#assign ctldHost = ctld.hostname> 
-   "/usr/bin/vtctlclient -server ${ctldHost}:15999 TabletExternallyReparented {successorAlias}" 
+    <#assign ctldHost = ctld.hostname ctldIndex += 1> 
+    <#if ctldIndex == ctldNum>
+   "/usr/bin/vtctlclient -server ${ctldHost}:${service['kunctld.grpc.port']} TabletExternallyReparented {successorAlias}" 
+    <#else>
+   "/usr/bin/vtctlclient -server ${ctldHost}:${service['kunctld.grpc.port']} TabletExternallyReparented {successorAlias}", 
+    </#if>
   </#list>
 </#if>
   ],
