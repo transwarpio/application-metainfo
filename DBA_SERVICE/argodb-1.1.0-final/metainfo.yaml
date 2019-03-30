@@ -7,7 +7,7 @@ friendlyName: "DBA Service"
 dockerImage: "transwarp/argodb-dbaservice:argodb-1.1.0-final"
 dependencies:
   - name: GUARDIAN
-    minVersion: transwarp-6.0.0-final
+    minVersion: transwarp-6.0.2-final
     optional: true
 
 roles:

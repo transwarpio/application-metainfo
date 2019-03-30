@@ -7,13 +7,13 @@ friendlyName: "ArgodbComputing"
 dockerImage: "transwarp/argodb-inceptor:argodb-1.1.0-final"
 dependencies:
   - name: GUARDIAN
-    minVersion: transwarp-6.0.0-final
+    minVersion: transwarp-6.0.2-final
     optional: true
   - name: ZOOKEEPER
-    minVersion: transwarp-6.0.0-final
+    minVersion: transwarp-6.0.2-final
     optional: false
   - name: TXSQL
-    minVersion: transwarp-6.0.0-final
+    minVersion: transwarp-6.0.2-final
     optional: false
   - name: ARGODB_STORAGE
     minVersion: argodb-1.1.0-final
@@ -28,11 +28,11 @@ dependencies:
     maxVersion: argodb-1.1.0-final
     optional: false
   - name: INCEPTOR
-    minVersion: transwarp-6.0.0-final
+    minVersion: transwarp-6.0.2-final
     optional: true
     preferred: false
   - name: HDFS
-    minVersion: transwarp-6.0.0-final
+    minVersion: transwarp-6.0.2-final
     optional: true
     preferred: false
 user: hive
