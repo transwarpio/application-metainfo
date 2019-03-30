@@ -34,6 +34,104 @@ plugins:
     useTar: false
 
 roles:
+- name: DBA_SERVICE
+  friendlyName: "DBA Service"
+  labelPrefix: "dbaservice"
+  dockerImage: "transwarp/argodb-watchman:argodb-1.0"
+  linkExpression: "http://${localhostname}:${service['dbaservice.ui.port']}/"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /
+      port: ${service['dbaservice.ui.port']}
+      scheme: HTTP
+  env:
+  - name: WATCHMAN_CONF
+    value: /etc/${service.sid}/conf/dbaservice/application.yml
+  - name: AIOPS_CONF
+    value: /etc/${service.sid}/conf/dbaservice/aiops.yml
+  deleteOpCleanDirs:
+    fromPath:
+    - key: /etc/${service.sid}/conf/dbaservice
+      featureFile: application.yml
+  mountPaths: []
+  resources:
+    limitsMemoryKey: dbaservice.container.limits.memory
+    limitsCpuKey: dbaservice.container.limits.cpu
+    requestsMemoryKey: dbaservice.container.requests.memory
+    requestsCpuKey: dbaservice.container.requests.cpu
+  summaryPolicy: NONE
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 0}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf/dbaservice"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "dbaservice/application.yml.ftl"
+        targetPath: "/etc/${service.sid}/conf/dbaservice/application.yml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "dbaservice/aiops.yml.ftl"
+        targetPath: "/etc/${service.sid}/conf/dbaservice/aiops.yml"
+        mode: "755"
+
+- name: INCEPTOR_EXECUTOR
+  friendlyName: "Inceptor Executor"
+  labelPrefix: "inceptor-executor"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  env:
+  - name: TRANSWARP_ZOOKEEPER_QUORUM
+    value: |
+      <#assign zookeepers=[]>
+      <#if dependencies.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?size gt 0>
+        <#list dependencies.ZOOKEEPER.roles.ZOOKEEPER as zookeeper>
+          <#assign zookeepers += [zookeeper.hostname]>
+        </#list>
+      </#if>
+      ${zookeepers?join(",")}
+  - name: INCEPTOR_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: executor.container.limits.memory
+    limitsCpuKey: executor.container.limits.cpu
+    requestsMemoryKey: executor.container.requests.memory
+    requestsCpuKey: executor.container.requests.cpu
+  nodeSpecificMounts:
+  - type: DIR_CONF
+    configKey: ngmr.localdir
+  - type: DIR_CONF
+    configKey: ngmr.fastdisk.dir
+  - type: DEPENDENCY_DIR_CONF
+    dependencyType: ARGODB_STORAGE
+    configKey: shiva.tabletserver.store.datadirs
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<EachNode> {}
+  suggestion:
+  - criteria: !<EachNode> {}
+  validation:
+  - criteria: !<Range> {"min": 0}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/run/${service.sid}"]
+        mode: "755"
+
 - name: INCEPTOR_SERVER
   friendlyName: "Inceptor Server"
   labelPrefix: "inceptor-server"
@@ -93,51 +191,6 @@ roles:
         templatePath: "dataSource.properties"
         targetPath: "/etc/${service.sid}/conf/dataSource.properties"
         mode: "644"
-
-- name: INCEPTOR_EXECUTOR
-  friendlyName: "Inceptor Executor"
-  labelPrefix: "inceptor-executor"
-  category: SLAVE
-  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
-  env:
-  - name: TRANSWARP_ZOOKEEPER_QUORUM
-    value: |
-      <#assign zookeepers=[]>
-      <#if dependencies.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?size gt 0>
-        <#list dependencies.ZOOKEEPER.roles.ZOOKEEPER as zookeeper>
-          <#assign zookeepers += [zookeeper.hostname]>
-        </#list>
-      </#if>
-      ${zookeepers?join(",")}
-  - name: INCEPTOR_CONF_DIR
-    value: /etc/${service.sid}/conf
-  mountPaths: []
-  resources:
-    limitsMemoryKey: executor.container.limits.memory
-    limitsCpuKey: executor.container.limits.cpu
-    requestsMemoryKey: executor.container.requests.memory
-    requestsCpuKey: executor.container.requests.cpu
-  nodeSpecificMounts:
-  - type: DIR_CONF
-    configKey: ngmr.localdir
-  - type: DIR_CONF
-    configKey: ngmr.fastdisk.dir
-  - type: DEPENDENCY_DIR_CONF
-    dependencyType: ARGODB_STORAGE
-    configKey: shiva.tabletserver.store.datadirs
-  summaryPolicy: SOME
-  autoAssign:
-  - advice: !<EachNode> {}
-  suggestion:
-  - criteria: !<EachNode> {}
-  validation:
-  - criteria: !<Range> {"min": 0}
-  operations:
-  - type: Install
-    directives:
-    - directive: !<mkdirs>
-        paths: ["/var/run/${service.sid}"]
-        mode: "755"
 
 - name: INCEPTOR_PROFILER
   friendlyName: "Inceptor Profiler"
@@ -213,6 +266,11 @@ stages:
   - type: Config
     taskGroups:
     - !<Role>
+      roleType: "DBA_SERVICE"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
       roleType: "INCEPTOR_SERVER"
       operation: Config
       summaryPolicy: SOME
@@ -248,6 +306,7 @@ firstWizardConfigs:
 - inceptor.executor.memory
 - inceptor.server.memory
 - inceptor.ui.port
+- inceptor.dbaservice.enabled
 - javax.jdo.option.ConnectionPassword
 - javax.jdo.option.ConnectionUserName
 - ngmr.cache.size
@@ -280,6 +339,13 @@ firstWizardConfigs:
 - compactor.container.requests.memory
 - compactor.container.requests.cpu
 - compactor.memory.ratio
+# Watchman
+- dbaservice.container.limits.cpu
+- dbaservice.container.limits.memory
+- dbaservice.container.requests.cpu
+- dbaservice.container.requests.memory
+- dbaservice.ui.port
+- dbaservice.aiops.ui.port
 
 dashboardMetrics:
 - InceptorSqlActiveTasks

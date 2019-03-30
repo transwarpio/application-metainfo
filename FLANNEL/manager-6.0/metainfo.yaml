@@ -6,6 +6,7 @@ namePrefix: Flannel
 friendlyName: Flannel
 dependencies: []
 user: root
+validateConfig: true
 roles:
 - name: FLANNELD
   friendlyName: "Flanneld"

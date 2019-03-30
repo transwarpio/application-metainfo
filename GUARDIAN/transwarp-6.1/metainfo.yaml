@@ -4,13 +4,14 @@ version: transwarp-6.1
 global: true
 namePrefix: Guardian
 friendlyName: Guardian
+validateConfig: true
 dependencies: []
 roles:
 - name: GUARDIAN_TXSQL_SERVER
   friendlyName: "TxSQL Server"
   labelPrefix: "txsql-server"
   category: MASTER
-  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   deleteOpCondition:
     deletable:
       number: 3

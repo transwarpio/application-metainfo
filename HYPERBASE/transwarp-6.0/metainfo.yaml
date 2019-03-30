@@ -4,8 +4,8 @@ version: transwarp-6.0
 global: false
 namePrefix: Hyperbase
 friendlyName: "Hyperbase"
-rollingRestart: true
 dockerImage: "transwarp/hbase:transwarp-6.0"
+validateConfig: true
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.0

@@ -4,7 +4,7 @@ version: transwarp-6.1
 global: false
 namePrefix: Kafka
 friendlyName: "Kafka"
-rollingRestart: true
+validateConfig: true
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.1

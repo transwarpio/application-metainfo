@@ -4,6 +4,7 @@ version: transwarp-6.1
 global: false
 namePrefix: Shiva
 friendlyName: "Shiva"
+validateConfig: true
 dependencies: []
 roles:
 - name: SHIVA_MASTER
@@ -45,7 +46,7 @@ roles:
     - key: master.master.data_path
       featureFile: master.lock
     - key: master.log.log_dir
-      featureFile: master.log
+      featureFile: master_main.INFO
     fromPath:
     - key: /etc/${service.sid}/conf
       featureFile: master.conf
@@ -84,6 +85,8 @@ roles:
     requestsMemoryKey: webserver.container.requests.memory
     requestsCpuKey: webserver.container.requests.cpu
   env:
+  - name: CONF_DIR
+    value: /etc/${service.sid}/conf
   - name: MASTER_GROUP
     value: |
       <#function master_group>
@@ -94,8 +97,6 @@ roles:
         <#return group?join(",")>
       </#function>
       ${master_group()}
-  - name: CONF_DIR
-    value: /etc/${service.sid}/conf
   deleteOpCondition:
     deletable:
       number: 2
@@ -118,6 +119,11 @@ roles:
         templateType: FreeMarker
         templatePath: "log4j.properties"
         targetPath: "/etc/${service.sid}/conf/log4j.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "shiva-env.sh"
+        targetPath: "/etc/${service.sid}/conf/shiva-env.sh"
         mode: "755"
 
 - name: SHIVA_TABLETSERVER
@@ -148,8 +154,6 @@ roles:
   env:
   - name: CONF_DIR
     value: /etc/${service.sid}/conf
-  - name: LOG_DIR
-    value: /var/log/${service.sid}
   - name: MASTER_GROUP
     value: |
       <#function master_group>
@@ -171,7 +175,7 @@ roles:
     - key: tabletserver.store.datadirs
       featureFile: .trash
     - key: tabletserver.log.log_dir
-      featureFile: tabletserver.log
+      featureFile: tabletserver_main.INFO
     fromPath:
     - key: /etc/${service.sid}/conf
       featureFile: tabletserver.conf
@@ -193,6 +197,11 @@ roles:
         templateType: FreeMarker
         templatePath: "topology.conf"
         targetPath: "/etc/${service.sid}/conf/topology.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "shiva-env.sh"
+        targetPath: "/etc/${service.sid}/conf/shiva-env.sh"
         mode: "755"
 
 firstWizardConfigs:

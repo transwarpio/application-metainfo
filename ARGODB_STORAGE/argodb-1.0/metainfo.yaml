@@ -128,7 +128,7 @@ roles:
     - key: shiva.master.master.data_path
       featureFile: master.lock
     - key: shiva.master.log.log_dir
-      featureFile: master.log
+      featureFile: master.INFO
     fromPath:
     - key: /etc/${service.sid}/conf/shiva
       featureFile: master.conf
@@ -172,16 +172,6 @@ roles:
     requestsMemoryKey: shiva.webserver.container.requests.memory
     requestsCpuKey: shiva.webserver.container.requests.cpu
   env:
-  - name: MASTER_GROUP
-    value: |
-      <#function master_group>
-        <#local group = []>
-        <#list service.roles["SHIVA_MASTER"] as r>
-          <#local group = group + [r.ip + ":" + service['shiva.master.rpc_service.master_service_port']]>
-        </#list>
-        <#return group?join(",")>
-      </#function>
-      ${master_group()}
   - name: CONF_DIR
     value: /etc/${service.sid}/conf/shiva
   deleteOpCondition:
@@ -212,6 +202,11 @@ roles:
         templatePath: "shiva/log4j.properties"
         targetPath: "/etc/${service.sid}/conf/shiva/log4j.properties"
         mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "shiva/shiva-env.sh"
+        targetPath: "/etc/${service.sid}/conf/shiva/shiva-env.sh"
+        mode: "755"
 
 - name: SHIVA_TABLETSERVER
   friendlyName: "Shiva Tablet Server"
@@ -241,18 +236,6 @@ roles:
   env:
   - name: CONF_DIR
     value: /etc/${service.sid}/conf/shiva
-  - name: LOG_DIR
-    value: /var/log/${service.sid}
-  - name: MASTER_GROUP
-    value: |
-      <#function master_group>
-        <#local group = []>
-        <#list service.roles["SHIVA_MASTER"] as r>
-          <#local group = group + [r.ip + ":" + service['shiva.master.rpc_service.master_service_port']]>
-        </#list>
-        <#return group?join(",")>
-      </#function>
-      ${master_group()}
   deleteOpCondition:
     deletable:
       number: 3
@@ -264,7 +247,7 @@ roles:
     - key: shiva.tabletserver.store.datadirs
       featureFile: .trash
     - key: shiva.tabletserver.log.log_dir
-      featureFile: tabletserver.log
+      featureFile: tabletserver.INFO
     fromPath:
     - key: /etc/${service.sid}/conf/shiva
       featureFile: tabletserver.conf
@@ -291,6 +274,11 @@ roles:
         templateType: FreeMarker
         templatePath: "shiva/topology.conf"
         targetPath: "/etc/${service.sid}/conf/shiva/topology.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "shiva/shiva-env.sh"
+        targetPath: "/etc/${service.sid}/conf/shiva/shiva-env.sh"
         mode: "755"
 
 ##########
@@ -335,7 +323,7 @@ roles:
       number: 2
   deleteOpCleanDirs:
     fromPath:
-    - key: /var/ladder_format/is_formated.identifier
+    - key: /var/transwarp/data/ladder/is_formated.identifier
       featureFile: is_formated.identifier
   mountPaths:
   - mountPath: /var/ladder_format
@@ -407,7 +395,7 @@ roles:
       number: 2
   deleteOpCleanDirs:
     fromPath:
-    - key: /var/ladder_format/is_formated_worker.identifier
+    - key: /var/transwarp/data/ladder/is_formated_worker.identifier
       featureFile: is_formated_worker.identifier
   mountPaths:
   - mountPath: /var/ladder_format

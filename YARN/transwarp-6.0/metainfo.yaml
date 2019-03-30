@@ -4,8 +4,8 @@ version: transwarp-6.0
 global: false
 namePrefix: YARN
 friendlyName: "YARN"
-rollingRestart: true
 dockerImage: "transwarp/yarn:transwarp-6.0"
+validateConfig: true
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.0

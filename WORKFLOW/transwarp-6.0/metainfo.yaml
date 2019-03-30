@@ -5,6 +5,7 @@ global: false
 namePrefix: Workflow
 friendlyName: Workflow
 dockerImage: "transwarp/workflow:transwarp-6.0"
+validateConfig: true
 dependencies:
   - name: TRANSPORTER
     minVersion: transwarp-6.0

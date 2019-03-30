@@ -5,9 +5,10 @@ global: true
 # compatible with legacy init.d script name "zookeeper-server-transwarp_license_cluster"
 namePrefix: License
 friendlyName: "License Service"
+validateConfig: true
 dependencies: []
 packages: ["zookeeper"]
-dockerImage: "transwarp/zookeeper:transwarp-6.0.0-final"
+dockerImage: "transwarp/zookeeper:transwarp-6.0.1-final"
 user: zookeeper
 roles:
 - name: LICENSE_NODE

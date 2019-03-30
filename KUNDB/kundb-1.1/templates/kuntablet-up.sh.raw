@@ -1,0 +1,249 @@
+#!/bin/bash
+
+# Copyright 2017 Google Inc.
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# This is an example script that creates a single shard vttablet deployment.
+#set -e
+set -x
+
+echo "------------------vttablet-up start-------------"
+
+if [ -f "$ROLE_CONF_DIR/role_conf.sh" ]; then
+  source $ROLE_CONF_DIR/role_conf.sh $1 
+else
+   echo "/etc/kundb1/shard/conf/ is not exist cant start kundb"
+   exit 1
+fi
+
+if [ ! -d "$VTDATAROOT/_kundb" ]; then
+   mkdir -p $VTDATAROOT/_kundb
+fi
+export VT_MYSQL_ROOT=${MYSQL_ROOT:-'/usr'}
+shard=$SHARD
+uid_base=$SHARD_UIDBASE
+uid_index=$UIDINDEX
+cell=${CELLNAME:-'transwarp'}
+keyspace=${KEYSPACE:-'kundb1'}
+port_base=$[$PORT_BASE + $uid_base]
+grpc_port_base=$[$GRPC_PORT_BASE + $uid_base]
+mysql_port_base=$[$MYSQL_PORT_BASE + $uid_base]
+default_dbname=${DEFAULT_DBNAME:-'vt_$keyspace'}
+tablet_hostname=`hostname -f`
+tablet_type=$1 
+local_host=$tablet_hostname
+uid=$[$uid_base + $uid_index]
+mysql_port=$[$mysql_port_base + $uid_index] 
+printf -v alias '%s-%010d' $cell $uid
+printf -v tablet_dir 'vt_%010d' $uid
+if [ $1 == "master" ]; then
+   tablet_type=replica
+fi
+
+dbconfig_dba_flags="\
+    -db-config-dba-uname vt_app \
+    -db-config-dba-charset utf8"
+dbconfig_flags="$dbconfig_dba_flags \
+    -db-config-app-uname vt_app \
+    -db-config-app-dbname $default_dbname\
+    -db-config-app-charset utf8 \
+    -db-config-appdebug-uname vt_appdebug \
+    -db-config-appdebug-dbname $default_dbname\
+    -db-config-appdebug-charset utf8 \
+    -db-config-allprivs-uname vt_allprivs \
+    -db-config-allprivs-dbname $default_dbname\
+    -db-config-allprivs-charset utf8 \
+    -db-config-repl-uname vt_repl \
+    -db-config-repl-dbname $default_dbname\
+    -db-config-repl-charset utf8 \
+    -db-config-filtered-uname vt_filtered \
+    -db-config-filtered-dbname $default_dbname\
+    -db-config-filtered-charset utf8 \
+    -queryserver-config-max-result-size 1000000 \
+    -queryserver-config-query-cache-size 1000 \
+    -queryserver-config-query-timeout 100 \
+    -queryserver-config-max-dml-rows 300000 \
+    -queryserver-config-pool-size 100 \
+    -queryserver-config-transaction-cap 300 \
+    -queryserver-config-transaction-timeout 90"
+init_db_sql_file="$VTROOT/config/init_db.sql"
+
+case "$MYSQL_FLAVOR" in
+  "MySQL56")
+    export EXTRA_MY_CNF=$VTROOT/config/mycnf/master_mysql56.cnf
+    ;;
+  "MariaDB")
+    export EXTRA_MY_CNF=$VTROOT/config/mycnf/master_mariadb.cnf
+    ;;
+  *)
+    echo "Please set MYSQL_FLAVOR to MySQL56 or MariaDB."
+    exit 1
+    ;;
+esac
+
+# Start all mysqlds in background.
+
+echo "Starting MySQL for tablet $alias..."
+action="init -init_db_sql_file $init_db_sql_file"
+if [ -d $VTDATAROOT/$tablet_dir ]; then
+  echo "Resuming from existing kuntablet dir:"
+  if [ -f "$VTDATAROOT/$tablet_dir/mysql.sock.lock" ]; then
+     rm $VTDATAROOT/$tablet_dir/mysql.sock.lock -f
+  fi 
+  echo "    $VTDATAROOT/$tablet_dir"
+  $ROLE_CONF_DIR/my_cnf_update.sh $VTDATAROOT/$tablet_dir/my.cnf $ROLE_CONF_DIR/mysql.cfg
+  action='start'
+fi
+$VTROOT/bin/mysqlctl \
+  -log_dir $VTDATAROOT/tmp \
+  -tablet_uid $uid \
+  $dbconfig_dba_flags \
+  -mysql_port $mysql_port \
+  $action &
+
+wait
+
+echo $MYSQL_PORT_BASE 
+echo $SHARD_UIDBASE
+mysql_port_base=$[$MYSQL_PORT_BASE + $SHARD_UIDBASE]
+mysql_port=$[$mysql_port_base+ $UIDINDEX]
+echo "mysql_port: $mysql_port"
+count=0
+mysql --socket=$VTDATAROOT/$tablet_dir/mysql.sock -uroot -e "select 1"
+while [ $? -ne 0 ]
+do
+   echo " wait mysql starting..."
+   sleep 4	
+   
+   count=$((count+1))
+   if [ $count -eq 5 ]; then
+      echo "mysql connetcion reach the maximum times exit"
+      break
+   fi
+
+   mysql --socket=$VTDATAROOT/$tablet_dir/mysql.sock -uroot -e "select 1"
+done
+
+
+# Travis hostnames are too long for MySQL, so we use IP.
+# Otherwise, blank hostname means the tablet auto-detects FQDN.
+if [ "$TRAVIS" == true ]; then
+  tablet_hostname=`hostname -i`
+fi
+
+
+# Start all vttablets in background.
+uid=$[$uid_base + $uid_index]
+port=$PORT
+grpc_port=$[$grpc_port_base + $uid_index]
+printf -v alias '%s-%010d' $cell $uid
+printf -v tablet_dir 'vt_%010d' $uid
+
+if [ ! -d "$VTDATAROOT/$tablet_dir/tmp" ]; then
+   mkdir -p $VTDATAROOT/$tablet_dir/tmp
+fi
+
+if [ ! -d "$VTDATAROOT/backups" ]; then
+  mkdir -p $VTDATAROOT/backups
+fi
+
+echo "Starting kuntablet for $alias..."
+
+$VTROOT/bin/vttablet \
+  $TOPOLOGY_FLAGS \
+  -log_dir $VTDATAROOT/$tablet_dir/tmp \
+  -tablet-path $alias \
+  -tablet_hostname "$tablet_hostname" \
+  -init_keyspace $keyspace \
+  -init_shard $shard \
+  -init_tablet_type $tablet_type \
+  -health_check_interval 5s \
+  -enable_semi_sync \
+  -enable_replication_reporter \
+  -backup_storage_implementation file \
+  -file_backup_storage_root $VTDATAROOT/backups \
+  -restore_from_backup \
+  -enable_access_control=true \
+  -orc_api_url http://$ORCHESTRATOR_HOST:3000/api/ \
+  -orc_discover_interval 60s \
+  -port $port \
+  -grpc_port $grpc_port \
+  -grpc_max_message_size 1073741824 \
+  -service_map 'grpc-queryservice,grpc-tabletmanager,grpc-updatestream' \
+  -pid_file $VTDATAROOT/$tablet_dir/vttablet.pid \
+  -vtctld_addr http://$local_host:$vtctld_web_port/ \
+  $dbconfig_flags \
+  > $VTDATAROOT/$tablet_dir/vttablet.out 2>&1 &
+
+echo "Access tablet $alias at http://$local_host:$port/debug/status"
+sleep 4
+
+if [ $1 == "master" ]; then
+ 
+   if [ ! -f "$VTDATAROOT/$tablet_dir/_init_tablet_master" ]; then
+    count=0
+    echo "start InitShardMaster ..."
+    cd $KUNHOME && ./kunctl.sh ListAllTablets $CELLNAME | grep $alias | grep -q master
+    while [ $? -ne 0 ]
+    do
+       echo "InitShardMaster ..."
+       cd $KUNHOME && timeout 100 ./kunctl.sh InitShardMaster -force $KEYSPACE/$SHARD $alias 
+       echo "------InitShardMaster over -----"
+       sleep 4
+       count=$((count+1))
+        	
+       if [ $count -eq 5 ]; then
+          echo "InitShardMaster reach the maximum times"
+          break
+       fi
+       cd $KUNHOME && ./kunctl.sh ListAllTablets $CELLNAME |grep $alias | grep -q master
+    done
+      
+      cd $VTDATAROOT/$tablet_dir && touch  _init_tablet_master
+      
+     ksCount=0
+     for ks in ${KEYSPACE_ARR[@]}; do
+        if [ "$ks"x = "$KEYSPACE"x ]; then
+      	   ksCount=$((ksCount+1))
+   	fi
+     done 
+     if [ $ksCount -eq 1 ]; then
+       cd $KUNHOME && num=$(./kunctl.sh ListAllTablets $CELLNAME | grep $KEYSPACE| grep master | wc -l)
+       if [ $num -gt 1 ]; then
+         cd $KUNHOME && ./kunctl.sh ApplyVSchema  -vschema_file=$KUNDB_CONF_DIR/sharded_vschema.json $KEYSPACE
+       else
+         cd $KUNHOME && ./kunctl.sh ApplyVSchema  -vschema_file=$KUNDB_CONF_DIR/unsharded_vschema.json $KEYSPACE
+       fi
+     fi
+     
+     source $ROLE_CONF_DIR/init_mfed.sh 
+     for((i=0; i< $MFED_SHARD_NUM; i++)); 
+     do
+        groupIndex=$i 
+        SHARD_UIDBASE=$(($uidbase+ $((10 * $groupIndex))))
+
+        printf -v alias '%s-%010d' $CELLNAME $SHARD_UIDBASE
+        echo "InitMfed $alias ... "
+        source $ROLE_CONF_DIR/sup_user_info.sh 
+        cd $KUNHOME && ./kunctl.sh InitMfed -mfed_alias $alias -vtgate_user $SUPUSER -vtgate_password $PASSWORD -vtgate_host ${mfedHost[$i]} -vtgate_port $vtgate_port 
+    done
+     
+  else
+      echo "Resuming MASTER_TABLET..."
+  fi
+fi
+echo "------------------vttablet-up end-------------"
+set +x
+	
+wait

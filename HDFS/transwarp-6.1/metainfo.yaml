@@ -4,9 +4,9 @@ version: transwarp-6.1
 global: false
 namePrefix: HDFS
 friendlyName: HDFS
-rollingRestart: true
 dockerImage: "transwarp/hdfs:transwarp-6.1"
 user: hdfs
+validateConfig: true
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.1
@@ -53,8 +53,11 @@ roles:
     - name: HADOOP_CONF_DIR
       value: /etc/${service.sid}/conf
     - name: HTTPFS_LOG_DIR
-      value: /var/log/${service.sid}
+      value: /var/log/${service.sid}_httpfs
     mountPaths:
+    - mountPath: /var/log/${service.sid}_httpfs
+      hostPath: /var/log/${service.sid}_httpfs
+      name: httpfslogdir
     - mountPath: /var/run/${service.sid}
       hostPath: /var/run/${service.sid}
       name: hdfssocketdir
