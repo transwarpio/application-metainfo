@@ -231,11 +231,13 @@ roles:
   linkExpression: "http://${localhostname}:${service['node.exporter.web.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop"]
+  hostPID: true
   env:
   - name: AQUILA_CONF_DIR
     value: /etc/${service.sid}/conf
   mountPaths:
   - mountPath: /host
+    mountParams: {mountPropagation: "HostToContainer", readOnly: true}
     hostPath: /
     name: host-mount
   nodeSpecificMounts: []
