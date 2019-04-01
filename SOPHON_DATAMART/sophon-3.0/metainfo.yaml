@@ -22,7 +22,7 @@ roles:
   - name: SOPHON_DATAMARKET_BACKEND
     friendlyName: "Datamart Backend"
     labelPrefix: "sophon-datamart-backend"
-    dockerImage: "transwarp/datamarket-backend:sophon-3.0"
+    dockerImage: "transwarp/sophon-datamarket-backend:sophon-3.0"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
     deleteOpCondition:
