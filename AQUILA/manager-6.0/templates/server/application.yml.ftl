@@ -40,7 +40,10 @@ metrics:
       - id: 1
         name: "Prometheus"
         type: PROMETHEUS
-        url: http://172.16.1.104:9390 # TODO generation
-db:
-  query:
-    max-in-clause-size: 1000
+        url: http://172.16.1.104:9390
+      - id: 2
+        name: "Manager Heatmap"
+        type: MANAGER_HEATMAP
+        prometheusUrl: http://172.16.1.104:9390
+manager-proxy:
+  endpoint: http://${service.roles["AQUILA_MANAGER_PROXY"][0].hostname}:${service["manager.proxy.web.port"]}

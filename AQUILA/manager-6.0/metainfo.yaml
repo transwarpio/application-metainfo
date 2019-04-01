@@ -89,6 +89,9 @@ roles:
   - mountPath: /var/lib/transwarp-manager/master/content/meta/services
     hostPath: /var/lib/transwarp-manager/master/content/meta/services
     name: metainfo
+  - mountPath: /etc/transwarp-manager/master/db.properties
+    hostPath: /etc/transwarp-manager/master/db.properties
+    name: dbproperties
   resources:
     limitsMemoryKey: manager.proxy.container.limits.memory
     limitsCpuKey: manager.proxy.container.limits.cpu
