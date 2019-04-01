@@ -1,0 +1,140 @@
+---
+name: SOPHON_DATAMART
+version: sophon-3.0
+global: false
+namePrefix: Sophon_DataMart
+friendlyName: "Sophon-DataMart"
+dependencies:
+  - name: INCEPTOR
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.1-final
+    optional: false
+  - name: TXSQL
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.1-final
+    optional: false
+  - name: HYPERBASE
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.1-final
+    optional: false
+  
+roles:
+  - name: SOPHON_DATAMARKET_BACKEND
+    friendlyName: "Datamart Backend"
+    labelPrefix: "sophon-datamart-backend"
+    dockerImage: "transwarp/sophon-datamarket-backend:sophon-3.0"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+    deleteOpCondition:
+      deletable:
+        number: 2
+      reject:
+        number: 1
+    env:
+    - name: DATAFACTORY_SERVICE_ID
+      value: ${service.sid}
+    mountPaths: []
+    resources:
+      limitsMemoryKey: backend.limits.memory
+      limitsCpuKey: backend.limits.cpu
+      requestsMemoryKey: backend.requests.memory
+      requestsCpuKey: backend.requests.cpu
+    summaryPolicy: ALL
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations:
+    - type: Config
+      directives:
+      - directive: !<link>
+          action: Link
+          from: "/etc/${dependencies.INCEPTOR.sid}/conf/hive-site.xml"
+          to: "/etc/${service.sid}/conf/hive-site.xml"
+
+  - name: SOPHON_DATAMARKET_FRONTEND
+    friendlyName: "Datamart Frontend"
+    labelPrefix: "sophon-datamart-frontend"
+    dockerImage: "transwarp/sophon-datamarket-frontend:sophon-3.0"
+    linkExpression: "http://${localhostname}:${service['frontend.port']}"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+    deleteOpCondition:
+      deletable:
+        number: 2
+      reject:
+        number: 1
+    env:
+    - name: API_URL
+      value: "http://${service.roles.SOPHON_DATAMARKET_BACKEND[0]['hostname']}:${service['backend.port']}"
+    - name: PORT
+      value: "${service['frontend.port']}"
+    mountPaths: []
+    resources:
+      limitsMemoryKey: frontend.limits.memory
+      limitsCpuKey: frontend.limits.cpu
+      requestsMemoryKey: frontend.requests.memory
+      requestsCpuKey: frontend.requests.cpu
+    summaryPolicy: ALL
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations: []
+
+stages:
+  - type: Config
+    taskGroups:
+    - !<Create-Database>
+      dbPrefix: datamarket
+      dbUserConfig: javax.jdo.option.ConnectionUserName
+      dbPasswordConfig: javax.jdo.option.ConnectionPassword
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Role>
+      roleType: "SOPHON_DATAMARKET_BACKEND"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SOPHON_DATAMARKET_FRONTEND"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+
+firstWizardConfigs:
+- backend.port
+- javax.jdo.option.ConnectionUserName
+- javax.jdo.option.ConnectionPassword
+- backend.limits.memory
+- backend.limits.cpu
+- backend.requests.memory
+- backend.requests.cpu
+- frontend.limits.memory
+- frontend.limits.cpu
+- frontend.requests.memory
+- frontend.requests.cpu
+- frontend.port
+- inceptor.ldap.username
+- inceptor.ldap.password
+- distributed.database.type
+
+product: Sophon
+
+principals:
+- hive
+
+pages:
+- roles
+- configuration
+- operation
+- security
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 30
+  method: !<K8sPod> {}
