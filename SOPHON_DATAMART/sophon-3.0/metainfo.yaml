@@ -19,10 +19,10 @@ dependencies:
     optional: false
   
 roles:
-  - name: SOPHON_DATAMARKET_BACKEND
+  - name: SOPHON_DATAMART_BACKEND
     friendlyName: "Datamart Backend"
     labelPrefix: "sophon-datamart-backend"
-    dockerImage: "transwarp/sophon-datamarket-backend:sophon-3.0"
+    dockerImage: "transwarp/sophon-datamart-backend:sophon-3.0"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
     deleteOpCondition:
@@ -54,10 +54,10 @@ roles:
           from: "/etc/${dependencies.INCEPTOR.sid}/conf/hive-site.xml"
           to: "/etc/${service.sid}/conf/hive-site.xml"
 
-  - name: SOPHON_DATAMARKET_FRONTEND
+  - name: SOPHON_DATAMART_FRONTEND
     friendlyName: "Datamart Frontend"
     labelPrefix: "sophon-datamart-frontend"
-    dockerImage: "transwarp/sophon-datamarket-frontend:sophon-3.0"
+    dockerImage: "transwarp/sophon-datamart-frontend:sophon-3.0"
     linkExpression: "http://${localhostname}:${service['frontend.port']}"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
@@ -68,7 +68,7 @@ roles:
         number: 1
     env:
     - name: API_URL
-      value: "http://${service.roles.SOPHON_DATAMARKET_BACKEND[0]['hostname']}:${service['backend.port']}"
+      value: "http://${service.roles.SOPHON_DATAMART_BACKEND[0]['hostname']}:${service['backend.port']}"
     - name: PORT
       value: "${service['frontend.port']}"
     mountPaths: []
@@ -90,18 +90,18 @@ stages:
   - type: Config
     taskGroups:
     - !<Create-Database>
-      dbPrefix: datamarket
+      dbPrefix: datamart
       dbUserConfig: javax.jdo.option.ConnectionUserName
       dbPasswordConfig: javax.jdo.option.ConnectionPassword
       timeoutMinutes: 5
       summaryPolicy: SOME
     - !<Role>
-      roleType: "SOPHON_DATAMARKET_BACKEND"
+      roleType: "SOPHON_DATAMART_BACKEND"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
     - !<Role>
-      roleType: "SOPHON_DATAMARKET_FRONTEND"
+      roleType: "SOPHON_DATAMART_FRONTEND"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1

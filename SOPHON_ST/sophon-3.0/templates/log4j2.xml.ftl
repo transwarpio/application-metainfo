@@ -1,7 +1,7 @@
 <#if dependencies.SEARCH??>
   <#assign search=dependencies.SEARCH searches=[]>
   <#list search.roles.SEARCH_SERVER as role>
-    <#if (searh[role.id?c])??>
+    <#if (search[role.id?c])??>
       <#assign searches += [role.hostname + ":" + search[role.id?c]['http.port']]>
     <#else>
       <#assign searches += [role['hostname'] + ":" + search['http.port']]>
