@@ -162,7 +162,7 @@
   visibility: READ_WRITE
 
 - name: workflow.client.token
-  recommendExpression: null
+  recommendExpression: token
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
