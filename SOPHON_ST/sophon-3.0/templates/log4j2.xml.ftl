@@ -1,9 +1,12 @@
 <#if dependencies.SEARCH??>
-    <#assign search=dependencies.SEARCH searches=[] searchesWithPort=[]>
-    <#list search.roles.SEARCH_SERVER as role>
-        <#assign searches += [role.hostname]>
-        <#assign searchesWithPort += [role.hostname + ":" + search[role.id?c]['http.port']]>
-    </#list>
+  <#assign search=dependencies.SEARCH searches=[]>
+  <#list search.roles.SEARCH_SERVER as role>
+    <#if (searh[role.id?c])??>
+      <#assign searches += [role.hostname + ":" + search[role.id?c]['http.port']]>
+    <#else>
+      <#assign searches += [role['hostname'] + ":" + search['http.port']]>
+    </#if>
+  </#list>
 </#if>
 <?xml version="1.0" encoding="UTF-8"?>
 <!--日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
@@ -34,7 +37,7 @@
                         <STRollingIndexName/>
                         <TaskId taskId="${r'${ctx:taskId}'}" />
                         <AsyncBatchDelivery>
-                            <JestHttp serverUris="http://${searchesWithPort[0]}" />
+                            <JestHttp serverUris="http://${searches[0]}" />
                         </AsyncBatchDelivery>
                     </ESTask>
                 </Route>

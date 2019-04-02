@@ -1,8 +1,13 @@
 <#if dependencies.SEARCH??>
   <#assign search=dependencies.SEARCH searches=[] port=[]>
   <#list search.roles.SEARCH_SERVER as role>
-    <#assign searches += [role.hostname]>
-    <#assign port += [search[role.id?c]['http.port']]>
+    <#if (searh[role.id?c])??>
+      <#assign searches += [role.hostname]>
+      <#assign port += [search[role.id?c]['http.port']]>
+    <#else>
+      <#assign searches += [role['hostname']]>
+      <#assign port += [search['http.port']]>
+    </#if>
   </#list>
 </#if>
 #ES properties
@@ -52,7 +57,7 @@ designing.spark.executor.instances=${service['designing.spark.executor.num']}
 designing.spark.executor.cores=${service['designing.spark.executor.core']}
 designing.spark.yarn.keytab=${service.keytab}
 designing.spark.yarn.principal=hive/${localhostname?lower_case}@${service.realm}
-enable.livy=${service['enable.livy']}
+#enable.livy=${service['enable.livy']}
 livy.server.session.timeout=${service['livy.server.session.timeout']}
 
 mirror.host=${service.roles.SOPHON_ST_BACKEND[0]['hostname']}
@@ -61,19 +66,23 @@ task.max.concurrency=${service['task.max.concurrency']}
 task.timeout=${service['task.timeout']}
 mirror.keytab=${service.keytab}
 mirror.principal=hive/${localhostname?lower_case}@${service.realm}
-<#if dependencies.GUARDIAN??>
-  <#if dependencies.GUARDIAN.roles.CAS_SERVER??>
+<#if dependencies.GUARDIAN?? && dependencies.GUARDIAN.roles.CAS_SERVER?? && service.auth == "kerberos">
 cas.service.prefix=https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']}:${dependencies.GUARDIAN['cas.server.ssl.port']}${dependencies.GUARDIAN['cas.server.context.path']}
-  </#if>
-</#if>
 disable.cas.authorization=${service['disable.cas.authorization']}
+<#else>
+disable.cas.authorization=true
+</#if>
 
 workflow.domain.id=0
-<#assign workflowHostPorts = []/>
-<#list dependencies.WORKFLOW.roles['WORKFLOW_SERVER'] as role>
-<#assign workflowHostPorts = workflowHostPorts + [role.hostname + ':' + dependencies.WORKFLOW['workflow.http.port']]>
-</#list>
-<#assign workflowHostPort = workflowHostPorts?join(",")>
+<#if dependencies.WORKFLOW??>
+  <#assign workflowHostPorts = []/>
+  <#list dependencies.WORKFLOW.roles['WORKFLOW_SERVER'] as role>
+  <#assign workflowHostPorts = workflowHostPorts + [role.hostname + ':' + dependencies.WORKFLOW['workflow.http.port']]>
+  </#list>
+  <#assign workflowHostPort = workflowHostPorts?join(",")>
+<#else>
+  <#assign workflowHostPort = "127.0.0.1:12345">
+</#if>
 # the workflow service location
 workflow.service.scheme=http
 workflow.service.host=${workflowHostPort}
