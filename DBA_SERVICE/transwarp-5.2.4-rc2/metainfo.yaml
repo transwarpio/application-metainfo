@@ -1,13 +1,13 @@
 ---
 name: DBA_SERVICE
-version: transwarp-5.2
+version: transwarp-5.2.4-rc2
 global: false
 namePrefix: DBAService
 friendlyName: "DBA Service"
-dockerImage: "transwarp/dbaservice:transwarp-5.2"
+dockerImage: "transwarp/dbaservice:transwarp-5.2.4-rc2"
 dependencies:
   - name: GUARDIAN
-    minVersion: transwarp-5.2
+    minVersion: transwarp-5.2.4-rc2
     optional: true
 
 roles:
