@@ -9,7 +9,7 @@
   visibility: READ_WRITE
 
 - name: javax.jdo.option.ConnectionUserName
-  recommendExpression: datamarket
+  recommendExpression: datamart
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
@@ -31,7 +31,7 @@
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
-    roleTypes: [DATAMARKET_BACKEND]
+    roleTypes: [SOPHON_DATAMART_BACKEND]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -41,7 +41,7 @@
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [DATAMARKET_BACKEND]
+    roleTypes: [SOPHON_DATAMART_BACKEND]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -51,7 +51,7 @@
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
-    roleTypes: [DATAMARKET_BACKEND]
+    roleTypes: [SOPHON_DATAMART_BACKEND]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -61,7 +61,7 @@
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [DATAMARKET_BACKEND]
+    roleTypes: [SOPHON_DATAMART_BACKEND]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -80,7 +80,7 @@
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
-    roleTypes: [DATAMARKET_BACKEND]
+    roleTypes: [SOPHON_DATAMART_FRONTEND]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -90,7 +90,7 @@
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [DATAMARKET_BACKEND]
+    roleTypes: [SOPHON_DATAMART_FRONTEND]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -100,7 +100,7 @@
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
-    roleTypes: [DATAMARKET_BACKEND]
+    roleTypes: [SOPHON_DATAMART_FRONTEND]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -110,7 +110,7 @@
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [DATAMARKET_BACKEND]
+    roleTypes: [SOPHON_DATAMART_FRONTEND]
   onDeps: []
   groups: []
   visibility: READ_WRITE
