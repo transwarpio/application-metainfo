@@ -17,6 +17,7 @@ server {
     proxy_set_header Connection "upgrade";
     proxy_set_header Host $host:$server_port;
     proxy_cache_bypass $http_upgrade;
+    proxy_read_timeout 180s;
   }
   location /api-manager/ {
     proxy_pass http://${service.roles.APINAMANER[0].hostname}:8044/;
@@ -26,5 +27,6 @@ server {
     proxy_set_header Connection "upgrade";
     proxy_set_header Host $host:$server_port;
     proxy_cache_bypass $http_upgrade;
+    proxy_read_timeout 180s;
   }
 }

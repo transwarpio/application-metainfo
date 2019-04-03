@@ -43,6 +43,43 @@ dependencies:
     optional: true
 
 roles:
+- name: SOPHON_ETCD
+  dockerImage: "transwarp/sophon-etcd:sophon-3.0"
+  friendlyName: "Sophon ETCD"
+  labelPrefix: "sophon-etcd"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env: 
+  - name: SOPHON_CONF_DIR
+    value: /etc/${service.sid}/conf/
+  - name: SOPHON_SERVICE_ID
+    value: ${service.sid}
+  mountPaths: []
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [3]}
+  suggestion:
+  - criteria: !<Range> {"min": 3}
+  validation:
+  - criteria: !<Range> {"min": 3}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "etcd.conf"
+        targetPath: "/etc/${service.sid}/conf/etcd.conf"
+        mode: "755"
 - name: SHARE_SERVER
   dockerImage: "transwarp/share-server:sophon-3.0"
   friendlyName: "Share Server"
@@ -380,6 +417,11 @@ stages:
       dbPasswordConfig: livy.jdbc.password
       timeoutMinutes: 5
       summaryPolicy: SOME
+    - !<Role>
+      roleType: "SOPHON_ETCD"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
     - !<Role>
       roleType: "SOPHON_WEB"
       operation: Config
