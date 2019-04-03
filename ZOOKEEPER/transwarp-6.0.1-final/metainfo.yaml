@@ -1,21 +1,22 @@
 ---
-name: LICENSE_SERVICE
-version: manager-6.0.1811a-final
-global: true
-# compatible with legacy init.d script name "zookeeper-server-transwarp_license_cluster"
-namePrefix: License
-friendlyName: "License Service"
-dependencies: []
+name: ZOOKEEPER
+version: transwarp-6.0.1-final
+global: false
+namePrefix: ZooKeeper
+friendlyName: "ZooKeeper"
+dependencies:
+  - name: GUARDIAN
+    minVersion: transwarp-6.0.1-final
+    optional: true
 packages: ["zookeeper"]
-dockerImage: "transwarp/zookeeper:transwarp-5.2.3-final"
+dockerImage: "transwarp/zookeeper:transwarp-6.0.1-final"
 user: zookeeper
 roles:
-- name: LICENSE_NODE
-  friendlyName: "License Node"
-  # compatible with legacy init.d script name "zookeeper-server-transwarp_license_cluster"
+- name: ZOOKEEPER
+  friendlyName: "ZooKeeper Server"
   labelPrefix: "zookeeper-server"
   category: MASTER
-  frontendOperations: ["Start", "Stop", "Move", "Scaleout"]
+  frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   deleteOpCondition:
     deletable:
       number: 4
@@ -23,6 +24,17 @@ roles:
       number: 3
     reject:
       number: 2
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - "echo stat | nc localhost ${service['zookeeper.client.port']} > /tmp/staty; cat /tmp/staty; grep -qE 'Mode: (follower|leader|standalone)' /tmp/staty"
+    failureThreshold: 3
+    initialDelaySeconds: 3
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 15
   env:
   - name: ZOOKEEPER_CONF_DIR
     value: /etc/${service.sid}/conf
@@ -62,17 +74,6 @@ roles:
         templatePath: "myid"
         targetPath: "/var/${service.sid}/myid"
         mode: "755"
-stages:
-  - type: Start
-    taskGroups:
-    - !<Role>
-      summaryPolicy: SOME
-      timeoutMinutes: 10
-      roleType: LICENSE_NODE
-      operation: Start
-    - !<Upload-License>
-      summaryPolicy: ALL
-      timeoutMinutes: 10
 
 firstWizardConfigs:
 - tickTime
@@ -88,10 +89,32 @@ firstWizardConfigs:
 - zookeeper.container.requests.cpu
 - zookeeper.memory.ratio
 
+dashboardMetrics:
+- MaxZookeeperRequestLatency
+- MinZookeeperRequestLatency
+- AvgZookeeperRequestLatency
+
+pages:
+- summary
+- roles
+- configuration
+- operation
+- security
+
+principals:
+- zookeeper
+- HTTP
+
 healthChecks:
 - category: DAEMON_CHECK
   intervalSeconds: 5
   method: !<K8sPod> {}
 - category: VITAL_SIGN_CHECK
-  intervalSeconds: 10
-  method: !<Builtin> {}
+  intervalSeconds: 15
+  method: !<Probe>
+    roles:
+    - roleType: ZOOKEEPER
+      from: !<readiness> {}
+
+customConfigFiles:
+- zoo_cfg
