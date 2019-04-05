@@ -1,0 +1,355 @@
+---
+name: IOT
+version: kg-2.3.0-rc4
+global: false
+namePrefix: IoT
+friendlyName: "IoT"
+dependencies:
+  - name: TXSQL
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.1-final
+    optional: false
+
+roles:
+  - name: CONSUL
+    friendlyName: "Consul"
+    labelPrefix: "thingercloud-consul"
+    dockerImage: "transwarp/consul:kg-2.3.0-rc4"
+    linkExpression: "http://${localhostname}:${service['thingercloud.consul.port']}/"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+    deleteOpCondition:
+      deletable:
+        number: 2
+      reject:
+        number: 1
+    env: []
+    mountPaths:
+      - mountPath: /bin/boot.sh
+        hostPath: /etc/${service.sid}/bin/consul-boot.sh
+        name: consulboot
+    resources:
+      limitsMemoryKey: thingercloud.consul.container.limits.memory
+      limitsCpuKey: thingercloud.consul.container.limits.cpu
+      requestsMemoryKey: thingercloud.consul.container.requests.memory
+      requestsCpuKey: thingercloud.consul.container.requests.cpu
+    summaryPolicy: ALL
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations:
+    - type: Config
+      directives:
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "consul-boot.sh"
+          targetPath: "/etc/${service.sid}/bin/consul-boot.sh"
+          mode: "755"
+
+  - name: NSQD
+    friendlyName: "Nsqd"
+    labelPrefix: "thingercloud-nsqd"
+    dockerImage: "transwarp/nsq:kg-2.3.0-rc4"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+    deleteOpCondition:
+      deletable:
+        number: 2
+      reject:
+        number: 1
+    env: []
+    mountPaths:
+      - mountPath: /bin/boot.sh
+        hostPath: /etc/${service.sid}/bin/nsqd-boot.sh
+        name: nsqdboot
+    resources:
+      limitsMemoryKey: thingercloud.nsqd.container.limits.memory
+      limitsCpuKey: thingercloud.nsqd.container.limits.cpu
+      requestsMemoryKey: thingercloud.nsqd.container.requests.memory
+      requestsCpuKey: thingercloud.nsqd.container.requests.cpu
+    summaryPolicy: ALL
+    autoAssign:
+      - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+      - criteria: !<Range> {"min": 1}
+    validation:
+      - criteria: !<Range> {"min": 1}
+    operations:
+      - type: Config
+        directives:
+          - directive: !<resource>
+              templateType: FreeMarker
+              templatePath: "nsqd-boot.sh"
+              targetPath: "/etc/${service.sid}/bin/nsqd-boot.sh"
+              mode: "755"
+
+  - name: EDGEMGR
+    friendlyName: "EdgeManager"
+    labelPrefix: "thingercloud-edgemgr"
+    dockerImage: "transwarp/thingercloud-edgemgr:kg-2.3.0-rc4"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+    deleteOpCondition:
+      deletable:
+        number: 2
+      reject:
+        number: 1
+    env:
+    - name: CONFIG_FILE
+      value: "/etc/${service.sid}/conf/edgemgr.yaml"
+    mountPaths: []
+    resources:
+      limitsMemoryKey: thingercloud.edgemgr.container.limits.memory
+      limitsCpuKey: thingercloud.edgemgr.container.limits.cpu
+      requestsMemoryKey: thingercloud.edgemgr.container.requests.memory
+      requestsCpuKey: thingercloud.edgemgr.container.requests.cpu
+    summaryPolicy: ALL
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations:
+    - type: Config
+      directives:
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "edgemgr.yaml"
+          targetPath: "/etc/${service.sid}/conf/edgemgr.yaml"
+          mode: "755"
+
+  - name: APPMGR
+    friendlyName: "AppManager"
+    labelPrefix: "thingercloud-appmgr"
+    dockerImage: "transwarp/thingercloud-appmgr:kg-2.3.0-rc4"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+    deleteOpCondition:
+      deletable:
+        number: 2
+      reject:
+        number: 1
+    env:
+    - name: CONFIG_FILE
+      value: "/etc/${service.sid}/conf/appmgr.yaml"
+    mountPaths: []
+    resources:
+      limitsMemoryKey: thingercloud.appmgr.container.limits.memory
+      limitsCpuKey: thingercloud.appmgr.container.limits.cpu
+      requestsMemoryKey: thingercloud.appmgr.container.requests.memory
+      requestsCpuKey: thingercloud.appmgr.container.requests.cpu
+    summaryPolicy: ALL
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations:
+    - type: Config
+      directives:
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "appmgr.yaml"
+          targetPath: "/etc/${service.sid}/conf/appmgr.yaml"
+          mode: "755"
+
+  - name: HUB
+    friendlyName: "Hub"
+    labelPrefix: "thingercloud-hub"
+    dockerImage: "transwarp/thinger-hub:kg-2.3.0-rc4"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+    deleteOpCondition:
+      deletable:
+        number: 2
+      reject:
+        number: 1
+    env:
+      - name: CONFIG_FILE
+        value: "/etc/${service.sid}/conf/cloud-hub.yaml"
+    mountPaths: []
+    resources:
+      limitsMemoryKey: thingercloud.hub.container.limits.memory
+      limitsCpuKey: thingercloud.hub.container.limits.cpu
+      requestsMemoryKey: thingercloud.hub.container.requests.memory
+      requestsCpuKey: thingercloud.hub.container.requests.cpu
+    summaryPolicy: ALL
+    autoAssign:
+      - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+      - criteria: !<Range> {"min": 1}
+    validation:
+      - criteria: !<Range> {"min": 1}
+    operations:
+      - type: Config
+        directives:
+          - directive: !<resource>
+              templateType: FreeMarker
+              templatePath: "cloud-hub.yaml"
+              targetPath: "/etc/${service.sid}/conf/cloud-hub.yaml"
+              mode: "755"
+
+  - name: GATEWAY
+    friendlyName: "Gateway"
+    labelPrefix: "thingercloud-gateway"
+    dockerImage: "transwarp/thingercloud-gateway:kg-2.3.0-rc4"
+    linkExpression: "http://${localhostname}:${service['thingercloud.gateway.port']}/apidocs/"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+    deleteOpCondition:
+      deletable:
+        number: 2
+      reject:
+        number: 1
+    env:
+    - name: CONFIG_FILE
+      value: "/etc/${service.sid}/conf/gateway.yaml"
+    mountPaths: []
+    resources:
+      limitsMemoryKey: thingercloud.gateway.container.limits.memory
+      limitsCpuKey: thingercloud.gateway.container.limits.cpu
+      requestsMemoryKey: thingercloud.gateway.container.requests.memory
+      requestsCpuKey: thingercloud.gateway.container.requests.cpu
+    summaryPolicy: ALL
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations:
+    - type: Config
+      directives:
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "gateway.yaml"
+          targetPath: "/etc/${service.sid}/conf/gateway.yaml"
+          mode: "755"
+
+  - name: FRONTEND
+    friendlyName: "Frontend"
+    labelPrefix: "thingercloud-frontend"
+    dockerImage: "transwarp/thingercloud-frontend:kg-2.3.0-rc4"
+    linkExpression: "http://${localhostname}:${service['thingercloud.frontend.port']}/"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+    deleteOpCondition:
+      deletable:
+        number: 2
+      reject:
+        number: 1
+    env:
+    - name: API_URL
+      value: "http://${service.roles.GATEWAY[0]['hostname']}:${service['thingercloud.gateway.port']}/"
+    - name: PORT
+      value: ${service['thingercloud.frontend.port']}
+    mountPaths: []
+    resources:
+      limitsMemoryKey: thingercloud.frontend.container.limits.memory
+      limitsCpuKey: thingercloud.frontend.container.limits.cpu
+      requestsMemoryKey: thingercloud.frontend.container.requests.memory
+      requestsCpuKey: thingercloud.frontend.container.requests.cpu
+    summaryPolicy: ALL
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations: []
+
+stages:
+  - type: Config
+    taskGroups:
+    - !<Create-Database>
+      dbPrefix: thingercloud
+      dbUserConfig: thingercloud.db.username
+      dbPasswordConfig: thingercloud.db.password
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Role>
+      roleType: "CONSUL"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "NSQD"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "EDGEMGR"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "APPMGR"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "HUB"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "GATEWAY"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+
+firstWizardConfigs:
+- thingercloud.db.username
+- thingercloud.db.password
+- thingercloud.consul.port
+- thingercloud.frontend.port
+- thingercloud.gateway.port
+- thingercloud.frontend.container.limits.memory
+- thingercloud.frontend.container.limits.cpu
+- thingercloud.frontend.container.requests.memory
+- thingercloud.frontend.container.requests.cpu
+- thingercloud.gateway.container.limits.memory
+- thingercloud.gateway.container.limits.cpu
+- thingercloud.gateway.container.requests.memory
+- thingercloud.gateway.container.requests.cpu
+- thingercloud.consul.container.limits.memory
+- thingercloud.consul.container.limits.cpu
+- thingercloud.consul.container.requests.memory
+- thingercloud.consul.container.requests.cpu
+- thingercloud.nsqd.container.limits.memory
+- thingercloud.nsqd.container.limits.cpu
+- thingercloud.nsqd.container.requests.memory
+- thingercloud.nsqd.container.requests.cpu
+- thingercloud.edgemgr.container.limits.memory
+- thingercloud.edgemgr.container.limits.cpu
+- thingercloud.edgemgr.container.requests.memory
+- thingercloud.edgemgr.container.requests.cpu
+- thingercloud.appmgr.container.limits.memory
+- thingercloud.appmgr.container.limits.cpu
+- thingercloud.appmgr.container.requests.memory
+- thingercloud.appmgr.container.requests.cpu
+- thingercloud.hub.container.limits.memory
+- thingercloud.hub.container.limits.cpu
+- thingercloud.hub.container.requests.memory
+- thingercloud.hub.container.requests.cpu
+product: IoT
+
+principals:
+- iot
+
+pages:
+- roles
+- configuration
+- operation
+- security
+
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 30
+  method: !<K8sPod> {}
