@@ -5,7 +5,6 @@ global: false
 namePrefix: DBAService
 friendlyName: "DBA Service"
 dockerImage: "transwarp/dbaservice:transwarp-5.2"
-dependencies: []
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-5.2

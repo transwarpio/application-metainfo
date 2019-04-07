@@ -1,0 +1,7 @@
+[main]
+shiro.loginUrl=/api/session
+shiro.globalSessionTimeout=300000
+
+[users]
+designer=designer
+
