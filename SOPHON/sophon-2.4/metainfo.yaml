@@ -358,6 +358,91 @@ roles:
         targetPath: "/etc/${service.sid}/conf/apimanager/application.properties"
         mode: "755"
 
+- name: APPROVAL
+  dockerImage: "transwarp/approval:sophon-2.3"
+  linkExpression: "http://${localhostname}:8045/swagger-ui.html"
+  friendlyName: "Approval Server"
+  labelPrefix: "approval"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env: 
+  - name: SOPHON_CONF_DIR
+    value: /etc/${service.sid}/conf/
+  - name: SOPHON_SERVICE_ID
+    value: ${service.sid}
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1, "max": 1}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "approval/server.conf"
+        targetPath: "/etc/${service.sid}/conf/approval/server.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "approval/application.properties"
+        targetPath: "/etc/${service.sid}/conf/approval/application.properties"
+        mode: "755"
+
+- name: GATEWAY
+  dockerImage: "transwarp/gateway:sophon-2.3"
+  linkExpression: "http://${localhostname}:8050/actuator/gateway/routes"
+  friendlyName: "Gateway"
+  labelPrefix: "gateway"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env: 
+  - name: SOPHON_CONF_DIR
+    value: /etc/${service.sid}/conf/
+  - name: SOPHON_SERVICE_ID
+    value: ${service.sid}
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1, "max": 1}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "gateway/gateway.conf"
+        targetPath: "/etc/${service.sid}/conf/gateway/gateway.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "gateway/application.properties"
+        targetPath: "/etc/${service.sid}/conf/gateway/application.properties"
+        mode: "755"
 
 stages:
   - type: Config
@@ -376,6 +461,12 @@ stages:
       summaryPolicy: SOME
     - !<Create-Database>
       dbPrefix: metastore_apimanager
+      dbUserConfig: livy.jdbc.username
+      dbPasswordConfig: livy.jdbc.password
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Create-Database>
+      dbPrefix: metastore_approval
       dbUserConfig: livy.jdbc.username
       dbPasswordConfig: livy.jdbc.password
       timeoutMinutes: 5
@@ -401,6 +492,16 @@ stages:
       summaryPolicy: SOME
       timeoutMinutes: 1
     - !<Role>
+      roleType: "APPROVAL"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "GATEWAY"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
       roleType: "SOPHON_REDIS"
       operation: Config
       summaryPolicy: SOME
@@ -420,8 +521,6 @@ stages:
       timeoutMinutes: 2
       templateType: FreeMarker
       templateFile: "rbac/serviceaccount.yaml"
-
-
 
 firstWizardConfigs:
 - sophon.resource.type
