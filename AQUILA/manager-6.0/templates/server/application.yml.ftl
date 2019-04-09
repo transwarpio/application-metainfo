@@ -45,5 +45,8 @@ metrics:
         name: "Manager Heatmap"
         type: MANAGER_HEATMAP
         prometheusUrl: http://172.16.1.104:9390
+      - id: 3
+        name: "Manager Database"
+        type: MANAGER_DB
 manager-proxy:
   endpoint: http://${service.roles["AQUILA_MANAGER_PROXY"][0].hostname}:${service["manager.proxy.web.port"]}
