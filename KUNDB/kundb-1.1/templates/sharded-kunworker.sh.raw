@@ -33,6 +33,7 @@ exec $VTROOT/bin/vtworker \
   $TOPOLOGY_FLAGS \
   -cell $cell\
   -log_dir $VTDATAROOT/tmp \
+   -remote_actions_timeout 5m \
   -alsologtostderr \
   -use_v3_resharding_mode \
   "$@"

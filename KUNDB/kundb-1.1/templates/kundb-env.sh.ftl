@@ -9,17 +9,14 @@ export GRPC_PORT_BASE=16000
 export MYSQL_PORT_BASE=17000
 export MYSQL_USER="root"
 export MYSQL_PASSWORD="123456"
+export ENABLE_SECURITY=${service['kundb.enable_security']}
 
 export CTLD_GRPC_PORT=${service['kunctld.grpc.port']}
 export CTLD_WEB_PORT=${service['kunctld.debug.port']}
 export KUNGATE_WEB_PORT=${service['kungate.debug.port']}
 export KUNGATE_GRPC_PORT=${service['kungate.grpc.port']}
 export MYSQL_SERVER_PORT_BASE=${service['kungate.server.port']}
-
 export KUNGATE_AUDIT_SQLS=${service['kungate.audit_sqls']}
-export KUNGATE_MYSQL_AUTH_SERVER_IMPL=${service['kungate.mysql_auth_server_impl']}
-export KUNGATE_KUNDB_AUTH_PLUGIN=${service['kungate.kundb_auth_plugin']}
-
 export KUNDB_DIR=${service.sid}
 
 <#if dependencies.ZOOKEEPER??>

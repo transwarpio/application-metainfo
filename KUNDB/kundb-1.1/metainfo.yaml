@@ -465,6 +465,7 @@ firstWizardConfigs:
 - data.localdir
 - kundb.cellname
 - kundb.keyspace
+- kundb.enable_security
 - kundb.shards
 - kunctld.debug.port
 - kunctld.grpc.port
@@ -489,8 +490,6 @@ firstWizardConfigs:
 - kungate.grpc.port
 - kungate.server.port
 - kungate.audit_sqls
-- kungate.mysql_auth_server_impl
-- kungate.kundb_auth_plugin
 - master.debug.port
 - replica.debug.port
 - rdonly.debug.port
@@ -547,7 +546,6 @@ healthChecks:
       from: !<readiness> {}
     - roleType: KUNGATE 
       from: !<readiness> {}
-  method: !<Builtin> {}
 
 customConfigFiles:
 - mfed.cfg 

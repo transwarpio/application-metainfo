@@ -55,6 +55,13 @@ default_dbname=${DEFAULT_DBNAME:-'$keyspace'}
 uid=$[$uid_base + $uid_index]
 vtgate_port=$PRIV_KUNGATE_SERVER_PORT
 optional_args=$PRIV_KUNGATE_OPTIONAL_ARGS 
+enable_security=$ENABLE_SECURITY
+if [ $enable_security == 'true' ]; then
+access_control=true
+else
+access_control=false
+fi
+
 
 dbconfig_dba_flags="\
     -db-config-dba-uname vt_app\
@@ -177,6 +184,9 @@ $VTROOT/bin/vttablet \
   -port $port \
   -grpc_port $grpc_port \
   -grpc_max_message_size 1073741824 \
+  -queryserver-config-schema-reload-time 1800 \
+  -enable_access_control=$access_control \
+  -binlog_use_v3_resharding_mode=true \
   -service_map 'grpc-queryservice,grpc-tabletmanager,grpc-updatestream' \
   -pid_file $TabletsDataDirs/$tablet_dir/vttablet.pid \
   -vtctld_addr http://$tablet_hostname:$vtctld_web_port/ \

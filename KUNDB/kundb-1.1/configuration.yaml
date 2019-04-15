@@ -39,6 +39,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: kundb.enable_security
+  recommendExpression: true
+  defaultValue: true
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: kundb.shards
   recommendExpression: 
   defaultValue: 
@@ -220,24 +229,6 @@
   recommendExpression: 1
   defaultValue: 1
   valueType: BOOL 
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kungate.mysql_auth_server_impl
-  recommendExpression: ldap
-  defaultValue: ldap
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kungate.kundb_auth_plugin
-  recommendExpression: ldap
-  defaultValue: ldap
-  valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
