@@ -204,7 +204,18 @@ do
 done
 echo "InitMfed $alias ... "
 source $KUNDB_CONF_DIR/sup_user_info.sh 
-cd $KUNHOME && ./kunctl.sh InitMfed -mfed_alias $alias -vtgate_user $SUPUSER -vtgate_password $PASSWORD -vtgate_host `hostname -f` -vtgate_port $vtgate_port 
+inNum=0
+cd $KUNHOME && timeout 10 ./kunctl.sh InitMfed -mfed_alias $alias -vtgate_user $SUPUSER -vtgate_password $PASSWORD -vtgate_host `hostname -f` -vtgate_port $vtgate_port 
+while [ $? -ne 0 ]
+do
+    sleep 3 
+    inNum=$((inNum+1))
+    if [ $inNum -eq 4 ]; then
+       echo "Mfed InitMfed reach the maximum times"
+       break
+    fi
+    cd $KUNHOME && timeout 10 ./kunctl.sh InitMfed -mfed_alias $alias -vtgate_user $SUPUSER -vtgate_password $PASSWORD -vtgate_host `hostname -f` -vtgate_port $vtgate_port 
+done
 sleep 2
     
 if [ ! -f "$VTDATAROOT/$tablet_dir/_init_mfed_master" ]; then

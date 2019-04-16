@@ -229,13 +229,48 @@ if [ $1 == "master" ]; then
    	fi
      done 
      if [ $ksCount -eq 1 ]; then
+       count=0
        cd $KUNHOME && num=$(./kunctl.sh ListAllTablets $CELLNAME | grep $KEYSPACE| grep master | wc -l)
        if [ $num -gt 1 ]; then
          cd $KUNHOME && ./kunctl.sh ApplyVSchema  -vschema_file=$KUNDB_CONF_DIR/sharded_vschema.json $KEYSPACE
+         while [ $? -ne 0 ]
+         do
+	   sleep 2
+           count=$((count+1))
+           if [ $count -eq 2 ]; then
+             echo "ApplyVSchema reach the maximum times"
+             break
+           fi
+           cd $KUNHOME && ./kunctl.sh ApplyVSchema  -vschema_file=$KUNDB_CONF_DIR/sharded_vschema.json $KEYSPACE
+	 done
        else
          cd $KUNHOME && ./kunctl.sh ApplyVSchema  -vschema_file=$KUNDB_CONF_DIR/unsharded_vschema.json $KEYSPACE
+         while [ $? -ne 0 ]
+         do
+	   sleep 2
+           count=$((count+1))
+           if [ $count -eq 2 ]; then
+             echo "ApplyVSchema reach the maximum times"
+             break
+           fi
+           cd $KUNHOME && ./kunctl.sh ApplyVSchema  -vschema_file=$KUNDB_CONF_DIR/unsharded_vschema.json $KEYSPACE
+	 done
        fi
      fi
+   
+      
+     count=0
+     cd $KUNHOME && ./kunctl.sh InitKeyspacePrivileges -keyspace $KEYSPACE
+     while [ $? -ne 0 ]
+     do
+	sleep 2
+        count=$((count+1))
+        if [ $count -eq 2 ]; then
+          echo "InitKeyspacePrivileges reach the maximum times"
+          break
+        fi
+        cd $KUNHOME && ./kunctl.sh InitKeyspacePrivileges -keyspace $KEYSPACE
+     done
 
      source $ROLE_CONF_DIR/init_mfed.sh 
      for((i=0; i< $MFED_SHARD_NUM; i++)); 
@@ -246,8 +281,20 @@ if [ $1 == "master" ]; then
         printf -v alias '%s-%010d' $CELLNAME $SHARD_UIDBASE
         echo "InitMfed $alias ... "
         source $ROLE_CONF_DIR/sup_user_info.sh 
-        cd $KUNHOME && ./kunctl.sh InitMfed -mfed_alias $alias -vtgate_user $SUPUSER -vtgate_password $PASSWORD -vtgate_host ${mfedHost[$i]} -vtgate_port $vtgate_port 
+        count=0
+        cd $KUNHOME && timeout 10 ./kunctl.sh InitMfed -mfed_alias $alias -vtgate_user $SUPUSER -vtgate_password $PASSWORD -vtgate_host ${mfedHost[$i]} -vtgate_port $vtgate_port 
+        while [ $? -ne 0 ]
+        do
+	  sleep 2
+          count=$((count+1))
+          if [ $count -eq 2 ]; then
+             echo "InitMfed reach the maximum times"
+             break
+          fi
+          cd $KUNHOME && timeout 10 ./kunctl.sh InitMfed -mfed_alias $alias -vtgate_user $SUPUSER -vtgate_password $PASSWORD -vtgate_host ${mfedHost[$i]} -vtgate_port $vtgate_port 
+     done
     done
+    
      
   else
       echo "Resuming MASTER_TABLET..."
