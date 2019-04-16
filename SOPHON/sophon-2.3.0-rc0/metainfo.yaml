@@ -3,7 +3,7 @@ name: SOPHON
 version: sophon-2.3.0-rc0
 global: false
 namePrefix: Sophon
-friendlyName: "Sophon"
+friendlyName: "Sophon-web"
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-5.2.2-final
@@ -22,8 +22,8 @@ dependencies:
     maxVersion: transwarp-6.0.1-final
     optional: false
   - name: YARN
-    minVersion: transwarp-5.2.2-final
-    maxVersion: transwarp-6.0.1-final
+    minVersion: sophon-2.2.0-final
+    maxVersion: sophon-2.3.0-final
     optional: false
   - name: TXSQL
     minVersion: transwarp-5.2.2-final
