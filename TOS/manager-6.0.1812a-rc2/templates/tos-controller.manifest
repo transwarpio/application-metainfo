@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tos-controller-${service.sid}
+  namespace: kube-system
+  labels:
+    k8s-app: kube-controller-manager
+spec:
+  priorityClassName: system-priority
+  hostNetwork: true
+  containers:
+    - name: tos-controller-${service.sid}
+      image: transwarp/hyperkube:manager-6.0.1812a-rc2
+      imagePullPolicy: IfNotPresent
+      command:
+        - hyperkube
+        - controller-manager
+        - --feature-gates=RotateKubeletServerCertificate=true,SupportIPVSProxyMode=true,PodPriority=true,ExpandPersistentVolumes=true
+        - --v=4
+        - --kubeconfig=/srv/kubernetes/kubeconfig
+        - --leader-elect
+        - --root-ca-file=/srv/kubernetes/ca.pem
+        - --service-account-private-key-file=/srv/kubernetes/service-account-key.pem
+        - --cluster-signing-cert-file=/srv/kubernetes/ca.pem
+        - --cluster-signing-key-file=/srv/kubernetes/ca-key.pem
+        - --controllers=*,tokencleaner,bootstrapsigner
+        - --logtostderr=true
+        - --log_dir=/var/log/kubernetes/
+        - --allocate-node-cidrs=true
+        - --cluster-cidr=${service['service.cluster.ip.range']}
+      env:
+      - name: TZ
+        value: "Asia/Shanghai"
+      livenessProbe:
+        httpGet:
+          host: 127.0.0.1
+          port: 10252
+          path: /healthz
+        initialDelaySeconds: 60
+        timeoutSeconds: 60
+      volumeMounts:
+      - name: ctlkubelog
+        mountPath: /var/log/kubernetes/
+        readOnly: false
+      - name: kubernetes
+        mountPath: /var/run/kubernetes/
+        readOnly: false
+      - name: srvkube
+        mountPath: /srv/kubernetes/
+        readOnly: true
+  volumes:
+    - name: ctlkubelog
+      hostPath:
+        path: /var/log/kubernetes/
+    - name: kubernetes
+      hostPath:
+        path: /var/run/${service.sid}
+    - name: srvkube
+      hostPath:
+        path: /srv/kubernetes/

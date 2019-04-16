@@ -23,8 +23,6 @@
     <@property "dfs.datanode.kerberos.principal" "hdfs/_HOST@" + realm/>
     <@property "dfs.web.authentication.kerberos.principal" "HTTP/_HOST@" + realm/>
     <@property "dfs.web.authentication.kerberos.keytab" service.keytab/>
-    <#--  for datanode to use unprivileged port -->
-    <@property "dfs.data.transfer.protection" "integrity"/>
 </#if>
 <#if service.plugins?seq_contains("guardian")>
     <@property "dfs.namenode.inode.attributes.provider.class" "io.transwarp.guardian.plugins.hdfs.GuardianINodeAttributeProvider"/>
@@ -105,7 +103,6 @@
     <@property "dfs.datanode.ipc.address" hostname + ":" + service["datanode.ipc-port"]/>
 <#--handleOther-->
     <@property "dfs.hosts.exclude" "/etc/${sid}/conf/exclude-list.txt"/>
-    <@property "dfs.client.read.shortcircuit", "true"/>
     <@property "dfs.domain.socket.path" "/var/run/${sid}/dn_socket"/>
     <#if dependencies.LICENSE_SERVICE??>
     <#assign  license=dependencies.LICENSE_SERVICE license_servers=[]>
@@ -115,7 +112,6 @@
     <@property "license.zookeeper.quorum" license_servers?join(",")/>
     </#if>
     <@property "dfs.journalnode.edits.dir" "/hadoop/journal"/>
-    <@property "dfs.client.socket-timeout" "120000"/>
 <#--Take properties from the context-->
 <#list service['hdfs-site.xml'] as key, value>
     <@property key value/>

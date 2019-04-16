@@ -60,8 +60,16 @@
         <#list service.roles["GUARDIAN_TXSQL_SERVER"] as r>
             <#assign hostPorts = hostPorts + [r.hostname + ':' + service['mysql.rw.port']]>
         </#list>
+    	<#assign hostPorts = hostPorts?sort 
+                         i = hostPorts?seq_index_of(localhostname + ':' + service['mysql.rw.port'])>
+  	<#if i lt 0>
+             <#assign i = .now?long % service.roles['GUARDIAN_TXSQL_SERVER']?size>
+   	</#if>
+  	<#if i gt 0>
+             <#assign hostPorts = hostPorts[i..] + hostPorts[0..i-1]>
+	</#if>
         <#assign txsql = hostPorts?join(",")>
-        <@property "guardian.txsql.connection.url" "jdbc:mysql://${txsql}/guardian?allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true&amp;failOverReadOnly=false"/>
+        <@property "guardian.txsql.connection.url" "jdbc:mysql://${txsql}/guardian?allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true&amp;failOverReadOnly=false&amp;connectTimeout=10000&amp;retriesAllDown=0&amp;secondsBeforeRetryMaster=0&amp;queriesBeforeRetryMaster=0"/>
         <@property "guardian.txsql.connection.username" "root"/>
         <@property "guardian.txsql.connection.password" "${service['root.password']}"/>
     </#if>

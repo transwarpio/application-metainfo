@@ -1,0 +1,85 @@
+<#assign etcd_servers=[]>
+<#list dependencies.TOS.roles.TOS_MASTER as tos_master>
+<#assign etcd_servers+=["https://" + tos_master.hostname + ":" + dependencies.TOS['tos.master.etcd.port']]>
+</#list>
+<#assign
+  tosService=dependencies.TOS
+  registryServer=tosService.roles['TOS_REGISTRY'][0].hostname
+  registryPort=tosService['tos.registry.port']
+>
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: flanneld-${service.sid}
+  namespace: kube-system
+spec:
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 100%
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      transwarp.name: flanneld-${service.sid}
+  template:
+    metadata:
+      labels:
+        transwarp.name: flanneld-${service.sid}
+    spec:
+      hostNetwork: true
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: flanneld-${service.sid}
+                operator: Exists
+      containers:
+      - command:
+        - bash
+        - -c
+        - |
+          set -ex
+          flanneld \
+          -etcd-endpoints=${etcd_servers?join(',')} \
+          -etcd-prefix=/coreos.com/network \
+          -etcd-cafile=/srv/ssl/etcd-ca.pem \
+          -etcd-keyfile=/srv/ssl/etcd-key.pem \
+          -etcd-certfile=/srv/ssl/etcd.pem \
+          -iface=${r'${FLANNELD_IFACE}'} \
+          --v=2 \
+          -ip-masq \
+          -watch-networks
+        env:
+        - name: TZ
+          value: Asia/Shanghai
+        - name: FLANNELD_IFACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.hostIP
+        image: ${registryServer}:${registryPort}/transwarp/flanneld:manager-6.0.1812a-rc1
+        imagePullPolicy: IfNotPresent
+        name: tos-flanneld-${service.sid}
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+          requests:
+            cpu: 500m
+            memory: 500Mi
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /run/flannel/networks
+          name: run
+        - mountPath: /srv/ssl
+          name: etcd-tls
+      restartPolicy: Always
+      volumes:
+      - name: run
+        hostPath:
+          path: /run/flannel/networks
+          type: ""
+      - name: etcd-tls
+        hostPath:
+          path: /srv/kubernetes

@@ -16,96 +16,6 @@
   groups: []
   visibility: READ_WRITE
 
-- name: workflow.execute.pool.size
-  recommendExpression: 100
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-  
-- name: workflow.verify.interval.millis
-  recommendExpression: 60000
-  defaultValue: null
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-  
-- name: workflow.global.max.running
-  recommendExpression: 2000
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: workflow.recover.max.running
-  recommendExpression: 500
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: workflow.in.wf.max.running
-  recommendExpression: 200
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: workflow.plugin.max.running
-  recommendExpression: 100
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: workflow.plugin.retry.max.running
-  recommendExpression: 100
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: workflow.max.running.delay.millis
-  recommendExpression: 600000
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: workflow.clean.interval.days
-  recommendExpression: 1
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: workflow.recovery.seconds
-  recommendExpression: 86400
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
 - name: workflow.datasource.username
   recommendExpression: "workflow"
   defaultValue: null
@@ -199,7 +109,7 @@
 - name: workflow.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [WORKFLOW_SERVER]
   onDeps: []
@@ -209,7 +119,7 @@
 - name: workflow.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [WORKFLOW_SERVER]
   onDeps: []
@@ -219,7 +129,7 @@
 - name: workflow.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [WORKFLOW_SERVER]
   onDeps: []
@@ -229,7 +139,7 @@
 - name: workflow.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [WORKFLOW_SERVER]
   onDeps: []

@@ -5,6 +5,7 @@ global: false
 namePrefix: TxSQL
 friendlyName: "TxSQL"
 dockerImage: "transwarp/txsql:transwarp-6.1"
+validateConfig: true
 dependencies: []
 user: mysql
 roles:
@@ -12,7 +13,7 @@ roles:
   friendlyName: "TxSQL Server"
   labelPrefix: "txsql-server"
   category: MASTER
-  frontendOperations: ["Start", "Stop", "Delete"]
+  frontendOperations: ["Start", "Stop", "Delete", "Move"]
   deleteOpCondition:
     deletable:
       number: 3

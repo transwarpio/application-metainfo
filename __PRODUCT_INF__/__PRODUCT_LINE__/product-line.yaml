@@ -1,0 +1,8 @@
+- name: TDH
+  friendlyName: "Transwarp Data Hub"
+- name: ARGODB
+  friendlyName: "ArgoDB"
+- name: SOPHON
+  friendlyName: "Sophon"
+- name: KUNDB
+  friendlyName: "KunDB"

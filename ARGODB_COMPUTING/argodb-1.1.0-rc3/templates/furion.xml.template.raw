@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<root weight="100">
+  <default weight="1" />
+  <system weight="100" maxCPURatio="20" />
+  <adhoc weight="60" rsvCPURatio="0" scheduler="FAIR">
+    <adhoc1 weight="50"/>
+    <adhoc2 weight="50"/>
+  </adhoc>
+  <etl weight="40" maxCPURatio="100" scheduler="FIFO">
+    <etl1 weight="50" />
+    <etl2 weight="50" />
+  </etl>
+</root>

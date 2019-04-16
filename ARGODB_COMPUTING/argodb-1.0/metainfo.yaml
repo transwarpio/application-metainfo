@@ -34,60 +34,58 @@ plugins:
     useTar: false
 
 roles:
-- name: INCEPTOR_SERVER
-  friendlyName: "Inceptor Server"
-  labelPrefix: "inceptor-server"
-  linkExpression: "http://${localhostname}:${service['inceptor.ui.port']}/"
+- name: DBA_SERVICE
+  friendlyName: "DBA Service"
+  labelPrefix: "dbaservice"
+  dockerImage: "transwarp/argodb-watchman:argodb-1.0"
+  linkExpression: "http://${localhostname}:${service['dbaservice.ui.port']}/"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
-  deleteOpCondition:
-    deletable:
-      number: 2
-    reject:
-      number: 1
   readinessProbe:
     probe: !<httpGet>
       path: /
-      port: ${service['inceptor.ui.port']}
+      port: ${service['dbaservice.ui.port']}
       scheme: HTTP
   env:
-  - name: TRANSWARP_ZOOKEEPER_QUORUM
-    value: |
-      <#assign zookeepers=[]>
-      <#if dependencies.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?size gt 0>
-        <#list dependencies.ZOOKEEPER.roles.ZOOKEEPER as zookeeper>
-          <#assign zookeepers += [zookeeper.hostname]>
-        </#list>
-      </#if>
-      ${zookeepers?join(",")}
-  - name: INCEPTOR_CONF_DIR
-    value: /etc/${service.sid}/conf
+  - name: WATCHMAN_CONF
+    value: /etc/${service.sid}/conf/dbaservice/application.yml
+  - name: AIOPS_CONF
+    value: /etc/${service.sid}/conf/dbaservice/aiops.yml
+  deleteOpCleanDirs:
+    fromPath:
+    - key: /etc/${service.sid}/conf/dbaservice
+      featureFile: application.yml
   mountPaths: []
   resources:
-    limitsMemoryKey: server.container.limits.memory
-    limitsCpuKey: server.container.limits.cpu
-    requestsMemoryKey: server.container.requests.memory
-    requestsCpuKey: server.container.requests.cpu
-  summaryPolicy: SOME
+    limitsMemoryKey: dbaservice.container.limits.memory
+    limitsCpuKey: dbaservice.container.limits.cpu
+    requestsMemoryKey: dbaservice.container.requests.memory
+    requestsCpuKey: dbaservice.container.requests.cpu
+  summaryPolicy: NONE
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
   suggestion:
   - criteria: !<Range> {"min": 1}
   validation:
-  - criteria: !<Range> {"min": 1}
+  - criteria: !<Range> {"min": 0}
   operations:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/var/lock/subsys/${service.sid}", "/var/run/${service.sid}"]
+        paths: ["/etc/${service.sid}/conf/dbaservice"]
         mode: "755"
   - type: Config
     directives:
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "dataSource.properties"
-        targetPath: "/etc/${service.sid}/conf/dataSource.properties"
-        mode: "644"
+        templatePath: "dbaservice/application.yml.ftl"
+        targetPath: "/etc/${service.sid}/conf/dbaservice/application.yml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "dbaservice/aiops.yml.ftl"
+        targetPath: "/etc/${service.sid}/conf/dbaservice/aiops.yml"
+        mode: "755"
 
 - name: INCEPTOR_EXECUTOR
   friendlyName: "Inceptor Executor"
@@ -134,6 +132,66 @@ roles:
         paths: ["/var/run/${service.sid}"]
         mode: "755"
 
+- name: INCEPTOR_SERVER
+  friendlyName: "Inceptor Server"
+  labelPrefix: "inceptor-server"
+  linkExpression: "http://${localhostname}:${service['inceptor.ui.port']}/"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  readinessProbe:
+    probe: !<httpGet>
+      path: /executors/json/
+      port: ${service['inceptor.ui.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 3
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 15
+  env:
+  - name: TRANSWARP_ZOOKEEPER_QUORUM
+    value: |
+      <#assign zookeepers=[]>
+      <#if dependencies.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?size gt 0>
+        <#list dependencies.ZOOKEEPER.roles.ZOOKEEPER as zookeeper>
+          <#assign zookeepers += [zookeeper.hostname]>
+        </#list>
+      </#if>
+      ${zookeepers?join(",")}
+  - name: INCEPTOR_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/lock/subsys/${service.sid}", "/var/run/${service.sid}"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "dataSource.properties"
+        targetPath: "/etc/${service.sid}/conf/dataSource.properties"
+        mode: "644"
+
 - name: INCEPTOR_PROFILER
   friendlyName: "Inceptor Profiler"
   labelPrefix: "inceptor-profiler"
@@ -159,7 +217,7 @@ roles:
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [0]}
   suggestion:
-  - criteria: !<Range> {"min": 1}
+  - criteria: !<Range> {"min": 0}
   validation:
   - criteria: !<Range> {"min": 0}
   operations:
@@ -194,7 +252,7 @@ roles:
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [0]}
   suggestion:
-  - criteria: !<Range> {"min": 1}
+  - criteria: !<Range> {"min": 0}
   validation:
   - criteria: !<Range> {"min": 0}
   operations:
@@ -208,6 +266,11 @@ stages:
   - type: Config
     taskGroups:
     - !<Role>
+      roleType: "DBA_SERVICE"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
       roleType: "INCEPTOR_SERVER"
       operation: Config
       summaryPolicy: SOME
@@ -216,7 +279,7 @@ stages:
       roleType: "INCEPTOR_EXECUTOR"
       operation: Config
       summaryPolicy: SOME
-      timeoutMinutes: 1
+      timeoutMinutes: 2
     - !<Role>
       roleType: "INCEPTOR_PROFILER"
       operation: Config
@@ -243,6 +306,7 @@ firstWizardConfigs:
 - inceptor.executor.memory
 - inceptor.server.memory
 - inceptor.ui.port
+- inceptor.dbaservice.enabled
 - javax.jdo.option.ConnectionPassword
 - javax.jdo.option.ConnectionUserName
 - ngmr.cache.size
@@ -275,6 +339,13 @@ firstWizardConfigs:
 - compactor.container.requests.memory
 - compactor.container.requests.cpu
 - compactor.memory.ratio
+# Watchman
+- dbaservice.container.limits.cpu
+- dbaservice.container.limits.memory
+- dbaservice.container.requests.cpu
+- dbaservice.container.requests.memory
+- dbaservice.ui.port
+- dbaservice.aiops.ui.port
 
 dashboardMetrics:
 - InceptorSqlActiveTasks

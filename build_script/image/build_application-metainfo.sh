@@ -13,7 +13,7 @@ build_application-metainfo() {
 
     mkdir -p "$TARGET_DIR"
 
-    for VERSION in dev transwarp-5.2; do
+    for VERSION in dev transwarp-6.1 transwarp-6.0 transwarp-5.2; do
         echo "preparing $VERSION ..."
 
         META_DST_DIR="$TARGET_DIR/$VERSION"
@@ -32,6 +32,7 @@ build_application-metainfo() {
 #          cp -rp $dir/* "$META_DST_DIR/$dir/"
 #        done
 
+        rm -rf __OEM__/
         rm -rf *.md script build_script .gitlab-ci.yml
         cp -rp . "$META_DST_DIR"
 

@@ -248,7 +248,7 @@
     {
       "ComponentSubType": "ORDERBY",
       "ComponentType": "TRANSFORMER",
-      "InDegree": 2,
+      "InDegree": 1,
       "OutDegree": 1,
       "Exclude": [
         "${CommonExcludeGroup}"
@@ -455,7 +455,7 @@
       "Neighbour": [],
       "Distance": [],
       "EnableConnections": [
-        "JDBC"
+        "INCEPTOR"
       ]
     },
     {
@@ -623,7 +623,7 @@
       "Neighbour": [],
       "Distance": [],
       "EnableConnections": [
-        "INCEPTOR"
+        "JDBC"
       ]
     },
     {
@@ -635,7 +635,7 @@
       "Neighbour": [],
       "Distance": [],
       "EnableConnections": [
-        "INCEPTOR"
+        "${CommonFSConnectionGroup}"
       ]
     },
     {
@@ -647,7 +647,7 @@
       "Neighbour": [],
       "Distance": [],
       "EnableConnections": [
-        "INCEPTOR"
+        "KAFKA"
       ]
     }
   ]

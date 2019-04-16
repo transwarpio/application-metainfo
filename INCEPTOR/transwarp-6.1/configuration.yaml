@@ -63,7 +63,7 @@
 - name: hive.hwi.war.file
   recommendExpression: lib/hive-hwi-0.8.1.war
   defaultValue: null
-  valueType: ABSOLUTE_PATH
+  valueType: URI
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: ["hive-site.xml"]
@@ -144,7 +144,7 @@
 - name: hive.aux.jars.path
   recommendExpression: ""
   defaultValue: ""
-  valueType: STRING
+  valueType: ABSOLUTE_PATH
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: ["hive-site.xml"]
@@ -356,12 +356,14 @@
 # min(32000m, total_memory_size / 2)
 - name: inceptor.executor.memory
   recommendExpression: |
+    <#compress>
     <#assign  thirdMemMB = (memBytes/1048576/2)?int>
     <#if thirdMemMB <= 32000>
       ${thirdMemMB?int}
     <#else>
       32000
     </#if>
+    </#compress>
   defaultValue: null
   valueType: MB
   isNodeSpecific: true
@@ -373,11 +375,13 @@
 
 - name: inceptor.executor.cores
   recommendExpression: |
+    <#compress>
     <#if (numCores/2)?int gt 10>
       ${(numCores/2)?int}
     <#else>
       10
     </#if>
+    </#compress>
   defaultValue: null
   valueType: NON_NEG_INT
   isNodeSpecific: true
@@ -416,6 +420,26 @@
   groups: []
   visibility: READ_WRITE
 
+- name: mapreduce.map.memory.mb
+  recommendExpression: 2048
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: mapred.child.java.opts
+  recommendExpression: -agentpath:/usr/lib/hadoop/bin/libagent.so -Xmx4096m
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
 - name: mysql.port
   recommendExpression: 3306
   defaultValue: null
@@ -428,7 +452,7 @@
 - name: mysql.datadir
   recommendExpression: /hadoop/mysql
   defaultValue: null
-  valueType: STRING
+  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_MYSQL]
   onDeps: []
@@ -438,7 +462,7 @@
 - name: executor.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_EXECUTOR]
   onDeps: []
@@ -448,7 +472,7 @@
 - name: executor.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_EXECUTOR]
   onDeps: []
@@ -458,7 +482,7 @@
 - name: executor.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_EXECUTOR]
   onDeps: []
@@ -468,7 +492,7 @@
 - name: executor.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_EXECUTOR]
   onDeps: []
@@ -497,7 +521,7 @@
 - name: server.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_SERVER]
   onDeps: []
@@ -507,7 +531,7 @@
 - name: server.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_SERVER]
   onDeps: []
@@ -517,7 +541,7 @@
 - name: server.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_SERVER]
   onDeps: []
@@ -527,7 +551,7 @@
 - name: server.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_SERVER]
   onDeps: []
@@ -547,7 +571,7 @@
 - name: metastore.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_METASTORE]
   onDeps: []
@@ -557,7 +581,7 @@
 - name: metastore.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_METASTORE]
   onDeps: []
@@ -567,7 +591,7 @@
 - name: metastore.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_METASTORE]
   onDeps: []
@@ -577,7 +601,7 @@
 - name: metastore.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_METASTORE]
   onDeps: []
@@ -675,7 +699,7 @@
   groups: []
   visibility: READ_WRITE
 
-# inceptor scheduler
+# inceptor profiler
 - name: inceptor.profiler.memory
   recommendExpression: 4096
   defaultValue: null
@@ -684,12 +708,12 @@
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_PROFILER]
   onDeps: []
-  groups: ["profiler-site.xml"]
+  groups: []
   visibility: READ_WRITE
 - name: profiler.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_PROFILER]
   onDeps: []
@@ -698,7 +722,7 @@
 - name: profiler.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_PROFILER]
   onDeps: []
@@ -707,7 +731,7 @@
 - name: profiler.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_PROFILER]
   onDeps: []
@@ -716,7 +740,7 @@
 - name: profiler.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_PROFILER]
   onDeps: []
@@ -758,37 +782,10 @@
   onDeps: []
   groups: ["profiler-site.xml"]
   visibility: READ_WRITE
-- name: profiler.worker.sleep.time.sec
-  recommendExpression: 300
-  defaultValue: null
-  valueType: SECONDS
-  scope: !<RoleTypes>
-    roleTypes: [INCEPTOR_PROFILER]
-  onDeps: []
-  groups: ["profiler-site.xml"]
-  visibility: READ_WRITE
 - name: profiler.stale.percent
   recommendExpression: 20
   defaultValue: null
   valueType: NON_NEG_INT
-  scope: !<RoleTypes>
-    roleTypes: [INCEPTOR_PROFILER]
-  onDeps: []
-  groups: ["profiler-site.xml"]
-  visibility: READ_WRITE
-- name: profiler.blacklist.cache.limit
-  recommendExpression: 512
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<RoleTypes>
-    roleTypes: [INCEPTOR_PROFILER]
-  onDeps: []
-  groups: ["profiler-site.xml"]
-  visibility: READ_WRITE
-- name: profiler.metastore.readonly.sleep.time.sec
-  recommendExpression: 1800
-  defaultValue: null
-  valueType: SECONDS
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_PROFILER]
   onDeps: []
@@ -803,42 +800,6 @@
   onDeps: []
   groups: ["profiler-site.xml"]
   visibility: READ_WRITE
-- name: profiler.zk.acquire.lock.enable
-  recommendExpression: true
-  defaultValue: null
-  valueType: BOOL
-  scope: !<RoleTypes>
-    roleTypes: [INCEPTOR_PROFILER]
-  onDeps: []
-  groups: ["profiler-site.xml"]
-  visibility: READ_WRITE
-- name: profiler.worker.min.execute.interval.sec
-  recommendExpression: 300
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<RoleTypes>
-    roleTypes: [INCEPTOR_PROFILER]
-  onDeps: []
-  groups: ["profiler-site.xml"]
-  visibility: READ_WRITE
-- name: profiler.inceptor.stmts.max.failure
-  recommendExpression: 5
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<RoleTypes>
-    roleTypes: [INCEPTOR_PROFILER]
-  onDeps: []
-  groups: ["profiler-site.xml"]
-  visibility: READ_WRITE
-- name: profiler.crud.logging.enable
-  recommendExpression: false
-  defaultValue: null
-  valueType: BOOL
-  scope: !<RoleTypes>
-    roleTypes: [INCEPTOR_PROFILER]
-  onDeps: []
-  groups: ["profiler-site.xml"]
-  visibility: READ_WRITE
 # inceptor compactor
 - name: inceptor.compactor.memory
   recommendExpression: 4096
@@ -848,12 +809,12 @@
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_COMPACTOR]
   onDeps: []
-  groups: ["compactor-site.xml"]
+  groups: []
   visibility: READ_WRITE
 - name: compactor.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_COMPACTOR]
   onDeps: []
@@ -862,7 +823,7 @@
 - name: compactor.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_COMPACTOR]
   onDeps: []
@@ -871,7 +832,7 @@
 - name: compactor.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_COMPACTOR]
   onDeps: []
@@ -880,7 +841,7 @@
 - name: compactor.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_COMPACTOR]
   onDeps: []
@@ -931,42 +892,6 @@
   onDeps: []
   groups: ["compactor-site.xml"]
   visibility: READ_WRITE
-- name: compactor.partial.scan.initial.delay.minute
-  recommendExpression: 2
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<RoleTypes>
-    roleTypes: [INCEPTOR_COMPACTOR]
-  onDeps: []
-  groups: ["compactor-site.xml"]
-  visibility: READ_WRITE
-- name: compactor.partial.scan.delay.interval.minute
-  recommendExpression: 2
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<RoleTypes>
-    roleTypes: [INCEPTOR_COMPACTOR]
-  onDeps: []
-  groups: ["compactor-site.xml"]
-  visibility: READ_WRITE
-- name: compactor.partial.scan.producer.initial.delay.minute
-  recommendExpression: 1
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<RoleTypes>
-    roleTypes: [INCEPTOR_COMPACTOR]
-  onDeps: []
-  groups: ["compactor-site.xml"]
-  visibility: READ_WRITE
-- name: compactor.partial.scan.producer.delay.interval.minute
-  recommendExpression: 2
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<RoleTypes>
-    roleTypes: [INCEPTOR_COMPACTOR]
-  onDeps: []
-  groups: ["compactor-site.xml"]
-  visibility: READ_WRITE
 - name: compactor.fetch.batch.size
   recommendExpression: 50
   defaultValue: null
@@ -976,17 +901,8 @@
   onDeps: []
   groups: ["compactor-site.xml"]
   visibility: READ_WRITE
-- name: compactor.partial.scan.candidate.blocking.queue.size
-  recommendExpression: 100
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<RoleTypes>
-    roleTypes: [INCEPTOR_COMPACTOR]
-  onDeps: []
-  groups: ["compactor-site.xml"]
-  visibility: READ_WRITE
 - name: compactor.valid.delta.count.persist.threshold
-  recommendExpression: 10
+  recommendExpression: 50
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -995,7 +911,7 @@
   groups: ["compactor-site.xml"]
   visibility: READ_WRITE
 - name: compactor.table.delta.count.alarm.threshold
-  recommendExpression: 3
+  recommendExpression: 2
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -1012,35 +928,8 @@
   onDeps: []
   groups: ["compactor-site.xml"]
   visibility: READ_WRITE
-- name: compactor.partial.scan.consume.batch.size
-  recommendExpression: 3
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<RoleTypes>
-    roleTypes: [INCEPTOR_COMPACTOR]
-  onDeps: []
-  groups: ["compactor-site.xml"]
-  visibility: READ_WRITE
-- name: compactor.partial.scan.consume.block.time.second
-  recommendExpression: 20
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<RoleTypes>
-    roleTypes: [INCEPTOR_COMPACTOR]
-  onDeps: []
-  groups: ["compactor-site.xml"]
-  visibility: READ_WRITE
-- name: compactor.partial.scanner.counts
-  recommendExpression: 3
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<RoleTypes>
-    roleTypes: [INCEPTOR_COMPACTOR]
-  onDeps: []
-  groups: ["compactor-site.xml"]
-  visibility: READ_WRITE
 - name: compactor.blacklist.alarm.threshold
-  recommendExpression: 0
+  recommendExpression: 1
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
@@ -1048,13 +937,12 @@
   onDeps: []
   groups: ["compactor-site.xml"]
   visibility: READ_WRITE
-- name: compactor.ha.zookeeper.path
-  recommendExpression: /compactor/master
+- name: compactor.auto.compact.submitter.switch
+  recommendExpression: false
   defaultValue: null
-  valueType: STRING
+  valueType: BOOL
   scope: !<RoleTypes>
     roleTypes: [INCEPTOR_COMPACTOR]
   onDeps: []
   groups: ["compactor-site.xml"]
   visibility: READ_WRITE
-

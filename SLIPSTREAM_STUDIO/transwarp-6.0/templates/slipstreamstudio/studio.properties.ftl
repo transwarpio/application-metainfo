@@ -38,13 +38,15 @@ slipstream.service.id=${dependencies.SLIPSTREAM.sid}
 <#assign historyserver=dependencies.SLIPSTREAM.roles.INCEPTOR_HISTORYSERVER[0]['hostname']>
 slipstream.restclient.history.address=${historyserver}:${dependencies.SLIPSTREAM['slipstream.historyserver.akka.listen.port']}
 </#if>
+</#if>
 slipstream.gateway.akka.host=${slipstream_server}
 slipstream.gateway.akka.port=${dependencies.SLIPSTREAM['slipstream.gateway.akka.port']}
 slipstream.server.ui.port=${dependencies.SLIPSTREAM['inceptor.ui.port']}
-<#elseif dependencies.INCEPOR_GATEWAY??>
+<#if dependencies.INCEPTOR_GATEWAY??>
 slipstream.server.ha.enable=true
-<#assign gateway_host=dependencies.INCEPOR_GATEWAY.roles.INCEPTOR_GATEWAY[0]['hostname']>
-<#assign gateway_port=dependencies.INCEPOR_GATEWAY['inceptor.gateway.ui.port']>
+slipstream.guardian.token=
+<#assign gateway_host=dependencies.INCEPTOR_GATEWAY.roles.INCEPTOR_GATEWAY[0]['hostname']>
+<#assign gateway_port=dependencies.INCEPTOR_GATEWAY['inceptor.gateway.ui.port']>
 slipstream.service.gateway.address=${gateway_host}:${gateway_port}
 </#if>
 
