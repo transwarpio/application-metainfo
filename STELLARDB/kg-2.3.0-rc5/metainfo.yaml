@@ -1,10 +1,10 @@
 ---
 name: STELLARDB
-version: kg-2.3
+version: kg-2.3.0-rc5
 global: false
 namePrefix: StellarDB
 friendlyName: "StellarDB"
-dockerImage: "transwarp/stellardb:kg-2.3"
+dockerImage: "transwarp/stellardb:kg-2.3.0-rc5"
 dependencies:
   - name: ZOOKEEPER
     minVersion: transwarp-6.0.1-final
