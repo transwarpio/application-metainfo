@@ -18,8 +18,8 @@ dependencies:
     maxVersion: transwarp-6.0.2-final
     optional: true
   - name: INCEPTOR
-    minVersion: transwarp-5.2.2-final
-    maxVersion: transwarp-6.0.2-final
+    minVersion: sophon-2.3
+    maxVersion: sophon-2.3
     optional: true
   - name: HDFS
     minVersion: transwarp-5.2.2-final
