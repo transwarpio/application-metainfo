@@ -19,7 +19,7 @@ export SPARK_DRIVER_PORT=${service['spark.driver.port']}
 <#assign dbaServiceExtraDriverOpts="">
 <#if dependencies.DBA_SERVICE??>
     <#assign dbaservice=dependencies.DBA_SERVICE.roles.DBA_SERVICE_SERVER>
-    <#assign dbaServiceExtraDriverOpts=" -Dinceptor.leviathan.studio.host=" + dbaservice[0]['ip'] + " -Dinceptor.leviathan.studio.http.port=" + dependencies.DBA_SERVICE['dbaservice.ui.port'] + " -Dinceptor.leviathan.studio.port=" + dependencies.DBA_SERVICE['dbaservice.message.port'] + " -Dinceptor.leviathan.studio.name=receiver -Dinceptor.leviathan.studio.test.enabled=false -Dspark.ui.show.context.default=false">
+    <#assign dbaServiceExtraDriverOpts=" -Dinceptor.leviathan.studio.host=" + dbaservice[0]['ip'] + " -Dinceptor.leviathan.studio.http.port=" + dependencies.DBA_SERVICE['dbaservice.ui.port'] + " -Dinceptor.leviathan.studio.port=" + dependencies.DBA_SERVICE['dbaservice.message.port'] + " -Dinceptor.leviathan.studio.name=receiver -Dinceptor.leviathan.studio.test.enabled=false -Dspark.ui.show.context.default=false ">
 </#if>
 export EXTRA_DRIVER_OPTS=" ${dbaServiceExtraDriverOpts + service['EXTRA_DRIVER_OPTS']} "
 EXTRA_EXECUTOR_OPTS=" ${service['EXTRA_EXECUTOR_OPTS']} "
