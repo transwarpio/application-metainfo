@@ -602,6 +602,33 @@ stages:
     - !<Wait-Healthy>
       summaryPolicy: ALL
       timeoutMinutes: 12
+  - type: Stop
+    taskGroups:
+    - !<Role>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: DF_CLIENT
+      operation: Stop
+    - !<Role>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: DF_MASTER
+      operation: Stop
+    - !<Role>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: TOS_REGISTRY
+      operation: Stop
+    - !<Role>
+      summaryPolicy: SOME
+      timeoutMinutes: 2
+      roleType: TOS_MASTER
+      operation: Stop
+    - !<Role>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      roleType: TOS_SLAVE
+      operation: Stop
 
 
 healthChecks:
