@@ -3,31 +3,35 @@ name: SOPHON
 version: sophon-2.3
 global: false
 namePrefix: Sophon
-friendlyName: "Sophon-web"
+friendlyName: "Sophon"
 dependencies:
+  - name: STELLARDB
+    minVersion: sophon-2.3
+    maxVersion: sophon-2.3
+    optional: true
   - name: GUARDIAN
     minVersion: transwarp-5.2.2-final
-    maxVersion: transwarp-6.0.1-final
+    maxVersion: transwarp-6.0.2-final
     optional: true
   - name: ZOOKEEPER
     minVersion: transwarp-5.2.2-final
-    maxVersion: transwarp-6.0.1-final
+    maxVersion: transwarp-6.0.2-final
     optional: true
   - name: INCEPTOR
     minVersion: transwarp-5.2.2-final
-    maxVersion: transwarp-6.0.1-final
+    maxVersion: transwarp-6.0.2-final
     optional: true
   - name: HDFS
     minVersion: transwarp-5.2.2-final
-    maxVersion: transwarp-6.0.1-final
+    maxVersion: transwarp-6.0.2-final
     optional: false
   - name: YARN
-    minVersion: sophon-2.2.0-final
-    maxVersion: sophon-2.3.0-final
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.2-final
     optional: false
   - name: TXSQL
     minVersion: transwarp-5.2.2-final
-    maxVersion: transwarp-6.0.1-final
+    maxVersion: transwarp-6.0.2-final
     optional: true
   - name: WORKFLOW
     minVersion: sophon-2.2.0-final
@@ -35,11 +39,11 @@ dependencies:
     optional: true
   - name: KONG
     minVersion: transwarp-5.2.2-final
-    maxVersion: transwarp-6.0.1-final
+    maxVersion: transwarp-6.0.2-final
     optional: true
   - name: HYPERBASE
     minVersion: transwarp-5.2.2-final
-    maxVersion: transwarp-6.0.1-final
+    maxVersion: transwarp-6.0.2-final
     optional: true
 
 roles:
@@ -358,6 +362,48 @@ roles:
         targetPath: "/etc/${service.sid}/conf/apimanager/application.properties"
         mode: "755"
 
+- name: KG_EXPLORER
+  dockerImage: "transwarp/kg-explorer:sophon-2.3"
+  linkExpression: "http://${localhostname}:9000"
+  friendlyName: "kg explorer"
+  labelPrefix: "kg-explorer"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+  - name: SOPHON_CONF_DIR
+    value: /etc/${service.sid}/conf/kg/
+  - name: SOPHON_SERVICE_ID
+    value: ${service.sid}
+  mountPaths:
+  - mountPath: /srv/kubernetes
+    hostPath: /srv/kubernetes
+    name: secure
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1, "max": 1}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "kg/default.conf"
+        targetPath: "/etc/${service.sid}/conf/kg/default.conf"
+        mode: "755"
+
 
 stages:
   - type: Config
@@ -397,6 +443,11 @@ stages:
       timeoutMinutes: 1
     - !<Role>
       roleType: "APINAMANER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "KG_EXPLORER"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
