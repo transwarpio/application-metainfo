@@ -1,10 +1,10 @@
 ---
 name: INCEPTOR
-version: sophon-2.3
+version: sophon-2.3.0-rc0
 global: false
 namePrefix: Inceptor
 friendlyName: "Inceptor"
-dockerImage: "transwarp/inceptor:sophon-2.3"
+dockerImage: "transwarp/inceptor:sophon-2.3.0-rc0"
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.0
