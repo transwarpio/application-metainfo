@@ -507,6 +507,7 @@ firstWizardConfigs:
 - shard.uid_base 
 - computenode.uid_base 
 - computenode.debug.port
+- computenode.audit_sqls
 - computenode.kungate.debug.port
 - computenode.kungate.grpc.port
 - computenode.kungate.server.port
