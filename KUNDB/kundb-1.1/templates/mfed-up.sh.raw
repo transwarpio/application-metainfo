@@ -54,6 +54,7 @@ TabletsDataDirs=$VTDATAROOT
 default_dbname=${DEFAULT_DBNAME:-'$keyspace'}
 uid=$[$uid_base + $uid_index]
 vtgate_port=$PRIV_KUNGATE_SERVER_PORT
+audit_sqls=$PRIV_KUNGATE_AUDIT_SQLS
 optional_args=$PRIV_KUNGATE_OPTIONAL_ARGS 
 enable_security=$ENABLE_SECURITY
 if [ $enable_security == 'true' ]; then
@@ -276,7 +277,7 @@ $VTROOT/bin/vtgate \
   -grpc_client_max_recv_message_size 1073741824 \
   -grpc_port $kungate_grpc_port\
   -mysql_server_port $mysql_server_port \
-  -audit_sqls 1 \
+  -audit_sqls $audit_sqls \
   -cell $cell \
   -cells_to_watch $cell \
   -tablet_types_to_wait MASTER,REPLICA \
