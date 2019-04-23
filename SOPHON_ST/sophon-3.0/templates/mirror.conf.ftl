@@ -9,9 +9,10 @@
       <#assign port += [search['http.port']]>
     </#if>
   </#list>
+  <#assign eshosts = searches?join(",")>
 </#if>
 #ES properties
-mirror.eshost = ${searches[0]}
+mirror.eshosts = ${eshosts}
 mirror.esport = ${port[0]}
 
 #HDFS properties
@@ -47,17 +48,23 @@ spark.yarn.appMasterEnv.JAVA_HOME=/usr/java/jdk1.8.0_25
 spark.executorEnv.JAVA_HOME=/usr/java/jdk1.8.0_25
 spark.executor.instances=${service['spark.executor.num']}
 spark.executor.cores=${service['spark.executor.core']}
+<#if service.auth == "kerberos">
 spark.yarn.keytab=${service.keytab}
 spark.yarn.principal=hive/${localhostname?lower_case}@${service.realm}
+</#if>
+spark.executor.memory=${service['spark.executor.memory']}
+spark.driver.memory=${service['spark.driver.memory']}
 designing.spark.sql.warehouse.dir=${service['spark.sql.warehouse.dir']}
 designing.spark.master=${service['designing.spark.master']}
 designing.spark.yarn.appMasterEnv.JAVA_HOME=/usr/java/jdk1.8.0_25
 designing.spark.executorEnv.JAVA_HOME=/usr/java/jdk1.8.0_25
 designing.spark.executor.instances=${service['designing.spark.executor.num']}
 designing.spark.executor.cores=${service['designing.spark.executor.core']}
+<#if service.auth == "kerberos">
 designing.spark.yarn.keytab=${service.keytab}
 designing.spark.yarn.principal=hive/${localhostname?lower_case}@${service.realm}
-#enable.livy=${service['enable.livy']}
+</#if>
+enable.livy=${service['enable.livy']}
 livy.server.session.timeout=${service['livy.server.session.timeout']}
 
 mirror.host=${service.roles.SOPHON_ST_BACKEND[0]['hostname']}
@@ -96,3 +103,6 @@ workflow.socket.timeout=5000000
 workflow.client.username=${service['workflow.client.username']}
 workflow.client.password=${service['workflow.client.password']}
 workflow.client.token=${service['workflow.client.token']}
+
+enable.hbase=${service['enable.hbase']}
+livy.spark.sync=${service['livy.spark.sync']}

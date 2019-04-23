@@ -18,7 +18,7 @@ dependencies:
     maxVersion: transwarp-6.0.1-final
     optional: false
   - name: SEARCH
-    minVersion: transwarp-6.0.1-final
+    minVersion: transwarp-5.2.2-final
     maxVersion: transwarp-6.0.1-final
     optional: false
   - name: WORKFLOW
@@ -30,6 +30,10 @@ dependencies:
     maxVersion: transwarp-6.0.1-final
     optional: true
   - name: YARN
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.1-final
+    optional: false
+  - name: HYPERBASE
     minVersion: transwarp-5.2.2-final
     maxVersion: transwarp-6.0.1-final
     optional: false
@@ -75,6 +79,18 @@ roles:
           action: Link
           from: "/etc/${dependencies.INCEPTOR.sid}/conf/hive-site.xml"
           to: "/etc/${service.sid}/conf/hive-site.xml"
+      - directive: !<link>
+          action: Link
+          from: "/etc/${dependencies.HYPERBASE.sid}/conf/hbase-site.xml"
+          to: "/etc/${service.sid}/conf/hbase-site.xml"
+      - directive: !<link>
+          action: Link
+          from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
+          to: "/etc/${service.sid}/conf/core-site.xml"
+      - directive: !<link>
+          action: Link
+          from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
+          to: "/etc/${service.sid}/conf/hdfs-site.xml"
 
   - name: SOPHON_ST_FRONTEND
     friendlyName: "Sophon-ST Frontend"
@@ -151,6 +167,8 @@ firstWizardConfigs:
 - spark.sql.warehouse.dir
 - spark.executor.num
 - spark.executor.core
+- spark.executor.memory
+- spark.driver.memory
 - designing.spark.master
 - designing.spark.executor.num
 - designing.spark.executor.core
@@ -162,7 +180,9 @@ firstWizardConfigs:
 - execute.cycle
 - disable.cas.authorization
 - enable.livy
+- enable.hbase
 - livy.server.session.timeout
+- livy.spark.sync
 
 product: Sophon
 
