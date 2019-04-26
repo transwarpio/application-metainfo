@@ -72,7 +72,7 @@
 </#if>
 </#if>
 <#--hadoop.proxyuser.[hive, hue, httpfs, oozie].[hosts,groups]-->
-<#assign services=["hbase","hive", "hue", "httpfs", "oozie", "guardian"]>
+<#assign services=["hdfs","hbase","hive", "hue", "httpfs", "oozie", "guardian"]>
 <#list services as s>
     <@property "hadoop.proxyuser." + s + ".hosts" "*"/>
     <@property "hadoop.proxyuser." + s + ".groups" "*"/>
