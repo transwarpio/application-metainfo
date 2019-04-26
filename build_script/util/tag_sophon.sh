@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-IN_PROGRESS_VERSION=sophon-2.3
-TAG_VERSION=sophon-2.3.0-rc0
+IN_PROGRESS_VERSION=sophon-2.2
+TAG_VERSION=sophon-2.2.1-rc0
 set -e
 
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 WORKSPACE="${SCRIPT_DIR}/../.."
 
-SERVICE_LIST=(SOPHON IOT SOPHON_ST WORKFLOW STELLARDB INCEPTOR)
+SERVICE_LIST=(SOPHON IOT SOPHON_ST WORKFLOW STELLARDB)
 
 for service in "${SERVICE_LIST[@]}"; do
     if [ -d "${WORKSPACE}"/"${service}"/"${IN_PROGRESS_VERSION}" ]; then
