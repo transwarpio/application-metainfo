@@ -36,8 +36,8 @@ dependencies:
     optional: true
     preferred: false
   - name: DBA_SERVICE
-    minVersion: transwarp-6.0
-    maxVersion: transwarp-6.0
+    minVersion: sophon-2.3
+    maxVersion: sophon-2.3
     optional: false
   - name: SEARCH
     minVersion: transwarp-6.0

@@ -223,6 +223,24 @@
   groups: []
   visibility: READ_WRITE
 
+- name: spark.executor.memory
+  recommendExpression: 5g
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.driver.memory
+  recommendExpression: 5g
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: designing.spark.master
   recommendExpression: local[*]
   defaultValue: null
@@ -260,7 +278,7 @@
   visibility: READ_WRITE
 
 - name: task.max.concurrency
-  recommendExpression: 5
+  recommendExpression: 10
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<ServiceLevel> {}
@@ -322,6 +340,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: enable.hbase
+  recommendExpression: true
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: livy.server.session.timeout
   recommendExpression: 1d
   defaultValue: null
@@ -330,3 +357,13 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: livy.spark.sync
+  recommendExpression: false
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
