@@ -1,5 +1,6 @@
 server {
   listen 9000;
+  <#if service['use.https'] = "true">
   # the section below is for https, remove them if https is not needed
   ssl                  on;
   ssl_certificate      /usr/lib/kg_explorer/server.crt;
@@ -10,6 +11,7 @@ server {
   ssl_prefer_server_ciphers   on;
   error_page 497  https://$host:$server_port$request_uri;
   # the section above is for https.
+  </#if>
   location / {
     root   /usr/lib/kg_explorer/dist;
     index  index.html index.htm;
@@ -21,7 +23,7 @@ server {
     root   /usr/lib/kg_explorer/dist;
   }
   location /api {
-    proxy_pass http://${service.roles.SOPHON_WEB[0].hostname}:${service['sophon.visit.port']};
+    proxy_pass https://${service.roles.SOPHON_WEB[0].hostname}:${service['sophon.visit.port']};
     proxy_http_version 1.1;
     proxy_set_header X-Forwarded-Proto https;
     proxy_set_header Upgrade $http_upgrade;

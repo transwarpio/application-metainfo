@@ -478,3 +478,12 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: use.https
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

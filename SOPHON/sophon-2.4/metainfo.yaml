@@ -63,7 +63,10 @@ roles:
     value: /etc/${service.sid}/conf/
   - name: SOPHON_SERVICE_ID
     value: ${service.sid}
-  mountPaths: []
+  mountPaths:
+  - mountPath: /etcd-data
+    hostPath: /var/${service.sid}/etcd-data
+    name: etcd-dir
   resources:
     limitsMemoryKey: server.container.limits.memory
     limitsCpuKey: server.container.limits.cpu
@@ -201,7 +204,7 @@ roles:
   operations: []
 
 - name: SOPHON_WEB_UI
-  linkExpression: "http://${localhostname}:${service['sophon.ui.port']}/"
+  linkExpression: "https://${localhostname}:${service['sophon.ui.port']}/"
   dockerImage: "transwarp/sophon-web-ui:sophon-2.4"
   friendlyName: "Sophon Web UI"
   labelPrefix: "sophon-web-ui"
@@ -277,6 +280,16 @@ roles:
   labelPrefix: "sophon-base"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /health
+      port: ${service['sophon.ui.port']}
+      scheme: HTTPS
+    failureThreshold: 10
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 10
   deleteOpCondition:
     deletable:
       number: 2
@@ -413,7 +426,7 @@ roles:
       number: 1
   env:
   - name: SOPHON_CONF_DIR
-    value: /etc/${service.sid}/conf/kg/
+    value: /etc/${service.sid}/conf/
   - name: SOPHON_SERVICE_ID
     value: ${service.sid}
   mountPaths:
@@ -437,10 +450,55 @@ roles:
     directives:
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "kg/default.conf"
-        targetPath: "/etc/${service.sid}/conf/kg/default.conf"
+        templatePath: "kg/default"
+        targetPath: "/etc/${service.sid}/conf/kg/default"
         mode: "755"
 
+- name: GATEWAY
+  dockerImage: "transwarp/gateway:sophon-2.4"
+  friendlyName: "gateway"
+  labelPrefix: "gateway"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+  - name: SOPHON_CONF_DIR
+    value: /etc/${service.sid}/conf/
+  - name: SOPHON_SERVICE_ID
+    value: ${service.sid}
+  mountPaths:
+  - mountPath: /srv/kubernetes
+    hostPath: /srv/kubernetes
+    name: secure
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1, "max": 1}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "gateway/application.properties"
+        targetPath: "/etc/${service.sid}/conf/gateway/application.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "gateway/gateway.conf"
+        targetPath: "/etc/${service.sid}/conf/gateway/gateway.conf"
+        mode: "755"
 
 stages:
   - type: Config
@@ -495,6 +553,11 @@ stages:
       timeoutMinutes: 1
     - !<Role>
       roleType: "SOPHON_REDIS"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "GATEWAY"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1

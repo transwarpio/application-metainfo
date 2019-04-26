@@ -46,6 +46,10 @@ HYPERBASE_CONF_DIR=/etc/${dependencies.HYPERBASE.sid}/conf
 STELLARDB_CONF_DIR=/etc/${dependencies.STELLARDB.sid}/conf
 </#if>
 
+USE_HTTPS=${service['use.https']}
+
+
+
 LIVY_LOG_DIR=/var/log/midas
 PYSPARK_PYTHON=python3
 PYSPARK_DRIVER_PYTHON=python3
