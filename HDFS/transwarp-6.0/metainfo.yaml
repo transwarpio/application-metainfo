@@ -156,7 +156,7 @@ roles:
     labelPrefix: "hadoop-hdfs-catalog-agent"
     dockerImage: "transwarp/catalog-agent:transwarp-6.0"
     category: SLAVE
-    frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
+    frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
     readinessProbe:
       probe: !<httpGet>
         path: /api/v1/health
@@ -208,7 +208,14 @@ roles:
     - criteria: !<Range> {"min": 0}
     validation:
     - criteria: !<Range> {"min": 0}
-    operations: []
+    operations:
+    - type: Config
+      directives:
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "ca-application.properties"
+          targetPath: "/etc/${service.sid}/conf/ca-application.properties"
+          mode: "644"
 
 roleGroups:
   - fieldName: nameservices

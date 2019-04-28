@@ -280,9 +280,9 @@ roles:
 - name: INCEPTOR_CATALOG_AGENT
   friendlyName: "Inceptor Catalog Agent"
   labelPrefix: "inceptor-catalog-agent"
-  dockerImage: "transwarp/catalog-agent:transwarp-6.0.2-final"
+  dockerImage: "transwarp/catalog-agent:transwarp-6.0"
   category: SLAVE
-  frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   readinessProbe:
     probe: !<httpGet>
       path: /api/v1/health
@@ -319,7 +319,14 @@ roles:
   - criteria: !<Range> {"min": 0}
   validation:
   - criteria: !<Range> {"min": 0}
-  operations: []
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "ca-application.properties"
+        targetPath: "/etc/${service.sid}/conf/ca-application.properties"
+        mode: "644"
 
 stages:
   - type: Bootstrap
@@ -361,6 +368,11 @@ stages:
       timeoutMinutes: 1
     - !<Role>
       roleType: "INCEPTOR_COMPACTOR"
+      operation: Config
+      summaryPolicy: NONE
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "INCEPTOR_CATALOG_AGENT"
       operation: Config
       summaryPolicy: NONE
       timeoutMinutes: 1
