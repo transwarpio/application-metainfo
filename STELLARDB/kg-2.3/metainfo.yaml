@@ -7,7 +7,7 @@ friendlyName: "StellarDB"
 dockerImage: "transwarp/stellardb:kg-2.3"
 dependencies:
   - name: ZOOKEEPER
-    minVersion: transwarp-6.0.1-final
+    minVersion: transwarp-5.2.0-final
     maxVersion: transwarp-6.0.1-final
     optional: false
 #  - name: INCEPTOR
