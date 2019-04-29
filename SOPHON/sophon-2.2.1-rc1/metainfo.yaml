@@ -1,6 +1,6 @@
 ---
 name: SOPHON
-version: sophon-2.2
+version: sophon-2.2.1-rc1
 global: false
 namePrefix: Sophon
 friendlyName: "Sophon-web"
@@ -30,8 +30,8 @@ dependencies:
     maxVersion: transwarp-6.0.2-final
     optional: false
   - name: WORKFLOW
-    minVersion: sophon-2.2
-    maxVersion: sophon-2.2
+    minVersion: sophon-2.2.0-final
+    maxVersion: sophon-2.2.1-final
     optional: true
   - name: KONG
     minVersion: transwarp-6.0.2-final
@@ -44,7 +44,7 @@ dependencies:
 
 roles:
 - name: SHARE_SERVER
-  dockerImage: "transwarp/share-server:sophon-2.2"
+  dockerImage: "transwarp/share-server:sophon-2.2.1-rc1"
   friendlyName: "Share Server"
   labelPrefix: "share-server"
   category: MASTER
@@ -87,7 +87,7 @@ roles:
         mode: "755"
 
 - name: SOPHON_PYTHON_REPO
-  dockerImage: "transwarp/sophon-python-repo:sophon-2.2"
+  dockerImage: "transwarp/sophon-python-repo:sophon-2.2.1-rc1"
   linkExpression: "http://${localhostname}:8036"
   friendlyName: "Sophon python repo"
   labelPrefix: "sophon-python-repo"
@@ -118,7 +118,7 @@ roles:
   operations: []
 
 - name: SOPHON_R_REPO
-  dockerImage: "transwarp/sophon-r-repo:sophon-2.2"
+  dockerImage: "transwarp/sophon-r-repo:sophon-2.2.1-rc1"
   linkExpression: "ftp://${localhostname}:8037/rlibs/src/contrib/"
   friendlyName: "Sophon R Repo"
   labelPrefix: "sophon-r-repo"
@@ -150,7 +150,7 @@ roles:
 
 - name: SOPHON_WEB_UI
   linkExpression: "http://${localhostname}:${service['sophon.ui.port']}/"
-  dockerImage: "transwarp/sophon-web-ui:sophon-2.2"
+  dockerImage: "transwarp/sophon-web-ui:sophon-2.2.1-rc1"
   friendlyName: "Sophon Web UI"
   labelPrefix: "sophon-web-ui"
   category: MASTER
@@ -188,7 +188,7 @@ roles:
         mode: "755"
 
 - name: SOPHON_REDIS
-  dockerImage: "transwarp/sophon-redis:sophon-2.2"
+  dockerImage: "transwarp/sophon-redis:sophon-2.2.1-rc1"
   friendlyName: "Redis Server"
   labelPrefix: "sophon-redis"
   category: MASTER
@@ -220,7 +220,7 @@ roles:
   operations: []
 
 - name: SOPHON_WEB
-  dockerImage: "transwarp/sophon-web:sophon-2.2"
+  dockerImage: "transwarp/sophon-web:sophon-2.2.1-rc1"
   friendlyName: "Sophon base"
   labelPrefix: "sophon-base"
   category: MASTER
