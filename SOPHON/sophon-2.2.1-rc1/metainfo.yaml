@@ -3,7 +3,7 @@ name: SOPHON
 version: sophon-2.2.1-rc1
 global: false
 namePrefix: Sophon
-friendlyName: "Sophon-web"
+friendlyName: "Sophon"
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.0.2-final
