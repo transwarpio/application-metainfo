@@ -54,7 +54,15 @@ TabletsDataDirs=$VTDATAROOT
 default_dbname=${DEFAULT_DBNAME:-'$keyspace'}
 uid=$[$uid_base + $uid_index]
 vtgate_port=$PRIV_KUNGATE_SERVER_PORT
+audit_sqls=$PRIV_KUNGATE_AUDIT_SQLS
 optional_args=$PRIV_KUNGATE_OPTIONAL_ARGS 
+enable_security=$ENABLE_SECURITY
+if [ $enable_security == 'true' ]; then
+access_control=true
+else
+access_control=false
+fi
+
 
 dbconfig_dba_flags="\
     -db-config-dba-uname vt_app\
@@ -177,6 +185,9 @@ $VTROOT/bin/vttablet \
   -port $port \
   -grpc_port $grpc_port \
   -grpc_max_message_size 1073741824 \
+  -queryserver-config-schema-reload-time 1800 \
+  -enable_access_control=$access_control \
+  -binlog_use_v3_resharding_mode=true \
   -service_map 'grpc-queryservice,grpc-tabletmanager,grpc-updatestream' \
   -pid_file $TabletsDataDirs/$tablet_dir/vttablet.pid \
   -vtctld_addr http://$tablet_hostname:$vtctld_web_port/ \
@@ -194,7 +205,18 @@ do
 done
 echo "InitMfed $alias ... "
 source $KUNDB_CONF_DIR/sup_user_info.sh 
-cd $KUNHOME && ./kunctl.sh InitMfed -mfed_alias $alias -vtgate_user $SUPUSER -vtgate_password $PASSWORD -vtgate_host `hostname -f` -vtgate_port $vtgate_port 
+inNum=0
+cd $KUNHOME && timeout 10 ./kunctl.sh InitMfed -mfed_alias $alias -vtgate_user $SUPUSER -vtgate_password $PASSWORD -vtgate_host `hostname -f` -vtgate_port $vtgate_port 
+while [ $? -ne 0 ]
+do
+    sleep 3 
+    inNum=$((inNum+1))
+    if [ $inNum -eq 4 ]; then
+       echo "Mfed InitMfed reach the maximum times"
+       break
+    fi
+    cd $KUNHOME && timeout 10 ./kunctl.sh InitMfed -mfed_alias $alias -vtgate_user $SUPUSER -vtgate_password $PASSWORD -vtgate_host `hostname -f` -vtgate_port $vtgate_port 
+done
 sleep 2
     
 if [ ! -f "$VTDATAROOT/$tablet_dir/_init_mfed_master" ]; then
@@ -255,7 +277,7 @@ $VTROOT/bin/vtgate \
   -grpc_client_max_recv_message_size 1073741824 \
   -grpc_port $kungate_grpc_port\
   -mysql_server_port $mysql_server_port \
-  -audit_sqls 1 \
+  -audit_sqls $audit_sqls \
   -cell $cell \
   -cells_to_watch $cell \
   -tablet_types_to_wait MASTER,REPLICA \

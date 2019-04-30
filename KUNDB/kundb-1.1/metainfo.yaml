@@ -141,7 +141,14 @@ roles:
   - criteria: !<Range> {"min": 1}
   validation:
   - criteria: !<Range> {"min": 1}
-  operations: []
+  operations: 
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "mysql_auth_server_static_creds.json"
+        targetPath: "/etc/${service.sid}/conf/mysql_auth_server_static_creds.json"
+        mode: "600"
 - name: COMPUTE_NODE 
   friendlyName: "Compute Node"
   labelPrefix: "kundb-computenode"
@@ -191,7 +198,19 @@ roles:
   - criteria: !<Range> {"min": 1}
   validation:
   - criteria: !<Range> {"min": 1}
-  operations: []
+  operations: 
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "mysql_auth_server_static_creds.json"
+        targetPath: "/etc/${service.sid}/conf/mysql_auth_server_static_creds.json"
+        mode: "600"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "sup_user_info.sh"
+        targetPath: "/etc/${service.sid}/conf/sup_user_info.sh"
+        mode: "600"
 
 roleGroups:
   - fieldName: Shard 
@@ -410,6 +429,11 @@ roleGroups:
               templatePath: "master_conf.sh"
               targetPath: "/etc/${service.sid}/${roleGroupName}/conf/master_conf.sh"
               mode: "755"
+          - directive: !<resource>
+              templateType: FreeMarker
+              templatePath: "sup_user_info.sh"
+              targetPath: "/etc/${service.sid}/${roleGroupName}/conf/sup_user_info.sh"
+              mode: "600"
     others: []
 
 stages:
@@ -465,6 +489,7 @@ firstWizardConfigs:
 - data.localdir
 - kundb.cellname
 - kundb.keyspace
+- kundb.enable_security
 - kundb.shards
 - kunctld.debug.port
 - kunctld.grpc.port
@@ -482,6 +507,7 @@ firstWizardConfigs:
 - shard.uid_base 
 - computenode.uid_base 
 - computenode.debug.port
+- computenode.audit_sqls
 - computenode.kungate.debug.port
 - computenode.kungate.grpc.port
 - computenode.kungate.server.port
@@ -489,8 +515,6 @@ firstWizardConfigs:
 - kungate.grpc.port
 - kungate.server.port
 - kungate.audit_sqls
-- kungate.mysql_auth_server_impl
-- kungate.kundb_auth_plugin
 - master.debug.port
 - replica.debug.port
 - rdonly.debug.port
@@ -547,7 +571,6 @@ healthChecks:
       from: !<readiness> {}
     - roleType: KUNGATE 
       from: !<readiness> {}
-  method: !<Builtin> {}
 
 customConfigFiles:
 - mfed.cfg 

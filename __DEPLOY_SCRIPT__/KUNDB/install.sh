@@ -26,6 +26,13 @@ current_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 function copy_files {
 
+echo "copy service clients ..."
+
+    if [ ! -d $FTP_DIR/service_client ]; then
+        mkdir -p $FTP_DIR/service_client
+    fi
+    \cp -rpf $current_dir/../service_client/* $FTP_DIR/service_client
+
     if [ ! -d $META_DIR ]; then
         mkdir -p $META_DIR
     fi

@@ -45,6 +45,14 @@ tablet_type=$1
 local_host=$tablet_hostname
 uid=$[$uid_base + $uid_index]
 mysql_port=$[$mysql_port_base + $uid_index] 
+mysql_server_port=$MYSQL_SERVER_PORT_BASE
+enable_security=$ENABLE_SECURITY
+if [ $enable_security == 'true' ]; then
+access_control=true
+else
+access_control=false
+fi
+
 printf -v alias '%s-%010d' $cell $uid
 printf -v tablet_dir 'vt_%010d' $uid
 if [ $1 == "master" ]; then
@@ -174,11 +182,13 @@ $VTROOT/bin/vttablet \
   -backup_storage_implementation file \
   -file_backup_storage_root $VTDATAROOT/backups \
   -restore_from_backup \
-  -enable_access_control=true \
+  -enable_access_control=$access_control \
   -orc_api_url http://$ORCHESTRATOR_HOST:3000/api/ \
   -orc_discover_interval 60s \
   -port $port \
   -grpc_port $grpc_port \
+  -binlog_use_v3_resharding_mode=true \
+  -queryserver-config-schema-reload-time 1800 \
   -grpc_max_message_size 1073741824 \
   -service_map 'grpc-queryservice,grpc-tabletmanager,grpc-updatestream' \
   -pid_file $VTDATAROOT/$tablet_dir/vttablet.pid \
@@ -219,14 +229,49 @@ if [ $1 == "master" ]; then
    	fi
      done 
      if [ $ksCount -eq 1 ]; then
+       count=0
        cd $KUNHOME && num=$(./kunctl.sh ListAllTablets $CELLNAME | grep $KEYSPACE| grep master | wc -l)
        if [ $num -gt 1 ]; then
          cd $KUNHOME && ./kunctl.sh ApplyVSchema  -vschema_file=$KUNDB_CONF_DIR/sharded_vschema.json $KEYSPACE
+         while [ $? -ne 0 ]
+         do
+	   sleep 2
+           count=$((count+1))
+           if [ $count -eq 2 ]; then
+             echo "ApplyVSchema reach the maximum times"
+             break
+           fi
+           cd $KUNHOME && ./kunctl.sh ApplyVSchema  -vschema_file=$KUNDB_CONF_DIR/sharded_vschema.json $KEYSPACE
+	 done
        else
          cd $KUNHOME && ./kunctl.sh ApplyVSchema  -vschema_file=$KUNDB_CONF_DIR/unsharded_vschema.json $KEYSPACE
+         while [ $? -ne 0 ]
+         do
+	   sleep 2
+           count=$((count+1))
+           if [ $count -eq 2 ]; then
+             echo "ApplyVSchema reach the maximum times"
+             break
+           fi
+           cd $KUNHOME && ./kunctl.sh ApplyVSchema  -vschema_file=$KUNDB_CONF_DIR/unsharded_vschema.json $KEYSPACE
+	 done
        fi
      fi
-     
+   
+      
+     count=0
+     cd $KUNHOME && ./kunctl.sh InitKeyspacePrivileges -keyspace $KEYSPACE
+     while [ $? -ne 0 ]
+     do
+	sleep 2
+        count=$((count+1))
+        if [ $count -eq 2 ]; then
+          echo "InitKeyspacePrivileges reach the maximum times"
+          break
+        fi
+        cd $KUNHOME && ./kunctl.sh InitKeyspacePrivileges -keyspace $KEYSPACE
+     done
+
      source $ROLE_CONF_DIR/init_mfed.sh 
      for((i=0; i< $MFED_SHARD_NUM; i++)); 
      do
@@ -236,8 +281,20 @@ if [ $1 == "master" ]; then
         printf -v alias '%s-%010d' $CELLNAME $SHARD_UIDBASE
         echo "InitMfed $alias ... "
         source $ROLE_CONF_DIR/sup_user_info.sh 
-        cd $KUNHOME && ./kunctl.sh InitMfed -mfed_alias $alias -vtgate_user $SUPUSER -vtgate_password $PASSWORD -vtgate_host ${mfedHost[$i]} -vtgate_port $vtgate_port 
+        count=0
+        cd $KUNHOME && timeout 10 ./kunctl.sh InitMfed -mfed_alias $alias -vtgate_user $SUPUSER -vtgate_password $PASSWORD -vtgate_host ${mfedHost[$i]} -vtgate_port $vtgate_port 
+        while [ $? -ne 0 ]
+        do
+	  sleep 2
+          count=$((count+1))
+          if [ $count -eq 2 ]; then
+             echo "InitMfed reach the maximum times"
+             break
+          fi
+          cd $KUNHOME && timeout 10 ./kunctl.sh InitMfed -mfed_alias $alias -vtgate_user $SUPUSER -vtgate_password $PASSWORD -vtgate_host ${mfedHost[$i]} -vtgate_port $vtgate_port 
+     done
     done
+    
      
   else
       echo "Resuming MASTER_TABLET..."

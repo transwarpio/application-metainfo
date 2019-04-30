@@ -39,6 +39,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: kundb.enable_security
+  recommendExpression: true
+  defaultValue: true
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: kundb.shards
   recommendExpression: 
   defaultValue: 
@@ -162,6 +171,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: computenode.audit_sqls
+  recommendExpression: 0
+  defaultValue: 0
+  valueType: BOOL 
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: computenode.kungate.debug.port
   recommendExpression: 15002
   defaultValue: 15002 
@@ -217,27 +235,9 @@
   visibility: READ_WRITE
 
 - name: kungate.audit_sqls
-  recommendExpression: 1
-  defaultValue: 1
+  recommendExpression: 0
+  defaultValue: 0
   valueType: BOOL 
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kungate.mysql_auth_server_impl
-  recommendExpression: ldap
-  defaultValue: ldap
-  valueType: STRING
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: kungate.kundb_auth_plugin
-  recommendExpression: ldap
-  defaultValue: ldap
-  valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []

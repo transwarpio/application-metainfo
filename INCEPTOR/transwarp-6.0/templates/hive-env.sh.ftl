@@ -76,6 +76,17 @@ done
 export EXTRA_JAVA_OPTS="-Djava.security.auth.login.config=/etc/${service.sid}/conf/kafka_client_jaas.conf"
 </#if>
 
+<#if service.plugins?seq_contains("catalog")>
+for f in /usr/lib/transwarp/plugins/catalog/inceptor/lib/*jar; do
+if [ "HIVE_AUX_JARS_PATH" ]; then
+export HIVE_AUX_JARS_PATH=$f:$HIVE_AUX_JARS_PATH
+else
+export HIVE_AUX_JARS_PATH=$f
+fi
+done
+export EXTRA_JAVA_OPTS="-Djava.security.auth.login.config=/etc/${service.sid}/conf/kafka_client_jaas.conf"
+</#if>
+
 # TODO get executor memory from resource configuration
 <#if service['executor.container.limits.memory'] != "-1" && service['executor.memory.ratio'] != "-1">
   <#assign limitsMemory = service['executor.container.limits.memory']?number

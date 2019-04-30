@@ -40,8 +40,14 @@ mysql_server_port=$MYSQL_SERVER_PORT_BASE
 mfed=$1
 optional_args=$KUNGATE_OPTIONAL_ARGS 
 audit_sqls=$KUNGATE_AUDIT_SQLS
-server_impl=$KUNGATE_MYSQL_AUTH_SERVER_IMPL
-auth_plugin=$KUNGATE_KUNDB_AUTH_PLUGIN
+enable_security=$ENABLE_SECURITY
+if [ $enable_security == 'true' ]; then
+server_impl=ldap
+auth_plugin=ldap
+else
+server_impl=static
+auth_plugin=static
+fi
 hostname=`hostname -f`
 
 #CA and key and so on
@@ -81,47 +87,6 @@ $VTROOT/bin/vtgate \
   > $VTDATAROOT/tmp/vtgate.out 2>&1 &
 
 echo "Access kungate at http://$hostname:$web_port/debug/status"
-
-#boot sequence
-keyspace="$KEYSPACE"
-OLD_IFS="$IFS"
-IFS=","
-export KEYSPACE_ARR=($keyspace)
-IFS="$OLD_IFS"
-echo ${KEYSPACE_ARR[@]}
-export KEYSPACE_NUM=${#KEYSPACE_ARR[@]}
-
-sleep 50
-source $KUNDB_CONF_DIR/sup_user_info.sh 
-for ks in ${KEYSPACE_ARR[@]}; do
-   mysql -h127.0.0.1 -u$SUPUSER -p$PASSWORD --enable-cleartext-plugin -P$mysql_server_port -D$ks -e "select 1" 
-   while [ $? -ne 0 ]
-   do
-     echo " wait kungate starting..."
-     sleep 4	
-     count=$((count+1))
-     if [ $count -eq 5 ]; then
-       echo "mysql connetcion reach the maximum times exit"
-       break
-     fi
-     mysql -h127.0.0.1 -u$SUPUSER -p$PASSWORD --enable-cleartext-plugin -P$mysql_server_port -D$ks -e "select 1" 
-  done
-  break
-done
-sleep 3 
-
-if [ ! -f "$VTDATAROOT/tmp/oltp/_init_sequence" ]; then
-  for ks in ${KEYSPACE_ARR[@]}; do
-     mysql -h127.0.0.1 -u$SUPUSER -p$PASSWORD --enable-cleartext-plugin -P$mysql_server_port -D$ks -e "show create table _kundb_sequence_metadata" 
-     if [ $? -ne 0 ]; then
-        sleep 3 
-        mysql -h127.0.0.1 -u$SUPUSER -p$PASSWORD --enable-cleartext-plugin -P$mysql_server_port -D$ks < seq_mata.sql
-        sleep 3 
-        mysql -h127.0.0.1 -u$SUPUSER -p$PASSWORD --enable-cleartext-plugin -P$mysql_server_port -D$ks < nextvalue.sql
-     fi
-  done
-  cd $VTDATAROOT/tmp/oltp && touch _init_sequence
-fi
 
 #disown -a
 wait

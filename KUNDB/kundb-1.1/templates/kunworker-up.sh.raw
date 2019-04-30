@@ -35,5 +35,6 @@ exec $VTROOT/bin/vtworker \
   -service_map=grpc-vtworker \
   -grpc_port 15033 \
   -port 15032 \
+   -remote_actions_timeout 5m \
   -pid_file $VTDATAROOT/tmp/vtworker.pid \
   -use_v3_resharding_mode &
