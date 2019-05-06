@@ -8,18 +8,18 @@ dockerImage: "transwarp/workflow:sophon-2.2"
 dependencies:
   - name: TRANSPORTER
     minVersion: transwarp-6.0.0-final
-    maxVersion: transwarp-6.0.1-final
+    maxVersion: transwarp-6.0.2-final
     optional: true
   - name: GUARDIAN
     minVersion: transwarp-6.0.0-final
     optional: true
   - name: ZOOKEEPER
     minVersion: transwarp-6.0.0-final
-    maxVersion: transwarp-6.0.1-final
+    maxVersion: transwarp-6.0.2-final
     optional: false
   - name: TXSQL
     minVersion: transwarp-6.0.0-final
-    maxVersion: transwarp-6.0.1-final
+    maxVersion: transwarp-6.0.2-final
     optional: false
 roles:
 - name: WORKFLOW_SERVER
