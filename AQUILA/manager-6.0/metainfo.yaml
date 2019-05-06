@@ -301,14 +301,54 @@ roles:
             targetPath: "/etc/${service.sid}/conf/tdh-exporter/log4j2.xml"
             mode: "755"
 
+- name: AQUILA_PROMETHEUS
+  friendlyName: "Prometheus"
+  labelPrefix: "prometheus"
+  dockerImage: "transwarp/prometheus:manager-6.0"
+  linkExpression: "http://${localhostname}:${service['prometheus.web.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop"]
+  hostPID: true
+  env:
+    - name: PROMETHEUS_CON_DIR
+      value: /etc/${service.sid}/conf/prometheus
+  mountPaths:
+    - mountPath: /prometheus
+      hostPath: ${service['prometheus.data.dir']}
+      name: work-dir
+  nodeSpecificMounts: []
+  summaryPolicy: SOME
+  autoAssign:
+    - advice: !<NumSeq>
+        numSeq: [1]
+  suggestion:
+    - criteria: !<Range> {"min": 1}
+  validation:
+    - criteria: !<Range> {"min": 1}
+  operations:
+    - type: Config
+      directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "prometheus/prometheus.yml.ftl"
+            targetPath: "/etc/${service.sid}/conf/prometheus/prometheus.yml"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "prometheus/prometheus-env.sh.ftl"
+            targetPath: "/etc/${service.sid}/conf/prometheus/prometheus-env.sh"
+            mode: "755"
+
 # MANAGER_PROXY is strictly adhered to Manager
 
 firstWizardConfigs:
+- prometheus.web.port
+- prometheus.data.dir
+- tdh.exporter.web.port
+- node.exporter.web.port
 - server.web.port
 - agent.web.port
 - manager.proxy.web.port
-- node.exporter.web.port
-- tdh.exporter.web.port
 - txsql.data.dir
 - txsql.mysql.rw.port
 - txsql.binlog.port
