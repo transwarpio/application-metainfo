@@ -1,0 +1,22 @@
+server {
+  listen ${service['sophon.ui.port']};
+  location / {
+    root  /usr/lib/sophon_web/build;
+    index index.html index.htm;
+    try_files $uri $uri/ /index.html;
+  }
+  error_page  500 502 503 504 /50x.html;
+  location = /50x.html {
+    root  /usr/lib/sophon_web/build;
+  }
+  location ~ ^/(api|login|cas|proxyreceptor|sophonWS)/ {
+    proxy_pass http://${service.roles.SOPHON_WEB[0].hostname}:${service['sophon.visit.port']};
+    proxy_http_version 1.1;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_set_header Host $host:$server_port;
+    proxy_cache_bypass $http_upgrade;
+  }
+}
+
