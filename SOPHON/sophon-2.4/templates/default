@@ -19,24 +19,22 @@ server {
   location = /50x.html {
     root  /usr/lib/sophon_web/build;
   }
-  location ~ ^/(api|login|cas|proxyreceptor|sophonWS)/ {
-    proxy_pass https://${service.roles.SOPHON_WEB[0].hostname}:${service['sophon.visit.port']};
+  location /gateway/ {
+    proxy_pass http://${service.roles.GATEWAY[0].hostname}:8050/;
     proxy_http_version 1.1;
     proxy_set_header X-Forwarded-Proto https;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
     proxy_set_header Host $host:$server_port;
     proxy_cache_bypass $http_upgrade;
-    proxy_read_timeout 180s;
   }
-  location /api-manager/ {
-    proxy_pass https://${service.roles.APINAMANER[0].hostname}:8044/;
+  location ~ ^/(cas|api|sophonWS){
+    proxy_pass http://${service.roles.GATEWAY[0].hostname}:8050;
     proxy_http_version 1.1;
     proxy_set_header X-Forwarded-Proto https;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
     proxy_set_header Host $host:$server_port;
     proxy_cache_bypass $http_upgrade;
-    proxy_read_timeout 180s;
   }
 }

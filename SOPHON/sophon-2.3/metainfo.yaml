@@ -12,7 +12,7 @@ dependencies:
   - name: GUARDIAN
     minVersion: transwarp-5.2.2-final
     maxVersion: transwarp-6.0.2-final
-    optional: false
+    optional: true
   - name: ZOOKEEPER
     minVersion: transwarp-5.2.2-final
     maxVersion: transwarp-6.0.2-final
@@ -248,8 +248,8 @@ roles:
   readinessProbe:
     probe: !<httpGet>
       path: /health
-      port: ${service['sophon.ui.port']}
-      scheme: HTTP
+      port: ${service['sophon.visit.port']}
+      scheme: HTTPS
     failureThreshold: 10
     initialDelaySeconds: 60
     periodSeconds: 30

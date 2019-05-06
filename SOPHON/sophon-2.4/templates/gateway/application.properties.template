@@ -1,6 +1,0 @@
-server.address = 0.0.0.0
-server.port = 8040
-
-management.endpoints.web.exposure.include = gateway
-spring.cloud.gateway.discovery.locator.enabled = true
-ribbon.eureka.enabled=false

@@ -1,6 +1,0 @@
-gateway.registration.etcd.endpoints = ""
-
-# 用户认证服务的地址
-gateway.auth.service.endpoint =
-# 主页
-gateway.homepage.endpoint =
