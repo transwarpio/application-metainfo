@@ -23,26 +23,27 @@
 <@property "ladder.master.rpc.server.addresslist" ladder_masters_rpc?join(",")/>
 </#if>
 
-<#if dependencies.HDFS??>
-    <#if dependencies['HDFS']['nameservices']?? && dependencies['HDFS']['nameservices']?size gt 0>
-        <#assign hostPort=dependencies['HDFS']['nameservices'][0]>
-    <#else>
-        <#assign host=dependencies['HDFS']['roles']['HDFS_NAMENODE'][0]['hostname']>
-        <#if dependencies['HDFS']['namenode.rpc-port']??>
-            <#assign port=dependencies['HDFS']['namenode.rpc-port']>
-        </#if>
-        <#if dependencies['HDFS'][host]?? && dependencies['HDFS'][host]['namenode.rpc-port']??>
-            <#assign port=dependencies['HDFS'][host]['namenode.rpc-port']>
-        </#if>
-        <#assign hostPort=host + ':' + port>
-    </#if>
-    <@property "fs.defaultFS" "hdfs://" + hostPort/>
-<#elseif dependencies.LADDER??>
-    <#assign scheme='ladder://' host=dependencies.LADDER.roles.LADDER_MASTER[0]['hostname'] port='19998'>
-    <@property "fs.defaultFS" scheme + host + ':' + port/>
-<#else>
-    <@property "fs.defaultFS" "ladder://service"/>
-</#if>
+<#--Code for switching fs.defaultFS based on HDFS/LADDER dependencies-->
+<#--<#if dependencies.HDFS??>-->
+    <#--<#if dependencies['HDFS']['nameservices']?? && dependencies['HDFS']['nameservices']?size gt 0>-->
+        <#--<#assign hostPort=dependencies['HDFS']['nameservices'][0]>-->
+    <#--<#else>-->
+        <#--<#assign host=dependencies['HDFS']['roles']['HDFS_NAMENODE'][0]['hostname']>-->
+        <#--<#if dependencies['HDFS']['namenode.rpc-port']??>-->
+            <#--<#assign port=dependencies['HDFS']['namenode.rpc-port']>-->
+        <#--</#if>-->
+        <#--<#if dependencies['HDFS'][host]?? && dependencies['HDFS'][host]['namenode.rpc-port']??>-->
+            <#--<#assign port=dependencies['HDFS'][host]['namenode.rpc-port']>-->
+        <#--</#if>-->
+        <#--<#assign hostPort=host + ':' + port>-->
+    <#--</#if>-->
+    <#--<@property "fs.defaultFS" "hdfs://" + hostPort/>-->
+<#--<#elseif dependencies.LADDER??>-->
+    <#--<#assign scheme='ladder://' host=dependencies.LADDER.roles.LADDER_MASTER[0]['hostname'] port='19998'>-->
+    <#--<@property "fs.defaultFS" scheme + host + ':' + port/>-->
+<#--<#else>-->
+    <#--<@property "fs.defaultFS" "ladder://service"/>-->
+<#--</#if>-->
 
 <#--handle dependent.zookeeper-->
 <#if dependencies.ZOOKEEPER??>

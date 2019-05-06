@@ -20,6 +20,21 @@
   groups: ["hive-site.xml"]
   visibility: READ_WRITE
 
+- name: fs.defaultFS
+  recommendExpression: |
+    <#function ladderUri>
+      <#local host=dependencies['LADDER']['roles']['LADDER_MASTER'][0]['hostname']>
+      <#local port='19998'>
+      <#return 'ladder://' + host + ':' + port>
+    </#function>
+    ${ladderUri()!'ladder://service'}
+  defaultValue: "ladder://service"
+  valueType: URI
+  scope: !<ServiceLevel> {}
+  onDeps: ['LADDER']
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
 - name: hive.metastore.execute.setugi
   recommendExpression: true
   defaultValue: null

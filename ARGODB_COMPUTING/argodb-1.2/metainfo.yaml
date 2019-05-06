@@ -253,6 +253,7 @@ firstWizardConfigs:
 - executor.container.requests.memory
 - executor.memory.ratio
 - executor.number.eachnode
+- fs.defaultFS
 - hive.exec.scratchdir
 - hive.server2.authentication
 - hive.server2.enabled

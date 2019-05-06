@@ -345,6 +345,7 @@ firstWizardConfigs:
 ######################
 # Inceptor Metastore #
 ######################
+- fs.defaultFS
 - hive.exec.scratchdir
 - hive.metastore.port
 - hive.metastore.warehouse.dir
