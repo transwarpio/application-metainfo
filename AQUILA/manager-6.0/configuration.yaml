@@ -190,6 +190,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: server.jdbc.connctor.timezone
+  recommendExpression: Asia/Shanghai
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 # AQUILA_AGENT
 
 - name: agent.web.port
@@ -322,9 +331,105 @@
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
-    roleTypes: [NODE_EXPORTER]
+    roleTypes: [AQUILA_NODE_EXPORTER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
 
+# AQUILA_TDH_EXPORTER
 
+- name: tdh.exporter.web.port
+  recommendExpression: 8692
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TDH_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tdh.exporter.metric.config.dir
+  recommendExpression: /etc/tdh-exporter
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TDH_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: HIDDEN
+
+# AQUILA_PROMETHEUS
+
+- name: prometheus.web.port
+  recommendExpression: 8690
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_PROMETHEUS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.data.dir
+  recommendExpression: "/${service.sid}/prometheus/data"
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TDH_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.web.enable-admin-api
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.web.enable-lifecycle
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.tdh.exporter.scrape_interval
+  recommendExpression: 60
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.tdh.exporter.scrape_timeout
+  recommendExpression: 10
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.node.exporter.scrape_interval
+  recommendExpression: 60
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.node.exporter.scrape_timeout
+  recommendExpression: 10
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

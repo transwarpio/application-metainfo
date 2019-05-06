@@ -253,13 +253,102 @@ roles:
   - criteria: !<Range> {"min": 1}
   operations: []
 
+- name: AQUILA_TDH_EXPORTER
+  friendlyName: "TDH Exporter"
+  labelPrefix: "tdh-exporter"
+  dockerImage: "transwarp/tdh-exporter:manager-6.0"
+  linkExpression: "http://${localhostname}:${service['tdh.exporter.web.port']}/metrics"
+  category: MASTER
+  frontendOperations: ["Start", "Stop"]
+  env:
+    - name: TDH_EXPORTER_CONF_DIR
+      value: /etc/${service.sid}/conf/tdh-exporter
+    - name: TDH_EXPORTER_LOG_DIR
+      value: /var/log/${service.sid}/tdh-exporter
+  mountPaths:
+    - mountPath: ${service['tdh.exporter.metric.config.dir']}
+      hostPath: ${service['tdh.exporter.metric.config.dir']}
+      name: config-mount
+  nodeSpecificMounts: []
+  summaryPolicy: SOME
+  autoAssign:
+    - advice: !<EachNode> {}
+  suggestion:
+    - criteria: !<EachNode> {}
+  validation:
+    - criteria: !<EachNode> {}
+  operations:
+    - type: Install
+      directives:
+        - directive: !<mkdirs>
+            paths: ["/var/log/${service.sid}/tdh-exporter"]
+            mode: "750"
+    - type: Config
+      directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "tdh-exporter/global-config.yml.ftl"
+            targetPath: "/etc/${service.sid}/conf/tdh-exporter/global-config.yml"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "tdh-exporter/env.sh.ftl"
+            targetPath: "/etc/${service.sid}/conf/tdh-exporter/env.sh"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "tdh-exporter/log4j2.xml.ftl"
+            targetPath: "/etc/${service.sid}/conf/tdh-exporter/log4j2.xml"
+            mode: "755"
+
+- name: AQUILA_PROMETHEUS
+  friendlyName: "Prometheus"
+  labelPrefix: "prometheus"
+  dockerImage: "transwarp/prometheus:manager-6.0"
+  linkExpression: "http://${localhostname}:${service['prometheus.web.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop"]
+  hostPID: true
+  env:
+    - name: PROMETHEUS_CON_DIR
+      value: /etc/${service.sid}/conf/prometheus
+  mountPaths:
+    - mountPath: /prometheus
+      hostPath: ${service['prometheus.data.dir']}
+      name: work-dir
+  nodeSpecificMounts: []
+  summaryPolicy: SOME
+  autoAssign:
+    - advice: !<NumSeq>
+        numSeq: [1]
+  suggestion:
+    - criteria: !<Range> {"min": 1}
+  validation:
+    - criteria: !<Range> {"min": 1}
+  operations:
+    - type: Config
+      directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "prometheus/prometheus.yml.ftl"
+            targetPath: "/etc/${service.sid}/conf/prometheus/prometheus.yml"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "prometheus/prometheus-env.sh.ftl"
+            targetPath: "/etc/${service.sid}/conf/prometheus/prometheus-env.sh"
+            mode: "755"
+
 # MANAGER_PROXY is strictly adhered to Manager
 
 firstWizardConfigs:
+- prometheus.web.port
+- prometheus.data.dir
+- tdh.exporter.web.port
+- node.exporter.web.port
 - server.web.port
 - agent.web.port
 - manager.proxy.web.port
-- node.exporter.web.port
 - txsql.data.dir
 - txsql.mysql.rw.port
 - txsql.binlog.port
