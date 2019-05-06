@@ -30,8 +30,8 @@ dependencies:
     maxVersion: transwarp-6.0.2-final
     optional: false
   - name: WORKFLOW
-    minVersion: sophon-2.2
-    maxVersion: sophon-2.2
+    minVersion: sophon-2.2.1-final
+    maxVersion: sophon-2.2.1-final
     optional: true
   - name: KONG
     minVersion: transwarp-5.2.2-final
