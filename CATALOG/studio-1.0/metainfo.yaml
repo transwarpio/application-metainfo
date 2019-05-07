@@ -1,33 +1,33 @@
 ---
 name: CATALOG
-version: studio-1.1
+version: studio-1.0
 global: false
 namePrefix: Catalog
 friendlyName: Catalog
 dependencies:
   - name: HYPERBASE
-    minVersion: transwarp-6.0
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-5.2
+    maxVersion: transwarp-6.0
     optional: false
   - name: SEARCH
-    minVersion: transwarp-6.0
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-5.2
+    maxVersion: transwarp-6.0
     optional: false
   - name: KAFKA
-    minVersion: transwarp-6.0
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-5.2
+    maxVersion: transwarp-6.0
     optional: false
   - name: ZOOKEEPER
-    minVersion: transwarp-6.0
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-5.2
+    maxVersion: transwarp-6.0
     optional: false
   - name: HDFS
-    minVersion: transwarp-6.0
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-5.2
+    maxVersion: transwarp-6.0
     optional: false
   - name: TXSQL
-    minVersion: transwarp-6.0
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-5.2
+    maxVersion: transwarp-6.0
     optional: false
 user: catalog
 
@@ -35,7 +35,7 @@ roles:
 - name: CATALOG_WEB
   friendlyName: "Catalog Web"
   labelPrefix: "catalog-web"
-  dockerImage: "transwarp/catalog-web:studio-1.1"
+  dockerImage: "transwarp/catalog-web:studio-1.0"
   linkExpression: "http://${localhostname}:${service['catalog.web.http.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
@@ -81,7 +81,7 @@ roles:
 - name: CATALOG_PLATFORM
   friendlyName: "Catalog Platform"
   labelPrefix: "catalog-platform"
-  dockerImage: "transwarp/catalog-platform:studio-1.1"
+  dockerImage: "transwarp/catalog-platform:studio-1.0"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
