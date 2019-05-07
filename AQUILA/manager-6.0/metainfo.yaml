@@ -166,6 +166,11 @@ roles:
     directives:
     - directive: !<resource>
         templateType: FreeMarker
+        templatePath: "server/env.sh.ftl"
+        targetPath: "/etc/${service.sid}/conf/server/env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
         templatePath: "server/application.yml.ftl"
         targetPath: "/etc/${service.sid}/conf/server/application.yml"
         mode: "755"
