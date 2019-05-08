@@ -26,6 +26,7 @@ springfox.documentation:
   swagger.v2.path: /api/docs
 
 ## ----- application configs
+<#assign prometheusEndpoint = "http://" + service.roles["AQUILA_PROMETHEUS"][0].hostname + ":" + service["prometheus.web.port"]>
 api:
   swagger:
     enabled: ${service['server.api.swagger.enabled']}
@@ -40,11 +41,11 @@ metrics:
       - id: 1
         name: "Prometheus"
         type: PROMETHEUS
-        url: http://172.16.1.104:9390
+        url: ${prometheusEndpoint}
       - id: 2
         name: "Manager Heatmap"
         type: MANAGER_HEATMAP
-        prometheusUrl: http://172.16.1.104:9390
+        prometheusUrl: ${prometheusEndpoint}
       - id: 3
         name: "Manager Database"
         type: MANAGER_DB
