@@ -1,0 +1,90 @@
+- name: pilotenterprise.mysql.http.port
+  recommendExpression: 6688
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: root.password
+  recommendExpression: root
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: HIDDEN
+
+- name: pilotenterprise.tomcat.http.port
+  recommendExpression: 18080
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: pilotenterprise.tomcat.https.port
+  recommendExpression: 18081
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog-agent.pilotenterprise.user
+  recommendExpression: admin
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes:
+      - PILOT_CATALOG_AGENT
+  onDeps: []
+  groups: ["ca-application.properties"]
+  visibility: READ_WRITE
+
+- name: catalog-agent.pilotenterprise.password
+  recommendExpression: 123
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes:
+      - PILOT_CATALOG_AGENT
+  onDeps: []
+  groups: ["ca-application.properties"]
+  visibility: PASSWORD
+
+- name: catalog-agent.http.port
+  recommendExpression: 26100
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes:
+      - PILOT_CATALOG_AGENT
+  onDeps: []
+  groups: ["ca-application.properties"]
+  visibility: READ_WRITE
+
+- name: catalog-agent.web.address
+  recommendExpression: http://localhost:28080
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes:
+      - PILOT_CATALOG_AGENT
+  onDeps: []
+  groups: ["ca-application.properties"]
+  visibility: READ_WRITE
+
+- name: catalog-agent.log.level
+  recommendExpression: INFO
+  defaultValue: INFO
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes:
+      - PILOT_CATALOG_AGENT
+  onDeps: []
+  groups: ["ca-application.properties"]
+  visibility: READ_WRITE
