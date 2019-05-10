@@ -1,0 +1,12 @@
+pilot.server.address=http://${service.roles["SMARTBI_TOMCAT"][0].hostname}:${service['pilotenterprise.tomcat.http.port']}/pilot
+pilot.visit.address=https://${service.roles["SMARTBI_TOMCAT"][0].hostname}:${service['pilotenterprise.tomcat.https.port']}/pilot
+pilot.user=${service['catalog-agent.pilotenterprise.user']}
+pilot.password=${service['catalog-agent.pilotenterprise.password']}
+server.address=${localhostname?lower_case}
+server.port=${service['catalog-agent.http.port']}
+catalog.web.server.address=${service['catalog-agent.web.address']}
+catalog.agent.service.id=${service.sid}
+catalog.agent.service.tenant=TDH
+catalog.agent.service.type=PILOT
+catalog.agent.service.version=8.5
+logging.level.root=${service['catalog-agent.log.level']}
