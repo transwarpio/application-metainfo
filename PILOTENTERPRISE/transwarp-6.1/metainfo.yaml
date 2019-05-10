@@ -1,0 +1,191 @@
+---
+name: PILOTENTERPRISE
+version: transwarp-6.1
+global: false
+namePrefix: PilotEnterprise
+friendlyName: PilotEnterprise
+dependencies: []
+roles:
+  - name: SMARTBI_MYSQL
+    friendlyName: "Pilot Enterprise MySQL"
+    labelPrefix: "smartbi-mysql"
+    dockerImage: "transwarp/smartbi-mysql:transwarp-6.1"
+    linkExpression: ""
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete"]
+    readinessProbe:
+      probe: !<exec>
+        command:
+        - /bin/bash
+        - -c
+        - mysql -h `hostname` -uroot -P${service['pilotenterprise.mysql.http.port']} -p"${service['root.password']}" -e "select 1 from dual"  > /dev/null && echo ok
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    env:
+    - name: CONF_DIR
+      value: /etc/${service.sid}/conf
+    mountPaths:
+    - mountPath: /etc/smartbi/conf
+      hostPath: /etc/${service.sid}/conf
+      name: conf-mysql
+    - mountPath: /var/lib/mysql
+      hostPath: /var/lib/${service.sid}/data/mysql
+      name: data-mysql
+    summaryPolicy: ALL
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations:
+    - type: Install
+      directives:
+      - directive: !<mkdirs>
+          paths: ["/var/lib/${service.sid}/data/mysql"]
+          mode: "777"
+
+  - name: SMARTBI_TOMCAT
+    friendlyName: "Pilot Enterprise Tomcat"
+    labelPrefix: "smartbi-tomcat"
+    dockerImage: "transwarp/smartbi-tomcat:transwarp-6.1"
+    linkExpression: "http://${localhostname}:${service['pilotenterprise.tomcat.http.port']}/pilot"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete"]
+    readinessProbe:
+      probe: !<httpGet>
+        path: /pilot
+        port: ${service['pilotenterprise.tomcat.http.port']}
+        scheme: HTTP
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    summaryPolicy: ALL
+    env:
+    - name: CONF_DIR
+      value: /etc/${service.sid}/conf
+    - name: LIB_DIR
+      value: /etc/${service.sid}/smartbi
+    mountPaths:
+    - mountPath: /etc/smartbi/conf
+      hostPath: /etc/${service.sid}/conf
+      name: conf-tomcat
+    - mountPath: /etc/smartbi/smartbi
+      hostPath: /etc/${service.sid}/smartbi
+      name: library-tomcat
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations:
+    - type: Install
+      directives:
+      - directive: !<mkdirs>
+          paths: ["/etc/${service.sid}/conf"]
+          mode: "777"
+      - directive: !<mkdirs>
+          paths: ["/etc/${service.sid}/dynamicLibraryPath"]
+          mode: "755"
+    - type: Config
+      directives:
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "datasources.xml"
+          targetPath: "/etc/${service.sid}/conf/datasources.xml"
+          mode: "755"
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "smartbi-config.xml"
+          targetPath: "/etc/${service.sid}/conf/smartbi-config.xml"
+          mode: "755"
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "eagle-config.xml"
+          targetPath: "/etc/${service.sid}/conf/eagle-config.xml"
+          mode: "755"
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "Smartbi-License.xml"
+          targetPath: "/etc/${service.sid}/conf/Smartbi-License.xml"
+          mode: "755"
+  - name: PILOT_CATALOG_AGENT
+    friendlyName: "Pilot Enterprise Catalog Agent"
+    labelPrefix: "pilot-catalog-agent"
+    dockerImage: "transwarp/catalog-agent:transwarp-5.2.2-final"
+    category: SLAVE
+    frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
+    readinessProbe:
+      probe: !<httpGet>
+        path: /api/v1/health
+        port: ${service['catalog-agent.http.port']}
+        scheme: HTTP
+      failureThreshold: 3
+      initialDelaySeconds: 30
+      periodSeconds: 60
+      successThreshold: 1
+      timeoutSeconds: 1
+    env:
+    - name: CATALOG_AGENT_COMPONENT
+      value: pilot
+    - name: CATALOG_AGENT_VERSION
+      value: pilot-8.5
+    - name: PILOT_CONF_DIR
+      value: /etc/${service.sid}/conf
+    mountPaths: []
+    summaryPolicy: NONE
+    autoAssign:
+      - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+      - criteria: !<Range> {"min": 1}
+    validation:
+      - criteria: !<Range> {"min": 1}
+    operations: []
+stages:
+  - type: Config
+    taskGroups:
+    - !<Role>
+      roleType: "SMARTBI_MYSQL"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SMARTBI_TOMCAT"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "PILOT_CATALOG_AGENT"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 3
+
+product: Studio
+
+firstWizardConfigs:
+- pilotenterprise.mysql.http.port
+- pilotenterprise.tomcat.http.port
+- pilotenterprise.tomcat.https.port
+- catalog-agent.pilotenterprise.user
+- catalog-agent.pilotenterprise.password
+- catalog-agent.http.port
+- catalog-agent.web.address
+- catalog-agent.log.level
+
+
+pages:
+- roles
+- configuration
+- operation
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  intervalSeconds: 5
+  method: !<K8sPod> {}
