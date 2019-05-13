@@ -531,3 +531,7 @@ healthChecks:
     roles:
     - roleType: SOPHON_WEB
       from: !<readiness> {}
+      
+customConfigFiles:
+- sophon.conf
+- spark-defaults.conf
