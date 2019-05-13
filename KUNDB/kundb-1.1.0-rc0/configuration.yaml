@@ -16,7 +16,7 @@
   defaultValue: null
   valueType: ABSOLUTE_PATH
   scope: !<RoleTypes>
-    roleTypes: [KUNCTLD, COMPUTE_NODE, KUNTABLET_MASTER, KUNTABLET_REPLICA, KUNTABLET_RDONLY, KUNGATE]
+    roleTypes: [ORCHESTRATOR, KUNCTLD, COMPUTE_NODE, KUNTABLET_MASTER, KUNTABLET_REPLICA, KUNTABLET_RDONLY, KUNGATE]
   onDeps: []
   groups: [kundb-env.sh]
   visibility: READ_WRITE
@@ -34,6 +34,15 @@
   recommendExpression: kundb1 
   defaultValue: kundb1 
   valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kundb.enable_security
+  recommendExpression: true
+  defaultValue: true
+  valueType: BOOL
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
@@ -162,6 +171,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: computenode.audit_sqls
+  recommendExpression: 0
+  defaultValue: 0
+  valueType: BOOL 
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: computenode.kungate.debug.port
   recommendExpression: 15002
   defaultValue: 15002 
@@ -216,6 +234,14 @@
   groups: []
   visibility: READ_WRITE
 
+- name: kungate.audit_sqls
+  recommendExpression: 0
+  defaultValue: 0
+  valueType: BOOL 
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
 
 - name: master.port_base 
   recommendExpression: 15000 
@@ -415,6 +441,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: orchestrator.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: kunctld.container.requests.memory
   recommendExpression: -1
   defaultValue: null
@@ -462,6 +497,15 @@
   visibility: READ_WRITE
 
 - name: KunGate.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: orchestrator.container.limits.memory
   recommendExpression: -1
   defaultValue: null
   valueType: GB
