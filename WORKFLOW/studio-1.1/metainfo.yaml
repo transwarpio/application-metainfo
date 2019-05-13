@@ -8,18 +8,18 @@ dockerImage: "transwarp/workflow:studio-1.1"
 validateConfig: true
 dependencies:
   - name: TRANSPORTER
-    minVersion: studio-1.1
+    minVersion: transwarp-5.2
     maxVersion: studio-1.1
     optional: true
   - name: GUARDIAN
-    minVersion: transwarp-6.0
+    minVersion: transwarp-5.2
     optional: true
   - name: ZOOKEEPER
-    minVersion: transwarp-6.0
+    minVersion: transwarp-5.2
     maxVersion: transwarp-6.1
     optional: false
   - name: TXSQL
-    minVersion: transwarp-6.0
+    minVersion: transwarp-5.2
     maxVersion: transwarp-6.1
     optional: false
 roles:
