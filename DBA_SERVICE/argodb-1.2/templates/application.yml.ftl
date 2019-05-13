@@ -3,17 +3,25 @@
   <#assign security_enabled="true">
 </#if>
 
+<#assign data_persistence_enabled="false">
+<#if (service['dbaservice.persistence.enabled']!"false")="true">
+  <#assign data_persistence_enabled="true">
+</#if>
+
 <#assign profile="normal">
 <#if security_enabled="true">
   <#assign profile="security">
 </#if>
 
 spring.profiles.active: ${profile}
+
+<#if data_persistence_enabled="true">
 spring:
   datasource:
     url: jdbc:h2:file:${service['dbaservice.persistence.datadir']}/${service.sid};DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE;MV_STORE=FALSE;CACHE_SIZE=102400;FILE_LOCK=NO;TRACE_LEVEL_FILE=0;LOG=0;LOCK_MODE=0;UNDO_LOG=0;RETENTION_TIME=0;MAX_QUERY_TIMEOUT=300000
     username: ${service['dbaservice.persistence.db.username']}
     password: ${service['dbaservice.persistence.db.password']}
+</#if>
 
 server.port: ${r"${watchman.server.port}"}
 
@@ -68,7 +76,7 @@ watchman:
       roles: [USER]
   inceptor:
     data-persistence:
-      enabled: ${service['dbaservice.persistence.enabled']}
+      enabled: ${data_persistence_enabled}
       limit:
         coldSql: ${service['dbaservice.persistence.inceptor.limit.sql']!'100000'}
         coldServer: ${service['dbaservice.persistence.inceptor.limit.server']!'10000'}
