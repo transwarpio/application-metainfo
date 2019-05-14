@@ -26,7 +26,8 @@ springfox.documentation:
   swagger.v2.path: /api/docs
 
 ## ----- application configs
-<#assign prometheusEndpoint = "http://" + service.roles["AQUILA_PROMETHEUS"][0].hostname + ":" + service["prometheus.web.port"]>
+<#assign prometheusHost = service.roles["AQUILA_PROMETHEUS"][0].hostname>
+<#assign prometheusEndpoint = "http://" + prometheusHost + ":" + service["prometheus.web.port"]>
 api:
   swagger:
     enabled: ${service['server.api.swagger.enabled']}
@@ -49,5 +50,15 @@ metrics:
       - id: 3
         name: "Manager Database"
         type: MANAGER_DB
+alert:
+  rule:
+    generate:
+      max-threads: 3
+      time-out-sec: 180
+      host: ${prometheusHost}
+      path: /etc/${service.sid}/conf/prometheus/rules.d
+      upload-trigger: ${prometheusEndpoint}/-/reload
 manager-proxy:
   endpoint: http://${service.roles["AQUILA_MANAGER_PROXY"][0].hostname}:${service["manager.proxy.web.port"]}
+agent:
+  port: ${service["agent.web.port"]}

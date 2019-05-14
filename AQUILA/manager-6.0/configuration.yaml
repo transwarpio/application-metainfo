@@ -398,6 +398,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: prometheus.global.evaluation_interval
+  recommendExpression: 37
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: prometheus.tdh.exporter.scrape_interval
   recommendExpression: 60
   defaultValue: null
