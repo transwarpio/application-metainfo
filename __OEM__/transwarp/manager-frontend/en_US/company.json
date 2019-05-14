@@ -2,5 +2,7 @@
   "OEM_COMPANY_NAME": "Transwarp",
   "OEM_PRODUCT_NAME": "Transwarp Manager",
   "OEM_PRODUCT_NAME_SHORT": "Transwarp",
-  "OEM_COMPANY_FULL_NAME": "星环信息科技（上海）有限公司"
+  "OEM_COMPANY_FULL_NAME": "星环信息科技（上海）有限公司",
+  "OEM_COMPONENT_TOS": "TOS",
+  "OEM_COMPONENT_GUARDIAN": "Guardian"
 }
