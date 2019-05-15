@@ -1,14 +1,14 @@
 ---
 name: WORKFLOW
-version: studio-1.1
+version: studio-1.1.0-rc0
 global: false
 namePrefix: Workflow
 friendlyName: Workflow
-dockerImage: "transwarp/workflow:studio-1.1"
+dockerImage: "transwarp/workflow:studio-1.1.0-rc0"
 dependencies:
   - name: TRANSPORTER
-    minVersion: studio-1.1
-    maxVersion: studio-1.1
+    minVersion: studio-1.1.0-rc0
+    maxVersion: studio-1.1.0-rc0
     optional: true
   - name: GUARDIAN
     minVersion: transwarp-5.2
