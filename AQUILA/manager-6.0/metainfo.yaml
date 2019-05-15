@@ -186,8 +186,8 @@ roles:
   frontendOperations: ["Start", "Stop"]
   hostPID: true
   env:
-  - name: AQUILA_CONF_DIR
-    value: /etc/${service.sid}/conf
+  - name: NODE_EXPORTER_CONF_DIR
+    value: /etc/${service.sid}/conf/node-exporter
   mountPaths:
   - mountPath: /host
     mountParams: {mountPropagation: "HostToContainer", readOnly: true}
@@ -201,7 +201,14 @@ roles:
   - criteria: !<EachNode> {}
   validation:
   - criteria: !<Range> {"min": 1}
-  operations: []
+  operations:
+    - type: Config
+      directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "node-exporter/env.sh.ftl"
+            targetPath: "/etc/${service.sid}/conf/node-exporter/env.sh"
+            mode: "755"
 
 - name: AQUILA_TDH_EXPORTER
   friendlyName: "TDH Exporter"

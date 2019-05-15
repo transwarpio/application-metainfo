@@ -4,6 +4,7 @@
     - targets: [${node_exporter_addr}]
       labels:
         nodeId: ${role.nodeId}
+        hostname: ${role.hostname}
         clusterId: ${role.clusterId}
         rackId: ${role.rackId}
   </#list>

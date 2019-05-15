@@ -8,8 +8,9 @@
 <#if .data_model['role.groupId'] ??>
     roleGroupId: ${.data_model['role.groupId']}
 </#if>
-    nodeId: ${.data_model['role.nodeId']}
-    rackId: ${.data_model['role.rackId']}
+    nodeId: ${.data_model['node.id']}
+    rackId: ${.data_model['node.rackId']}
+    hostname: ${.data_model['localhostname']}
 </#macro>
 sources:
 - name: name_node_node_status_source
@@ -55,7 +56,7 @@ sources:
     cacheSec: 60
 
 metrics:
-- name: name_node_node_status
+- name: name_node_is_active_or_not
   fixedLabels:
     <@serviceLabel/>
     <@roleLabel/>
@@ -66,6 +67,9 @@ metrics:
   scrape:
     jsonPath: "$.beans[0].State"
     fromResultLabelMap: {}
+    valueMapping:
+      active: 1.0
+      standy: 0.0
 
 - name: name_node_capacity_total
   fixedLabels:
