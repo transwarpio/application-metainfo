@@ -177,6 +177,36 @@ roles:
         templatePath: "user/log4j.properties"
         targetPath: "/etc/${service.sid}/conf/user/log4j.properties"
         mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "application-commons.properties"
+        targetPath: "/etc/${service.sid}/conf/application-commons.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "commons.conf"
+        targetPath: "/etc/${service.sid}/conf/commons.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "env.sh"
+        targetPath: "/etc/${service.sid}/conf/env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "spark-defaults.conf"
+        targetPath: "/etc/${service.sid}/conf/spark-defaults.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "jupyter_notebook_config.py"
+        targetPath: "/etc/${service.sid}/conf/jupyter_notebook_config.py"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "scheduler.xml"
+        targetPath: "/etc/${service.sid}/conf/scheduler.xml"
+        mode: "755"
 
 - name: SHARE_SERVER
   dockerImage: "transwarp/share-server:sophon-2.4"
@@ -320,7 +350,6 @@ roles:
         templatePath: "kg/default"
         targetPath: "/etc/${service.sid}/conf/kg/default"
         mode: "755"
-
 - name: SOPHON_WEB
   dockerImage: "transwarp/sophon-web:sophon-2.4"
   friendlyName: "Sophon base"
@@ -330,8 +359,8 @@ roles:
   readinessProbe:
     probe: !<httpGet>
       path: /health
-      port: ${service['sophon.ui.port']}
-      scheme: HTTP
+      port: ${service['sophon.visit.port']}
+      scheme: HTTPS
     failureThreshold: 10
     initialDelaySeconds: 60
     periodSeconds: 30
@@ -378,11 +407,6 @@ roles:
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "env.sh"
-        targetPath: "/etc/${service.sid}/conf/env.sh"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
         templatePath: "base/log4j.properties"
         targetPath: "/etc/${service.sid}/conf/base/log4j.properties"
         mode: "755"
@@ -391,21 +415,7 @@ roles:
         templatePath: "base/application.properties"
         targetPath: "/etc/${service.sid}/conf/base/application.properties"
         mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "spark-defaults.conf"
-        targetPath: "/etc/${service.sid}/conf/spark-defaults.conf"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "jupyter_notebook_config.py"
-        targetPath: "/etc/${service.sid}/conf/jupyter_notebook_config.py"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "scheduler.xml"
-        targetPath: "/etc/${service.sid}/conf/scheduler.xml"
-        mode: "755"
+
 
 - name: GATEWAY
   dockerImage: "transwarp/gateway:sophon-2.4"
