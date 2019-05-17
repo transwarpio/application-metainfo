@@ -6,6 +6,7 @@ namePrefix: Guardian
 friendlyName: Guardian
 validateConfig: true
 dependencies: []
+isSupportOAuth2: true
 roles:
 - name: GUARDIAN_TXSQL_SERVER
   friendlyName: "TxSQL Server"
@@ -43,7 +44,7 @@ roles:
   nodeSpecificMounts:
     - configKey: data.dir
   summaryPolicy: MAJOR
-  dockerImage: "transwarp/txsql:guardian-3.1"
+  dockerImage: "transwarp/txsql:transwarp-6.0.2-final"
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [5, 3, 1]}
   suggestion:
@@ -68,9 +69,9 @@ roles:
         templatePath: "txsql-txsql-env.sh"
         targetPath: "/etc/${service.sid}/conf/txsql-env.sh"
         mode: "755"
-- name: FEDERATION_SERVER
-  friendlyName: "Federation Service"
-  labelPrefix: "federation-server"
+- name: GUARDIAN_FEDERATION
+  friendlyName: "Guardian Federation Service"
+  labelPrefix: "guardian-federation"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   deleteOpCondition:
@@ -78,7 +79,7 @@ roles:
       number: 2
     movable:
       number: 1
-  linkExpression: https://${localhostname}:${service['federation.server.port']}
+  linkExpression: https://${localhostname}:${service['federation.server.port']}/federation-server
   summaryPolicy: SOME
   dockerImage: "transwarp/guardian-federation:guardian-3.1"
   autoAssign:
@@ -87,6 +88,17 @@ roles:
   - criteria: !<Range> {"min": 1}
   validation:
   - criteria: !<Range> {"min": 1}
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - netstat -an | grep ${service['federation.server.port']} | grep LISTEN > /dev/null
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 15
   env:
   - name: FEDERATION_CONFIG_DIR
     value: /etc/federation/conf
@@ -96,11 +108,17 @@ roles:
   - mountPath: /srv/federation
     hostPath: /srv/federation
     name: srv
+  - mountPath: /etc/federation/conf
+    hostPath: /etc/federation/conf
+    name: federation-conf
+  - mountPath: /var/log/federation
+    hostPath: /var/log/federation
+    name: federation-log
   operations:
   - type: Install
     directives:
     - directive: !<shell>
-        script: "docker run -v /srv/federation:/srv/federation --net=host ${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/guardian-gencerts:guardian-3.1 entry.sh"
+        script: "docker run -v /srv/federation:/srv/guardian --net=host ${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/guardian-gencerts:guardian-3.1 entry.sh"
   - type: Config
     directives:
     - directive: !<resource>
@@ -128,6 +146,17 @@ roles:
   - criteria: !<Range> {"min": 1}
   validation:
   - criteria: !<Range> {"min": 1}
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - netstat -an | grep ${service['guardian.apacheds.ldap.port']} | grep LISTEN > /dev/null
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 15
   env:
   - name: GUARDIAN_CONF_DIR
     value: /etc/${service.sid}/conf
@@ -174,6 +203,17 @@ roles:
   - criteria: !<Range> {"min": 1}
   validation:
   - criteria: !<Range> {"min": 1}
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - netstat -an | grep ${service['guardian.server.port']} | grep LISTEN > /dev/null
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 15
   env:
   - name: GUARDIAN_CONF_DIR
     value: /etc/${service.sid}/conf
@@ -226,6 +266,17 @@ roles:
     - criteria: !<Range> {"min": 1}
   validation:
     - criteria: !<Range> {"min": 1}
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - netstat -an | grep ${service['cas.config.server.port']} | grep LISTEN > /dev/null
+    failureThreshold: 3
+    initialDelaySeconds: 20
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 15
   env:
     - name: GUARDIAN_CONF_DIR
       value: /etc/${service.sid}/conf
@@ -258,6 +309,17 @@ roles:
     - criteria: !<Range> {"min": 1}
   validation:
     - criteria: !<Range> {"min": 1}
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - netstat -an | grep ${service['cas.server.ssl.port']} | grep LISTEN > /dev/null
+    failureThreshold: 3
+    initialDelaySeconds: 20
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 15
   env:
     - name: GUARDIAN_CONF_DIR
       value: /etc/${service.sid}/conf
@@ -294,6 +356,17 @@ roles:
     - criteria: !<Range> {"min": 1}
   validation:
     - criteria: !<Range> {"min": 1}
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - netstat -an | grep ${service['cas.mgmt.server.port']} | grep LISTEN > /dev/null
+    failureThreshold: 3
+    initialDelaySeconds: 20
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 15
   env:
     - name: GUARDIAN_CONF_DIR
       value: /etc/${service.sid}/conf
@@ -319,10 +392,12 @@ jobs:
     stages:
     - Install
     - GenKeystore
+    - GenCredential
     - Config
     - Bootstrap
     - Start
     - GenKeytab
+    - SetupTenant
   - type: Start
     stages:
     - Start
@@ -342,7 +417,24 @@ stages:
     - !<DockerRunPreUpgrade>
       summaryPolicy: ALL 
       timeoutMinutes: 10
-      roleType: GUARDIAN_SERVER
+      roleType: GUARDIAN_APACHEDS
+      node: Each
+    - !<DockerRunPreUpgrade>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      roleType: GUARDIAN_TXSQL_SERVER
+      node: Each
+  - type: PreRollback
+    taskGroups:
+    - !<DockerRunPreRollback>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      roleType: GUARDIAN_APACHEDS
+      node: Each
+    - !<DockerRunPreRollback>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      roleType: GUARDIAN_TXSQL_SERVER
       node: Each
 
 firstWizardConfigs:
@@ -356,6 +448,8 @@ firstWizardConfigs:
 - guardian.client.cache.enabled
 - guardian.ds.realm
 - guardian.ds.domain
+- guardian.server.authentication.oauth2.enabled
+- guardian.server.authentication.oauth2.server.baseUrls.external
 - guardian.server.cas.authentication.enabled
 - guardian.server.cas.server.host
 - guardian.server.access.token.authentication.enabled
@@ -383,5 +477,20 @@ healthChecks:
   intervalSeconds: 15
   method: !<K8sPod> {}
 - category: VITAL_SIGN_CHECK
-  intervalSeconds: 20
-  method: !<Builtin> {}
+  intervalSeconds: 15
+  method: !<Probe>
+    roles:
+    - roleType: GUARDIAN_TXSQL_SERVER
+      from: !<readiness> {}
+    - roleType: GUARDIAN_FEDERATION
+      from: !<readiness> {}
+    - roleType: GUARDIAN_APACHEDS
+      from: !<readiness> {}
+    - roleType: GUARDIAN_SERVER
+      from: !<readiness> {}
+    - roleType: CAS_CONFIG_SERVER
+      from: !<readiness> {}
+    - roleType: CAS_SERVER
+      from: !<readiness> {}
+    - roleType: CAS_ADMIN_SERVER
+      from: !<readiness> {}
