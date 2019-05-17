@@ -5,34 +5,27 @@ global: false
 namePrefix: Transporter
 friendlyName: Transwarp Data Transporter
 dockerImage: "transwarp/tdt:studio-1.1.0-rc0"
-validateConfig: true
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-5.2
     optional: true
   - name: TXSQL
     minVersion: transwarp-5.2
-    maxVersion: transwarp-6.1
     optional: false
   - name: HDFS
     minVersion: transwarp-5.2
-    maxVersion: transwarp-6.1
     optional: true
   - name: INCEPTOR
     minVersion: transwarp-5.2
-    maxVersion: transwarp-6.1
     optional: true
   - name: ZOOKEEPER
     minVersion: transwarp-5.2
-    maxVersion: transwarp-6.1
     optional: true
   - name: KAFKA
     minVersion: transwarp-5.2
-    maxVersion: transwarp-6.1
     optional: true
   - name: HYPERBASE
     minVersion: transwarp-5.2
-    maxVersion: transwarp-6.1
     optional: true
 roles:
 - name: TDT_SERVER
