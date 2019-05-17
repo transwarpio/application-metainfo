@@ -1,6 +1,6 @@
 ---
 name: PILOTENTERPRISE
-version: transwarp-6.0
+version: transwarp-5.2
 global: false
 namePrefix: PilotEnterprise
 friendlyName: PilotEnterprise
@@ -9,7 +9,7 @@ roles:
   - name: SMARTBI_MYSQL
     friendlyName: "Pilot Enterprise MySQL"
     labelPrefix: "smartbi-mysql"
-    dockerImage: "transwarp/smartbi-mysql:transwarp-6.0"
+    dockerImage: "transwarp/smartbi-mysql:transwarp-5.2"
     linkExpression: ""
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete"]
@@ -51,7 +51,7 @@ roles:
   - name: SMARTBI_TOMCAT
     friendlyName: "Pilot Enterprise Tomcat"
     labelPrefix: "smartbi-tomcat"
-    dockerImage: "transwarp/smartbi-tomcat:transwarp-6.0"
+    dockerImage: "transwarp/smartbi-tomcat:transwarp-5.2"
     linkExpression: "http://${localhostname}:${service['pilotenterprise.tomcat.http.port']}/pilot"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete"]

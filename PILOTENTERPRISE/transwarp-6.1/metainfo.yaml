@@ -115,6 +115,12 @@ roles:
           templatePath: "Smartbi-License.xml"
           targetPath: "/etc/${service.sid}/conf/Smartbi-License.xml"
           mode: "755"
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "server.xml"
+          targetPath: "/etc/${service.sid}/conf/server.xml"
+          mode: "755"
+
   - name: PILOT_CATALOG_AGENT
     friendlyName: "Pilot Enterprise Catalog Agent"
     labelPrefix: "pilot-catalog-agent"
