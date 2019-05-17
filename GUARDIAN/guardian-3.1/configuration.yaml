@@ -208,8 +208,27 @@
   groups: []
   visibility: READ_WRITE
 
+- name: federation.service.resetPasswordAllowed
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.service.user.admin.password
+  recommendExpression: Transwarp!
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: WRITE_ONLY
+
 - name: federation.service.user.admin.usePlainPassword
-  recommendExpression: false
+  recommendExpression: true
   defaultValue: null
   valueType: BOOL
   scope: !<RoleTypes>
@@ -741,6 +760,26 @@
   recommendExpression: true
   defaultValue: null
   valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.server.authentication.oauth2.enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.server.authentication.oauth2.server.baseUrls.external
+  recommendExpression: ""
+  defaultValue: null
+  valueType: STRING
   scope: !<RoleTypes>
     roleTypes: [GUARDIAN_SERVER]
   onDeps: []

@@ -46,6 +46,26 @@
         <@property "guardian.server.cas.authentication.enabled" "false"/>
     </#if>
 
+        <!-- OAUTH2 Authentication -->
+    <#if service.roles["GUARDIAN_FEDERATION"]??>
+        <#assign federationTenant = service['guardian.ds.realm']>
+        <#assign federation_servers=[]>
+        <#list service.roles["GUARDIAN_FEDERATION"] as role>
+        <#assign federation_servers += [("https://" + role.hostname + ":" + service["federation.server.port"] + "/federation-server")]>
+        </#list>
+        <#assign federation_address = federation_servers?join(";")>
+        <@property "guardian.server.authentication.oauth2.enabled" "${service['guardian.server.authentication.oauth2.enabled']}"/>
+        <@property "guardian.server.authentication.oauth2.server.baseUrls" "${federation_address}"/>
+        <#if !service['guardian.server.authentication.oauth2.server.baseUrls.external']?matches("^\\s*$")>
+        <@property "guardian.server.authentication.oauth2.server.baseUrls.external" "${service['guardian.server.authentication.oauth2.server.baseUrls.external']}"/>
+        </#if>
+        <@property "guardian.server.authentication.oauth2.server.endpoint.validation" "/${federationTenant}/oauth/check_token"/>
+        <@property "guardian.server.authentication.oauth2.server.endpoint.authCode" "/${federationTenant}/oauth/authorize"/>
+        <@property "guardian.server.authentication.oauth2.server.endpoint.token" "/${federationTenant}/oauth/token"/>
+        <@property "guardian.server.authentication.oauth2.server.endpoint.logout" "/logout"/>
+        <@property "guardian.server.authentication.oauth2.client.credentialFile" "/etc/guardian/conf/client-credential.jks"/>
+    </#if>
+
     <!-- Access Token Authentication -->
     <#if service['guardian.server.access.token.authentication.enabled'] = "true">
         <@property "guardian.server.access.token.authentication.enabled" "true"/>

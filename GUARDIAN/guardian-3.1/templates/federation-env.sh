@@ -1,4 +1,3 @@
-<#if service.roles["GUARDIAN_TXSQL_SERVER"]??>
 <#assign hostPorts = []>
 <#list service.roles["GUARDIAN_TXSQL_SERVER"] as r>
     <#assign hostPorts = hostPorts + [r.hostname + ':' + service['mysql.rw.port']]>
@@ -25,6 +24,8 @@ export FEDERATION_SERVICE_SESSION_MAX_INACTIVE_INTERVAL=${service['federation.se
 export FEDERATION_SERVICE_EXPIRED_SESSION_EVICTION_START_DELAY=${service['federation.service.session.expiredSessionEvictionStartDelay']}
 export FEDERATION_SERVICE_EXPIRED_SESSION_EVICTION_INTERVAL=${service['federation.service.session.expiredSessionEvictionInterval']}
 export FEDERATION_SERVICE_SESSION_CACHE_EVICTION_INTERVAL=${service['federation.service.session.sessionCacheEvictionInterval']}
+
+export FEDERATION_SERVICE_RESET_PASSWORD_ALLOWED=${service['federation.service.resetPasswordAllowed']}
 
 export FEDERATION_SERVICE_USER_ADMIN_PASSWORD=${service['federation.service.user.admin.password']}
 export FEDERATION_SERVICE_USER_ADMIN_USE_PLAIN_PASSWORD=${service['federation.service.user.admin.usePlainPassword']}
