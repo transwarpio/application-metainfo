@@ -9,17 +9,14 @@ export GRPC_PORT_BASE=16000
 export MYSQL_PORT_BASE=17000
 export MYSQL_USER="root"
 export MYSQL_PASSWORD="123456"
+export ENABLE_SECURITY=${service['kundb.enable_security']}
 
 export CTLD_GRPC_PORT=${service['kunctld.grpc.port']}
 export CTLD_WEB_PORT=${service['kunctld.debug.port']}
-
 export KUNGATE_WEB_PORT=${service['kungate.debug.port']}
 export KUNGATE_GRPC_PORT=${service['kungate.grpc.port']}
 export MYSQL_SERVER_PORT_BASE=${service['kungate.server.port']}
-
-export MFED_SHARD=0	
-export MFED_UIDBASE=800
-export MFED_UIDINDEX=0
+export KUNGATE_AUDIT_SQLS=${service['kungate.audit_sqls']}
 export KUNDB_DIR=${service.sid}
 
 <#if dependencies.ZOOKEEPER??>
@@ -30,33 +27,31 @@ export KUNDB_DIR=${service.sid}
     </#list>
     <#assign quorum=quorums?join(",")>
     <#assign hostrum=hostrums?join(" ")>
-</#if>
 export KUNDB_ZOOKEEPER_SERVER="${quorum}"
 export KUNDB_ZOOKEEPER_SERVER_ARR=(${hostrum})
+</#if>
+
 <#if dependencies.ZOOKEEPER??>
     <#if dependencies.ZOOKEEPER['zookeeper.client.port']??>
 export KUNDB_ZOOKEEPER_PORT=${dependencies.ZOOKEEPER['zookeeper.client.port']}
     </#if>
 </#if>
 
-<#if service.roles.COMPUTE_NODE?? && service.roles.COMPUTE_NODE?size gt 0>
-  <#assign mfedNum = (service.roles.COMPUTE_NODE?size) mfedIndex = 0>
-export MFED_SHARD_NUM=${mfedNum}
-    <#list service.roles.COMPUTE_NODE as mfed>
-      <#if mfed.hostname == .data_model["localhostname"]>
-export MFED_SHARD_INDEX=${mfedIndex}
-      </#if>
-      <#assign mfedIndex += 1>
-    </#list>
-</#if>
-
 <#if service.roles.KUNCTLD??>
   <#list service.roles.KUNCTLD as ctld>
     <#assign ctldHost = ctld.hostname> 
+    <#break>
   </#list>
-</#if>
-#export CTLD_HOST=`hostname -I`
 export CTLD_HOST=${ctldHost}
+</#if>
+
+<#if service.roles.ORCHESTRATOR??>
+  <#list service.roles.ORCHESTRATOR as orche>
+    <#assign orcheHost = orche.hostname> 
+    <#break>
+  </#list>
+export ORCHESTRATOR_HOST=${orcheHost}
+</#if>
 
 export VTROOT=/vt
 export VTTOP=$VTROOT/src/github.com/youtube/vitess

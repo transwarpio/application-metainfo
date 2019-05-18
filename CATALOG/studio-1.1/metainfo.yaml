@@ -6,28 +6,28 @@ namePrefix: Catalog
 friendlyName: Catalog
 dependencies:
   - name: HYPERBASE
-    minVersion: studio-1.1
-    maxVersion: studio-1.1
+    minVersion: transwarp-6.0
+    maxVersion: transwarp-6.1
     optional: false
   - name: SEARCH
-    minVersion: studio-1.1
-    maxVersion: studio-1.1
+    minVersion: transwarp-6.0
+    maxVersion: transwarp-6.1
     optional: false
   - name: KAFKA
-    minVersion: studio-1.1
-    maxVersion: studio-1.1
+    minVersion: transwarp-6.0
+    maxVersion: transwarp-6.1
     optional: false
   - name: ZOOKEEPER
-    minVersion: studio-1.1
-    maxVersion: studio-1.1
+    minVersion: transwarp-6.0
+    maxVersion: transwarp-6.1
     optional: false
   - name: HDFS
-    minVersion: studio-1.1
-    maxVersion: studio-1.1
+    minVersion: transwarp-6.0
+    maxVersion: transwarp-6.1
     optional: false
   - name: TXSQL
-    minVersion: studio-1.1
-    maxVersion: studio-1.1
+    minVersion: transwarp-6.0
+    maxVersion: transwarp-6.1
     optional: false
 user: catalog
 

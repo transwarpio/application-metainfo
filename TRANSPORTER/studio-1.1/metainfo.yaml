@@ -5,34 +5,27 @@ global: false
 namePrefix: Transporter
 friendlyName: Transwarp Data Transporter
 dockerImage: "transwarp/tdt:studio-1.1"
-validateConfig: true
 dependencies:
   - name: GUARDIAN
-    minVersion: transwarp-6.0
+    minVersion: transwarp-5.2
     optional: true
   - name: TXSQL
-    minVersion: transwarp-6.0
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-5.2
     optional: false
   - name: HDFS
-    minVersion: transwarp-6.0
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-5.2
     optional: true
   - name: INCEPTOR
-    minVersion: transwarp-6.0
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-5.2
     optional: true
   - name: ZOOKEEPER
-    minVersion: transwarp-6.0
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-5.2
     optional: true
   - name: KAFKA
-    minVersion: transwarp-6.0
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-5.2
     optional: true
   - name: HYPERBASE
-    minVersion: transwarp-6.0
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-5.2
     optional: true
 roles:
 - name: TDT_SERVER
@@ -73,6 +66,9 @@ roles:
         mode: "755"
   - type: Config
     directives:
+    - directive: !<mkdirs>
+            paths: ["/etc/${service.sid}/conf/canal/conf/spring"]
+            mode: "755"
     - directive: !<link>
         action: Link
         from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"

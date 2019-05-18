@@ -9,6 +9,7 @@ export MYSQL_FLAVOR=MariaDB
 export PRIV_KUNGATE_SERVER_PORT=${service['computenode.kungate.server.port']}
 export PRIV_KUNGATE_WEB_PORT=${service['computenode.kungate.debug.port']}
 export PRIV_KUNGATE_GRPC_PORT=${service['computenode.kungate.grpc.port']}
+export PRIV_KUNGATE_AUDIT_SQLS=${service['computenode.audit_sqls']}
 export PRIV_KUNGATE_OPTIONAL_ARGS="-mysql_auth_server_static_file $KUNDB_CONF_DIR/mysql_auth_server_static_creds.json" 
 
 <#if service.roles.COMPUTE_NODE?? && service.roles.COMPUTE_NODE?size gt 0>
