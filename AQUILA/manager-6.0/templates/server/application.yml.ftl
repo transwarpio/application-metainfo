@@ -58,6 +58,12 @@ alert:
       host: ${prometheusHost}
       path: /etc/${service.sid}/conf/prometheus/rules.d
       upload-trigger: ${prometheusEndpoint}/-/reload
+  gateway:
+    alert-manager:
+      push-url: http://172.16.1.104:9193/api/v1/alerts
+  query:
+    alert-manager:
+      query-url: http://172.16.1.104:9193/api/v1/alerts
 manager-proxy:
   endpoint: http://${service.roles["AQUILA_MANAGER_PROXY"][0].hostname}:${service["manager.proxy.web.port"]}
 agent:
