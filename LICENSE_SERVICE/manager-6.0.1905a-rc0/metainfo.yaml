@@ -8,7 +8,7 @@ friendlyName: "License Service"
 validateConfig: true
 dependencies: []
 packages: ["zookeeper"]
-dockerImage: "transwarp/zookeeper:transwarp-6.0.1-final"
+dockerImage: "transwarp/zookeeper:transwarp-6.0.2-final"
 user: zookeeper
 roles:
 - name: LICENSE_NODE
