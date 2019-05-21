@@ -119,6 +119,7 @@ stages:
     timeoutMinutes: 3
 
 firstWizardConfigs:
+- graph.file.server.port
 - graph.cypher.jdbc.url
 - graph.data.dirs
 - graph.raft.dirs
