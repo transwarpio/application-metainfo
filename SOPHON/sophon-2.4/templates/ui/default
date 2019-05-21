@@ -20,7 +20,7 @@ server {
     root  /usr/lib/sophon_web/build;
   }
   location /gateway/ {
-    proxy_pass http://${service.roles.GATEWAY[0].hostname}:8050/;
+    proxy_pass http://${service.roles.SOPHON_GATEWAY[0].hostname}:${service['gateway.server.port']}/;
     proxy_http_version 1.1;
     <#if service['use.https'] = "true">
     proxy_set_header X-Forwarded-Proto https;
@@ -34,7 +34,7 @@ server {
     proxy_cache_bypass $http_upgrade;
   }
   location ~ ^/(cas|api|sophonWS){
-    proxy_pass http://${service.roles.GATEWAY[0].hostname}:8050;
+    proxy_pass http://${service.roles.SOPHON_GATEWAY[0].hostname}:${service['gateway.server.port']};
     proxy_http_version 1.1;
     <#if service['use.https'] = "true">
     proxy_set_header X-Forwarded-Proto https;

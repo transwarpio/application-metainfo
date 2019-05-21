@@ -127,10 +127,10 @@ roles:
         targetPath: "/etc/${service.sid}/conf/redis/redis.conf"
         mode: "755"
 
-- name: USER
-  dockerImage: "transwarp/user:sophon-2.4"
-  friendlyName: "user"
-  labelPrefix: "user"
+- name: SOPHON_USER
+  dockerImage: "transwarp/sophon-user:sophon-2.4"
+  friendlyName: "Sophon User"
+  labelPrefix: "sophon-user"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
@@ -208,10 +208,10 @@ roles:
         targetPath: "/etc/${service.sid}/conf/scheduler.xml"
         mode: "755"
 
-- name: SHARE_SERVER
-  dockerImage: "transwarp/share-server:sophon-2.4"
-  friendlyName: "Share Server"
-  labelPrefix: "share-server"
+- name: SOPHON_SHARE_SERVER
+  dockerImage: "transwarp/sophon-share-server:sophon-2.4"
+  friendlyName: "Sophon Share Server"
+  labelPrefix: "sophon-share-server"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
@@ -251,11 +251,11 @@ roles:
         targetPath: "/etc/${service.sid}/conf/share/application.properties"
         mode: "755"
 
-- name: APINAMANER
-  dockerImage: "transwarp/apimanager:sophon-2.4"
+- name: SOPHON_APINAMANER
+  dockerImage: "transwarp/sophon-apimanager:sophon-2.4"
   linkExpression: "http://${localhostname}:8044/swagger-ui.html"
-  friendlyName: "Api Manager"
-  labelPrefix: "apimanager"
+  friendlyName: "Sophon Api Manager"
+  labelPrefix: "sophon-apimanager"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
@@ -350,6 +350,7 @@ roles:
         templatePath: "kg/default"
         targetPath: "/etc/${service.sid}/conf/kg/default"
         mode: "755"
+
 - name: SOPHON_WEB
   dockerImage: "transwarp/sophon-web:sophon-2.4"
   friendlyName: "Sophon base"
@@ -416,11 +417,10 @@ roles:
         targetPath: "/etc/${service.sid}/conf/base/application.properties"
         mode: "755"
 
-
-- name: GATEWAY
-  dockerImage: "transwarp/gateway:sophon-2.4"
-  friendlyName: "gateway"
-  labelPrefix: "gateway"
+- name: SOPHON_GATEWAY
+  dockerImage: "transwarp/sophon-gateway:sophon-2.4"
+  friendlyName: "Sophon Gateway"
+  labelPrefix: "sophon-gateway"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
@@ -624,12 +624,12 @@ stages:
       summaryPolicy: SOME
       timeoutMinutes: 1
     - !<Role>
-      roleType: "SHARE_SERVER"
+      roleType: "SOPHON_SHARE_SERVER"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
     - !<Role>
-      roleType: "APINAMANER"
+      roleType: "SOPHON_APINAMANER"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
@@ -644,12 +644,12 @@ stages:
       summaryPolicy: SOME
       timeoutMinutes: 1
     - !<Role>
-      roleType: "USER"
+      roleType: "SOPHON_USER"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
     - !<Role>
-      roleType: "GATEWAY"
+      roleType: "SOPHON_GATEWAY"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1

@@ -316,7 +316,7 @@
 
 # notebook
 - name: sophon.k8s.tensorboard.image.name
-  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-cpu:sophon-2.3"
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-cpu-basic:sophon-2.3"
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
@@ -324,7 +324,7 @@
   groups: []
   visibility: READ_WRITE
 - name: sophon.k8s.jupyter.cpu.image.name
-  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-cpu:sophon-2.3"
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-cpu-basic:sophon-2.3"
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}

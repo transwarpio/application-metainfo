@@ -254,16 +254,6 @@
   onDeps: []
   groups: []
   visibility: PASSWORD
-
-- name: sophon.server.port
-  recommendExpression: 8082
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<RoleTypes>
-    roleTypes: [SOPHON_BASE]
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
 - name: sophon.kong.username
   recommendExpression: "admin"
   defaultValue: null
@@ -288,25 +278,9 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
-- name: sophon.visit.port
-  recommendExpression: 8067
-  defaultValue: null
-  valueType: PORT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
+
 - name: sophon.ui.port
   recommendExpression: 8066
-  defaultValue: null
-  valueType: PORT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: sophon.proxy.api.port
-  recommendExpression: 8083
   defaultValue: null
   valueType: PORT
   scope: !<ServiceLevel> {}
@@ -446,7 +420,7 @@
   groups: []
   visibility: PASSWORD
 - name: r.repo.port
-  recommendExpression: 8037
+  recommendExpression: 8717
   defaultValue: null
   valueType: PORT
   scope: !<ServiceLevel> {}
@@ -471,7 +445,7 @@
   groups: []
   visibility: PASSWORD
 - name: python.repo.port
-  recommendExpression: 8036
+  recommendExpression: 8716
   defaultValue: null
   valueType: PORT
   scope: !<ServiceLevel> {}
@@ -483,6 +457,96 @@
   recommendExpression: true
   defaultValue: null
   valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: gateway.server.port
+  recommendExpression: 8700
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: sophon.visit.port
+  recommendExpression: 8701
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: sophon.proxy.api.port
+  recommendExpression: 8702
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: sophon.server.port
+  recommendExpression: 8703
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_BASE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: user.server.port
+  recommendExpression: 8710
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: apimanager.server.port
+  recommendExpression: 8711
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: approval.server.port
+  recommendExpression: 8712
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: audit.server.port
+  recommendExpression: 8713
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: share.server.port
+  recommendExpression: 8714
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: kg.server.port
+  recommendExpression: 8715
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: resource.server.port
+  recommendExpression: 8718
+  defaultValue: null
+  valueType: PORT
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: []
