@@ -111,3 +111,11 @@
   onDeps: []
   groups: ["graphconf.xml"]
   visibility: READ_WRITE
+- name: graph.file.server.port
+  recommendExpression: 43999
+  defaultValue: null
+  valueType: HOST_PORT
+  scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
+  onDeps: []
+  groups: ["graphconf.xml"]
+  visibility: READ_WRITE
