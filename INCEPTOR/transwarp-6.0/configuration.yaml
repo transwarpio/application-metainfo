@@ -322,7 +322,7 @@
   visibility: READ_WRITE
 
 - name: inceptor.ui.port
-  recommendExpression: 4040
+  recommendExpression: 8888
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
@@ -638,7 +638,7 @@
   visibility: READ_WRITE
 
 - name: EXTRA_DRIVER_OPTS
-  recommendExpression: ""
+  recommendExpression: "-Dtranswarp.query.cypher.enabled=true"
   defaultValue: ""
   valueType: STRING
   scope: !<ServiceLevel> {}
@@ -1017,4 +1017,30 @@
     roleTypes: [INCEPTOR_CATALOG_AGENT]
   onDeps: []
   groups: []
+  visibility: READ_WRITE
+
+# STELLARDB
+- name: graph.zk.base_path
+  recommendExpression: "/graph"
+  defaultValue: ""
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: graph.zk.quorum
+  recommendExpression: |
+    <#compress>
+    <#assign zookeeper=dependencies.ZOOKEEPER quorum=[]>
+    <#list zookeeper.roles.ZOOKEEPER as role>
+        <#assign quorum += [role.hostname + ":" + zookeeper["zookeeper.client.port"]]>
+    </#list>
+    ${quorum?join(",")}
+    </#compress>
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: ['ZOOKEEPER']
+  groups: ["hive-site.xml"]
   visibility: READ_WRITE

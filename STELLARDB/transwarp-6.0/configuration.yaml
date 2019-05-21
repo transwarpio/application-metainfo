@@ -41,11 +41,18 @@
   groups: ["graphconf.xml"]
   visibility: READ_WRITE
 - name: graph.zk.quorum
-  recommendExpression: localhost:2181
+  recommendExpression: |
+    <#compress>
+    <#assign zookeeper=dependencies.ZOOKEEPER quorum=[]>
+    <#list zookeeper.roles.ZOOKEEPER as role>
+        <#assign quorum += [role.hostname + ":" + zookeeper["zookeeper.client.port"]]>
+    </#list>
+    ${quorum?join(",")}
+    </#compress>
   defaultValue: null
   valueType: STRING
   scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
-  onDeps: []
+  onDeps: ['ZOOKEEPER']
   groups: ["graphconf.xml"]
   visibility: READ_WRITE
 - name: graph.master.port
@@ -90,6 +97,22 @@
   visibility: READ_WRITE
 - name: graph.raft.server.port
   recommendExpression: 1998
+  defaultValue: null
+  valueType: HOST_PORT
+  scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
+  onDeps: []
+  groups: ["graphconf.xml"]
+  visibility: READ_WRITE
+- name: graph.cypher.jdbc.url
+  recommendExpression: jdbc:hive2://localhost:10000/default
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
+  onDeps: []
+  groups: ["graphconf.xml"]
+  visibility: READ_WRITE
+- name: graph.file.server.port
+  recommendExpression: 43999
   defaultValue: null
   valueType: HOST_PORT
   scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
