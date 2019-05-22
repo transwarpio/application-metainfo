@@ -16,7 +16,12 @@ export NGMR_CACHE_SIZE=${service['ngmr.cache.size']}
 export NGMR_EXECUTORS_PERJOB=${service['ngmr.executors.perjob']}
 export INCEPTOR_LOG_DIR=/var/log/${service.sid}
 export SPARK_DRIVER_PORT=${service['spark.driver.port']}
-export EXTRA_DRIVER_OPTS=" ${service['EXTRA_DRIVER_OPTS']} "
+<#assign dbaServiceExtraDriverOpts="">
+<#if dependencies.DBA_SERVICE??>
+    <#assign dbaservice=dependencies.DBA_SERVICE.roles.DBA_SERVICE_SERVER>
+    <#assign dbaServiceExtraDriverOpts=" -Dinceptor.leviathan.studio.host=" + dbaservice[0]['ip'] + " -Dinceptor.leviathan.studio.http.port=" + dependencies.DBA_SERVICE['dbaservice.ui.port'] + " -Dinceptor.leviathan.studio.port=" + dependencies.DBA_SERVICE['dbaservice.message.port'] + " -Dinceptor.leviathan.studio.name=receiver -Dinceptor.leviathan.studio.test.enabled=false -Dspark.ui.show.context.default=false ">
+</#if>
+export EXTRA_DRIVER_OPTS=" ${dbaServiceExtraDriverOpts + service['EXTRA_DRIVER_OPTS']} "
 EXTRA_EXECUTOR_OPTS=" ${service['EXTRA_EXECUTOR_OPTS']} "
 #SHIVA ENV
 <#if dependencies.SHIVA??>
