@@ -36,9 +36,9 @@
                     <ESTask name="ESBatchForTask${r'${ctx:taskId}'}">
                         <STRollingIndexName/>
                         <TaskId taskId="${r'${ctx:taskId}'}" />
-                        <AsyncBatchDelivery>
+                        <BulkDelivery>
                             <JestHttp serverUris="http://${searches[0]}" />
-                        </AsyncBatchDelivery>
+                        </BulkDelivery>
                     </ESTask>
                 </Route>
             </Routes>
