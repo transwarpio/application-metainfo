@@ -111,7 +111,7 @@ def replaceVersionTags(tags):
         dirname = re.sub(tag['original'], tag['replacement'], dirname)
       if(dir != dirname):
         #print '%s rename dir as %s' % (dir, dirname)
-        os.rename(os.path.join(path, dir), os.path.join(path, dirname))
+        shutil.move(os.path.join(path, dir), os.path.join(path, dirname))
   print 'Replace service version and images tags finished.'
 
 def replaceReservedTagsAndDeleteOthers(tags):
@@ -133,7 +133,7 @@ def replaceReservedTagsAndDeleteOthers(tags):
         dirname = re.sub(tag['original'], tag['replacement'], dirname)
       if(dir != dirname):
         # print '%s rename dir as %s' % (dir, dirname)
-        os.rename(os.path.join(path, dir), os.path.join(path, dirname))
+        shutil.move(os.path.join(path, dir), os.path.join(path, dirname))
       else:
         shutil.rmtree(os.path.join(path, dir))
         print 'Deleted %s' % os.path.join(path, dir)
