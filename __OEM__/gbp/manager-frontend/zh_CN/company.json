@@ -2,5 +2,7 @@
   "OEM_COMPANY_NAME": "巨人网络",
   "OEM_PRODUCT_NAME": "Giant Bigdata Platform",
   "OEM_PRODUCT_NAME_SHORT": "GBP",
-  "OEM_COMPANY_FULL_NAME": "巨人网络技术保障部"
+  "OEM_COMPANY_FULL_NAME": "巨人网络技术保障部",
+  "OEM_COMPONENT_TOS": "TOS",
+  "OEM_COMPONENT_GUARDIAN": "Guardian"
 }

@@ -114,6 +114,70 @@ def replaceVersionTags(tags):
         os.rename(os.path.join(path, dir), os.path.join(path, dirname))
   print 'Replace service version and images tags finished.'
 
+def replaceReservedTagsAndDeleteOthers(tags):
+  print 'Replace metainfo for reserved versions and delete other versions ...'
+  #replace metainfo version directory name and delete un-reserved ones
+  for service in os.listdir('../'):
+    if('__' in service):
+      continue
+      continue
+    if(r'.git' in service):
+      continue
+
+    path = '../{:s}'.format(service)
+    if not os.path.isdir(path):
+      continue
+    for dir in os.listdir(path):
+      dirname = dir
+      for tag in tags:
+        dirname = re.sub(tag['original'], tag['replacement'], dirname)
+      if(dir != dirname):
+        # print '%s rename dir as %s' % (dir, dirname)
+        os.rename(os.path.join(path, dir), os.path.join(path, dirname))
+      else:
+        shutil.rmtree(os.path.join(path, dir))
+        print 'Deleted %s' % os.path.join(path, dir)
+
+  for (path, dirs, files) in os.walk('../', topdown=False):
+    if('__' in path):
+      continue
+    if('resources' in path):
+      continue
+    if('i18n' in path):
+      continue
+    if(r'.git' in path):
+      continue
+
+    for file in files:
+      f = open(os.path.join(path, file),'r')
+      filedata = f.read()
+      f.close()
+
+      filename = file
+      for tag in tags:
+        #replace versions and tags in files
+        pattern = tag['original']
+        repl = tag['replacement']
+        filedata = re.sub(pattern, repl, filedata, flags=re.M)
+
+        #replace upgrade path filename
+        if(tag['original'] in file):
+          filename = re.sub(tag['original'], tag['replacement'], filename)
+
+       # upgrade path should be deleted if not in reserve tags
+      if path.endswith('/upgrade') and file == filename:
+        os.remove(os.path.join(path, file))
+        print 'Deleted upgrade path %s' % os.path.join(path, file)
+        continue
+
+      if(file != filename):
+        os.rename(os.path.join(path, file), os.path.join(path, filename))
+      f = open(os.path.join(path, filename),'w')
+      f.write(filedata)
+      f.close()
+
+  print 'Replace metainfo for reserved versions and delete other versions finished.'
+
 def replaceProductsInfo(products):
   print 'Replace metainfo for products ...'
   for product in products:
@@ -135,6 +199,51 @@ def replaceProductsInfo(products):
       f.write(filedata)
       f.close()
   print 'Replace metainfo for products finished.'
+
+def copy_tree(srcDir, dstDir, overwrite=False):
+  if not os.path.exists(dstDir):
+    os.makedirs(dstDir)
+
+  for file in os.listdir(srcDir):
+    srcFile = os.path.join(srcDir, file)
+    dstFile = os.path.join(dstDir, file)
+
+    if os.path.isfile(srcFile):
+      if overwrite or not os.path.exists(dstFile):
+        open(dstFile, "wb").write(open(srcFile, "rb").read())
+
+    if os.path.isdir(srcFile):
+      copy_tree(srcFile, dstFile, overwrite)
+
+def replaceServiceResources(baseDir):
+  print 'Replace service resources...'
+  for service in os.listdir(baseDir):
+    if('__' in service):
+      continue
+
+    srcDir = os.path.join(baseDir, service)
+    if not os.path.isdir(srcDir):
+      continue
+
+    servicePath = '../{:s}'.format(service)
+    if os.path.exists(servicePath):
+      versions = os.listdir(servicePath)
+      for version in versions:
+        dstDir = os.path.join(servicePath, version)
+        if not os.path.isdir(dstDir):
+          continue
+        print 'Replace service resources from %s to %s' % (srcDir, dstDir)
+        copy_tree(srcDir, dstDir, overwrite=True)
+  print 'Replace service resources finished.'
+
+def deleteServicesMeta(services):
+  print 'Delete metainfo for services ...'
+  for service in services:
+    print 'Delete metainfo for service %s ...' % service
+    servicePath = '../{:s}'.format(service)
+    if os.path.exists(servicePath):
+      shutil.rmtree(servicePath)
+    print 'Delete metainfo for service %s done' % service
 
 def replaceServicesInfo(services):
   print 'Replace metainfo for services ...'
@@ -163,19 +272,20 @@ def replaceServicesInfo(services):
 
         if service.has_key('roles'):
           if meta.has_key('roleGroups'):
-            for role in meta['roleGroups']['roles']:
-              for r in service['roles']:
-                if (role['name'] == r['name']):
-                  #replace role friendlyName
-                  if role.has_key('friendlyName') and r.has_key('friendlyName'):
-                    pattern = r'friendlyName:\s+["|\']?{:s}["|\']?$'.format(role['friendlyName'])
-                    repl = 'friendlyName: "{:s}"'.format(r['friendlyName'])
-                    filedata = re.sub(pattern, repl, filedata, flags=re.M)
-                  #replace role labelPrefix
-                  if role.has_key('labelPrefix') and r.has_key('labelPrefix'):
-                    pattern = r'labelPrefix:\s+["|\']?{:s}["|\']?$'.format(role['labelPrefix'])
-                    repl = 'labelPrefix: "{:s}"'.format(r['labelPrefix'])
-                    filedata = re.sub(pattern, repl, filedata, flags=re.M)
+            for group in meta['roleGroups']:
+              for role in group['roles']:
+                for r in service['roles']:
+                  if (role['name'] == r['name']):
+                    #replace role friendlyName
+                    if role.has_key('friendlyName') and r.has_key('friendlyName'):
+                      pattern = r'friendlyName:\s+["|\']?{:s}["|\']?$'.format(role['friendlyName'])
+                      repl = 'friendlyName: "{:s}"'.format(r['friendlyName'])
+                      filedata = re.sub(pattern, repl, filedata, flags=re.M)
+                    #replace role labelPrefix
+                    if role.has_key('labelPrefix') and r.has_key('labelPrefix'):
+                      pattern = r'labelPrefix:\s+["|\']?{:s}["|\']?$'.format(role['labelPrefix'])
+                      repl = 'labelPrefix: "{:s}"'.format(r['labelPrefix'])
+                      filedata = re.sub(pattern, repl, filedata, flags=re.M)
           for role in meta['roles']:
             for r in service['roles']:
               if (role['name'] == r['name']):
@@ -266,6 +376,10 @@ def replaceDockerImageTagWithProductTag(company, managerTag, productTag):
         repl = ':{:s}'.format(productTag)
         filedata = re.sub(pattern, repl, filedata, flags=re.M)
 
+        pattern = ':transwarp-\d+.\d+.\d+-\w+'.format(company)
+        repl = ':{:s}'.format(productTag)
+        filedata = re.sub(pattern, repl, filedata, flags=re.M)
+
         f = open(filePath, 'w')
         f.write(filedata)
         f.close()
@@ -305,6 +419,10 @@ if __name__ == "__main__":
 
     if conf.has_key('products'):
       replaceProductsInfo(conf['products'])
+    if conf.has_key('deleteServices'):
+      deleteServicesMeta(conf['deleteServices'])
+    if conf.has_key('reserveTags'):
+      replaceReservedTagsAndDeleteOthers(conf['reserveTags'])
     if conf.has_key('services'):
       replaceServicesInfo(conf['services'])
     if conf.has_key('tags'):
@@ -313,3 +431,6 @@ if __name__ == "__main__":
     managerTag = sys.argv[2]
     productTag = sys.argv[3]
     replaceDockerImageTagWithProductTag(company, managerTag, productTag)
+
+    serviceMetaBaseDir = company + '/application-metainfo/'
+    replaceServiceResources(serviceMetaBaseDir)
