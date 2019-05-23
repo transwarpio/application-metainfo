@@ -4,6 +4,8 @@ reserveTags:
   replacement: inspur-iih.4.0.0
 - original: manager-6.0.1812a
   replacement: inspur-iih.4.0.0
+- original: studio-1.1.0
+  replacement: inspur-iih.4.0.0
 
 products:
 - name: BASIC
