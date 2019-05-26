@@ -35,12 +35,21 @@ dependencies:
     maxVersion: transwarp-6.1
     optional: true
     preferred: false
+  - name: DBA_SERVICE
+    minVersion: transwarp-6.1
+    maxVersion: transwarp-6.1
+    optional: false
   - name: SEARCH
     minVersion: transwarp-6.1
     maxVersion: transwarp-6.1
     optional: true
     preferred: true
   - name: SHIVA
+    minVersion: transwarp-6.1
+    maxVersion: transwarp-6.1
+    optional: true
+    preferred: true
+  - name: STELLARDB
     minVersion: transwarp-6.1
     maxVersion: transwarp-6.1
     optional: true
@@ -190,6 +199,9 @@ roles:
   - type: DEPENDENCY_DIR_CONF
     dependencyType: SHIVA
     configKey: tabletserver.store.datadirs
+  - type: DEPENDENCY_DIR_CONF
+    dependencyType: STELLARDB
+    configKey: graph.data.dirs
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}
@@ -333,6 +345,10 @@ stages:
 
 
 firstWizardConfigs:
+# StellarDB
+- graph.zk.base_path
+- graph.zk.quorum
+# inceptor
 - hive.server2.enabled
 - hive.server2.authentication
 - hive.exec.scratchdir

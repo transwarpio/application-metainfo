@@ -11,7 +11,7 @@ roles:
 - name: MANAGER_ZOOKEEPER_SERVER
   friendlyName: "Zookeeper Server"
   labelPrefix: "zookeeper-server"
-  dockerImage: "transwarp/zookeeper:transwarp-6.0.1-final"
+  dockerImage: "transwarp/zookeeper:transwarp-6.0.2-final"
   category: MASTER
   frontendOperations: ["Start"]
   deleteOpCondition:
@@ -41,7 +41,7 @@ roles:
         mode: "755"
     - directive: !<shell>
         script: |
-          docker pull transwarp/zookeeper:transwarp-6.0.1-final
+          docker pull transwarp/zookeeper:transwarp-6.0.2-final
   - type: Config
     directives:
     - directive: !<resource>
@@ -72,7 +72,7 @@ roles:
     - directive: !<shell>
         script: |
           <#assign
-            cmd="docker run --restart on-failure:5 --privileged=true --detach --env ZOOKEEPER_CONF_DIR=/etc/${service.sid}/conf --volume /etc/${service.sid}/conf:/etc/${service.sid}/conf --volume /var/${service.sid}/zookeeper:/var/${service.sid}/zookeeper --volume /var/log/${service.sid}/zookeeper:/var/log/${service.sid}/zookeeper --volume /etc/transwarp/conf:/etc/transwarp/conf --net=host --name=Manager-Zookeeper transwarp/zookeeper:transwarp-6.0.1-final /bin/boot.sh"
+            cmd="docker run --restart on-failure:5 --privileged=true --detach --env ZOOKEEPER_CONF_DIR=/etc/${service.sid}/conf --volume /etc/${service.sid}/conf:/etc/${service.sid}/conf --volume /var/${service.sid}/zookeeper:/var/${service.sid}/zookeeper --volume /var/log/${service.sid}/zookeeper:/var/log/${service.sid}/zookeeper --volume /etc/transwarp/conf:/etc/transwarp/conf --net=host --name=Manager-Zookeeper transwarp/zookeeper:transwarp-6.0.2-final /bin/boot.sh"
           >
           if docker ps -a | grep Manager-Zookeeper; then
             if docker ps -a | grep Manager-Zookeeper | grep Exited; then
@@ -93,7 +93,7 @@ roles:
 - name: MANAGER_TXSQL_SERVER
   friendlyName: "TxSQL Server"
   labelPrefix: "txsql-server"
-  dockerImage: "transwarp/txsql:transwarp-6.0.1-final"
+  dockerImage: "transwarp/txsql:transwarp-6.0.2-final"
   category: MASTER
   frontendOperations: ["Start", "Move"]
   deleteOpCondition:
@@ -120,7 +120,7 @@ roles:
         mode: "755"
     - directive: !<shell>
         script: |
-          docker pull transwarp/txsql:transwarp-6.0.1-final
+          docker pull transwarp/txsql:transwarp-6.0.2-final
   - type: Config
     directives:
     - directive: !<resource>
@@ -143,7 +143,7 @@ roles:
     - directive: !<shell>
         script: |
           <#assign
-            cmd="docker run --restart on-failure:5 --privileged=true --detach --env CONF_DIR=/etc/${service.sid}/conf --volume /etc/${service.sid}/conf:/etc/${service.sid}/conf --volume ${service['data.dir']}:${service['data.dir']}  --volume /var/log/${service.sid}/txsql:/var/log/${service.sid}/txsql --volume /etc/transwarp/conf:/etc/transwarp/conf --net=host --name=Manager-TxSQL transwarp/txsql:transwarp-6.0.1-final /bin/boot.sh"
+            cmd="docker run --restart on-failure:5 --privileged=true --detach --env CONF_DIR=/etc/${service.sid}/conf --volume /etc/${service.sid}/conf:/etc/${service.sid}/conf --volume ${service['data.dir']}:${service['data.dir']}  --volume /var/log/${service.sid}/txsql:/var/log/${service.sid}/txsql --volume /etc/transwarp/conf:/etc/transwarp/conf --net=host --name=Manager-TxSQL transwarp/txsql:transwarp-6.0.2-final /bin/boot.sh"
           >
           if docker ps -a | grep Manager-TxSQL; then
             if docker ps -a | grep Manager-TxSQL | grep Exited; then
