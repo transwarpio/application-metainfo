@@ -1023,3 +1023,12 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: hbase.master.hfilecleaner.ttl
+  recommendExpression: 86400000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
