@@ -309,6 +309,63 @@ roles:
         targetPath: "/etc/${service.sid}/conf/apimanager/log4j.properties"
         mode: "755"
 
+- name: SOPHON_APPROVAL
+  dockerImage: "transwarp/sophon-approval:sophon-2.4"
+  friendlyName: "Sophon Approval"
+  labelPrefix: "sophon-approval"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+  - name: SOPHON_CONF_DIR
+    value: /etc/${service.sid}/conf/
+  - name: SOPHON_SERVICE_ID
+    value: ${service.sid}
+  mountPaths:
+  - mountPath: /var/run/docker.sock
+    hostPath: /var/run/docker.sock
+    name: dockersock
+  - mountPath: /srv/kubernetes
+    hostPath: /srv/kubernetes
+    name: secure
+  - mountPath: /bin/docker
+    hostPath: /usr/bin/docker
+    name: docker
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "approval/server.conf"
+        targetPath: "/etc/${service.sid}/conf/approval/server.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "approval/application.properties"
+        targetPath: "/etc/${service.sid}/conf/approval/application.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "approval/log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/approval/log4j.properties"
+        mode: "755"
+
 - name: KG_EXPLORER
   dockerImage: "transwarp/kg-explorer:sophon-2.4"
   linkExpression: "http://${localhostname}:9000"
@@ -608,6 +665,12 @@ stages:
       dbPasswordConfig: livy.jdbc.password
       timeoutMinutes: 5
       summaryPolicy: SOME
+    - !<Create-Database>
+      dbPrefix: metastore_approval
+      dbUserConfig: livy.jdbc.username
+      dbPasswordConfig: livy.jdbc.password
+      timeoutMinutes: 5
+      summaryPolicy: SOME
     - !<Role>
       roleType: "SOPHON_ETCD"
       operation: Config
@@ -630,6 +693,11 @@ stages:
       timeoutMinutes: 1
     - !<Role>
       roleType: "SOPHON_APINAMANER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SOPHON_APPROVAL"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1

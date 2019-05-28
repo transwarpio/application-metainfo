@@ -453,7 +453,7 @@
   groups: []
   visibility: READ_WRITE
 
-- name: use.https
+- name: server.ssl.enabled
   recommendExpression: true
   defaultValue: null
   valueType: BOOL

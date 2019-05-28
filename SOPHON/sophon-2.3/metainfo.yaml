@@ -377,6 +377,11 @@ roles:
         templatePath: "apimanager/application.properties"
         targetPath: "/etc/${service.sid}/conf/apimanager/application.properties"
         mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "apimanager/log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/apimanager/log4j.properties"
+        mode: "755"
 
 
 stages:

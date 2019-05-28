@@ -1,6 +1,6 @@
 server {
   listen ${service['sophon.ui.port']};
-  <#if service['use.https'] = "true">
+  <#if service['server.ssl.enabled'] = "true">
   ssl on;
   ssl_certificate /usr/lib/sophon_web/server.crt;
   ssl_certificate_key /usr/lib/sophon_web/server.key;
@@ -22,7 +22,7 @@ server {
   location /gateway/ {
     proxy_pass http://${service.roles.SOPHON_GATEWAY[0].hostname}:${service['gateway.server.port']}/;
     proxy_http_version 1.1;
-    <#if service['use.https'] = "true">
+    <#if service['server.ssl.enabled'] = "true">
     proxy_set_header X-Forwarded-Proto https;
     <#else>
     proxy_set_header X-Forwarded-Proto http;
@@ -36,7 +36,7 @@ server {
   location ~ ^/(cas|api|sophonWS){
     proxy_pass http://${service.roles.SOPHON_GATEWAY[0].hostname}:${service['gateway.server.port']};
     proxy_http_version 1.1;
-    <#if service['use.https'] = "true">
+    <#if service['server.ssl.enabled'] = "true">
     proxy_set_header X-Forwarded-Proto https;
     <#else>
     proxy_set_header X-Forwarded-Proto http;
