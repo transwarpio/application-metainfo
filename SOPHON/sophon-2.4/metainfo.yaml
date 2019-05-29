@@ -408,17 +408,17 @@ roles:
         targetPath: "/etc/${service.sid}/conf/kg/default"
         mode: "755"
 
-- name: SOPHON_WEB
-  dockerImage: "transwarp/sophon-web:sophon-2.4"
+- name: SOPHON_BASE
+  dockerImage: "transwarp/sophon-base:sophon-2.4"
   friendlyName: "Sophon base"
   labelPrefix: "sophon-base"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   readinessProbe:
     probe: !<httpGet>
-      path: /health
+      path: /actuator/health
       port: ${service['sophon.visit.port']}
-      scheme: HTTPS
+      scheme: HTTP
     failureThreshold: 10
     initialDelaySeconds: 60
     periodSeconds: 30
@@ -525,11 +525,11 @@ roles:
         targetPath: "/etc/${service.sid}/conf/gateway/log4j.properties"
         mode: "755"
 
-- name: SOPHON_WEB_UI
+- name: SOPHON_UI
   linkExpression: "https://${localhostname}:${service['sophon.ui.port']}/"
-  dockerImage: "transwarp/sophon-web-ui:sophon-2.4"
-  friendlyName: "Sophon Web UI"
-  labelPrefix: "sophon-web-ui"
+  dockerImage: "transwarp/sophon-ui:sophon-2.4"
+  friendlyName: "Sophon UI"
+  labelPrefix: "sophon-ui"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
@@ -677,12 +677,12 @@ stages:
       summaryPolicy: SOME
       timeoutMinutes: 1
     - !<Role>
-      roleType: "SOPHON_WEB"
+      roleType: "SOPHON_BASE"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
     - !<Role>
-      roleType: "SOPHON_WEB_UI"
+      roleType: "SOPHON_UI"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
@@ -778,5 +778,5 @@ healthChecks:
   intervalSeconds: 15
   method: !<Probe>
     roles:
-    - roleType: SOPHON_WEB
+    - roleType: SOPHON_BASE
       from: !<readiness> {}
