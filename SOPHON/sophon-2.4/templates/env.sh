@@ -46,7 +46,7 @@ HYPERBASE_CONF_DIR=/etc/${dependencies.HYPERBASE.sid}/conf
 STELLARDB_CONF_DIR=/etc/${dependencies.STELLARDB.sid}/conf
 </#if>
 
-USE_HTTPS=${service['use.https']}
+USE_HTTPS=${service['server.ssl.enabled']}
 
 
 

@@ -1,6 +1,6 @@
 server {
   listen 9000;
-  <#if service['use.https'] = "true">
+  <#if service['server.ssl.enabled'] = "true">
   # the section below is for https, remove them if https is not needed
   ssl                  on;
   ssl_certificate      /usr/lib/kg_explorer/server.crt;

@@ -27,7 +27,7 @@ server {
     <#else>
     proxy_set_header X-Forwarded-Proto http;
     </#if>
-    proxy_set_header X-Forwarded-For ${service.roles.SOPHON_WEB[0]['ip']};
+    proxy_set_header X-Forwarded-For ${service.roles.SOPHON_BASE[0]['ip']};
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
     proxy_set_header Host $host:$server_port;
