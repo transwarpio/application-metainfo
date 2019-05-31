@@ -638,7 +638,7 @@
   visibility: READ_WRITE
 
 - name: EXTRA_DRIVER_OPTS
-  recommendExpression: "-Dtranswarp.query.cypher.enabled=true"
+  recommendExpression: ""
   defaultValue: ""
   valueType: STRING
   scope: !<ServiceLevel> {}
