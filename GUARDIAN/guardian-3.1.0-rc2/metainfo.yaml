@@ -1,6 +1,6 @@
 ---
 name: GUARDIAN
-version: guardian-3.1
+version: guardian-3.1.0-rc2
 global: true
 namePrefix: Guardian
 friendlyName: Guardian
@@ -81,7 +81,7 @@ roles:
       number: 1
   linkExpression: https://${localhostname}:${service['federation.server.port']}/federation-server
   summaryPolicy: SOME
-  dockerImage: "transwarp/guardian-federation:guardian-3.1"
+  dockerImage: "transwarp/guardian-federation:guardian-3.1.0-rc2"
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [2, 1]}
   suggestion:
@@ -118,7 +118,7 @@ roles:
   - type: Install
     directives:
     - directive: !<shell>
-        script: "docker run -v /srv/federation:/srv/guardian --net=host ${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/guardian-gencerts:guardian-3.1 entry.sh"
+        script: "docker run -v /srv/federation:/srv/guardian --net=host ${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/guardian-gencerts:guardian-3.1.0-rc2 entry.sh"
   - type: Config
     directives:
     - directive: !<resource>
@@ -139,7 +139,7 @@ roles:
     - key: guardian.apacheds.data.dir
       featureFile: partitions
   summaryPolicy: SOME
-  dockerImage: "transwarp/apacheds:guardian-3.1"
+  dockerImage: "transwarp/apacheds:guardian-3.1.0-rc2"
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [2, 1]}
   suggestion:
@@ -196,7 +196,7 @@ roles:
       number: 1
   linkExpression: <#if service['guardian.server.tls.enabled'] = "true">https<#else>http</#if>://${localhostname}:${service['guardian.server.port']}
   summaryPolicy: SOME
-  dockerImage: "transwarp/guardian:guardian-3.1"
+  dockerImage: "transwarp/guardian:guardian-3.1.0-rc2"
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [2, 1]}
   suggestion:
@@ -227,7 +227,7 @@ roles:
   - type: Install
     directives:
     - directive: !<shell>
-        script: "docker run -v /srv/guardian:/srv/guardian --net=host ${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/guardian-gencerts:guardian-3.1 entry.sh"
+        script: "docker run -v /srv/guardian:/srv/guardian --net=host ${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/guardian-gencerts:guardian-3.1.0-rc2 entry.sh"
   - type: Config
     directives:
     - directive: !<resource>
@@ -264,7 +264,7 @@ roles:
     movable:
       number: 1
   summaryPolicy: SOME
-  dockerImage: "transwarp/cas-config-server:guardian-3.1"
+  dockerImage: "transwarp/cas-config-server:guardian-3.1.0-rc2"
   autoAssign:
     - advice: !<NumSeq> {"numSeq": [1]}
   suggestion:
@@ -307,7 +307,7 @@ roles:
       number: 1
   linkExpression: https://${localhostname}:${service['cas.server.ssl.port']}/cas
   summaryPolicy: SOME
-  dockerImage: "transwarp/cas-server:guardian-3.1"
+  dockerImage: "transwarp/cas-server:guardian-3.1.0-rc2"
   autoAssign:
     - advice: !<NumSeq> {"numSeq": [1]}
   suggestion:
@@ -336,7 +336,7 @@ roles:
     - type: Install
       directives:
       - directive: !<shell>
-          script: "docker run -v /srv/cas-server:/srv/guardian --net=host ${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/guardian-gencerts:guardian-3.1 entry.sh"
+          script: "docker run -v /srv/cas-server:/srv/guardian --net=host ${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/guardian-gencerts:guardian-3.1.0-rc2 entry.sh"
     - type: Config
       directives:
       - directive: !<resource>
@@ -354,7 +354,7 @@ roles:
       number: 1
   linkExpression: https://${localhostname}:${service['cas.mgmt.server.port']}/cas-management
   summaryPolicy: SOME
-  dockerImage: "transwarp/cas-admin-server:guardian-3.1"
+  dockerImage: "transwarp/cas-admin-server:guardian-3.1.0-rc2"
   autoAssign:
     - advice: !<NumSeq> {"numSeq": [1]}
   suggestion:
@@ -383,7 +383,7 @@ roles:
     - type: Install
       directives:
       - directive: !<shell>
-          script: "docker run -v /srv/cas-admin-server:/srv/guardian --net=host ${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/guardian-gencerts:guardian-3.1 entry.sh"
+          script: "docker run -v /srv/cas-admin-server:/srv/guardian --net=host ${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/guardian-gencerts:guardian-3.1.0-rc2 entry.sh"
     - type: Config
       directives:
       - directive: !<resource>
