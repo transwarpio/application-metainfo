@@ -140,4 +140,5 @@ cp /etc/${service.sid}/conf/krb5.conf /etc
 export MASTERPRINCIPAL=yarn/${localhostname}
 export KEYTAB=/etc/${service.sid}/conf/yarn.keytab
 export KRB_PLUGIN_ENABLE=true
+export YARN_RESOURCEMANAGER_OPTS="-Djava.security.auth.login.config=/etc/${service.sid}/conf/jaas.conf"
 </#if>
