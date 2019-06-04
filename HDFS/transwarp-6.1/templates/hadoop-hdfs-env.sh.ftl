@@ -202,4 +202,5 @@ cp /etc/${service.sid}/conf/krb5.conf /etc/
 export MASTERPRINCIPAL=hdfs/${localhostname}
 export KEYTAB=/etc/${service.sid}/conf/hdfs.keytab
 export KRB_PLUGIN_ENABLE=true
+export ZKFC_OPTS="-Djava.security.auth.login.config=/etc/${service.sid}/conf/jaas.conf"
 </#if>
