@@ -199,6 +199,36 @@
   groups: []
   visibility: READ_WRITE
 
+- name: http-client.connect.timeout
+  recommendExpression: 30000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: http-client.connection-request.timeout
+  recommendExpression: 30000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: http-client.socket.timeout
+  recommendExpression: 30000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 # AQUILA_AGENT
 
 - name: agent.web.port

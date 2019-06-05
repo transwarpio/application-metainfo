@@ -34,6 +34,11 @@ api:
 conf-gen:
   freemarker:
     strong-size-limit: 10
+http-client:
+  timeout:
+    connect: ${service['http-client.connect.timeout']}
+    connection-request: ${service['http-client.connection-request.timeout']}
+    socket: ${service['http-client.socket.timeout']}
 metrics:
   folders:
     special-folder-name: General
@@ -65,6 +70,10 @@ alert:
     alert-manager:
       query-url: http://172.16.1.104:9193/api/v1/alerts
 manager-proxy:
-  endpoint: http://${service.roles["AQUILA_MANAGER_PROXY"][0].hostname}:${service["manager.proxy.web.port"]}
+  endpoints:
+<#list managerEndPoints as endpoint>
+    - ${endpoint}
+</#list>
+  user: __Aquila
 agent:
   port: ${service["agent.web.port"]}
