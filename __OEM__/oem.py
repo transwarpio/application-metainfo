@@ -120,7 +120,6 @@ def replaceReservedTagsAndDeleteOthers(tags):
   for service in os.listdir('../'):
     if('__' in service):
       continue
-      continue
     if(r'.git' in service):
       continue
 
@@ -249,6 +248,15 @@ def replaceServicesInfo(services):
   print 'Replace metainfo for services ...'
   for service in services:
     name = service['name']
+
+    if service.has_key('friendlyName'):
+      friendlyName = service['friendlyName']
+      file = r'/tmp/sed-manager-resources.sh'
+      with open(file, 'a+') as f:
+        f.write('sed -ir \'s/ {:s} / {:s} /gI\' PATH_TO_REPLACE/transwarp-*.properties\n'.format(name, friendlyName))
+        f.write('sed -ir \'s/^{:s} /{:s} /gI\' PATH_TO_REPLACE/transwarp-*.properties\n'.format(name, friendlyName))
+        f.write('sed -ir \'s/ {:s}$/ {:s}/gI\' PATH_TO_REPLACE/transwarp-*.properties\n'.format(name, friendlyName))
+
     print 'Replace service name and role name for %s ...' % name
     for (path, dirs, files) in os.walk('../{:s}/'.format(name)):
       if 'metainfo.yaml' in files:
@@ -376,14 +384,37 @@ def replaceDockerImageTagWithProductTag(company, managerTag, productTag):
         repl = ':{:s}'.format(productTag)
         filedata = re.sub(pattern, repl, filedata, flags=re.M)
 
-        pattern = ':transwarp-\d+.\d+.\d+-\w+'.format(company)
-        repl = ':{:s}'.format(productTag)
-        filedata = re.sub(pattern, repl, filedata, flags=re.M)
-
         f = open(filePath, 'w')
         f.write(filedata)
         f.close()
-  print 'Replace service docker image tag with oem product tag.'
+  print 'Replace service docker image tag with oem product tag finished.'
+  print 'Replace transwarp tag with oem product tag ...'
+  for (path, dirs, files) in os.walk('../', topdown=False):
+    if('__' in path):
+      continue
+    if('resources' in path):
+      continue
+    if('i18n' in path):
+      continue
+    if(r'.git' in path):
+      continue
+
+    for file in files:
+      if file == 'release-date.csv':
+         continue
+
+      filePath = os.path.join(path, file)
+      f = open(filePath,'r')
+      filedata = f.read()
+      f.close()
+
+      pattern = 'transwarp-\d+.\d+(.\d+-\w+)?'
+      filedata = re.sub(pattern, productTag, filedata, flags=re.M)
+
+      f = open(filePath, 'w')
+      f.write(filedata)
+      f.close()
+  print 'Replace service docker image tag with oem product tag finished.'
 
 
 #for yaml load custom tags

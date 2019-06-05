@@ -64,6 +64,7 @@ deleteServices:
 
 services:
 - name: SHIVA
+  namePrefix: IDFS
   friendlyName: "IDFS"
   i18n:
     service_en_US.properties:
@@ -78,6 +79,7 @@ services:
     - name: SHIVA_TABLETSERVER
       friendlyName: "IDFS Tablet Server"
 - name: ZOOKEEPER
+  namePrefix: ZooKeeper
   friendlyName: "ZooKeeper"
   i18n:
     service_en_US.properties:
@@ -88,6 +90,7 @@ services:
     - name: ZOOKEEPER
       friendlyName: "ZooKeeper Server"
 - name: HDFS
+  namePrefix: HDFS
   friendlyName: "HDFS"
   i18n:
     service_en_US.properties:
@@ -104,6 +107,7 @@ services:
     - name: HDFS_NAMENODE
       friendlyName: "Name Node"
 - name: TXSQL
+  namePrefix: InSQL
   friendlyName: "InSQL"
   i18n:
     service_en_US.properties:
@@ -114,6 +118,7 @@ services:
     - name: TXSQL_SERVER
       friendlyName: "InSQL Server"
 - name: YARN
+  namePrefix: YARN
   friendlyName: "YARN"
   i18n:
     service_en_US.properties:
@@ -130,6 +135,7 @@ services:
     - name: YARN_TIMELINESERVER
       friendlyName: "Timeline Server"
 - name: SEARCH
+  namePrefix: ElasticSearch
   friendlyName: "ElasticSearch"
   i18n:
     service_en_US.properties:
@@ -142,6 +148,7 @@ services:
     - name: SEARCH_SERVER
       friendlyName: "ElasticSearch Server"
 - name: HYPERBASE
+  namePrefix: IHBase
   friendlyName: "IHBase"
   i18n:
     service_en_US.properties:
@@ -156,6 +163,7 @@ services:
     - name: HYPERBASE_THRIFT
       friendlyName: "IHBase Thrift"
 - name: INCEPTOR
+  namePrefix: Tuna
   friendlyName: "Tuna"
   i18n:
     service_en_US.properties:
@@ -174,6 +182,7 @@ services:
     - name: INCEPTOR_COMPACTOR
       friendlyName: "Tuna Compactor"
 - name: SLIPSTREAM
+  namePrefix: InLink
   friendlyName: "InLink"
   i18n:
     service_en_US.properties:
@@ -190,6 +199,7 @@ services:
     - name: INCEPTOR_EXECUTOR
       friendlyName: "InLink Executor"
 - name: INCEPTOR_GATEWAY
+  namePrefix: TunaGateway
   friendlyName: "TunaGateway"
   i18n:
     service_en_US.properties:
@@ -200,6 +210,7 @@ services:
     - name: INCEPTOR_GATEWAY
       friendlyName: "TunaGateway"
 - name: SLIPSTREAM_STUDIO
+  namePrefix: InLinkStudio
   friendlyName: "InLinkStudio"
   i18n:
     service_en_US.properties:
@@ -210,6 +221,7 @@ services:
     - name: INCEPTOR_SLIPSTREAMSTUDIO
       friendlyName: "InLinkStudio"
 - name: NOTIFICATION
+  namePrefix: Courier
   friendlyName: "Courier"
   i18n:
     service_en_US.properties:
@@ -220,6 +232,7 @@ services:
     - name: NOTIFICATION_SERVER
       friendlyName: "Courier Server"
 - name: KAFKA
+  namePrefix: Kafka
   friendlyName: "Kafka"
   i18n:
     service_en_US.properties:
@@ -234,6 +247,7 @@ services:
     - name: KAFKA_REST
       friendlyName: "Kafka Rest"
 - name: TRANSPORTER
+  namePrefix: ETL-Toolkit
   friendlyName: "ETL-Toolkit"
   i18n:
     service_en_US.properties:
@@ -244,16 +258,18 @@ services:
     - name: TDT_SERVER
       friendlyName: "ETL-Toolkit Server"
 - name: WORKFLOW
+  namePrefix: WorkFlow
   friendlyName: "WorkFlow"
   i18n:
     service_en_US.properties:
-    - service.description: "Workflow is a batch job scheduler, providing easy-to-use UI to design, execute, monitor and analyze complex workflows"
+    - service.description: "WorkFlow is a batch job scheduler, providing easy-to-use UI to design, execute, monitor and analyze complex workflows"
     service_zh_CN.properties:
     - service.description: "WorkFlow是图形化的工作流设计、调试、调度和分析的服务工具"
   roles:
     - name: WORKFLOW_SERVER
-      friendlyName: "Workflow Server"
+      friendlyName: "WorkFlow Server"
 - name: RUBIK
+  namePrefix: Cube-Designer
   friendlyName: "Cube-Designer"
   i18n:
     service_en_US.properties:
@@ -264,6 +280,7 @@ services:
     - name: RUBIK_SERVER
       friendlyName: "Cube-Designer Server"
 - name: GOVERNOR
+  namePrefix: Meta-Navigator
   friendlyName: "Meta-Navigator"
   i18n:
     service_en_US.properties:
@@ -274,6 +291,7 @@ services:
     - name: GOVERNOR_SERVER
       friendlyName: "Meta-Navigator Server"
 - name: REDIS
+  namePrefix: Redis
   friendlyName: "Redis"
   i18n:
     service_en_US.properties:
@@ -284,6 +302,7 @@ services:
     - name: REDIS_SERVER
       friendlyName: "Redis Server"
 - name: KONG
+  namePrefix: Kong
   friendlyName: "Kong"
   i18n:
     service_en_US.properties:
@@ -298,6 +317,7 @@ services:
     - name: KONG_DASHBOARD
       friendlyName: "Kong Dashboard"
 - name: CODIS
+  namePrefix: Codis
   friendlyName: "Codis"
   i18n:
     service_en_US.properties:
@@ -314,6 +334,7 @@ services:
     - name: CODIS_SERVER
       friendlyName: "Codis Server"
 - name: SMARTBI
+  namePrefix: SmartBI
   friendlyName: "SmartBI"
   i18n:
     service_en_US.properties:
@@ -326,6 +347,7 @@ services:
     - name: SMARTBI_TOMCAT
       friendlyName: "SmartBI Tomcat"
 - name: MILANO
+  namePrefix: LogSearch
   friendlyName: "LogSearch"
   i18n:
     service_en_US.properties:
@@ -344,6 +366,7 @@ services:
     - name: MILANO_CRONTAB
       friendlyName: "Crontab"
 - name: KMS
+  namePrefix: "Hadoop-KMS"
   friendlyName: "Hadoop KMS"
   i18n:
     service_en_US.properties:
@@ -352,8 +375,9 @@ services:
     - service.description: "Hadoop KMS是key管理服务，支持hdfs的透明加密功能"
   roles:
     - name: KMS_SERVER
-      friendlyName: "KMS Server"
+      friendlyName: "Hadoop KMS Server"
 - name: DISCOVER
+  namePrefix: "ML-Space"
   friendlyName: "ML Space"
   i18n:
     service_en_US.properties:
@@ -368,6 +392,7 @@ services:
     - name: DISCOVER_LOCAL-CRAN
       friendlyName: "ML Space Local-Cran"
 - name: STELLARDB
+  namePrefix: GDB
   friendlyName: "GDB"
   i18n:
     service_en_US.properties:
@@ -380,6 +405,7 @@ services:
     - name: STELLARDB_WORKER
       friendlyName: "GDB Worker"
 - name: SOPHON
+  namePrefix: "AI-Space"
   friendlyName: "AI Space"
   i18n:
     service_en_US.properties:
@@ -394,6 +420,7 @@ services:
     - name: SOPHON_SCHEDULER
       friendlyName: "AI Space Scheduler"
 - name: KUNDB
+  namePrefix: TDB
   friendlyName: "TDB"
   i18n:
     service_en_US.properties:
@@ -408,12 +435,23 @@ services:
     - name: COMPUTE_NODE
       friendlyName: "Compute Node"
 - name: GUARDIAN
+  namePrefix: SafeGuard
   friendlyName: "SafeGuard"
   i18n:
     service_en_US.properties:
     - service.description: "SafeGuard is a security management component"
+      service.plugin.hdfs.description: "HDFS permission and quota management by SafeGuard component"
+      service.plugin.yarn.description: "YARN permission and queue quota management by SafeGuard component"
+      service.plugin.hyperbase.description: "IHBase schema, table etc. permission management by SafeGuard component"
+      service.plugin.inceptor.description: "Tuna database, table etc. permission and queue management by SafeGuard component"
+      service.plugin.slipstream.description: "InLink database, table etc. permission and queue management by SafeGuard component"
     service_zh_CN.properties:
     - service.description: "SafeGuard是一个安全管理组件"
+      service.plugin.hdfs.description: "通过安全管理组件SafeGuard来管理HDFS的权限和配额"
+      service.plugin.yarn.description: "通过安全管理组件SafeGuard来管理YARN的权限和队列配额"
+      service.plugin.hyperbase.description: "通过安全管理组件SafeGuard来管理IHBase中的Schema、表等的权限"
+      service.plugin.inceptor.description: "通过安全管理组件SafeGuard来管理Tuna中的数据库、表等的权限以及队列配额"
+      service.plugin.slipstream.description: "通过安全管理组件SafeGuard来管理InLink中的数据库、表等的权限以及队列配额"
   roles:
     - name: GUARDIAN_TXSQL_SERVER
       friendlyName: "InSQL Server"
@@ -428,6 +466,7 @@ services:
     - name: CAS_ADMIN_SERVER
       friendlyName: "CAS Admin Server"
 - name: DASHBOARD
+  namePrefix: Dashboard
   friendlyName: "DASHBOARD"
   i18n:
     service_en_US.properties:
@@ -438,6 +477,7 @@ services:
     - name: DASHBOARD
       friendlyName: "Dashboard"
 - name: FLANNEL
+  namePrefix: Flannel
   friendlyName: "FLANNEL"
   i18n:
     service_en_US.properties:
@@ -450,6 +490,7 @@ services:
     - name: KUBE_DNS
       friendlyName: "Kube Dns"
 - name: LICENSE_SERVICE
+  namePrefix: LICENSE_SERVICE
   friendlyName: "LICENSE_SERVICE"
   i18n:
     service_en_US.properties:
@@ -460,6 +501,7 @@ services:
     - name: LICENSE_NODE
       friendlyName: "License Node"
 - name: MONITOR
+  namePrefix: Monitor
   friendlyName: "MONITOR"
   i18n:
     service_en_US.properties:
@@ -476,7 +518,8 @@ services:
     - name: MONITOR_GRAFANA
       friendlyName: "Grafana"
 - name: TOS
-  friendlyName: "TOS"
+  namePrefix: IOS
+  friendlyName: "IOS"
   i18n:
     service_en_US.properties:
     - service.description: ""
@@ -488,12 +531,13 @@ services:
     - name: DF_MASTER
       friendlyName: "DF Master"
     - name: TOS_SLAVE
-      friendlyName: "TOS Slave"
+      friendlyName: "IOS Slave"
     - name: TOS_REGISTRY
-      friendlyName: "TOS Registry"
+      friendlyName: "IOS Registry"
     - name: TOS_MASTER
-      friendlyName: "TOS Master"
+      friendlyName: "IOS Master"
 - name: ARGODB_STORAGE
+  namePrefix: ADB-Storage
   friendlyName: "ADB-Storage"
   i18n:
     service_en_US.properties:
@@ -514,6 +558,7 @@ services:
     - name: LADDER_WORKER
       friendlyName: "Ladder Worker"
 - name: ARGODB_COMPUTING
+  namePrefix: ADB-Computing
   friendlyName: "ADB-Computing"
   i18n:
     service_en_US.properties:
