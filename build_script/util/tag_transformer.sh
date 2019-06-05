@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
 MANAGER_PROGRESS_VERSION=manager-6.0
-MANAGER_TAG_VERSION=manager-6.0.1812a-final
-LAST_STABLE_VERSION=transwarp-6.0.0-final
-TDH_PROGRESS_VERSION=transwarp-5.2
-TDH_TAG_VERSION=transwarp-5.2.4-final
-UPGRADE_FROM_VERSION='transwarp-5.1.6-final transwarp-5.2.3-final'
+MANAGER_TAG_VERSION=manager-6.0.1905a-final
+GUARDIAN_PROGRESS_VERSION=guardian-3.1
+GUARDIAN_TAG_VERSION=guardian-3.1.0-rc0
+LAST_STABLE_VERSION=transwarp-6.0.2-final
+TDH_PROGRESS_VERSION=transwarp-6.0
+TDH_TAG_VERSION=transwarp-6.0.2-final
+UPGRADE_FROM_VERSION='transwarp-6.0.2-final'
 #ROLLING_UPGRADE_LIST='LICENSE_SERVICE ZOOKEEPER HDFS HYPERBASE YARN KAFKA'
 ROLLING_UPGRADE_LIST='LICENSE_SERVICE ZOOKEEPER HDFS YARN KAFKA'
 
@@ -42,6 +44,17 @@ for service_dir in "${WORKSPACE}"/*; do
         for file in $(find "${service_dir}/${MANAGER_TAG_VERSION}" | grep -v upgrade); do
             if [ -f ${file} ]; then
                 sed -i "s/${MANAGER_PROGRESS_VERSION}/${MANAGER_TAG_VERSION}/g" "${file}"
+                sed -i "s/${LAST_STABLE_VERSION}/${TDH_TAG_VERSION}/g" "${file}"
+            fi
+        done
+    fi
+
+    if [ -d "${service_dir}/${GUARDIAN_PROGRESS_VERSION}" ]; then
+        rm -rf "${service_dir}/${GUARDIAN_TAG_VERSION}"
+        \cp -rp "${service_dir}/${GUARDIAN_PROGRESS_VERSION}" "${service_dir}/${GUARDIAN_TAG_VERSION}"
+        for file in $(find "${service_dir}/${GUARDIAN_TAG_VERSION}" | grep -v upgrade); do
+            if [ -f ${file} ]; then
+                sed -i "s/${GUARDIAN_PROGRESS_VERSION}/${GUARDIAN_TAG_VERSION}/g" "${file}"
                 sed -i "s/${LAST_STABLE_VERSION}/${TDH_TAG_VERSION}/g" "${file}"
             fi
         done
