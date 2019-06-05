@@ -1,0 +1,17 @@
+<#if service.roles["GUARDIAN_FEDERATION"]??>
+<#assign federationTenant = service['guardian.ds.realm']>
+---
+oauth2:
+  server:
+    baseUrls: [<#list service.roles["GUARDIAN_FEDERATION"] as role><#assign url = "https://" + role.hostname + ":" + service["federation.server.port"] + "/federation-server">"${url}"<#sep>, </#list>]
+<#if !service['guardian.server.authentication.oauth2.server.baseUrls.external']?matches("^\\s*$")>
+    externalBaseUrls: [<#list service['guardian.server.authentication.oauth2.server.baseUrls.external']?split(",") as url>"${url}"<#sep>, </#list>]
+</#if>
+    endpoint:
+      validation: "/${federationTenant}/oauth/check_token"
+      authCode: "/${federationTenant}/oauth/authorize"
+      token: "/${federationTenant}/oauth/token"
+      logout: "/logout"
+  client:
+    credentialFile: "/etc/guardian/conf/client-credential.jks"
+</#if>
