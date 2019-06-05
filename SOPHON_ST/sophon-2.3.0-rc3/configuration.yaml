@@ -1,0 +1,332 @@
+# application-prod.properties
+- name: backend.port
+  recommendExpression: 8887
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: frontend.port
+  recommendExpression: 8888
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: javax.jdo.option.ConnectionUserName
+  recommendExpression: sophon_st
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: javax.jdo.option.ConnectionPassword
+  recommendExpression: password
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: PASSWORD
+
+- name: backend.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_ST_BACKEND]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: backend.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_ST_BACKEND]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+
+- name: backend.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_ST_BACKEND]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: backend.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_ST_BACKEND]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: frontend.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_ST_FRONTEND]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: frontend.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_ST_FRONTEND]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: frontend.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_ST_FRONTEND]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: frontend.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [SOPHON_ST_FRONTEND]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: distributed.database.type
+  recommendExpression: inceptor
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: superuser.username
+  recommendExpression: sophon_st
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: superuser.password
+  recommendExpression: Transwarp4T
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.client.username
+  recommendExpression: workflow
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.client.password
+  recommendExpression: Transwarp4T
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.client.token
+  recommendExpression: null
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: workflow.domain.id
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.sql.warehouse.dir
+  recommendExpression: |
+    <#function hdfsUri path>
+      <#local hdfs=dependencies['HDFS']>
+      <#if hdfs['nameservices']?? && hdfs['nameservices']?size gt 0>
+        <#local hostPort=hdfs['nameservices'][0]>
+      <#else>
+        <#local host=hdfs['roles']['HDFS_NAMENODE'][0]['hostname']>
+        <#if hdfs['namenode.rpc-port']??>
+          <#local port=hdfs['namenode.rpc-port']>
+        </#if>
+        <#if hdfs[host]?? && hdfs[host]['namenode.rpc-port']??>
+          <#local port=hdfs[host]['namenode.rpc-port']>
+        </#if>
+        <#local hostPort=host + ':' + port>
+      </#if>
+      <#return 'hdfs://' + hostPort + path>
+    </#function>
+    ${hdfsUri("/" + dependencies.INCEPTOR.sid + '/user/hive/warehouse')}
+  defaultValue: "/user/hive/warehouse"
+  valueType: URI
+  scope: !<ServiceLevel> {}
+  onDeps: ['HDFS','INCEPTOR']
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.executor.num
+  recommendExpression: 4
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.executor.core
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: designing.spark.master
+  recommendExpression: local[*]
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: designing.spark.executor.num
+  recommendExpression: 4
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: designing.spark.executor.core
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: task.pool.size
+  recommendExpression: 100
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: task.max.concurrency
+  recommendExpression: 5
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: task.timeout
+  recommendExpression: 3600000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: inceptor.ldap.username
+  recommendExpression: mirror
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: inceptor.ldap.password
+  recommendExpression: password
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: PASSWORD
+
+- name: execute.cycle
+  recommendExpression: 3000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: disable.cas.authorization
+  recommendExpression: false
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: enable.livy
+  recommendExpression: true
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: livy.server.session.timeout
+  recommendExpression: 1d
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
