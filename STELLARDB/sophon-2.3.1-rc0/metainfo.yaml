@@ -1,14 +1,14 @@
 ---
 name: STELLARDB
-version: kg-2.3
+version: sophon-2.3.1-rc0
 global: false
 namePrefix: StellarDB
 friendlyName: "StellarDB"
-dockerImage: "transwarp/stellardb:kg-2.3"
+dockerImage: "transwarp/stellardb:sophon-2.3.1-rc0"
 dependencies:
   - name: ZOOKEEPER
-    minVersion: transwarp-6.0.0-final
-    maxVersion: transwarp-6.0.1-final
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.2-final
     optional: false
 #  - name: INCEPTOR
 #    minVersion: transwarp-6.0.1-final
