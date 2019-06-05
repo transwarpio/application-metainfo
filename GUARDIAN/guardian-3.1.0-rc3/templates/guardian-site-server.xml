@@ -1,0 +1,83 @@
+<#--Simple macro definition-->
+<#macro property key value>
+<property>
+    <name>${key}</name>
+    <value>${value}</value>
+</property>
+</#macro>
+<#assign guardian_servers=[]>
+<#list service.roles["GUARDIAN_SERVER"] as role>
+    <#assign guardian_servers += [(role.hostname + ":" + service["guardian.server.port"])]>
+</#list>
+<#assign guardian_address = guardian_servers?join(";")>
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <@property "guardian.server.ldap.type" "APACHEDS" />
+    <@property "guardian.server.kerberos.principal" "guardian/guardian" />
+    <@property "guardian.server.kerberos.password.store" "/etc/${service.sid}/conf/guardian-auth.jks" />
+    <@property "guardian.server.kerberos.keytab" "/etc/${service.sid}/conf/guardian.keytab" />
+    <@property "guardian.server.db.location" "/var/lib/guardian/guardian.db" />
+    <@property "guardian.server.bind.port" "${service['guardian.server.port']}" />
+    <@property "guardian.server.tls.enabled" "${service['guardian.server.tls.enabled']}" />
+    <@property "guardian.allow.read.everything" "${service['guardian.allow.read.everything']}"/>
+    <@property "guardian.server.audit.enabled" "${service['guardian.server.audit.enabled']}"/>
+    <@property "guardian.server.audit.level" "${service['guardian.server.audit.level']}"/>
+    <@property "guardian.server.audit.dao.impl" "${service['guardian.server.audit.dao.impl']}"/>
+    <@property "guardian.server.cache.enabled" "${service['guardian.server.cache.enabled']}"/>
+    <@property "guardian.server.cache.expired.time" "${service['guardian.server.cache.expired.time']}"/>
+
+    <@property "guardian.skip.check.access.with.service" "${service['guardian.skip.check.access.with.service']}"/>
+    <@property "guardian.server.spnego.auth.filter.class" "io.transwarp.guardian.plugins.filter.SpnegoAuthFilter"/>
+    <@property "guardian.server.spnego.keytab" "/etc/${service.sid}/conf/guardian.keytab"/>
+
+    <#if service.roles["CAS_SERVER"]??>
+        <#assign casServerSslPort=service['cas.server.ssl.port']>
+        <#if service['guardian.server.cas.server.host']?matches("^\\s*$")>
+            <#assign casServerName="https://${service.roles.CAS_SERVER[0]['ip']}:${casServerSslPort}">
+        <#else>
+            <#assign casServerName="https://${service['guardian.server.cas.server.host']}:${casServerSslPort}">
+        </#if>
+        <#assign casServerPrefix="${casServerName}${service['cas.server.context.path']}">
+        <@property "guardian.server.cas.authentication.enabled" "${service['guardian.server.cas.authentication.enabled']}"/>
+        <@property "guardian.server.cas.server.url.prefix" "${casServerPrefix}"/>
+        <@property "guardian.server.cas.server.login.url" "${casServerPrefix}/login"/>
+    <#else>
+        <@property "guardian.server.cas.authentication.enabled" "false"/>
+    </#if>
+
+        <!-- OAUTH2 Authentication -->
+    <#if service.roles["GUARDIAN_FEDERATION"]??>
+        <@property "guardian.server.authentication.oauth2.enabled" "${service['guardian.server.authentication.oauth2.enabled']}"/>
+    </#if>
+
+    <!-- Access Token Authentication -->
+    <#if service['guardian.server.access.token.authentication.enabled'] = "true">
+        <@property "guardian.server.access.token.authentication.enabled" "true"/>
+        <@property "guardian.server.access.token.server.address" "${guardian_address}"/>
+        <@property "guardian.server.access.token.server.tls.enabled" "${service['guardian.server.tls.enabled']}"/>
+    <#else>
+        <@property "guardian.server.access.token.authentication.enabled" "false"/>
+    </#if>
+
+    <#if service.roles["GUARDIAN_TXSQL_SERVER"]??>
+        <#assign hostPorts = []>
+        <#list service.roles["GUARDIAN_TXSQL_SERVER"] as r>
+            <#assign hostPorts = hostPorts + [r.hostname + ':' + service['mysql.rw.port']]>
+        </#list>
+        <#assign txsql = hostPorts?join(",")>
+        <@property "guardian.txsql.connection.url" "jdbc:mysql://${txsql}/guardian?allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true&amp;failOverReadOnly=false"/>
+        <@property "guardian.txsql.connection.username" "root"/>
+        <@property "guardian.txsql.connection.password" "${service['root.password']}"/>
+    </#if>
+
+<#--Take properties from the context-->
+<#if service['guardian-site.xml']??>
+    <#list service['guardian-site.xml'] as key, value>
+        <@property key value/>
+    </#list>
+</#if>
+
+</configuration>
+
+
