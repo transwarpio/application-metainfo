@@ -10,7 +10,7 @@ dependencies:
     optional: true
   - name: GUARDIAN
     minVersion: transwarp-5.2.2-final
-    optional: false
+    optional: true
   - name: ZOOKEEPER
     minVersion: transwarp-5.2.2-final
     optional: true
