@@ -76,6 +76,7 @@ services:
       friendlyName: "IDFS Master"
     - name: SHIVA_WEBSERVER
       friendlyName: "IDFS Webserver"
+      linkExpression: null
     - name: SHIVA_TABLETSERVER
       friendlyName: "IDFS Tablet Server"
 - name: ZOOKEEPER

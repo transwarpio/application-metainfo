@@ -294,6 +294,14 @@ def replaceServicesInfo(services):
                       pattern = r'labelPrefix:\s+["|\']?{:s}["|\']?$'.format(role['labelPrefix'])
                       repl = 'labelPrefix: "{:s}"'.format(r['labelPrefix'])
                       filedata = re.sub(pattern, repl, filedata, flags=re.M)
+                    #replace role linkExpression
+                    if role.has_key('linkExpression') and r.has_key('linkExpression'):
+                      pattern = r'linkExpression:\s+\S+$'
+                      if r['linkExpression'] == None:
+                        repl = 'linkExpression: null'
+                      else:
+                        repl = 'linkExpression: "{:s}"'.format(r['linkExpression'])
+                      filedata = re.sub(pattern, repl, filedata, flags=re.M)
           for role in meta['roles']:
             for r in service['roles']:
               if (role['name'] == r['name']):
@@ -306,6 +314,14 @@ def replaceServicesInfo(services):
                 if role.has_key('labelPrefix') and r.has_key('labelPrefix'):
                   pattern = r'labelPrefix:\s+["|\']?{:s}["|\']?$'.format(role['labelPrefix'])
                   repl = 'labelPrefix: "{:s}"'.format(r['labelPrefix'])
+                  filedata = re.sub(pattern, repl, filedata, flags=re.M)
+                #replace role labelPrefix
+                if role.has_key('linkExpression') and r.has_key('linkExpression'):
+                  pattern = r'linkExpression:\s+\S+$'
+                  if r['linkExpression'] == None:
+                    repl = 'linkExpression: null'
+                  else:
+                    repl = 'linkExpression: "{:s}"'.format(r['linkExpression'])
                   filedata = re.sub(pattern, repl, filedata, flags=re.M)
 
         #write back metainfo.yaml after modified
