@@ -44,7 +44,7 @@ roles:
   nodeSpecificMounts:
     - configKey: data.dir
   summaryPolicy: MAJOR
-  dockerImage: "transwarp/txsql:transwarp-6.0.2-final"
+  dockerImage: "transwarp/txsql:guardian-3.1.0-final"
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [5, 3, 1]}
   suggestion:
@@ -249,6 +249,11 @@ roles:
         templateType: FreeMarker
         templatePath: "application.properties"
         targetPath: "/etc/${service.sid}/conf/application.properties"
+        mode: "600"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "oauth2-configuration.yml"
+        targetPath: "/etc/${service.sid}/conf/oauth2-configuration.yml"
         mode: "600"
 - name: CAS_CONFIG_SERVER
   friendlyName: "CAS Configuration Server"
