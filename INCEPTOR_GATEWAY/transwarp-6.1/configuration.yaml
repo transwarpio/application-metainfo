@@ -1,5 +1,5 @@
 - name: inceptor.server.version
-  recommendExpression: "tdh60"
+  recommendExpression: "tdh61"
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
@@ -109,7 +109,7 @@
   visibility: READ_WRITE
 
 - name: inceptor.gateway.backend.server.default.version
-  recommendExpression: tdh60
+  recommendExpression: tdh61
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
