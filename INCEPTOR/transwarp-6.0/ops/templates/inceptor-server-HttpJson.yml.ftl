@@ -8,8 +8,9 @@
 <#if .data_model['role.groupId'] ??>
     roleGroupId: ${.data_model['role.groupId']}
 </#if>
-    nodeId: ${.data_model['role.nodeId']}
-    rackId: ${.data_model['role.rackId']}
+    nodeId: ${.data_model['node.id']}
+    rackId: ${.data_model['node.rackId']}
+    hostname: ${.data_model['localhostname']}
 </#macro>
 sources:
 - name: inceptor_server_executors_source
@@ -62,7 +63,7 @@ metrics:
     fromResultLabelMap:
       host: executor
 
-- name: inceptor_server_total_shuffle_read
+- name: inceptor_server_shuffle_read_per_second
   fixedLabels:
     <@serviceLabel/>
     <@roleLabel/>
@@ -77,7 +78,7 @@ metrics:
     fromResultLabelMap:
       host: executor
 
-- name: inceptor_server_total_shuffle_write
+- name: inceptor_server_shuffle_write_per_second
   fixedLabels:
     <@serviceLabel/>
     <@roleLabel/>
@@ -131,5 +132,19 @@ metrics:
   scrape:
     jsonPath: "$"
     valueField: "failedTask"
+    fromResultLabelMap:
+      host: executor
+
+- name: inceptor_server_sql_total_tasks
+  fixedLabels:
+    <@serviceLabel/>
+    <@roleLabel/>
+  type: COUNTER
+  help: "Number of total tasks. Unit: count"
+  delaySec: 61
+  source: inceptor_server_executors_source
+  scrape:
+    jsonPath: "$"
+    valueField: "totalTasks"
     fromResultLabelMap:
       host: executor

@@ -11,7 +11,6 @@
 </#if>
 #!/usr/bin/env bash
 
-export PROMETHEUS_WEB_PORT=${service['prometheus.web.port']}
 export PROMETHEUS_OPTS="--config.file=/etc/${service.sid}/conf/prometheus/prometheus.yml \
                         --storage.tsdb.path=/prometheus \
                         --web.console.libraries=/usr/share/prometheus/console_libraries \

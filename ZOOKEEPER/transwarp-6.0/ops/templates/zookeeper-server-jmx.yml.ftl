@@ -8,8 +8,9 @@
 <#if .data_model['role.groupId'] ??>
     roleGroupId: ${.data_model['role.groupId']}
 </#if>
-    nodeId: ${.data_model['role.nodeId']}
-    rackId: ${.data_model['role.rackId']}
+    nodeId: ${.data_model['node.id']}
+    rackId: ${.data_model['node.rackId']}
+    hostname: ${.data_model['localhostname']}
 </#macro>
 sources:
 - name: zookeeper_server_source
@@ -25,6 +26,20 @@ sources:
     bean: "java.lang:type=OperatingSystem"
 
 metrics:
+- name: zookeeper_server_is_leader_or_not
+  fixedLabels:
+    <@serviceLabel/>
+    <@roleLabel/>
+  type: GAUGE
+  help: "Zookeeper server is leader(1.0) or follower(0.0)."
+  delaySec: 61
+  source: zookeeper_server_source
+  scrape:
+    jsonPath: "$.beans[0].modelerType"
+    valueMapping:
+      org.apache.zookeeper.server.quorum.LeaderBean: 1.0
+      org.apache.zookeeper.server.quorum.FollowerBean: 0.0
+
 - name: zookeeper_server_max_request_latency
   fixedLabels:
     <@serviceLabel/>
@@ -62,8 +77,8 @@ metrics:
   fixedLabels:
     <@serviceLabel/>
     <@roleLabel/>
-  type: GAUGE
-  help: "Number of client packets sent (responses and notifications) per second. Unit: count/s"
+  type: COUNTER
+  help: "Number of client packets sent (responses and notifications). Unit: count"
   delaySec: 61
   source: zookeeper_server_source
   scrape:
@@ -73,8 +88,8 @@ metrics:
   fixedLabels:
     <@serviceLabel/>
     <@roleLabel/>
-  type: GAUGE
-  help: "Number of client packets received (responses and notifications) per second. Unit: count/s"
+  type: COUNTER
+  help: "Number of client packets received (responses and notifications). Unit: count"
   delaySec: 61
   source: zookeeper_server_source
   scrape:

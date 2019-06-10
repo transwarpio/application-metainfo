@@ -15,8 +15,9 @@
 <#if .data_model['role.groupId'] ??>
     roleGroupId: ${.data_model['role.groupId']}
 </#if>
-    nodeId: ${.data_model['role.nodeId']}
-    rackId: ${.data_model['role.rackId']}
+    nodeId: ${.data_model['node.id']}
+    rackId: ${.data_model['node.rackId']}
+    hostname: ${.data_model['localhostname']}
 </#macro>
 sources:
 - name: kafka_server_topics_in_rate_source
@@ -196,6 +197,18 @@ metrics:
   source: kafka_server_leader_election_rate_source
   scrape:
     jsonPath: "$.beans[0].OneMinuteRate"
+
+- name: kafka_server_live_brokers
+  fixedLabels:
+    <@serviceLabel/>
+    <@roleLabel/>
+  type: GAUGE
+  help: "Number of live brokers. Unit: count"
+  delaySec: 61
+  source: kafka_server_broker_status_source
+  scrape:
+    isLive: true
+    znodePath: "/brokers/ids"
 
 - name: kafka_server_dead_brokers
   fixedLabels:

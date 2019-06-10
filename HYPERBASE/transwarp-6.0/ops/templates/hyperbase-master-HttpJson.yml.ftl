@@ -8,8 +8,9 @@
 <#if .data_model['role.groupId'] ??>
     roleGroupId: ${.data_model['role.groupId']}
 </#if>
-    nodeId: ${.data_model['role.nodeId']}
-    rackId: ${.data_model['role.rackId']}
+    nodeId: ${.data_model['node.id']}
+    rackId: ${.data_model['node.rackId']}
+    hostname: ${.data_model['localhostname']}
 </#macro>
 sources:
 - name: hyperbase_master_server_source
@@ -34,7 +35,22 @@ sources:
     cacheSec: 60
 
 metrics:
-- name: hyperbase_master_num_region_servers
+- name: hyperbase_master_is_active_master_or_not
+  fixedLabels:
+    <@serviceLabel/>
+    <@roleLabel/>
+  type: GAUGE
+  help: "Hyperbase Master is active master(1.0) or backup master(0.0). "
+  delaySec: 61
+  source: hyperbase_master_server_source
+  scrape:
+    jsonPath: "$.beans[0].['tag.isActiveMaster']"
+    fromResultLabelMap: {}
+    valueMapping:
+      true: 1.0
+      false: 0.0
+
+- name: hyperbase_master_num_live_region_servers
   fixedLabels:
     <@serviceLabel/>
     <@roleLabel/>

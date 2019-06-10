@@ -8,10 +8,18 @@
 <#if .data_model['role.groupId'] ??>
     roleGroupId: ${.data_model['role.groupId']}
 </#if>
-    nodeId: ${.data_model['role.nodeId']}
-    rackId: ${.data_model['role.rackId']}
+    nodeId: ${.data_model['node.id']}
+    rackId: ${.data_model['node.rackId']}
+    hostname: ${.data_model['localhostname']}
 </#macro>
 sources:
+- name: resource_manager_jvm_metrics_source
+  className: io.transwarp.tdh.metrics.source.HttpJsonSource
+  props:
+    url: "http://${localhostname}:${service['resourcemanager.webapp.port']}/jmx?qry=Hadoop:service=ResourceManager,name=JvmMetrics"
+    timeoutSec: 60
+    cacheSec: 60
+
 - name: resource_manager_queue_metrics_source
   className: io.transwarp.tdh.metrics.source.HttpJsonSource
   props:
@@ -27,6 +35,20 @@ sources:
     cacheSec: 60
 
 metrics:
+- name: resource_manager_is_active_master_or_not
+  fixedLabels:
+    <@serviceLabel/>
+    <@roleLabel/>
+  type: GAUGE
+  help: "Resource Manager is active master(1.0) or backup master(0.0). "
+  delaySec: 61
+  source: resource_manager_jvm_metrics_source
+  scrape:
+    jsonPath: "$.beans[0].modelerType"
+    fromResultLabelMap: {}
+    valueMapping:
+      JvmMetrics: 1.0
+
 - name: resource_manager_apps_running
   fixedLabels:
     <@serviceLabel/>

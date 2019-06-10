@@ -366,6 +366,27 @@
   groups: []
   visibility: READ_WRITE
 
+- name: node.exporter.collector.filesystem.ignored-mount-points
+  recommendExpression: ^/(dev|proc|sys|var/lib/docker.+|hadoop/drbd|mnt/ramdisk/ngmr|transwarp/mounts)($|/)
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_NODE_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: node.exporter.collector.filesystem.ignored-fs-types
+  recommendExpression: ^(afs|anon_inodefs|aufs|autofs|bdev|bind|binfmt_.*|cgroup|cifs|coda|configfs|cpuset|debugfs|devfs|devpts|devtmpfs|ecryptfs|fd|ftpfs|fuse.*|gfs|gvfs.*|hugetlbfs|inotifyfs|iso9660|lustre.*|mfs|mqueue|ncpfs|NFS|nfs.*|none|overlay|pipefs|proc|procfs|pstore|ramfs|rootfs|rpc_.*|securityfs|shfs|shm|smbfs|sockfs|sysfs|tmpfs|tracefs|udev|udf|unionfs|usbfs)$
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_NODE_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+
 # AQUILA_TDH_EXPORTER
 
 - name: tdh.exporter.web.port
@@ -456,7 +477,7 @@
   visibility: READ_WRITE
 
 - name: prometheus.node.exporter.scrape_interval
-  recommendExpression: 60
+  recommendExpression: 15
   defaultValue: null
   valueType: SECONDS
   scope: !<ServiceLevel> {}
