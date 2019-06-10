@@ -16,7 +16,7 @@ export SERVER_JVMFLAGS="-Xmx${memory?floor}m $SERVER_JVMFLAGS"
 
 export SERVER_JVMFLAGS="-Dzookeeper.log.dir=/var/log/${service.sid} -Dzookeeper.root.logger=INFO,ROLLINGFILE $SERVER_JVMFLAGS"
 <#if service.auth == "kerberos">
-export SERVER_JVMFLAGS="$SERVER_JVMFLAGS -Djava.security.auth.login.config=/etc/${service.sid}/conf/jaas.conf"
+export SERVER_JVMFLAGS="$SERVER_JVMFLAGS -Djava.security.auth.login.config=/etc/${service.sid}/conf/jaas.conf  -Dzookeeper.allowSaslFailedClients=false"
 export KRB_KEYTAB=${service.keytab}
 chown zookeeper:zookeeper $KRB_KEYTAB
 chown zookeeper:zookeeper /etc/${service.sid}/conf/jaas.conf

@@ -13,5 +13,6 @@ export JAVAX_JDO_OPTION_CONNECTION_USERNAME=${service['javax.jdo.option.Connecti
 export JAVAX_JDO_OPTION_CONNECTION_PASSWORD=${service['javax.jdo.option.ConnectionPassword']}
 export DATABASE_NAME=workflow_${service.sid}
 <#if service.auth = "kerberos">
-cp /etc/${service.sid}/conf/krb5.conf /etc/
+    cp /etc/${service.sid}/conf/krb5.conf /etc/
+    export SERVICE_AUTH="kerberos"
 </#if>
