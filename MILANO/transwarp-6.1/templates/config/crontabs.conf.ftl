@@ -10,7 +10,7 @@ ${service['crontab.schedule.time']} ES_HOSTS=${searches[0]} ES_PORT=9200 INDEX_P
 ${service['crontab.schedule.time']} ES_HOSTS=${searches[0]} ES_PORT=9200 INDEX_PREFIX=persisted-${service['crontab.index.prefix']} RETENTION_DAYS=${service['crontab.persisted.retention.days']} curator --config /opt/curator/conf/config.yaml /opt/curator/conf/actions.yaml
   <#if service['crontab.conf']??>
     <#list service['crontab.conf'] as key, value>
-${service['crontab.schedule.time']} ES_HOSTS=${searches[0]} ES_PORT=9200 INDEX_PREFIX=${key} RETENTION_DAYS=${value} --config /opt/curator/conf/config.yaml /opt/curator/conf/actions.yaml
+${service['crontab.schedule.time']} ES_HOSTS=${searches[0]} ES_PORT=9200 INDEX_PREFIX=${key} RETENTION_DAYS=${value} curator --config /opt/curator/conf/config.yaml /opt/curator/conf/actions.yaml
     </#list>
   </#if>
 </#if>
