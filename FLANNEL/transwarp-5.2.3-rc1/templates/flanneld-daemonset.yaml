@@ -1,0 +1,73 @@
+<#assign
+  tosService=dependencies.TOS
+  registryServer=tosService.roles['TOS_REGISTRY'][0].hostname
+  registryPort=tosService['tos.registry.port']
+>
+<#assign etcd_servers=[]>
+<#list tosService.roles.TOS_MASTER as tos_master>
+<#assign etcd_servers+=["http://" + tos_master.hostname + ":" + dependencies.TOS['tos.master.etcd.port']]>
+</#list>
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: flanneld-${service.sid}
+  namespace: kube-system
+spec:
+  template:
+    metadata:
+      labels:
+        transwarp.name: flanneld-${service.sid}
+    spec:
+      hostNetwork: true
+      nodeSelector:
+        flanneld-${service.sid}: "true"
+      containers:
+      - name: flanneld
+        image: ${registryServer}:${registryPort}/transwarp/flanneld:transwarp-5.2.3-rc1
+        imagePullPolicy: IfNotPresent
+        command:
+        - entrypoint.sh
+        env:
+        - name: TZ
+          value: "Asia/Shanghai"
+        - name: FLANNEL_CIDR
+          value: ${tosService.roles.TOS_MASTER[0].ip}
+        - name: ETCD_URL
+          value: ${etcd_servers?join(',')}
+        - name: FLANNEL_CONFIG_NETWORK
+          value: ${service['flannel.config.network']}
+        - name: FLANNEL_CONFIG_SUBNETLEN
+          value: "${service['flannel.config.subnetlen']}"
+        - name: FLANNEL_CONFIG_SUBNETMIN
+          value: ${service['flannel.config.subnetmin']}
+        - name: FLANNEL_CONFIG_SUBNETMAX
+          value: ${service['flannel.config.subnetmax']}
+        - name: MULTINETWORK
+          value: overlay
+        - name: FLANNEL_CONFIG_TYPE
+          value: vxlan
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /var/run/hadoop-flannel
+          name: hadoop-flannel
+        - mountPath: /run/flannel/
+          name: run
+        - mountPath: /var/run/flannel/
+          name: varrun
+        - mountPath: /etc/cni/net.d/
+          name: cniconf
+      restartPolicy: Always
+      volumes:
+      - hostPath:
+          path: /var/run/hadoop-flannel
+        name: hadoop-flannel
+      - hostPath:
+          path: /run/flannel/
+        name: run
+      - hostPath:
+          path: /var/run/flannel/
+        name: varrun
+      - hostPath:
+          path: /etc/cni/net.d/
+        name: cniconf

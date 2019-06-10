@@ -163,7 +163,7 @@
 - name: rubik.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [RUBIK_SERVER]
   onDeps: []
@@ -173,7 +173,7 @@
 - name: rubik.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [RUBIK_SERVER]
   onDeps: []
@@ -183,7 +183,7 @@
 - name: rubik.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [RUBIK_SERVER]
   onDeps: []
@@ -193,7 +193,7 @@
 - name: rubik.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [RUBIK_SERVER]
   onDeps: []
@@ -204,46 +204,6 @@
   recommendExpression: -1
   defaultValue: null
   valueType: FLOAT
-  scope: !<RoleTypes>
-    roleTypes: [RUBIK_SERVER]
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: workflow.connect.timeout
-  recommendExpression: 60000
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<RoleTypes>
-    roleTypes: [RUBIK_SERVER]
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: workflow.socket.timeout
-  recommendExpression: 60000
-  defaultValue: null
-  valueType: NON_NEG_INT
-  scope: !<RoleTypes>
-    roleTypes: [RUBIK_SERVER]
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: workflow.client.username
-  recommendExpression: workflow
-  defaultValue: null
-  valueType: STRING
-  scope: !<RoleTypes>
-    roleTypes: [RUBIK_SERVER]
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-
-- name: workflow.client.password
-  recommendExpression: Transwarp4T
-  defaultValue: null
-  valueType: STRING
   scope: !<RoleTypes>
     roleTypes: [RUBIK_SERVER]
   onDeps: []

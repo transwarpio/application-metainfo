@@ -1,0 +1,941 @@
+- name: hive.exec.scratchdir
+  recommendExpression: "ladder:///${service['sid']}/tmp/hive"
+  defaultValue: "/tmp/hive-${user.name}"
+  valueType: URI
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.metastore.warehouse.dir
+  recommendExpression: "ladder:///${service['sid']}/user/hive/warehouse"
+  defaultValue: "/user/hive/warehouse"
+  valueType: URI
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.metastore.execute.setugi
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.hwi.war.file
+  recommendExpression: lib/hive-hwi-0.8.1.war
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: plsql.compile.dml.check.semantic
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: javax.jdo.option.ConnectionPassword
+  recommendExpression: password
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: PASSWORD
+
+- name: hive.server2.session.check.interval
+  recommendExpression: 60000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.users.in.admin.role
+  recommendExpression: hive,hue
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: mapreduce.framework.name
+  recommendExpression: yarn
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hbase.client.scanner.caching
+  recommendExpression: 500
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: datanucleus.autoStartMechanism
+  recommendExpression: SchemaTable
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.input.format
+  recommendExpression: org.apache.hadoop.hive.ql.io.HiveInputFormat
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.aux.jars.path
+  recommendExpression: ""
+  defaultValue: ""
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.server2.idle.session.timeout
+  recommendExpression: 14400000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: datanucleus.fixedDatastore
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: javax.jdo.option.ConnectionDriverName
+  recommendExpression: com.mysql.jdbc.Driver
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: javax.jdo.option.ConnectionUserName
+  recommendExpression: inceptoruser
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.exec.dynamic.partition
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.exec.compress.output
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.server2.authentication
+  recommendExpression: NONE
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: hive.server2.idle.operation.timeout
+  recommendExpression: 28800000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: datanucleus.autoCreateSchema
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.exec.compress.intermediate
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.server2.logging.operation.enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.server2.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: ngmr.fastdisk.dir
+  recommendExpression: /mnt/ramdisk/ngmr
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER, INCEPTOR_EXECUTOR]
+  isNodeSpecific: true
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.localdir
+  recommendExpression: |
+    <#function localDir suffix>
+      <#if !(rcmdMounts??) || (rcmdMounts?size == 0)>
+        <#return suffix>
+      <#else>
+        <#local dirs = []>
+        <#list rcmdMounts?sort as mnt>
+         <#local dirs = dirs + [mnt + suffix]>
+        </#list>
+        <#return dirs?join(",")>
+      </#if>
+    </#function>
+    ${localDir("/hadoop/ngmr/" + service['sid'])}
+  isNodeSpecific: true
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER, INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.fastdisk.size
+  recommendExpression: 0.5
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER, INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.cache.size
+  recommendExpression: 0.5
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER, INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ngmr.executors.perjob
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: inceptor.ui.port
+  recommendExpression: 4040
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: inceptor.metastore.memory
+  recommendExpression: 4096
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: inceptor.server.memory
+  recommendExpression: 8192
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# min(32000m, total_memory_size / 2)
+- name: inceptor.executor.memory
+  recommendExpression: |
+    <#assign  thirdMemMB = (memBytes/1048576/2)?int>
+    <#if thirdMemMB <= 32000>
+      ${thirdMemMB?int}
+    <#else>
+      32000
+    </#if>
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: inceptor.executor.cores
+  recommendExpression: |
+    <#if (numCores/2)?int gt 10>
+      ${(numCores/2)?int}
+    <#else>
+      10
+    </#if>
+  defaultValue: null
+  valueType: NON_NEG_INT
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: hive.server2.thrift.port
+  recommendExpression: 10000
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.decimal.wrdecimal.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE
+
+- name: hive.metastore.port
+  recommendExpression: 9083
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: mysql.port
+  recommendExpression: 3306
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: mysql.datadir
+  recommendExpression: /hadoop/mysql
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_MYSQL]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_EXECUTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: executor.number.eachnode
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: metastore.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: metastore.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: metastore.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: metastore.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: metastore.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_METASTORE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# inceptor scheduler
+- name: inceptor.scheduler.enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: spark.driver.port
+  recommendExpression: 51888
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: EXTRA_DRIVER_OPTS
+  recommendExpression: ""
+  defaultValue: ""
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: EXTRA_EXECUTOR_OPTS
+  recommendExpression: ""
+  defaultValue: ""
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: rubik.connection.url
+  recommendExpression: |
+    <#compress>
+    <#assign mysqlHostPorts = []/>
+    <#list dependencies.TXSQL.roles['TXSQL_SERVER'] as role>
+        <#assign mysqlHostPorts = mysqlHostPorts + [role.hostname + ':' + dependencies.TXSQL['mysql.rw.port']]>
+    </#list>
+    <#assign mysqlHostPort = mysqlHostPorts?join(",")>
+    ${mysqlHostPort}
+    </#compress>
+  defaultValue: ""
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: ['TXSQL']
+  groups: []
+  visibility: READ_WRITE
+
+- name: rubik.connection.username
+  recommendExpression: inceptor
+  defaultValue: ""
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: rubik.connection.password
+  recommendExpression: 123
+  defaultValue: ""
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: rubik.connection.database
+  recommendExpression: rubik_rubik1
+  defaultValue: ""
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# inceptor scheduler
+- name: inceptor.profiler.memory
+  recommendExpression: 4096
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_PROFILER]
+  onDeps: []
+  groups: ["profiler-site.xml"]
+  visibility: READ_WRITE
+- name: profiler.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_PROFILER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: profiler.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_PROFILER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: profiler.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_PROFILER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: profiler.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_PROFILER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: profiler.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_PROFILER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: inceptor.profiler.ui.port
+  recommendExpression: 9093
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_PROFILER]
+  onDeps: []
+  groups: ["profiler-site.xml"]
+  visibility: READ_WRITE
+- name: profiler.scanner.init.time.hhmm
+  recommendExpression: "18:00"
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_PROFILER]
+  onDeps: []
+  groups: ["profiler-site.xml"]
+  visibility: READ_WRITE
+- name: profiler.scanner.interval.hours
+  recommendExpression: 24
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_PROFILER]
+  onDeps: []
+  groups: ["profiler-site.xml"]
+  visibility: READ_WRITE
+- name: profiler.worker.sleep.time.sec
+  recommendExpression: 300
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_PROFILER]
+  onDeps: []
+  groups: ["profiler-site.xml"]
+  visibility: READ_WRITE
+- name: profiler.stale.percent
+  recommendExpression: 20
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_PROFILER]
+  onDeps: []
+  groups: ["profiler-site.xml"]
+  visibility: READ_WRITE
+- name: profiler.blacklist.cache.limit
+  recommendExpression: 512
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_PROFILER]
+  onDeps: []
+  groups: ["profiler-site.xml"]
+  visibility: READ_WRITE
+- name: profiler.metastore.readonly.sleep.time.sec
+  recommendExpression: 1800
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_PROFILER]
+  onDeps: []
+  groups: ["profiler-site.xml"]
+  visibility: READ_WRITE
+- name: profiler.metastore.fetch.batch.size
+  recommendExpression: 50
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_PROFILER]
+  onDeps: []
+  groups: ["profiler-site.xml"]
+  visibility: READ_WRITE
+- name: profiler.zk.acquire.lock.enable
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_PROFILER]
+  onDeps: []
+  groups: ["profiler-site.xml"]
+  visibility: READ_WRITE
+- name: profiler.worker.min.execute.interval.sec
+  recommendExpression: 300
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_PROFILER]
+  onDeps: []
+  groups: ["profiler-site.xml"]
+  visibility: READ_WRITE
+- name: profiler.inceptor.stmts.max.failure
+  recommendExpression: 5
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_PROFILER]
+  onDeps: []
+  groups: ["profiler-site.xml"]
+  visibility: READ_WRITE
+- name: profiler.crud.logging.enable
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_PROFILER]
+  onDeps: []
+  groups: ["profiler-site.xml"]
+  visibility: READ_WRITE
+# inceptor compactor
+- name: inceptor.compactor.memory
+  recommendExpression: 4096
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_COMPACTOR]
+  onDeps: []
+  groups: ["compactor-site.xml"]
+  visibility: READ_WRITE
+- name: compactor.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_COMPACTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: compactor.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_COMPACTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: compactor.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_COMPACTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: compactor.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_COMPACTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: compactor.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_COMPACTOR]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: inceptor.compactor.ui.port
+  recommendExpression: 9918
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_COMPACTOR]
+  onDeps: []
+  groups: ["compactor-site.xml"]
+  visibility: READ_WRITE
+
+#
+# Extra config for ArgoDB
+#
+- name: ladder.user.short.circuit.enabled
+  recommendExpression: false
+  defaultValue: false
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: ["hive-site.xml", "core-site.xml"]
+  visibility: READ_WRITE
+
+# These are required by executor
+- name: argodb.docker.enabled
+  recommendExpression: true
+  defaultValue: true
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: transwarp.docker.enable
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["core-site.xml"]
+  visibility: READ_WRITE
+
+- name: transwarp.docker.network.policy
+  recommendExpression: io.transwarp.docker.DockerNetworkPolicyHostGW
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["core-site.xml"]
+  visibility: READ_WRITE
+
+- name: transwarp.docker.network.interfaces
+  recommendExpression: eth0
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["core-site.xml"]
+  visibility: READ_WRITE
+
+- name: transwarp.docker.network.hypervisor-subnetmask
+  recommendExpression: 255.255.255.255
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["core-site.xml"]
+  visibility: READ_WRITE
+
+- name: holodesk.shiva.meta
+  recommendExpression: true
+  defaultValue: true
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SERVER]
+  onDeps: []
+  groups: ["hive-site.xml"]
+  visibility: READ_WRITE

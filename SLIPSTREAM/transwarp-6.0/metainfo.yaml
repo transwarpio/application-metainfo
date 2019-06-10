@@ -5,6 +5,7 @@ global: false
 namePrefix: Slipstream
 friendlyName: "Slipstream"
 dockerImage: "transwarp/inceptor:transwarp-6.0"
+validateConfig: true
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.0
@@ -188,7 +189,10 @@ roles:
       ${zookeepers?join(",")}
   - name: INCEPTOR_CONF_DIR
     value: /etc/${service.sid}/conf
-  mountPaths: []
+  mountPaths:
+  - mountPath: /etc/slipstream/keytabs
+    hostPath: /etc/slipstream/keytabs
+    name: data
   resources:
     limitsMemoryKey: executor.container.limits.memory
     limitsCpuKey: executor.container.limits.cpu

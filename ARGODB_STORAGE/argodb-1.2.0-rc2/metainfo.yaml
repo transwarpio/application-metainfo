@@ -1,0 +1,415 @@
+---
+name: ARGODB_STORAGE
+version: argodb-1.2.0-rc2
+global: false
+namePrefix: ArgodbStorage
+friendlyName: "ArgodbStorage"
+dockerImage: "transwarp/argodb-inceptor:argodb-1.2.0-rc2"
+dependencies:
+  - name: GUARDIAN
+    minVersion: transwarp-6.0
+    optional: true
+  - name: ZOOKEEPER
+    minVersion: transwarp-6.0
+    optional: false
+  - name: TXSQL
+    minVersion: transwarp-6.0
+    optional: false
+  - name: LADDER
+    minVersion: argodb-1.2.0-rc2
+    maxVersion: argodb-1.2.0-rc2
+    optional: false
+  - name: INCEPTOR
+    minVersion: transwarp-6.0
+    optional: true
+    preferred: false
+  - name: HDFS
+    minVersion: transwarp-6.0
+    optional: true
+    preferred: false
+user: hive
+plugins:
+  - provider: GUARDIAN
+    version: 0.12.0+500.51250
+    useTar: false
+
+roles:
+######################
+# Inceptor Metastore #
+######################
+- name: INCEPTOR_METASTORE
+  friendlyName: "Inceptor Metastore"
+  labelPrefix: "inceptor-metastore"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - netstat -an | grep ${service['hive.metastore.port']} | grep LISTEN > /dev/null
+  env:
+  - name: INCEPTOR_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: metastore.container.limits.memory
+    limitsCpuKey: metastore.container.limits.cpu
+    requestsMemoryKey: metastore.container.requests.memory
+    requestsCpuKey: metastore.container.requests.cpu
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [2, 1]}
+  suggestion:
+  - when: !<WhenDependency>
+      depType: INCEPTOR_METASTORE
+      present: true
+    criteria: !<Range> {"max": 0}
+  - when: !<WhenDependency>
+      depType: INCEPTOR_METASTORE
+      present: false
+    criteria: !<Range> {"min": 2}
+  validation:
+  - when: !<WhenDependency>
+      depType: INCEPTOR_METASTORE
+      present: true
+    criteria: !<Range> {"max": 0}
+  - when: !<WhenDependency>
+      depType: INCEPTOR_METASTORE
+      present: false
+    criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/run/${service.sid}"]
+        mode: "755"
+
+#########
+# Shiva #
+#########
+- name: SHIVA_MASTER
+  friendlyName: "Shiva Master"
+  labelPrefix: "shiva-master"
+  dockerImage: "transwarp/argodb-shiva-master:argodb-1.2.0-rc2"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /
+      port: ${service['shiva.master.rpc_service.master_service_port']}
+      scheme: HTTP
+  summaryPolicy: MAJOR
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [5, 3]}
+  suggestion:
+  - criteria: !<Range> {"min": 3, "oddity": true}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  resources:
+    limitsMemoryKey: shiva.master.container.limits.memory
+    limitsCpuKey: shiva.master.container.limits.cpu
+    requestsMemoryKey: shiva.master.container.requests.memory
+    requestsCpuKey: shiva.master.container.requests.cpu
+  nodeSpecificMounts:
+  - configKey: shiva.master.master.data_path
+  env:
+  - name: CONF_DIR
+    value: /etc/${service.sid}/conf/shiva
+  deleteOpCondition:
+    deletable:
+      number: 3
+      decommission: false
+    reject:
+      number: 2
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: shiva.master.master.data_path
+      featureFile: master.lock
+    - key: shiva.master.log.log_dir
+      featureFile: master_main.INFO
+    fromPath:
+    - key: /etc/${service.sid}/conf/shiva
+      featureFile: master.conf
+  mountPaths: []
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf/shiva"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "shiva/master.conf"
+        targetPath: "/etc/${service.sid}/conf/shiva/master.conf"
+        mode: "755"
+
+- name: SHIVA_WEBSERVER
+  friendlyName: "Shiva Webserver"
+  labelPrefix: "shiva-webserver"
+  dockerImage: "transwarp/argodb-shiva-webserver:argodb-1.2.0-rc2"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /
+      port: ${service['shiva.http.port']}
+      scheme: HTTP
+  summaryPolicy: MAJOR
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1, "oddity": true}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  linkExpression: "http://${localhostname}:${service['shiva.http.port']}"
+  resources:
+    limitsMemoryKey: shiva.webserver.container.limits.memory
+    limitsCpuKey: shiva.webserver.container.limits.cpu
+    requestsMemoryKey: shiva.webserver.container.requests.memory
+    requestsCpuKey: shiva.webserver.container.requests.cpu
+  env:
+  - name: CONF_DIR
+    value: /etc/${service.sid}/conf/shiva
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  deleteOpCleanDirs:
+    fromPath:
+    - key: /etc/${service.sid}/conf/shiva
+      featureFile: master.conf
+  mountPaths: []
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf/shiva"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "shiva/shiva-restful.sh"
+        targetPath: "/etc/${service.sid}/conf/shiva/shiva-restful.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "shiva/log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/shiva/log4j.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "shiva/shiva-env.sh"
+        targetPath: "/etc/${service.sid}/conf/shiva/shiva-env.sh"
+        mode: "755"
+
+- name: SHIVA_TABLETSERVER
+  friendlyName: "Shiva Tablet Server"
+  labelPrefix: "shiva-tabletserver"
+  dockerImage: "transwarp/argodb-shiva-tabletserver:argodb-1.2.0-rc2"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /
+      port: ${service['shiva.tabletserver.rpc_service.manage_service_port']}
+      scheme: HTTP
+  summaryPolicy: MAJOR
+  autoAssign:
+  - advice: !<EachNode> {}
+  suggestion:
+  - criteria: !<Range> {"min": 3, "oddity": true}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  resources:
+    limitsMemoryKey: shiva.tabletserver.container.limits.memory
+    limitsCpuKey: shiva.tabletserver.container.limits.cpu
+    requestsMemoryKey: shiva.tabletserver.container.requests.memory
+    requestsCpuKey: shiva.tabletserver.container.requests.cpu
+  nodeSpecificMounts:
+  - configKey: shiva.tabletserver.store.datadirs
+  env:
+  - name: CONF_DIR
+    value: /etc/${service.sid}/conf/shiva
+  deleteOpCondition:
+    deletable:
+      number: 3
+      decommission: false
+    reject:
+      number: 2
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: shiva.tabletserver.store.datadirs
+      featureFile: .trash
+    - key: shiva.tabletserver.log.log_dir
+      featureFile: tabletserver_main.INFO
+    fromPath:
+    - key: /etc/${service.sid}/conf/shiva
+      featureFile: tabletserver.conf
+  mountPaths: []
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf/shiva"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "shiva/tabletserver.conf"
+        targetPath: "/etc/${service.sid}/conf/shiva/tabletserver.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "shiva/store.conf"
+        targetPath: "/etc/${service.sid}/conf/shiva/store.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "shiva/topology.conf"
+        targetPath: "/etc/${service.sid}/conf/shiva/topology.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "shiva/shiva-env.sh"
+        targetPath: "/etc/${service.sid}/conf/shiva/shiva-env.sh"
+        mode: "755"
+
+stages:
+# TODO Remove this Bootstrap, or open write permission in ladder on root level
+#  - type: Bootstrap
+#    taskGroups:
+#    - !<Create-Dir-in-HDFS>
+#      summaryPolicy: ALL
+#      timeoutMinutes: 10
+#      dirs: ["/${service.sid}"]
+#      user: "hive"
+#      group: "hive"
+#      mod: 711
+  - type: Config
+    taskGroups:
+    - !<Create-Database>
+      dbPrefix: metastore
+      dbUserConfig: javax.jdo.option.ConnectionUserName
+      dbPasswordConfig: javax.jdo.option.ConnectionPassword
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Role>
+      roleType: "SHIVA_MASTER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SHIVA_WEBSERVER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SHIVA_TABLETSERVER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "INCEPTOR_METASTORE"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+  - type: PreUpgrade
+    taskGroups:
+    - !<DockerRunPreUpgrade>
+        summaryPolicy: ALL
+        timeoutMinutes: 10
+        roleType: INCEPTOR_METASTORE
+        node: Any
+  - type: PreRollback
+    taskGroups:
+    - !<DockerRunPreRollback>
+        summaryPolicy: ALL
+        timeoutMinutes: 10
+        roleType: INCEPTOR_METASTORE
+        node: Any
+
+product: Inceptor
+
+firstWizardConfigs:
+######################
+# Inceptor Metastore #
+######################
+- fs.defaultFS
+- hive.exec.scratchdir
+- hive.metastore.port
+- hive.metastore.warehouse.dir
+- hive.server2.authentication
+- hive.server2.enabled
+- hive.server2.thrift.port
+- inceptor.metastore.memory
+- javax.jdo.option.ConnectionPassword
+- javax.jdo.option.ConnectionUserName
+- metastore.container.limits.cpu
+- metastore.container.limits.memory
+- metastore.container.requests.cpu
+- metastore.container.requests.memory
+- metastore.memory.ratio
+#########
+# Shiva #
+#########
+- shiva.http.port
+- shiva.master.container.limits.cpu
+- shiva.master.container.limits.memory
+- shiva.master.container.requests.cpu
+- shiva.master.container.requests.memory
+- shiva.master.master.data_path
+- shiva.master.memory.ratio
+- shiva.master.rpc_service.master_service_port
+- shiva.store.capacity
+- shiva.tabletserver.container.limits.cpu
+- shiva.tabletserver.container.limits.memory
+- shiva.tabletserver.container.requests.cpu
+- shiva.tabletserver.container.requests.memory
+- shiva.tabletserver.memory.ratio
+- shiva.tabletserver.rpc_service.manage_service_port
+- shiva.tabletserver.store.datadirs
+- shiva.webserver.container.limits.cpu
+- shiva.webserver.container.limits.memory
+- shiva.webserver.container.requests.cpu
+- shiva.webserver.container.requests.memory
+- shiva.webserver.memory.ratio
+
+dashboardMetrics:
+- InceptorSqlActiveTasks
+
+pages:
+- summary
+- roles
+- configuration
+- operation
+- resource_allocation
+- security
+- plugin
+
+principals:
+- hive
+- HTTP
+- kafka
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
+# TODO this shows error in Manager: scala.MatchError: STORAGE (of class java.lang.String)
+#- category: VITAL_SIGN_CHECK
+#  intervalSeconds: 10
+#  method: !<Builtin> {}
+
+customConfigFiles:
+- hive-site.xml

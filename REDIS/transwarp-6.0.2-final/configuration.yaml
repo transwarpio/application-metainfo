@@ -1,0 +1,69 @@
+- name: redis.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [REDIS_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: redis.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [REDIS_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: redis.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [REDIS_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: redis.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [REDIS_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: redis.bind
+  recommendExpression: 0.0.0.0
+  defaultValue: null
+  valueType: HOST
+  scope: !<RoleTypes>
+    roleTypes: [REDIS_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: redis.password
+  recommendExpression:
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [REDIS_SERVER]
+  onDeps: []
+  groups: []
+  visibility: PASSWORD
+
+- name: redis.port
+  recommendExpression: 6379
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [REDIS_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

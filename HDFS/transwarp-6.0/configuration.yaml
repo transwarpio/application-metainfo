@@ -28,7 +28,7 @@
     </#function>
     ${localDir("/hadoop/data")}
   defaultValue: file://${hadoop.tmp.dir}/dfs/data
-  valueType: STRING
+  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
   isNodeSpecific: true  # TODO work around before WARP-11503
   scope: !<RoleTypes>
     roleTypes:
@@ -60,7 +60,7 @@
     ${sorted[0]}/hadoop/namenode_dir,${sorted[1]}/hadoop/namenode_dir
     </#if>
   defaultValue: file://${hadoop.tmp.dir}/dfs/name
-  valueType: STRING
+  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
   isNodeSpecific: true # TODO work around before WARP-11503
   scope: !<RoleTypes>
       roleTypes:
@@ -119,6 +119,15 @@
     - HDFS_NAMENODE
   onDeps: []
   groups: []
+  visibility: READ_WRITE
+
+- name: dfs.namenode.handler.count
+  recommendExpression: 100
+  defaultValue: 10
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hdfs-site.xml"]
   visibility: READ_WRITE
 
 - name: namenode.http-port
@@ -203,6 +212,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: dfs.datanode.handler.count
+  recommendExpression: 30
+  defaultValue: 10
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hdfs-site.xml"]
+  visibility: READ_WRITE
+
 - name: datanode.http-port
   recommendExpression: 50075
   defaultValue: null
@@ -281,12 +299,14 @@
 
 - name: namenode.memory
   recommendExpression: |
+    <#compress>
     <#assign halfMemMB = (memBytes/1048576/2)?int>
     <#if halfMemMB <= 24000>
-    ${halfMemMB?c}
+      ${halfMemMB?c}
     <#else>
-    24000
+      24000
     </#if>
+    </#compress>
   defaultValue: null
   valueType: MB
   isNodeSpecific: true
@@ -336,7 +356,7 @@
 - name: namenode.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [HDFS_NAMENODE]
   onDeps: []
@@ -346,7 +366,7 @@
 - name: namenode.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [HDFS_NAMENODE]
   onDeps: []
@@ -356,7 +376,7 @@
 - name: namenode.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [HDFS_NAMENODE]
   onDeps: []
@@ -366,7 +386,7 @@
 - name: namenode.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [HDFS_NAMENODE]
   onDeps: []
@@ -386,7 +406,7 @@
 - name: zkfc.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [HDFS_NAMENODE]
   onDeps: []
@@ -396,7 +416,7 @@
 - name: zkfc.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [HDFS_NAMENODE]
   onDeps: []
@@ -406,7 +426,7 @@
 - name: zkfc.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [HDFS_NAMENODE]
   onDeps: []
@@ -416,7 +436,7 @@
 - name: zkfc.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [HDFS_NAMENODE]
   onDeps: []
@@ -436,7 +456,7 @@
 - name: journalnode.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [HDFS_JOURNALNODE]
   onDeps: []
@@ -446,7 +466,7 @@
 - name: journalnode.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [HDFS_JOURNALNODE]
   onDeps: []
@@ -456,7 +476,7 @@
 - name: journalnode.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [HDFS_JOURNALNODE]
   onDeps: []
@@ -466,7 +486,7 @@
 - name: journalnode.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [HDFS_JOURNALNODE]
   onDeps: []
@@ -486,7 +506,7 @@
 - name: datanode.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [HDFS_DATANODE]
   onDeps: []
@@ -496,7 +516,7 @@
 - name: datanode.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [HDFS_DATANODE]
   onDeps: []
@@ -506,7 +526,7 @@
 - name: datanode.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [HDFS_DATANODE]
   onDeps: []
@@ -516,7 +536,7 @@
 - name: datanode.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [HDFS_DATANODE]
   onDeps: []
@@ -536,7 +556,7 @@
 - name: httpfs.container.limits.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [HDFS_HTTPFS]
   onDeps: []
@@ -546,7 +566,7 @@
 - name: httpfs.container.limits.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [HDFS_HTTPFS]
   onDeps: []
@@ -556,7 +576,7 @@
 - name: httpfs.container.requests.memory
   recommendExpression: -1
   defaultValue: null
-  valueType: GB
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [HDFS_HTTPFS]
   onDeps: []
@@ -566,7 +586,7 @@
 - name: httpfs.container.requests.cpu
   recommendExpression: -1
   defaultValue: null
-  valueType: NON_NEG_INT
+  valueType: FLOAT
   scope: !<RoleTypes>
     roleTypes: [HDFS_HTTPFS]
   onDeps: []
@@ -617,4 +637,113 @@
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: ["core-site.xml"]
+  visibility: READ_WRITE
+
+- name: catalog-agent.http.port
+  recommendExpression: 25300
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes:
+    - HDFS_CATALOG_AGENT
+  onDeps: []
+  groups: ["ca-application.properties"]
+  visibility: READ_WRITE
+
+- name: catalog-agent.web.address
+  recommendExpression: INFO
+  defaultValue: INFO
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes:
+    - HDFS_CATALOG_AGENT
+  onDeps: []
+  groups: ["ca-application.properties"]
+  visibility: READ_WRITE
+
+- name: catalog-agent.log.level
+  recommendExpression: INFO
+  defaultValue: INFO
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes:
+    - HDFS_CATALOG_AGENT
+  onDeps: []
+  groups: ["ca-application.properties"]
+  visibility: READ_WRITE
+
+- name: catalog-agent.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [HDFS_CATALOG_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog-agent.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [HDFS_CATALOG_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog-agent.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [HDFS_CATALOG_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog-agent.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [HDFS_CATALOG_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog-agent.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [HDFS_CATALOG_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: dfs.data.transfer.protection
+  recommendExpression: authentication
+  defaultValue: "authentication"
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hdfs-site.xml"]
+  visibility: READ_WRITE
+
+- name: dfs.client.read.shortcircuit
+  recommendExpression: true
+  defaultValue: true
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hdfs-site.xml"]
+  visibility: READ_WRITE
+
+- name: dfs.client.socket-timeout
+  recommendExpression: 120000
+  defaultValue: 120000
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["hdfs-site.xml"]
   visibility: READ_WRITE

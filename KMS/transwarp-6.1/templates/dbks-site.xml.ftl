@@ -5,7 +5,7 @@
   
   <property>
 	<name>ranger.db.encrypt.key.password</name>
-    <value>${service['ranger.db.encrypt.key.password']}</value>
+    <value>${service['kms.db.encrypt.key.password']}</value>
     <description>
     	Password used for encrypting Master Key
     </description>

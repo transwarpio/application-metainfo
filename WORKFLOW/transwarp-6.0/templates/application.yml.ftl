@@ -118,6 +118,9 @@ cookie.remember-me.days: ${service['workflow.cookie.rememberme.days']}
 # http cookie max-age in hours
 cookie.max-age.hours: ${service['workflow.cookie.maxage.hours']}
 
+# folder for internationalization files
+spring.messages.basename: "classpath:i18n/locale"
+
 # http upload file size
 spring:
   http:
@@ -125,3 +128,12 @@ spring:
       enabled: true
       max-file-size: 50MB
       max-request-size: 50MB
+
+# agent settings
+agent:
+  status-update:
+    # size of thread pool of status update task
+    pool-size: 100
+  connection-check:
+    # size of thread pool of connection check task
+    pool-size: 2

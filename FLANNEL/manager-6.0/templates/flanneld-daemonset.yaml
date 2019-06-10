@@ -37,7 +37,7 @@ spec:
           flanneld \
           -etcd-endpoints=${etcd_servers?join(',')} \
           -etcd-prefix=/coreos.com/network \
-          -etcd-cafile=/srv/ssl/ca.pem \
+          -etcd-cafile=/srv/ssl/etcd-ca.pem \
           -etcd-keyfile=/srv/ssl/etcd-key.pem \
           -etcd-certfile=/srv/ssl/etcd.pem \
           -iface=${r'${FLANNELD_IFACE}'} \
@@ -52,7 +52,7 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: status.hostIP
-        image: ${registryServer}:${registryPort}/transwarp/flanneld:manager-6.0
+        image: transwarp/flanneld:manager-6.0
         imagePullPolicy: IfNotPresent
         name: tos-flanneld-${service.sid}
         resources:

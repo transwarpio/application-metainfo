@@ -14,10 +14,10 @@
     ${localDir("/stellardb/graph/" + service['sid'])}
   isNodeSpecific: true
   defaultValue: null
-  valueType: STRING
+  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
   scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
   onDeps: []
-  groups: []
+  groups: ["graphconf.xml"]
   visibility: READ_WRITE
 - name: graph.raft.dirs
   recommendExpression: |
@@ -35,18 +35,25 @@
     ${localDir("/stellardb/raft/" + service['sid'])}
   isNodeSpecific: true
   defaultValue: null
-  valueType: STRING
+  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
   scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
   onDeps: []
-  groups: []
+  groups: ["graphconf.xml"]
   visibility: READ_WRITE
 - name: graph.zk.quorum
-  recommendExpression: localhost:2181
+  recommendExpression: |
+    <#compress>
+    <#assign zookeeper=dependencies.ZOOKEEPER quorum=[]>
+    <#list zookeeper.roles.ZOOKEEPER as role>
+        <#assign quorum += [role.hostname + ":" + zookeeper["zookeeper.client.port"]]>
+    </#list>
+    ${quorum?join(",")}
+    </#compress>
   defaultValue: null
   valueType: STRING
   scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
-  onDeps: []
-  groups: []
+  onDeps: ['ZOOKEEPER']
+  groups: ["graphconf.xml"]
   visibility: READ_WRITE
 - name: graph.master.port
   recommendExpression: 30909
@@ -54,7 +61,7 @@
   valueType: HOST_PORT
   scope: !<RoleTypes> {roleTypes: [STELLARDB_MASTER]}
   onDeps: []
-  groups: []
+  groups: ["graphconf.xml"]
   visibility: READ_WRITE
 - name: graph.master.ui.port
   recommendExpression: 50088
@@ -62,7 +69,7 @@
   valueType: HOST_PORT
   scope: !<RoleTypes> {roleTypes: [STELLARDB_MASTER]}
   onDeps: []
-  groups: []
+  groups: ["graphconf.xml"]
   visibility: READ_WRITE
 - name: graph.worker.port
   recommendExpression: 30815
@@ -70,7 +77,7 @@
   valueType: HOST_PORT
   scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
   onDeps: []
-  groups: []
+  groups: ["graphconf.xml"]
   visibility: READ_WRITE
 - name: graph.worker.ui.port
   recommendExpression: 50089
@@ -78,15 +85,15 @@
   valueType: HOST_PORT
   scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
   onDeps: []
-  groups: []
+  groups: ["graphconf.xml"]
   visibility: READ_WRITE
 - name: graph.zk.base_path
   recommendExpression: "/graph"
   defaultValue: null
-  valueType: STRING
+  valueType: ABSOLUTE_PATH
   scope: !<ServiceLevel> {}
   onDeps: []
-  groups: []
+  groups: ["graphconf.xml"]
   visibility: READ_WRITE
 - name: graph.raft.server.port
   recommendExpression: 1998
@@ -94,5 +101,21 @@
   valueType: HOST_PORT
   scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
   onDeps: []
-  groups: []
+  groups: ["graphconf.xml"]
+  visibility: READ_WRITE
+- name: graph.cypher.jdbc.url
+  recommendExpression: jdbc:hive2://localhost:10000/default
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
+  onDeps: []
+  groups: ["graphconf.xml"]
+  visibility: READ_WRITE
+- name: graph.file.server.port
+  recommendExpression: 43999
+  defaultValue: null
+  valueType: HOST_PORT
+  scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
+  onDeps: []
+  groups: ["graphconf.xml"]
   visibility: READ_WRITE

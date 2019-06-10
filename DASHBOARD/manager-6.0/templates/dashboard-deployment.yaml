@@ -1,8 +1,3 @@
-<#assign
-  tosService=dependencies.TOS
-  registryServer=tosService.roles['TOS_REGISTRY'][0].hostname
-  registryPort=tosService['tos.registry.port']
->
 kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
@@ -35,22 +30,19 @@ spec:
                 operator: Exists
       containers:
       - name: kubernetes-dashboard
-        image: ${registryServer}:${registryPort}/transwarp/dashboard:manager-6.0
+        image: transwarp/dashboard:manager-6.0
         imagePullPolicy: Always
-        ports:
-        - name: https
-          containerPort: 8443
-          protocol: TCP
         args:
           # Uncomment the following line to manually specify Kubernetes API server Host
           # If not specified, Dashboard will attempt to auto discover the API server and connect
           # to it. Uncomment only if the default does not work.
         - --auto-generate-certificates
+        - --port=${service['dashboard.ssl.container.port']}
         livenessProbe:
           httpGet:
             scheme: HTTPS
             path: /
-            port: 8443
+            port: ${service['dashboard.ssl.container.port']}
           initialDelaySeconds: 30
           timeoutSeconds: 30
         resources:

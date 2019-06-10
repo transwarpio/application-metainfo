@@ -41,6 +41,9 @@
     <@property "transwarp.docker.inceptor" service.roles.INCEPTOR_SERVER[0]['hostname'] + ':' + service['hive.server2.thrift.port']/>
     <@property "hive.server2.authentication.kerberos.principal"  "hive/_HOST@" + service.realm/>
     <@property "hive.server2.authentication.kerberos.keytab" service.keytab/>
+    <#if service.plugins?seq_contains("guardian")>
+        <@property "spark.ui.guardian.enabled" "true"/>
+    </#if>
 </#if>
 <#if service['hive.server2.authentication'] == "LDAP">
     <#assign  authentication="LDAP">
@@ -51,6 +54,9 @@
     <@property "hive.server2.authentication.ldap.baseDN", "ou=People,${service.domain}"/>
     <@property "hive.server2.authentication.ldap.extra.baseDNs", "ou=System,ou=People,${service.domain}"/>
     <@property "hive.server2.authentication.ldap.url" "${guardian_servers?join(' ')}"/>
+    <#if service.plugins?seq_contains("guardian")>
+        <@property "spark.ui.guardian.enabled" "true"/>
+    </#if>
 </#if>
 
 <#if dependencies.GUARDIAN?? && dependencies.GUARDIAN.roles.CAS_SERVER??>
@@ -70,7 +76,6 @@
     <#assign  manager="org.apache.hadoop.hive.ql.security.authorization.plugin.sqlstd.SQLStdHiveAuthorizerFactory">
 </#if>
 <#if service.plugins?seq_contains("guardian")>
-    <@property "hive.metastore.event.listeners" "io.transwarp.guardian.plugins.inceptor.GuardianMetaStoreListener,io.transwarp.guardian.binding.metastore.GuardianMetaStoreNotificationLogListener"/>
     <@property "plsql.link.hooks" "org.apache.hadoop.hive.ql.pl.parse.hooks.PLAnonExecHook"/>
     <@property "hive.exec.pre.hooks" "io.transwarp.guardian.plugins.inceptor.GuardianPLFunctionHook"/>
     <#assign  manager="io.transwarp.guardian.plugins.inceptor.GuardianHiveAuthorizerFactory">
@@ -84,7 +89,6 @@
     <@property "inceptor.scheduler.enabled" "true"/>
     <#if service.plugins?seq_contains("guardian")>
         <@property "spark.guardian.enabled" "true"/>
-        <@property "spark.ui.guardian.enabled" "true"/>
     <#else>
         <@property "inceptor.scheduler.config" "/etc/${service.sid}/conf/inceptor-scheduler.xml"/>
     </#if>
@@ -92,7 +96,6 @@
     <@property "inceptor.scheduler.enabled" "false"/>
     <#if service.plugins?seq_contains("guardian")>
         <@property "spark.guardian.enabled" "true"/>
-        <@property "spark.ui.guardian.enabled" "true"/>
     </#if>
 </#if>
 
@@ -134,6 +137,19 @@
     <#list service.roles["INCEPTOR_METASTORE"] as role>
         <#assign uris += [("thrift://" + role.hostname + ":" + service["hive.metastore.port"])]>
     </#list>
+</#if>
+<#assign i = -1>
+<#list uris as uri>
+    <#if uri?contains(localhostname)>
+        <#assign i=uri?index>
+        <#break>
+    </#if>
+</#list>
+<#if i lt 0>
+    <#assign i = .now?long % uris?size>
+</#if>
+<#if i gt 0>
+    <#assign uris = uris[i..] + uris[0..i-1]>
 </#if>
     <@property "hive.metastore.uris" uris?join(",")/>
 <#if dependencies.YARN??>

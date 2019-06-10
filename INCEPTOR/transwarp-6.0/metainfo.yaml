@@ -5,6 +5,7 @@ global: false
 namePrefix: Inceptor
 friendlyName: "Inceptor"
 dockerImage: "transwarp/inceptor:transwarp-6.0"
+validateConfig: true
 dependencies:
   - name: GUARDIAN
     minVersion: transwarp-6.0
@@ -34,12 +35,21 @@ dependencies:
     maxVersion: transwarp-6.0
     optional: true
     preferred: false
+  - name: DBA_SERVICE
+    minVersion: transwarp-6.0
+    maxVersion: transwarp-6.0
+    optional: true
   - name: SEARCH
     minVersion: transwarp-6.0
     maxVersion: transwarp-6.0
     optional: true
     preferred: true
   - name: SHIVA
+    minVersion: transwarp-6.0
+    maxVersion: transwarp-6.0
+    optional: true
+    preferred: true
+  - name: STELLARDB
     minVersion: transwarp-6.0
     maxVersion: transwarp-6.0
     optional: true
@@ -194,6 +204,9 @@ roles:
   - type: DEPENDENCY_DIR_CONF
     dependencyType: SHIVA
     configKey: tabletserver.store.datadirs
+  - type: DEPENDENCY_DIR_CONF
+    dependencyType: STELLARDB
+    configKey: graph.data.dirs
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}
@@ -276,6 +289,56 @@ roles:
     - directive: !<mkdirs>
         paths: ["/var/run/${service.sid}"]
         mode: "755"
+- name: INCEPTOR_CATALOG_AGENT
+  friendlyName: "Inceptor Catalog Agent"
+  labelPrefix: "inceptor-catalog-agent"
+  dockerImage: "transwarp/catalog-agent:transwarp-6.0"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /api/v1/health
+      port: ${service['catalog-agent.http.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 60
+    successThreshold: 1
+    timeoutSeconds: 60
+  env:
+  - name: HADOOP_CONF_DIR
+    value: /etc/${dependencies.HDFS.sid}/conf
+  - name: YARN_CONF_DIR
+    value: /etc/${dependencies.YARN.sid}/conf
+  - name: INCEPTOR_CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: KRB_ENABLE
+    value: <#if service.auth = "kerberos">true<#else>false</#if>
+  - name: CATALOG_AGENT_COMPONENT
+    value: hive
+  - name: CATALOG_AGENT_VERSION
+    value: inceptor-0.12.0
+  mountPaths: []
+  resources:
+    limitsMemoryKey: catalog.container.limits.memory
+    limitsCpuKey: catalog.container.limits.cpu
+    requestsMemoryKey: catalog.container.requests.memory
+    requestsCpuKey: catalog.container.requests.cpu
+  summaryPolicy: NONE
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [0]}
+  suggestion:
+  - criteria: !<Range> {"min": 0}
+  validation:
+  - criteria: !<Range> {"min": 0}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "ca-application.properties"
+        targetPath: "/etc/${service.sid}/conf/ca-application.properties"
+        mode: "644"
 
 stages:
   - type: Bootstrap
@@ -320,6 +383,11 @@ stages:
       operation: Config
       summaryPolicy: NONE
       timeoutMinutes: 1
+    - !<Role>
+      roleType: "INCEPTOR_CATALOG_AGENT"
+      operation: Config
+      summaryPolicy: NONE
+      timeoutMinutes: 1
   - type: PreUpgrade
     taskGroups:
     - !<DockerRunPreUpgrade>
@@ -337,6 +405,10 @@ stages:
 
 
 firstWizardConfigs:
+# StellarDB
+- graph.zk.base_path
+- graph.zk.quorum
+# inceptor
 - hive.server2.enabled
 - hive.server2.authentication
 - hive.exec.scratchdir
@@ -391,6 +463,14 @@ firstWizardConfigs:
 - compactor.container.requests.memory
 - compactor.container.requests.cpu
 - compactor.memory.ratio
+# inceptor catalog agent
+- catalog-agent.http.port
+- catalog-agent.web.address
+- catalog-agent.container.limits.memory
+- catalog-agent.container.limits.cpu
+- catalog-agent.container.requests.memory
+- catalog-agent.container.requests.cpu
+- catalog-agent.memory.ratio
 
 
 dashboardMetrics:

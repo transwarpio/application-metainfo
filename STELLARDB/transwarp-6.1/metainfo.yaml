@@ -10,11 +10,11 @@ dependencies:
     minVersion: transwarp-6.1
     maxVersion: transwarp-6.1
     optional: false
-  - name: INCEPTOR
-    minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
-    optional: true
-    preferred: true
+#  - name: INCEPTOR
+#    minVersion: transwarp-6.1
+#    maxVersion: transwarp-6.1
+#    optional: true
+#    preferred: true
 roles:
   - name: STELLARDB_MASTER
     friendlyName: "StellarDB Master"
@@ -119,6 +119,8 @@ stages:
     timeoutMinutes: 3
 
 firstWizardConfigs:
+- graph.file.server.port
+- graph.cypher.jdbc.url
 - graph.data.dirs
 - graph.raft.dirs
 - graph.zk.quorum
@@ -134,3 +136,6 @@ healthChecks:
 - category: DAEMON_CHECK
   intervalSeconds: 30
   method: !<K8sPod> {}
+
+customConfigFiles:
+- graphconf.xml

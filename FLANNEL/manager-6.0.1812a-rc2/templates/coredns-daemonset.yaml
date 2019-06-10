@@ -1,0 +1,80 @@
+<#assign
+  tosService=dependencies.TOS
+  registryServer=tosService.roles['TOS_REGISTRY'][0].hostname
+  registryPort=tosService['tos.registry.port']
+>
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    transwarp.name: kube-dns-${service.sid}
+  name: kube-dns-${service.sid}
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      transwarp.name: kube-dns-${service.sid}
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 100%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        cni.networks: overlay
+      labels:
+        transwarp.name: kube-dns-${service.sid}
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kube-dns-${service.sid}
+                operator: Exists
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                transwarp.name: kube-dns-${service.sid}
+            namespaces:
+            - kube-system
+            topologyKey: kubernetes.io/hostname
+      containers:
+      - args:
+        - /boot/entrypoint.sh
+        image: ${registryServer}:${registryPort}/transwarp/coredns:manager-6.0.1812a-rc2
+        imagePullPolicy: IfNotPresent
+        name: coredns
+        resources:
+          limits:
+            cpu: "1"
+            memory: 3Gi
+          requests:
+            cpu: 500m
+            memory: 1Gi
+        volumeMounts:
+        - mountPath: /boot
+          name: coredns-entrypoint-cm
+        - mountPath: /conf
+          name: coredns-conf-cm
+      dnsPolicy: ClusterFirst
+      hostNetwork: true
+      priorityClassName: system-priority
+      restartPolicy: Always
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: entrypoint.sh
+            mode: 493
+            path: entrypoint.sh
+          name: coredns-entrypoint-cm
+        name: coredns-entrypoint-cm
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: Corefile
+            path: Corefile
+          name: coredns-conf-cm
+        name: coredns-conf-cm

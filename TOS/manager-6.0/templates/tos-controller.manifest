@@ -28,6 +28,7 @@ spec:
         - --log_dir=/var/log/kubernetes/
         - --allocate-node-cidrs=true
         - --cluster-cidr=${service['service.cluster.ip.range']}
+        - --pod-eviction-timeout=30m0s
       env:
       - name: TZ
         value: "Asia/Shanghai"

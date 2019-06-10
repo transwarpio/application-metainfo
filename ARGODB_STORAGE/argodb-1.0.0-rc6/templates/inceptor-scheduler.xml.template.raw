@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<inceptor>
+    <properties>
+        <spark.scheduler.mode>FURION</spark.scheduler.mode>
+    </properties>
+    <schedulers>
+        <scheduler>
+            <name>FURION</name>
+            <configuration>/etc/${service.sid}/conf/furion.xml</configuration>
+            <properties>
+                <is.default.pool>default</is.default.pool>
+                <is.quota.default.permitted.pools>*</is.quota.default.permitted.pools>
+                <is.quota.default.pool>10</is.quota.default.pool>
+                <is.quota.default.session>10</is.quota.default.session>
+                <is.quota.default.total>10</is.quota.default.total>
+            </properties>
+            <quotas>
+                <quota>
+                    <user>hive</user>
+                    <properties>
+                        <is.quota.user.permitted.pools>*</is.quota.user.permitted.pools>
+                        <is.quota.user.pool>10</is.quota.user.pool>
+                        <is.quota.user.session>10</is.quota.user.session>
+                        <is.quota.user.total>10</is.quota.user.total>
+                    </properties>
+                </quota>
+            </quotas>
+        </scheduler>
+    </schedulers>
+</inceptor>

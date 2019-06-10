@@ -284,9 +284,9 @@ roles:
       numSeq: [1]
       mates: ["TRANSWARP_MANAGER_MASTER"] #REGISTRY_SERVER is strictly adhered to Manager
   suggestion:
-  - criteria: !<Range> {"min": 1, "max": 1}
+  - criteria: !<OnManagerNode> {"roleType": "TOS_REGISTRY"}
   validation:
-  - criteria: !<Range> {"min": 1, "max": 1} #TODO must at TRANSWARP_MANAGER_MASTER nodes
+  - criteria: !<OnManagerNode> {"roleType": "TOS_REGISTRY"}
   operations:
   - type: Install
     directives:

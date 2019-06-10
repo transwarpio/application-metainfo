@@ -139,22 +139,22 @@ stages:
             CONFIG_URL="/coreos.com/network/overlay/config"
             CONFIG_SECURITY_URL="/coreos.com/network/overlay/securityrules"
         >
-        ETCDCTL_API=3 /usr/local/bin/etcdctl \
-        --cacert=/srv/kubernetes/etcd-ca.pem \
-        --cert=/srv/kubernetes/etcd.pem \
-        --key=/srv/kubernetes/etcd-key.pem \
-        --endpoints ${ETCD_URL} put ${CONFIG_URL} \
+        ETCDCTL_API=2 /usr/local/bin/etcdctl \
+        --ca-file=/srv/kubernetes/etcd-ca.pem \
+        --cert-file=/srv/kubernetes/etcd.pem \
+        --key-file=/srv/kubernetes/etcd-key.pem \
+        --peers ${ETCD_URL} set ${CONFIG_URL} \
           "{ \"Network\": \"${FLANNEL_CONFIG_NETWORK}\",\
              \"SubnetLen\": ${FLANNEL_CONFIG_SUBNETLEN},\
              \"SubnetMin\": \"${FLANNEL_CONFIG_SUBNETMIN}\",\
              \"SubnetMax\": \"${FLANNEL_CONFIG_SUBNETMAX}\", \
              \"Backend\": { \"Type\": \"vxlan\", \"VNI\": 1} }"
         [ -n "${CONFIG_SECURITY_URL}" ] && \
-          ETCDCTL_API=3 /usr/local/bin/etcdctl \
-          --cacert=/srv/kubernetes/etcd-ca.pem \
-          --cert=/srv/kubernetes/etcd.pem \
-          --key=/srv/kubernetes/etcd-key.pem \
-          --endpoints ${ETCD_URL} put ${CONFIG_SECURITY_URL} "[]"
+          ETCDCTL_API=2 /usr/local/bin/etcdctl \
+          --ca-file=/srv/kubernetes/etcd-ca.pem \
+          --cert-file=/srv/kubernetes/etcd.pem \
+          --key-file=/srv/kubernetes/etcd-key.pem \
+          --peers ${ETCD_URL} set ${CONFIG_SECURITY_URL} "[]"
   - type: Config
     taskGroups:
     - !<Resource-on-Manager>

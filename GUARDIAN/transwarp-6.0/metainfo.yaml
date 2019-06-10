@@ -5,6 +5,7 @@ global: true
 namePrefix: Guardian
 friendlyName: Guardian
 dependencies: []
+validateConfig: true
 roles:
 - name: GUARDIAN_TXSQL_SERVER
   friendlyName: "TxSQL Server"
@@ -240,7 +241,7 @@ roles:
   friendlyName: "CAS Admin Server"
   labelPrefix: "cas-admin-server"
   category: MASTER
-  frontendOperations: ["Start", "Stop", "Move", "Scaleout"]
+  frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   deleteOpCondition:
     movable:
       number: 1
