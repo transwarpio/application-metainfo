@@ -46,7 +46,7 @@
   visibility: READ_WRITE
 
 - name: catalog-agent.pilotenterprise.password
-  recommendExpression: 123
+  recommendExpression: manager
   defaultValue: null
   valueType: STRING
   scope: !<RoleTypes>
