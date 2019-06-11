@@ -51,6 +51,7 @@ export OAUTH2_TOKEN_EVICTION_REPEAT_INTERVAL=${service['federation.oauth2.tokenE
 export OAUTH2_TOKEN_REFRESH_START_DELAY=${service['federation.oauth2.tokenRefresh.startDelay']}
 export OAUTH2_TOKEN_REFRESH_REPEAT_INTERVAL=${service['federation.oauth2.tokenRefresh.repeatInterval']}
 
+export OAUTH2_LOGIN_TENANT_NAME_AUTO_FILLED=${service['federation.oauth2.login.tenantNameAutoFilled']}
 export HA_LEADER_ELECTION_NODE_STATUS_UPDATE_INITIAL_DELAY=${service['ha.leader-election.nodeStatusUpdate.initialDelay']}
 export HA_LEADER_ELECTION_NODE_STATUS_UPDATE_INTERVAL=${service['ha.leader-election.nodeStatusUpdate.interval']}
 export HA_LEADER_ELECTION_TIME_TO_OVERTHROW_DORMANT_LEADER=${service['ha.leader-election.timeToOverthrowDormantLeader']}
