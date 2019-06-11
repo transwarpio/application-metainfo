@@ -5,22 +5,19 @@ global: false
 namePrefix: Workflow
 friendlyName: Workflow
 dockerImage: "transwarp/workflow:studio-1.1"
-validateConfig: true
 dependencies:
   - name: TRANSPORTER
     minVersion: studio-1.1
     maxVersion: studio-1.1
     optional: true
   - name: GUARDIAN
-    minVersion: transwarp-6.0
+    minVersion: transwarp-5.2
     optional: true
   - name: ZOOKEEPER
-    minVersion: transwarp-6.0
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-5.2
     optional: false
   - name: TXSQL
-    minVersion: transwarp-6.0
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-5.2
     optional: false
 roles:
 - name: WORKFLOW_SERVER

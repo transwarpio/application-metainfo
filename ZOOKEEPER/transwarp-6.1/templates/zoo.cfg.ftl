@@ -17,6 +17,8 @@ clientPort=${service['zookeeper.client.port']}
     jaasLoginRenew=3600000
     kerberos.removeHostFromPrincipal=true
     kerberos.removeRealmFromPrincipal=true
+<#else>
+    skipACL=yes
 </#if>
 
 <#--Take properties from the context-->

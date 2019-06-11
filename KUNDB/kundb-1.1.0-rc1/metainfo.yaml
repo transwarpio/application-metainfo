@@ -1,0 +1,583 @@
+---
+name: KUNDB 
+version: kundb-1.1.0-rc1
+global: false
+namePrefix: kundb 
+friendlyName: "KunDB"
+dockerImage: "transwarp/kundb:kundb-1.1.0-rc1"
+dependencies: 
+  - name: ZOOKEEPER
+    minVersion: transwarp-6.0.0
+    maxVersion: transwarp-6.1.0-final
+    optional: false
+user: kundb
+
+roles:
+- name: ORCHESTRATOR 
+  friendlyName: "Orchestrator"
+  labelPrefix: "orchestrator"
+  dockerImage: "transwarp/kundb-orchestrator:kundb-1.1.0-rc1"
+  linkExpression: "http://${localhostname}:3000"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 1
+    reject:
+      number: 1
+  env:
+  - name: KUNDB_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: orchestrator.container.limits.memory
+    requestsMemoryKey: orchestrator.container.requests.memory
+  nodeSpecificMounts:
+  - type: DIR_CONF
+    configKey: data.localdir
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 0}
+  operations: []
+- name: KUNCTLD 
+  friendlyName: "KunCtld"
+  labelPrefix: "kunctld"
+  linkExpression: "http://${localhostname}:${service['kunctld.debug.port']}"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - |
+        curl --connect-timeout 15 --max-time 15 "http://`hostname`:${service['kunctld.debug.port']}/check/status" | tee /tmp/check-kunctld
+        grep '"healthy"' /tmp/check-kunctld
+  deleteOpCondition:
+    deletable:
+      number: 1
+    reject:
+      number: 1
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: data.localdir
+      featureFile: _kundb 
+  env:
+  - name: TRANSWARP_ZOOKEEPER_QUORUM
+    value: |
+      <#assign zookeepers=[]>
+      <#if dependencies.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?size gt 0>
+        <#list dependencies.ZOOKEEPER.roles.ZOOKEEPER as zookeeper>
+          <#assign zookeepers += [zookeeper.hostname]>
+        </#list> </#if>
+      ${zookeepers?join(",")}
+  - name: KUNDB_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: kunctld.container.limits.memory
+    requestsMemoryKey: kunctld.container.requests.memory
+  nodeSpecificMounts:
+  - type: DIR_CONF
+    configKey: data.localdir
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations: []
+- name: KUNGATE 
+  friendlyName: "KunGate"
+  labelPrefix: "kundb-kungate"
+  linkExpression: "http://${localhostname}:${service['kungate.debug.port']}"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - |
+        curl --connect-timeout 15 --max-time 15 "http://`hostname`:${service['kungate.debug.port']}/check/status" | tee /tmp/check-kungate 
+        grep '"healthy"' /tmp/check-kungate
+  deleteOpCondition:
+    deletable:
+      number: 1
+    reject:
+      number: 1
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: data.localdir
+      featureFile: _kundb 
+  env:
+  - name: TRANSWARP_ZOOKEEPER_QUORUM
+    value: |
+      <#assign zookeepers=[]>
+      <#if dependencies.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?size gt 0>
+        <#list dependencies.ZOOKEEPER.roles.ZOOKEEPER as zookeeper>
+          <#assign zookeepers += [zookeeper.hostname]>
+        </#list>
+      </#if>
+      ${zookeepers?join(",")}
+  - name: KUNDB_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: KunGate.container.limits.memory
+    requestsMemoryKey: KunGate.container.requests.memory
+  nodeSpecificMounts:
+  - type: DIR_CONF
+    configKey: data.localdir
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations: 
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "mysql_auth_server_static_creds.json"
+        targetPath: "/etc/${service.sid}/conf/mysql_auth_server_static_creds.json"
+        mode: "600"
+- name: COMPUTE_NODE 
+  friendlyName: "Compute Node"
+  labelPrefix: "kundb-computenode"
+  linkExpression: "http://${localhostname}:${service['computenode.debug.port']}"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - |
+        curl --connect-timeout 15 --max-time 15 "http://`hostname`:${service['computenode.debug.port']}/check/status" | tee /tmp/check-computenode
+        grep '"healthy"' /tmp/check-computenode
+  deleteOpCondition:
+    deletable:
+      number: 1
+    reject:
+      number: 1
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: data.localdir
+      featureFile: _kundb 
+  env:
+  - name: TRANSWARP_ZOOKEEPER_QUORUM
+    value: |
+      <#assign zookeepers=[]>
+      <#if dependencies.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?size gt 0>
+        <#list dependencies.ZOOKEEPER.roles.ZOOKEEPER as zookeeper>
+          <#assign zookeepers += [zookeeper.hostname]>
+        </#list>
+      </#if>
+      ${zookeepers?join(",")}
+  - name: KUNDB_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: computenode.container.limits.memory
+    requestsMemoryKey: computenode.container.requests.memory
+  nodeSpecificMounts:
+  - type: DIR_CONF
+    configKey: data.localdir
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations: 
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "mysql_auth_server_static_creds.json"
+        targetPath: "/etc/${service.sid}/conf/mysql_auth_server_static_creds.json"
+        mode: "600"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "sup_user_info.sh"
+        targetPath: "/etc/${service.sid}/conf/sup_user_info.sh"
+        mode: "600"
+
+roleGroups:
+  - fieldName: Shard 
+    namePrefix: shard
+    friendlyName: "Shard"
+    autoAssign:
+      - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+      - criteria: !<Range> {"min": 1}
+    validation:
+      - when: !<WhenRoleType>
+          roleType: KUNTABLET_MASTER
+          inRange: {"min": 0, "max": 0}
+        criteria: !<Range> {"min": 1}
+      - when: !<WhenRoleType>
+          roleType: KUNTABLET_REPLICA
+          inRange: {"min": 0, "max": 0}
+        criteria: !<Range> {"min": 0}
+      - when: !<WhenRoleType>
+          roleType: KUNTABLET_RDONLY
+          inRange: {"min": 0, "max": 0}
+        criteria: !<Range> {"min": 0}
+    roles:
+      - name: KUNTABLET_RDONLY
+        supportMultiInstances: true
+        friendlyName: "KunTablet Rdonly "
+        labelPrefix: "kuntablet-rdonly"
+        linkExpression: "http://${localhostname}:${service['rdonly.debug.port']}"
+        category: SLAVE
+        frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+        readinessProbe:
+          probe: !<exec>
+            command:
+            - /bin/bash
+            - -c
+            - |
+              source /etc/${service.sid}/${roleGroupName}/conf/rdonly_conf.sh
+              curl --connect-timeout 15 --max-time 15 "http://`hostname`:$PORT/check/status" | tee /tmp/check-kuntablet-rdonly
+              grep '"healthy"' /tmp/check-kuntablet-rdonly
+        summaryPolicy: SOME 
+        deleteOpCondition:
+          deletable:
+            number: 1
+          movable:
+            number: 1
+          reject:
+            number: 1
+        deleteOpCleanDirs:
+          fromConfig:
+          - key: data.localdir
+            featureFile: _kundb 
+        env:
+        - name: TRANSWARP_ZOOKEEPER_QUORUM
+          value: |
+            <#assign zookeepers=[]>
+            <#if dependencies.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?size gt 0>
+              <#list dependencies.ZOOKEEPER.roles.ZOOKEEPER as zookeeper>
+                <#assign zookeepers += [zookeeper.hostname]>
+              </#list>
+            </#if>
+            ${zookeepers?join(",")}
+        - name: KUNDB_CONF_DIR 
+          value: /etc/${service.sid}/conf
+        - name: ROLE_CONF_DIR
+          value: /etc/${service.sid}/${roleGroupName}/conf
+        mountPaths: []
+        resources:
+          limitsMemoryKey: rdonly.container.limits.memory
+          requestsMemoryKey: rdonly.container.requests.memory
+        nodeSpecificMounts:
+        - type: DIR_CONF
+          configKey: data.localdir
+        autoAssign:
+        - advice: !<NumSeq> {"numSeq": [1, 1]}
+        suggestion:
+        - criteria: !<Range> {"min": 0}
+        validation:
+        - criteria: !<Range> {"min": 0}
+        operations:
+        - type: Config
+          directives:
+          - directive: !<resource>
+              templateType: FreeMarker
+              templatePath: "rdonly_conf.sh"
+              targetPath: "/etc/${service.sid}/${roleGroupName}/conf/rdonly_conf.sh"
+              mode: "755"
+      - name: KUNTABLET_REPLICA
+        supportMultiInstances: true
+        friendlyName: "KunTablet Replica "
+        labelPrefix: "kuntablet-replica"
+        linkExpression: "http://${localhostname}:${service['replica.debug.port']}"
+        category: SLAVE
+        frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+        readinessProbe:
+          probe: !<exec>
+            command:
+            - /bin/bash
+            - -c
+            - |
+              source /etc/${service.sid}/${roleGroupName}/conf/replica_conf.sh
+              curl --connect-timeout 15 --max-time 15 "http://`hostname`:$PORT/check/status" | tee /tmp/check-kuntablet-replica
+              grep '"healthy"' /tmp/check-kuntablet-replica
+        summaryPolicy: SOME 
+        deleteOpCondition:
+          deletable:
+            number: 1
+          movable:
+            number: 1
+          reject:
+            number: 1
+        deleteOpCleanDirs:
+          fromConfig:
+          - key: data.localdir
+            featureFile: _kundb 
+        env:
+        - name: TRANSWARP_ZOOKEEPER_QUORUM
+          value: |
+            <#assign zookeepers=[]>
+            <#if dependencies.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?size gt 0>
+              <#list dependencies.ZOOKEEPER.roles.ZOOKEEPER as zookeeper>
+                <#assign zookeepers += [zookeeper.hostname]>
+              </#list>
+            </#if>
+            ${zookeepers?join(",")}
+        - name: KUNDB_CONF_DIR 
+          value: /etc/${service.sid}/conf
+        - name: ROLE_CONF_DIR
+          value: /etc/${service.sid}/${roleGroupName}/conf
+        mountPaths: []
+        resources:
+          limitsMemoryKey: replica.container.limits.memory
+          requestsMemoryKey: replica.container.requests.memory
+        nodeSpecificMounts:
+        - type: DIR_CONF
+          configKey: data.localdir
+        autoAssign:
+        - advice: !<NumSeq> {"numSeq": [1, 1]}
+        suggestion:
+        - criteria: !<Range> {"min": 0}
+        validation:
+        - criteria: !<Range> {"min": 0}
+        operations: 
+        - type: Config
+          directives:
+          - directive: !<resource>
+              templateType: FreeMarker
+              templatePath: "replica_conf.sh"
+              targetPath: "/etc/${service.sid}/${roleGroupName}/conf/replica_conf.sh"
+              mode: "755"
+      - name: KUNTABLET_MASTER
+        supportMultiInstances: true
+        friendlyName: "KunTablet Master"
+        labelPrefix: "kuntablet-master"
+        linkExpression: "http://${localhostname}:${service['master.debug.port']}"
+        category: SLAVE
+        frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+        readinessProbe:
+          probe: !<exec>
+            command:
+            - /bin/bash
+            - -c
+            - |
+              source /etc/${service.sid}/${roleGroupName}/conf/master_conf.sh
+              curl --connect-timeout 15 --max-time 15 "http://`hostname`:$PORT/check/status" | tee /tmp/check-kuntablet-master
+              grep '"healthy"' /tmp/check-kuntablet-master
+        summaryPolicy: ALL 
+        autoAssign:
+        - advice: !<NumSeq> {"numSeq": [1, 1]}
+        suggestion:
+        - criteria: !<Range> {"min": 1}
+        validation:
+        - criteria: !<Range> {"min": 1}
+        deleteOpCondition:
+          deletable:
+            number: 1
+          movable:
+            number: 1
+          reject:
+            number: 1
+        deleteOpCleanDirs:
+          fromConfig:
+          - key: data.localdir
+            featureFile: _kundb 
+        env:
+        - name: TRANSWARP_ZOOKEEPER_QUORUM
+          value: |
+            <#assign zookeepers=[]>
+            <#if dependencies.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?size gt 0>
+              <#list dependencies.ZOOKEEPER.roles.ZOOKEEPER as zookeeper>
+                <#assign zookeepers += [zookeeper.hostname]>
+              </#list>
+            </#if>
+            ${zookeepers?join(",")}
+        - name: KUNDB_CONF_DIR
+          value: /etc/${service.sid}/conf
+        - name: ROLE_CONF_DIR
+          value: /etc/${service.sid}/${roleGroupName}/conf
+        mountPaths: []
+        resources:
+          limitsMemoryKey: master.container.limits.memory
+          requestsMemoryKey: master.container.requests.memory
+        nodeSpecificMounts:
+        - type: DIR_CONF
+          configKey: data.localdir
+        autoAssign:
+        - advice: !<NumSeq> {"numSeq": [1, 1]}
+        suggestion:
+        - criteria: !<Range> {"min": 1}
+        validation:
+        - criteria: !<Range> {"min": 1}
+        operations: 
+        - type: Config
+          directives:
+          - directive: !<resource>
+              templateType: FreeMarker
+              templatePath: "master_conf.sh"
+              targetPath: "/etc/${service.sid}/${roleGroupName}/conf/master_conf.sh"
+              mode: "755"
+          - directive: !<resource>
+              templateType: FreeMarker
+              templatePath: "sup_user_info.sh"
+              targetPath: "/etc/${service.sid}/${roleGroupName}/conf/sup_user_info.sh"
+              mode: "600"
+    others: []
+
+stages:
+  - type: Start
+    taskGroups:
+    - !<Role>
+      roleType: "KUNCTLD"
+      operation: Start
+      summaryPolicy: ALL 
+      timeoutMinutes: 3   
+    - !<Role>
+      roleType: "ORCHESTRATOR"
+      operation: Start
+      summaryPolicy: ALL 
+      timeoutMinutes: 3   
+    - !<Role>
+      roleType: "KUNTABLET_RDONLY"
+      operation: Start
+      summaryPolicy: ALL 
+      timeoutMinutes: 3   
+    - !<Role>
+      roleType: "KUNTABLET_REPLICA"
+      operation: Start
+      summaryPolicy: ALL 
+      timeoutMinutes: 3   
+    - !<Role>
+      roleType: "KUNTABLET_MASTER"
+      operation: Start
+      summaryPolicy: ALL 
+      timeoutMinutes: 3   
+    - !<Role>
+      roleType: "COMPUTE_NODE"
+      operation: Start
+      summaryPolicy: ALL 
+      timeoutMinutes: 3   
+    - !<Role>
+      roleType: "KUNGATE"
+      operation: Start
+      summaryPolicy: ALL 
+      timeoutMinutes: 3   
+  - type: PreDeleteAfterStop 
+    taskGroups:
+    - !<DockerRunPreDelete>
+      roleType: "KUNCTLD"
+      summaryPolicy: ALL 
+      timeoutMinutes: 10   
+      node: Any
+ 
+ 
+product: kundb 
+
+firstWizardConfigs:
+- data.localdir
+- kundb.cellname
+- kundb.keyspace
+- kundb.enable_security
+- kundb.shards
+- kunctld.debug.port
+- kunctld.grpc.port
+- kunctld.data_dir
+- mysql.flavor 
+- mysql.root
+- master.port_base 
+- master.grpc.port_base 
+- master.mysql.port_base 
+- master.data_dir
+- replica.port_base 
+- replica.grpc.port_base 
+- replica.mysql.port_base 
+- replica.data_dir
+- rdonly.port_base 
+- rdonly.grpc.port_base 
+- rdonly.mysql.port_base 
+- rdonly.data_dir
+- shard.uid_base 
+- computenode.uid_base 
+- computenode.debug.port
+- computenode.data_dir
+- computenode.audit_filter
+- computenode.kungate.debug.port
+- computenode.kungate.grpc.port
+- computenode.kungate.server.port
+- kungate.debug.port
+- kungate.grpc.port
+- kungate.server.port
+- kungate.audit_filter
+- kungate.data_dir
+- master.debug.port
+- replica.debug.port
+- rdonly.debug.port
+- optimizer_switch 
+- fedx_bkah_size
+- fedx_vitess_min_str_len_for_cbo
+- fedx_small_table_threshold 
+- fedx_valid_index_cardinality_percent 
+- fedx_valid_index_cardinality_minvalue
+- orchestrator.container.limits.memory
+- orchestrator.container.requests.memory
+- kunctld.container.limits.memory
+- kunctld.container.requests.memory
+- computenode.container.limits.memory
+- computenode.container.requests.memory
+- KunGate.container.limits.memory
+- KunGate.container.requests.memory
+- master.container.limits.memory
+- master.container.requests.memory
+- replica.container.limits.memory
+- replica.container.requests.memory
+- rdonly.container.limits.memory
+- rdonly.container.requests.memory
+
+dashboardMetrics: []
+pages:
+- summary
+- roles
+- configuration
+- operation
+- resource_allocation
+- plugin
+
+principals:
+- HTTP
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 10
+  method: !<Probe>
+    roles:
+    - roleType: KUNCTLD 
+      from: !<readiness> {}
+    - roleType: KUNTABLET_RDONLY
+      from: !<readiness> {}
+    - roleType: KUNTABLET_REPLICA
+      from: !<readiness> {}
+    - roleType: KUNTABLET_MASTER
+      from: !<readiness> {}
+    - roleType: COMPUTE_NODE
+      from: !<readiness> {}
+    - roleType: KUNGATE 
+      from: !<readiness> {}
+
+customConfigFiles:
+- mfed.cfg 
+- mysql.cfg

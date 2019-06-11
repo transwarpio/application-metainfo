@@ -162,6 +162,7 @@
 <@property "hbase.hregion.memstore.block.multiplier" service['hbase.hregion.memstore.block.multiplier']/>
 <@property "hbase.client.meta.operation.timeout" service['hbase.client.meta.operation.timeout']/>
 <@property "hbase.client.write.buffer" service['hbase.client.write.buffer']/>
+<@property "hbase.master.hfilecleaner.ttl" service['hbase.master.hfilecleaner.ttl']/>
 
 <@property "mapred.child.env" "JAVA_HOME=/usr/java/jdk1.8.0_25"/>
 <@property "yarn.app.mapreduce.am.env" "JAVA_HOME=/usr/java/jdk1.8.0_25"/>
