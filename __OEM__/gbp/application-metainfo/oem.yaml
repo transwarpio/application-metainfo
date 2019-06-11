@@ -1,0 +1,66 @@
+---
+tags:
+- original: transwarp
+  replacement: gbp
+
+products:
+- name: BASIC
+  i18n:
+    product_en_US.properties:
+    - product.friendlyName: "GBP Basic"
+    - product.description: "GBP Basic consists of ZooKeeper, HDFS, YARN and Kafka"
+    product_zh_CN.properties:
+    - product.friendlyName: "GBP Basic"
+    - product.description: "GBP Basic 包括 ZooKeeper, HDFS, YARN, Kafka 等服务"
+- name: CORE_PRODUCT
+  i18n:
+    product_en_US.properties:
+    - product.friendlyName: "GBP Core Product"
+    - product.description: "GBP Core Product consists of Inceptor, Slipstream, Hyperbase, Search and Discover"
+    product_zh_CN.properties:
+    - product.friendlyName: "GBP Core Product"
+    - product.description: "GBP 核心组件包括 Inceptor, Slipstream, Hyperbase, Search, Discover 等服务"
+- name: STUIDO
+  i18n:
+    product_en_US.properties:
+    - product.friendlyName: "GBP Studio"
+    - product.description: "GBP Studio is a set of big data development tools of TBP"
+    product_zh_CN.properties:
+    - product.friendlyName: "GBP Studio"
+    - product.description: "GBP Studio 是 TBP 中的大数据开发工具集"
+- name: SOPHON
+  i18n:
+    product_en_US.properties:
+    - product.friendlyName: "Sophon"
+    - product.description: "Sophon is a general AI platform to help enterprise users to quickly start building AI applications"
+    product_zh_CN.properties:
+    - product.friendlyName: "Sophon"
+    - product.description: "Sophon是一款通用的人工智能平台, 以帮助企业级用户快速实现人工智能的落地为目的"
+- name: ARGODB
+  i18n:
+    product_en_US.properties:
+    - product.friendlyName: "ArgoDB"
+    - product.description: "ArgoDB is a distributed database based on flash storage"
+    product_zh_CN.properties:
+    - product.friendlyName: "ArgoDB"
+    - product.description: "ArgoDB是一款分布式闪存数据库"
+- name: KUNDB
+  i18n:
+    product_en_US.properties:
+    - product.friendlyName: "KunDB"
+    - product.description: "KunDB is a distributed transactional database"
+    product_zh_CN.properties:
+    - product.friendlyName: "KunDB"
+    - product.description: "KunDB 是一款分布式的交易型数据库"
+
+services:
+- name: GUARDIAN
+  configurations:
+  - name: guardian.ds.realm
+    recommendExpression: GBP
+- name: TRANSPEDIA
+  i18n:
+    service_zh_CN.properties:
+    - service.description: "Transpedia是GBP产品的文档检索服务"
+- name: TRANSPORTER
+  friendlyName: "GBP Data Transporter"
