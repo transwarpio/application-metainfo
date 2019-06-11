@@ -1,6 +1,6 @@
 ---
 name: SEARCH
-version: transwarp-6.1
+version: transwarp-6.2
 global: false
 namePrefix: Search
 friendlyName: "Search"
@@ -10,7 +10,7 @@ roles:
 - name: SEARCH_HEAD
   friendlyName: "Search Head"
   labelPrefix: "search-head"
-  dockerImage: "transwarp/search-head:transwarp-6.1"
+  dockerImage: "transwarp/search-head:transwarp-6.2"
   linkExpression: "http://${localhostname}:${service['head.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
@@ -51,7 +51,7 @@ roleGroups:
       supportMultiInstances: true
       friendlyName: "Search Server"
       labelPrefix: "search-server"
-      dockerImage: "transwarp/search:transwarp-6.1"
+      dockerImage: "transwarp/search:transwarp-6.2"
       linkExpression: "http://${localhostname}:${service['http.port']}/_cluster/health?pretty=true"
       category: MASTER
       frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
