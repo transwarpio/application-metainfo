@@ -81,7 +81,7 @@ roles:
         mode: "755"
 - name: SOPHON_PYTHON_REPO
   dockerImage: "transwarp/sophon-python-repo:sophon-2.3.0-final"
-  linkExpression: "https://${localhostname}:${service['python.repo.port']}"
+  linkExpression: "http://${localhostname}:${service['python.repo.port']}"
   friendlyName: "Sophon python repo"
   labelPrefix: "sophon-python-repo"
   category: MASTER
