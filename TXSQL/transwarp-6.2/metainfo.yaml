@@ -1,10 +1,10 @@
 ---
 name: TXSQL
-version: transwarp-6.1
+version: transwarp-6.2
 global: false
 namePrefix: TxSQL
 friendlyName: "TxSQL"
-dockerImage: "transwarp/txsql:transwarp-6.1"
+dockerImage: "transwarp/txsql:transwarp-6.2"
 validateConfig: true
 dependencies: []
 user: mysql
