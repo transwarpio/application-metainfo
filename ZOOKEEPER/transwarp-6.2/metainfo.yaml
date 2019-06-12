@@ -1,16 +1,16 @@
 ---
 name: ZOOKEEPER
-version: transwarp-6.1
+version: transwarp-6.2
 global: false
 namePrefix: ZooKeeper
 friendlyName: "ZooKeeper"
 validateConfig: true
 dependencies:
   - name: GUARDIAN
-    minVersion: transwarp-6.1
+    minVersion: transwarp-6.2
     optional: true
 packages: ["zookeeper"]
-dockerImage: "transwarp/zookeeper:transwarp-6.1"
+dockerImage: "transwarp/zookeeper:transwarp-6.2"
 user: zookeeper
 roles:
 - name: ZOOKEEPER
