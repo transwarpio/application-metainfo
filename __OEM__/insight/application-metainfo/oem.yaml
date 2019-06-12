@@ -6,6 +6,8 @@ reserveTags:
   replacement: inspur-iih.4.0.0
 - original: studio-1.1.0
   replacement: inspur-iih.4.0.0
+- original: argodb-1.1.0
+  replacement: inspur-iih.4.0.0
 
 products:
 - name: BASIC
