@@ -1,22 +1,22 @@
 ---
 name: YARN
-version: transwarp-6.1
+version: transwarp-6.2
 global: false
 namePrefix: YARN
 friendlyName: "YARN"
-dockerImage: "transwarp/yarn:transwarp-6.1"
+dockerImage: "transwarp/yarn:transwarp-6.2"
 validateConfig: true
 dependencies:
   - name: GUARDIAN
-    minVersion: transwarp-6.1
+    minVersion: transwarp-6.2
     optional: true
   - name: ZOOKEEPER
-    minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-6.2
+    maxVersion: transwarp-6.2
     optional: false
   - name: HDFS
-    minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-6.2
+    maxVersion: transwarp-6.2
     optional: false
 user: yarn
 plugins:
