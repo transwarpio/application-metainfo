@@ -1,15 +1,15 @@
 ---
 name: KMS
-version: transwarp-6.1
+version: transwarp-6.2
 global: false
 namePrefix: KMS
 friendlyName: KMS
-dockerImage: "transwarp/kms:transwarp-6.1"
+dockerImage: "transwarp/kms:transwarp-6.2"
 validateConfig: true
 dependencies:
   - name: TXSQL
     minVersion: transwarp-5.1
-    maxVersion: transwarp-6.1
+    maxVersion: transwarp-6.2
     optional: false
 roles:
 - name: KMS_SERVER

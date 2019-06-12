@@ -1,19 +1,19 @@
 ---
 name: HDFS
-version: transwarp-6.1
+version: transwarp-6.2
 global: false
 namePrefix: HDFS
 friendlyName: HDFS
-dockerImage: "transwarp/hdfs:transwarp-6.1"
+dockerImage: "transwarp/hdfs:transwarp-6.2"
 user: hdfs
 validateConfig: true
 dependencies:
   - name: GUARDIAN
-    minVersion: transwarp-6.1
+    minVersion: transwarp-6.2
     optional: true
   - name: ZOOKEEPER
-    minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-6.2
+    maxVersion: transwarp-6.2
     optional: false
 plugins:
   - provider: GUARDIAN
@@ -23,7 +23,7 @@ roles:
   - name: HDFS_HTTPFS
     friendlyName: "Httpfs"
     labelPrefix: "hadoop-hdfs-httpfs"
-    dockerImage: "transwarp/httpfs:transwarp-6.1"
+    dockerImage: "transwarp/httpfs:transwarp-6.2"
     category: SLAVE
     frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
     readinessProbe:
