@@ -17,6 +17,9 @@ clientPort=${service['zookeeper.client.port']}
     jaasLoginRenew=3600000
     kerberos.removeHostFromPrincipal=true
     kerberos.removeRealmFromPrincipal=true
+    <#if dependencies.GUARDIAN?? && dependencies.GUARDIAN.roles["GUARDIAN_FEDERATION"]??>
+    sasl.oauth2.enabled=${service['sasl.oauth2.enabled']}
+    </#if>
 <#else>
     skipACL=yes
 </#if>

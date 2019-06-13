@@ -55,6 +55,25 @@
     <@property "hadoop.http.authentication.kerberos.principal" principal/>
     <@property "hadoop.http.authentication.kerberos.keytab" "/etc/"+ fsid + "/conf/hdfs.keytab"/>
     <@property "hadoop.http.authentication.signature.secret.file" "/etc/hadoop-http-auth-signature-secret"/>
+    <#if dependencies.GUARDIAN??>
+        <#--handle CAS-->
+        <#if dependencies.GUARDIAN.roles.CAS_SERVER??>
+            <#assign casServerSslPort=dependencies.GUARDIAN['cas.server.ssl.port']>
+            <#if dependencies.GUARDIAN['guardian.server.cas.server.host']?matches("^\\s*$")>
+                <#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['ip']}:${casServerSslPort}">
+            <#else>
+                <#assign casServerName="https://${dependencies.GUARDIAN['guardian.server.cas.server.host']}:${casServerSslPort}">
+            </#if>
+            <@property "hadoop.security.authentication.web.cas.enabled" "${service['hadoop.security.authentication.web.cas.enabled']}"/>
+            <@property "hadoop.security.authentication.cas.server.loginUrl" "${casServerName}/cas/login"/>
+            <@property "hadoop.security.authentication.cas.server.prefix" "${casServerName}/cas"/>
+        </#if>
+        <#--handle Guardian Federation-->
+        <#if dependencies.GUARDIAN.roles["GUARDIAN_FEDERATION"]??>
+            <@property "hadoop.security.authentication.oauth2.enabled" "${service['hadoop.security.authentication.oauth2.enabled']}"/>
+            <@property "hadoop.security.authentication.web.oauth2.enabled" "${service['hadoop.security.authentication.web.oauth2.enabled']}"/>
+        </#if>
+    </#if>
 <#if service.plugins?seq_contains("guardian")>
     <#assign  guardian=dependencies.GUARDIAN guardian_servers=[]>
     <#list guardian.roles["GUARDIAN_APACHEDS"] as role>

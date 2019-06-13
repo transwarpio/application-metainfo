@@ -2,6 +2,7 @@
 name: KAFKA
 version: transwarp-6.2
 global: false
+isSupportOAuth2: true
 namePrefix: Kafka
 friendlyName: "Kafka"
 validateConfig: true

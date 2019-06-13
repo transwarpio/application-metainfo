@@ -64,103 +64,123 @@
     </init-param>
   </filter>
 </#if>
-<#--handle CAS-->
 <#if service.auth = "kerberos">
-    <#if dependencies.GUARDIAN?? && dependencies.GUARDIAN.roles.CAS_SERVER??>
-        <#assign casServerSslPort=dependencies.GUARDIAN['cas.server.ssl.port']>
-        <#if dependencies.GUARDIAN['guardian.server.cas.server.host']?matches("^\\s*$")>
-          <#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['ip']}:${casServerSslPort}">
-        <#else>
-          <#assign casServerName="https://${dependencies.GUARDIAN['guardian.server.cas.server.host']}:${casServerSslPort}">
+    <#if dependencies.GUARDIAN??>
+        <#--handle Guardian Federation-->
+        <#if dependencies.GUARDIAN.roles["GUARDIAN_FEDERATION"]?? && service['dfs.httpfs.oauth2.enabled'] = "true">
+  <filter>
+    <filter-name>OAuth2 Access Token Filter</filter-name>
+    <filter-class>io.transwarp.guardian.federation.utils.oauth2.web.filter.OAuth2AccessTokenAuthFilter</filter-class>
+    <init-param>
+      <param-name>useSession</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter>
+    <filter-name>customFilter</filter-name>
+    <filter-class>org.apache.hadoop.fs.http.server.HttpFSCustomAuthenticationFilter</filter-class>
+  </filter>
+  <filter>
+    <filter-name>OAuth2 HttpServletRequest Wrapper Filter</filter-name>
+    <filter-class>io.transwarp.guardian.federation.utils.oauth2.web.filter.OAuth2RequestWrapperFilter</filter-class>
+  </filter>
+        <#--handle CAS-->
+        <#elseif dependencies.GUARDIAN.roles.CAS_SERVER?? && service['dfs.httpfs.cas.enabled'] = "true">
+            <#assign casServerSslPort=dependencies.GUARDIAN['cas.server.ssl.port']>
+            <#if dependencies.GUARDIAN['guardian.server.cas.server.host']?matches("^\\s*$")>
+                <#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['ip']}:${casServerSslPort}">
+            <#else>
+                <#assign casServerName="https://${dependencies.GUARDIAN['guardian.server.cas.server.host']}:${casServerSslPort}">
+            </#if>
+  <filter>
+    <filter-name>CAS Single Sign Out Filter</filter-name>
+    <filter-class>org.jasig.cas.client.session.SingleSignOutFilter</filter-class>
+    <init-param>
+      <param-name>casServerUrlPrefix</param-name>
+      <param-value>${casServerName}/cas</param-value>
+    </init-param>
+  </filter>
+  <listener>
+    <listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>
+  </listener>
+
+  <filter>
+    <filter-name>customFilter</filter-name>
+   <filter-class>org.apache.hadoop.fs.http.server.HttpFSCustomAuthenticationFilter</filter-class>
+  </filter>
+
+  <filter>
+    <filter-name>CAS Authentication Filter</filter-name>
+    <!--<filter-class>org.jasig.cas.client.authentication.Saml11AuthenticationFilter</filter-class>-->
+    <filter-class>org.jasig.cas.client.authentication.AuthenticationFilter</filter-class>
+    <!--<filter-class>org.apache.hadoop.security.authentication.server.AuthenticationFilter4Cas</filter-class>-->
+    <init-param>
+      <param-name>encodeServiceUrl</param-name>
+      <param-value>false</param-value>
+    </init-param>
+    <init-param>
+      <param-name>acceptAnyProxy</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>casServerLoginUrl</param-name>
+      <param-value>${casServerName}/cas/login</param-value>
+    </init-param>
+    <!--<init-param>
+      <param-name>serverName</param-name>
+      <param-value>http://172.16.130.69:14000/</param-value>
+    </init-param>-->
+  </filter>
+
+  <filter>
+    <filter-name>CAS Validation Filter</filter-name>
+    <!--<filter-class>org.jasig.cas.client.validation.Saml11TicketValidationFilter</filter-class>-->
+    <filter-class>org.jasig.cas.client.validation.Cas30ProxyReceivingTicketValidationFilter</filter-class>
+    <!--<filter-class>org.apache.hadoop.security.authentication.server.Cas30ProxyReceivingTicketValidationFilter4Cas</filter-class>-->
+    <init-param>
+      <param-name>encodeServiceUrl</param-name>
+      <param-value>false</param-value>
+    </init-param>
+    <init-param>
+      <param-name>redirectAfterValidation</param-name>
+      <param-value>false</param-value>
+    </init-param>
+    <init-param>
+      <param-name>acceptAnyProxy</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>casServerUrlPrefix</param-name>
+      <param-value>${casServerName}/cas</param-value>
+    </init-param>
+    <init-param>
+      <param-name>hostnameVerifier</param-name>
+      <param-value>org.jasig.cas.client.ssl.AnyHostnameVerifier</param-value>
+    </init-param>
+    <!--<init-param>
+      <param-name>serverName</param-name>
+      <param-value>http://172.16.130.69:14000/</param-value>
+    </init-param>-->
+    <init-param>
+      <param-name>redirectAfterValidation</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>useSession</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>authn_method</param-name>
+      <param-value>mfa-duo</param-value>
+    </init-param>
+  </filter>
+
+  <filter>
+    <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+    <filter-class>org.jasig.cas.client.util.HttpServletRequestWrapperFilter</filter-class>
+    <!--<filter-class>org.apache.hadoop.security.authentication.server.HttpServletRequestWrapperFilter4Cas</filter-class>-->
+  </filter>
         </#if>
-          <filter>
-            <filter-name>CAS Single Sign Out Filter</filter-name>
-            <filter-class>org.jasig.cas.client.session.SingleSignOutFilter</filter-class>
-            <init-param>
-              <param-name>casServerUrlPrefix</param-name>
-              <param-value>${casServerName}/cas</param-value>
-            </init-param>
-          </filter>
-            <listener>
-              <listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>
-            </listener>
-
-            <filter>
-              <filter-name>casFilter</filter-name>
-              <filter-class>org.apache.hadoop.fs.http.server.HttpFSCasAuthenticationFilter</filter-class>
-            </filter>
-
-            <filter>
-              <filter-name>CAS Authentication Filter</filter-name>
-              <!--<filter-class>org.jasig.cas.client.authentication.Saml11AuthenticationFilter</filter-class>-->
-              <filter-class>org.jasig.cas.client.authentication.AuthenticationFilter</filter-class>
-              <!--<filter-class>org.apache.hadoop.security.authentication.server.AuthenticationFilter4Cas</filter-class>-->
-              <init-param>
-                <param-name>encodeServiceUrl</param-name>
-                <param-value>false</param-value>
-              </init-param>
-              <init-param>
-                <param-name>acceptAnyProxy</param-name>
-                <param-value>true</param-value>
-              </init-param>
-              <init-param>
-                <param-name>casServerLoginUrl</param-name>
-                <param-value>${casServerName}/cas/login</param-value>
-              </init-param>
-              <!--<init-param>
-                <param-name>serverName</param-name>
-                <param-value>http://172.16.130.69:14000/</param-value>
-              </init-param>-->
-            </filter>
-
-            <filter>
-              <filter-name>CAS Validation Filter</filter-name>
-              <!--<filter-class>org.jasig.cas.client.validation.Saml11TicketValidationFilter</filter-class>-->
-              <filter-class>org.jasig.cas.client.validation.Cas30ProxyReceivingTicketValidationFilter</filter-class>
-              <!--<filter-class>org.apache.hadoop.security.authentication.server.Cas30ProxyReceivingTicketValidationFilter4Cas</filter-class>-->
-              <init-param>
-                <param-name>encodeServiceUrl</param-name>
-                <param-value>false</param-value>
-              </init-param>
-              <init-param>
-                <param-name>redirectAfterValidation</param-name>
-                <param-value>false</param-value>
-              </init-param>
-              <init-param>
-                <param-name>acceptAnyProxy</param-name>
-                <param-value>true</param-value>
-              </init-param>
-              <init-param>
-                <param-name>casServerUrlPrefix</param-name>
-                <param-value>${casServerName}/cas</param-value>
-              </init-param>
-              <init-param>
-                <param-name>hostnameVerifier</param-name>
-                <param-value>org.jasig.cas.client.ssl.AnyHostnameVerifier</param-value>
-              </init-param>
-              <!--<init-param>
-                <param-name>serverName</param-name>
-                <param-value>http://172.16.130.69:14000/</param-value>
-              </init-param>-->
-              <init-param>
-                <param-name>redirectAfterValidation</param-name>
-                <param-value>true</param-value>
-              </init-param>
-              <init-param>
-                <param-name>useSession</param-name>
-                <param-value>true</param-value>
-              </init-param>
-              <init-param>
-                <param-name>authn_method</param-name>
-                <param-value>mfa-duo</param-value>
-              </init-param>
-            </filter>
-
-            <filter>
-              <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
-              <filter-class>org.jasig.cas.client.util.HttpServletRequestWrapperFilter</filter-class>
-              <!--<filter-class>org.apache.hadoop.security.authentication.server.HttpServletRequestWrapperFilter4Cas</filter-class>-->
-            </filter>
     </#if>
 </#if>
   <filter>
@@ -200,33 +220,48 @@
     <url-pattern>*</url-pattern>
   </filter-mapping>
 </#if>
-<#--handle CAS-->
+
 <#if service.auth = "kerberos">
-    <#if dependencies.GUARDIAN['cas.server.ssl.port']??>
-          <filter-mapping>
-            <filter-name>CAS Single Sign Out Filter</filter-name>
-            <url-pattern>*</url-pattern>
-          </filter-mapping>
+    <#--handle Guardian Federation-->
+    <#if dependencies.GUARDIAN.roles["GUARDIAN_FEDERATION"]?? && service['dfs.httpfs.oauth2.enabled'] = "true">
+  <filter-mapping>
+    <filter-name>OAuth2 Access Token Filter</filter-name>
+    <url-pattern>*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>customFilter</filter-name>
+    <url-pattern>*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>OAuth2 HttpServletRequest Wrapper Filter</filter-name>
+    <url-pattern>*</url-pattern>
+  </filter-mapping>
+    <#--handle CAS-->
+    <#elseif dependencies.GUARDIAN['cas.server.ssl.port']?? && service['dfs.httpfs.cas.enabled'] = "true">
+  <filter-mapping>
+    <filter-name>CAS Single Sign Out Filter</filter-name>
+    <url-pattern>*</url-pattern>
+  </filter-mapping>
 
-          <filter-mapping>
-            <filter-name>casFilter</filter-name>
-            <url-pattern>*</url-pattern>
-          </filter-mapping>
+  <filter-mapping>
+    <filter-name>customFilter</filter-name>
+    <url-pattern>*</url-pattern>
+  </filter-mapping>
 
-          <filter-mapping>
-            <filter-name>CAS Authentication Filter</filter-name>
-            <url-pattern>*</url-pattern>
-          </filter-mapping>
+  <filter-mapping>
+    <filter-name>CAS Authentication Filter</filter-name>
+    <url-pattern>*</url-pattern>
+  </filter-mapping>
 
-          <filter-mapping>
-            <filter-name>CAS Validation Filter</filter-name>
-            <url-pattern>*</url-pattern>
-          </filter-mapping>
+  <filter-mapping>
+    <filter-name>CAS Validation Filter</filter-name>
+    <url-pattern>*</url-pattern>
+  </filter-mapping>
 
-          <filter-mapping>
-            <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
-            <url-pattern>*</url-pattern>
-          </filter-mapping>
+  <filter-mapping>
+    <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+    <url-pattern>*</url-pattern>
+  </filter-mapping>
     </#if>
 </#if>
   <filter-mapping>
