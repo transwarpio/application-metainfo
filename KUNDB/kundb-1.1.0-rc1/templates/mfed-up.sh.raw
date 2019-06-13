@@ -30,7 +30,7 @@ else
    exit 1
 fi
 
-if [ "$MFED_DATA_DIR"x = ""x ]; then
+if [ "$MFED_DATA_DIR" != "/vdir" ]; then
 export VTDATAROOT=$MFED_DATA_DIR
 fi
 
