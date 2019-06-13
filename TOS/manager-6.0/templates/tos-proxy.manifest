@@ -4,7 +4,7 @@ metadata:
   name: tos-proxy-${service.sid}
   namespace: kube-system
 spec:
-  priorityClassName: system-priority
+  priorityClassName: high-priority
   hostNetwork: true
   containers:
   - name: tos-proxy-${service.sid}

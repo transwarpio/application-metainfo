@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 MANAGER_PROGRESS_VERSION=manager-6.0
-MANAGER_TAG_VERSION=manager-6.0.1905a-rc0
+MANAGER_TAG_VERSION=manager-6.0.1905a-final
 GUARDIAN_PROGRESS_VERSION=guardian-3.1
 GUARDIAN_TAG_VERSION=guardian-3.1.0-rc0
 LAST_STABLE_VERSION=transwarp-6.0.2-final

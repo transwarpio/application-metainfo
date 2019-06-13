@@ -16,5 +16,16 @@ export NGMR_CACHE_SIZE=${service['ngmr.cache.size']}
 export NGMR_EXECUTORS_PERJOB=${service['ngmr.executors.perjob']}
 export INCEPTOR_LOG_DIR=/var/log/${service.sid}
 export SPARK_DRIVER_PORT=${service['spark.driver.port']}
-export EXTRA_DRIVER_OPTS=" ${service['EXTRA_DRIVER_OPTS']} "
-export EXTRA_EXECUTOR_OPTS=" ${service['EXTRA_EXECUTOR_OPTS']} "
+
+<#if service.auth = "kerberos">
+export EXTRA_DRIVER_OPTS=" ${service['EXTRA_DRIVER_OPTS']} -Djava.security.auth.login.config=/etc/${service.sid}/conf/jaas.conf "
+<#else>
+export EXTRA_DRIVER_OPTS=" ${service['EXTRA_DRIVER_OPTS']}"
+</#if>
+
+<#if service.auth = "kerberos">
+export EXTRA_EXECUTOR_OPTS=" ${service['EXTRA_EXECUTOR_OPTS']} -Djava.security.auth.login.config=/etc/${service.sid}/conf/jaas.conf "
+<#else>
+export EXTRA_EXECUTOR_OPTS=" ${service['EXTRA_EXECUTOR_OPTS']}"
+</#if>
+

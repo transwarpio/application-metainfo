@@ -528,11 +528,6 @@ stages:
       summaryPolicy: ALL
       timeoutMinutes: 1
       templateType: Raw
-      templateFile: "priority/system-priority.yaml"
-    - !<Resource-on-Manager>
-      summaryPolicy: ALL
-      timeoutMinutes: 1
-      templateType: Raw
       templateFile: "rbac/clusterrole-rbac.yaml"
     - !<Resource-on-Manager>
       summaryPolicy: ALL

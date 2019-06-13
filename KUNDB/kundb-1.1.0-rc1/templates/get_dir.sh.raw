@@ -1,0 +1,21 @@
+#/bin/bash
+set -x
+OLD_IFS="$IFS" 
+IFS="," 
+newDataDir=($1) 
+IFS="$OLD_IFS" 
+for s in ${newDataDir[@]} 
+do 
+    echo "$s" 
+done
+echo ${newDataDir[@]}
+DATADIR_NUM=${#newDataDir[@]}
+
+for((i=0;i<$DATADIR_NUM;i++)); do
+   dataDir=${newDataDir[i]}    
+   if [ $i -eq 0 ]; then	
+      export VTDATAROOT=${newDataDir[i]} 
+      echo $VTDATAROOT
+   fi
+done 
+#set +x

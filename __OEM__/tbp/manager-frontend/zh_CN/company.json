@@ -4,5 +4,7 @@
   "OEM_PRODUCT_NAME_SHORT": "TBP",
   "OEM_COMPANY_FULL_NAME": "腾讯云计算（北京）有限责任公司",
   "OEM_COMPONENT_TOS": "TOS",
-  "OEM_COMPONENT_GUARDIAN": "Guardian"
+  "OEM_COMPONENT_GUARDIAN": "Guardian",
+  "OEM_COMPONENT_WATERDROP": "Waterdrop",
+  "OEM_COMPONENT_INCEPTOR": "Inceptor"
 }

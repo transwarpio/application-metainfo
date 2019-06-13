@@ -1,9 +1,16 @@
 import os, re, sys, shutil
 import json, yaml
 
-def replaceMetainfoWithLatestVersion():
+def replaceMetainfoWithLatestVersion(releaseTag):
   print 'Replace service metainfo with latest version ...'
   for service in os.listdir('../'):
+    if service.startswith('__'):
+      continue
+    if service.startswith('.'):
+      continue
+    if service == 'build_script':
+      continue
+
     servicePath = '../{:s}'.format(service)
     if not os.path.isdir(servicePath):
       continue
@@ -16,8 +23,8 @@ def replaceMetainfoWithLatestVersion():
 
       list = version.split('-')
       # final version or non-release version, just skip
-      if not list[-1].startswith('rc'):
-        continue
+      # if not list[-1].startswith('rc'):
+      #   continue
 
       rcVersion = list.pop()
       versionPrefix = '-'.join(list)
@@ -37,12 +44,31 @@ def replaceMetainfoWithLatestVersion():
           if int(curNum) > int(latestNum):
             latestVersion = curVersion
 
+      latestDir = os.path.join(servicePath, latestVersion)
+      releaseVersion = versionPrefix + '-' + releaseTag
+      releaseDir = os.path.join(servicePath, releaseVersion)
+      if releaseVersion not in versions and not os.path.exists(releaseDir):
+        print 'Add release version %s for %s ...' % (releaseVersion, service)
+        shutil.copytree(latestDir, releaseDir)
+
+        for (path, dirs, files) in os.walk(releaseDir):
+          for file in files:
+            filePath = os.path.join(path, file)
+            f = open(filePath, 'r')
+            filedata = f.read()
+            f.close()
+
+            filedata = re.sub(latestVersion, releaseVersion, filedata, flags=re.M)
+
+            f = open(filePath, 'w')
+            f.write(filedata)
+            f.close()
+
       # need replace metainfo only if latest version is different from current version
       if latestVersion != version:
         # start replace metainfo with latest version
         print 'Replace %s %s with %s ...' % (service, version, latestVersion)
         shutil.rmtree(metaDir)
-        latestDir = os.path.join(servicePath, latestVersion)
         shutil.copytree(latestDir, metaDir)
 
         for (path, dirs, files) in os.walk(metaDir):
@@ -119,7 +145,6 @@ def replaceReservedTagsAndDeleteOthers(tags):
   #replace metainfo version directory name and delete un-reserved ones
   for service in os.listdir('../'):
     if('__' in service):
-      continue
       continue
     if(r'.git' in service):
       continue
@@ -249,6 +274,15 @@ def replaceServicesInfo(services):
   print 'Replace metainfo for services ...'
   for service in services:
     name = service['name']
+
+    if service.has_key('friendlyName'):
+      friendlyName = service['friendlyName']
+      file = r'/tmp/sed-manager-resources.sh'
+      with open(file, 'a+') as f:
+        f.write('sed -ir \'s/ {:s} / {:s} /gI\' PATH_TO_REPLACE/transwarp-*.properties\n'.format(name, friendlyName))
+        f.write('sed -ir \'s/^{:s} /{:s} /gI\' PATH_TO_REPLACE/transwarp-*.properties\n'.format(name, friendlyName))
+        f.write('sed -ir \'s/ {:s}$/ {:s}/gI\' PATH_TO_REPLACE/transwarp-*.properties\n'.format(name, friendlyName))
+
     print 'Replace service name and role name for %s ...' % name
     for (path, dirs, files) in os.walk('../{:s}/'.format(name)):
       if 'metainfo.yaml' in files:
@@ -286,6 +320,14 @@ def replaceServicesInfo(services):
                       pattern = r'labelPrefix:\s+["|\']?{:s}["|\']?$'.format(role['labelPrefix'])
                       repl = 'labelPrefix: "{:s}"'.format(r['labelPrefix'])
                       filedata = re.sub(pattern, repl, filedata, flags=re.M)
+                    #replace role linkExpression
+                    if role.has_key('linkExpression') and r.has_key('linkExpression'):
+                      pattern = r'linkExpression:\s+\S+$'
+                      if r['linkExpression'] == None:
+                        repl = 'linkExpression: null'
+                      else:
+                        repl = 'linkExpression: "{:s}"'.format(r['linkExpression'])
+                      filedata = re.sub(pattern, repl, filedata, flags=re.M)
           for role in meta['roles']:
             for r in service['roles']:
               if (role['name'] == r['name']):
@@ -298,6 +340,14 @@ def replaceServicesInfo(services):
                 if role.has_key('labelPrefix') and r.has_key('labelPrefix'):
                   pattern = r'labelPrefix:\s+["|\']?{:s}["|\']?$'.format(role['labelPrefix'])
                   repl = 'labelPrefix: "{:s}"'.format(r['labelPrefix'])
+                  filedata = re.sub(pattern, repl, filedata, flags=re.M)
+                #replace role labelPrefix
+                if role.has_key('linkExpression') and r.has_key('linkExpression'):
+                  pattern = r'linkExpression:\s+\S+$'
+                  if r['linkExpression'] == None:
+                    repl = 'linkExpression: null'
+                  else:
+                    repl = 'linkExpression: "{:s}"'.format(r['linkExpression'])
                   filedata = re.sub(pattern, repl, filedata, flags=re.M)
 
         #write back metainfo.yaml after modified
@@ -376,14 +426,37 @@ def replaceDockerImageTagWithProductTag(company, managerTag, productTag):
         repl = ':{:s}'.format(productTag)
         filedata = re.sub(pattern, repl, filedata, flags=re.M)
 
-        pattern = ':transwarp-\d+.\d+.\d+-\w+'.format(company)
-        repl = ':{:s}'.format(productTag)
-        filedata = re.sub(pattern, repl, filedata, flags=re.M)
-
         f = open(filePath, 'w')
         f.write(filedata)
         f.close()
-  print 'Replace service docker image tag with oem product tag.'
+  print 'Replace service docker image tag with oem product tag finished.'
+  print 'Replace transwarp tag with oem product tag ...'
+  for (path, dirs, files) in os.walk('../', topdown=False):
+    if('__' in path):
+      continue
+    if('resources' in path):
+      continue
+    if('i18n' in path):
+      continue
+    if(r'.git' in path):
+      continue
+
+    for file in files:
+      if file == 'release-date.csv':
+         continue
+
+      filePath = os.path.join(path, file)
+      f = open(filePath,'r')
+      filedata = f.read()
+      f.close()
+
+      pattern = 'transwarp-\d+.\d+(.\d+-\w+)?'
+      filedata = re.sub(pattern, productTag, filedata, flags=re.M)
+
+      f = open(filePath, 'w')
+      f.write(filedata)
+      f.close()
+  print 'Replace service docker image tag with oem product tag finished.'
 
 
 #for yaml load custom tags
@@ -427,9 +500,9 @@ if __name__ == "__main__":
       replaceServicesInfo(conf['services'])
     if conf.has_key('tags'):
       replaceVersionTags(conf['tags'])
-    replaceMetainfoWithLatestVersion()
     managerTag = sys.argv[2]
     productTag = sys.argv[3]
+    replaceMetainfoWithLatestVersion(managerTag.split('-')[-1])
     replaceDockerImageTagWithProductTag(company, managerTag, productTag)
 
     serviceMetaBaseDir = company + '/application-metainfo/'

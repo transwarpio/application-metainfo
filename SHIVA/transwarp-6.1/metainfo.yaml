@@ -75,7 +75,7 @@ roles:
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
   suggestion:
-  - criteria: !<Range> {"min": 1, "oddity": true}
+  - criteria: !<Range> {"min": 1, "oddity": false}
   validation:
   - criteria: !<Range> {"min": 1}
   linkExpression: "http://${localhostname}:${service['http.port']}"
@@ -141,7 +141,7 @@ roles:
   autoAssign:
   - advice: !<EachNode> {}
   suggestion:
-  - criteria: !<Range> {"min": 3, "oddity": true}
+  - criteria: !<Range> {"min": 3, "oddity": false}
   validation:
   - criteria: !<Range> {"min": 1}
   resources:
