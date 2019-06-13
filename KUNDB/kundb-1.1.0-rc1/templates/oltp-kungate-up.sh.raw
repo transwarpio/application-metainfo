@@ -26,7 +26,7 @@ else
    echo "/etc/kundb1/conf/ is not exist cant start kundb"
 fi
 
-if [ "$KUNGATE_DATA_DIR"x = ""x ]; then
+if [ "$KUNGATE_DATA_DIR" != "/vdir" ]; then
 export VTDATAROOT=$KUNGATE_DATA_DIR
 fi
 
