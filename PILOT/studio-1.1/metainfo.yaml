@@ -6,19 +6,19 @@ namePrefix: Pilot
 friendlyName: Pilot
 dependencies:
   - name: GUARDIAN
-    minVersion: transwarp-6.0.1-final
+    minVersion: transwarp-5.2
     optional: true
   - name: INCEPTOR
-    minVersion: transwarp-6.0.2-final
+    minVersion: transwarp-5.2
     optional: false
   - name: HDFS
-    minVersion: transwarp-6.0.2-final
+    minVersion: transwarp-5.2
     optional: false
   - name: TXSQL
-    minVersion: transwarp-6.0.2-final
+    minVersion: transwarp-5.2
     optional: false
   - name: ZOOKEEPER
-    minVersion: transwarp-6.0.2-final
+    minVersion: transwarp-5.2
     optional: false
 roles:
   - name: FILEROBOT_SERVER
