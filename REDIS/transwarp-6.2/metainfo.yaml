@@ -1,12 +1,12 @@
 ---
 name: REDIS
-version: transwarp-6.1
+version: transwarp-6.2
 global: false
 namePrefix: redis
 friendlyName: "redis"
 validateConfig: true
 dependencies: []
-dockerImage: "transwarp/redis:transwarp-6.1"
+dockerImage: "transwarp/redis:transwarp-6.2"
 roles:
   - name: REDIS_SERVER
     friendlyName: "Redis Server"

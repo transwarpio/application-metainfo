@@ -1,6 +1,6 @@
 ---
 name: CODIS
-version: transwarp-6.1
+version: transwarp-6.2
 global: false
 namePrefix: codis
 friendlyName: "Codis"
@@ -8,10 +8,10 @@ rollingRestart: true
 validateConfig: true
 dependencies:
   - name: ZOOKEEPER
-    minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-6.2
+    maxVersion: transwarp-6.2
     optional: false
-dockerImage: "transwarp/codis-all:transwarp-6.1"
+dockerImage: "transwarp/codis-all:transwarp-6.2"
 roles:
   - name: CODIS_DASHBOARD
     friendlyName: "Codis Dashboard"
