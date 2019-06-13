@@ -10,7 +10,7 @@ metadata:
   labels:
     k8s-app: etcd-server
 spec:
-  priorityClassName: system-priority
+  priorityClassName: high-priority
   hostNetwork: true
   containers:
   - name: tos-etcd-${service.sid}
