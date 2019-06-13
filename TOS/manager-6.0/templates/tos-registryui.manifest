@@ -4,7 +4,7 @@ metadata:
   name: tos-registryui-${service.sid}
   namespace: kube-system
 spec:
-  priorityClassName: system-priority
+  priorityClassName: high-priority
   hostNetwork: true
   restartPolicy: OnFailure
   containers:
