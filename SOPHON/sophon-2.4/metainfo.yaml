@@ -357,7 +357,7 @@ roles:
         targetPath: "/etc/${service.sid}/conf/share/application.properties"
         mode: "755"
 
-- name: SOPHON_APINAMANER
+- name: SOPHON_APIMANAGER
   dockerImage: "transwarp/sophon-apimanager:sophon-2.4"
   linkExpression: "http://${localhostname}:${service['apimanager.server.port']}/swagger-ui.html"
   friendlyName: "Sophon Api Manager"
@@ -371,7 +371,7 @@ roles:
       number: 1
   env: 
   - name: SOPHON_CONF_DIR
-    value: /etc/${service.sid}/conf/apimanager/
+    value: /etc/${service.sid}/conf
   - name: SOPHON_SERVICE_ID
     value: ${service.sid}
   mountPaths:
@@ -432,15 +432,9 @@ roles:
   - name: SOPHON_SERVICE_ID
     value: ${service.sid}
   mountPaths:
-  - mountPath: /var/run/docker.sock
-    hostPath: /var/run/docker.sock
-    name: dockersock
   - mountPath: /srv/kubernetes
     hostPath: /srv/kubernetes
     name: secure
-  - mountPath: /bin/docker
-    hostPath: /usr/bin/docker
-    name: docker
   resources:
     limitsMemoryKey: server.container.limits.memory
     limitsCpuKey: server.container.limits.cpu
@@ -887,6 +881,12 @@ stages:
       summaryPolicy: SOME
     - !<Create-Database>
       dbPrefix: metastore_kg
+      dbUserConfig: livy.jdbc.username
+      dbPasswordConfig: livy.jdbc.password
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Create-Database>
+      dbPrefix: metastore_notification
       dbUserConfig: livy.jdbc.username
       dbPasswordConfig: livy.jdbc.password
       timeoutMinutes: 5
