@@ -90,7 +90,7 @@ roles:
 
 - name: SOPHON_REDIS
   dockerImage: "transwarp/sophon-redis:sophon-2.4"
-  friendlyName: "Redis Server"
+  friendlyName: "Sophon-Redis"
   labelPrefix: "sophon-redis"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
@@ -208,6 +208,112 @@ roles:
         targetPath: "/etc/${service.sid}/conf/scheduler.xml"
         mode: "755"
 
+
+- name: SOPHON_NOTEBOOK
+  dockerImage: "transwarp/sophon-notebook:sophon-2.4"
+  friendlyName: "Sophon notebook"
+  labelPrefix: "sophon-notebook"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+  - name: SOPHON_CONF_DIR
+    value: /etc/${service.sid}/conf/
+  - name: SOPHON_SERVICE_ID
+    value: ${service.sid}
+  mountPaths:
+  - mountPath: /srv/kubernetes
+    hostPath: /srv/kubernetes
+    name: secure
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "notebook/application.properties"
+        targetPath: "/etc/${service.sid}/conf/notebook/application.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "notebook/notebook.conf"
+        targetPath: "/etc/${service.sid}/conf/notebook/notebook.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "notebook/log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/notebook/log4j.properties"
+        mode: "755"
+
+
+
+- name: SOPHON_RESOURCE
+  dockerImage: "transwarp/sophon-resource:sophon-2.4"
+  friendlyName: "Sophon resource"
+  labelPrefix: "sophon-resource"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+  - name: SOPHON_CONF_DIR
+    value: /etc/${service.sid}/conf/
+  - name: SOPHON_SERVICE_ID
+    value: ${service.sid}
+  mountPaths:
+  - mountPath: /srv/kubernetes
+    hostPath: /srv/kubernetes
+    name: secure
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "resource/application.properties"
+        targetPath: "/etc/${service.sid}/conf/resource/application.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "resource/resource.conf"
+        targetPath: "/etc/${service.sid}/conf/resource/resource.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "resource/log4j2.xml"
+        targetPath: "/etc/${service.sid}/conf/resource/log4j2.xml"
+        mode: "755"
+
+
 - name: SOPHON_SHARE_SERVER
   dockerImage: "transwarp/sophon-share-server:sophon-2.4"
   friendlyName: "Sophon Share Server"
@@ -253,7 +359,7 @@ roles:
 
 - name: SOPHON_APINAMANER
   dockerImage: "transwarp/sophon-apimanager:sophon-2.4"
-  linkExpression: "http://${localhostname}:8044/swagger-ui.html"
+  linkExpression: "http://${localhostname}:${service['apimanager.server.port']}/swagger-ui.html"
   friendlyName: "Sophon Api Manager"
   labelPrefix: "sophon-apimanager"
   category: MASTER
@@ -366,10 +472,67 @@ roles:
         targetPath: "/etc/${service.sid}/conf/approval/log4j.properties"
         mode: "755"
 
-- name: KG_EXPLORER
+- name: SOPHON_NOTIFICATION
+  dockerImage: "transwarp/sophon-notification:sophon-2.4"
+  friendlyName: "Sophon Notification"
+  labelPrefix: "sophon-notification"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+  - name: SOPHON_CONF_DIR
+    value: /etc/${service.sid}/conf/
+  - name: SOPHON_SERVICE_ID
+    value: ${service.sid}
+  mountPaths:
+  - mountPath: /var/run/docker.sock
+    hostPath: /var/run/docker.sock
+    name: dockersock
+  - mountPath: /srv/kubernetes
+    hostPath: /srv/kubernetes
+    name: secure
+  - mountPath: /bin/docker
+    hostPath: /usr/bin/docker
+    name: docker
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "notification/server.conf"
+        targetPath: "/etc/${service.sid}/conf/notification/server.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "notification/application.properties"
+        targetPath: "/etc/${service.sid}/conf/notification/application.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "notification/log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/notification/log4j.properties"
+        mode: "755"
+
+- name: SOPHON_KG_EXPLORER
   dockerImage: "transwarp/kg-explorer:sophon-2.4"
-  linkExpression: "http://${localhostname}:9000"
-  friendlyName: "kg explorer"
+  linkExpression: "http://${localhostname}:${service['kg.explorer.port']}"
+  friendlyName: "sophon kg explorer"
   labelPrefix: "kg-explorer"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
@@ -396,7 +559,7 @@ roles:
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [1]}
   suggestion:
-  - criteria: !<Range> {"min": 1}
+  - criteria: !<Range> {"min": 0}
   validation:
   - criteria: !<Range> {"min": 0, "max": 1}
   operations:
@@ -523,6 +686,57 @@ roles:
         templateType: FreeMarker
         templatePath: "gateway/log4j.properties"
         targetPath: "/etc/${service.sid}/conf/gateway/log4j.properties"
+        mode: "755"
+
+- name: SOPHON_KG
+  dockerImage: "transwarp/sophon-kg:sophon-2.4"
+  friendlyName: "Sophon KG"
+  labelPrefix: "sophon-kg"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+  - name: SOPHON_CONF_DIR
+    value: /etc/${service.sid}/conf/
+  - name: SOPHON_SERVICE_ID
+    value: ${service.sid}
+  mountPaths:
+  - mountPath: /srv/kubernetes
+    hostPath: /srv/kubernetes
+    name: secure
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "kg/application.properties"
+        targetPath: "/etc/${service.sid}/conf/kg/application.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "kg/kg.conf"
+        targetPath: "/etc/${service.sid}/conf/kg/kg.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "kg/log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/kg/log4j.properties"
         mode: "755"
 
 - name: SOPHON_UI
@@ -671,6 +885,12 @@ stages:
       dbPasswordConfig: livy.jdbc.password
       timeoutMinutes: 5
       summaryPolicy: SOME
+    - !<Create-Database>
+      dbPrefix: metastore_kg
+      dbUserConfig: livy.jdbc.username
+      dbPasswordConfig: livy.jdbc.password
+      timeoutMinutes: 5
+      summaryPolicy: SOME
     - !<Role>
       roleType: "SOPHON_ETCD"
       operation: Config
@@ -697,12 +917,22 @@ stages:
       summaryPolicy: SOME
       timeoutMinutes: 1
     - !<Role>
+      roleType: "SOPHON_NOTEBOOK"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SOPHON_RESOURCE"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
       roleType: "SOPHON_APPROVAL"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
     - !<Role>
-      roleType: "KG_EXPLORER"
+      roleType: "SOPHON_KG_EXPLORER"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
@@ -717,7 +947,17 @@ stages:
       summaryPolicy: SOME
       timeoutMinutes: 1
     - !<Role>
+      roleType: "SOPHON_NOTIFICATION"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
       roleType: "SOPHON_GATEWAY"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SOPHON_KG"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1

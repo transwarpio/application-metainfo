@@ -486,6 +486,22 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+- name: notebook.server.port
+  recommendExpression: 8708
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: notebook.visit.port
+  recommendExpression: 8709
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
 - name: sophon.server.port
   recommendExpression: 8703
   defaultValue: null
@@ -543,8 +559,32 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+- name: kg.explorer.port
+  recommendExpression: 8730
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
 - name: resource.server.port
   recommendExpression: 8718
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: notification.server.port
+  recommendExpression: 8719
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: notification.socket.port
+  recommendExpression: 8720
   defaultValue: null
   valueType: PORT
   scope: !<ServiceLevel> {}
