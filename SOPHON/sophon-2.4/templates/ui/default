@@ -19,6 +19,7 @@ server {
   location = /50x.html {
     root  /usr/lib/sophon_web/build;
   }
+
   location /gateway/ {
     proxy_pass http://${service.roles.SOPHON_GATEWAY[0].hostname}:${service['gateway.server.port']}/;
     proxy_http_version 1.1;
@@ -33,6 +34,7 @@ server {
     proxy_set_header Host $host:$server_port;
     proxy_cache_bypass $http_upgrade;
   }
+
   location ~ ^/(cas|api){
     proxy_pass http://${service.roles.SOPHON_GATEWAY[0].hostname}:${service['gateway.server.port']};
     proxy_http_version 1.1;
@@ -45,6 +47,14 @@ server {
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
     proxy_set_header Host $host:$server_port;
+    proxy_cache_bypass $http_upgrade;
+  }
+
+  location /WS/ {
+    proxy_pass http://${service.roles.SOPHON_NOTIFICATION[0].hostname}:${service['notification.socket.port']}/;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
     proxy_cache_bypass $http_upgrade;
   }
 }
