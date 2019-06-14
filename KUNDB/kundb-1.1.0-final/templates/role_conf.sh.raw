@@ -1,0 +1,111 @@
+#!/bin/bash
+
+set -x
+
+get_keyspace() {
+
+  cat $ROLE_CONF_DIR/shard_set | while read line
+   do
+     if [ -n "$line" ]; then
+       echo $line 
+       sed -i 's/,/\n/g' $ROLE_CONF_DIR/shard_set
+       cat $ROLE_CONF_DIR/shard_set
+     fi
+   done
+
+   j=0
+   while read line
+   do
+    if [ -n "$line" ]; then
+      echo $line
+      i=0
+      shardSet=($line)
+      for shard in ${shardSet[@]}
+      do 
+        if [ "$shard"x = "$SHARD_NAME"x ]; then
+          export KEYSPACE=${KEYSPACE_ARR[j]}
+          export SHARD_NUM=${#shardSet[@]}
+          export DEFAULT_DBNAME=vt_$KEYSPACE
+          export SHARD_INDEX=$i
+          break;
+        fi
+        i=$((i+1))
+      done    
+      j=$((j+1))
+    fi
+   done < $ROLE_CONF_DIR/shard_set 
+}
+
+get_dataDir() {
+
+  OLD_IFS="$IFS" 
+  IFS="," 
+  newDataDir=($VIR_DATA_DIR) 
+  IFS="$OLD_IFS" 
+  for s in ${newDataDir[@]} 
+  do 
+    echo "$s" 
+  done
+     
+  export DATADIR_NUM=${#newDataDir[@]}
+  export newDataDir
+}
+
+
+if [ $1 == "mfed" ]; then
+   source $KUNDB_CONF_DIR/kundb-env.sh
+   source $KUNDB_CONF_DIR/mfed_conf.sh
+   shardDir=$KUNDB_CONF_DIR
+else
+   if [ -f "$ROLE_CONF_DIR/kundb-env.sh" ]; then
+     source $ROLE_CONF_DIR/kundb-env.sh
+     shardDir=$ROLE_CONF_DIR
+     get_dataDir
+     if [ $1 == "master" ]; then
+        source $ROLE_CONF_DIR/master_conf.sh
+     elif [ $1 == "replica" ]; then
+        source $ROLE_CONF_DIR/replica_conf.sh
+     elif [ $1 == "rdonly" ]; then
+        source $ROLE_CONF_DIR/rdonly_conf.sh
+     else
+        echo "$1 is not exist cant start kundb"
+        exit 1
+     fi
+   else
+     echo "$ROLE_CONF_DIR is not exist cant start kundb"
+     exit 1
+   fi
+   
+   if [ "$SET_DATA_DIR" = "/vdir" ]; then
+      for((i=0;i<$DATADIR_NUM;i++)); do
+        if [ $(($LOCAL_SHARD_ID%$DATADIR_NUM)) -eq $i ]; then	
+           export VTDATAROOT=${newDataDir[i]} 
+           break
+        fi
+      done 
+   else
+      export VTDATAROOT=$SET_DATA_DIR
+   fi
+
+   keyspace="$KEYSPACE"
+   OLD_IFS="$IFS"
+   IFS=","
+   export KEYSPACE_ARR=($keyspace)
+   IFS="$OLD_IFS"
+   echo ${KEYSPACE_ARR[@]}
+   export KEYSPACE_NUM=${#KEYSPACE_ARR[@]}
+   echo $KEYSPACE_NUM
+   if [ $KEYSPACE_NUM -gt 1 ]; then 
+      get_keyspace
+   fi
+fi
+
+
+if [ -f "$shardDir/shard_conf.sh" ]; then
+   cd $shardDir && source $shardDir/shard_conf.sh $SHARD_NUM $SHARD_INDEX $UIDBASE $GROUP_INDEX 
+else
+   echo "shard_conf.sh is not exist cant start kundb"
+   exit 2
+fi
+
+
