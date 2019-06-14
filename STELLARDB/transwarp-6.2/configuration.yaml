@@ -14,7 +14,7 @@
     ${localDir("/stellardb/graph/" + service['sid'])}
   isNodeSpecific: true
   defaultValue: null
-  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
+  valueType: STRING
   scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
   onDeps: []
   groups: ["graphconf.xml"]
@@ -35,7 +35,7 @@
     ${localDir("/stellardb/raft/" + service['sid'])}
   isNodeSpecific: true
   defaultValue: null
-  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
+  valueType: STRING
   scope: !<RoleTypes> {roleTypes: [STELLARDB_WORKER]}
   onDeps: []
   groups: ["graphconf.xml"]
@@ -90,7 +90,7 @@
 - name: graph.zk.base_path
   recommendExpression: "/graph"
   defaultValue: null
-  valueType: ABSOLUTE_PATH
+  valueType: STRING
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: ["graphconf.xml"]
