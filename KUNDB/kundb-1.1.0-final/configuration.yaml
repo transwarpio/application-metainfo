@@ -1,0 +1,694 @@
+- name: data.localdir
+  recommendExpression: |
+    <#function localDir suffix>
+      <#if rcmdMounts?size == 0>
+        <#return suffix>
+      <#else>
+        <#local dirs = []>
+        <#list rcmdMounts?sort as mnt>
+         <#local dirs = dirs + [mnt + suffix]>
+        </#list>
+        <#return dirs?join(",")>
+      </#if>
+    </#function>
+    ${localDir("/" + service['sid'])}
+  isNodeSpecific: true 
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [ORCHESTRATOR, KUNCTLD, COMPUTE_NODE, KUNTABLET_MASTER, KUNTABLET_REPLICA, KUNTABLET_RDONLY, KUNGATE]
+  onDeps: []
+  groups: [kundb-env.sh]
+  visibility: READ_WRITE
+
+- name: kundb.cellname 
+  recommendExpression: transwarp 
+  defaultValue: transwarp 
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kundb.keyspace 
+  recommendExpression: kundb1 
+  defaultValue: kundb1 
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kundb.enable_security
+  recommendExpression: true
+  defaultValue: true
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kundb.shards
+  recommendExpression: 
+  defaultValue: 
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kundb.context.path
+  recommendExpression: /check/status
+  defaultValue: /check/status
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: HIDDEN
+
+- name: mysql.flavor 
+  recommendExpression: MySQL56
+  defaultValue: MySQL56
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: mysql.root
+  recommendExpression: /usr/local/mysql57
+  defaultValue: /usr/local/mysql57
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: shard.uid_base 
+  recommendExpression: 100
+  defaultValue: 100 
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: computenode.uid_base 
+  recommendExpression: 800
+  defaultValue: 800 
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: computenode.data_dir
+  recommendExpression: |
+    <#assign sorted = rcmdMounts?sort>
+    <#if sorted?size == 0>
+    ${"/" + service['sid']}
+    <#elseif sorted?size == 1>
+    ${sorted?first}${"/" + service['sid']}
+    <#else>
+    ${sorted[0]}${"/" + service['sid']}
+    </#if>
+  defaultValue: ${"/" + service['sid']}
+  valueType: ABSOLUTE_PATH
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [COMPUTE_NODE]
+  onDeps: []
+  groups: [mfed_conf.sh]
+  visibility: READ_WRITE
+
+- name: master.debug.port
+  recommendExpression: ${15100 + 10 * (currentRoleGroupsCount - 1)}
+  defaultValue: NULL
+  valueType: PORT
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [KUNTABLET_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [KUNTABLET_MASTER]
+
+- name: replica.debug.port
+  recommendExpression: ${15101 + 10 * (currentRoleGroupsCount - 1)}
+  defaultValue: NULL
+  valueType: PORT
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [KUNTABLET_REPLICA]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [KUNTABLET_REPLICA]
+
+- name: rdonly.debug.port
+  recommendExpression: ${15102 + 10 * (currentRoleGroupsCount - 1)}
+  defaultValue: NULL
+  valueType: PORT
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [KUNTABLET_RDONLY]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [KUNTABLET_RDONLY]
+
+- name: kunctld.debug.port
+  recommendExpression: 15000
+  defaultValue: 15000
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kunctld.grpc.port
+  recommendExpression: 15999
+  defaultValue: 15999
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kunctld.data_dir
+  recommendExpression: |
+    <#assign sorted = rcmdMounts?sort>
+    <#if sorted?size == 0>
+    ${"/" + service['sid']}
+    <#elseif sorted?size == 1>
+    ${sorted?first}${"/" + service['sid']}
+    <#else>
+    ${sorted[0]}${"/" + service['sid']}
+    </#if>
+  defaultValue: ${"/" + service['sid']}
+  valueType: ABSOLUTE_PATH
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [KUNCTLD]
+  onDeps: []
+  groups: [kundb-env.sh]
+  visibility: READ_WRITE
+
+- name: computenode.debug.port
+  recommendExpression: 15800
+  defaultValue: 15800
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: computenode.audit_filter
+  recommendExpression: "DCL, DDL, DML, CRUD, SHOW, SET, OTHER"
+  defaultValue: "DCL, DDL, DML, CRUD, SHOW, SET, OTHER"
+  valueType: STRING 
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: computenode.kungate.debug.port
+  recommendExpression: 15002
+  defaultValue: 15002 
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: computenode.kungate.grpc.port
+  recommendExpression: 15992
+  defaultValue: 15992
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: computenode.kungate.server.port
+  recommendExpression: 15306
+  defaultValue: 15306
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kungate.debug.port
+  recommendExpression: 15001
+  defaultValue: 15001
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kungate.grpc.port
+  recommendExpression: 15991
+  defaultValue: 15991 
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kungate.server.port
+  recommendExpression: 15307
+  defaultValue: 15307
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kungate.audit_filter
+  recommendExpression: "DCL, DDL, DML, CRUD, SHOW, SET, OTHER"
+  defaultValue: "DCL, DDL, DML, CRUD, SHOW, SET, OTHER"
+  valueType: STRING 
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kungate.data_dir
+  recommendExpression: |
+    <#assign sorted = rcmdMounts?sort>
+    <#if sorted?size == 0>
+    ${"/" + service['sid']}
+    <#elseif sorted?size == 1>
+    ${sorted?first}${"/" + service['sid']}
+    <#else>
+    ${sorted[0]}${"/" + service['sid']}
+    </#if>
+  defaultValue: ${"/" + service['sid']}
+  valueType: ABSOLUTE_PATH
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [KUNGATE]
+  onDeps: []
+  groups: [kundb-env.sh]
+  visibility: READ_WRITE
+
+- name: master.port_base 
+  recommendExpression: 15000 
+  defaultValue: 15000 
+  valueType: PORT 
+  isNodeSpecific: true 
+  scope: !<RoleTypes>
+    roleTypes: [KUNTABLET_MASTER]
+  onDeps: []
+  groups: [master_conf.sh]
+  visibility: READ_WRITE
+
+- name: master.grpc.port_base 
+  recommendExpression: 16000 
+  defaultValue: 16000 
+  valueType: PORT 
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [KUNTABLET_MASTER]
+  onDeps: []
+  groups: [master_conf.sh]
+  visibility: READ_WRITE
+
+- name: master.mysql.port_base 
+  recommendExpression: 14000 
+  defaultValue: 14000 
+  valueType: PORT 
+  isNodeSpecific: true 
+  scope: !<RoleTypes>
+    roleTypes: [KUNTABLET_MASTER]
+  onDeps: []
+  groups: [master_conf.sh]
+  visibility: READ_WRITE
+
+- name: master.data_dir
+  recommendExpression: |
+    <#assign sorted = rcmdMounts?sort>
+    <#if sorted?size == 0>
+    ${"/" + service['sid']}
+    <#elseif sorted?size == 1>
+    ${sorted?first}${"/" + service['sid']}
+    <#else>
+    ${sorted[0]}${"/" + service['sid']}
+    </#if>
+  defaultValue: ${"/" + service['sid']}
+  valueType: ABSOLUTE_PATH
+  isNodeSpecific: true 
+  scope: !<RoleTypes>
+    roleTypes: [KUNTABLET_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [KUNTABLET_MASTER]
+
+- name: replica.port_base 
+  recommendExpression: 15000 
+  defaultValue: 15000 
+  valueType: PORT 
+  isNodeSpecific: true 
+  scope: !<RoleTypes>
+    roleTypes: [KUNTABLET_REPLICA]
+  onDeps: []
+  groups: [replica_conf.sh]
+  visibility: READ_WRITE
+
+- name: replica.grpc.port_base 
+  recommendExpression: 16000 
+  defaultValue: 16000 
+  valueType: PORT 
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [KUNTABLET_REPLICA]
+  onDeps: []
+  groups: [replica_conf.sh]
+  visibility: READ_WRITE
+
+- name: replica.mysql.port_base 
+  recommendExpression: 14000 
+  defaultValue: 14000 
+  valueType: PORT 
+  isNodeSpecific: true 
+  scope: !<RoleTypes>
+    roleTypes: [KUNTABLET_REPLICA]
+  onDeps: []
+  groups: [replica_conf.sh]
+  visibility: READ_WRITE
+
+- name: replica.data_dir
+  recommendExpression: |
+    <#assign sorted = rcmdMounts?sort>
+    <#if sorted?size == 0>
+    ${"/" + service['sid']}
+    <#elseif sorted?size == 1>
+    ${sorted?first}${"/" + service['sid']}
+    <#else>
+    ${sorted[0]}${"/" + service['sid']}
+    </#if>
+  defaultValue: ${"/" + service['sid']}
+  valueType: ABSOLUTE_PATH
+  isNodeSpecific: true 
+  scope: !<RoleTypes>
+    roleTypes: [KUNTABLET_REPLICA]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [KUNTABLET_REPLICA]
+
+
+- name: rdonly.port_base 
+  recommendExpression: 15000 
+  defaultValue: 15000 
+  valueType: PORT 
+  isNodeSpecific: true 
+  scope: !<RoleTypes>
+    roleTypes: [KUNTABLET_RDONLY]
+  onDeps: []
+  groups: [rdonly_conf.sh]
+  visibility: READ_WRITE
+
+- name: rdonly.grpc.port_base 
+  recommendExpression: 16000 
+  defaultValue: 16000 
+  valueType: PORT 
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [KUNTABLET_RDONLY]
+  onDeps: []
+  groups: [rdonly_conf.sh]
+  visibility: READ_WRITE
+
+- name: rdonly.mysql.port_base 
+  recommendExpression: 14000 
+  defaultValue: 14000 
+  valueType: PORT 
+  isNodeSpecific: true 
+  scope: !<RoleTypes>
+    roleTypes: [KUNTABLET_RDONLY]
+  onDeps: []
+  groups: [rdonly_conf.sh]
+  visibility: READ_WRITE
+
+- name: rdonly.data_dir
+  recommendExpression: |
+    <#assign sorted = rcmdMounts?sort>
+    <#if sorted?size == 0>
+    ${"/" + service['sid']}
+    <#elseif sorted?size == 1>
+    ${sorted?first}${"/" + service['sid']}
+    <#else>
+    ${sorted[0]}${"/" + service['sid']}
+    </#if>
+  defaultValue: ${"/" + service['sid']}
+  valueType: ABSOLUTE_PATH
+  isNodeSpecific: true 
+  scope: !<RoleTypes>
+    roleTypes: [KUNTABLET_RDONLY]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [KUNTABLET_RDONLY]
+
+
+- name: optimizer_switch 
+  recommendExpression: "fedx_scan_mode_olap=off,fedx_mrr=on,fedx_cbo_with_actual_records=on,fedx_sharded_read=on,fedx_range_read=on,fedx_auto_partial_read_on_limit=on,fedx_cache_range_info=on"
+  defaultValue: "fedx_scan_mode_olap=off,fedx_mrr=on,fedx_cbo_with_actual_records=on,fedx_sharded_read=on,fedx_range_read=on,fedx_auto_partial_read_on_limit=on,fedx_cache_range_info=on"
+  valueType: STRING 
+  isNodeSpecific: true 
+  scope: !<RoleTypes>
+    roleTypes: [COMPUTE_NODE]
+  onDeps: []
+  groups: [mfed.cnf]
+  visibility: READ_WRITE
+
+- name: fedx_bkah_size
+  recommendExpression: 1024 
+  defaultValue: 1024 
+  valueType: NON_NEG_INT 
+  isNodeSpecific: true 
+  scope: !<RoleTypes>
+    roleTypes: [COMPUTE_NODE]
+  onDeps: []
+  groups: [mfed.cnf]
+  visibility: READ_WRITE
+
+- name: fedx_vitess_min_str_len_for_cbo
+  recommendExpression: 2 
+  defaultValue: 2 
+  valueType: NON_NEG_INT 
+  isNodeSpecific: true 
+  scope: !<RoleTypes>
+    roleTypes: [COMPUTE_NODE]
+  onDeps: []
+  groups: [mfed.cnf]
+  visibility: READ_WRITE
+
+- name: fedx_small_table_threshold 
+  recommendExpression: 20000 
+  defaultValue: 20000 
+  valueType: NON_NEG_INT 
+  isNodeSpecific: true 
+  scope: !<RoleTypes>
+    roleTypes: [COMPUTE_NODE]
+  onDeps: []
+  groups: [mfed.cnf]
+  visibility: READ_WRITE
+
+- name: fedx_valid_index_cardinality_percent 
+  recommendExpression: 7 
+  defaultValue: 7
+  valueType: NON_NEG_INT 
+  isNodeSpecific: true 
+  scope: !<RoleTypes>
+    roleTypes: [COMPUTE_NODE]
+  onDeps: []
+  groups: [mfed.cnf]
+  visibility: READ_WRITE
+
+- name: fedx_valid_index_cardinality_minvalue
+  recommendExpression: 10 
+  defaultValue: 10 
+  valueType: NON_NEG_INT 
+  isNodeSpecific: true 
+  scope: !<RoleTypes>
+    roleTypes: [COMPUTE_NODE]
+  onDeps: []
+  groups: [mfed.cnf]
+  visibility: READ_WRITE
+
+- name: kunctld.memory
+  recommendExpression: 8192 
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [KUNCTLD]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: computenode.memory
+  recommendExpression: 8192
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [COMPUTE_NODE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: KunGate.memory
+  recommendExpression: 4096
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [KUNGATE]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: orchestrator.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kunctld.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: master.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: replica.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: rdonly.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+
+- name: computenode.container.requests.memory
+  recommendExpression: -1 
+  defaultValue: null
+  valueType: GB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: KunGate.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: orchestrator.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kunctld.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: master.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: replica.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: rdonly.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: computenode.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: KunGate.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
