@@ -8,7 +8,6 @@ dockerImage: "transwarp/kundb:kundb-1.1.0-final"
 dependencies: 
   - name: ZOOKEEPER
     minVersion: transwarp-6.0.0
-    maxVersion: transwarp-6.1.0-final
     optional: false
 user: kundb
 
