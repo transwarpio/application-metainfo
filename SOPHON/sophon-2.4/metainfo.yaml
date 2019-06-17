@@ -525,8 +525,8 @@ roles:
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "notification/log4j.properties"
-        targetPath: "/etc/${service.sid}/conf/notification/log4j.properties"
+        templatePath: "notification/log4j2.xml"
+        targetPath: "/etc/${service.sid}/conf/notification/log4j2.xml"
         mode: "755"
 
 - name: SOPHON_KG_EXPLORER
@@ -887,6 +887,12 @@ stages:
       summaryPolicy: SOME
     - !<Create-Database>
       dbPrefix: metastore_kg
+      dbUserConfig: livy.jdbc.username
+      dbPasswordConfig: livy.jdbc.password
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Create-Database>
+      dbPrefix: metastore_resource
       dbUserConfig: livy.jdbc.username
       dbPasswordConfig: livy.jdbc.password
       timeoutMinutes: 5
