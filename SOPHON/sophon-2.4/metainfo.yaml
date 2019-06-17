@@ -678,8 +678,8 @@ roles:
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "gateway/log4j.properties"
-        targetPath: "/etc/${service.sid}/conf/gateway/log4j.properties"
+        templatePath: "gateway/log4j2.xml"
+        targetPath: "/etc/${service.sid}/conf/gateway/log4j2.xml"
         mode: "755"
 
 - name: SOPHON_KG
