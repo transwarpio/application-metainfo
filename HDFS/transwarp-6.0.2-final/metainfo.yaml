@@ -147,6 +147,71 @@ roles:
       - criteria: !<Range>
           min: 1
     operations: []
+  - name: HDFS_CATALOG_AGENT
+    friendlyName: "HDFS Catalog Agent"
+    labelPrefix: "hadoop-hdfs-catalog-agent"
+    dockerImage: "transwarp/catalog-agent:transwarp-6.0.2-final"
+    category: SLAVE
+    frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
+    readinessProbe:
+      probe: !<httpGet>
+        path: /api/v1/health
+        port: ${service['catalog-agent.http.port']}
+        scheme: HTTP
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 60
+      successThreshold: 1
+      timeoutSeconds: 10
+    env:
+    - name: HDFS_HA_NAMENODE_SERVICE
+      value: |
+        <#assign namenodes=[]>
+        <#if service.nameservices?? && service.nameservices?size gt 0>
+          <#list service.nameservices as ns>
+            <#list service[ns]['HDFS_NAMENODE'] as namenode>
+              <#assign namenodes += [namenode.hostname]>
+            </#list>
+          </#list>
+        <#else>
+          <#assign namenodes += service.roles.HDFS_NAMENODE[0]['hostname']>
+        </#if>
+        ${namenodes?join(",")}
+    - name: HADOOP_CONF_DIR
+      value: /etc/${service.sid}/conf
+    - name: KRB_ENABLE
+      value: <#if service.auth = "kerberos">true<#else>false</#if>
+    - name: CATALOG_AGENT_COMPONENT
+      value: hdfs
+    - name: CATALOG_AGENT_VERSION
+      value: hdfs-2.7.2
+    mountPaths:
+    - mountPath: /var/transwarp/data
+      hostPath: /var/namenode_format/
+      name: format
+    - mountPath: /var/run/${service.sid}
+      hostPath: /var/run/${service.sid}
+      name: hdfssocketdir
+    resources:
+      limitsMemoryKey: catalog.container.limits.memory
+      limitsCpuKey: catalog.container.limits.cpu
+      requestsMemoryKey: catalog.container.requests.memory
+      requestsCpuKey: catalog.container.requests.cpu
+    summaryPolicy: NONE
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [0]}
+    suggestion:
+    - criteria: !<Range> {"min": 0}
+    validation:
+    - criteria: !<Range> {"min": 0}
+    operations:
+    - type: Config
+      directives:
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "ca-application.properties"
+          targetPath: "/etc/${service.sid}/conf/ca-application.properties"
+          mode: "644"
 
 roleGroups:
   - fieldName: nameservices
@@ -343,6 +408,11 @@ stages:
       operation: Start
       summaryPolicy: SOME
       timeoutMinutes: 3
+    - !<Role>
+      roleType: "HDFS_CATALOG_AGENT"
+      operation: Start
+      summaryPolicy: SOME
+      timeoutMinutes: 3
 
 jobs:
   - type: Stop
@@ -388,6 +458,14 @@ firstWizardConfigs:
 - httpfs.container.requests.memory
 - httpfs.container.requests.cpu
 - httpfs.memory.ratio
+- catalog-agent.http.port
+- catalog-agent.web.address
+- catalog-agent.log.level
+- catalog-agent.container.limits.memory
+- catalog-agent.container.limits.cpu
+- catalog-agent.container.requests.memory
+- catalog-agent.container.requests.cpu
+- catalog-agent.memory.ratio
 
 dashboardMetrics:
 - DFSUsage
