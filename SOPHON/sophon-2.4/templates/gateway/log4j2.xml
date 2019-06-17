@@ -4,7 +4,7 @@
         <Property name="LOG_DIR">/var/log/${service.sid}</Property>
         <!-- 新文件生成周期，单位与pattern相同 -->
         <Property name="ROLL_INTERVAL">1</Property>
-        <Property name="ROLL_SIZE">50MB</Property>
+        <Property name="ROLL_SIZE">200MB</Property>
         <Property name="DELETE_AGE">30d</Property>
     </Properties>
 
@@ -13,7 +13,7 @@
             <PatternLayout pattern="%d{yy/MM/dd HH:mm:ss} %p %c{2}: %m%n" charset="UTF-8"/>
         </Console>
         <RollingFile name="RollingFile" fileName="${r'${LOG_DIR}'}/${r'${SERVICE_NAME}'}-server.log"
-                     filePattern="${r'${LOG_DIR}'}/${r'${SERVICE_NAME}'}-server.%d{yyyy-MM-dd}.log">
+                     filePattern="${r'${LOG_DIR}'}/${r'${SERVICE_NAME}'}-server.%d{yyyy-MM-dd}-%i.log">
             <PatternLayout pattern="%d{ISO8601} %-5p %c{2} (%F:%M(%L)) - %m%n" charset="UTF-8"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="${r'${ROLL_INTERVAL'}"/>
