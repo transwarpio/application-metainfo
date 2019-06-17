@@ -174,8 +174,8 @@ roles:
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "user/log4j.properties"
-        targetPath: "/etc/${service.sid}/conf/user/log4j.properties"
+        templatePath: "user/log4j2.xml"
+        targetPath: "/etc/${service.sid}/conf/user/log4j2.xml"
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
@@ -411,8 +411,8 @@ roles:
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "apimanager/log4j.properties"
-        targetPath: "/etc/${service.sid}/conf/apimanager/log4j.properties"
+        templatePath: "apimanager/log4j2.xml"
+        targetPath: "/etc/${service.sid}/conf/apimanager/log4j2.xml"
         mode: "755"
 
 - name: SOPHON_APPROVAL
@@ -462,8 +462,8 @@ roles:
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "approval/log4j.properties"
-        targetPath: "/etc/${service.sid}/conf/approval/log4j.properties"
+        templatePath: "approval/log4j2.xml"
+        targetPath: "/etc/${service.sid}/conf/approval/log4j2.xml"
         mode: "755"
 
 - name: SOPHON_NOTIFICATION
@@ -519,8 +519,8 @@ roles:
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "notification/log4j.properties"
-        targetPath: "/etc/${service.sid}/conf/notification/log4j.properties"
+        templatePath: "notification/log4j2.xml"
+        targetPath: "/etc/${service.sid}/conf/notification/log4j2.xml"
         mode: "755"
 
 - name: SOPHON_KG_EXPLORER

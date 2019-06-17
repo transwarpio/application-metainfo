@@ -1,6 +1,6 @@
 <Configuration status="WARN">
     <Properties>
-        <Property name="SERVICE_NAME">notification</Property>
+        <Property name="SERVICE_NAME">apimanager</Property>
         <Property name="LOG_DIR">/var/log/${service.sid}</Property>
         <!-- 新文件生成周期，单位与pattern相同 -->
         <Property name="ROLL_INTERVAL">1</Property>
