@@ -4,7 +4,7 @@
         <Property name="SERVICE_NAME">user</Property>
         <Property name="LOG_DIR">/var/log/${service.sid}</Property>
         <Property name="ROLL_INTERVAL">1</Property>
-        <Property name="ROLL_SIZE">50MB</Property>
+        <Property name="ROLL_SIZE">200MB</Property>
         <Property name="DELETE_AGE">30d</Property>
     </Properties>
 

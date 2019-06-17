@@ -21,6 +21,10 @@ server {
   }
 
   location /gateway/ {
+    valid_referers none blocked ${service.roles.SOPHON_UI[0]['ip']} ${service.roles.SOPHON_UI[0].hostname};
+    if ($invalid_referer) {
+        return 403;
+    }
     proxy_pass http://${service.roles.SOPHON_GATEWAY[0].hostname}:${service['gateway.server.port']}/;
     proxy_http_version 1.1;
     <#if service['server.ssl.enabled'] = "true">
@@ -36,6 +40,10 @@ server {
   }
 
   location ~ ^/(cas|api){
+    valid_referers none blocked ${service.roles.SOPHON_UI[0]['ip']} ${service.roles.SOPHON_UI[0].hostname};
+    if ($invalid_referer) {
+        return 403;
+    }
     proxy_pass http://${service.roles.SOPHON_GATEWAY[0].hostname}:${service['gateway.server.port']};
     proxy_http_version 1.1;
     <#if service['server.ssl.enabled'] = "true">
@@ -51,6 +59,10 @@ server {
   }
 
   location /WS/ {
+    valid_referers none blocked ${service.roles.SOPHON_UI[0]['ip']} ${service.roles.SOPHON_UI[0].hostname};
+    if ($invalid_referer) {
+        return 403;
+    }
     proxy_pass http://${service.roles.SOPHON_NOTIFICATION[0].hostname}:${service['notification.socket.port']}/;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
