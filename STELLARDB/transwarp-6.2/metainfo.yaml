@@ -1,20 +1,19 @@
 ---
 name: STELLARDB
-version: transwarp-6.1
+version: transwarp-6.2
 global: false
 namePrefix: StellarDB
 friendlyName: "StellarDB"
-dockerImage: "transwarp/stellardb:transwarp-6.1"
+dockerImage: "transwarp/stellardb:stellardb-2.0.2-final"
 dependencies:
   - name: ZOOKEEPER
-    minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-6.0.0-final
+    maxVersion: transwarp-6.3.0-final
     optional: false
-#  - name: INCEPTOR
-#    minVersion: transwarp-6.1
-#    maxVersion: transwarp-6.1
-#    optional: true
-#    preferred: true
+  - name: GUARDIAN
+    minVersion: transwarp-6.0.0-final
+    maxVersion: transwarp-6.3.0-final
+    optional: true
 roles:
   - name: STELLARDB_MASTER
     friendlyName: "StellarDB Master"
@@ -139,3 +138,9 @@ healthChecks:
 
 customConfigFiles:
 - graphconf.xml
+
+pages:
+- security
+
+principals:
+- stellardb
