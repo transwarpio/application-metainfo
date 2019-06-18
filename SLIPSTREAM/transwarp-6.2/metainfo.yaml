@@ -1,57 +1,48 @@
 ---
-name: INCEPTOR
-version: transwarp-6.1
+name: SLIPSTREAM
+version: transwarp-6.2
 global: false
-namePrefix: Inceptor
-friendlyName: "Inceptor"
-dockerImage: "transwarp/inceptor:transwarp-6.1"
+namePrefix: Slipstream
+friendlyName: "Slipstream"
+dockerImage: "transwarp/inceptor:transwarp-6.2"
 validateConfig: true
 dependencies:
   - name: GUARDIAN
-    minVersion: transwarp-6.1
+    minVersion: transwarp-6.2
     optional: true
   - name: ZOOKEEPER
-    minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-6.2
+    maxVersion: transwarp-6.2
     optional: false
   - name: HDFS
-    minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-6.2
+    maxVersion: transwarp-6.2
     optional: false
   - name: YARN
-    minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-6.2
+    maxVersion: transwarp-6.2
     optional: false
   - name: HYPERBASE
-    minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-6.2
+    maxVersion: transwarp-6.2
     optional: true
   - name: TXSQL
-    minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-6.2
+    maxVersion: transwarp-6.2
     optional: false
   - name: INCEPTOR
-    minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-6.2
+    maxVersion: transwarp-6.2
     optional: true
     preferred: false
-  - name: DBA_SERVICE
-    minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
-    optional: false
+  - name: SLIPSTREAM
+    minVersion: transwarp-6.2
+    maxVersion: transwarp-6.2
+    optional: true
+    preferred: false
   - name: SEARCH
-    minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
-    optional: true
-    preferred: true
-  - name: SHIVA
-    minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
-    optional: true
-    preferred: true
-  - name: STELLARDB
-    minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-6.2
+    maxVersion: transwarp-6.2
     optional: true
     preferred: true
 user: hive
@@ -59,10 +50,9 @@ plugins:
   - provider: GUARDIAN
     version: 0.12.0+500.51250
     useTar: false
-
 roles:
 - name: INCEPTOR_METASTORE
-  friendlyName: "Inceptor Metastore"
+  friendlyName: "Slipstream Metastore"
   labelPrefix: "inceptor-metastore"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
@@ -107,14 +97,28 @@ roles:
       depType: INCEPTOR_METASTORE
       present: false
     criteria: !<Range> {"min": 1}
-  operations:
-  - type: Install
-    directives:
-    - directive: !<mkdirs>
-        paths: ["/var/run/${service.sid}"]
-        mode: "755"
+  operations: []
+- name: INCEPTOR_HISTORYSERVER
+  friendlyName: "Slipstream History Server"
+  labelPrefix: "inceptor-historyserver"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  env:
+  - name: INCEPTOR_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  nodeSpecificMounts:
+  - configKey: history.localdir
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [0]}
+  suggestion:
+  - criteria: !<Range> {"min": 0}
+  validation:
+  - criteria: !<Range> {"min": 0}
+  operations: []
 - name: INCEPTOR_SERVER
-  friendlyName: "Inceptor Server"
+  friendlyName: "Slipstream Server"
   labelPrefix: "inceptor-server"
   linkExpression: "http://${localhostname}:${service['inceptor.ui.port']}/"
   category: MASTER
@@ -158,7 +162,7 @@ roles:
   - type: Install
     directives:
     - directive: !<mkdirs>
-        paths: ["/var/lock/subsys/${service.sid}", "/var/run/${service.sid}"]
+        paths: ["/var/lock/subsys/${service.sid}"]
         mode: "755"
   - type: Config
     directives:
@@ -169,7 +173,7 @@ roles:
         mode: "644"
 
 - name: INCEPTOR_EXECUTOR
-  friendlyName: "Inceptor Executor"
+  friendlyName: "Slipstream Executor"
   labelPrefix: "inceptor-executor"
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
@@ -192,16 +196,8 @@ roles:
     requestsMemoryKey: executor.container.requests.memory
     requestsCpuKey: executor.container.requests.cpu
   nodeSpecificMounts:
-  - type: DIR_CONF
-    configKey: ngmr.localdir
-  - type: DIR_CONF
-    configKey: ngmr.fastdisk.dir
-  - type: DEPENDENCY_DIR_CONF
-    dependencyType: SHIVA
-    configKey: tabletserver.store.datadirs
-  - type: DEPENDENCY_DIR_CONF
-    dependencyType: STELLARDB
-    configKey: graph.data.dirs
+  - configKey: ngmr.localdir
+  - configKey: ngmr.fastdisk.dir
   summaryPolicy: SOME
   autoAssign:
   - advice: !<EachNode> {}
@@ -209,81 +205,7 @@ roles:
   - criteria: !<EachNode> {}
   validation:
   - criteria: !<Range> {"min": 0}
-  operations:
-  - type: Install
-    directives:
-    - directive: !<mkdirs>
-        paths: ["/var/run/${service.sid}"]
-        mode: "755"
-- name: INCEPTOR_PROFILER
-  friendlyName: "Inceptor Profiler"
-  labelPrefix: "inceptor-profiler"
-  linkExpression: "http://${localhostname}:${service['inceptor.profiler.ui.port']}/candidates"
-  category: SLAVE
-  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
-  readinessProbe:
-    probe: !<exec>
-      command:
-      - /bin/bash
-      - -c
-      - netstat -an | grep ${service['inceptor.profiler.ui.port']} | grep LISTEN > /dev/null
-  env:
-  - name: INCEPTOR_CONF_DIR
-    value: /etc/${service.sid}/conf
-  mountPaths: []
-  resources:
-    limitsMemoryKey: profiler.container.limits.memory
-    limitsCpuKey: profiler.container.limits.cpu
-    requestsMemoryKey: profiler.container.requests.memory
-    requestsCpuKey: profiler.container.requests.cpu
-  summaryPolicy: NONE
-  autoAssign:
-  - advice: !<NumSeq> {"numSeq": [0]}
-  suggestion:
-  - criteria: !<Range> {"min": 0}
-  validation:
-  - criteria: !<Range> {"min": 0}
-  operations:
-  - type: Install
-    directives:
-    - directive: !<mkdirs>
-        paths: ["/var/run/${service.sid}"]
-        mode: "755"
-
-- name: INCEPTOR_COMPACTOR
-  friendlyName: "Inceptor Compactor"
-  labelPrefix: "inceptor-compactor"
-  linkExpression: "http://${localhostname}:${service['inceptor.compactor.ui.port']}"
-  category: SLAVE
-  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
-  readinessProbe:
-    probe: !<exec>
-      command:
-      - /bin/bash
-      - -c
-      - netstat -an | grep ${service['inceptor.compactor.ui.port']} | grep LISTEN > /dev/null
-  env:
-  - name: INCEPTOR_CONF_DIR
-    value: /etc/${service.sid}/conf
-  mountPaths: []
-  resources:
-    limitsMemoryKey: compactor.container.limits.memory
-    limitsCpuKey: compactor.container.limits.cpu
-    requestsMemoryKey: compactor.container.requests.memory
-    requestsCpuKey: compactor.container.requests.cpu
-  summaryPolicy: NONE
-  autoAssign:
-  - advice: !<NumSeq> {"numSeq": [0]}
-  suggestion:
-  - criteria: !<Range> {"min": 0}
-  validation:
-  - criteria: !<Range> {"min": 0}
-  operations:
-  - type: Install
-    directives:
-    - directive: !<mkdirs>
-        paths: ["/var/run/${service.sid}"]
-        mode: "755"
+  operations: []
 
 stages:
   - type: Bootstrap
@@ -309,6 +231,11 @@ stages:
       summaryPolicy: SOME
       timeoutMinutes: 1
     - !<Role>
+      roleType: "INCEPTOR_HISTORYSERVER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
       roleType: "INCEPTOR_SERVER"
       operation: Config
       summaryPolicy: SOME
@@ -317,38 +244,9 @@ stages:
       roleType: "INCEPTOR_EXECUTOR"
       operation: Config
       summaryPolicy: SOME
-      timeoutMinutes: 2
-    - !<Role>
-      roleType: "INCEPTOR_PROFILER"
-      operation: Config
-      summaryPolicy: NONE
       timeoutMinutes: 1
-    - !<Role>
-      roleType: "INCEPTOR_COMPACTOR"
-      operation: Config
-      summaryPolicy: NONE
-      timeoutMinutes: 1
-  - type: PreUpgrade
-    taskGroups:
-    - !<DockerRunPreUpgrade>
-        summaryPolicy: ALL
-        timeoutMinutes: 10
-        roleType: INCEPTOR_METASTORE
-        node: Any
-  - type: PreRollback
-    taskGroups:
-    - !<DockerRunPreRollback>
-        summaryPolicy: ALL
-        timeoutMinutes: 10
-        roleType: INCEPTOR_METASTORE
-        node: Any
-
 
 firstWizardConfigs:
-# StellarDB
-- graph.zk.base_path
-- graph.zk.quorum
-# inceptor
 - hive.server2.enabled
 - hive.server2.authentication
 - hive.exec.scratchdir
@@ -382,34 +280,18 @@ firstWizardConfigs:
 - executor.container.requests.cpu
 - executor.memory.ratio
 - executor.number.eachnode
+- history.localdir
+- historyserver.memory.initial.mb
+- historyserver.memory.max.mb
+- slipstream.historyserver.akka.listen.port
+- slipstream.historyserver.restful.listen.port
 - rubik.connection.url
 - rubik.connection.username
 - rubik.connection.password
 - rubik.connection.database
-# inceptor profiler
-- inceptor.profiler.ui.port
-- profiler.stale.percent
-- inceptor.profiler.memory
-- profiler.container.limits.memory
-- profiler.container.limits.cpu
-- profiler.container.requests.memory
-- profiler.container.requests.cpu
-- profiler.memory.ratio
-# inceptor compactor
-- inceptor.compactor.ui.port
-- inceptor.compactor.memory
-- compactor.container.limits.memory
-- compactor.container.limits.cpu
-- compactor.container.requests.memory
-- compactor.container.requests.cpu
-- compactor.memory.ratio
 
-
-dashboardMetrics:
-- InceptorSqlActiveTasks
 
 pages:
-- summary
 - roles
 - configuration
 - operation
@@ -420,7 +302,6 @@ pages:
 principals:
 - hive
 - HTTP
-- kafka
 
 healthChecks:
 - category: DAEMON_CHECK

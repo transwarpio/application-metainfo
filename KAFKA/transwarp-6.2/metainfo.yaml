@@ -1,19 +1,19 @@
 ---
 name: KAFKA
-version: transwarp-6.1
+version: transwarp-6.2
 global: false
 namePrefix: Kafka
 friendlyName: "Kafka"
 validateConfig: true
 dependencies:
   - name: GUARDIAN
-    minVersion: transwarp-6.1
+    minVersion: transwarp-6.2
     optional: true
   - name: ZOOKEEPER
-    minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-6.2
+    maxVersion: transwarp-6.2
     optional: false
-dockerImage: "transwarp/kafka:transwarp-6.1"
+dockerImage: "transwarp/kafka:transwarp-6.2"
 user: kafka
 plugins:
   - provider: GUARDIAN
@@ -59,7 +59,7 @@ roles:
   - criteria: !<Range> {"min": 1}
   operations: []
 - name: KAFKA_REST
-  dockerImage: "transwarp/kafka-rest:transwarp-6.1"
+  dockerImage: "transwarp/kafka-rest:transwarp-6.2"
   friendlyName: "Kafka Rest"
   labelPrefix: "kafka-rest"
   category: MASTER

@@ -1,31 +1,31 @@
 ---
 name: SLIPSTREAM_STUDIO
-version: transwarp-6.1
+version: transwarp-6.2
 global: false
 namePrefix: SlipstreamStudio
 friendlyName: "SlipstreamStudio"
-dockerImage: "transwarp/slipstream-studio:transwarp-6.1"
+dockerImage: "transwarp/slipstream-studio:transwarp-6.2"
 validateConfig: true
 dependencies:
   - name: GUARDIAN
-    minVersion: transwarp-6.1
+    minVersion: transwarp-6.2
     optional: true
   - name: HDFS
-    minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-6.2
+    maxVersion: transwarp-6.2
     optional: false
   - name: TXSQL
-    minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-6.2
+    maxVersion: transwarp-6.2
     optional: false
   - name: SLIPSTREAM
-    minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-6.2
+    maxVersion: transwarp-6.2
     optional: true
     preferred: true
   - name: INCEPTOR_GATEWAY
-    minVersion: transwarp-6.1
-    maxVersion: transwarp-6.1
+    minVersion: transwarp-6.2
+    maxVersion: transwarp-6.2
     optional: true
     preferred: false
 user: slipstream
