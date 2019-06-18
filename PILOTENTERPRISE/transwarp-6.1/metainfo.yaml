@@ -147,11 +147,11 @@ roles:
     mountPaths: []
     summaryPolicy: NONE
     autoAssign:
-      - advice: !<NumSeq> {"numSeq": [1]}
+      - advice: !<NumSeq> {"numSeq": [0]}
     suggestion:
-      - criteria: !<Range> {"min": 1}
+      - criteria: !<Range> {"min": 0}
     validation:
-      - criteria: !<Range> {"min": 1}
+      - criteria: !<Range> {"min": 0}
     operations: []
 stages:
   - type: Config
