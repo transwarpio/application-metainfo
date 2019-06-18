@@ -94,6 +94,11 @@
     </#if>
 </#if>
 
+<#if service.plugins?seq_contains("catalog")>
+    <@property "hive.exec.post.hooks" "io.transwarp.catalog.hook.inceptor._5_2_2.HiveHook"/>
+    <@property "hive.exec.failure.hooks" "io.transwarp.catalog.hook.inceptor._5_2_2.HiveFailureHook"/>
+</#if>
+
 <#if service.plugins?seq_contains("governor")>
     <@property "hive.exec.post.hooks" "org.apache.atlas.hive.hook.HivePostHook"/>
     <@property "hive.exec.failure.hooks" "org.apache.atlas.hive.hook.HiveFailHook"/>
