@@ -540,8 +540,8 @@ services:
     - name: TOS_MASTER
       friendlyName: "IOS Master"
 - name: ARGODB_STORAGE
-  namePrefix: ADB-Storage
-  friendlyName: "ADB-Storage"
+  namePrefix: ADBStorage
+  friendlyName: "ADBStorage"
   i18n:
     service_en_US.properties:
     - service.description: "ADB-Storage is the storage unit of the distributed flash database ADB"
@@ -562,8 +562,8 @@ services:
     - name: LADDER_WORKER
       friendlyName: "Ladder Worker"
 - name: ARGODB_COMPUTING
-  namePrefix: ADB-Computing
-  friendlyName: "ADB-Computing"
+  namePrefix: ADBComputing
+  friendlyName: "ADBComputing"
   i18n:
     service_en_US.properties:
     - service.description: "ADB-Computing is ADB's memory-based interactive SQL analysis calculation engine"
