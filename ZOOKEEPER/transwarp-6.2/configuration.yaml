@@ -140,3 +140,13 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: sasl.oauth2.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

@@ -2,6 +2,7 @@
 name: HDFS
 version: transwarp-6.2
 global: false
+isSupportOAuth2: true
 namePrefix: HDFS
 friendlyName: HDFS
 dockerImage: "transwarp/hdfs:transwarp-6.2"
@@ -81,10 +82,12 @@ roles:
     category: SLAVE
     frontendOperations: ["Start", "Stop", "Commission", "Decommission", "Delete", "Scaleout"]
     readinessProbe:
-      probe: !<httpGet>
-        path: /
-        port: ${service['datanode.http-port']}
-        scheme: HTTP
+      probe: !<exec>
+        command:
+        - /bin/bash
+        - -c
+        - |
+            curl --fail --connect-timeout 15 --max-time 15 "http://`hostname`:${service['datanode.http-port']}/?user.name=hdfs"
       failureThreshold: 3
       initialDelaySeconds: 10
       periodSeconds: 10

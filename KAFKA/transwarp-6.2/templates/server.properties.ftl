@@ -148,7 +148,11 @@ zookeeper.sync.time.ms=${service['zookeeper.sync.time.ms']}
 # Authentication method: simple, kerberos or ipaddress
 # Property principal and keytab should also be configured when authentication set to kerberos.
 <#if service.auth == "kerberos">
+    <#if dependencies.GUARDIAN?? && dependencies.GUARDIAN.roles["GUARDIAN_FEDERATION"]??>
+sasl.enabled.mechanisms=GSSAPI,OAUTHBEARER
+    <#else>
 sasl.enabled.mechanisms=GSSAPI
+    </#if>
 security.inter.broker.protocol=SASL_PLAINTEXT
 sasl.mechanism.inter.broker.protocol=GSSAPI
 

@@ -2,6 +2,7 @@
 name: ZOOKEEPER
 version: transwarp-6.2
 global: false
+isSupportOAuth2: true
 namePrefix: ZooKeeper
 friendlyName: "ZooKeeper"
 validateConfig: true

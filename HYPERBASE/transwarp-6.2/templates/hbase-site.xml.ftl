@@ -43,6 +43,25 @@
     <@property "hbase.rootdir.perms" "711"/>
     <#assign coprocessorRegion=",org.apache.hadoop.hbase.security.token.TokenProvider,org.apache.hadoop.hbase.security.access.AccessController,org.apache.hadoop.hbase.security.access.SecureBulkLoadEndpoint"/>
     <#assign coprocessorMaster=",org.apache.hadoop.hbase.security.access.AccessController"/>
+    <#if dependencies.GUARDIAN??>
+    <#--handle CAS-->
+        <#if dependencies.GUARDIAN.roles.CAS_SERVER??>
+            <#assign casServerSslPort=dependencies.GUARDIAN['cas.server.ssl.port']>
+            <#if dependencies.GUARDIAN['guardian.server.cas.server.host']?matches("^\\s*$")>
+                <#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['ip']}:${casServerSslPort}">
+            <#else>
+                <#assign casServerName="https://${dependencies.GUARDIAN['guardian.server.cas.server.host']}:${casServerSslPort}">
+            </#if>
+            <@property "hbase.security.authentication.web.cas.enabled" "${service['hbase.security.authentication.web.cas.enabled']}"/>
+            <@property "hbase.security.authentication.cas.server.loginUrl" "${casServerName}/cas/login"/>
+            <@property "hbase.security.authentication.cas.server.prefix" "${casServerName}/cas"/>
+        </#if>
+    <#--handle Guardian Federation-->
+        <#if dependencies.GUARDIAN.roles["GUARDIAN_FEDERATION"]??>
+            <@property "hbase.security.authentication.oauth2.enabled" "${service['hbase.security.authentication.oauth2.enabled']}"/>
+            <@property "hbase.security.authentication.web.oauth2.enabled" "${service['hbase.security.authentication.web.oauth2.enabled']}"/>
+        </#if>
+    </#if>
 </#if>
 
 <#if service.plugins?seq_contains("guardian")>

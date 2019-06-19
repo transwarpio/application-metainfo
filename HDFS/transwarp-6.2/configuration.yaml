@@ -603,6 +603,26 @@
   groups: []
   visibility: READ_WRITE
 
+- name: dfs.httpfs.cas.enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+      roleTypes: [HDFS_HTTPFS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: dfs.httpfs.oauth2.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+      roleTypes: [HDFS_HTTPFS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: transwarp.docker.enable
   recommendExpression: true
   defaultValue: null
@@ -637,6 +657,33 @@
   scope: !<ServiceLevel> {}
   onDeps: []
   groups: ["core-site.xml"]
+  visibility: READ_WRITE
+
+- name: hadoop.security.authentication.web.cas.enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: hadoop.security.authentication.web.oauth2.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: hadoop.security.authentication.oauth2.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
   visibility: READ_WRITE
 
 - name: dfs.data.transfer.protection

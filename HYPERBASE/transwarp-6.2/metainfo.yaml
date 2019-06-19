@@ -2,6 +2,7 @@
 name: HYPERBASE
 version: transwarp-6.2
 global: false
+isSupportOAuth2: true
 namePrefix: Hyperbase
 friendlyName: "Hyperbase"
 dockerImage: "transwarp/hbase:transwarp-6.2"
@@ -102,10 +103,12 @@ roles:
     reject:
       number: 2
   readinessProbe:
-    probe: !<httpGet>
-      path: /
-      port: ${service['regionserver.info.port']}
-      scheme: HTTP
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - |
+          curl --fail --connect-timeout 15 --max-time 15 "http://`hostname`:${service['regionserver.info.port']}/"
   env:
   - name: HBASE_CONF_DIR
     value: /etc/${service.sid}/conf

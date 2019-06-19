@@ -2,6 +2,7 @@
 name: YARN
 version: transwarp-6.2
 global: false
+isSupportOAuth2: true
 namePrefix: YARN
 friendlyName: "YARN"
 dockerImage: "transwarp/yarn:transwarp-6.2"
@@ -31,10 +32,12 @@ roles:
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   readinessProbe:
-    probe: !<httpGet>
-      path: /
-      port: ${service['resourcemanager.webapp.port']}
-      scheme: HTTP
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - |
+          curl --fail --connect-timeout 15 --max-time 15 "http://`hostname`:${service['resourcemanager.webapp.port']}/?user.name=yarn"
     failureThreshold: 3
     initialDelaySeconds: 10
     periodSeconds: 10
@@ -86,10 +89,12 @@ roles:
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Commission", "Decommission", "Delete", "Scaleout"]
   readinessProbe:
-    probe: !<httpGet>
-      path: /
-      port: ${service['nodemanager.webapp.port']}
-      scheme: HTTP
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - |
+          curl --fail --connect-timeout 15 --max-time 15 "http://`hostname`:${service['nodemanager.webapp.port']}/?user.name=yarn"
     failureThreshold: 3
     initialDelaySeconds: 10
     periodSeconds: 10
@@ -148,10 +153,12 @@ roles:
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   readinessProbe:
-    probe: !<httpGet>
-      path: /
-      port: ${service['historyserver.http-port']}
-      scheme: HTTP
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - |
+          curl --fail --connect-timeout 15 --max-time 15 "http://`hostname`:${service['historyserver.http-port']}/?user.name=yarn"
     failureThreshold: 3
     initialDelaySeconds: 10
     periodSeconds: 10

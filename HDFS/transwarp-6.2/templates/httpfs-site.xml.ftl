@@ -7,16 +7,22 @@
 </property>
 </#macro>
 <configuration>
-<#--handle CAS-->
 <#if service.auth = "kerberos">
-    <#if dependencies.GUARDIAN?? && dependencies.GUARDIAN.roles.CAS_SERVER??>
-        <#assign casServerSslPort=dependencies.GUARDIAN['cas.server.ssl.port']>
-        <#if dependencies.GUARDIAN['guardian.server.cas.server.host']?matches("^\\s*$")>
-            <#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['ip']}:${casServerSslPort}">
-        <#else>
-            <#assign casServerName="https://${dependencies.GUARDIAN['guardian.server.cas.server.host']}:${casServerSslPort}">
+    <#if dependencies.GUARDIAN??>
+        <#--handle CAS-->
+        <#if dependencies.GUARDIAN.roles.CAS_SERVER??>
+            <#assign casServerSslPort=dependencies.GUARDIAN['cas.server.ssl.port']>
+            <#if dependencies.GUARDIAN['guardian.server.cas.server.host']?matches("^\\s*$")>
+                <#assign casServerName="https://${dependencies.GUARDIAN.roles.CAS_SERVER[0]['ip']}:${casServerSslPort}">
+            <#else>
+                <#assign casServerName="https://${dependencies.GUARDIAN['guardian.server.cas.server.host']}:${casServerSslPort}">
+            </#if>
+            <@property "dfs.httpfs.cas.enabled" "${service['dfs.httpfs.cas.enabled']}"/>
         </#if>
-        <@property "dfs.httpfs.cas.enabled" "true"/>
+        <#--handle Guardian Federation-->
+        <#if dependencies.GUARDIAN.roles["GUARDIAN_FEDERATION"]??>
+            <@property "dfs.httpfs.oauth2.enabled" "${service['dfs.httpfs.oauth2.enabled']}"/>
+        </#if>
     </#if>
 </#if>
     <@property "httpfs.hadoop.config.dir" "/etc/${service.sid}/conf"/>
