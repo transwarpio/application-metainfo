@@ -76,7 +76,7 @@ metrics:
     <@serviceLabel/>
     <@roleLabel/>
   type: GAUGE
-  help: "Current raw capacity of DataNodes in bytes. Unit: bytes"
+  help: "Current total configured capacity across all DataNodes Disks in bytes. Unit: bytes"
   delaySec: 61
   source: name_node_FSNamesystem_source
   scrape:

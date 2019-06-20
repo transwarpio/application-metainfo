@@ -20,6 +20,13 @@ sources:
     timeoutSec: 60
     cacheSec: 60
 
+- name: data_node_usage_source
+  className: io.transwarp.tdh.metrics.source.HttpJsonSource
+  props:
+    url: "http://${localhostname}:${service['datanode.http-port']}/jmx?qry=Hadoop:service=DataNode,name=FSDatasetState-null"
+    timeoutSec: 60
+    cacheSec: 60
+
 metrics:
 - name: data_node_bytes_read
   fixedLabels:
@@ -139,4 +146,28 @@ metrics:
   source: data_node_activity_source
   scrape:
     jsonPath: "$.beans[0].BlockVerificationFailures"
+    fromResultLabelMap: {}
+
+- name: data_node_capacity_total
+  fixedLabels:
+    <@serviceLabel/>
+    <@roleLabel/>
+  type: COUNTER
+  help: "Total configured capacity of Disk. Unit: bytes"
+  delaySec: 61
+  source: data_node_usage_source
+  scrape:
+    jsonPath: "$.beans[0].Capacity"
+    fromResultLabelMap: {}
+
+- name: data_node_DfsUsed
+  fixedLabels:
+    <@serviceLabel/>
+    <@roleLabel/>
+  type: COUNTER
+  help: "The used space by the DataNode. Unit: bytes"
+  delaySec: 61
+  source: data_node_usage_source
+  scrape:
+    jsonPath: "$.beans[0].DfsUsed"
     fromResultLabelMap: {}
