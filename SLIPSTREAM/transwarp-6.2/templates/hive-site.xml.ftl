@@ -41,19 +41,63 @@
     </#list>
     <@property "hive.server2.authentication.ldap.baseDN", "ou=People,${service.domain}"/>
     <@property "hive.server2.authentication.ldap.url" "${guardian_servers?join(' ')}"/>
-  <#if service.plugins?seq_contains("guardian")>
-    <#assign  authentication="CUSTOM">
-    <@property "hive.server2.custom.authentication.class" "io.transwarp.guardian.plugins.inceptor.GuardianLdapAuthProviderImpl"/>
-  </#if>
 </#if>
 
-<#if dependencies.GUARDIAN?? && dependencies.GUARDIAN.roles.CAS_SERVER??>
-    <#assign  guardian=dependencies.GUARDIAN guardian_servers=[]>
+<#if dependencies.GUARDIAN?? && (service.auth == "kerberos" || service['hive.server2.authentication'] == "LDAP")>
+    <#assign guardian=dependencies.GUARDIAN>
+
+    <#if service.plugins?seq_contains("guardian")>
+        <!-- enable spark ui when guardian plugin is enabled -->
+        <@property "spark.ui.guardian.enabled" "${service['spark.ui.guardian.enabled']}"/>
+
+        <#if dependencies.SLIPSTREAM??>
+            <@property "spark.ui.authorization.guardian.component" "${dependencies.SLIPSTREAM.sid}"/>
+        <#elseif dependencies.INCEPTOR??>
+            <@property "spark.ui.authorization.guardian.component" "${dependencies.INCEPTOR.sid}"/>
+         <#else>
+            <@property "spark.ui.authorization.guardian.component" "${service.sid}"/>
+        </#if>
+
+        <#assign guardian_servers=[]>
+        <#list guardian.roles["GUARDIAN_SERVER"] as role>
+            <#assign guardian_servers += [(role.hostname + ":" + guardian["guardian.server.port"])]>
+        </#list>
+        <@property "spark.ui.authentication.accessToken.enabled" "${service['spark.ui.authentication.accessToken.enabled']}"/>
+        <@property "spark.ui.authentication.accessToken.server.address" "${guardian_servers?join(' ')}"/>
+        <@property "spark.ui.authentication.accessToken.server.tls.enabled" "${guardian['guardian.server.tls.enabled']}"/>
+
+        <#if guardian.roles["CAS_SERVER"]??>
+            <#assign casServerSslPort=guardian['cas.server.ssl.port']>
+            <#if guardian['guardian.server.cas.server.host']?matches("^\\s*$")>
+                <#assign casServerName="https://${guardian.roles.CAS_SERVER[0]['ip']}:${casServerSslPort}">
+            <#else>
+                <#assign casServerName="https://${guardian['guardian.server.cas.server.host']}:${casServerSslPort}">
+            </#if>
+            <#assign casServerPrefix="${casServerName}${guardian['cas.server.context.path']}">
+            <@property "spark.ui.authentication.cas.enabled" "${service['spark.ui.authentication.cas.enabled']}"/>
+            <@property "spark.ui.authentication.cas.server.url.prefix" "${casServerPrefix}"/>
+            <@property "spark.ui.authentication.cas.server.login.url" "${casServerPrefix}/login"/>
+        </#if>
+
+        <#if guardian.roles['GUARDIAN_FEDERATION']??>
+            <@property "spark.ui.authentication.oauth2.enabled" "${service['spark.ui.authentication.oauth2.enabled']}"/>
+        </#if>
+    </#if>
+
+    <#if guardian.roles['GUARDIAN_FEDERATION']??>
+        <@property "hive.server2.authentication.oauth2.enabled" "${service['hive.server2.authentication.oauth2.enabled']}"/>
+    </#if>
+
+    <#assign guardian_servers=[]>
     <#list guardian.roles["GUARDIAN_SERVER"] as role>
         <#assign guardian_servers += [("https://" + role.hostname + ":" + guardian["guardian.server.port"])]>
     </#list>
     <@property "hive.server2.authentication.guardian.url" "${guardian_servers?join(' ')}"/>
-    <@property "hive.server2.authentication.cas.prefix" 'https://' + guardian.roles.CAS_SERVER[0]['hostname'] + ':' + guardian['cas.server.ssl.port'] + guardian['cas.server.context.path']/>
+
+    <#if guardian.roles['CAS_SERVER']??>
+        <@property "hive.server2.authentication.cas.prefix" 'https://' + guardian.roles.CAS_SERVER[0]['hostname'] + ':' + guardian['cas.server.ssl.port'] + guardian['cas.server.context.path']/>
+    </#if>
+
 </#if>
 
 <#assign  manager="NONE">

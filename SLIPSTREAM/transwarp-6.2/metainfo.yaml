@@ -6,9 +6,10 @@ namePrefix: Slipstream
 friendlyName: "Slipstream"
 dockerImage: "transwarp/inceptor:transwarp-6.2"
 validateConfig: true
+isSupportOAuth2: true
 dependencies:
   - name: GUARDIAN
-    minVersion: transwarp-6.2
+    minVersion: guardian-3.1.0-final
     optional: true
   - name: ZOOKEEPER
     minVersion: transwarp-6.2
