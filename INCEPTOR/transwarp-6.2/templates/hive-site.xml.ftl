@@ -105,6 +105,11 @@
     <@property "atlas.cluster.name" "${service.sid}"/>
 </#if>
 
+<#if service.plugins?seq_contains("catalog")>
+    <@property "hive.exec.post.hooks" "io.transwarp.catalog.hook.inceptor._6_0_0.HiveHook"/>
+    <@property "hive.exec.failure.hooks" "io.transwarp.catalog.hook.inceptor._6_0_0.HiveFailureHook"/>
+</#if>
+
 <#if dependencies.TXSQL??>
     <#assign mysqlHostPorts = []/>
     <#list dependencies.TXSQL.roles['TXSQL_SERVER'] as role>

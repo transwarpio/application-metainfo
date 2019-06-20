@@ -686,6 +686,89 @@
   groups: []
   visibility: READ_WRITE
 
+- name: catalog-agent.http.port
+  recommendExpression: 25300
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes:
+    - HDFS_CATALOG_AGENT
+  onDeps: []
+  groups: ["ca-application.properties"]
+  visibility: READ_WRITE
+
+- name: catalog-agent.web.address
+  recommendExpression: INFO
+  defaultValue: INFO
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes:
+    - HDFS_CATALOG_AGENT
+  onDeps: []
+  groups: ["ca-application.properties"]
+  visibility: READ_WRITE
+
+- name: catalog-agent.log.level
+  recommendExpression: INFO
+  defaultValue: INFO
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes:
+    - HDFS_CATALOG_AGENT
+  onDeps: []
+  groups: ["ca-application.properties"]
+  visibility: READ_WRITE
+
+- name: catalog-agent.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [HDFS_CATALOG_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog-agent.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [HDFS_CATALOG_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog-agent.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [HDFS_CATALOG_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog-agent.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [HDFS_CATALOG_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog-agent.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [HDFS_CATALOG_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  
 - name: dfs.data.transfer.protection
   recommendExpression: authentication
   defaultValue: "authentication"
