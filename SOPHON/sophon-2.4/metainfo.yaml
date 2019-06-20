@@ -127,6 +127,49 @@ roles:
         targetPath: "/etc/${service.sid}/conf/redis/redis.conf"
         mode: "755"
 
+- name: SOPHON_NFS
+  dockerImage: "transwarp/sophon-nfs:sophon-2.4"
+  friendlyName: "Sophon nfs"
+  labelPrefix: "sophon-nfs"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+  - name: SOPHON_CONF_DIR
+    value: /etc/${service.sid}/conf/
+  - name: SOPHON_SERVICE_ID
+    value: ${service.sid}
+  mountPaths:
+  - mountPath: /srv/kubernetes
+    hostPath: /srv/kubernetes
+    name: secure
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  nodeSpecificMounts:
+  - configKey: nfs.share.name.dir
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "nfs/env.sh"
+        targetPath: "/etc/${service.sid}/conf/nfs/env.sh"
+        mode: "755"
+
 - name: SOPHON_USER
   dockerImage: "transwarp/sophon-user:sophon-2.4"
   friendlyName: "Sophon User"
@@ -899,6 +942,11 @@ stages:
       summaryPolicy: SOME
     - !<Role>
       roleType: "SOPHON_ETCD"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SOPHON_NFS"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
