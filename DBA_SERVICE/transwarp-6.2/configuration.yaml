@@ -239,8 +239,8 @@
   visibility: READ_WRITE
 
 - name: dbaservice.persistence.enabled
-  recommendExpression: false
-  defaultValue: false
+  recommendExpression: true
+  defaultValue: true
   valueType: BOOL
   scope: !<RoleTypes>
     roleTypes: [DBA_SERVICE_SERVER]
