@@ -1,0 +1,336 @@
+- name: javax.jdo.option.ConnectionPassword
+  recommendExpression: password
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: PASSWORD
+
+- name: javax.jdo.option.ConnectionDriverName
+  recommendExpression: com.mysql.jdbc.Driver
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: javax.jdo.option.ConnectionUserName
+  recommendExpression: slipstreamuser
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE
+
+- name: mysql.port
+  recommendExpression: 3306
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: mysql.datadir
+  recommendExpression: /hadoop/mysql
+  defaultValue: null
+  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_MYSQL]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: slipstream.studio.eventstore.basedir
+  isNodeSpecific: true
+  recommendExpression: |
+      <#function localDir suffix>
+        <#if rcmdMounts?size == 0>
+          <#return suffix>
+        <#else>
+          <#local dirs = []>
+          <#list rcmdMounts?sort as mnt>
+           <#local dirs = dirs + [mnt + suffix]>
+          </#list>
+          <#return dirs?join(",")>
+        </#if>
+      </#function>
+      ${localDir("/" + service['sid'] + "/eventstore" )}
+  defaultValue: null
+  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SLIPSTREAMSTUDIO]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: slipstream.studio.eventstore.rotation.hours
+  recommendExpression: 336
+  defaultValue: 336
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SLIPSTREAMSTUDIO]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: slipstream.studio.druid.username
+  recommendExpression: ""
+  defaultValue: ""
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SLIPSTREAMSTUDIO]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: slipstream.studio.druid.password
+  recommendExpression: ""
+  defaultValue: ""
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SLIPSTREAMSTUDIO]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: slipstream.studio.akkaserver.port
+  recommendExpression: 30030
+  defaultValue: 30030
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SLIPSTREAMSTUDIO]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: slipstream.studio.akkaserver.local.port
+  recommendExpression: 30090
+  defaultValue: 30090
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SLIPSTREAMSTUDIO]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: slipstream.studio.http.port
+  recommendExpression: 7100
+  defaultValue: 7100
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SLIPSTREAMSTUDIO]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tdt.persistence.user.name
+  recommendExpression: slipstreamuser
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE
+
+- name: tdt.persistence.password
+  recommendExpression: password
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: PASSWORD
+
+- name: tdt.task.live.time
+  recommendExpression: 12hour
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE
+
+- name: tdt.task.scavenger.check.period
+  recommendExpression: 30min
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE
+
+- name: tdt.task.max.accept.size
+  recommendExpression: 10000
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE
+
+- name: tdt.task.max.concurrent.size
+  recommendExpression: 100
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE
+
+- name: tdt.thread.max.concurrent.size
+  recommendExpression: 20
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE
+
+- name: tdt.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [TDT_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tdt.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [TDT_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tdt.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [TDT_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tdt.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [TDT_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tdt.memory.ratio
+  recommendExpression: 0.9
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [TDT_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tdt.kafka.bootstrap.servers
+  recommendExpression: null
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["tdt-site.xml"]
+  visibility: READ_WRITE
+
+
+- name: slipstream.studio.projects.output.dir
+  isNodeSpecific: true
+  recommendExpression: |
+    <#function localDir suffix>
+      <#if rcmdMounts?size == 0>
+        <#return suffix>
+      <#else>
+        <#local dirs = []>
+        <#list rcmdMounts?sort as mnt>
+         <#local dirs = dirs + [mnt + suffix]>
+         <#break/>
+        </#list>
+        <#return dirs?join(",")>
+      </#if>
+    </#function>
+    ${localDir("/" + service['sid'] + "/projoutput" )}
+  defaultValue: null
+  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SLIPSTREAMSTUDIO]
+  onDeps: []
+  groups: ['studio.properties']
+  visibility: READ_WRITE
+
+- name: slipstream.studio.project.repo.dir
+  isNodeSpecific: true
+  recommendExpression: |
+    <#function localDir suffix>
+      <#if rcmdMounts?size == 0>
+        <#return suffix>
+      <#else>
+        <#local dirs = []>
+        <#list rcmdMounts?sort as mnt>
+         <#local dirs = dirs + [mnt + suffix]>
+         <#break/>
+        </#list>
+        <#return dirs?join(",")>
+      </#if>
+    </#function>
+    ${localDir("/" + service['sid'] + "/projrepo/default" )}
+  defaultValue: null
+  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [INCEPTOR_SLIPSTREAMSTUDIO]
+  onDeps: []
+  groups: ['studio.properties']
+  visibility: READ_WRITE
+
+- name: slipstream.guardian.token
+  isNodeSpecific: true
+  recommendExpression: null
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ['studio.properties']
+  visibility: READ_WRITE
+
+- name: slipstream.studio.rules.resource.dir
+  recommendExpression: /${service['sid']}/rules/resource
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: slipstream.studio.algorithm.hdfs.jar.dir
+  recommendExpression: /${service['sid']}/algorithm_jar
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: slipstream.studio.algorithm.hdfs.tmp.jar.dir
+  recommendExpression: /${service['sid']}/algorithm_tmp_jar
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

@@ -1,0 +1,146 @@
+---
+name: STELLARDB
+version: transwarp-6.2.0-rc0
+global: false
+namePrefix: StellarDB
+friendlyName: "StellarDB"
+dockerImage: "transwarp/stellardb:stellardb-2.0.2-final"
+dependencies:
+  - name: ZOOKEEPER
+    minVersion: transwarp-6.0.0-final
+    maxVersion: transwarp-6.3.0-final
+    optional: false
+  - name: GUARDIAN
+    minVersion: transwarp-6.0.0-final
+    maxVersion: transwarp-6.3.0-final
+    optional: true
+roles:
+  - name: STELLARDB_MASTER
+    friendlyName: "StellarDB Master"
+    labelPrefix: "stellardb-master"
+    frontendOperations: ["Start", "Stop", "Delete"]
+    summaryPolicy: SOME
+    category: MASTER
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [3, 1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    deleteOpCondition:
+      deletable:
+        number: 2
+      reject:
+        number: 1
+    readinessProbe:
+      probe: !<exec>
+        command:
+        - /bin/bash
+        - -c
+        - netstat -an | grep ${service['graph.master.port']} | grep LISTEN > /dev/null
+    mountPaths: []
+    resources:
+      limitsMemoryKey: stellardb.master.container.limits.memory
+      limitsCpuKey: stellardb.master.container.limits.cpu
+      requestsMemoryKey: stellardb.master.container.requests.memory
+      requestsCpuKey: stellardb.master.container.requests.cpu
+    env:
+    - name: STELLARDB_CONF_DIR
+      value: /etc/${service.sid}/conf
+    - name: STELLARDB_LOG_DIR
+      value: /var/log/${service.sid}
+    operations: []
+
+  - name: STELLARDB_WORKER
+    friendlyName: "StellarDB Worker"
+    labelPrefix: "stellardb-worker"
+    frontendOperations: ["Start", "Stop", "Delete"]
+    summaryPolicy: MAJOR
+    category: SLAVE
+    autoAssign:
+    - advice: !<EachNode> {}
+    suggestion:
+    - criteria: !<Range> {"min": 3, "oddity": true}
+    validation:
+    - criteria: !<Range> {"min": 3}
+    deleteOpCondition:
+      deletable:
+        number: 3
+        decommission: false
+      reject:
+        number: 2
+    readinessProbe:
+      probe: !<exec>
+        command:
+        - /bin/bash
+        - -c
+        - netstat -an | grep ${service['graph.worker.port']} | grep LISTEN > /dev/null
+    mountPaths: []
+    resources:
+      limitsMemoryKey: stellardb.master.container.limits.memory
+      limitsCpuKey: stellardb.master.container.limits.cpu
+      requestsMemoryKey: stellardb.master.container.requests.memory
+      requestsCpuKey: stellardb.master.container.requests.cpu
+    env:
+    - name: STELLARDB_CONF_DIR
+      value: /etc/${service.sid}/conf
+    - name: STELLARDB_LOG_DIR
+      value: /var/log/${service.sid}
+    nodeSpecificMounts:
+    - configKey: graph.data.dirs
+    - configKey: graph.raft.dirs
+    operations: []
+
+stages:
+- type: Config
+  taskGroups:
+  - !<Role>
+    roleType: "STELLARDB_MASTER"
+    operation: Config
+    summaryPolicy: ALL
+    timeoutMinutes: 1
+  - !<Role>
+    roleType: "STELLARDB_WORKER"
+    operation: Config
+    summaryPolicy: ALL
+    timeoutMinutes: 1
+- type: Start
+  taskGroups:
+  - !<Role>
+    roleType: "STELLARDB_MASTER"
+    operation: Start
+    summaryPolicy: SOME
+    timeoutMinutes: 3
+  - !<Role>
+    roleType: "STELLARDB_WORKER"
+    operation: Start
+    summaryPolicy: ALL
+    timeoutMinutes: 3
+
+firstWizardConfigs:
+- graph.file.server.port
+- graph.cypher.jdbc.url
+- graph.data.dirs
+- graph.raft.dirs
+- graph.zk.quorum
+- graph.master.port
+- graph.master.ui.port
+- graph.worker.port
+- graph.worker.ui.port
+- graph.zk.base_path
+- graph.raft.server.port
+
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 30
+  method: !<K8sPod> {}
+
+customConfigFiles:
+- graphconf.xml
+
+pages:
+- security
+
+principals:
+- stellardb
