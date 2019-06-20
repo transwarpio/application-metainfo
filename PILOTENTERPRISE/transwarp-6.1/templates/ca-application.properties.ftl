@@ -1,5 +1,5 @@
 pilot.server.address=http://${service.roles["SMARTBI_TOMCAT"][0].ip}:${service['pilotenterprise.tomcat.http.port']}/pilot
-pilot.visit.address=https://${service.roles["SMARTBI_TOMCAT"][0].ip}:${service['pilotenterprise.tomcat.https.port']}/pilot
+pilot.visit.address=http://${service.roles["SMARTBI_TOMCAT"][0].ip}:${service['pilotenterprise.tomcat.http.port']}/pilot
 pilot.user=${service['catalog-agent.pilotenterprise.user']}
 pilot.password=${service['catalog-agent.pilotenterprise.password']}
 server.address=${localhostname?lower_case}
