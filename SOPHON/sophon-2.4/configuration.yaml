@@ -591,3 +591,20 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+- name: nfs.share.name.dir
+  recommendExpression: |
+    <#assign sorted = rcmdMounts?sort>
+    <#if sorted?size == 0>
+    /sophon/nfs_dir/${service.sid}
+    <#else>
+    ${sorted[0]}/sophon/nfs_dir/${service.sid}
+    </#if>
+  defaultValue: file:///tmp/sophon/nfs_dir/sophon
+  valueType: STRING
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes:
+    - SOPHON_NFS
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
