@@ -776,6 +776,57 @@ roles:
         targetPath: "/etc/${service.sid}/conf/kg/log4j.properties"
         mode: "755"
 
+- name: SOPHON_CVAT
+  dockerImage: "transwarp/sophon-cvat:sophon-2.4"
+  friendlyName: "Sophon Computer Vision Annotation Tool"
+  labelPrefix: "sophon-cvat"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+  - name: SOPHON_CONF_DIR
+    value: /etc/${service.sid}/conf/
+  - name: SOPHON_SERVICE_ID
+    value: ${service.sid}
+  mountPaths:
+  - mountPath: /srv/kubernetes
+    hostPath: /srv/kubernetes
+    name: secure
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "cvat/application.properties"
+        targetPath: "/etc/${service.sid}/conf/cvat/application.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "cvat/server.conf"
+        targetPath: "/etc/${service.sid}/conf/cvat/server.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "cvat/log4j2.xml"
+        targetPath: "/etc/${service.sid}/conf/cvat/log4j2.xml"
+        mode: "755"
+
 - name: SOPHON_UI
   linkExpression: "https://${localhostname}:${service['sophon.ui.port']}/"
   dockerImage: "transwarp/sophon-ui:sophon-2.4"
@@ -940,6 +991,12 @@ stages:
       dbPasswordConfig: livy.jdbc.password
       timeoutMinutes: 5
       summaryPolicy: SOME
+    - !<Create-Database>
+      dbPrefix: metastore_cvat
+      dbUserConfig: livy.jdbc.username
+      dbPasswordConfig: livy.jdbc.password
+      timeoutMinutes: 5
+      summaryPolicy: SOME
     - !<Role>
       roleType: "SOPHON_ETCD"
       operation: Config
@@ -1007,6 +1064,11 @@ stages:
       timeoutMinutes: 1
     - !<Role>
       roleType: "SOPHON_GATEWAY"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SOPHON_CVAT"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
