@@ -947,7 +947,7 @@
   groups: ["compactor-site.xml"]
   visibility: READ_WRITE
 
-  - name: catalog-agent.http.port
+- name: catalog-agent.http.port
   recommendExpression: 25000
   defaultValue: null
   valueType: PORT
