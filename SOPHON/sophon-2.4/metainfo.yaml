@@ -1034,6 +1034,7 @@ stages:
 
 
 firstWizardConfigs:
+- nfs.share.name.dir
 - sophon.resource.type
 - sophon.enable.kerberos
 - api.docker.repo
