@@ -591,6 +591,14 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+- name: cvat.server.port
+  recommendExpression: 8721
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
 - name: nfs.share.name.dir
   recommendExpression: |
     <#assign sorted = rcmdMounts?sort>
