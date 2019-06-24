@@ -45,7 +45,6 @@ metrics:
   source: resource_manager_jvm_metrics_source
   scrape:
     jsonPath: "$.beans[0].modelerType"
-    fromResultLabelMap: {}
     valueMapping:
       JvmMetrics: 1.0
 
@@ -59,7 +58,6 @@ metrics:
   source: resource_manager_queue_metrics_source
   scrape:
     jsonPath: "$.beans[0].AppsRunning"
-    fromResultLabelMap: {}
 
 - name: resource_manager_apps_pending
   fixedLabels:
@@ -71,7 +69,6 @@ metrics:
   source: resource_manager_queue_metrics_source
   scrape:
     jsonPath: "$.beans[0].AppsPending"
-    fromResultLabelMap: {}
 
 - name: resource_manager_apps_completed
   fixedLabels:
@@ -83,7 +80,6 @@ metrics:
   source: resource_manager_queue_metrics_source
   scrape:
     jsonPath: "$.beans[0].AppsCompleted"
-    fromResultLabelMap: {}
 
 - name: resource_manager_apps_failed
   fixedLabels:
@@ -95,7 +91,6 @@ metrics:
   source: resource_manager_queue_metrics_source
   scrape:
     jsonPath: "$.beans[0].AppsFailed"
-    fromResultLabelMap: {}
 
 - name: resource_manager_allocated_containers
   fixedLabels:
@@ -107,7 +102,6 @@ metrics:
   source: resource_manager_queue_metrics_source
   scrape:
     jsonPath: "$.beans[0].AllocatedContainers"
-    fromResultLabelMap: {}
 
 - name: resource_manager_allocated_memory
   fixedLabels:
@@ -119,7 +113,6 @@ metrics:
   source: resource_manager_queue_metrics_source
   scrape:
     jsonPath: "$.beans[0].AllocatedMB"
-    fromResultLabelMap: {}
 
 - name: resource_manager_available_memory
   fixedLabels:
@@ -131,7 +124,6 @@ metrics:
   source: resource_manager_queue_metrics_source
   scrape:
     jsonPath: "$.beans[0].AvailableMB"
-    fromResultLabelMap: {}
 
 - name: resource_manager_allocated_vcores
   fixedLabels:
@@ -143,7 +135,6 @@ metrics:
   source: resource_manager_queue_metrics_source
   scrape:
     jsonPath: "$.beans[0].AllocatedVCores"
-    fromResultLabelMap: {}
 
 - name: resource_manager_available_vcores
   fixedLabels:
@@ -155,7 +146,6 @@ metrics:
   source: resource_manager_queue_metrics_source
   scrape:
     jsonPath: "$.beans[0].AvailableVCores"
-    fromResultLabelMap: {}
 
 - name: resource_manager_active_node_managers
   fixedLabels:
@@ -167,7 +157,6 @@ metrics:
   source: resource_manager_cluster_metrics_source
   scrape:
     jsonPath: "$.beans[0].NumActiveNMs"
-    fromResultLabelMap: {}
 
 - name: resource_manager_decommission_node_managers
   fixedLabels:
@@ -179,7 +168,6 @@ metrics:
   source: resource_manager_cluster_metrics_source
   scrape:
     jsonPath: "$.beans[0].NumDecommissionedNMs"
-    fromResultLabelMap: {}
 
 - name: resource_manager_lost_node_managers
   fixedLabels:
@@ -191,7 +179,6 @@ metrics:
   source: resource_manager_cluster_metrics_source
   scrape:
     jsonPath: "$.beans[0].NumLostNMs"
-    fromResultLabelMap: {}
 
 - name: resource_manager_unhealthy_node_managers
   fixedLabels:
@@ -203,7 +190,6 @@ metrics:
   source: resource_manager_cluster_metrics_source
   scrape:
     jsonPath: "$.beans[0].NumUnhealthyNMs"
-    fromResultLabelMap: {}
 
 - name: resource_manager_rebooted_node_managers
   fixedLabels:
@@ -215,4 +201,3 @@ metrics:
   source: resource_manager_cluster_metrics_source
   scrape:
     jsonPath: "$.beans[0].NumRebootedNMs"
-    fromResultLabelMap: {}

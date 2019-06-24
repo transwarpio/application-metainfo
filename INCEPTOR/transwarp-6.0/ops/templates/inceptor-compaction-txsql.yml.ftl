@@ -36,7 +36,6 @@ metrics:
   source: inceptor_compaction_txsql_source
   scrape:
     sql: "SELECT count(*) AS `value` FROM COMPACTION_BLACKLIST"
-    fromResultLabels: []
 
 - name: inceptor_compaction_queue_size
   fixedLabels:

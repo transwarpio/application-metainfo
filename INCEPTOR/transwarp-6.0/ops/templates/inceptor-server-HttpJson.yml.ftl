@@ -31,7 +31,6 @@ metrics:
   source: inceptor_server_executors_source
   scrape:
     jsonPath: "$.length()"
-    fromResultLabelMap: {}
 
 - name: inceptor_sql_disk_used
   fixedLabels:

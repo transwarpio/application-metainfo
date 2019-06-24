@@ -39,7 +39,6 @@ metrics:
   source: region_server_server_source
   scrape:
     jsonPath: "$.beans[0].regionCount"
-    fromResultLabelMap: {}
 
 - name: region_server_compaction_queue_length
   fixedLabels:
@@ -52,7 +51,6 @@ metrics:
   source: region_server_server_source
   scrape:
     jsonPath: "$.beans[0].compactionQueueLength"
-    fromResultLabelMap: {}
 
 - name: region_server_flush_queue_length
   fixedLabels:
@@ -65,7 +63,6 @@ metrics:
   source: region_server_server_source
   scrape:
     jsonPath: "$.beans[0].flushQueueLength"
-    fromResultLabelMap: {}
 
 - name: region_server_read_request_rate
   fixedLabels:
@@ -78,7 +75,6 @@ metrics:
   source: region_server_server_source
   scrape:
     jsonPath: "$.beans[0].readRequestCountPerSecond"
-    fromResultLabelMap: {}
 
 - name: region_server_write_request_rate
   fixedLabels:
@@ -91,7 +87,6 @@ metrics:
   source: region_server_server_source
   scrape:
     jsonPath: "$.beans[0].writeRequestCountPerSecond"
-    fromResultLabelMap: {}
 
 - name: region_server_managed_store_file_count
   fixedLabels:
@@ -104,7 +99,6 @@ metrics:
   source: region_server_server_source
   scrape:
     jsonPath: "$.beans[0].storeFileCount"
-    fromResultLabelMap: {}
 
 - name: region_server_flush_request_count
   fixedLabels:
@@ -117,7 +111,6 @@ metrics:
   source: region_server_server_source
   scrape:
     jsonPath: "$.beans[0].flushRequestCount"
-    fromResultLabelMap: {}
 
 - name: region_server_compact_request_count
   fixedLabels:
@@ -130,7 +123,6 @@ metrics:
   source: region_server_server_source
   scrape:
     jsonPath: "$.beans[0].compactionRequestCount"
-    fromResultLabelMap: {}
 
 - name: region_server_split_request_count
   fixedLabels:
@@ -143,7 +135,6 @@ metrics:
   source: region_server_server_source
   scrape:
     jsonPath: "$.beans[0].splitRequestCount"
-    fromResultLabelMap: {}
 
 - name: region_server_show_put_count
   fixedLabels:
@@ -156,7 +147,6 @@ metrics:
   source: region_server_server_source
   scrape:
     jsonPath: "$.beans[0].slowPutCount"
-    fromResultLabelMap: {}
 
 - name: region_server_gc_count
   fixedLabels:
@@ -169,7 +159,6 @@ metrics:
   source: region_server_jvm_metrics_source
   scrape:
     jsonPath: "$.beans[0].GcCount"
-    fromResultLabelMap: {}
 
 - name: region_server_gc_time_millis
   fixedLabels:
@@ -182,4 +171,3 @@ metrics:
   source: region_server_jvm_metrics_source
   scrape:
     jsonPath: "$.beans[0].GcTimeMillis"
-    fromResultLabelMap: {}
