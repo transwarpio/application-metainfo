@@ -1,0 +1,7 @@
+* Improve NLP data support with adding dependency of TXSQL
+
+* Improve Client interaction interface
+
+* Bugs fixed:
+   * [WARP-19465]: Fix failure about reading empty transactional ORC and Parquet table
+   * [WARP-18000]: Fix Client JDBC connection shows abnormalities. 
