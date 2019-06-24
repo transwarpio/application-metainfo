@@ -45,7 +45,6 @@ metrics:
   source: hyperbase_master_server_source
   scrape:
     jsonPath: "$.beans[0].['tag.isActiveMaster']"
-    fromResultLabelMap: {}
     valueMapping:
       true: 1.0
       false: 0.0
@@ -60,7 +59,6 @@ metrics:
   source: hyperbase_master_server_source
   scrape:
     jsonPath: "$.beans[0].numRegionServers"
-    fromResultLabelMap: {}
 
 - name: hyperbase_master_num_dead_region_servers
   fixedLabels:
@@ -72,7 +70,6 @@ metrics:
   source: hyperbase_master_server_source
   scrape:
     jsonPath: "$.beans[0].numDeadRegionServers"
-    fromResultLabelMap: {}
 
 - name: hyperbase_master_average_load
   fixedLabels:
@@ -84,7 +81,6 @@ metrics:
   source: hyperbase_master_server_source
   scrape:
     jsonPath: "$.beans[0].averageLoad"
-    fromResultLabelMap: {}
 
 - name: hyperbase_master_gc_count
   fixedLabels:
@@ -96,7 +92,6 @@ metrics:
   source: hyperbase_master_jvm_metrics_source
   scrape:
     jsonPath: "$.beans[0].GcCount"
-    fromResultLabelMap: {}
 
 - name: hyperbase_master_gc_time_millis
   fixedLabels:
@@ -108,7 +103,6 @@ metrics:
   source: hyperbase_master_jvm_metrics_source
   scrape:
     jsonPath: "$.beans[0].GcTimeMillis"
-    fromResultLabelMap: {}
 
 - name: hyperbase_master_transition_region_count
   fixedLabels:

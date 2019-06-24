@@ -31,7 +31,6 @@ metrics:
   source: node_manager_metrics_source
   scrape:
     jsonPath: "$.beans[0].AllocatedVCores"
-    fromResultLabelMap: {}
 
 - name: node_manager_available_vcores
   fixedLabels:
@@ -43,4 +42,3 @@ metrics:
   source: node_manager_metrics_source
   scrape:
     jsonPath: "$.beans[0].AvailableVCores"
-    fromResultLabelMap: {}

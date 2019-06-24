@@ -66,7 +66,6 @@ metrics:
   source: name_node_node_status_source
   scrape:
     jsonPath: "$.beans[0].State"
-    fromResultLabelMap: {}
     valueMapping:
       active: 1.0
       standy: 0.0
@@ -81,7 +80,6 @@ metrics:
   source: name_node_FSNamesystem_source
   scrape:
     jsonPath: "$.beans[0].CapacityTotal"
-    fromResultLabelMap: {}
 
 - name: name_node_capacity_used
   fixedLabels:
@@ -93,7 +91,6 @@ metrics:
   source: name_node_FSNamesystem_source
   scrape:
     jsonPath: "$.beans[0].CapacityUsed"
-    fromResultLabelMap: {}
 
 - name: name_node_capacity_remaining
   fixedLabels:
@@ -105,7 +102,6 @@ metrics:
   source: name_node_FSNamesystem_source
   scrape:
     jsonPath: "$.beans[0].CapacityRemaining"
-    fromResultLabelMap: {}
 
 - name: name_node_total_load
   fixedLabels:
@@ -117,7 +113,6 @@ metrics:
   source: name_node_FSNamesystem_source
   scrape:
     jsonPath: "$.beans[0].TotalLoad"
-    fromResultLabelMap: {}
 
 - name: name_node_capacity_used_percent
   fixedLabels:
@@ -129,7 +124,6 @@ metrics:
   source: name_node_FSNamesystem_source
   scrape:
     jsonPath: "$.beans[0].CapacityUsedPercent"
-    fromResultLabelMap: {}
 
 - name: name_node_capacity_remaining_percent
   fixedLabels:
@@ -141,7 +135,6 @@ metrics:
   source: name_node_FSNamesystem_source
   scrape:
     jsonPath: "$.beans[0].CapacityRemainingPercent"
-    fromResultLabelMap: {}
 
 - name: name_node_data_node_live_percent
   fixedLabels:
@@ -153,7 +146,6 @@ metrics:
   source: name_node_FSNamesystem_source
   scrape:
     jsonPath: "$.beans[0].NumLiveDataNodesPercent"
-    fromResultLabelMap: {}
 
 - name: name_node_data_node_live_num
   fixedLabels:
@@ -165,7 +157,6 @@ metrics:
   source: name_node_FSNamesystem_source
   scrape:
     jsonPath: "$.beans[0].NumLiveDataNodes"
-    fromResultLabelMap: {}
 
 - name: name_node_data_node_dead_num
   fixedLabels:
@@ -177,7 +168,6 @@ metrics:
   source: name_node_FSNamesystem_source
   scrape:
     jsonPath: "$.beans[0].NumDeadDataNodes"
-    fromResultLabelMap: {}
 
 - name: name_node_missing_blocks
   fixedLabels:
@@ -189,7 +179,6 @@ metrics:
   source: name_node_FSNamesystem_source
   scrape:
     jsonPath: "$.beans[0].MissingBlocks"
-    fromResultLabelMap: {}
 
 - name: name_node_excess_blocks
   fixedLabels:
@@ -201,7 +190,6 @@ metrics:
   source: name_node_FSNamesystem_source
   scrape:
     jsonPath: "$.beans[0].ExcessBlocks"
-    fromResultLabelMap: {}
 
 - name: name_node_blocks_total
   fixedLabels:
@@ -213,7 +201,6 @@ metrics:
   source: name_node_FSNamesystem_source
   scrape:
     jsonPath: "$.beans[0].BlocksTotal"
-    fromResultLabelMap: {}
 
 - name: name_node_corrupt_blocks
   fixedLabels:
@@ -225,7 +212,6 @@ metrics:
   source: name_node_FSNamesystem_source
   scrape:
     jsonPath: "$.beans[0].CorruptBlocks"
-    fromResultLabelMap: {}
 
 - name: name_node_pending_replication_blocks
   fixedLabels:
@@ -237,7 +223,6 @@ metrics:
   source: name_node_FSNamesystem_source
   scrape:
     jsonPath: "$.beans[0].PendingReplicationBlocks"
-    fromResultLabelMap: {}
 
 - name: name_node_under_replicated_blocks
   fixedLabels:
@@ -249,7 +234,6 @@ metrics:
   source: name_node_FSNamesystem_source
   scrape:
     jsonPath: "$.beans[0].UnderReplicatedBlocks"
-    fromResultLabelMap: {}
 
 - name: name_node_scheduled_replication_blocks
   fixedLabels:
@@ -261,7 +245,6 @@ metrics:
   source: name_node_FSNamesystem_source
   scrape:
     jsonPath: "$.beans[0].ScheduledReplicationBlocks"
-    fromResultLabelMap: {}
 
 - name: name_node_last_young_gc_duration
   fixedLabels:
@@ -274,7 +257,6 @@ metrics:
   scrape:
     jsonPath: "$.beans[0].LastGcInfo"
     valueField: "duration"
-    fromResultLabelMap: {}
 
 - name: name_node_last_old_gc_duration
   fixedLabels:
@@ -287,7 +269,6 @@ metrics:
   scrape:
     jsonPath: "$.beans[0].LastGcInfo"
     valueField: "duration"
-    fromResultLabelMap: {}
 
 - name: name_node_heap_memory_usage
   fixedLabels:
@@ -299,7 +280,6 @@ metrics:
   source: name_node_jvm_metrics_source
   scrape:
     jsonPath: "$.beans[0].HeapMemoryUsagePercent"
-    fromResultLabelMap: {}
 
 - name: name_node_journal_node_transactions_avg_time
   fixedLabels:
@@ -311,4 +291,3 @@ metrics:
   source: name_node_activity_source
   scrape:
     jsonPath: "$.beans[0].TransactionsAvgTime"
-    fromResultLabelMap: {}

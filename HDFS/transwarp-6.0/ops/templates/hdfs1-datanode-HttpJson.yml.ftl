@@ -38,7 +38,6 @@ metrics:
   source: data_node_activity_source
   scrape:
     jsonPath: "$.beans[0].BytesRead"
-    fromResultLabelMap: {}
 
 - name: data_node_bytes_write
   fixedLabels:
@@ -62,7 +61,6 @@ metrics:
   source: data_node_activity_source
   scrape:
     jsonPath: "$.beans[0].BlocksCached"
-    fromResultLabelMap: {}
 
 - name: data_node_blocks_uncached
   fixedLabels:
@@ -74,7 +72,6 @@ metrics:
   source: data_node_activity_source
   scrape:
     jsonPath: "$.beans[0].BlocksUncached"
-    fromResultLabelMap: {}
 
 - name: data_node_blocks_read
   fixedLabels:
@@ -86,7 +83,6 @@ metrics:
   source: data_node_activity_source
   scrape:
     jsonPath: "$.beans[0].BlocksRead"
-    fromResultLabelMap: {}
 
 - name: data_node_blocks_written
   fixedLabels:
@@ -98,7 +94,6 @@ metrics:
   source: data_node_activity_source
   scrape:
     jsonPath: "$.beans[0].BlocksWritten"
-    fromResultLabelMap: {}
 
 - name: data_node_blocks_removed
   fixedLabels:
@@ -122,7 +117,6 @@ metrics:
   source: data_node_activity_source
   scrape:
     jsonPath: "$.beans[0].BlocksReplicated"
-    fromResultLabelMap: {}
 
 - name: data_node_blocks_verified
   fixedLabels:
@@ -134,7 +128,6 @@ metrics:
   source: data_node_activity_source
   scrape:
     jsonPath: "$.beans[0].BlocksVerified"
-    fromResultLabelMap: {}
 
 - name: data_node_blocks_verification_failures
   fixedLabels:
@@ -146,7 +139,6 @@ metrics:
   source: data_node_activity_source
   scrape:
     jsonPath: "$.beans[0].BlockVerificationFailures"
-    fromResultLabelMap: {}
 
 - name: data_node_capacity_total
   fixedLabels:
@@ -158,7 +150,6 @@ metrics:
   source: data_node_usage_source
   scrape:
     jsonPath: "$.beans[0].Capacity"
-    fromResultLabelMap: {}
 
 - name: data_node_DfsUsed
   fixedLabels:
@@ -170,4 +161,3 @@ metrics:
   source: data_node_usage_source
   scrape:
     jsonPath: "$.beans[0].DfsUsed"
-    fromResultLabelMap: {}

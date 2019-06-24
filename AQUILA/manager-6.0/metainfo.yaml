@@ -303,7 +303,6 @@ firstWizardConfigs:
 - node.exporter.web.port
 - server.web.port
 - agent.web.port
-- manager.proxy.web.port
 - txsql.data.dir
 - txsql.mysql.rw.port
 - txsql.binlog.port
