@@ -21,8 +21,8 @@ export SPARK_DRIVER_PORT=${service['spark.driver.port']}
     <#assign dbaservice=dependencies.DBA_SERVICE.roles.DBA_SERVICE_SERVER>
     <#assign dbaServiceExtraDriverOpts=" -Dinceptor.leviathan.studio.host=" + dbaservice[0]['ip'] + " -Dinceptor.leviathan.studio.http.port=" + dependencies.DBA_SERVICE['dbaservice.ui.port'] + " -Dinceptor.leviathan.studio.port=" + dependencies.DBA_SERVICE['dbaservice.message.port'] + " -Dinceptor.leviathan.studio.name=receiver -Dinceptor.leviathan.studio.test.enabled=false -Dspark.ui.show.context.default=false ">
 </#if>
-export EXTRA_DRIVER_OPTS=" ${service['EXTRA_DRIVER_OPTS']} -Djava.security.auth.login.config=/etc/${service.sid}/conf/jaas.conf"
-EXTRA_EXECUTOR_OPTS=" ${service['EXTRA_EXECUTOR_OPTS']} "
+export EXTRA_DRIVER_OPTS=" ${service['EXTRA_DRIVER_OPTS']} -Djava.security.auth.login.config=/etc/${service.sid}/conf/jaas.conf "
+EXTRA_EXECUTOR_OPTS=" ${service['EXTRA_EXECUTOR_OPTS']} -Djava.security.auth.login.config=/etc/${service.sid}/conf/jaas.conf "
 #SHIVA ENV
 <#if dependencies.SHIVA??>
     <#assign shiva=dependencies.SHIVA master_group=[]>
@@ -32,7 +32,7 @@ EXTRA_EXECUTOR_OPTS=" ${service['EXTRA_EXECUTOR_OPTS']} "
     <#assign master_group = master_group?join(",")>
 export SHIVA_MASTER_GROUP=${master_group}
 <#noparse>
-EXTRA_EXECUTOR_OPTS+=" -Dngmr.holodesk.shiva.mastergroup=${SHIVA_MASTER_GROUP} -Djava.security.auth.login.config=/etc/${service.sid}/conf/jaas.conf"
+EXTRA_EXECUTOR_OPTS+=" -Dngmr.holodesk.shiva.mastergroup=${SHIVA_MASTER_GROUP} "
 </#noparse>
 </#if>
 export EXTRA_EXECUTOR_OPTS
