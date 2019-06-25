@@ -1,12 +1,12 @@
 ---
 name: SOPHON
-version: sophon-2.3.1
+version: sophon-2.3.2
 global: false
 namePrefix: Sophon
 friendlyName: "Sophon"
 dependencies:
   - name: STELLARDB
-    minVersion: sophon-2.3.1
+    minVersion: transwarp-5.2.2-final
     optional: true
   - name: GUARDIAN
     minVersion: transwarp-5.2.2-final
@@ -38,7 +38,7 @@ dependencies:
 
 roles:
 - name: SHARE_SERVER
-  dockerImage: "transwarp/share-server:sophon-2.3.1"
+  dockerImage: "transwarp/share-server:sophon-2.3.2"
   friendlyName: "Share Server"
   labelPrefix: "share-server"
   category: MASTER
@@ -80,8 +80,8 @@ roles:
         targetPath: "/etc/${service.sid}/conf/share/application.properties"
         mode: "755"
 - name: SOPHON_PYTHON_REPO
-  dockerImage: "transwarp/sophon-python-repo:sophon-2.3.1"
-  linkExpression: "https://${localhostname}:${service['python.repo.port']}"
+  dockerImage: "transwarp/sophon-python-repo:sophon-2.3.2"
+  linkExpression: "http://${localhostname}:${service['python.repo.port']}"
   friendlyName: "Sophon python repo"
   labelPrefix: "sophon-python-repo"
   category: MASTER
@@ -117,7 +117,7 @@ roles:
   operations: []
 
 - name: SOPHON_R_REPO
-  dockerImage: "transwarp/sophon-r-repo:sophon-2.3.1"
+  dockerImage: "transwarp/sophon-r-repo:sophon-2.3.2"
   linkExpression: "ftp://${localhostname}:${service['r.repo.port']}/rlibs/src/contrib/"
   friendlyName: "Sophon R Repo"
   labelPrefix: "sophon-r-repo"
@@ -160,7 +160,7 @@ roles:
 
 - name: SOPHON_WEB_UI
   linkExpression: "https://${localhostname}:${service['sophon.ui.port']}/"
-  dockerImage: "transwarp/sophon-web-ui:sophon-2.3.1"
+  dockerImage: "transwarp/sophon-web-ui:sophon-2.3.2"
   friendlyName: "Sophon Web UI"
   labelPrefix: "sophon-web-ui"
   category: MASTER
@@ -198,7 +198,7 @@ roles:
         mode: "755"
 
 - name: SOPHON_REDIS
-  dockerImage: "transwarp/sophon-redis:sophon-2.3.1"
+  dockerImage: "transwarp/sophon-redis:sophon-2.3.2"
   friendlyName: "Redis Server"
   labelPrefix: "sophon-redis"
   category: MASTER
@@ -230,11 +230,21 @@ roles:
   operations: []
 
 - name: SOPHON_WEB
-  dockerImage: "transwarp/sophon-web:sophon-2.3.1"
+  dockerImage: "transwarp/sophon-web:sophon-2.3.2"
   friendlyName: "Sophon base"
   labelPrefix: "sophon-base"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /health
+      port: ${service['sophon.visit.port']}
+      scheme: HTTPS
+    failureThreshold: 10
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 10
   deleteOpCondition:
     deletable:
       number: 2
@@ -306,7 +316,7 @@ roles:
         mode: "755"
 
 - name: APINAMANER
-  dockerImage: "transwarp/apimanager:sophon-2.3.1"
+  dockerImage: "transwarp/apimanager:sophon-2.3.2"
   linkExpression: "http://${localhostname}:8044/swagger-ui.html"
   friendlyName: "Api Manager"
   labelPrefix: "apimanager"
@@ -357,47 +367,10 @@ roles:
         templatePath: "apimanager/application.properties"
         targetPath: "/etc/${service.sid}/conf/apimanager/application.properties"
         mode: "755"
-
-- name: KG_EXPLORER
-  dockerImage: "transwarp/kg-explorer:sophon-2.3.1"
-  linkExpression: "http://${localhostname}:9000"
-  friendlyName: "kg explorer"
-  labelPrefix: "kg-explorer"
-  category: MASTER
-  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
-  deleteOpCondition:
-    deletable:
-      number: 2
-    reject:
-      number: 1
-  env:
-  - name: SOPHON_CONF_DIR
-    value: /etc/${service.sid}/conf/kg/
-  - name: SOPHON_SERVICE_ID
-    value: ${service.sid}
-  mountPaths:
-  - mountPath: /srv/kubernetes
-    hostPath: /srv/kubernetes
-    name: secure
-  resources:
-    limitsMemoryKey: server.container.limits.memory
-    limitsCpuKey: server.container.limits.cpu
-    requestsMemoryKey: server.container.requests.memory
-    requestsCpuKey: server.container.requests.cpu
-  summaryPolicy: ALL
-  autoAssign:
-  - advice: !<NumSeq> {"numSeq": [1]}
-  suggestion:
-  - criteria: !<Range> {"min": 1}
-  validation:
-  - criteria: !<Range> {"min": 1, "max": 1}
-  operations:
-  - type: Config
-    directives:
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "kg/default"
-        targetPath: "/etc/${service.sid}/conf/kg/default"
+        templatePath: "apimanager/log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/apimanager/log4j.properties"
         mode: "755"
 
 
@@ -439,11 +412,6 @@ stages:
       timeoutMinutes: 1
     - !<Role>
       roleType: "APINAMANER"
-      operation: Config
-      summaryPolicy: SOME
-      timeoutMinutes: 1
-    - !<Role>
-      roleType: "KG_EXPLORER"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1

@@ -40,7 +40,7 @@
   groups: []
   visibility: READ_WRITE
 - name: driver.docker.image.name
-  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-driver:sophon-2.3.1"
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-driver:sophon-2.3.2"
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
@@ -316,7 +316,7 @@
 
 # notebook
 - name: sophon.k8s.tensorboard.image.name
-  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-cpu-basic:sophon-2.3.1"
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-cpu-basic:sophon-2.3.2"
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
@@ -324,7 +324,7 @@
   groups: []
   visibility: READ_WRITE
 - name: sophon.k8s.jupyter.cpu.image.name
-  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-cpu-basic:sophon-2.3.1"
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-cpu-basic:sophon-2.3.2"
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
@@ -332,7 +332,7 @@
   groups: []
   visibility: READ_WRITE
 - name: sophon.k8s.jupyter.gpu.image.name
-  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-gpu:sophon-2.3.1"
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-notebook-gpu:sophon-2.3.2"
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
@@ -340,7 +340,7 @@
   groups: []
   visibility: READ_WRITE
 - name: sophon.apiservice.image.name
-  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-apiserver:sophon-2.3.1"
+  recommendExpression: "${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/sophon-apiserver:sophon-2.3.2"
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}

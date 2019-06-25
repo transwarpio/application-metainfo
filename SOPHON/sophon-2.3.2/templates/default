@@ -20,7 +20,11 @@ server {
     root  /usr/lib/sophon_web/build;
   }
   location ~ ^/(api|login|cas|proxyreceptor|sophonWS)/ {
+    <#if service['use.https'] = "true">
     proxy_pass https://${service.roles.SOPHON_WEB[0].hostname}:${service['sophon.visit.port']};
+    <#else>
+    proxy_pass http://${service.roles.SOPHON_WEB[0].hostname}:${service['sophon.visit.port']};
+    </#if>
     proxy_http_version 1.1;
     proxy_set_header X-Forwarded-Proto https;
     proxy_set_header Upgrade $http_upgrade;
@@ -30,7 +34,11 @@ server {
     proxy_read_timeout 180s;
   }
   location /api-manager/ {
+    <#if service['use.https'] = "true">
     proxy_pass https://${service.roles.APINAMANER[0].hostname}:8044/;
+    <#else>
+    proxy_pass http://${service.roles.APINAMANER[0].hostname}:8044/;
+    </#if>
     proxy_http_version 1.1;
     proxy_set_header X-Forwarded-Proto https;
     proxy_set_header Upgrade $http_upgrade;
