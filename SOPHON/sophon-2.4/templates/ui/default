@@ -20,6 +20,26 @@ server {
     root  /usr/lib/sophon_web/build;
   }
 
+  location /nb-proxy/ {
+    valid_referers none blocked ${service.roles.SOPHON_UI[0]['ip']} ${service.roles.SOPHON_UI[0].hostname};
+    if ($invalid_referer) {
+        return 403;
+    }
+    proxy_pass http://${service.roles.SOPHON_UI[0].hostname}:${service['sophon.proxy.visit.port']}/nb-proxy/;
+    proxy_http_version 1.1;
+    <#if service['server.ssl.enabled'] = "true">
+    proxy_set_header X-Forwarded-Proto https;
+    <#else>
+    proxy_set_header X-Forwarded-Proto http;
+    </#if>
+    proxy_set_header X-Forwarded-For ${service.roles.SOPHON_BASE[0]['ip']};
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_set_header Host $host:$server_port;
+    proxy_cache_bypass $http_upgrade;
+  }
+
+
   location /gateway/ {
     valid_referers none blocked ${service.roles.SOPHON_UI[0]['ip']} ${service.roles.SOPHON_UI[0].hostname};
     if ($invalid_referer) {
