@@ -137,6 +137,7 @@ healthChecks:
         aggregate: Union
         command: |
           <#assign zkPort = dependencies.ZOOKEEPER["zookeeper.client.port"]>
+          export JVMFLAGS="$JVMFLAGS -Djava.security.auth.login.config=/etc/${dependencies.ZOOKEEPER.sid}/conf/jaas.conf"
           python -c "import os; import subprocess; import socket; import json
           FNULL = open(os.devnull, 'w')
 
