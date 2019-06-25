@@ -163,3 +163,8 @@ export KRB_OPTS="-Djava.security.krb5.conf=/etc/${service.sid}/conf/krb5.conf -D
 </#if>
 
 export HBASE_MASTER_OPTS="$HBASE_MASTER_OPTS -Duser.dir=/etc/${service.sid}/conf"
+
+# Used to collect metrics for prometheus
+export JMXEXPORTER_ENABLED="${service['prometheus.jmx.exporter.enabled']}"
+export JMXEXPORTER_MASTER_PORT="${service['prometheus.jmx.exporter.master.port']}"
+export JMXEXPORTER_REGIONSERVER_PORT="${service['prometheus.jmx.exporter.regionserver.port']}"
