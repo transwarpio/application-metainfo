@@ -1,9 +1,8 @@
 export SERVICE_TYPE=StreamSQL
 
 export NGMR_ENGINE_MODE=${service['ngmr.engine.mode']}
-<#if service['ngmr.engine.mode'] == 'morphling'>
-
 export NGMR_COMMANDER_ENABLE=${service['ngmr.commander.enable']}
+<#if service['ngmr.engine.mode'] == 'morphling'>
 
 export NGMR_NETWORK_SNDRCV_BUFFER=${service['ngmr.network.sndrcv.buffer']}
 export NGMR_NETWORK_SERVER_NUM_THREADS=${service['ngmr.network.server.num.threads']}
