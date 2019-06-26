@@ -16,7 +16,7 @@
                      filePattern="${r'${LOG_DIR}'}/${r'${SERVICE_NAME}'}-server.%d{yyyy-MM-dd}-%i.log">
             <PatternLayout pattern="%d{ISO8601} %-5p %c{2} (%F:%M(%L)) - %m%n" charset="UTF-8"/>
             <Policies>
-                <TimeBasedTriggeringPolicy interval="${r'${ROLL_INTERVAL'}"/>
+                <TimeBasedTriggeringPolicy interval="${r'${ROLL_INTERVAL}'}"/>
                 <SizeBasedTriggeringPolicy size="${r'${ROLL_SIZE}'}" />
             </Policies>
             <DefaultRolloverStrategy>
