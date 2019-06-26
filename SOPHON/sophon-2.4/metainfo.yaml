@@ -1028,7 +1028,7 @@ stages:
       summaryPolicy: SOME
       timeoutMinutes: 1
     - !<Role>
-      roleType: "SOPHON_APIMAMANER"
+      roleType: "SOPHON_APIMANAGER"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
