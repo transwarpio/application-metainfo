@@ -1023,7 +1023,7 @@ stages:
       summaryPolicy: SOME
       timeoutMinutes: 1
     - !<Role>
-      roleType: "SOPHON_APINAMANER"
+      roleType: "SOPHON_APIMAMANER"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
