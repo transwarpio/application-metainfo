@@ -4,7 +4,7 @@ currentpath=$(cd `dirname $0`; pwd)
 basepath=${currentpath}/../
 imagespath=${basepath}/images
 metainfopath=${basepath}/service_meta
-version=`jq -r '.manifests[].annotations."org.opencontainers.image.ref.name"' ${imagespath}/index.json |grep sophon-web-ui|cut -d':' -f2`
+version=`${currentpath}/jq -r '.manifests[].annotations."org.opencontainers.image.ref.name"' ${imagespath}/index.json |grep sophon-web-ui|cut -d':' -f2`
 
 
 
@@ -21,11 +21,11 @@ done
 
 # upload sophon metainfo
 echo "COPY SOPHON META"
-\cp -rf ${metainfopath}/SOPHON/${version} /var/lib/transwarp-manager/master/content/meta/services/SOPHON/
+\tar xvf sophonmeta.tar  -C /var/lib/transwarp-manager/master/content/meta/services/SOPHON/
 
 
 # upload kong images
-for image in `jq -r '.manifests[].annotations."org.opencontainers.image.ref.name"' ${imagespath}/index.json |grep kong`;
+for image in `${currentpath}/jq -r '.manifests[].annotations."org.opencontainers.image.ref.name"' ${imagespath}/index.json |grep kong`;
 do
    echo "COPY Image: "${image}
    skopeo --insecure-policy=true copy --dest-tls-verify=false oci:${imagespath}:${image} docker://${registry_addr}/${image}  1>setup_log.txt  ;
