@@ -865,6 +865,11 @@ roles:
         templatePath: "ui/default"
         targetPath: "/etc/${service.sid}/conf/ui/default"
         mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "ui/config"
+        targetPath: "/etc/${service.sid}/conf/ui/config"
+        mode: "755"
 
 - name: SOPHON_PYTHON_REPO
   dockerImage: "transwarp/sophon-python-repo:sophon-2.4"
