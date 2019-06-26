@@ -21,7 +21,7 @@ server {
   }
 
   location /nb-proxy/ {
-    valid_referers none blocked ${service.roles.SOPHON_UI[0]['ip']} ${service.roles.SOPHON_UI[0].hostname};
+    valid_referers none blocked ${service.roles.SOPHON_UI[0]['ip']} ${service.roles.SOPHON_UI[0].hostname} ${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']} ${dependencies.GUARDIAN.roles.CAS_SERVER[0]['ip']};
     if ($invalid_referer) {
         return 403;
     }
@@ -41,7 +41,7 @@ server {
 
 
   location /gateway/ {
-    valid_referers none blocked ${service.roles.SOPHON_UI[0]['ip']} ${service.roles.SOPHON_UI[0].hostname};
+    valid_referers none blocked ${service.roles.SOPHON_UI[0]['ip']} ${service.roles.SOPHON_UI[0].hostname} ${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']} ${dependencies.GUARDIAN.roles.CAS_SERVER[0]['ip']};
     if ($invalid_referer) {
         return 403;
     }
@@ -60,7 +60,7 @@ server {
   }
 
   location ~ ^/(cas|api){
-    valid_referers none blocked ${service.roles.SOPHON_UI[0]['ip']} ${service.roles.SOPHON_UI[0].hostname};
+    valid_referers none blocked ${service.roles.SOPHON_UI[0]['ip']} ${service.roles.SOPHON_UI[0].hostname} ${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']} ${dependencies.GUARDIAN.roles.CAS_SERVER[0]['ip']};
     if ($invalid_referer) {
         return 403;
     }
@@ -79,7 +79,7 @@ server {
   }
 
   location /WS/ {
-    valid_referers none blocked ${service.roles.SOPHON_UI[0]['ip']} ${service.roles.SOPHON_UI[0].hostname};
+    valid_referers none blocked ${service.roles.SOPHON_UI[0]['ip']} ${service.roles.SOPHON_UI[0].hostname} ${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']} ${dependencies.GUARDIAN.roles.CAS_SERVER[0]['ip']};
     if ($invalid_referer) {
         return 403;
     }

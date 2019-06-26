@@ -19,13 +19,13 @@ dependencies:
     optional: true
   - name: HDFS
     minVersion: transwarp-5.2.2-final
-    optional: false
+    optional: true
   - name: YARN
     minVersion: transwarp-5.2.2-final
-    optional: false
+    optional: true
   - name: TXSQL
     minVersion: transwarp-5.2.2-final
-    optional: false
+    optional: true
   - name: WORKFLOW
     minVersion: sophon-2.2.0-final
     optional: true
