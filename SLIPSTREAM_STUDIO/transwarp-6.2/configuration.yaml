@@ -334,3 +334,12 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: slipstream.server.mode
+  recommendExpression: morphling
+  defaultValue: morphling
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: [studio.properties]
+  visibility: READ_WRITE
