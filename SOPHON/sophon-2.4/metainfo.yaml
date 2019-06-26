@@ -778,7 +778,7 @@ roles:
 
 - name: SOPHON_CVAT
   dockerImage: "transwarp/sophon-cvat:sophon-2.4"
-  friendlyName: "Sophon Computer Vision Annotation Tool"
+  friendlyName: "Sophon CVAT"
   labelPrefix: "sophon-cvat"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]

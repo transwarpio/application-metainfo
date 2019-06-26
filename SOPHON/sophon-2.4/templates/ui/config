@@ -1,0 +1,7 @@
+export CHP_PORT=${service['sophon.proxy.visit.port']}
+export CHP_API_PORT=${service['sophon.proxy.api.port']}
+<#if service['server.ssl.enabled'] = "true">
+export HTTPS="true"
+<#else>
+export HTTPS="false"
+</#if>
