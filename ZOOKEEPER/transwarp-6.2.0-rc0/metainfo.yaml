@@ -31,7 +31,7 @@ roles:
       command:
       - /bin/bash
       - -c
-      - "echo stat | nc localhost ${service['zookeeper.client.port']} > /tmp/staty; cat /tmp/staty; grep -qE 'Mode: (follower|leader|standalone)' /tmp/staty"
+      - "echo twzkstat | nc localhost ${service['zookeeper.client.port']} > /tmp/staty; cat /tmp/staty; grep -qE 'Mode: (follower|leader|standalone)' /tmp/staty"
     failureThreshold: 3
     initialDelaySeconds: 3
     periodSeconds: 30

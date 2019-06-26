@@ -598,6 +598,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: ngmr.commander.enable
+  recommendExpression: false
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: ngmr.network.sndrcv.buffer
   recommendExpression: 0
   defaultValue: null

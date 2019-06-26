@@ -75,7 +75,8 @@ slipstream.gateway.akka.heartbeat.retryinterval=5000
 # Local maven location.
 slipstream.studio.maven.home=/usr/lib/slipstream-studio/sdks/maven
 slipstream.studio.maven.repo.dir=/usr/lib/slipstream-studio/.m2
-slipstream.studio.dependent.transwarp.version=transwarp-6.1.0-rc0
+## dependent inceptor version
+slipstream.studio.dependent.transwarp.version=8.0.0
 
 # generate by manager.
 slipstream.studio.projects.output.dir=${service['slipstream.studio.projects.output.dir']}
