@@ -21,6 +21,15 @@ spring.datasource:
   url: jdbc:mysql://${txsql}/aquila?createDatabaseIfNotExist=true&characterEncoding=UTF-8&failOverReadOnly=false&connectTimeout=10000&retriesAllDown=0&secondsBeforeRetryMaster=0&queriesBeforeRetryMaster=0&serverTimezone=${service['server.jdbc.connctor.timezone']}
   username: root
 
+shiro:
+  sessionManager:
+    cookie:
+      name: AJSSIONID
+  rememberMeManager:
+    cookie:
+      maxAge: ${service['server.rememberme.max-age']}
+      name: aRememberMe
+
 springfox.documentation:
   auto-startup: true
   swagger.v2.path: /api/docs
@@ -31,6 +40,12 @@ springfox.documentation:
 api:
   swagger:
     enabled: ${service['server.api.swagger.enabled']}
+auth:
+  manager-sso:
+    login-path: "/#/ssologin"
+  authorization:
+    anonymous-admin: ${service['server.authz.anonymous.admin']}
+    cache-expire-sec: ${service['server.authz.cache.expire.sec']}
 conf-gen:
   freemarker:
     strong-size-limit: 10
