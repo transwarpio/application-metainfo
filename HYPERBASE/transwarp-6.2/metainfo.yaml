@@ -237,6 +237,9 @@ firstWizardConfigs:
 - thrift.memory.ratio
 - regionserver.thrift.port
 - thrift.info.port
+- prometheus.jmx.exporter.enabled
+- prometheus.jmx.exporter.master.port
+- prometheus.jmx.exporter.regionserver.port
 
 dashboardMetrics:
 - HyperBaseReadRequestsRate

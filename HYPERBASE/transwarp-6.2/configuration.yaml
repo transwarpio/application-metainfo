@@ -1059,3 +1059,32 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: prometheus.jmx.exporter.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.jmx.exporter.master.port
+  recommendExpression: 19007
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [HYPERBASE_MASTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.jmx.exporter.regionserver.port
+  recommendExpression: 19008
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [HYPERBASE_REGIONSERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
