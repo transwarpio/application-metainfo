@@ -655,6 +655,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: EXTRA_METASTORE_OPTS
+  recommendExpression: ""
+  defaultValue: ""
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: rubik.connection.url
   recommendExpression: |
     <#compress>
