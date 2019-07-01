@@ -28,7 +28,7 @@ echo "COPY SOPHON META"
 for image in `${currentpath}/jq -r '.manifests[].annotations."org.opencontainers.image.ref.name"' ${imagespath}/index.json |grep kong`;
 do
    echo "COPY Image: "${image}
-   skopeo --insecure-policy=true copy --dest-tls-verify=false oci:${imagespath}:${image} docker://${registry_addr}/${image}  1>setup_log.txt  ;
+   ${currentpath}/skopeo --insecure-policy=true copy --dest-tls-verify=false oci:${imagespath}:${image} docker://${registry_addr}/${image}  1>setup_log.txt  ;
 done
 
 # upload kong metainfo
