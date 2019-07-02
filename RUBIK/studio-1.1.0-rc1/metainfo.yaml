@@ -13,7 +13,6 @@ dependencies:
     minVersion: transwarp-5.2
     optional: false
   - name: NOTIFICATION
-    minVersion: transwarp-5.2
     optional: false
 roles:
 - name: RUBIK_SERVER
