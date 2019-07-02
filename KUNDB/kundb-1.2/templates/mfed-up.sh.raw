@@ -58,7 +58,7 @@ TabletsDataDirs=$VTDATAROOT
 default_dbname=${DEFAULT_DBNAME:-'$keyspace'}
 uid=$[$uid_base + $uid_index]
 vtgate_port=$PRIV_KUNGATE_SERVER_PORT
-audit_sqls=$PRIV_KUNGATE_AUDIT_SQLS
+audit_filter=$PRIV_KUNGATE_AUDIT_FILTER
 always_set_user=$ALWAYS_SET_USER
 optional_args=$PRIV_KUNGATE_OPTIONAL_ARGS 
 enable_security=$ENABLE_SECURITY
@@ -283,12 +283,12 @@ $VTROOT/bin/vtgate \
   -grpc_client_max_recv_message_size 1073741824 \
   -grpc_port $kungate_grpc_port\
   -mysql_server_port $mysql_server_port \
-  -audit_sqls $audit_sqls \
+  -audit_sqls 0 \
   -cell $cell \
   -cells_to_watch $cell \
   -tablet_types_to_wait MASTER,REPLICA \
   -gateway_implementation discoverygateway \
-  -audit_filter="DCL, DDL, DML, CRUD, SHOW, SET, OTHER" \
+  -audit_filter="$audit_filter" \
   -service_map 'grpc-vtgateservice' \
   -pid_file $VTDATAROOT/tmp/priv/vtgate.pid \
   -lower_case_table_names=true \
