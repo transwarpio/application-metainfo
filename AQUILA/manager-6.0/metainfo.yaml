@@ -129,6 +129,11 @@ roles:
         templatePath: "server/log4j2.xml.ftl"
         targetPath: "/etc/${service.sid}/conf/server/log4j2.xml"
         mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "server/init-dashboard.yml"
+        targetPath: "/etc/${service.sid}/conf/server/init-dashboard.yml"
+        mode: "700"
 
 - name: AQUILA_AGENT
   friendlyName: "Aquila Agent"

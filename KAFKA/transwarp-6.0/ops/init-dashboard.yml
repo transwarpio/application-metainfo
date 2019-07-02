@@ -1,0 +1,4 @@
+folders:
+  - dashboards:
+    - title: "KAFKA"
+      dashboardJson: "kafka-init-dashboard.json"

@@ -362,6 +362,7 @@
   recommendExpression: "/${service.sid}/prometheus/data"
   defaultValue: null
   valueType: ABSOLUTE_PATH
+  isNodeSpecific: true
   scope: !<RoleTypes>
     roleTypes: [AQUILA_TDH_EXPORTER]
   onDeps: []
