@@ -1,0 +1,103 @@
+#!/bin/bash
+set -x
+
+
+echo "---------------private kungate start-----------"
+
+if [ -f "$KUNDB_CONF_DIR/role_conf.sh" ]; then
+  source $KUNDB_CONF_DIR/role_conf.sh mfed 
+  source $KUNDB_CONF_DIR/get_dir.sh $VIR_DATA_DIR 
+else
+   echo "/etc/kundb1/conf/ is not exist cant start kundb"
+   exit 1
+fi
+
+if [ "$MFED_DATA_DIR" != "/vdir" ]; then
+export VTDATAROOT=$MFED_DATA_DIR
+fi
+
+if [ ! -d "$VTDATAROOT/tmp/priv" ]; then
+   mkdir -p $VTDATAROOT/tmp/priv
+fi
+if [ ! -d "$VTDATAROOT/_kundb" ]; then
+   mkdir -p $VTDATAROOT/_kundb
+fi
+
+cell=${CELLNAME:-'transwarp'}
+keyspace=${KEYSPACE:-'_mfed'}
+web_port=$PRIV_KUNGATE_WEB_PORT
+kungate_grpc_port=$PRIV_KUNGATE_GRPC_PORT
+mysql_server_port=$PRIV_KUNGATE_SERVER_PORT
+tablet_hostname=`hostname -f`
+audit_filter=$PRIV_KUNGATE_AUDIT_FILTER
+optional_args=$PRIV_KUNGATE_OPTIONAL_ARGS 
+server_impl=static
+auth_plugin=static
+
+
+
+# ---start priv-vtgate
+optional_tls_args=''
+if [ "$1" = "--enable-tls" ];
+then
+	echo "Enabling TLS with client authentication"
+	config_dir=../../java/grpc-client/src/test/resources
+	cert_dir=$VTDATAROOT/tls
+	rm -Rf $cert_dir
+	mkdir -p $cert_dir
+
+    # Create CA
+    openssl genrsa -out $cert_dir/ca-key.pem
+    openssl req -new -x509 -nodes -days 3600 -batch -config $config_dir/ca.config -key $cert_dir/ca-key.pem -out $cert_dir/ca-cert.pem
+
+    # Create server-side signed cert
+    openssl req -newkey rsa:2048 -days 3600 -nodes -batch -config $config_dir/cert.config -keyout $cert_dir/server-key.pem -out $cert_dir/server-req.pem
+    openssl x509 -req -in $cert_dir/server-req.pem -days 3600 -CA $cert_dir/ca-cert.pem -CAkey $cert_dir/ca-key.pem -set_serial 01 -out $cert_dir/server-cert.pem
+
+    # Create client-side signed cert
+    openssl req -newkey rsa:2048 -days 3600 -nodes -batch -config $config_dir/cert.config -keyout $cert_dir/client-key.pem -out $cert_dir/client-req.pem
+    openssl x509 -req -in $cert_dir/client-req.pem -days 3600 -CA $cert_dir/ca-cert.pem -CAkey $cert_dir/ca-key.pem -set_serial 02 -out $cert_dir/client-cert.pem
+
+    optional_tls_args="-grpc_cert $cert_dir/server-cert.pem -grpc_key $cert_dir/server-key.pem -grpc_ca $cert_dir/ca-cert.pem"
+fi
+
+# Start vtgate.
+$VTROOT/bin/vtgate \
+  $TOPOLOGY_FLAGS \
+  -log_dir $VTDATAROOT/tmp/priv \
+  -port $web_port \
+  -grpc_max_message_size 1073741824 \
+  -grpc_client_max_recv_message_size 1073741824 \
+  -grpc_port $kungate_grpc_port\
+  -mysql_server_port $mysql_server_port \
+  -audit_sqls 0\
+  -cell $cell \
+  -cells_to_watch $cell \
+  -tablet_types_to_wait MASTER,REPLICA \
+  -gateway_implementation discoverygateway \
+  -audit_filter="$audit_filter" \
+  -service_map 'grpc-vtgateservice' \
+  -pid_file $VTDATAROOT/tmp/priv/vtgate.pid \
+  -lower_case_table_names=true \
+  -enable_offload_engines=false \
+  -mysql_allow_clear_text_without_tls=true \
+  -mysql_auth_server_impl $server_impl\
+  -kundb_ldap_disable_tls=true \
+  -kundb_ldap_tls_skip_verify_host=true \
+  -kundb_auth_plugin $auth_plugin\
+  -grpc_cert $KUNDB_CONF_DIR/vtgate-server-instance-cert.pem \
+  -grpc_key $KUNDB_CONF_DIR/vtgate-server-instance-key.pem \
+  -skip_peak_log=false \
+  $optional_args \
+  $optional_tls_args \
+  > $VTDATAROOT/tmp/priv/vtgate.out 2>&1 &
+
+echo "Access vtgate at http://$tablet_hostname:$web_port/debug/status"
+
+echo "------start monitor kungate-----"
+if [ "$1" = "" ]; then
+   cd $KUNHOME && ./monitor_kungate.sh priv > $VTDATAROOT/tmp/priv/monitor_vtgate.out 2>&1 &
+fi
+wait
+
+
