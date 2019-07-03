@@ -3,9 +3,9 @@ import sys
 import os
 import json
 import yaml
-
+import shutil
 """
-Grammar: sudo docker run -v $PWD:/tmp ubuntu:python3 /usr/local/bin/installable.py [package_numbers] [package_name] [package_name] [comparison file]
+Grammar: sudo docker run -v $PWD:/tmp ubuntu:python3 /usr/local/bin/installable.py [package_numbers] [package_name] [package_name]...[comparison file]
 [package_numbers] is the number of packages to be checked.
 [package_name] is the name of package to be published, the order of packages is the order of decompression, package suffix is .gz.
 [comparison file] is the name of comparison file, file suffix is .yaml and the format is 
@@ -24,6 +24,7 @@ There are a few points to note:
 """
 
 PACKAGES_POSITION = '/tmp'
+DATA_TEMP = '/dataTmp'
 IMAGES_POSITION = 'images/index.json'
 SERVICE_META_POSITION = 'service_meta'
 SERVICE_META = 'metainfo.yaml'
@@ -192,16 +193,31 @@ def is_installable(service, services_meta, images_set):
                     print("No dependencie:" + "name:" + str(dependencie.get('name')) + ",minVersion:" + min_version)
                     service['state'] = -1
                     return -1
-            elif dependencie_is_installable_1(dependencieName, min_version, max_version, services_meta,
-                                              images_set) == -1:
+            elif min_version is not None and max_version is not None:
+                if dependencie_is_installable_1(dependencieName, min_version, max_version, services_meta,
+                                                images_set) == -1:
+                    print('Name:' + str(service.get('name')) + ',version:' + str(service.get('version')))
+                    print("No dependencie:" + "name:" + str(
+                        dependencie.get('name')) + ",minVersion:" + min_version + ",maxVersion:" + max_version)
+                    service['state'] = -1
+                    return -1
+            elif dependencie_is_installable_0(dependencieName, services_meta, images_set) == -1:
                 print('Name:' + str(service.get('name')) + ',version:' + str(service.get('version')))
-                print("No dependencie:" + "name:" + str(
-                    dependencie.get('name')) + ",minVersion:" + min_version + ",maxVersion:" + max_version)
+                print("No dependencie:" + "name:" + str(dependencie.get('name')))
                 service['state'] = -1
                 return -1
-    #    print('success')
+                #    print('success')
     service['state'] = 1
     return 1
+
+
+def dependencie_is_installable_0(name, services_meta, images_set):
+    for service in services_meta:
+        if service.get('name') == name:
+            state = service.get('state')
+            if state == 1 or is_installable(service, services_meta, images_set) == 1:
+                return 1
+    return -1
 
 
 # Whether the dependencie of service can be installed in case of limiting the maximum version and the minimum version
@@ -253,13 +269,16 @@ else:
         if os.path.splitext(sys.argv[i])[1] != '.gz' or (not os.path.exists(PACKAGES_POSITION + '/' + sys.argv[i])):
             print('Invalid filename:' + sys.argv[i])
             sys.exit()
+    if not os.path.exists(PACKAGES_POSITION + DATA_TEMP):
+        os.mkdir(PACKAGES_POSITION + DATA_TEMP)
+
     for i in range(index, index + package_num):
         print('tar:' + sys.argv[i])
         os.system(
             'tar -zxvf ' + PACKAGES_POSITION + '/' + sys.argv[
-                i] + ' -C ' + PACKAGES_POSITION + " " + IMAGES_POSITION + " " + SERVICE_META_POSITION)
-        if os.path.exists(PACKAGES_POSITION + '/' + IMAGES_POSITION):
-            with open(PACKAGES_POSITION + '/' + IMAGES_POSITION) as f:
+                i] + ' -C ' + PACKAGES_POSITION + DATA_TEMP + " " + IMAGES_POSITION + " " + SERVICE_META_POSITION)
+        if os.path.exists(PACKAGES_POSITION + DATA_TEMP + '/' + IMAGES_POSITION):
+            with open(PACKAGES_POSITION + DATA_TEMP + '/' + IMAGES_POSITION) as f:
                 imagesJson = json.load(f)
                 manifests = imagesJson.get('manifests')
                 for manifest in manifests:
@@ -267,17 +286,18 @@ else:
     index = index + package_num
     print("Available image:" + str(images_set))
 
+try:
     yaml.add_multi_constructor('', lambda loader, suffix, node: None)
 
     services_meta = []
 
-    for root, dirs, files in os.walk(PACKAGES_POSITION):
-        for file in files:
-            if file == SERVICE_META:
-                with open(os.path.join(root, file), 'r') as f:
+    for root, dirs, files in os.walk(PACKAGES_POSITION+ DATA_TEMP):
+        for name in files:
+            if name == SERVICE_META:
+                with open(os.path.join(root, name), 'r') as f:
                     temp_meta = yaml.load(f.read(), Loader=yaml.Loader)
                     temp_dir = {}
-                    print(os.path.join(root, file))
+                    print(os.path.join(root, name))
                     temp_dir['name'] = temp_meta.get('name')
                     temp_dir['version'] = temp_meta.get('version')
                     temp_dir['dockerImage'] = temp_meta.get('dockerImage')
@@ -286,36 +306,40 @@ else:
                     temp_dir['state'] = 0
                     services_meta.append(temp_dir)
 
-for service in services_meta:
-    is_installable(service, services_meta, images_set)
+    for service in services_meta:
+        is_installable(service, services_meta, images_set)
 
-installable_service = []
-print("Installable service:")
-for service in services_meta:
-    if service.get('state') == 1:
-        installable_service.append(service)
-        print('name:' + str(service.get('name')) + ',version:' + str(service.get('version')))
+    installable_service = []
+    print("Installable service:")
+    for service in services_meta:
+        if service.get('state') == 1:
+            installable_service.append(service)
+            print('name:' + str(service.get('name')) + ',version:' + str(service.get('version')))
 
-all_service_flag = 1
-service_flag = 0
-if index < len(sys.argv):
-    if (os.path.splitext(sys.argv[index])[1] != '.yaml') or (
-            not os.path.exists(PACKAGES_POSITION + '/' + sys.argv[index])):
-        print('Invalid comparison file')
-        sys.exit()
-    else:
-        print('Comparison detail:')
-        with open(PACKAGES_POSITION + '/' + sys.argv[index], 'r') as f:
-            comparison_meta = yaml.load(f.read(), Loader=yaml.Loader)
-        for meta in comparison_meta:
-            for service in installable_service:
-                if service.get('name') == meta.get('name') and service.get('version') == meta.get('version'):
-                    service_flag = 1
-                    print(meta.get('name') + ',' + meta.get('version') + ' is installable')
-                    break
-            if service_flag == 1:
-                service_flag = 0
-            else:
-                all_service_flag = 0
-                print(meta.get('name') + ',' + meta.get('version') + ' is not installable')
-        print(True if all_service_flag == 1 else False)
+    all_service_flag = 1
+    service_flag = 0
+    if index < len(sys.argv):
+        if (os.path.splitext(sys.argv[index])[1] != '.yaml') or (
+                not os.path.exists(PACKAGES_POSITION + '/' + sys.argv[index])):
+            print('Invalid comparison file')
+            sys.exit()
+        else:
+            print('Comparison detail:')
+            with open(PACKAGES_POSITION + '/' + sys.argv[index], 'r') as f:
+                comparison_meta = yaml.load(f.read(), Loader=yaml.Loader)
+            for meta in comparison_meta:
+                for service in installable_service:
+                    if service.get('name') == meta.get('name') and service.get('version') == meta.get('version'):
+                        service_flag = 1
+                        print(meta.get('name') + ',' + meta.get('version') + ' is installable')
+                        break
+                if service_flag == 1:
+                    service_flag = 0
+                else:
+                    all_service_flag = 0
+                    print(meta.get('name') + ',' + meta.get('version') + ' is not installable')
+            print(True if all_service_flag == 1 else False)
+finally:
+    if os.path.exists(PACKAGES_POSITION + DATA_TEMP):
+        shutil.rmtree(PACKAGES_POSITION + DATA_TEMP)
+        print('Delete' + PACKAGES_POSITION + DATA_TEMP)
