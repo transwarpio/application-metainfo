@@ -45,7 +45,7 @@ roles:
   nodeSpecificMounts:
     - configKey: txsql.data.dir
   summaryPolicy: MAJOR
-  dockerImage: "transwarp/txsql:transwarp-6.0.1-final"
+  dockerImage: "transwarp/txsql:transwarp-6.0.2-final"
   autoAssign:
     - advice: !<NumSeq> {"numSeq": [5, 3, 1]}
   suggestion:
@@ -78,6 +78,19 @@ roles:
   linkExpression: "http://${localhostname}:${service['server.web.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop"]
+  readinessProbe:
+    probe: !<exec>
+      command:
+        - /bin/bash
+        - -c
+        - |
+          curl --connect-timeout 15 --max-time 15 "http://`hostname`:${service['server.web.port']}/actuator/health" | tee /tmp/check-aquila-server
+          grep '"UP"' /tmp/check-aquila-server
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
   env:
   - name: SERVER_CONF_DIR
     value: /etc/${service.sid}/conf/server
@@ -141,6 +154,14 @@ roles:
   dockerImage: "transwarp/aquila:manager-6.0"
   category: MASTER
   frontendOperations: ["Start", "Stop"]
+  readinessProbe:
+    probe: !<tcpSocket>
+      port: ${service['agent.web.port']}
+    failureThreshold: 3
+    initialDelaySeconds: 3
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 15
   env:
   - name: AGENT_CONF_DIR
     value: /etc/${service.sid}/conf/agent
@@ -189,6 +210,16 @@ roles:
   linkExpression: "http://${localhostname}:${service['node.exporter.web.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /metrics
+      port: ${service['node.exporter.web.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
   hostPID: true
   env:
   - name: NODE_EXPORTER_CONF_DIR
@@ -222,6 +253,16 @@ roles:
   linkExpression: "http://${localhostname}:${service['tdh.exporter.web.port']}/metrics"
   category: MASTER
   frontendOperations: ["Start", "Stop"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /metrics
+      port: ${service['tdh.exporter.web.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
   env:
     - name: TDH_EXPORTER_CONF_DIR
       value: /etc/${service.sid}/conf/tdh-exporter
@@ -270,15 +311,23 @@ roles:
   linkExpression: "http://${localhostname}:${service['prometheus.web.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /-/healthy
+      port: ${service['prometheus.web.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
   hostPID: true
   env:
     - name: PROMETHEUS_CON_DIR
       value: /etc/${service.sid}/conf/prometheus
-  mountPaths:
-    - mountPath: /prometheus
-      hostPath: ${service['prometheus.data.dir']}
-      name: work-dir
-  nodeSpecificMounts: []
+  mountPaths: []
+  nodeSpecificMounts:
+    - configKey: prometheus.data.dir
   summaryPolicy: SOME
   autoAssign:
     - advice: !<NumSeq>
@@ -329,3 +378,19 @@ healthChecks:
 - category: DAEMON_CHECK
   intervalSeconds: 5
   method: !<K8sPod> {}
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 10
+  method: !<Probe>
+    roles:
+      - roleType: AQUILA_TXSQL_SERVER
+        from: !<readiness> {}
+      - roleType: AQUILA_SERVER
+        from: !<readiness> {}
+      - roleType: AQUILA_AGENT
+        from: !<readiness> {}
+      - roleType: AQUILA_NODE_EXPORTER
+        from: !<readiness> {}
+      - roleType: AQUILA_TDH_EXPORTER
+        from: !<readiness> {}
+      - roleType: AQUILA_PROMETHEUS
+        from: !<readiness> {}
