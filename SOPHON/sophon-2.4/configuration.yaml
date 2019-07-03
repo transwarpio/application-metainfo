@@ -470,22 +470,6 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
-- name: sophon.visit.port
-  recommendExpression: 8701
-  defaultValue: null
-  valueType: PORT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
-- name: sophon.proxy.api.port
-  recommendExpression: 8702
-  defaultValue: null
-  valueType: PORT
-  scope: !<ServiceLevel> {}
-  onDeps: []
-  groups: []
-  visibility: READ_WRITE
 - name: notebook.server.port
   recommendExpression: 8708
   defaultValue: null
