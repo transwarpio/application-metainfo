@@ -54,7 +54,7 @@
   defaultValue: null
   valueType: PORT
   scope: !<RoleTypes>
-    roleTypes: [GUARDIAN_TXSQL_SERVER]
+    roleTypes: [AQUILA_TXSQL_SERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -64,7 +64,7 @@
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
-    roleTypes: [GUARDIAN_TXSQL_SERVER]
+    roleTypes: [AQUILA_TXSQL_SERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -74,7 +74,7 @@
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [GUARDIAN_TXSQL_SERVER]
+    roleTypes: [AQUILA_TXSQL_SERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -84,7 +84,7 @@
   defaultValue: null
   valueType: GB
   scope: !<RoleTypes>
-    roleTypes: [GUARDIAN_TXSQL_SERVER]
+    roleTypes: [AQUILA_TXSQL_SERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -94,7 +94,7 @@
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes>
-    roleTypes: [GUARDIAN_TXSQL_SERVER]
+    roleTypes: [AQUILA_TXSQL_SERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -104,7 +104,7 @@
   defaultValue: null
   valueType: FLOAT
   scope: !<RoleTypes>
-    roleTypes: [GUARDIAN_TXSQL_SERVER]
+    roleTypes: [AQUILA_TXSQL_SERVER]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -364,7 +364,7 @@
   valueType: ABSOLUTE_PATH
   isNodeSpecific: true
   scope: !<RoleTypes>
-    roleTypes: [AQUILA_TDH_EXPORTER]
+    roleTypes: [AQUILA_PROMETHEUS]
   onDeps: []
   groups: []
   visibility: READ_WRITE

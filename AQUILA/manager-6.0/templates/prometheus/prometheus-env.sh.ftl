@@ -12,7 +12,7 @@
 #!/usr/bin/env bash
 
 export PROMETHEUS_OPTS="--config.file=/etc/${service.sid}/conf/prometheus/prometheus.yml \
-                        --storage.tsdb.path=/prometheus \
+                        --storage.tsdb.path=${service['prometheus.data.dir']} \
                         --web.console.libraries=/usr/share/prometheus/console_libraries \
                         --web.console.templates=/usr/share/prometheus/consoles \
                         --web.listen-address=:${service['prometheus.web.port']} \
