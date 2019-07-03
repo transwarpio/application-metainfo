@@ -4,7 +4,7 @@ version: studio-1.1
 global: false
 namePrefix: Notification
 friendlyName: Notification
-dockerImage: "transwarp/notification:stduio-1.1"
+dockerImage: "transwarp/notification:studio-1.1"
 dependencies:
   - name: TXSQL
     minVersion: transwarp-5.2
