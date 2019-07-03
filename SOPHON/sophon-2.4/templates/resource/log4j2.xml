@@ -13,7 +13,7 @@
             <PatternLayout pattern="%d{yy/MM/dd HH:mm:ss} %p %c{2}: %m%n" charset="UTF-8"/>
         </Console>
         <RollingFile name="RollingFile" fileName="${r'${LOG_DIR}'}/${r'${SERVICE_NAME}'}-server.log"
-                     filePattern="${r'${LOG_DIR}'}/${r'${SERVICE_NAME}'}-server.%d{yyyy-MM-dd}.log">
+                     filePattern="${r'${LOG_DIR}'}/${r'${SERVICE_NAME}'}-server.%d{yyyy-MM-dd}-%i.log">
             <PatternLayout pattern="%d{ISO8601} %-5p %c{2} (%F:%M(%L)) - %m%n" charset="UTF-8"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="${r'${ROLL_INTERVAL}'}"/>

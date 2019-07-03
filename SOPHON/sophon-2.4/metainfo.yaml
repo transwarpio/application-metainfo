@@ -295,6 +295,50 @@ roles:
         targetPath: "/etc/${service.sid}/conf/ui/config"
         mode: "755"
 
+- name: SOPHON_UI_CV
+  linkExpression: "https://${localhostname}:${service['sophon.ui.cv.port']}/"
+  dockerImage: "transwarp/sophon-ui-cv:sophon-2.4"
+  friendlyName: "Sophon UI CV"
+  labelPrefix: "sophon-ui-cv"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+  - name: SOPHON_CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: SOPHON_SERVICE_ID
+    value: ${service.sid}
+  mountPaths: []
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1, "max": 1}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "ui-cv/default"
+        targetPath: "/etc/${service.sid}/conf/ui-cv/default"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "ui-cv/config"
+        targetPath: "/etc/${service.sid}/conf/ui-cv/config"
+        mode: "755"
+
 
 - name: SOPHON_NOTEBOOK
   dockerImage: "transwarp/sophon-notebook:sophon-2.4"
@@ -1019,6 +1063,11 @@ stages:
       timeoutMinutes: 1
     - !<Role>
       roleType: "SOPHON_UI"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SOPHON_UI_CV"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
