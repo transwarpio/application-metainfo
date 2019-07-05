@@ -50,9 +50,14 @@
     <#assign coprocessorMaster=",io.transwarp.guardian.plugins.hyperbase.GuardianAccessController"/>
 </#if>
 
+<#--catalog hook-->
+<#if service.plugins?seq_contains("catalog")>
+    <#assign catalogHook=",io.transwarp.catalog.hook.hyperbase._5_2_2.HBaseCoprocessor"/>
+</#if>
+
     <#assign esRegionCoprocessor=dependencies.SEARCH???string(",org.apache.hadoop.hyperbase.fulltextindex.coprocessor.EsRegionCoprocessor", "")>
     <@property "hbase.coprocessor.region.classes" service['hbase.coprocessor.region.classes'] + esRegionCoprocessor + coprocessorRegion/>
-    <@property "hbase.coprocessor.master.classes" service['hbase.coprocessor.master.classes'] + coprocessorMaster/>
+    <@property "hbase.coprocessor.master.classes" service['hbase.coprocessor.master.classes'] + coprocessorMaster + (catalogHook!"")/>
 
     <#assign path="hdfs://" + dependencies.HDFS.nameservices[0] + "/" + service.sid + "_hregionindex">
     <@property "hregion.index.path" path/>

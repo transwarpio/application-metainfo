@@ -148,6 +148,13 @@ stages:
       operation: Config
       summaryPolicy: ALL
       timeoutMinutes: 1
+  - type: PreDeleteAfterStop
+    taskGroups:
+    - !<DockerRunPreDelete>
+      summaryPolicy: NONE
+      timeoutMinutes: 10
+      roleType: CATALOG_PLATFORM
+      node: Any
 
 firstWizardConfigs:
 - catalog.web.http.port
