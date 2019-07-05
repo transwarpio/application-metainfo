@@ -1,33 +1,33 @@
 ---
 name: CATALOG
-version: studio-1.0
+version: studio-1.2
 global: false
 namePrefix: Catalog
 friendlyName: Catalog
 dependencies:
   - name: HYPERBASE
-    minVersion: transwarp-5.2
-    maxVersion: transwarp-6.0
+    minVersion: transwarp-6.0
+    maxVersion: transwarp-6.1
     optional: false
   - name: SEARCH
-    minVersion: transwarp-5.2
-    maxVersion: transwarp-6.0
+    minVersion: transwarp-6.0
+    maxVersion: transwarp-6.1
     optional: false
   - name: KAFKA
-    minVersion: transwarp-5.2
-    maxVersion: transwarp-6.0
+    minVersion: transwarp-6.0
+    maxVersion: transwarp-6.1
     optional: false
   - name: ZOOKEEPER
-    minVersion: transwarp-5.2
-    maxVersion: transwarp-6.0
+    minVersion: transwarp-6.0
+    maxVersion: transwarp-6.1
     optional: false
   - name: HDFS
-    minVersion: transwarp-5.2
-    maxVersion: transwarp-6.0
+    minVersion: transwarp-6.0
+    maxVersion: transwarp-6.1
     optional: false
   - name: TXSQL
-    minVersion: transwarp-5.2
-    maxVersion: transwarp-6.0
+    minVersion: transwarp-6.0
+    maxVersion: transwarp-6.1
     optional: false
 user: catalog
 
@@ -35,7 +35,7 @@ roles:
 - name: CATALOG_WEB
   friendlyName: "Catalog Web"
   labelPrefix: "catalog-web"
-  dockerImage: "transwarp/catalog-web:studio-1.0"
+  dockerImage: "transwarp/catalog-web:studio-1.1"
   linkExpression: "http://${localhostname}:${service['catalog.web.http.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
@@ -54,7 +54,10 @@ roles:
     value: /etc/${service.sid}/conf
   - name: KRB_ENABLE
     value: <#if service.auth = "kerberos">true<#else>false</#if>
-  mountPaths: []
+  mountPaths:
+  - mountPath: /var/log/catalog-web
+    hostPath: /var/log/${service.sid}/catalog-web
+    name: catalog-web-log
   resources:
     limitsMemoryKey: catalog.web.limits.memory
     limitsCpuKey: catalog.web.limits.cpu
@@ -81,7 +84,7 @@ roles:
 - name: CATALOG_PLATFORM
   friendlyName: "Catalog Platform"
   labelPrefix: "catalog-platform"
-  dockerImage: "transwarp/catalog-platform:studio-1.0"
+  dockerImage: "transwarp/catalog-platform:studio-1.1"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
@@ -101,7 +104,10 @@ roles:
     value: <#if service.auth = "kerberos">true<#else>false</#if>
   - name: WEB_SERVER_ADDRESS
     value: http://${service.roles["CATALOG_WEB"][0].hostname}:${service['catalog.web.http.port']}
-  mountPaths: []
+  mountPaths:
+  - mountPath: /var/log/catalog-platform
+    hostPath: /var/log/${service.sid}/catalog-platform
+    name: catalog-platform-log
   resources:
     limitsMemoryKey: catalog.platform.limits.memory
     limitsCpuKey: catalog.platform.limits.cpu

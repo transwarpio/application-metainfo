@@ -168,3 +168,14 @@ export HBASE_MASTER_OPTS="$HBASE_MASTER_OPTS -Duser.dir=/etc/${service.sid}/conf
 export JMXEXPORTER_ENABLED="${service['prometheus.jmx.exporter.enabled']}"
 export JMXEXPORTER_MASTER_PORT="${service['prometheus.jmx.exporter.master.port']}"
 export JMXEXPORTER_REGIONSERVER_PORT="${service['prometheus.jmx.exporter.regionserver.port']}"
+
+<#if service.plugins?seq_contains("catalog")>
+for f in /usr/lib/transwarp/plugins/catalog/hyperbase/lib/*jar; do
+if [ "HBASE_CLASSPATH" ]; then
+export HBASE_CLASSPATH=$HBASE_CLASSPATH:$f
+else
+export HBASE_CLASSPATH=$f
+fi
+done
+export EXTRA_JAVA_OPTS="$EXTRA_JAVA_OPTS -Djava.security.auth.login.config=/etc/${service.sid}/conf/kafka_client_jaas.conf"
+</#if>

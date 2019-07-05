@@ -199,6 +199,9 @@ roles:
     - mountPath: /var/run/${service.sid}
       hostPath: /var/run/${service.sid}
       name: hdfssocketdir
+    - mountPath: /var/log/catalog-agent
+      hostPath: /var/log/${service.sid}/catalog-agent
+      name: catalog-agent-hdfs-log
     resources:
       limitsMemoryKey: catalog.container.limits.memory
       limitsCpuKey: catalog.container.limits.cpu
