@@ -318,7 +318,10 @@ roles:
     value: hive
   - name: CATALOG_AGENT_VERSION
     value: inceptor-0.12.0
-  mountPaths: []
+  mountPaths:
+  - mountPath: /var/log/catalog-agent
+    hostPath: /var/log/${service.sid}/catalog-agent
+    name: catalog-agent-inceptor-log
   resources:
     limitsMemoryKey: catalog.container.limits.memory
     limitsCpuKey: catalog.container.limits.cpu

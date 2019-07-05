@@ -6,7 +6,7 @@ metadata:
   labels:
     k8s-app: kube-controller-manager
 spec:
-  priorityClassName: system-priority
+  priorityClassName: high-priority
   hostNetwork: true
   containers:
     - name: tos-controller-${service.sid}

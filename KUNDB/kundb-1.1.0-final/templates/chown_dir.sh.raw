@@ -1,0 +1,19 @@
+#/bin/bash
+set -x
+OLD_IFS="$IFS" 
+IFS="," 
+newDataDir=($1) 
+IFS="$OLD_IFS" 
+for s in ${newDataDir[@]} 
+do 
+    echo "$s" 
+done
+echo ${newDataDir[@]}
+
+DATADIR_NUM=${#newDataDir[@]}
+
+for((i=0;i<$DATADIR_NUM;i++)); do
+   dataDir=${newDataDir[i]}    
+   chown -R $KUNUSER:$KUNUSER $dataDir
+done 
+set +x

@@ -4,7 +4,7 @@ metadata:
   name: tos-registry-${service.sid}
   namespace: kube-system
 spec:
-  priorityClassName: system-priority
+  priorityClassName: high-priority
   hostNetwork: true
   containers:
   - name: registry

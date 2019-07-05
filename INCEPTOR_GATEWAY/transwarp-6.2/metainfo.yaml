@@ -1,0 +1,119 @@
+---
+name: INCEPTOR_GATEWAY
+version: transwarp-6.2
+global: false
+namePrefix: InceptorGateway
+friendlyName: "InceptorGateway"
+dockerImage: "transwarp/inceptor-gateway:transwarp-6.2"
+user: hive
+validateConfig: true
+dependencies: []
+plugins: []
+roles:
+- name: INCEPTOR_GATEWAY
+  friendlyName: "Inceptor Gateway"
+  labelPrefix: "inceptor-gateway"
+  linkExpression: "http://${localhostname}:${service['inceptor.gateway.ui.port']}/"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  env:
+  - name: GATEWAY_CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: INCEPTOR_VERSION
+    value: ${service['inceptor.server.version']}
+  - name: GATEWAY_SERVER__VERSION
+    value: ${service['inceptor.server.version']}
+  - name: GATEWAY_PORT
+    value: ${service['inceptor.gateway.port']}
+  - name: GATEWAY_UI_PORT
+    value: ${service['inceptor.gateway.ui.port']}
+  - name: GATEWAY_LOG_DIR
+    value: /var/log/${service.sid}/
+  - name: GATEWAY_BACKEND_SERVER_DEFAULT_VERSION
+    value: ${service['inceptor.gateway.backend.server.default.version']}
+  - name: GATEWAY_HOST
+    value: ${service['inceptor.gateway.host']}
+  - name: GATEWAY_FAILRETRY_TIME
+    value: ${service['inceptor.gateway.connection.failretry.ms']}
+  - name: GATEWAY_SYSTEM_TIMEOUT
+    value: ${service['inceptor.gateway.system.timeout.ms']}
+  - name: GATEWAY_MIN_WORKER
+    value: ${service['inceptor.gateway.thrift.min.workers']}
+  - name: GATEWAY_MAX_WORKER
+    value: ${service['inceptor.gateway.thrift.max.workers']}
+  - name: GATEWAY_SESSION_IDLE_TIMEOUT
+    value: ${service['inceptor.gateway.session.idle.timeout.ms']}
+  - name: GATEWAY_USE_HIVEPARSER
+    value: ${service['inceptor.gateway.hive.parser.enabled']}
+  - name: GATEWAY_HIVEPARSER_WARMUP
+    value: ${service['inceptor.gateway.hive.parser.warmup']}
+  - name: GATEWAY_CHECK_SERVER_INTERVAL
+    value: ${service['inceptor.gateway.check.server.interval']}
+  - name: GATEWAY_HA_SLAVE_CONNECT_RETRY_TIMES
+    value: ${service['inceptor.gateway.ha.slave.connect.retry.times']}
+  - name: GATEWAY_HA_SLAVE_RETRY_GAP
+    value: ${service['inceptor.gateway.ha.slave.retry.interval']}
+  - name: GATEWAY_PICK_SERVER_MODE
+    value: ${service['inceptor.gateway.pick.server.mode']}
+  - name: GATEWAY_CONF_FILE_FORMAT
+    value: ${service['inceptor.gateway.conf.file.format']}
+  - name: GATEWAY_USED_SLIP_STREAM
+    value: ${service['inceptor.gateway.used.slipstream']}
+  - name: GATEWAY_AUDIT_MAX_SQL_LENGTH
+    value: ${service['inceptor.gateway.audit.max.sql.length']}
+
+  mountPaths: []
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/run/${service.sid}"]
+        mode: "755"
+
+stages:
+  - type: Config
+    taskGroups:
+    - !<Role>
+      roleType: "INCEPTOR_GATEWAY"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+
+
+firstWizardConfigs:
+- inceptor.server.version
+- inceptor.gateway.port
+- inceptor.gateway.ui.port
+- inceptor.gateway.host
+- inceptor.gateway.conf.dir
+- inceptor.gateway.connection.failretry.ms
+- inceptor.gateway.system.timeout.ms
+- inceptor.gateway.thrift.min.workers
+- inceptor.gateway.thrift.max.workers
+- inceptor.gateway.session.idle.timeout.ms
+- inceptor.gateway.hive.parser.enabled
+- inceptor.gateway.hive.parser.warmup
+- inceptor.gateway.backend.server.default.version
+- inceptor.gateway.check.server.interval
+- inceptor.gateway.ha.slave.connect.retry.times
+- inceptor.gateway.ha.slave.retry.interval
+- inceptor.gateway.pick.server.mode
+- inceptor.gateway.conf.file.format
+- inceptor.gateway.used.slipstream
+- inceptor.gateway.audit.max.sql.length
+
+pages:
+- roles
+- configuration
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
