@@ -1,0 +1,233 @@
+---
+name: SHIVA
+version: transwarp-6.2.0-rc1
+global: false
+namePrefix: Shiva
+friendlyName: "Shiva"
+validateConfig: true
+dependencies: []
+roles:
+- name: SHIVA_MASTER
+  friendlyName: "Shiva Master"
+  labelPrefix: "shiva-master"
+  dockerImage: "transwarp/shiva-master:transwarp-6.2.0-rc1"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /
+      port: ${service['master.rpc_service.master_service_port']}
+      scheme: HTTP
+  summaryPolicy: MAJOR
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [5, 3]}
+  suggestion:
+  - criteria: !<Range> {"min": 3, "oddity": true}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  resources:
+    limitsMemoryKey: master.container.limits.memory
+    limitsCpuKey: master.container.limits.cpu
+    requestsMemoryKey: master.container.requests.memory
+    requestsCpuKey: master.container.requests.cpu
+  nodeSpecificMounts:
+  - configKey: master.master.data_path
+  env:
+  - name: CONF_DIR
+    value: /etc/${service.sid}/conf
+  deleteOpCondition:
+    deletable:
+      number: 3
+      decommission: false
+    reject:
+      number: 2
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: master.master.data_path
+      featureFile: master.lock
+    - key: master.log.log_dir
+      featureFile: master_main.INFO
+    fromPath:
+    - key: /etc/${service.sid}/conf
+      featureFile: master.conf
+  mountPaths: []
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "master.conf"
+        targetPath: "/etc/${service.sid}/conf/master.conf"
+        mode: "755"
+
+- name: SHIVA_WEBSERVER
+  friendlyName: "Shiva Webserver"
+  labelPrefix: "shiva-webserver"
+  dockerImage: "transwarp/shiva-webserver:transwarp-6.2.0-rc1"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /
+      port: ${service['http.port']}
+      scheme: HTTP
+  summaryPolicy: MAJOR
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1, "oddity": false}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  linkExpression: "http://${localhostname}:${service['http.port']}"
+  resources:
+    limitsMemoryKey: webserver.container.limits.memory
+    limitsCpuKey: webserver.container.limits.cpu
+    requestsMemoryKey: webserver.container.requests.memory
+    requestsCpuKey: webserver.container.requests.cpu
+  env:
+  - name: CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: MASTER_GROUP
+    value: |
+      <#function master_group>
+        <#local group = []>
+        <#list service.roles["SHIVA_MASTER"] as r>
+          <#local group = group + [r.ip + ":" + service['master.rpc_service.master_service_port']]>
+        </#list>
+        <#return group?join(",")>
+      </#function>
+      ${master_group()}
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  deleteOpCleanDirs:
+    fromPath:
+    - key: /etc/${service.sid}/conf
+      featureFile: master.conf
+  mountPaths: []
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "shiva-restful.sh"
+        targetPath: "/etc/${service.sid}/conf/shiva-restful.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/log4j.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "shiva-env.sh"
+        targetPath: "/etc/${service.sid}/conf/shiva-env.sh"
+        mode: "755"
+
+- name: SHIVA_TABLETSERVER
+  friendlyName: "Shiva Tablet Server"
+  labelPrefix: "shiva-tabletserver"
+  dockerImage: "transwarp/shiva-tabletserver:transwarp-6.2.0-rc1"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /
+      port: ${service['tabletserver.rpc_service.manage_service_port']}
+      scheme: HTTP
+  summaryPolicy: MAJOR
+  autoAssign:
+  - advice: !<EachNode> {}
+  suggestion:
+  - criteria: !<Range> {"min": 3, "oddity": false}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  resources:
+    limitsMemoryKey: tabletserver.container.limits.memory
+    limitsCpuKey: tabletserver.container.limits.cpu
+    requestsMemoryKey: tabletserver.container.requests.memory
+    requestsCpuKey: tabletserver.container.requests.cpu
+  nodeSpecificMounts:
+  - configKey: tabletserver.store.datadirs
+  env:
+  - name: CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: MASTER_GROUP
+    value: |
+      <#function master_group>
+        <#local group = []>
+        <#list service.roles["SHIVA_MASTER"] as r>
+          <#local group = group + [r.ip + ":" + service['master.rpc_service.master_service_port']]>
+        </#list>
+        <#return group?join(",")>
+      </#function>
+      ${master_group()}
+  deleteOpCondition:
+    deletable:
+      number: 3
+      decommission: false
+    reject:
+      number: 2
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: tabletserver.store.datadirs
+      featureFile: .trash
+    - key: tabletserver.log.log_dir
+      featureFile: tabletserver_main.INFO
+    fromPath:
+    - key: /etc/${service.sid}/conf
+      featureFile: tabletserver.conf
+  mountPaths: []
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "tabletserver.conf"
+        targetPath: "/etc/${service.sid}/conf/tabletserver.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "store.conf"
+        targetPath: "/etc/${service.sid}/conf/store.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "topology.conf"
+        targetPath: "/etc/${service.sid}/conf/topology.conf"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "shiva-env.sh"
+        targetPath: "/etc/${service.sid}/conf/shiva-env.sh"
+        mode: "755"
+
+firstWizardConfigs:
+- master.rpc_service.master_service_port
+- tabletserver.rpc_service.manage_service_port
+- http.port
+- master.container.limits.memory
+- master.container.limits.cpu
+- master.container.requests.memory
+- master.container.requests.cpu
+- master.memory.ratio
+- tabletserver.container.limits.memory
+- tabletserver.container.limits.cpu
+- tabletserver.container.requests.memory
+- tabletserver.container.requests.cpu
+- tabletserver.memory.ratio
+- webserver.container.limits.memory
+- webserver.container.limits.cpu
+- webserver.container.requests.memory
+- webserver.container.requests.cpu
+- webserver.memory.ratio
+- master.master.data_path
+- tabletserver.store.datadirs
+- store.capacity
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 30
+  method: !<K8sPod> {}
