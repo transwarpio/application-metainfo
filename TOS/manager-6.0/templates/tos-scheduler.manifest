@@ -4,7 +4,7 @@ metadata:
   name: tos-scheduler-${service.sid}
   namespace: kube-system
 spec:
-  priorityClassName: system-priority
+  priorityClassName: high-priority
   hostNetwork: true
   containers:
     - name: tos-scheduler-${service.sid}

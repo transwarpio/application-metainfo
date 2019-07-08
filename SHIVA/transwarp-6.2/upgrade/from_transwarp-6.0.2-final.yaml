@@ -1,0 +1,4 @@
+---
+fromVersion: transwarp-6.0.2-final
+rolling: false
+rollbackable: false

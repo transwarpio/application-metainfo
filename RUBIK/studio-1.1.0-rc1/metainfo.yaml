@@ -1,0 +1,137 @@
+---
+name: RUBIK
+version: studio-1.1.0-rc1
+global: false
+namePrefix: Rubik
+friendlyName: Rubik
+dockerImage: "transwarp/rubik:studio-1.1.0-rc1"
+dependencies:
+  - name: GUARDIAN
+    minVersion: transwarp-5.2
+    optional: true
+  - name: TXSQL
+    minVersion: transwarp-5.2
+    optional: false
+  - name: NOTIFICATION
+    optional: false
+roles:
+- name: RUBIK_SERVER
+  friendlyName: "Rubik Server"
+  labelPrefix: "rubik-server"
+  linkExpression: "http://${localhostname}:${service['designer.server.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - |
+          curl --fail --connect-timeout 15 --max-time 15 "http://`hostname`:${service['designer.server.port']}/"
+    failureThreshold: 3
+    initialDelaySeconds: 3
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 15
+  env:
+  - name: RUBIK_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths:
+  - mountPath: /var/lib/Rubik
+    hostPath: /var/lib/${service.sid}
+    name: libdir
+  resources:
+    limitsMemoryKey: rubik.container.limits.memory
+    limitsCpuKey: rubik.container.limits.cpu
+    requestsMemoryKey: rubik.container.requests.memory
+    requestsCpuKey: rubik.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "dataSource.properties"
+        targetPath: "/etc/${service.sid}/conf/dataSource.properties"
+        mode: "600"
+stages:
+  - type: Config
+    taskGroups:
+    - !<Create-Database>
+      dbPrefix: rubik
+      dbUserConfig: javax.jdo.option.ConnectionUserName
+      dbPasswordConfig: javax.jdo.option.ConnectionPassword
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Create-Database>
+      dbPrefix: rubik
+      dbUserConfig: inceptor.database.username
+      dbPasswordConfig: inceptor.database.password
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Role>
+      roleType: "RUBIK_SERVER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+  - type: PreUpgrade
+    taskGroups:
+    - !<DockerRunPreUpgrade>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      roleType: RUBIK_SERVER
+      node: Any
+  - type: PreRollback
+    taskGroups:
+    - !<DockerRunPreRollback>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      roleType: RUBIK_SERVER
+      node: Any
+
+
+firstWizardConfigs:
+- designer.server.port
+- designer.global.session.timeout.secs
+- javax.jdo.option.ConnectionUserName
+- javax.jdo.option.ConnectionPassword
+- rubik.memory
+- rubik.container.limits.memory
+- rubik.container.limits.cpu
+- rubik.container.requests.memory
+- rubik.container.requests.cpu
+- rubik.memory.ratio
+- inceptor.database.username
+- inceptor.database.password
+
+pages:
+- roles
+- configuration
+- operation
+- security
+
+principals:
+- rubik
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 15
+  method: !<Probe>
+    roles:
+    - roleType: RUBIK_SERVER
+      from: !<readiness> {}
+

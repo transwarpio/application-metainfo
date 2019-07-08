@@ -1,0 +1,789 @@
+{
+  "schemaVersion": 2,
+  "id": null,
+  "folderId": null,
+  "starred": false,
+  "title": "YARN",
+  "tags": [],
+  "timezone": null,
+  "editable": null,
+  "graphToolTip": null,
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "type": "query",
+        "name": "serviceId",
+        "label": "Service",
+        "hide": "NONE",
+        "multi": false,
+        "includeAll": false,
+        "options": [
+          {
+            "text": "yarn1",
+            "value": 7,
+            "selected": true
+          }
+        ],
+        "tags": null,
+        "current": null,
+        "dataSourceId": 3,
+        "refresh": "ON_LOAD",
+        "query": "SELECT * FROM service where type = 'YARN'",
+        "valueColumn": "id",
+        "textColumn": "sid",
+        "regex": null,
+        "sort": "NONE",
+        "useTags": false,
+        "tagQuery": null,
+        "tagQueryValueColumn": null,
+        "tagQueryTextColumn": null,
+        "tagValuesQuery": null
+      }
+    ]
+  },
+  "refresh": "1m",
+  "links": null,
+  "panels": [
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 6,
+      "cols": 6,
+      "x": 6,
+      "y": 9,
+      "title": "Application Failed",
+      "description": "Total number of failed applications",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "resource_manager_apps_failed{serviceId=\"${serviceId}\"}",
+          "legendFormat": "apps_failed"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#DB6767",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 6,
+      "cols": 6,
+      "x": 12,
+      "y": 9,
+      "title": "Containers Running ",
+      "description": "Current number of allocated containers",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "resource_manager_allocated_containers{serviceId=\"${serviceId}\"}",
+          "legendFormat": "containers_running"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#5A88C5",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 6,
+      "cols": 6,
+      "x": 18,
+      "y": 9,
+      "title": "Active NodeManager",
+      "description": "Current number of active NodeManagers",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "resource_manager_active_node_managers{serviceId=\"${serviceId}\"}",
+          "legendFormat": "active_node_managers"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#77B8D1",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 6,
+      "cols": 6,
+      "x": 0,
+      "y": 15,
+      "title": "Decommission NodeManager",
+      "description": "Current number of decommissioned NodeManagers",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "resource_manager_decommission_node_managers{serviceId=\"${serviceId}\"}",
+          "legendFormat": "decommission_node_managers"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#8D7564",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 9,
+      "cols": 24,
+      "x": 0,
+      "y": 0,
+      "title": "Application Running/Pending",
+      "description": "Current number of running/pending applications",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "resource_manager_apps_running{serviceId=\"${serviceId}\"}",
+          "legendFormat": "apps_running"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "B",
+          "format": "TIME_SERIES",
+          "expr": "resource_manager_apps_pending{serviceId=\"${serviceId}\"}",
+          "legendFormat": "apps_pending"
+        }
+      ],
+      "colors": {
+        "apps_pending": "#DB6767",
+        "apps_running": "#2fa2d6"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "none",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 0,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 0,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 6,
+      "cols": 6,
+      "x": 0,
+      "y": 9,
+      "title": "Application Completed",
+      "description": "Total number of completed applications",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "resource_manager_apps_completed{serviceId=\"${serviceId}\"}",
+          "legendFormat": "apps_completed"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#4BAA7B",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 6,
+      "cols": 6,
+      "x": 6,
+      "y": 15,
+      "title": "Lost NodeManager",
+      "description": "Current number of lost NodeManagers for not sending heartbeats",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "resource_manager_lost_node_managers{serviceId=\"${serviceId}\"}",
+          "legendFormat": "lost_node_managers"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#E29A47",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 6,
+      "cols": 6,
+      "x": 12,
+      "y": 15,
+      "title": "Unhealthy NodeManager",
+      "description": "Current number of unhealthy NodeManagers",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "resource_manager_unhealthy_node_managers{serviceId=\"${serviceId}\"}",
+          "legendFormat": "unhealthy_node_managers"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#857DD5",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 9,
+      "cols": 12,
+      "x": 0,
+      "y": 21,
+      "title": "Memory Usage",
+      "description": "Current allocated/available memory",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "resource_manager_allocated_memory{serviceId=\"${serviceId}\"}",
+          "legendFormat": "memory_allocated"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "B",
+          "format": "TIME_SERIES",
+          "expr": "resource_manager_available_memory{serviceId=\"${serviceId}\"}",
+          "legendFormat": "memory_available"
+        }
+      ],
+      "colors": {
+        "memory_allocated": "#E29A47",
+        "memory_available": "#64B88F"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "mbytes",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 2,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 2,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": true,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 6,
+      "cols": 6,
+      "x": 18,
+      "y": 15,
+      "title": "Rebooted NodeManager",
+      "description": "Current number of rebooted NodeManagers",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "resource_manager_rebooted_node_managers{serviceId=\"${serviceId}\"}",
+          "legendFormat": "rebooted_node_managers"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#85BE5B",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 9,
+      "cols": 12,
+      "x": 12,
+      "y": 21,
+      "title": "VCores usage",
+      "description": "Current allocated/available CPU(s) in virtual cores",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "resource_manager_allocated_vcores{serviceId=\"${serviceId}\"}",
+          "legendFormat": "allocated_vcores"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "B",
+          "format": "TIME_SERIES",
+          "expr": "resource_manager_available_vcores{serviceId=\"${serviceId}\"}",
+          "legendFormat": "available_vcores"
+        }
+      ],
+      "colors": {
+        "allocated_vcores": "#E29A47",
+        "available_vcores": "#64B88F"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "none",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 0,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 0,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": true,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    }
+  ]
+}

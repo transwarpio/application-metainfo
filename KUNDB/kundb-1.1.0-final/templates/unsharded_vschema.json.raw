@@ -1,0 +1,20 @@
+{
+  "vindexes": {
+    "binary": {
+      "type": "binary"
+    },
+    "binary_md5": {
+      "type": "binary_md5"
+    },
+    "hash": {
+      "type": "hash"
+    },
+    "numeric": {
+      "type": "numeric"
+    },
+    "unicode_loose_md5": {
+      "type": "unicode_loose_md5"
+    }
+  }
+}
+

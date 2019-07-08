@@ -183,6 +183,50 @@ roles:
         templatePath: "jmxremote.passwd"
         targetPath: "/etc/${service.sid}/conf/jmxremote.passwd"
         mode: "600"
+- name: HYPERBASE_CATALOG_AGENT
+  friendlyName: "Catalog Agent"
+  labelPrefix: "hyperbase-catalog-agent"
+  dockerImage: "transwarp/catalog-agent:transwarp-5.2.2-final"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /api/v1/health
+      port: ${service['catalog-agent.http.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 60
+    successThreshold: 1
+    timeoutSeconds: 60
+  env:
+    - name: HADOOP_CONF_DIR
+      value: /etc/${dependencies.HDFS.sid}/conf
+    - name: HBASE_CONF_DIR
+      value: /etc/${service.sid}/conf
+    - name: KRB_ENABLE
+      value: <#if service.auth = "kerberos">true<#else>false</#if>
+    - name: CATALOG_AGENT_COMPONENT
+      value: hbase
+    - name: CATALOG_AGENT_VERSION
+      value: hyperbase-0.98.6-transwarp-5.2.2
+  mountPaths:
+  - mountPath: /var/log/catalog-agent
+    hostPath: /var/log/${service.sid}/catalog-agent
+    name: catalog-agent-hyperbase-log
+  resources:
+    limitsMemoryKey: catalog.container.limits.memory
+    limitsCpuKey: catalog.container.limits.cpu
+    requestsMemoryKey: catalog.container.requests.memory
+    requestsCpuKey: catalog.container.requests.cpu
+  summaryPolicy: NONE
+  autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+    - criteria: !<Range> {"min": 1}
+  validation:
+    - criteria: !<Range> {"min": 1}
+  operations: []
 
 stages:
   - type: Bootstrap
@@ -232,6 +276,13 @@ firstWizardConfigs:
 - thrift.container.requests.memory
 - thrift.container.requests.cpu
 - thrift.memory.ratio
+- catalog-agent.http.port
+- catalog-agent.web.address
+- catalog-agent.container.limits.memory
+- catalog-agent.container.limits.cpu
+- catalog-agent.container.requests.memory
+- catalog-agent.container.requests.cpu
+- catalog-agent.memory.ratio
 
 dashboardMetrics:
 - HyperBaseReadRequestsRate
@@ -248,6 +299,7 @@ pages:
 principals:
 - hbase
 - HTTP
+- kafka
 
 healthChecks:
 - category: DAEMON_CHECK
