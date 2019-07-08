@@ -124,7 +124,7 @@ roles:
   - name: PILOT_CATALOG_AGENT
     friendlyName: "Pilot Enterprise Catalog Agent"
     labelPrefix: "pilot-catalog-agent"
-    dockerImage: "transwarp/catalog-agent:transwarp-5.2.2-final"
+    dockerImage: "transwarp/catalog-agent:transwarp-6.1"
     category: SLAVE
     frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
     readinessProbe:

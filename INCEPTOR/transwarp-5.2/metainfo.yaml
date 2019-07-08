@@ -192,7 +192,7 @@ roles:
 - name: INCEPTOR_CATALOG_AGENT
   friendlyName: "Inceptor Catalog Agent"
   labelPrefix: "inceptor-catalog-agent"
-  dockerImage: "transwarp/catalog-agent:transwarp-5.2.2-final"
+  dockerImage: "transwarp/catalog-agent:transwarp-5.2"
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   readinessProbe:
