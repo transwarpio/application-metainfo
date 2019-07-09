@@ -186,7 +186,7 @@ roles:
 - name: HYPERBASE_CATALOG_AGENT
   friendlyName: "Catalog Agent"
   labelPrefix: "hyperbase-catalog-agent"
-  dockerImage: "transwarp/catalog-agent:transwarp-5.2.2-final"
+  dockerImage: "transwarp/catalog-agent:transwarp-5.2"
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   readinessProbe:
