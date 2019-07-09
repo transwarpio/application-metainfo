@@ -42,51 +42,6 @@ plugins:
     useTar: false
 
 roles:
-- name: INCEPTOR_EXECUTOR
-  friendlyName: "Inceptor Executor"
-  labelPrefix: "inceptor-executor"
-  category: SLAVE
-  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
-  env:
-  - name: TRANSWARP_ZOOKEEPER_QUORUM
-    value: |
-      <#assign zookeepers=[]>
-      <#if dependencies.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?size gt 0>
-        <#list dependencies.ZOOKEEPER.roles.ZOOKEEPER as zookeeper>
-          <#assign zookeepers += [zookeeper.hostname]>
-        </#list>
-      </#if>
-      ${zookeepers?join(",")}
-  - name: INCEPTOR_CONF_DIR
-    value: /etc/${service.sid}/conf
-  mountPaths: []
-  resources:
-    limitsMemoryKey: executor.container.limits.memory
-    limitsCpuKey: executor.container.limits.cpu
-    requestsMemoryKey: executor.container.requests.memory
-    requestsCpuKey: executor.container.requests.cpu
-  nodeSpecificMounts:
-  - type: DIR_CONF
-    configKey: ngmr.localdir
-  - type: DIR_CONF
-    configKey: ngmr.fastdisk.dir
-  - type: DEPENDENCY_DIR_CONF
-    dependencyType: ARGODB_STORAGE
-    configKey: shiva.tabletserver.store.datadirs
-  summaryPolicy: SOME
-  autoAssign:
-  - advice: !<EachNode> {}
-  suggestion:
-  - criteria: !<EachNode> {}
-  validation:
-  - criteria: !<Range> {"min": 0}
-  operations:
-  - type: Install
-    directives:
-    - directive: !<mkdirs>
-        paths: ["/var/run/${service.sid}"]
-        mode: "755"
-
 - name: INCEPTOR_SERVER
   friendlyName: "Inceptor Server"
   labelPrefix: "inceptor-server"
@@ -146,6 +101,51 @@ roles:
         templatePath: "dataSource.properties"
         targetPath: "/etc/${service.sid}/conf/dataSource.properties"
         mode: "644"
+
+- name: INCEPTOR_EXECUTOR
+  friendlyName: "Inceptor Executor"
+  labelPrefix: "inceptor-executor"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  env:
+  - name: TRANSWARP_ZOOKEEPER_QUORUM
+    value: |
+      <#assign zookeepers=[]>
+      <#if dependencies.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?? && dependencies.ZOOKEEPER.roles.ZOOKEEPER?size gt 0>
+        <#list dependencies.ZOOKEEPER.roles.ZOOKEEPER as zookeeper>
+          <#assign zookeepers += [zookeeper.hostname]>
+        </#list>
+      </#if>
+      ${zookeepers?join(",")}
+  - name: INCEPTOR_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: executor.container.limits.memory
+    limitsCpuKey: executor.container.limits.cpu
+    requestsMemoryKey: executor.container.requests.memory
+    requestsCpuKey: executor.container.requests.cpu
+  nodeSpecificMounts:
+  - type: DIR_CONF
+    configKey: ngmr.localdir
+  - type: DIR_CONF
+    configKey: ngmr.fastdisk.dir
+  - type: DEPENDENCY_DIR_CONF
+    dependencyType: ARGODB_STORAGE
+    configKey: shiva.tabletserver.store.datadirs
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<EachNode> {}
+  suggestion:
+  - criteria: !<EachNode> {}
+  validation:
+  - criteria: !<Range> {"min": 0}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/run/${service.sid}"]
+        mode: "755"
 
 - name: INCEPTOR_PROFILER
   friendlyName: "Inceptor Profiler"
