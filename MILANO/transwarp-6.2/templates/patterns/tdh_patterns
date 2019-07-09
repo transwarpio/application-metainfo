@@ -86,7 +86,7 @@ SQL_PERFLOG_END ^ql\.Driver:.*\(SessionHandle=%{NOTSPACE:session_handle}\).*<\/P
 # Metastore Events
 MS_INIT ^metastore\.ObjectStore:.* - Initialized ObjectStore$
 MS_CLOSE ^metastore\.HiveMetaStore: .*Shutting down the object store\.\.\.$
-MS_AUDIT_LOG HiveMetaStore\.audit:.*logAuditEvent\(%{NUMBER:event_id}\).* - ugi=%{NOTSPACE:ugi}\s+ip=/?%{NOTSPACE:ip}\s+cmd=%{GREEDYDATA:cmd}$
+MS_AUDIT_LOG HiveMetaStore\.audit:.*logAuditEvent\(%{NUMBER:event_id}\).* - ugi=%{NOTSPACE:ugi}\s+ip=%{NOTSPACE:ip}\s+cmd=%{GREEDYDATA:cmd}$
 # this is a wanr type
 MS_THREAD_POOL_FULL (.*server\.TThreadPoolServe.* pool size = %{NUMBER:pool_size:int}, active threads = %{NUMBER:thread_num:int}.*)
 
