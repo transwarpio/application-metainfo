@@ -333,12 +333,6 @@ roles:
         templatePath: "ui-cv/default"
         targetPath: "/etc/${service.sid}/conf/ui-cv/default"
         mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "ui-cv/config"
-        targetPath: "/etc/${service.sid}/conf/ui-cv/config"
-        mode: "755"
-
 
 - name: SOPHON_NOTEBOOK
   dockerImage: "transwarp/sophon-notebook:sophon-2.4"
