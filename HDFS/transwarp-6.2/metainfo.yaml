@@ -387,7 +387,14 @@ roleGroups:
 stages:
   - type: Bootstrap
     taskGroups:
-    - !<FormakZK>
+    - !<Shell-On-Role>
+      roleType: "HDFS_NAMENODE"
+      node: Any
+      command: "sudo docker run --net=host -v /etc/${service.sid}/conf:/etc/${service.sid}/conf
+      transwarp/hdfs:transwarp-6.2.0-rc0 sh -c \"/bin/cp /etc/${service.sid}/conf/krb5.conf /etc/krb5.conf;
+      export HADOOP_OPTS=\\\"-Djava.security.auth.login.config=/etc/${service.sid}/conf/jaas.conf\\\";
+      su -s /bin/bash hdfs -c \\\"export KRB5CCNAME=/tmp/hdfs_cc;kinit -p hdfs/${localhostname} -kt /etc/${service.sid}/conf/hdfs.keytab
+      \n yes Y | hdfs --config /etc/${service.sid}/conf zkfc -formatZK\\\" \""
       summaryPolicy: ALL
       timeoutMinutes: 10
   - type: Start
