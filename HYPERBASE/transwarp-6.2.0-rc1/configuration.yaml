@@ -1089,7 +1089,7 @@
   groups: []
   visibility: READ_WRITE
 
-  - name: catalog-agent.http.port
+- name: catalog-agent.http.port
   recommendExpression: 25400
   defaultValue: null
   valueType: PORT
