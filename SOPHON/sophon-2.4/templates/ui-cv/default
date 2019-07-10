@@ -10,7 +10,7 @@ server {
     root  /usr/lib/sophon_web/build;
   }
 
-  location ~ ^/cvat {
+  location /gateway/ {
     proxy_pass http://${service.roles.SOPHON_GATEWAY[0].hostname}:${service['gateway.server.port']}/;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
