@@ -16,9 +16,9 @@ spec:
     - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
       value: /var/lib/registry
     - name: REGISTRY_HTTP_TLS_CERTIFICATE
-      value: /certs/server.cert
+      value: /certs/server.pem
     - name: REGISTRY_HTTP_TLS_KEY
-      value: /certs/server.key
+      value: /certs/server-key.pem
     volumeMounts:
     - name: certs
       mountPath: /certs
@@ -29,7 +29,7 @@ spec:
   volumes:
     - name: certs
       hostPath:
-        path: /opt/kubernetes/registry-certs
+        path: /srv/kubernetes
     - name: data
       hostPath:
         path: /var/lib/registry_data
