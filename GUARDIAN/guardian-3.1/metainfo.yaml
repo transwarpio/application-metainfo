@@ -44,7 +44,7 @@ roles:
   nodeSpecificMounts:
     - configKey: data.dir
   summaryPolicy: MAJOR
-  dockerImage: "transwarp/txsql:guardian-3.1.0-final"
+  dockerImage: "transwarp/txsql:guardian-3.1"
   autoAssign:
   - advice: !<NumSeq> {"numSeq": [5, 3, 1]}
   suggestion:
