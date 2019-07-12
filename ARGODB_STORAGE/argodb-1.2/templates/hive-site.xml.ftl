@@ -49,7 +49,7 @@
 <#if dependencies.ZOOKEEPER??>
     <#assign zookeeper=dependencies.ZOOKEEPER quorum=[]>
     <#list zookeeper.roles.ZOOKEEPER as role>
-        <#assign quorum += [role.hostname]>
+        <#assign quorum += [role.hostname + ":" + zookeeper["zookeeper.client.port"]]>
     </#list>
     <@property "hive.zookeeper.quorum" quorum?join(",")/>
     <@property "hbase.zookeeper.quorum" quorum?join(",")/>
