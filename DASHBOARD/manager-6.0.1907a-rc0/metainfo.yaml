@@ -1,0 +1,180 @@
+---
+name: DASHBOARD
+version: manager-6.0.1907a-rc0
+global: true
+namePrefix: Dashboard
+friendlyName: Dashboard
+dockerImage: "transwarp/dashboard:manager-6.0.1907a-rc0"
+dependencies: []
+user: root
+validateConfig: true
+roles:
+- name: DASHBOARD
+  friendlyName: "Dashboard"
+  labelPrefix: "kubernetes"
+  linkExpression: "https://${service.roles.DASHBOARD[0].hostname}:${service['tos.master.dashboard.port']}"
+  category: MASTER
+  frontendOperations: []
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations: []
+
+stages:
+  - type: Config
+    taskGroups:
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "role.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "rolebinding.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "clusterrole.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "clusterrolebinding.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "serviceaccount.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "secret.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "dashboard-service.yaml"
+    - !<Resource-on-Manager>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      templateType: FreeMarker
+      templateFile: "dashboard-deployment.yaml"
+  - type: Start
+    taskGroups:
+    - !<Kubectl-Label>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      action: AddLabel
+      roleType: DASHBOARD
+      labelPrefix: "kubernetes"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Start
+      file: "role.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Start
+      file: "rolebinding.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Start
+      file: "clusterrole.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Start
+      file: "clusterrolebinding.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Start
+      file: "secret.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Start
+      file: "serviceaccount.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Start
+      file: "dashboard-deployment.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Start
+      file: "dashboard-service.yaml"
+  - type: Stop
+    taskGroups:
+    - !<Kubectl-Label>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+      action: RemoveLabel
+      roleType: DASHBOARD
+      labelPrefix: "kubernetes"
+      labelValue: "true"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Stop
+      file: "role.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Stop
+      file: "rolebinding.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Stop
+      file: "clusterrole.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Stop
+      file: "clusterrolebinding.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Stop
+      file: "secret.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Stop
+      file: "serviceaccount.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Stop
+      file: "dashboard-service.yaml"
+    - !<Kubectl>
+      summaryPolicy: SOME
+      timeoutMinutes: 10
+      action: Stop
+      file: "dashboard-deployment.yaml"
+
+
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {"namespace": "kube-system"}
+#- category: VITAL_SIGN_CHECK
+#  intervalSeconds: 10
+#  method: !<Builtin> {}
+
+firstWizardConfigs:
+- tos.master.dashboard.port
