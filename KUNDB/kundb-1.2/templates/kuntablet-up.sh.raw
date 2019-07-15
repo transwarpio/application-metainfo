@@ -40,6 +40,8 @@ port_base=$[$PORT_BASE + $uid_base]
 grpc_port_base=$[$GRPC_PORT_BASE + $uid_base]
 mysql_port_base=$[$MYSQL_PORT_BASE + $uid_base]
 default_dbname=${DEFAULT_DBNAME:-'vt_$keyspace'}
+logDir=$KUNDB_LOG_DIR
+shardLogDir=${SHARD_NAME}
 tablet_hostname=`hostname -f`
 tablet_type=$1 
 local_host=$tablet_hostname
@@ -115,7 +117,7 @@ if [ -d $VTDATAROOT/$tablet_dir ]; then
   action='start'
 fi
 $VTROOT/bin/mysqlctl \
-  -log_dir $VTDATAROOT/tmp \
+  -log_dir $logDir/$shardLogDir/$tablet_dir/ \
   -tablet_uid $uid \
   $dbconfig_dba_flags \
   -mysql_port $mysql_port \
@@ -159,8 +161,9 @@ grpc_port=$[$grpc_port_base + $uid_index]
 printf -v alias '%s-%010d' $cell $uid
 printf -v tablet_dir 'vt_%010d' $uid
 
-if [ ! -d "$VTDATAROOT/$tablet_dir/tmp" ]; then
-   mkdir -p $VTDATAROOT/$tablet_dir/tmp
+
+if [ ! -d "$logDir/$shardLogDir/$tablet_dir/audit" ]; then
+   mkdir -p $logDir/$shardLogDir/$tablet_dir/audit
 fi
 
 if [ ! -d "$VTDATAROOT/backups" ]; then
@@ -171,7 +174,8 @@ echo "Starting kuntablet for $alias..."
 
 $VTROOT/bin/vttablet \
   $TOPOLOGY_FLAGS \
-  -log_dir $VTDATAROOT/$tablet_dir/tmp \
+  -log_dir $logDir/$shardLogDir/$tablet_dir \
+  -audit_log_dir $logDir/$shardLogDir/$tablet_dir/audit \
   -tablet-path $alias \
   -tablet_hostname "$tablet_hostname" \
   -init_keyspace $keyspace \
@@ -196,7 +200,7 @@ $VTROOT/bin/vttablet \
   -pid_file $VTDATAROOT/$tablet_dir/vttablet.pid \
   -vtctld_addr http://$local_host:$vtctld_web_port/ \
   $dbconfig_flags \
-  > $VTDATAROOT/$tablet_dir/vttablet.out 2>&1 &
+  > $logDir/$shardLogDir/$tablet_dir/vttablet.out 2>&1 &
 
 echo "Access tablet $alias at http://$local_host:$port/debug/status"
 sleep 4

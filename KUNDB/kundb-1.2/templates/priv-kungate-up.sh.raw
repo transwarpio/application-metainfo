@@ -16,9 +16,6 @@ if [ "$MFED_DATA_DIR" != "/vdir" ]; then
 export VTDATAROOT=$MFED_DATA_DIR
 fi
 
-if [ ! -d "$VTDATAROOT/tmp/priv" ]; then
-   mkdir -p $VTDATAROOT/tmp/priv
-fi
 if [ ! -d "$VTDATAROOT/_kundb" ]; then
    mkdir -p $VTDATAROOT/_kundb
 fi
@@ -31,10 +28,9 @@ mysql_server_port=$PRIV_KUNGATE_SERVER_PORT
 tablet_hostname=`hostname -f`
 audit_filter=$PRIV_KUNGATE_AUDIT_FILTER
 optional_args=$PRIV_KUNGATE_OPTIONAL_ARGS 
+logDir=$KUNDB_LOG_DIR
 server_impl=static
 auth_plugin=static
-
-
 
 # ---start priv-vtgate
 optional_tls_args=''
@@ -61,10 +57,15 @@ then
     optional_tls_args="-grpc_cert $cert_dir/server-cert.pem -grpc_key $cert_dir/server-key.pem -grpc_ca $cert_dir/ca-cert.pem"
 fi
 
+if [ ! -d "$logDir/kungate/private/audit " ]; then
+  mkdir -p $logDir/kungate/private/audit 
+fi
+
 # Start vtgate.
 $VTROOT/bin/vtgate \
   $TOPOLOGY_FLAGS \
-  -log_dir $VTDATAROOT/tmp/priv \
+  -log_dir $logDir/kungate/private\
+  -audit_log_dir $logDir/kungate/private/audit \
   -port $web_port \
   -grpc_max_message_size 1073741824 \
   -grpc_client_max_recv_message_size 1073741824 \
@@ -77,7 +78,7 @@ $VTROOT/bin/vtgate \
   -gateway_implementation discoverygateway \
   -audit_filter="$audit_filter" \
   -service_map 'grpc-vtgateservice' \
-  -pid_file $VTDATAROOT/tmp/priv/vtgate.pid \
+  -pid_file $logDir/kungate/private/vtgate.pid \
   -lower_case_table_names=true \
   -enable_offload_engines=false \
   -mysql_allow_clear_text_without_tls=true \
@@ -90,13 +91,13 @@ $VTROOT/bin/vtgate \
   -skip_peak_log=false \
   $optional_args \
   $optional_tls_args \
-  > $VTDATAROOT/tmp/priv/vtgate.out 2>&1 &
+  > $logDir/kungate/private/vtgate.out 2>&1 &
 
 echo "Access vtgate at http://$tablet_hostname:$web_port/debug/status"
 
 echo "------start monitor kungate-----"
 if [ "$1" = "" ]; then
-   cd $KUNHOME && ./monitor_kungate.sh priv > $VTDATAROOT/tmp/priv/monitor_vtgate.out 2>&1 &
+   cd $KUNHOME && ./monitor_kungate.sh priv > $logDir/kungate/private/monitor_vtgate.out 2>&1 &
 fi
 wait
 

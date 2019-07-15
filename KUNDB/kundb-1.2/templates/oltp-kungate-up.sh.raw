@@ -30,9 +30,6 @@ if [ "$KUNGATE_DATA_DIR" != "/vdir" ]; then
 export VTDATAROOT=$KUNGATE_DATA_DIR
 fi
 
-if [ ! -d "$VTDATAROOT/tmp/oltp" ]; then
-   mkdir -p $VTDATAROOT/tmp/oltp
-fi
 
 if [ ! -d "$VTDATAROOT/_kundb" ]; then
    mkdir -p $VTDATAROOT/_kundb
@@ -45,6 +42,7 @@ mfed=$1
 optional_args=$KUNGATE_OPTIONAL_ARGS 
 audit_filter=$KUNGATE_AUDIT_FILTER
 enable_security=$ENABLE_SECURITY
+logDir=$KUNDB_LOG_DIR
 if [ $enable_security == 'true' ]; then
 server_impl=ldap
 auth_plugin=ldap
@@ -55,11 +53,15 @@ fi
 hostname=`hostname -f`
 
 #CA and key and so on
+if [ ! -d "$logDir/kunagte/public" ]; then
+   mkdir -p $logDir/kungate/public/audit
+fi
 
 # Start vtgate.
 $VTROOT/bin/vtgate \
   $TOPOLOGY_FLAGS \
-  -log_dir $VTDATAROOT/tmp/oltp \
+  -log_dir $logDir/kungate/public \
+  -audit_log_dir $logDir/kungate/public/audit \
   -port $web_port \
   -grpc_max_message_size 1073741824 \
   -grpc_client_max_recv_message_size 1073741824 \
@@ -72,7 +74,7 @@ $VTROOT/bin/vtgate \
   -gateway_implementation discoverygateway \
   -audit_filter="$audit_filter" \
   -service_map 'grpc-vtgateservice' \
-  -pid_file $VTDATAROOT/tmp/oltp/vtgate.pid \
+  -pid_file $logDir/kungate/public/vtgate.pid \
   -conn_count 2 \
   -lower_case_table_names=true \
   -enable_offload_engines=true \
@@ -90,7 +92,7 @@ $VTROOT/bin/vtgate \
   -grpc_cert $KUNDB_CONF_DIR/vtgate-server-instance-cert.pem \
   -grpc_key $KUNDB_CONF_DIR/vtgate-server-instance-key.pem \
   $optional_tls_args \
-  > $VTDATAROOT/tmp/oltp/vtgate.out 2>&1 &
+  > $logDir/kungate/public/vtgate.out 2>&1 &
 
 echo "Access kungate at http://$hostname:$web_port/debug/status"
 
