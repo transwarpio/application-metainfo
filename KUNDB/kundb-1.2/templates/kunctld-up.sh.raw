@@ -35,9 +35,16 @@ if [ ! -d "$VTDATAROOT/_kundb" ]; then
    mkdir -p $VTDATAROOT/_kundb
 fi
 
+
 cell=$CELLNAME
 grpc_port=$CTLD_GRPC_PORT
 vtctld_web_port=$CTLD_WEB_PORT
+logDir=$KUNDB_LOG_DIR
+
+if [ ! -d "$logDir/kunctld" ]; then
+   mkdir -p $logDir/kunctld
+fi
+
 echo $cell
 echo "Starting kunctld..."
 $VTROOT/bin/vtctld \
@@ -50,11 +57,11 @@ $VTROOT/bin/vtctld \
   -service_map 'grpc-vtctl' \
   -backup_storage_implementation file \
   -file_backup_storage_root $VTDATAROOT/backups \
-  -log_dir $VTDATAROOT/tmp \
+  -log_dir $logDir/kunctld \
   -port $vtctld_web_port \
   -grpc_port $grpc_port \
-  -pid_file $VTDATAROOT/tmp/vtctld.pid \
-  > $VTDATAROOT/tmp/vtctld.out 2>&1 &
+  -pid_file $logDir/kunctld/vtctld.pid \
+  > $logDir/kunctld/vtctld.out 2>&1 &
 
 echo "Access kunctld web UI at http://$hostname:$vtctld_web_port"
 echo "Send commands with: kunctlclient -server $hostname:$grpc_port ..."

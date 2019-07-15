@@ -75,6 +75,16 @@
   groups: []
   visibility: READ_WRITE 
 
+- name: kundb.log_dir
+  recommendExpression: ${"/var/log/" + service['sid']}
+  defaultValue: ${"/var/log/" + service['sid']}
+  valueType: ABSOLUTE_PATH
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE 
+
+
 - name: mysql.flavor 
   recommendExpression: MySQL56
   defaultValue: MySQL56
@@ -219,8 +229,8 @@
   visibility: READ_WRITE
 
 - name: computenode.audit_filter
-  recommendExpression: "DCL, DDL, DML, CRUD, SHOW, SET, OTHER"
-  defaultValue: "DCL, DDL, DML, CRUD, SHOW, SET, OTHER"
+  recommendExpression: "DCL, DDL, DML, SHOW, SET, OTHER"
+  defaultValue: "DCL, DDL, DML, SHOW, SET, OTHER"
   valueType: STRING 
   scope: !<ServiceLevel> {}
   onDeps: []
@@ -282,8 +292,8 @@
   visibility: READ_WRITE
 
 - name: kungate.audit_filter
-  recommendExpression: "DCL, DDL, DML, CRUD, SHOW, SET, OTHER"
-  defaultValue: "DCL, DDL, DML, CRUD, SHOW, SET, OTHER"
+  recommendExpression: "DCL, DDL, DML, SHOW, SET, OTHER"
+  defaultValue: "DCL, DDL, DML, SHOW, SET, OTHER"
   valueType: STRING 
   scope: !<ServiceLevel> {}
   onDeps: []

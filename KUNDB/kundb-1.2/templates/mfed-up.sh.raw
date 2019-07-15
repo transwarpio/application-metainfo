@@ -34,9 +34,6 @@ if [ "$MFED_DATA_DIR" != "/vdir" ]; then
 export VTDATAROOT=$MFED_DATA_DIR
 fi
 
-if [ ! -d "$VTDATAROOT/tmp/priv" ]; then
-   mkdir -p $VTDATAROOT/tmp/priv
-fi
 if [ ! -d "$VTDATAROOT/_kundb" ]; then
    mkdir -p $VTDATAROOT/_kundb
 fi
@@ -55,6 +52,7 @@ grpc_port_base=$[$GRPC_PORT_BASE + $uid_base]
 mysql_port_base=$[$MYSQL_PORT_BASE + $uid_base]
 tablet_hostname=`hostname -f`
 TabletsDataDirs=$VTDATAROOT
+logDir=$KUNDB_LOG_DIR
 default_dbname=${DEFAULT_DBNAME:-'$keyspace'}
 uid=$[$uid_base + $uid_index]
 vtgate_port=$PRIV_KUNGATE_SERVER_PORT
@@ -111,9 +109,6 @@ case "$MYSQL_FLAVOR" in
     ;;
 esac
 
-if [ ! -d "$VTDATAROOT/$tablet_dir/tmp" ]; then
-   mkdir -p $VTDATAROOT/$tablet_dir/tmp
-fi
 
 # Start all mysqlds in background.
 uid=$[$uid_base + $uid_index]
@@ -130,7 +125,7 @@ if [ -d $VTDATAROOT/$tablet_dir ]; then
   action='start'
 fi
 $VTROOT/bin/mysqlctl \
-  -log_dir $VTDATAROOT/$tablet_dir/tmp \
+  -log_dir $logDir/$tablet_dir \
   -tablet_uid $uid \
   $dbconfig_dba_flags \
   -mysql_port $mysql_port \
@@ -173,10 +168,15 @@ if [ ! -d "$VTDATAROOT/backups" ]; then
   mkdir -p $VTDATAROOT/backups
 fi
 
+if [ ! -d "$logDir/computeNode/$tablet_dir/audit " ]; then
+  mkdir -p $logDir/computeNode/$tablet_dir/audit 
+fi
+
 echo "Starting vttablet for $alias..."
 $VTROOT/bin/vttablet \
   $TOPOLOGY_FLAGS \
-  -log_dir $TabletsDataDirs/$tablet_dir/tmp \
+  -log_dir $logDir/computeNode/$tablet_dir \
+  -audit_log_dir $logDir/computeNode/$tablet_dir/audit \
   -tablet-path $alias \
   -tablet_hostname "$tablet_hostname" \
   -init_keyspace $keyspace \
@@ -198,7 +198,7 @@ $VTROOT/bin/vttablet \
   -pid_file $TabletsDataDirs/$tablet_dir/vttablet.pid \
   -vtctld_addr http://$tablet_hostname:$vtctld_web_port/ \
   $dbconfig_flags \
-  > $TabletsDataDirs/$tablet_dir/vttablet.out 2>&1 &
+  > $logDir/computeNode/$tablet_dir/vttablet.out 2>&1 &
 
 echo "Access tablet $alias at http://$tablet_hostname:$port/debug/status"
 sleep 4
@@ -274,10 +274,15 @@ then
     optional_tls_args="-grpc_cert $cert_dir/server-cert.pem -grpc_key $cert_dir/server-key.pem -grpc_ca $cert_dir/ca-cert.pem"
 fi
 
+if [ ! -d "$logDir/kungate/private/audit " ]; then
+  mkdir -p $logDir/kungate/private/audit 
+fi
+
 # Start vtgate.
 $VTROOT/bin/vtgate \
   $TOPOLOGY_FLAGS \
-  -log_dir $VTDATAROOT/tmp/priv \
+  -log_dir $logDir/kungate/private\
+  -audit_log_dir $logDir/kungate/private/audit \
   -port $web_port \
   -grpc_max_message_size 1073741824 \
   -grpc_client_max_recv_message_size 1073741824 \
@@ -290,7 +295,7 @@ $VTROOT/bin/vtgate \
   -gateway_implementation discoverygateway \
   -audit_filter="$audit_filter" \
   -service_map 'grpc-vtgateservice' \
-  -pid_file $VTDATAROOT/tmp/priv/vtgate.pid \
+  -pid_file $logDir/kungate/private/vtgate.pid \
   -lower_case_table_names=true \
   -enable_offload_engines=false \
   -mysql_allow_clear_text_without_tls=true \
@@ -303,12 +308,12 @@ $VTROOT/bin/vtgate \
   -skip_peak_log=false \
   $optional_args \
   $optional_tls_args \
-  > $VTDATAROOT/tmp/priv/vtgate.out 2>&1 &
+  > $logDir/kungate/private/vtgate.out 2>&1 &
 
 echo "Access vtgate at http://$tablet_hostname:$web_port/debug/status"
 
 echo "------start monitor kungate-----"
-cd $KUNHOME && ./monitor_kungate.sh priv > $VTDATAROOT/tmp/priv/monitor_vtgate.out 2>&1 &
+cd $KUNHOME && ./monitor_kungate.sh priv > $logDir/kungate/private/monitor_vtgate.out 2>&1 &
 
 echo "---------------mfed-up end-----------"
 

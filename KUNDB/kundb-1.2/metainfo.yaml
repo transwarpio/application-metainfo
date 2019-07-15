@@ -494,6 +494,7 @@ firstWizardConfigs:
 - kunctld.grpc.port
 - kunctld.data_dir
 - kundb.always_set_effective_user
+- kundb.log_dir
 - mysql.flavor 
 - mysql.root
 - master.port_base 
