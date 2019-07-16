@@ -342,7 +342,7 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
-  
+
 - name: spring.http.multipart.max-request-size
   recommendExpression: "10240MB"
   defaultValue: null
@@ -368,7 +368,7 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
-  
+
 - name: sophon.auth.cas.session.timeout
   recommendExpression: "604800"
   defaultValue: null
@@ -528,7 +528,7 @@
   groups: []
   visibility: READ_WRITE
 - name: audit.server.port
-  recommendExpression: 8713
+  recommendExpression: 8867
   defaultValue: null
   valueType: PORT
   scope: !<ServiceLevel> {}
@@ -616,3 +616,126 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+- name: datamart.server.port
+  recommendExpression: 8897
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: feature.server.port
+  recommendExpression: 8877
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: datamart.ui.port
+  recommendExpression: 8898
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: feature.ui.port
+  recommendExpression: 8878
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# feature, datamart, audit
+- name: distributed.database.type
+  recommendExpression: inceptor
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: feature.enable.livy
+  recommendExpression: true
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: spark.executor.num
+  recommendExpression: 4
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: spark.executor.core
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: spark.executor.memory
+  recommendExpression: 5g
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: spark.driver.memory
+  recommendExpression: 5g
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: feature.task.pool.size
+  recommendExpression: 100
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: feature.task.max.concurrency
+  recommendExpression: 10
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: feature.task.timeout
+  recommendExpression: 3600000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: inceptor.ldap.username
+  recommendExpression: mirror
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+- name: inceptor.ldap.password
+  recommendExpression: password
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: PASSWORD

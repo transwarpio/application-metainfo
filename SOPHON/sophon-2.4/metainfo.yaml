@@ -20,7 +20,7 @@ dependencies:
   - name: INCEPTOR
     minVersion: transwarp-5.2.2-final
     maxVersion: transwarp-6.0.2-final
-    optional: true
+    optional: false
   - name: HDFS
     minVersion: transwarp-5.2.2-final
     maxVersion: transwarp-6.0.2-final
@@ -32,7 +32,7 @@ dependencies:
   - name: TXSQL
     minVersion: transwarp-5.2.2-final
     maxVersion: transwarp-6.0.2-final
-    optional: true
+    optional: false
   - name: WORKFLOW
     minVersion: sophon-2.2.0-final
     maxVersion: sophon-2.4.0-final
@@ -44,6 +44,10 @@ dependencies:
   - name: HYPERBASE
     minVersion: transwarp-5.2.2-final
     maxVersion: transwarp-6.0.2-final
+    optional: false
+  - name: SEARCH
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.1-final
     optional: true
 
 roles:
@@ -58,7 +62,7 @@ roles:
       number: 2
     reject:
       number: 1
-  env: 
+  env:
   - name: SOPHON_CONF_DIR
     value: /etc/${service.sid}/conf/
   - name: SOPHON_SERVICE_ID
@@ -147,6 +151,9 @@ roles:
   - mountPath: /srv/kubernetes
     hostPath: /srv/kubernetes
     name: secure
+  - mountPath: /lib/modules
+    hostPath: /lib/modules
+    name: secure
   resources:
     limitsMemoryKey: server.container.limits.memory
     limitsCpuKey: server.container.limits.cpu
@@ -224,11 +231,6 @@ roles:
         templateType: FreeMarker
         templatePath: "application-commons.properties"
         targetPath: "/etc/${service.sid}/conf/application-commons.properties"
-        mode: "755"
-    - directive: !<resource>
-        templateType: FreeMarker
-        templatePath: "commons.conf"
-        targetPath: "/etc/${service.sid}/conf/commons.conf"
         mode: "755"
     - directive: !<resource>
         templateType: FreeMarker
@@ -450,7 +452,7 @@ roles:
       number: 2
     reject:
       number: 1
-  env: 
+  env:
   - name: SOPHON_CONF_DIR
     value: /etc/${service.sid}/conf/share/
   - name: SOPHON_SERVICE_ID
@@ -494,7 +496,7 @@ roles:
       number: 2
     reject:
       number: 1
-  env: 
+  env:
   - name: SOPHON_CONF_DIR
     value: /etc/${service.sid}/conf
   - name: SOPHON_SERVICE_ID
@@ -539,6 +541,58 @@ roles:
         templatePath: "apimanager/log4j2.xml"
         targetPath: "/etc/${service.sid}/conf/apimanager/log4j2.xml"
         mode: "755"
+
+- name: SOPHON_AUDIT
+  dockerImage: "transwarp/sophon-audit:sophon-2.4"
+  linkExpression: "http://${localhostname}:${service['audit.server.port']}/swagger-ui.html"
+  friendlyName: "Sophon Audit"
+  labelPrefix: "sophon-audit"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+    - name: AUDIT_SERVICE_ID
+      value: ${service.sid}
+    - name: SOPHON_SERVICE_ID
+      value: ${service.sid}
+  mountPaths: []
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+    - criteria: !<Range> {"min": 1}
+  validation:
+    - criteria: !<Range> {"min": 1}
+  operations:
+    - type: Config
+      directives:
+        - directive: !<mkdirs>
+            paths: ["/etc/${service.sid}/conf/audit"]
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "audit/application.properties"
+            targetPath: "/etc/${service.sid}/conf/audit/application.properties"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "audit/audit.conf"
+            targetPath: "/etc/${service.sid}/conf/audit/audit.conf"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "audit/log4j.properties"
+            targetPath: "/etc/${service.sid}/conf/audit/log4j.properties"
+            mode: "755"
 
 - name: SOPHON_APPROVAL
   dockerImage: "transwarp/sophon-approval:sophon-2.4"
@@ -699,7 +753,7 @@ roles:
   readinessProbe:
     probe: !<httpGet>
       path: /actuator/health
-      port: ${service['sophon.visit.port']}
+      port: ${service['sophon.server.port']} 
       scheme: HTTP
     failureThreshold: 10
     initialDelaySeconds: 60
@@ -921,7 +975,7 @@ roles:
       number: 2
     reject:
       number: 1
-  env: 
+  env:
   - name: PYTHON_REPO_PASSWORD
     value: "${service['python.repo.password']}"
   - name: PYTHON_REPO_USERNAME
@@ -983,6 +1037,201 @@ roles:
   - criteria: !<Range> {"min": 0, "max": 1}
   operations: []
 
+- name: SOPHON_DATAMART
+  dockerImage: "transwarp/sophon-datamart:sophon-2.4"
+  linkExpression: "http://${localhostname}:${service['datamart.server.port']}/swagger-ui.html"
+  friendlyName: "Sophon Datamart"
+  labelPrefix: "sophon-datamart"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+    - name: DATAMART_SERVICE_ID
+      value: ${service.sid}
+    - name: HADOOP_CONF_DIR
+      value: /etc/${dependencies.INCEPTOR.sid}/conf
+    - name: SOPHON_SERVICE_ID
+      value: ${service.sid}
+  mountPaths: []
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+    - criteria: !<Range> {"min": 1}
+  validation:
+    - criteria: !<Range> {"min": 1}
+  operations:
+    - type: Config
+      directives:
+        - directive: !<mkdirs>
+            paths: ["/etc/${service.sid}/conf/datamart"]
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "datamart/application.properties"
+            targetPath: "/etc/${service.sid}/conf/datamart/application.properties"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "datamart/application-prod.properties"
+            targetPath: "/etc/${service.sid}/conf/datamart/application-prod.properties"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "datamart/datamarket.conf"
+            targetPath: "/etc/${service.sid}/conf/datamart/datamart.conf"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "datamart/log4j2.xml"
+            targetPath: "/etc/${service.sid}/conf/datamart/log4j2.xml"
+            mode: "755"
+        - directive: !<link>
+            action: Link
+            from: "/etc/${dependencies.INCEPTOR.sid}/conf/hive-site.xml"
+            to: "/etc/${service.sid}/conf/hive-site.xml"
+        - directive: !<link>
+            action: Link
+            from: "/etc/${dependencies.HYPERBASE.sid}/conf/hbase-site.xml"
+            to: "/etc/${service.sid}/conf/hbase-site.xml"
+        - directive: !<link>
+            action: Link
+            from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
+            to: "/etc/${service.sid}/conf/core-site.xml"
+        - directive: !<link>
+            action: Link
+            from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
+            to: "/etc/${service.sid}/conf/hdfs-site.xml"
+
+- name: SOPHON_FEATURE
+  dockerImage: "transwarp/sophon-feature:sophon-2.4"
+  linkExpression: "http://${localhostname}:${service['feature.server.port']}/swagger-ui.html"
+  friendlyName: "Sophon Feature"
+  labelPrefix: "sophon-feature"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+    - name: FEATURE_SERVICE_ID
+      value: ${service.sid}
+    - name: HADOOP_CONF_DIR
+      value: /etc/${dependencies.INCEPTOR.sid}/conf
+    - name: YARN_CONF_DIR
+      value: /etc/${dependencies.YARN.sid}/conf
+    - name: SOPHON_SERVICE_ID
+      value: ${service.sid}
+  mountPaths: []
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+    - criteria: !<Range> {"min": 1}
+  validation:
+    - criteria: !<Range> {"min": 1}
+  operations:
+    - type: Config
+      directives:
+        - directive: !<mkdirs>
+            paths: ["/etc/${service.sid}/conf/feature"]
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "feature/application.properties"
+            targetPath: "/etc/${service.sid}/conf/feature/application.properties"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "feature/feature.conf"
+            targetPath: "/etc/${service.sid}/conf/feature/feature.conf"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "feature/log4j2.xml"
+            targetPath: "/etc/${service.sid}/conf/feature/log4j2.xml"
+            mode: "755"
+
+- name: SOPHON_UI_DATAMART
+  friendlyName: "Sophon UI Datamart"
+  labelPrefix: "sophon-ui-datamart"
+  dockerImage: "transwarp/sophon-ui-datamart:sophon-2.4"
+  linkExpression: "http://${localhostname}:${service['datamart.ui.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+    - name: API_URL
+      value: "http://${service.roles.SOPHON_GATEWAY[0]['hostname']}:${service['gateway.server.port']}/datamart"
+    - name: PORT
+      value: "${service['datamart.ui.port']}"
+  mountPaths: []
+  resources:
+    limitsMemoryKey: frontend.limits.memory
+    limitsCpuKey: frontend.limits.cpu
+    requestsMemoryKey: frontend.requests.memory
+    requestsCpuKey: frontend.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+    - criteria: !<Range> {"min": 1}
+  validation:
+    - criteria: !<Range> {"min": 1}
+  operations: []
+
+- name: SOPHON_UI_FEATURE
+  friendlyName: "Sophon UI Feature"
+  labelPrefix: "sophon-ui-feature"
+  dockerImage: "transwarp/sophon-ui-feature:sophon-2.4"
+  linkExpression: "http://${localhostname}:${service['feature.ui.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+    - name: API_URL
+      value: "http://${service.roles.SOPHON_GATEWAY[0]['hostname']}:${service['gateway.server.port']}/feature"
+    - name: PORT
+      value: "${service['feature.ui.port']}"
+  mountPaths: []
+  resources:
+    limitsMemoryKey: frontend.limits.memory
+    limitsCpuKey: frontend.limits.cpu
+    requestsMemoryKey: frontend.requests.memory
+    requestsCpuKey: frontend.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+    - criteria: !<Range> {"min": 1}
+  validation:
+    - criteria: !<Range> {"min": 1}
+  operations: []
+
 stages:
   - type: Config
     taskGroups:
@@ -1036,6 +1285,24 @@ stages:
       summaryPolicy: SOME
     - !<Create-Database>
       dbPrefix: metastore_cvat
+      dbUserConfig: livy.jdbc.username
+      dbPasswordConfig: livy.jdbc.password
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Create-Database>
+      dbPrefix: audit
+      dbUserConfig: livy.jdbc.username
+      dbPasswordConfig: livy.jdbc.password
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Create-Database>
+      dbPrefix: datamart
+      dbUserConfig: livy.jdbc.username
+      dbPasswordConfig: livy.jdbc.password
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Create-Database>
+      dbPrefix: feature
       dbUserConfig: livy.jdbc.username
       dbPasswordConfig: livy.jdbc.password
       timeoutMinutes: 5
@@ -1122,6 +1389,21 @@ stages:
       timeoutMinutes: 1
     - !<Role>
       roleType: "SOPHON_KG"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SOPHON_AUDIT"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SOPHON_DATAMART"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SOPHON_FEATURE"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1

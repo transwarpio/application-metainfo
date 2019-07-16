@@ -1,0 +1,181 @@
+---
+name: SOPHON_ST
+version: sophon-2.3.1-final
+global: false
+namePrefix: Sophon_ST
+friendlyName: "Sophon-ST"
+dependencies:
+  - name: INCEPTOR
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.1-final
+    optional: false
+  - name: TXSQL
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.1-final
+    optional: false
+  - name: HDFS
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.1-final
+    optional: false
+  - name: SEARCH
+    minVersion: transwarp-6.0.1-final
+    maxVersion: transwarp-6.0.1-final
+    optional: false
+  - name: WORKFLOW
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.1-final
+    optional: false
+  - name: GUARDIAN
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.1-final
+    optional: true
+  - name: YARN
+    minVersion: transwarp-5.2.2-final
+    maxVersion: transwarp-6.0.1-final
+    optional: false
+
+roles:
+  - name: SOPHON_ST_BACKEND
+    friendlyName: "Sophon-ST Backend"
+    labelPrefix: "sophon-st-backend"
+    dockerImage: "transwarp/sophon-st-backend:sophon-2.3.1-final"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+    deleteOpCondition:
+      deletable:
+        number: 2
+      reject:
+        number: 1
+    env:
+    - name: MIRROR_CONF_DIR
+      value: /etc/${service.sid}/conf
+    - name: MIRROR_SERVICE_ID
+      value: ${service.sid}
+    - name: YARN_CONF_DIR
+      value: /etc/${dependencies.YARN.sid}/conf
+    - name: HADOOP_CONF_DIR
+      value: /etc/${dependencies.INCEPTOR.sid}/conf
+    mountPaths: []
+    resources:
+      limitsMemoryKey: backend.limits.memory
+      limitsCpuKey: backend.limits.cpu
+      requestsMemoryKey: backend.requests.memory
+      requestsCpuKey: backend.requests.cpu
+    summaryPolicy: ALL
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations:
+    - type: Config
+      directives:
+      - directive: !<link>
+          action: Link
+          from: "/etc/${dependencies.INCEPTOR.sid}/conf/hive-site.xml"
+          to: "/etc/${service.sid}/conf/hive-site.xml"
+
+  - name: SOPHON_ST_FRONTEND
+    friendlyName: "Sophon-ST Frontend"
+    labelPrefix: "sophon-st-frontend"
+    dockerImage: "transwarp/sophon-st-frontend:sophon-2.3.1-final"
+    linkExpression: "http://${localhostname}:${service['frontend.port']}"
+    category: MASTER
+    frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+    deleteOpCondition:
+      deletable:
+        number: 2
+      reject:
+        number: 1
+    env:
+    - name: API_URL
+      value: "http://${service.roles.SOPHON_ST_BACKEND[0]['hostname']}:${service['backend.port']}"
+    - name: PORT
+      value: "${service['frontend.port']}"
+    mountPaths: []
+    resources:
+      limitsMemoryKey: frontend.limits.memory
+      limitsCpuKey: frontend.limits.cpu
+      requestsMemoryKey: frontend.requests.memory
+      requestsCpuKey: frontend.requests.cpu
+    summaryPolicy: ALL
+    autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+    - criteria: !<Range> {"min": 1}
+    validation:
+    - criteria: !<Range> {"min": 1}
+    operations: []
+
+stages:
+  - type: Config
+    taskGroups:
+    - !<Create-Database>
+      dbPrefix: sophon_st
+      dbUserConfig: javax.jdo.option.ConnectionUserName
+      dbPasswordConfig: javax.jdo.option.ConnectionPassword
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Role>
+      roleType: "SOPHON_ST_BACKEND"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "SOPHON_ST_FRONTEND"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+
+firstWizardConfigs:
+- backend.port
+- frontend.port
+- javax.jdo.option.ConnectionUserName
+- javax.jdo.option.ConnectionPassword
+- distributed.database.type
+- superuser.username
+- superuser.password
+- backend.limits.memory
+- backend.limits.cpu
+- backend.requests.memory
+- backend.requests.cpu
+- frontend.limits.memory
+- frontend.limits.cpu
+- frontend.requests.memory
+- frontend.requests.cpu
+- workflow.client.username
+- workflow.client.password
+- workflow.client.token
+- workflow.domain.id
+- spark.sql.warehouse.dir
+- spark.executor.num
+- spark.executor.core
+- designing.spark.master
+- designing.spark.executor.num
+- designing.spark.executor.core
+- task.pool.size
+- task.max.concurrency
+- task.timeout
+- inceptor.ldap.username
+- inceptor.ldap.password
+- execute.cycle
+- disable.cas.authorization
+- enable.livy
+- livy.server.session.timeout
+
+product: Sophon
+
+principals:
+- hive
+
+pages:
+- roles
+- configuration
+- operation
+- security
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 30
+  method: !<K8sPod> {}

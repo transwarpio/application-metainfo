@@ -1,0 +1,34 @@
+server {
+  listen 9000;
+  <#if service['use.https'] = "true">
+  # the section below is for https, remove them if https is not needed
+  ssl                  on;
+  ssl_certificate      /usr/lib/kg_explorer/server.crt;
+  ssl_certificate_key  /usr/lib/kg_explorer/server.key;
+  ssl_session_timeout  5m;
+  ssl_protocols  SSLv2 SSLv3 TLSv1;
+  ssl_ciphers  ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;
+  ssl_prefer_server_ciphers   on;
+  error_page 497  https://$host:$server_port$request_uri;
+  # the section above is for https.
+  </#if>
+  location / {
+    root   /usr/lib/kg_explorer/dist;
+    index  index.html index.htm;
+    try_files $uri $uri/ /index.html;
+  }
+  client_max_body_size 20M;
+  error_page   500 502 503 504  /50x.html;
+  location = /50x.html {
+    root   /usr/lib/kg_explorer/dist;
+  }
+  location ~ ^/(api|login|cas|proxyreceptor|sophonWS)/ {
+    proxy_pass https://${service.roles.SOPHON_WEB[0].hostname}:${service['sophon.visit.port']};
+    proxy_http_version 1.1;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection 'upgrade';
+    proxy_set_header Host $host:$server_port;
+    proxy_cache_bypass $http_upgrade;
+  }
+}

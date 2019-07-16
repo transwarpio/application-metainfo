@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-IN_PROGRESS_VERSION=sophon-2.3.2
-TAG_VERSION=sophon-2.3.2-rc0
+IN_PROGRESS_VERSION=sophon-2.3.1
+TAG_VERSION=sophon-2.3.1-final
 set -e
 
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )

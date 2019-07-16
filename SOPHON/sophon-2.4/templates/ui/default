@@ -1,3 +1,9 @@
+<#if service.roles.SOPHON_UI[0].hostname == dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname'] >
+    <#assign ips = service.roles.SOPHON_UI[0]['ip'] + " " + service.roles.SOPHON_UI[0].hostname >
+<#else>
+    <#assign ips = service.roles.SOPHON_UI[0]['ip']  + " " +  service.roles.SOPHON_UI[0].hostname + " " +  dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname'] + " " +  dependencies.GUARDIAN.roles.CAS_SERVER[0]['ip'] >
+</#if>
+
 server {
   listen ${service['sophon.ui.port']};
   <#if service['server.ssl.enabled'] = "true">
@@ -78,12 +84,12 @@ server {
     proxy_cache_bypass $http_upgrade;
   }
 
-  location /WS/ {
+  location /socket.io {
     valid_referers none blocked ${service.roles.SOPHON_UI[0]['ip']} ${service.roles.SOPHON_UI[0].hostname} ${dependencies.GUARDIAN.roles.CAS_SERVER[0]['hostname']} ${dependencies.GUARDIAN.roles.CAS_SERVER[0]['ip']};
     if ($invalid_referer) {
         return 403;
     }
-    proxy_pass http://${service.roles.SOPHON_NOTIFICATION[0].hostname}:${service['notification.socket.port']}/;
+    proxy_pass http://${service.roles.SOPHON_NOTIFICATION[0].hostname}:${service['notification.socket.port']};
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
