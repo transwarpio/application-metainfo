@@ -1,0 +1,6 @@
+<#assign registries = []/>
+<#list service.roles['TOS_REGISTRY'] as role>
+    <#assign registries = registries + ['--registry-mirror https://' + role.hostname + ':' + service['tos.registry.port']]>
+</#list>
+<#assign registryUrls = registries?join("  ")>
+REGISTRY_OPTS="  ${registryUrls}  "
