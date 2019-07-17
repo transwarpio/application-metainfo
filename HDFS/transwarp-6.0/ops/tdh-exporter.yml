@@ -1,12 +1,12 @@
 - scope:
     scopeType: ROLE # 角色级别的 metric 模板文件
     roleType: HDFS_DATANODE
-  configFile: "hdfs1-datanode-HttpJson.yml.ftl"
+  configFile: "hdfs-datanode-HttpJson.yml.ftl"
   scrape:
     exporterType: TDH_EXPORTER
 - scope:
     scopeType: ROLE # 角色级别的 metric 模板文件
     roleType: HDFS_NAMENODE
-  configFile: "hdfs1-namenode-HttpJson.yml.ftl"
+  configFile: "hdfs-namenode-HttpJson.yml.ftl"
   scrape:
     exporterType: TDH_EXPORTER
