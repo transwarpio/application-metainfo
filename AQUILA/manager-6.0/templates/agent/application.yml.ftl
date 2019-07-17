@@ -3,6 +3,5 @@ server.port: ${service['agent.web.port']}
 
 ## ----- application configs
 io:
-  fs-storage:
-    writable-dirs:
-      - /etc/aquila
+  writable-dirs:
+    - /etc/aquila
