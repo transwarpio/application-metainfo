@@ -1,1 +1,0 @@
-${service['kundb.shards']}
