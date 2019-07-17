@@ -1,6 +1,6 @@
 ---
 name: PILOT
-version: studio-1.1
+version: studio-1.1.0-final
 global: false
 namePrefix: Pilot
 friendlyName: Pilot
@@ -21,7 +21,7 @@ roles:
   - name: FILEROBOT_SERVER
     friendlyName: "Filerobot Server"
     labelPrefix: "filerobot-server"
-    dockerImage: "transwarp/filerobot:studio-1.1"
+    dockerImage: "transwarp/filerobot:studio-1.1.0-final"
     linkExpression: "http://${localhostname}:${service['filerobot.desktop.http.port']}"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete"]
@@ -62,7 +62,7 @@ roles:
   - name: PILOT_SERVER
     friendlyName: "Pilot Server"
     labelPrefix: "pilot-server"
-    dockerImage: "transwarp/pilot:studio-1.1"
+    dockerImage: "transwarp/pilot:studio-1.1.0-final"
     linkExpression: "http://${localhostname}:${service['pilot.desktop.http.port']}"
     category: MASTER
     frontendOperations: ["Start", "Stop", "Delete"]

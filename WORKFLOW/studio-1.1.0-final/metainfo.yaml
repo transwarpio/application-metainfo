@@ -1,21 +1,26 @@
 ---
-name: RUBIK
-version: studio-1.1
+name: WORKFLOW
+version: studio-1.1.0-final
 global: false
-namePrefix: Rubik
-friendlyName: Rubik
-dockerImage: "transwarp/rubik:studio-1.1"
+namePrefix: Workflow
+friendlyName: Workflow
+dockerImage: "transwarp/workflow:studio-1.1.0-final"
 dependencies:
+  - name: TRANSPORTER
+    minVersion: studio-1.1.0-final
+    maxVersion: studio-1.1.0-final
+    optional: true
+  - name: ZOOKEEPER
+    minVersion: transwarp-5.2
+    optional: false
   - name: TXSQL
     minVersion: transwarp-5.2
     optional: false
-  - name: NOTIFICATION
-    optional: false
 roles:
-- name: RUBIK_SERVER
-  friendlyName: "Rubik Server"
-  labelPrefix: "rubik-server"
-  linkExpression: "http://${localhostname}:${service['designer.server.port']}"
+- name: WORKFLOW_SERVER
+  friendlyName: "Workflow Server"
+  labelPrefix: "workflow-server"
+  linkExpression: "http://${localhostname}:${service['workflow.http.port']}"
   category: MASTER
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   deleteOpCondition:
@@ -29,56 +34,56 @@ roles:
       - /bin/bash
       - -c
       - |
-          curl --fail --connect-timeout 15 --max-time 15 "http://`hostname`:${service['designer.server.port']}/"
+          curl --fail --connect-timeout 15 --max-time 15 "http://`hostname`:${service['workflow.http.port']}/"
     failureThreshold: 3
     initialDelaySeconds: 3
     periodSeconds: 30
     successThreshold: 1
     timeoutSeconds: 15
   env:
-  - name: RUBIK_CONF_DIR
+  - name: WORKFLOW_CONF_DIR
     value: /etc/${service.sid}/conf
   mountPaths:
-  - mountPath: /var/lib/Rubik
+  - mountPath: /var/lib/workflow
     hostPath: /var/lib/${service.sid}
-    name: libdir
+    name: data
   resources:
-    limitsMemoryKey: rubik.container.limits.memory
-    limitsCpuKey: rubik.container.limits.cpu
-    requestsMemoryKey: rubik.container.requests.memory
-    requestsCpuKey: rubik.container.requests.cpu
-  summaryPolicy: ALL
+    limitsMemoryKey: workflow.container.limits.memory
+    limitsCpuKey: workflow.container.limits.cpu
+    requestsMemoryKey: workflow.container.requests.memory
+    requestsCpuKey: workflow.container.requests.cpu
+  summaryPolicy: SOME
   autoAssign:
-  - advice: !<NumSeq> {"numSeq": [1]}
+  - advice: !<NumSeq> {"numSeq": [2]}
   suggestion:
-  - criteria: !<Range> {"min": 1}
+  - criteria: !<Range> {"min": 2}
   validation:
   - criteria: !<Range> {"min": 1}
   operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/lib/${service.sid}"]
+        mode: "755"
   - type: Config
     directives:
     - directive: !<resource>
         templateType: FreeMarker
-        templatePath: "dataSource.properties"
-        targetPath: "/etc/${service.sid}/conf/dataSource.properties"
+        templatePath: "db.properties"
+        targetPath: "/etc/${service.sid}/conf/db.properties"
         mode: "600"
+
 stages:
   - type: Config
     taskGroups:
     - !<Create-Database>
-      dbPrefix: rubik
+      dbPrefix: workflow
       dbUserConfig: javax.jdo.option.ConnectionUserName
       dbPasswordConfig: javax.jdo.option.ConnectionPassword
       timeoutMinutes: 5
       summaryPolicy: SOME
-    - !<Create-Database>
-      dbPrefix: rubik
-      dbUserConfig: inceptor.database.username
-      dbPasswordConfig: inceptor.database.password
-      timeoutMinutes: 5
-      summaryPolicy: SOME
     - !<Role>
-      roleType: "RUBIK_SERVER"
+      roleType: "WORKFLOW_SERVER"
       operation: Config
       summaryPolicy: SOME
       timeoutMinutes: 1
@@ -87,30 +92,32 @@ stages:
     - !<DockerRunPreUpgrade>
       summaryPolicy: ALL
       timeoutMinutes: 10
-      roleType: RUBIK_SERVER
+      roleType: WORKFLOW_SERVER
       node: Any
   - type: PreRollback
     taskGroups:
     - !<DockerRunPreRollback>
       summaryPolicy: ALL
       timeoutMinutes: 10
-      roleType: RUBIK_SERVER
+      roleType: WORKFLOW_SERVER
       node: Any
 
 
 firstWizardConfigs:
-- designer.server.port
-- designer.global.session.timeout.secs
+- workflow.http.port
 - javax.jdo.option.ConnectionUserName
 - javax.jdo.option.ConnectionPassword
-- rubik.memory
-- rubik.container.limits.memory
-- rubik.container.limits.cpu
-- rubik.container.requests.memory
-- rubik.container.requests.cpu
-- rubik.memory.ratio
-- inceptor.database.username
-- inceptor.database.password
+- workflow.access.control.enabled
+- workflow.pseudo.username
+- workflow.pseudo.password
+- workflow.session.timeout.seconds
+- workflow.cookie.rememberme.days
+- workflow.cookie.maxage.hours
+- workflow.container.limits.memory
+- workflow.container.limits.cpu
+- workflow.container.requests.memory
+- workflow.container.requests.cpu
+- workflow.memory.ratio
 
 pages:
 - roles
@@ -119,7 +126,7 @@ pages:
 - security
 
 principals:
-- rubik
+- workflow
 
 healthChecks:
 - category: DAEMON_CHECK
@@ -129,6 +136,5 @@ healthChecks:
   intervalSeconds: 15
   method: !<Probe>
     roles:
-    - roleType: RUBIK_SERVER
+    - roleType: WORKFLOW_SERVER
       from: !<readiness> {}
-
