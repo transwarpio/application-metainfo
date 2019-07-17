@@ -6,9 +6,6 @@ namePrefix: Transporter
 friendlyName: Transwarp Data Transporter
 dockerImage: "transwarp/tdt:studio-1.1"
 dependencies:
-  - name: GUARDIAN
-    minVersion: transwarp-5.2
-    optional: true
   - name: TXSQL
     minVersion: transwarp-5.2
     optional: false

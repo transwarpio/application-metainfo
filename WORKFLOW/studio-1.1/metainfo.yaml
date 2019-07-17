@@ -10,9 +10,6 @@ dependencies:
     minVersion: studio-1.1
     maxVersion: studio-1.1
     optional: true
-  - name: GUARDIAN
-    minVersion: transwarp-5.2
-    optional: true
   - name: ZOOKEEPER
     minVersion: transwarp-5.2
     optional: false

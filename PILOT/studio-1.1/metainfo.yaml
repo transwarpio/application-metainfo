@@ -5,9 +5,6 @@ global: false
 namePrefix: Pilot
 friendlyName: Pilot
 dependencies:
-  - name: GUARDIAN
-    minVersion: transwarp-5.2
-    optional: true
   - name: INCEPTOR
     minVersion: transwarp-5.2
     optional: false
