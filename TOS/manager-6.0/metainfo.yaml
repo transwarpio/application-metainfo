@@ -14,9 +14,10 @@ roles:
   frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   summaryPolicy: SOME
   autoAssign:
-  - advice: !<EachNode> {}
+  - advice: !<NumSeq>
+      numSeq: [0]
   suggestion:
-  - criteria: !<EachNode> {}
+  - criteria: !<Range> {"min": 0}
   validation:
   - criteria: !<Range> {"min": 0}
   operations:
@@ -88,9 +89,9 @@ roles:
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq>
-      numSeq: [3,2,1]
+      numSeq: [0]
   suggestion:
-  - criteria: !<Range> {"min": 1}
+  - criteria: !<Range> {"min": 0}
   validation:
   - criteria: !<Range> {"min": 0}
   operations:

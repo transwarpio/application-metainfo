@@ -18,6 +18,7 @@ export KUNGATE_GRPC_PORT=${service['kungate.grpc.port']}
 export MYSQL_SERVER_PORT_BASE=${service['kungate.server.port']}
 export KUNGATE_AUDIT_FILTER="${service['kungate.audit_filter']}"
 export KUNDB_DIR=${service.sid}
+export KUNDB_LOG_DIR=${service['kundb.log_dir']}
 
 <#if service.roles.KUNCTLD??>
   <#list service.roles.KUNCTLD as ctld>

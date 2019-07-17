@@ -190,7 +190,7 @@ roles:
 - name: HYPERBASE_CATALOG_AGENT
   friendlyName: "Catalog Agent"
   labelPrefix: "hyperbase-catalog-agent"
-  dockerImage: "transwarp/catalog-agent:transwarp-6.0.2-final"
+  dockerImage: "transwarp/catalog-agent:transwarp-6.2"
   category: SLAVE
   frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
   readinessProbe:
@@ -230,7 +230,14 @@ roles:
     - criteria: !<Range> {"min": 0}
   validation:
     - criteria: !<Range> {"min": 0}
-  operations: []
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "ca-application.properties"
+        targetPath: "/etc/${service.sid}/conf/ca-application.properties"
+        mode: "644"
 
 stages:
   - type: Bootstrap

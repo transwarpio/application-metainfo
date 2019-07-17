@@ -10,6 +10,7 @@
     <#assign PROMETHEUS_ENABLE_LIFECYCLE="">
 </#if>
 #!/usr/bin/env bash
+export PROMETHEUS_DATA_DIR=${service['prometheus.data.dir']}
 
 export PROMETHEUS_OPTS="--config.file=/etc/${service.sid}/conf/prometheus/prometheus.yml \
                         --storage.tsdb.path=${service['prometheus.data.dir']} \

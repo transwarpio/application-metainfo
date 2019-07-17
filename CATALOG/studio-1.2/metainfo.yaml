@@ -7,27 +7,21 @@ friendlyName: Catalog
 dependencies:
   - name: HYPERBASE
     minVersion: transwarp-6.0
-    maxVersion: transwarp-6.1
     optional: false
   - name: SEARCH
     minVersion: transwarp-6.0
-    maxVersion: transwarp-6.1
     optional: false
   - name: KAFKA
     minVersion: transwarp-6.0
-    maxVersion: transwarp-6.1
     optional: false
   - name: ZOOKEEPER
     minVersion: transwarp-6.0
-    maxVersion: transwarp-6.1
     optional: false
   - name: HDFS
     minVersion: transwarp-6.0
-    maxVersion: transwarp-6.1
     optional: false
   - name: TXSQL
     minVersion: transwarp-6.0
-    maxVersion: transwarp-6.1
     optional: false
 user: catalog
 
