@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration debug="false" scan="true" scanPeriod="60000">
+    <!-- simple console appender -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder charset="UTF-8">
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}][%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <!-- rolling file appender -->
+    <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${SLIPSTREAM_STUDIO_LOG_DIR:-/var/log/slipstreamstudio}/slipstreamstudio.log</file>
+        <!--<rollingPolicy class="io.transwarp.slipstream.util.logback.StartupSizeTimeRollingPolicy">-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${SLIPSTREAM_STUDIO_LOG_DIR:-/var/log/slipstreamstudio}/slipstreamstudio_%d{yyyyMMdd}.%i.log.zip</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>60</maxHistory>
+            <totalSizeCap>5GB</totalSizeCap>
+        </rollingPolicy>
+
+        <encoder charset="UTF-8">
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}][%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--sql log-->
+    <logger name="io.transwarp.slipstream.studio.persistence.mapper" level="INFO"/>
+    <!--inner rest client log. used to check restful api situation in slipstream-->
+    <logger name="io.transwarp.slipstream.studio.rest.client.SlipstreamRestClient" level="INFO"/>
+    <!--web filter log. used to check login errors-->
+    <logger name="io.transwarp.slipstream.studio.rest.filter" level="INFO"/>
+    <!--slipstream akka msg log. used to check akka msg-->
+    <logger name="io.transwarp.slipstream.studio.ws.event.handler.EventRouterHandler" level="INFO"/>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="ROLLING"/>
+        <!--<appender-ref ref="SIFT"/>-->
+    </root>
+</configuration>
