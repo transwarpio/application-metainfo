@@ -9,8 +9,8 @@
   groups: ["master.conf"]
   visibility: READ_WRITE
 
-- name: master.log.log_level
-  recommendExpression: 5
+- name: master.log.log_min_log_level
+  recommendExpression: 0
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
@@ -18,8 +18,8 @@
   groups: ["master.conf"]
   visibility: READ_WRITE
 
-- name: master.log.log_max_size
-  recommendExpression: 1024
+- name: master.log.log_v_level
+  recommendExpression: 0
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
@@ -27,7 +27,7 @@
   groups: ["master.conf"]
   visibility: READ_WRITE
 
-- name: master.log.log_file_num
+- name: master.log.log_retain_size_gb
   recommendExpression: 10
   defaultValue: null
   valueType: NON_NEG_INT
@@ -253,8 +253,8 @@
   groups: ["tabletserver.conf"]
   visibility: READ_WRITE
 
-- name: tabletserver.log.log_level
-  recommendExpression: 5
+- name: tabletserver.log.log_min_log_level
+  recommendExpression: 0
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
@@ -262,8 +262,8 @@
   groups: ["tabletserver.conf"]
   visibility: READ_WRITE
 
-- name: tabletserver.log.log_max_size
-  recommendExpression: 1024
+- name: tabletserver.log.log_v_level
+  recommendExpression: 0
   defaultValue: null
   valueType: NON_NEG_INT
   scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
@@ -271,7 +271,7 @@
   groups: ["tabletserver.conf"]
   visibility: READ_WRITE
 
-- name: tabletserver.log.log_file_num
+- name: tabletserver.log.log_retain_size_gb
   recommendExpression: 10
   defaultValue: null
   valueType: NON_NEG_INT
