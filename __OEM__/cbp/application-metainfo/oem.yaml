@@ -2,6 +2,12 @@
 reserveTags:
 - original: manager-6.0.1905a
   replacement: cbp-2.0.0
+- original: transwarp-6.0.2
+  replacement: transwarp-6.0.2
+- original: studio-1.1.0
+  replacement: studio-1.1.0
+- original: argodb-1.2.0
+  replacement: argodb-1.2.0
 
 products:
 - name: BASIC
