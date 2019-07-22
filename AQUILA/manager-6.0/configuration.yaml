@@ -229,6 +229,56 @@
   groups: []
   visibility: READ_WRITE
 
+- name: server.rememberme.max-age
+  recommendExpression: 1209600
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.internal.admin.user
+  recommendExpression: <@randomstring len=10/>
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: WRITE_ONLY
+
+- name: server.internal.admin.password
+  recommendExpression: <@randomstring len=10/>
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: WRITE_ONLY
+
+- name: server.authz.anonymous.admin
+  recommendExpression: false
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.authz.cache.expire.sec
+  recommendExpression: 1200
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 # AQUILA_AGENT
 
 - name: agent.web.port
@@ -431,3 +481,27 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+# AQUILA_ALERTMANAGER
+
+- name: alertmanager.web.port
+  recommendExpression: 8693
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_ALERTMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: alertmanager.global.resolve.timeout
+  recommendExpression: 5m
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_ALERTMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+

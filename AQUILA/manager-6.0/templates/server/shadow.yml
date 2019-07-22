@@ -1,3 +1,7 @@
 spring.datasource:
   password: "${service['txsql.root.password']}"
 manager-proxy.password: "${managerInfo['AQUILA_PASS']}"
+auth:
+  internal-admin:
+    user: ${service['server.internal.admin.user']}
+    pass: ${service['server.internal.admin.password']}

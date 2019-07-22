@@ -24,7 +24,7 @@ alerting:
   alertmanagers:
   - static_configs:
     - targets:
-      - ${service.roles['AQUILA_TDH_EXPORTER'][0].hostname}:${service['server.web.port']}
+      - ${service.roles['AQUILA_SERVER'][0].hostname}:${service['server.web.port']}
     path_prefix: /api/alert/bridge
 
 # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
