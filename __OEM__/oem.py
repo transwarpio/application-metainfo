@@ -154,9 +154,12 @@ def replaceReservedTagsAndDeleteOthers(tags):
       continue
     for dir in os.listdir(path):
       dirname = dir
+      keepdir = False
       for tag in tags:
-        dirname = re.sub(tag['original'], tag['replacement'], dirname)
-      if(dir != dirname):
+        if tag['original'] in dirname:
+          dirname = re.sub(tag['original'], tag['replacement'], dirname)
+          keepdir = True
+      if keepdir:
         # print '%s rename dir as %s' % (dir, dirname)
         shutil.move(os.path.join(path, dir), os.path.join(path, dirname))
       else:
