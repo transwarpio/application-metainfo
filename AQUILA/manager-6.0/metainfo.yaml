@@ -350,9 +350,55 @@ roles:
             targetPath: "/etc/${service.sid}/conf/prometheus/prometheus-env.sh"
             mode: "755"
 
+- name: AQUILA_ALERTMANAGER
+  friendlyName: "Alertmanager"
+  labelPrefix: "alertmanager"
+  dockerImage: "transwarp/alertmanager:manager-6.0"
+  linkExpression: "http://${localhostname}:${service['alertmanager.web.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /-/healthy
+      port: ${service['alertmanager.web.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  hostPID: true
+  env:
+    - name: ALERTMANAGER_CON_DIR
+      value: /etc/${service.sid}/conf/alertmanager
+  mountPaths: []
+  nodeSpecificMounts: []
+  summaryPolicy: SOME
+  autoAssign:
+    - advice: !<NumSeq>
+        numSeq: [1]
+  suggestion:
+    - criteria: !<Range> {"min": 1}
+  validation:
+    - criteria: !<Range> {"min": 1}
+  operations:
+    - type: Config
+      directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "alertmanager/alertmanager.yml.ftl"
+            targetPath: "/etc/${service.sid}/conf/alertmanager/alertmanager.yml"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "alertmanager/alertmanager-env.sh.ftl"
+            targetPath: "/etc/${service.sid}/conf/alertmanager/alertmanager-env.sh"
+            mode: "755"
+
 firstWizardConfigs:
 - prometheus.web.port
 - prometheus.data.dir
+- alertmanager.web.port
 - tdh.exporter.web.port
 - node.exporter.web.port
 - server.web.port

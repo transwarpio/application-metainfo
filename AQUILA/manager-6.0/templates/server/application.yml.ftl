@@ -36,7 +36,9 @@ springfox.documentation:
 
 ## ----- application configs
 <#assign prometheusHost = service.roles["AQUILA_PROMETHEUS"][0].hostname>
+<#assign alertmanagerHost = service.roles["AQUILA_ALERTMANAGER"][0].hostname>
 <#assign prometheusEndpoint = "http://" + prometheusHost + ":" + service["prometheus.web.port"]>
+<#assign alertmanagerEndpoint = "http://" + alertmanagerHost + ":" + service["alertmanager.web.port"]>
 api:
   swagger:
     enabled: ${service['server.api.swagger.enabled']}
@@ -80,10 +82,10 @@ alert:
       upload-trigger: ${prometheusEndpoint}/-/reload
   gateway:
     alert-manager:
-      push-url: http://172.16.1.104:9193/api/v1/alerts
+      push-url: ${alertmanagerEndpoint}/api/v1/alerts
   query:
     alert-manager:
-      query-url: http://172.16.1.104:9193/api/v1/alerts
+      query-url: ${alertmanagerEndpoint}/api/v1/alerts
 manager-proxy:
   endpoints:
 <#list managerEndPoints as endpoint>

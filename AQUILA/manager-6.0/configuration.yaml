@@ -481,3 +481,27 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
+
+# AQUILA_ALERTMANAGER
+
+- name: alertmanager.web.port
+  recommendExpression: 8693
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_ALERTMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: alertmanager.global.resolve.timeout
+  recommendExpression: 5m
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_ALERTMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+
