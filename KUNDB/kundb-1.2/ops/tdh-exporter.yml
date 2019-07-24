@@ -1,0 +1,30 @@
+- scope:
+    scopeType: ROLE # 角色级别的 metric 模板文件
+    roleType: KUNGATE
+  configFile: "kundb_kungate_HttpJson.yml.ftl"
+  scrape:
+    exporterType: TDH_EXPORTER
+- scope:
+    scopeType: ROLE # 角色级别的 metric 模板文件
+    roleType: COMPUTE_NODE
+  configFile: "kundb_kuntablet_computeNode_HttpJson.yml.ftl"
+  scrape:
+    exporterType: TDH_EXPORTER
+- scope:
+    scopeType: ROLE # 角色级别的 metric 模板文件
+    roleType: KUNTABLET_MASTER
+  configFile: "shard/kundb_kuntablet_master_HttpJson.yml.ftl"
+  scrape:
+    exporterType: TDH_EXPORTER
+- scope:
+    scopeType: ROLE # 角色级别的 metric 模板文件
+    roleType: KUNTABLET_REPLICA
+  configFile: "shard/kundb_kuntablet_replica_HttpJson.yml.ftl"
+  scrape:
+    exporterType: TDH_EXPORTER
+- scope:
+    scopeType: ROLE # 角色级别的 metric 模板文件
+    roleType: KUNTABLET_RDONLY
+  configFile: "shard/kundb_kuntablet_rdonly_HttpJson.yml.ftl"
+  scrape:
+    exporterType: TDH_EXPORTER

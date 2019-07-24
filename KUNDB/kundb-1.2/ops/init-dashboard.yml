@@ -1,0 +1,4 @@
+folders:
+  - dashboards:
+    - title: "KUNDB"
+      dashboardJson: "kundb-init-dashboard.json"

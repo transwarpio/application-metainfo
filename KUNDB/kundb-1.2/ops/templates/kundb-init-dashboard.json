@@ -1,0 +1,1064 @@
+{
+  "schemaVersion": 2,
+  "id": null,
+  "folderId": null,
+  "starred": false,
+  "title": "KUNDB",
+  "tags": [],
+  "timezone": null,
+  "editable": null,
+  "graphToolTip": null,
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "type": "query",
+        "name": "serviceId",
+        "label": "Service",
+        "hide": "NONE",
+        "multi": true,
+        "includeAll": true,
+        "options": [
+          {
+            "text": "kundb1",
+            "value": 22,
+            "selected": true
+          }
+        ],
+        "tags": null,
+        "current": null,
+        "dataSourceId": 3,
+        "refresh": "ON_LOAD",
+        "query": "select * from service where type='KUNDB'",
+        "valueColumn": "id",
+        "textColumn": "sid",
+        "regex": null,
+        "sort": "NONE",
+        "useTags": false,
+        "tagQuery": null,
+        "tagQueryValueColumn": null,
+        "tagQueryTextColumn": null,
+        "tagValuesQuery": null
+      },
+      {
+        "type": "query",
+        "name": "roleType",
+        "label": "Role",
+        "hide": "NONE",
+        "multi": true,
+        "includeAll": true,
+        "options": [
+          {
+            "text": "COMPUTE_NODE",
+            "value": "COMPUTE_NODE",
+            "selected": false
+          },
+          {
+            "text": "KUNGATE",
+            "value": "KUNGATE",
+            "selected": true
+          },
+          {
+            "text": "KUNTABLET_MASTER",
+            "value": "KUNTABLET_MASTER",
+            "selected": false
+          },
+          {
+            "text": "KUNTABLET_RDONLY",
+            "value": "KUNTABLET_RDONLY",
+            "selected": false
+          },
+          {
+            "text": "KUNTABLET_REPLICA",
+            "value": "KUNTABLET_REPLICA",
+            "selected": false
+          }
+        ],
+        "tags": null,
+        "current": null,
+        "dataSourceId": 3,
+        "refresh": "ON_LOAD",
+        "query": "select distinct(type) from role where type in('KUNGATE','COMPUTE_NODE','KUNTABLET_RDONLY','KUNTABLET_REPLICA','KUNTABLET_MASTER')",
+        "valueColumn": "type",
+        "textColumn": "type",
+        "regex": null,
+        "sort": "NONE",
+        "useTags": false,
+        "tagQuery": null,
+        "tagQueryValueColumn": null,
+        "tagQueryTextColumn": null,
+        "tagValuesQuery": null
+      },
+      {
+        "type": "query",
+        "name": "roleGroupId",
+        "label": "Shard",
+        "hide": "NONE",
+        "multi": true,
+        "includeAll": true,
+        "options": [
+          {
+            "text": "shard1",
+            "value": 10,
+            "selected": false
+          },
+          {
+            "text": "shard2",
+            "value": 11,
+            "selected": false
+          }
+        ],
+        "tags": null,
+        "current": null,
+        "dataSourceId": 3,
+        "refresh": "ON_LOAD",
+        "query": "select * from role_group where fieldName='Shard'",
+        "valueColumn": "id",
+        "textColumn": "name",
+        "regex": null,
+        "sort": "NONE",
+        "useTags": false,
+        "tagQuery": null,
+        "tagQueryValueColumn": null,
+        "tagQueryTextColumn": null,
+        "tagValuesQuery": null
+      }
+    ]
+  },
+  "refresh": "5s",
+  "links": null,
+  "panels": [
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 9,
+      "cols": 12,
+      "x": 0,
+      "y": 0,
+      "title": "Transactions",
+      "description": "total number of transactions in kuntablet since it was started.",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_master_transactions_sum_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} TotalCount"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "B",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_rdonly_transactions_sum_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} TotalCount"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "C",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_replica_transactions_sum_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} TotalCount"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "D",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_computeNode_transactions_sum_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} TotalCount"
+        }
+      ],
+      "colors": {},
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "none",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 2,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": true,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 2,
+        "min": true,
+        "max": true,
+        "avg": false,
+        "current": true,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 9,
+      "cols": 12,
+      "x": 12,
+      "y": 0,
+      "title": "Kills",
+      "description": "total number of killed transactions or queries due to timeout by kuntablet since it was started.",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_computeNode_kills_transactions_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} Killed Transactions"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "B",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_master_kills_transactions_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} Killed Transactions"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "C",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_rdonly_kills_transactions_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} Killed Transactions"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "D",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_replica_kills_transactions_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} Killed Transactions"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "E",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_computeNode_kills_queries_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} Killed Queries"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "F",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_master_kills_queries_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} Killed Queries"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "G",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_rdonly_kills_queries_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} Killed Queries"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "H",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_replica_kills_queries_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} Killed Queries"
+        }
+      ],
+      "colors": {},
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "none",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 2,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": null,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": true,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 9,
+      "cols": 12,
+      "x": 12,
+      "y": 9,
+      "title": "Internal Errors",
+      "description": "Total Number of diverse Internal errors in kuntablet calculated from its start",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_computeNode_internalErrors_panic_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} Panic"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "B",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_master_internalErrors_panic_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} Panic"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "C",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_rdonly_internalErrors_panic_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} Panic"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "D",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_replica_internalErrors_panic_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} Panic"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "E",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_computeNode_internalErrors_hungQuery_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} HungQuery"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "F",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_master_internalErrors_hungQuery_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} HungQuery"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "G",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_rdonly_internalErrors_hungQuery_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} HungQuery"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "H",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_replica_internalErrors_hungQuery_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} HungQuery"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "I",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_computeNode_internalErrors_twopcCommit_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} TwopcCommit"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "J",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_master_internalErrors_twopcCommit_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} TwopcCommit"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "K",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_rdonly_internalErrors_twopcCommit_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} TwopcCommit"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "L",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_replica_internalErrors_twopcCommit_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} TwopcCommit"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "M",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_computeNode_internalErrors_twopcResurrection_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} TwopcResurrection"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "N",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} TwopcResurrection",
+          "expr": "kundb_kuntablet_master_internalErrors_twopcResurrection_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "O",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} TwopcResurrection",
+          "expr": "kundb_kuntablet_rdonly_internalErrors_twopcResurrection_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "P",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} TwopcResurrection",
+          "expr": "kundb_kuntablet_replica_internalErrors_twopcResurrection_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "Q",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_computeNode_internalErrors_schema_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} Schema"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "R",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} Schema",
+          "expr": "kundb_kuntablet_master_internalErrors_schema_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "S",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} Schema",
+          "expr": "kundb_kuntablet_rdonly_internalErrors_schema_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "T",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} Schema",
+          "expr": "kundb_kuntablet_replica_internalErrors_schema_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "U",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_computeNode_internalErrors_watchdogFail_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} WatchdogFail"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "V",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} WatchdogFail",
+          "expr": "kundb_kuntablet_master_internalErrors_watchdogFail_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "W",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} WatchdogFail",
+          "expr": "kundb_kuntablet_rdonly_internalErrors_watchdogFail_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "X",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} WatchdogFail",
+          "expr": "kundb_kuntablet_replica_internalErrors_watchdogFail_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        }
+      ],
+      "colors": {},
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "none",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 2,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": null,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": true,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 9,
+      "cols": 12,
+      "x": 0,
+      "y": 9,
+      "title": "Errors",
+      "description": "Total Number of errors of diverse types in kuntablet calculated from its start",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_computeNode_errors_aborted_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} Aborted"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "B",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_master_errors_aborted_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} Aborted"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "C",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_rdonly_errors_aborted_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} Aborted"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "D",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_replica_errors_aborted_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} Aborted"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "E",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_computeNode_errors_alreadyExists_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} AlreadyExists"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "F",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_master_errors_alreadyExists_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} AlreadyExists"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "G",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_rdonly_errors_alreadyExists_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} AlreadyExists"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "H",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_replica_errors_alreadyExists_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} AlreadyExists"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "I",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_computeNode_errors_deadlineExceeded_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} DeadlineExceeded"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "J",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} DeadlineExceeded",
+          "expr": "kundb_kuntablet_master_errors_deadlineExceeded_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "K",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} DeadlineExceeded",
+          "expr": "kundb_kuntablet_rdonly_errors_deadlineExceeded_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "L",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} DeadlineExceeded",
+          "expr": "kundb_kuntablet_replica_errors_deadlineExceeded_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "M",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_computeNode_errors_invalidArgument_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} InvalidArgument"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "N",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} InvalidArgument",
+          "expr": "kundb_kuntablet_master_errors_invalidArgument_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "O",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} InvalidArgument",
+          "expr": "kundb_kuntablet_rdonly_errors_invalidArgument_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "P",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} InvalidArgument",
+          "expr": "kundb_kuntablet_replica_errors_invalidArgument_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "Q",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_computeNode_errors_outOfRange_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} OutOfRange"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "R",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} OutOfRange",
+          "expr": "kundb_kuntablet_master_errors_outOfRange_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "S",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} OutOfRange",
+          "expr": "kundb_kuntablet_rdonly_errors_outOfRange_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "T",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} OutOfRange",
+          "expr": "kundb_kuntablet_replica_errors_outOfRange_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "U",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_computeNode_errors_permissionDenied_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} PermissionDenied"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "V",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} PermissionDenied",
+          "expr": "kundb_kuntablet_master_errors_permissionDenied_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "W",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} PermissionDenied",
+          "expr": "kundb_kuntablet_rdonly_errors_permissionDenied_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "X",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} PermissionDenied",
+          "expr": "kundb_kuntablet_replica_errors_permissionDenied_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "Y",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_computeNode_errors_resourceExhausted_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} ResourceExhausted"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "Z",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} ResourceExhausted",
+          "expr": "kundb_kuntablet_master_errors_resourceExhausted_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "[",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} ResourceExhausted",
+          "expr": "kundb_kuntablet_rdonly_errors_resourceExhausted_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "\\",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} ResourceExhausted",
+          "expr": "kundb_kuntablet_replica_errors_resourceExhausted_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "]",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_computeNode_errors_unauthenticated_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} Unauthenticated"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "^",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} Unauthenticated",
+          "expr": "kundb_kuntablet_master_errors_unauthenticated_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "_",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} Unauthenticated",
+          "expr": "kundb_kuntablet_rdonly_errors_unauthenticated_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "`",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} Unauthenticated",
+          "expr": "kundb_kuntablet_replica_errors_unauthenticated_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "a",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kuntablet_computeNode_errors_unknown_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\"}",
+          "legendFormat": "{{hostname}} {{roleType}} Unknown"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "b",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} Unknown",
+          "expr": "kundb_kuntablet_master_errors_unknown_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "c",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} Unknown",
+          "expr": "kundb_kuntablet_rdonly_errors_unknown_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "d",
+          "format": "TIME_SERIES",
+          "legendFormat": "{{hostname}} {{roleType}} Unknown",
+          "expr": "kundb_kuntablet_replica_errors_unknown_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\",roleGroupId=\"${roleGroupId}\"}"
+        }
+      ],
+      "colors": {},
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "none",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 2,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": null,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": true,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 9,
+      "cols": 12,
+      "x": 0,
+      "y": 18,
+      "title": "Kuntablet Calls in Kungate",
+      "description": "total number of kuntablet call in kungate since it was started.",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kungate_kuntabletCall_sum_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\"}",
+          "legendFormat": "{{hostname}} TotalCount"
+        }
+      ],
+      "colors": {},
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "none",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 2,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": null,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": true,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 9,
+      "cols": 12,
+      "x": 12,
+      "y": 18,
+      "title": "Connections&Queries in Kungate",
+      "description": "total number of connections and queries in kungate since it was started.",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "kundb_kungate_mysqlServerTimings_sum_total{serviceId=\"${serviceId}\",roleType=\"${roleType}\"}\n",
+          "legendFormat": "{{hostname}} TotalCount"
+        }
+      ],
+      "colors": {},
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "none",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 2,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": null,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": true,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    }
+  ]
+}
+
