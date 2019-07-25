@@ -98,6 +98,12 @@ else
    if [ $KEYSPACE_NUM -gt 1 ]; then 
       get_keyspace
    fi
+   if [ ! -f "$ROLE_CONF_DIR/dataBase" ]; then
+      touch $ROLE_CONF_DIR/dataBase
+      echo $DEFAULT_DBNAME > $ROLE_CONF_DIR/dataBase
+   else 
+      echo $DEFAULT_DBNAME > $ROLE_CONF_DIR/dataBase
+   fi   
 fi
 
 
