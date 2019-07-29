@@ -13,7 +13,7 @@ roles:
   friendlyName: "TxSQL Server"
   labelPrefix: "txsql-server"
   category: MASTER
-  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  frontendOperations: ["Start", "Stop", "Delete", "Move"]
   deleteOpCondition:
     deletable:
       number: 3
@@ -21,13 +21,13 @@ roles:
       number: 2
   deleteOpCleanDirs:
     fromConfig:
-    - key: txsql.data.dir
+    - key: data.dir
   readinessProbe:
     probe: !<exec>
       command:
       - /bin/bash
       - -c
-      - "MYSQL_PWD=$(grep db.password /etc/${service.sid}/conf/db.properties | cut -d'=' -f2) mysql -h`hostname` -P${service['txsql.mysql.rw.port']} -uroot -e'select 1 from dual'"
+      - "MYSQL_PWD=$(grep db.password /etc/${service.sid}/conf/db.properties | cut -d'=' -f2) mysql -h`hostname` -P${service['mysql.rw.port']} -uroot -e'select 1 from dual'"
     failureThreshold: 3
     initialDelaySeconds: 10
     periodSeconds: 10
@@ -43,7 +43,7 @@ roles:
     requestsMemoryKey: txsql.container.requests.memory
     requestsCpuKey: txsql.container.requests.cpu
   nodeSpecificMounts:
-    - configKey: txsql.data.dir
+    - configKey: data.dir
   summaryPolicy: MAJOR
   dockerImage: "transwarp/txsql:transwarp-6.0.2-final"
   autoAssign:
@@ -152,8 +152,8 @@ roles:
   friendlyName: "Aquila Agent"
   labelPrefix: "aquila-agent"
   dockerImage: "transwarp/aquila:manager-6.0"
-  category: MASTER
-  frontendOperations: ["Start", "Stop"]
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   readinessProbe:
     probe: !<tcpSocket>
       port: ${service['agent.web.port']}
@@ -208,8 +208,8 @@ roles:
   labelPrefix: "node-exporter"
   dockerImage: "transwarp/node-exporter:manager-6.0"
   linkExpression: "http://${localhostname}:${service['node.exporter.web.port']}"
-  category: MASTER
-  frontendOperations: ["Start", "Stop"]
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   readinessProbe:
     probe: !<httpGet>
       path: /metrics
@@ -236,7 +236,7 @@ roles:
   suggestion:
   - criteria: !<EachNode> {}
   validation:
-  - criteria: !<Range> {"min": 1}
+  - criteria: !<EachNode> {}
   operations:
     - type: Config
       directives:
@@ -251,8 +251,8 @@ roles:
   labelPrefix: "tdh-exporter"
   dockerImage: "transwarp/tdh-exporter:manager-6.0"
   linkExpression: "http://${localhostname}:${service['tdh.exporter.web.port']}/metrics"
-  category: MASTER
-  frontendOperations: ["Start", "Stop"]
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
   readinessProbe:
     probe: !<httpGet>
       path: /metrics
@@ -403,12 +403,12 @@ firstWizardConfigs:
 - node.exporter.web.port
 - server.web.port
 - agent.web.port
-- txsql.data.dir
-- txsql.mysql.rw.port
-- txsql.binlog.port
-- txsql.mysql.local.port
-- txsql.binlogsvr.rpc.port
-- txsql.paxos.port
+- data.dir
+- mysql.rw.port
+- binlog.port
+- mysql.local.port
+- binlogsvr.rpc.port
+- paxos.port
 - txsql.container.limits.memory
 - txsql.container.limits.cpu
 - txsql.container.requests.memory
@@ -439,4 +439,6 @@ healthChecks:
       - roleType: AQUILA_TDH_EXPORTER
         from: !<readiness> {}
       - roleType: AQUILA_PROMETHEUS
+        from: !<readiness> {}
+      - roleType: AQUILA_ALERTMANAGER
         from: !<readiness> {}

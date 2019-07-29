@@ -12,7 +12,7 @@ server:
 <#if service.roles["AQUILA_TXSQL_SERVER"]??>
     <#assign hostPorts = []>
     <#list service.roles["AQUILA_TXSQL_SERVER"] as r>
-        <#assign hostPorts = hostPorts + [r.hostname + ':' + service['txsql.mysql.rw.port']]>
+        <#assign hostPorts = hostPorts + [r.hostname + ':' + service['mysql.rw.port']]>
     </#list>
     <#assign txsql = hostPorts?join(",")>
 </#if>
