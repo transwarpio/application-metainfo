@@ -86,6 +86,7 @@ alert:
   query:
     alert-manager:
       query-url: ${alertmanagerEndpoint}/api/v1/alerts
+    filter-keys: [ "clusterId", "nodeId", "serviceId" ]
 manager-proxy:
   endpoints:
 <#list managerEndPoints as endpoint>

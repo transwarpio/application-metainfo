@@ -386,8 +386,8 @@ roles:
       directives:
         - directive: !<resource>
             templateType: FreeMarker
-            templatePath: "alertmanager/alertmanager.yml.ftl"
-            targetPath: "/etc/${service.sid}/conf/alertmanager/alertmanager.yml"
+            templatePath: "alertmanager/alertmanager.yml.empty.ftl"
+            targetPath: "/etc/${service.sid}/conf/alertmanager/alertmanager.yml.empty"
             mode: "755"
         - directive: !<resource>
             templateType: FreeMarker
