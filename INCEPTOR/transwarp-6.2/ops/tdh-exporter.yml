@@ -1,0 +1,14 @@
+- scope:
+    scopeType: SERVICE  # 服务级别的 metric 模板文件, 只会在该服务角色id最小的节点生成
+  configFile: "inceptor-compaction-txsql.yml.ftl"
+  scrape:
+    exporterType: TDH_EXPORTER
+#      portConfig: exporter.from.txsql.port
+#      scheme: http
+#      interval: 1m
+- scope:
+    scopeType: ROLE # 角色级别的 metric 模板文件
+    roleType: INCEPTOR_SERVER
+  configFile: "inceptor-server-HttpJson.yml.ftl"
+  scrape:
+    exporterType: TDH_EXPORTER

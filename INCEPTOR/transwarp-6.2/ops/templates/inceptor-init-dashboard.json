@@ -1,0 +1,510 @@
+{
+  "schemaVersion": 2,
+  "id": null,
+  "folderId": null,
+  "starred": false,
+  "title": "INCEPTOR",
+  "tags": [],
+  "timezone": null,
+  "editable": null,
+  "graphToolTip": null,
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "type": "query",
+        "name": "serviceId",
+        "label": "Service",
+        "hide": "NONE",
+        "multi": false,
+        "includeAll": false,
+        "options": [
+          {
+            "text": "inceptor1",
+            "value": 21,
+            "selected": true
+          }
+        ],
+        "tags": null,
+        "current": null,
+        "dataSourceId": 3,
+        "refresh": "ON_LOAD",
+        "query": "SELECT * FROM service where type = 'INCEPTOR'",
+        "valueColumn": "id",
+        "textColumn": "sid",
+        "regex": null,
+        "sort": "NONE",
+        "useTags": false,
+        "tagQuery": null,
+        "tagQueryValueColumn": null,
+        "tagQueryTextColumn": null,
+        "tagValuesQuery": null
+      }
+    ]
+  },
+  "refresh": "1m",
+  "links": null,
+  "panels": [
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 8,
+      "cols": 8,
+      "x": 0,
+      "y": 0,
+      "title": "Active Tasks",
+      "description": "Number of active tasks",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "sum(inceptor_server_sql_active_tasks{serviceId=\"${serviceId}\"})",
+          "legendFormat": "active_tasks"
+        }
+      ],
+      "colors": {
+        "active_tasks": "#337cdc"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "none",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 1,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 1,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 6,
+      "cols": 6,
+      "x": 0,
+      "y": 8,
+      "title": "Executors",
+      "description": "Number of running executors registered to the server",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "sum(inceptor_server_executors_number{serviceId=\"${serviceId}\"})",
+          "legendFormat": "executors_number"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#417cca",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 8,
+      "cols": 8,
+      "x": 8,
+      "y": 0,
+      "title": "Shuffle Write",
+      "description": "Bytes written per second to disk during the shuffle stage",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "inceptor_server_shuffle_write_per_second{serviceId=\"${serviceId}\"}",
+          "legendFormat": "{{executor}}_shuffle_write_per_second"
+        }
+      ],
+      "colors": {
+        "tw-node1219:60014_shuffle_write_per_second": "#E29A47",
+        "tw-node1220:46252_shuffle_write_per_second": "#CC4F4F",
+        "tw-node1221:39371_shuffle_write_per_second": "#7770BE"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "Bps",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 2,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 2,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 8,
+      "cols": 8,
+      "x": 16,
+      "y": 0,
+      "title": "Shuffle Read",
+      "description": "Bytes fetched per second from other nodes during the shuffle stage",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "inceptor_server_shuffle_read_per_second{serviceId=\"${serviceId}\"}",
+          "legendFormat": "{{executor}}_shuffle_read"
+        }
+      ],
+      "colors": {
+        "tw-node1219:60014_shuffle_read": "#528ddc",
+        "tw-node1220:46252_shuffle_read": "#3eb0dc",
+        "tw-node1221:39371_shuffle_read": "#39b879"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "Bps",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 2,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 2,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 6,
+      "cols": 6,
+      "x": 6,
+      "y": 8,
+      "title": "Completed Tasks",
+      "description": "Number of completed tasks",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "sum(inceptor_server_sql_completed_tasks{serviceId=\"${serviceId}\"})",
+          "legendFormat": "completed_tasks"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#3bb377",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 6,
+      "cols": 6,
+      "x": 18,
+      "y": 8,
+      "title": "Failed Tasks Percent",
+      "description": "Failed tasks percent",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "sum(inceptor_server_sql_failed_tasks{serviceId=\"${serviceId}\"}) / (sum(inceptor_server_sql_total_tasks{serviceId=\"${serviceId}\"})>0)",
+          "legendFormat": "failed_task_rate"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "50%",
+        "format": "percentunit",
+        "formatPosition": "RIGHT",
+        "decimals": null,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": true,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#D8882C",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 6,
+      "cols": 6,
+      "x": 12,
+      "y": 8,
+      "title": "Failed Tasks",
+      "description": "Number of failed tasks",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "sum(inceptor_server_sql_failed_tasks{serviceId=\"${serviceId}\"})",
+          "legendFormat": "failed_tasks"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#CC4F4F",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    }
+  ]
+}

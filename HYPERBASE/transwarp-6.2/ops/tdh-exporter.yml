@@ -1,0 +1,12 @@
+- scope:
+    scopeType: ROLE # 角色级别的 metric 模板文件
+    roleType: HYPERBASE_MASTER
+  configFile: "hyperbase-master-HttpJson.yml.ftl"
+  scrape:
+    exporterType: TDH_EXPORTER
+- scope:
+    scopeType: ROLE # 角色级别的 metric 模板文件
+    roleType: HYPERBASE_REGIONSERVER
+  configFile: "hyperbase-region-server-HttpJson.yml.ftl"
+  scrape:
+    exporterType: TDH_EXPORTER
