@@ -482,6 +482,33 @@
   groups: []
   visibility: READ_WRITE
 
+- name: prometheus.storage.retention.time.days
+  recommendExpression: 15
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.min-block-duration.hours
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.max-block-duration.hours
+  recommendExpression: 26
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 # AQUILA_ALERTMANAGER
 
 - name: alertmanager.web.port
@@ -503,5 +530,3 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
-
-

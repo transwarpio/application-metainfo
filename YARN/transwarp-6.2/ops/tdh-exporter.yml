@@ -1,0 +1,12 @@
+- scope:
+    scopeType: ROLE # 角色级别的 metric 模板文件
+    roleType: YARN_RESOURCEMANAGER
+  configFile: "yarn-resource-manager-HttpJson.yml.ftl"
+  scrape:
+    exporterType: TDH_EXPORTER
+- scope:
+    scopeType: ROLE # 角色级别的 metric 模板文件
+    roleType: YARN_NODEMANAGER
+  configFile: "yarn-node-manager-HttpJson.yml.ftl"
+  scrape:
+    exporterType: TDH_EXPORTER

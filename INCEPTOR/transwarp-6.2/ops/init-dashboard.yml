@@ -1,0 +1,4 @@
+folders:
+  - dashboards:
+    - title: "INCEPTOR"
+      dashboardJson: "inceptor-init-dashboard.json"

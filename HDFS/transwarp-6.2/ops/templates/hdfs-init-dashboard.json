@@ -1,0 +1,978 @@
+{
+  "schemaVersion": 2,
+  "id": null,
+  "folderId": null,
+  "starred": false,
+  "title": "HDFS",
+  "tags": [],
+  "timezone": null,
+  "editable": null,
+  "graphToolTip": null,
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "type": "query",
+        "name": "serviceId",
+        "label": "Service",
+        "hide": "NONE",
+        "multi": false,
+        "includeAll": true,
+        "options": [
+          {
+            "text": "hdfs1",
+            "value": 6,
+            "selected": true
+          }
+        ],
+        "tags": null,
+        "current": null,
+        "dataSourceId": 3,
+        "refresh": "ON_LOAD",
+        "query": "SELECT * FROM service where type = 'HDFS'",
+        "valueColumn": "id",
+        "textColumn": "sid",
+        "regex": null,
+        "sort": "NONE",
+        "useTags": false,
+        "tagQuery": null,
+        "tagQueryValueColumn": null,
+        "tagQueryTextColumn": null,
+        "tagValuesQuery": null
+      }
+    ]
+  },
+  "refresh": "1m",
+  "links": null,
+  "panels": [
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 9,
+      "cols": 12,
+      "x": 0,
+      "y": 0,
+      "title": "Read/Write Throughput",
+      "description": "Number of bytes read/write from/to DataNode per second",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "sum(irate(data_node_bytes_read{serviceId=\"${serviceId}\"}[5m]))",
+          "legendFormat": "Read Throughput"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "B",
+          "format": "TIME_SERIES",
+          "expr": "sum(irate(data_node_bytes_write{serviceId=\"${serviceId}\"}[5m]))",
+          "legendFormat": "Write Throughput"
+        }
+      ],
+      "colors": {
+        "read throughput": "#4BAA7B",
+        "write throughput": "#E29A47",
+        "Write Throughput": "#CC4F4F"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "Bps",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 1,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": true,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 1,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 3,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 9,
+      "cols": 12,
+      "x": 12,
+      "y": 9,
+      "title": "Journalnode Transaction Avg Time",
+      "description": "Average time of JournalNode transactions in milliseconds",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "name_node_journal_node_transactions_avg_time{serviceId=\"${serviceId}\"}",
+          "legendFormat": "{{hostname}}"
+        }
+      ],
+      "colors": {
+        "transactions avg time": "#6c62d4",
+        "tw-node1219": "#77B8D1",
+        "tw-node1220": "#E29A47"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "ms",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 1,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": true,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 1,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 6,
+      "cols": 12,
+      "x": 0,
+      "y": 18,
+      "title": "Capacity Remaining",
+      "description": "Remaining capacity percent",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "name_node_capacity_remaining_percent{serviceId=\"${serviceId}\"} and name_node_is_active_or_not{serviceId=\"${serviceId}\"} > 0",
+          "legendFormat": "{{nodeId}}"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#D66868",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#44C498"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "70%",
+        "format": "percent",
+        "formatPosition": "RIGHT",
+        "decimals": 2,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": true,
+        "minValue": 0,
+        "maxValue": 100,
+        "bandWidthRatio": 0.2,
+        "thresholdLabels": true,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": false,
+        "lineColor": "#5A88C5",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 9,
+      "cols": 12,
+      "x": 0,
+      "y": 9,
+      "title": "NameNode Heap Usage",
+      "description": "Percentage of heap memory usage for NameNode",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "name_node_heap_memory_usage{serviceId=\"${serviceId}\"}",
+          "legendFormat": "{{hostname}}"
+        }
+      ],
+      "colors": {
+        "namenode heap usage": "#357bd8",
+        "tw-node1219": "#77B8D1",
+        "tw-node1220": "#E29A47"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "percentunit",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 1,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": true,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 1,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 6,
+      "cols": 12,
+      "x": 12,
+      "y": 18,
+      "title": "Active DataNode Percent",
+      "description": "Live DataNode percent",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "name_node_data_node_live_percent{serviceId=\"${serviceId}\"} and name_node_is_active_or_not{serviceId=\"${serviceId}\"} > 0"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 0.5,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 0.8,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "70%",
+        "format": "percentunit",
+        "formatPosition": "RIGHT",
+        "decimals": 2,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": true,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.2,
+        "thresholdLabels": true,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": false,
+        "lineColor": "#5A88C5",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 9,
+      "cols": 12,
+      "x": 12,
+      "y": 0,
+      "title": "NameNode Status",
+      "description": "Namenode is active(1.0) or standby(0.0)",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "name_node_is_active_or_not{serviceId=\"${serviceId}\"}>0",
+          "legendFormat": "Active Namenode {{hostname}}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "B",
+          "format": "TIME_SERIES",
+          "expr": "name_node_is_active_or_not{serviceId=\"${serviceId}\"}==0",
+          "legendFormat": "Standy Namenode {{hostname}}"
+        }
+      ],
+      "colors": {
+        "Active Namenode tw-node1219": "#77B8D1",
+        "Standy Namenode tw-node1220": "#E29A47"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "short",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 1,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": true,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 0,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 5,
+      "cols": 6,
+      "x": 6,
+      "y": 24,
+      "title": "Capacity Remaining",
+      "description": "Current remaining capacity across all DataNodes",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "name_node_capacity_remaining{serviceId=\"${serviceId}\"} and name_node_is_active_or_not{serviceId=\"${serviceId}\"} > 0",
+          "legendFormat": "capacity_remaining"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "bytes",
+        "formatPosition": "RIGHT",
+        "decimals": null,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#77B8D1",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 5,
+      "cols": 6,
+      "x": 0,
+      "y": 24,
+      "title": "Capacity Used",
+      "description": "Current used capacity across all DataNodes",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "name_node_capacity_used{serviceId=\"${serviceId}\"} and name_node_is_active_or_not{serviceId=\"${serviceId}\"} > 0",
+          "legendFormat": "capacity_used"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "bytes",
+        "formatPosition": "RIGHT",
+        "decimals": 2,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#857DD5",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 5,
+      "cols": 6,
+      "x": 18,
+      "y": 24,
+      "title": "Total Blocks",
+      "description": "Current number of allocated blocks",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "name_node_blocks_total{serviceId=\"${serviceId}\"} and name_node_is_active_or_not{serviceId=\"${serviceId}\"} > 0",
+          "legendFormat": "blocks_total"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#A18E80",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 5,
+      "cols": 6,
+      "x": 0,
+      "y": 29,
+      "title": "Pending Replication Blocks",
+      "description": "Current number of blocks pending to be replicated",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "name_node_pending_replication_blocks{serviceId=\"${serviceId}\"} and name_node_is_active_or_not{serviceId=\"${serviceId}\"} > 0",
+          "legendFormat": "blocks_pending_replication"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#E98B8B",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 5,
+      "cols": 6,
+      "x": 12,
+      "y": 24,
+      "title": "Live DataNodes",
+      "description": "Current number of live DataNodes",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "name_node_data_node_live_num{serviceId=\"${serviceId}\"} and name_node_is_active_or_not{serviceId=\"${serviceId}\"} > 0",
+          "legendFormat": "data_node_live_num"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#E29A47",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 5,
+      "cols": 6,
+      "x": 6,
+      "y": 29,
+      "title": "Scheduled Replication Blocks",
+      "description": "Current number of blocks scheduled for replications",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "name_node_scheduled_replication_blocks{serviceId=\"${serviceId}\"} and name_node_is_active_or_not{serviceId=\"${serviceId}\"} > 0",
+          "legendFormat": "blocks_scheduled_replication"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#79A4DE",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 5,
+      "cols": 6,
+      "x": 12,
+      "y": 29,
+      "title": "Corrupt Blocks",
+      "description": "Current number of blocks with corrupt replicas",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "name_node_corrupt_blocks{serviceId=\"${serviceId}\"} and name_node_is_active_or_not{serviceId=\"${serviceId}\"} > 0",
+          "legendFormat": "blocks_corrupt"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#64B88F",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 5,
+      "cols": 6,
+      "x": 18,
+      "y": 29,
+      "title": "Under Replicated Blocks",
+      "description": "Current number of blocks under replicated",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "name_node_under_replicated_blocks{serviceId=\"${serviceId}\"} and name_node_is_active_or_not{serviceId=\"${serviceId}\"} > 0",
+          "legendFormat": "blocks_under_replicated"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#85BE5B",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    }
+  ]
+}

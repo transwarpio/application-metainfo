@@ -1,0 +1,662 @@
+{
+  "schemaVersion": 2,
+  "id": null,
+  "folderId": null,
+  "starred": false,
+  "title": "ZOOKEEPER",
+  "tags": [],
+  "timezone": null,
+  "editable": null,
+  "graphToolTip": null,
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "type": "query",
+        "name": "serviceId",
+        "label": "Service",
+        "hide": "NONE",
+        "multi": false,
+        "includeAll": false,
+        "options": [
+          {
+            "text": "zookeeper1",
+            "value": 5,
+            "selected": true
+          }
+        ],
+        "tags": null,
+        "current": null,
+        "dataSourceId": 3,
+        "refresh": "ON_LOAD",
+        "query": "SELECT * FROM service where type = 'ZOOKEEPER'",
+        "valueColumn": "id",
+        "textColumn": "sid",
+        "regex": null,
+        "sort": "NONE",
+        "useTags": false,
+        "tagQuery": null,
+        "tagQueryValueColumn": null,
+        "tagQueryTextColumn": null,
+        "tagValuesQuery": null
+      }
+    ]
+  },
+  "refresh": "1m",
+  "links": null,
+  "panels": [
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 7,
+      "cols": 8,
+      "x": 16,
+      "y": 0,
+      "title": "Avg Request Latency",
+      "description": "Average amount of time it takes for the server to respond to a client request",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "zookeeper_server_avg_request_latency{serviceId=\"${serviceId}\"}",
+          "legendFormat": "{{hostname}}_avg_request_latency"
+        }
+      ],
+      "colors": {
+        "tw-node1219_avg_request_latency": "#E29A47",
+        "tw-node1220_avg_request_latency": "#79A4DE",
+        "tw-node1221_avg_request_latency": "#4BAA7B"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "ms",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 1,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 1,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 7,
+      "cols": 8,
+      "x": 8,
+      "y": 0,
+      "title": "Min Request Latency",
+      "description": "Minimal amount of time it takes for the server to respond to a client request",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "zookeeper_server_min_request_latency{serviceId=\"${serviceId}\"}",
+          "legendFormat": "{{hostname}}_min_request_latency"
+        }
+      ],
+      "colors": {
+        "tw-node1219_min_request_latency": "#E29A47",
+        "tw-node1221_min_request_latency": "#4BAA7B",
+        "tw-node1220_min_request_latency": "#79A4DE"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "ms",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 1,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": null,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 7,
+      "cols": 8,
+      "x": 16,
+      "y": 7,
+      "title": "Packets Received",
+      "description": " Number of client packets received per second (responses and notifications)",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "irate(zookeeper_server_packets_received{serviceId=\"${serviceId}\"}[2m])",
+          "legendFormat": "{{hostname}}_packets_received"
+        }
+      ],
+      "colors": {
+        "tw-node1219_packets_received": "#E29A47",
+        "tw-node1220_packets_received": "#79A4DE"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "none",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 1,
+          "label": "packets/s"
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 1,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 7,
+      "cols": 8,
+      "x": 0,
+      "y": 0,
+      "title": "Max Request Latency",
+      "description": "Maximal amount of time it takes for the server to respond to a client request",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "zookeeper_server_max_request_latency{serviceId=\"${serviceId}\"}",
+          "legendFormat": "{{hostname}}_max_request_latency"
+        }
+      ],
+      "colors": {
+        "tw-node1220_max_request_latency": "#79A4DE",
+        "tw-node1219_max_request_latency": "#E29A47"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "ms",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 1,
+          "label": ""
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 1,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 7,
+      "cols": 8,
+      "x": 8,
+      "y": 7,
+      "title": "Packets Sent ",
+      "description": "Number of client packets sent per second (responses and notifications)",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "irate(zookeeper_server_packets_sent{serviceId=\"${serviceId}\"}[2m])",
+          "legendFormat": "{{hostname}}_packets_sent"
+        }
+      ],
+      "colors": {
+        "tw-node1219_packets_sent": "#E29A47",
+        "tw-node1220_packets_sent": "#79A4DE"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "none",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 1,
+          "label": "packets/s"
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 1,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 8,
+      "cols": 8,
+      "x": 16,
+      "y": 14,
+      "title": "Process CPU Load",
+      "description": "'Recent CPU usage' for the JVM process",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "zookeeper_server_process_cpu_load{serviceId=\"${serviceId}\"}",
+          "legendFormat": "{{hostname}}_process_cpu_load"
+        }
+      ],
+      "colors": {
+        "tw-node1219_process_cpu_load": "#E29A47",
+        "tw-node1220_process_cpu_load": "#79A4DE"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "percentunit",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 2,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 2,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 8,
+      "cols": 8,
+      "x": 0,
+      "y": 14,
+      "title": "Outstanding Requests",
+      "description": "Number of queued requests in Zookeeper server",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "zookeeper_server_outstanding_requests{serviceId=\"${serviceId}\"}",
+          "legendFormat": "{{hostname}}_outstanding_requests"
+        }
+      ],
+      "colors": {
+        "tw-node1219_outstanding_requests": "#E29A47",
+        "tw-node1220_outstanding_requests": "#79A4DE"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "none",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 1,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 1,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 7,
+      "cols": 8,
+      "x": 0,
+      "y": 7,
+      "title": "Leader/Followers",
+      "description": "Zookeeper server is leader(1.0) or follower(0.0)",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "zookeeper_server_is_leader_or_not{serviceId=\"${serviceId}\"} > 0",
+          "legendFormat": "Leader {{hostname}}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "B",
+          "format": "TIME_SERIES",
+          "expr": "zookeeper_server_is_leader_or_not{serviceId=\"${serviceId}\"} == 0",
+          "legendFormat": "Follower {{hostname}}"
+        }
+      ],
+      "colors": {},
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "none",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 1,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 1,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 8,
+      "cols": 8,
+      "x": 8,
+      "y": 14,
+      "title": "Alive Connections",
+      "description": "Number of alive connections",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "zookeeper_server_alive_connections{serviceId=\"${serviceId}\"}",
+          "legendFormat": "{{hostname}}_alive_connections"
+        }
+      ],
+      "colors": {
+        "tw-node1219_alive_connections": "#E29A47",
+        "tw-node1220_alive_connections": "#79A4DE"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "none",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 1,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 1,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    }
+  ]
+}

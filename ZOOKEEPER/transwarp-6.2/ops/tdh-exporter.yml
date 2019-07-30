@@ -1,0 +1,6 @@
+- scope:
+    scopeType: ROLE # 角色级别的 metric 模板文件
+    roleType: ZOOKEEPER
+  configFile: "zookeeper-server-jmx.yml.ftl"
+  scrape:
+    exporterType: TDH_EXPORTER
