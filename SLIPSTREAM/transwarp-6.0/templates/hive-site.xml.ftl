@@ -9,6 +9,15 @@
 <#--------------------------->
 <configuration>
 
+<#--handle dependent.shiva and ladder-->
+<#if dependencies.ARGODB_STORAGE??>
+    <#assign storage=dependencies.ARGODB_STORAGE master_group=[]>
+    <#list storage.roles.SHIVA_MASTER as master>
+        <#assign master_group += [master.ip + ":" + storage['shiva.master.rpc_service.master_service_port']]>
+    </#list>
+    <@property "ngmr.holodesk.shiva.mastergroup" master_group?join(",")/>
+    <@property "holodesk.shiva.meta" dependencies.ARGODB_STORAGE['holodesk.shiva.meta']/>
+</#if>
 <#--handle dependent.zookeeper-->
 <#if dependencies.ZOOKEEPER??>
     <#assign zookeeper=dependencies.ZOOKEEPER quorum=[]>
@@ -107,6 +116,11 @@
         <#assign uris += [("thrift://" + role.hostname + ":" + dependencies.SLIPSTREAM["hive.metastore.port"])]>
     </#list>
     <@property "hive.metastore.service.id" "${dependencies.SLIPSTREAM.sid}"/>
+<#elseif dependencies.ARGODB_STORAGE??>
+    <#list dependencies.ARGODB_STORAGE.roles["INCEPTOR_METASTORE"] as role>
+        <#assign uris += [("thrift://" + role.hostname + ":" + dependencies.ARGODB_STORAGE["hive.metastore.port"])]>
+    </#list>
+    <@property "hive.metastore.service.id" "${dependencies.ARGODB_STORAGE.sid}"/>
 <#elseif dependencies.INCEPTOR??>
     <#list dependencies.INCEPTOR.roles["INCEPTOR_METASTORE"] as role>
         <#assign uris += [("thrift://" + role.hostname + ":" + dependencies.INCEPTOR["hive.metastore.port"])]>
