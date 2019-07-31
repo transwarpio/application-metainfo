@@ -9,7 +9,7 @@ log4j.rootLogger=${inceptor.root.logger}
 log4j.appender.console=org.apache.log4j.ConsoleAppender
 log4j.appender.console.target=System.err
 log4j.appender.console.layout=org.apache.log4j.PatternLayout
-log4j.appender.console.layout.ConversionPattern=%d{yy/MM/dd HH:mm:ss} %p %c: %m%n
+log4j.appender.console.layout.ConversionPattern=%d{ISO8601} %-5p %c{2}: (%F:%M(%L)) [%t(%x)] - %m%n
 
 
 # output to file
@@ -21,7 +21,7 @@ log4j.appender.RFA.MaxFileSize=10MB
 log4j.appender.RFA.MaxBackupIndex=1024
 # Pattern to output: date priority [category] - message
 log4j.appender.RFA.layout=org.apache.log4j.PatternLayout
-log4j.appender.RFA.layout.ConversionPattern=%d{yy/MM/dd HH:mm:ss} %p %c: %m%n
+log4j.appender.RFA.layout.ConversionPattern=%d{ISO8601} %-5p %c{2}: (%F:%M(%L)) [%t(%x)] - %m%n
 
 # Ignore messages below warning level from Jetty, because it's a bit verbose
 log4j.logger.org.eclipse.jetty=WARN
