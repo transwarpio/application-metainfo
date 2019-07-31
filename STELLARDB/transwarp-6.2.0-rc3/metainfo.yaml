@@ -144,3 +144,6 @@ pages:
 
 principals:
 - stellardb
+- summary
+- roles
+- configuration
