@@ -1,10 +1,10 @@
 ---
 name: TRANSPORTER
-version: studio-1.2.0-final
+version: studio-1.2
 global: false
 namePrefix: Transporter
 friendlyName: Transwarp Data Transporter
-dockerImage: "transwarp/tdt:studio-1.2.0-final"
+dockerImage: "transwarp/tdt:studio-1.2"
 dependencies:
   - name: TXSQL
     minVersion: transwarp-5.2
