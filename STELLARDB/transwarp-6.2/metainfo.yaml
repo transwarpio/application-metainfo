@@ -141,9 +141,9 @@ customConfigFiles:
 
 pages:
 - security
-
-principals:
-- stellardb
 - summary
 - roles
 - configuration
+
+principals:
+- stellardb
