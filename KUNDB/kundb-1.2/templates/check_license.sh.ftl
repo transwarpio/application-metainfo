@@ -1,4 +1,6 @@
 #!/bin/bash
+set -ex
+
 <#if service.roles.LICENSE_PROXY??>
   <#list service.roles.LICENSE_PROXY as olicense>
     <#assign licenseHost= olicense.hostname>
@@ -7,15 +9,11 @@
 export LICENSE_PROXY_HOST=${licenseHost}
 </#if>
 
-export SHARD=${service['kundb.shards']}
-if [[ -z $SHARD ]]; then
 <#if service.Shard?? && service.Shard?size gt 0>
   <#assign shardNum = (service.Shard?size)>
 export SHARD_NUM=${shardNum}
 </#if>
-else
-export SHARD_NUM=$(echo $SHARD | sed 's/,/\n/g' | wc -l)
-fi
+
 
 if [[ -z "$LICENSE_PROXY_HOST" ]]; then
     exit 1
@@ -42,6 +40,6 @@ done
 cmd="curl -s -m 20 --connect-timeout 10 http://$license_proxy_server_ip:$license_proxy_server_port/license/checkByResource?nodeNum=$total_shard_counts"
 res=$(eval $cmd)
 
-if [[ "$res" == "false" ]]; then
+if [[ "$res" != "true" ]]; then
     exit 1
 fi
