@@ -1,0 +1,4 @@
+folders:
+  - dashboards:
+    - title: "ZOOKEEPER"
+      dashboardJson: "zookeeper-init-dashboard.json"

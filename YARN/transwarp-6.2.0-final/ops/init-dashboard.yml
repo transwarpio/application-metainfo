@@ -1,0 +1,4 @@
+folders:
+  - dashboards:
+    - title: "YARN"
+      dashboardJson: "yarn-init-dashboard.json"

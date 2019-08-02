@@ -1,0 +1,4 @@
+folders:
+  - dashboards:
+    - title: "HYPERBASE"
+      dashboardJson: "hyperbase-init-dashboard.json"
