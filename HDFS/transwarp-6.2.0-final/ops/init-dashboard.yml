@@ -1,0 +1,4 @@
+folders:
+  - dashboards:
+    - title: "HDFS"
+      dashboardJson: "hdfs-init-dashboard.json"
