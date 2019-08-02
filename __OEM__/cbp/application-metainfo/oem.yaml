@@ -1,0 +1,574 @@
+---
+reserveTags:
+- original: manager-6.0.1905a
+  replacement: cbp-2.0.0
+
+products:
+- name: BASIC
+  i18n:
+    product_en_US.properties:
+    - product.friendlyName: "Cetcloud Basic"
+    - product.description: "Cetcloud Basic consists of ZooKeeper, HDFS, YARN and Kafka"
+    product_zh_CN.properties:
+    - product.friendlyName: "Cetcloud Basic"
+    - product.description: "Cetcloud Basic 包括 ZooKeeper, HDFS, YARN, Kafka 等服务"
+- name: CORE_PRODUCT
+  i18n:
+    product_en_US.properties:
+    - product.friendlyName: "Cetcloud Core Product"
+    - product.description: "Cetcloud Core Product consists of Tn, ILink, IBase, Elasticsearch and ML Platform"
+    product_zh_CN.properties:
+    - product.friendlyName: "Cetcloud Core Product"
+    - product.description: "Cetcloud 核心组件包括 Tn, ILink, IBase, Elasticsearch, ML Platform 等服务"
+- name: STUIDO
+  i18n:
+    product_en_US.properties:
+    - product.friendlyName: "Cetcloud Toolkit"
+    - product.description: "Cetcloud Toolkit is a set of big data development tools of Cetcloud"
+    product_zh_CN.properties:
+    - product.friendlyName: "Cetcloud Toolkit"
+    - product.description: "Cetcloud Toolkit 是 Cetcloud 中的大数据开发工具集"
+- name: SOPHON
+  i18n:
+    product_en_US.properties:
+    - product.friendlyName: "AI Platform"
+    - product.description: "AI Platform is a general AI platform to help enterprise users to quickly start building AI applications"
+    product_zh_CN.properties:
+    - product.friendlyName: "AI Platform"
+    - product.description: "AI Platform是一个深度学习交互式分析服务平台, 以帮助企业级用户快速实现人工智能的落地为目的"
+- name: ARGODB
+  i18n:
+    product_en_US.properties:
+    - product.friendlyName: "ADB"
+    - product.description: "ADB is a distributed database based on flash storage"
+    product_zh_CN.properties:
+    - product.friendlyName: "ADB"
+    - product.description: "ADB是一款分布式闪存数据库"
+- name: KUNDB
+  i18n:
+    product_en_US.properties:
+    - product.friendlyName: "TRDB"
+    - product.description: "TRDB is a distributed transactional database"
+    product_zh_CN.properties:
+    - product.friendlyName: "TRDB"
+    - product.description: "TRDB 是一款分布式的交易型数据库"
+
+deleteServices:
+- PILOT
+- HBASE
+- TRANSPEDIA
+
+services:
+- name: SHIVA
+  namePrefix: PDFS
+  friendlyName: "PDFS"
+  i18n:
+    service_en_US.properties:
+    - service.description: "PDFS is a general distributed storage service"
+    service_zh_CN.properties:
+    - service.description: "PDFS是一个通用的存储服务"
+  roles:
+    - name: SHIVA_MASTER
+      friendlyName: "PDFS Master"
+    - name: SHIVA_WEBSERVER
+      friendlyName: "PDFS Webserver"
+      linkExpression: null
+    - name: SHIVA_TABLETSERVER
+      friendlyName: "PDFS Tablet Server"
+- name: ZOOKEEPER
+  namePrefix: ZooKeeper
+  friendlyName: "ZooKeeper"
+  i18n:
+    service_en_US.properties:
+    - service.description: "Zookeeper is a service for coordination"
+    service_zh_CN.properties:
+    - service.description: "ZooKeeper是一个分布式应用程序协调服务"
+  roles:
+    - name: ZOOKEEPER
+      friendlyName: "ZooKeeper Server"
+- name: HDFS
+  namePrefix: HDFS
+  friendlyName: "HDFS"
+  i18n:
+    service_en_US.properties:
+    - service.description: "HDFS is the primary storage system for Hadoop application"
+    service_zh_CN.properties:
+    - service.description: "HDFS是Hadoop应用的基本存储系统"
+  roles:
+    - name: HDFS_HTTPFS
+      friendlyName: "Httpfs"
+    - name: HDFS_DATANODE
+      friendlyName: "Data Node"
+    - name: HDFS_JOURNALNODE
+      friendlyName: "Journal Node"
+    - name: HDFS_NAMENODE
+      friendlyName: "Name Node"
+- name: TXSQL
+  namePrefix: ISQL
+  friendlyName: "ISQL"
+  i18n:
+    service_en_US.properties:
+    - service.description: "ISQL is a distributed RDBMS"
+    service_zh_CN.properties:
+    - service.description: "ISQL是一个分布式的关系型数据库"
+  roles:
+    - name: TXSQL_SERVER
+      friendlyName: "ISQL Server"
+- name: YARN
+  namePrefix: YARN
+  friendlyName: "YARN"
+  i18n:
+    service_en_US.properties:
+    - service.description: "YARN is a resource managment framework"
+    service_zh_CN.properties:
+    - service.description: "YARN是通用资源管理系统"
+  roles:
+    - name: YARN_RESOURCEMANAGER
+      friendlyName: "Resource Manager"
+    - name: YARN_NODEMANAGER
+      friendlyName: "Node Manager"
+    - name: YARN_HISTORYSERVER
+      friendlyName: "History Server"
+    - name: YARN_TIMELINESERVER
+      friendlyName: "Timeline Server"
+- name: SEARCH
+  namePrefix: ElasticSearch
+  friendlyName: "ElasticSearch"
+  i18n:
+    service_en_US.properties:
+    - service.description: "ElasticSearch is a distributed search and analytics engine"
+    service_zh_CN.properties:
+    - service.description: "ElasticSearch是一个分布式的搜索分析引擎"
+  roles:
+    - name: SEARCH_HEAD
+      friendlyName: "ElasticSearch Head"
+    - name: SEARCH_SERVER
+      friendlyName: "ElasticSearch Server"
+- name: HYPERBASE
+  namePrefix: IBase
+  friendlyName: "IBase"
+  i18n:
+    service_en_US.properties:
+    - service.description: "IBase is a distributed column-oriented big data repository built on top of HDFS"
+    service_zh_CN.properties:
+    - service.description: "IBase是建立在HDFS之上的分布式的面向列的大数据存储库"
+  roles:
+    - name: HYPERBASE_MASTER
+      friendlyName: "IBase Master"
+    - name: HYPERBASE_REGIONSERVER
+      friendlyName: "Region Server"
+    - name: HYPERBASE_THRIFT
+      friendlyName: "IBase Thrift"
+- name: INCEPTOR
+  namePrefix: Tn
+  friendlyName: "Tn"
+  i18n:
+    service_en_US.properties:
+    - service.description: "share MetaStore with Tn is a memory based interative SQL engine"
+    service_zh_CN.properties:
+    - service.description: "Tn是基于内存的交互式SQL分析引擎"
+  roles:
+    - name: INCEPTOR_METASTORE
+      friendlyName: "Tn Metastore"
+    - name: INCEPTOR_SERVER
+      friendlyName: "Tn Server"
+    - name: INCEPTOR_EXECUTOR
+      friendlyName: "Tn Executor"
+    - name: INCEPTOR_PROFILER
+      friendlyName: "Tn Profiler"
+    - name: INCEPTOR_COMPACTOR
+      friendlyName: "Tn Compactor"
+- name: SLIPSTREAM
+  namePrefix: ILink
+  friendlyName: "ILink"
+  i18n:
+    service_en_US.properties:
+    - service.description: "ILink is a SQL based and unified engine for both batch and stream processing"
+    service_zh_CN.properties:
+    - service.description: "ILink是一种SQL化的实时流处理引擎"
+  roles:
+    - name: INCEPTOR_METASTORE
+      friendlyName: "ILink Metastore"
+    - name: INCEPTOR_HISTORYSERVER
+      friendlyName: "ILink History Server"
+    - name: INCEPTOR_SERVER
+      friendlyName: "ILink Server"
+    - name: INCEPTOR_EXECUTOR
+      friendlyName: "ILink Executor"
+- name: INCEPTOR_GATEWAY
+  namePrefix: TnGateway
+  friendlyName: "TnGateway"
+  i18n:
+    service_en_US.properties:
+    - service.description: "TnGateway is Tn's connection management and transfer station"
+    service_zh_CN.properties:
+    - service.description: "TnGateway是Tn的连接管理及中转站"
+  roles:
+    - name: INCEPTOR_GATEWAY
+      friendlyName: "TnGateway"
+- name: SLIPSTREAM_STUDIO
+  namePrefix: ILinkStudio
+  friendlyName: "ILinkStudio"
+  i18n:
+    service_en_US.properties:
+    - service.description: "ILinkStudio is a platform is a SQL based and unified engine for both batch and stream processing"
+    service_zh_CN.properties:
+    - service.description: "ILinkStudio是图形化的流任务设计、调试、监控和分析的开发工具套件"
+  roles:
+    - name: INCEPTOR_SLIPSTREAMSTUDIO
+      friendlyName: "ILinkStudio"
+- name: NOTIFICATION
+  namePrefix: Coury
+  friendlyName: "Coury"
+  i18n:
+    service_en_US.properties:
+    - service.description: "Coury is a centralized middleware for receiving, storing and forwarding messages"
+    service_zh_CN.properties:
+    - service.description: "Coury是集中化的消息接受、存储和转发的中间件"
+  roles:
+    - name: NOTIFICATION_SERVER
+      friendlyName: "Coury Server"
+- name: KAFKA
+  namePrefix: Kafka
+  friendlyName: "Kafka"
+  i18n:
+    service_en_US.properties:
+    - service.description: "Kafka is a distributed publish-subscribe messaging system"
+    service_zh_CN.properties:
+    - service.description: "Kafka是一种分布式消息发布订阅系统"
+  roles:
+    - name: KAFKA_SERVER
+      friendlyName: "Kafka Server"
+    - name: MILANO_KAFKA_MANAGER
+      friendlyName: "KafkaManager"
+    - name: KAFKA_REST
+      friendlyName: "Kafka Rest"
+- name: TRANSPORTER
+  namePrefix: ETL-Tools
+  friendlyName: "ETL-Tools"
+  i18n:
+    service_en_US.properties:
+    - service.description: "ETL-Tools is a data integration tool"
+    service_zh_CN.properties:
+    - service.description: "ETL-Tools是数据整合工具"
+  roles:
+    - name: TDT_SERVER
+      friendlyName: "ETL-Tools Server"
+- name: WORKFLOW
+  namePrefix: WorkFlow
+  friendlyName: "WorkFlow"
+  i18n:
+    service_en_US.properties:
+    - service.description: "WorkFlow is a batch job scheduler, providing easy-to-use UI to design, execute, monitor and analyze complex workflows"
+    service_zh_CN.properties:
+    - service.description: "WorkFlow是图形化的工作流设计、调试、调度和分析的服务工具"
+  roles:
+    - name: WORKFLOW_SERVER
+      friendlyName: "WorkFlow Server"
+- name: RUBIK
+  namePrefix: Cube-Designers
+  friendlyName: "Cube-Designers"
+  i18n:
+    service_en_US.properties:
+    - service.description: "Cube-Designers is a visualized tool to design OLAP Cubes which is materialized in HDFS or Holodesk"
+    service_zh_CN.properties:
+    - service.description: "Cube-Designers是OLAP Cube的可视化设计工具"
+  roles:
+    - name: RUBIK_SERVER
+      friendlyName: "Cube-Designers Server"
+- name: GOVERNOR
+  namePrefix: Meta-Navigator
+  friendlyName: "Meta-Navigator"
+  i18n:
+    service_en_US.properties:
+    - service.description: "Meta-Navigator is a metadata management and data governance tool"
+    service_zh_CN.properties:
+    - service.description: "Meta-Navigator是元数据管理工具"
+  roles:
+    - name: GOVERNOR_SERVER
+      friendlyName: "Meta-Navigator Server"
+- name: REDIS
+  namePrefix: Redis
+  friendlyName: "Redis"
+  i18n:
+    service_en_US.properties:
+    - service.description: "Redis is an open source (BSD licensed), in-memory data structure store"
+    service_zh_CN.properties:
+    - service.description: "Redis是一个开源的高性能内存数据库"
+  roles:
+    - name: REDIS_SERVER
+      friendlyName: "Redis Server"
+- name: KONG
+  namePrefix: Kong
+  friendlyName: "Kong"
+  i18n:
+    service_en_US.properties:
+    - service.description: "Kong is an API gateway."
+    service_zh_CN.properties:
+    - service.description: "Kong是一个API网关"
+  roles:
+    - name: KONG_MYSQL
+      friendlyName: "Kong Mysql"
+    - name: KONG_SERVER
+      friendlyName: "Kong Server"
+    - name: KONG_DASHBOARD
+      friendlyName: "Kong Dashboard"
+- name: CODIS
+  namePrefix: Codis
+  friendlyName: "Codis"
+  i18n:
+    service_en_US.properties:
+    - service.description: "Codis is a proxy based high performance Redis cluster solution"
+    service_zh_CN.properties:
+    - service.description: "Codis是一种基于代理机制的Redis集群解决方案"
+  roles:
+    - name: CODIS_DASHBOARD
+      friendlyName: "Codis Dashboard"
+    - name: CODIS_PROXY
+      friendlyName: "Codis Proxy"
+    - name: CODIS_FE
+      friendlyName: "Codis FE"
+    - name: CODIS_SERVER
+      friendlyName: "Codis Server"
+- name: SMARTBI
+  namePrefix: SmartBI
+  friendlyName: "SmartBI"
+  i18n:
+    service_en_US.properties:
+    - service.description: "SmartBI is a professional business intelligence BI and big data analysis software platform."
+    service_zh_CN.properties:
+    - service.description: "SmartBI是一个专业的商业智能BI与大数据分析软件"
+  roles:
+    - name: SMARTBI_MYSQL
+      friendlyName: "SmartBI MySQL"
+    - name: SMARTBI_TOMCAT
+      friendlyName: "SmartBI Tomcat"
+- name: MILANO
+  namePrefix: LogSearch
+  friendlyName: "LogSearch"
+  i18n:
+    service_en_US.properties:
+    - service.description: "Log collection and search."
+    service_zh_CN.properties:
+    - service.description: "日志搜集与检索"
+  roles:
+    - name: MILANO_FILEBEAT
+      friendlyName: "Filebeat"
+    - name: MILANO_LOGSTASH
+      friendlyName: "Logstash"
+    - name: MILANO_KIBANA
+      friendlyName: "Kibana"
+    - name: MILANO_KAFKA_MANAGER
+      friendlyName: "KafkaManager"
+    - name: MILANO_CRONTAB
+      friendlyName: "Crontab"
+- name: KMS
+  namePrefix: "Hadoop-KMS"
+  friendlyName: "Hadoop KMS"
+  i18n:
+    service_en_US.properties:
+    - service.description: "Hadoop KMS is a key management service that supports transparent encryption of hdfs."
+    service_zh_CN.properties:
+    - service.description: "Hadoop KMS是key管理服务，支持hdfs的透明加密功能"
+  roles:
+    - name: KMS_SERVER
+      friendlyName: "Hadoop KMS Server"
+- name: DISCOVER
+  namePrefix: "ML-Space"
+  friendlyName: "ML Platform"
+  i18n:
+    service_en_US.properties:
+    - service.description: "ML Platform is a memory-based data mining engine"
+    service_zh_CN.properties:
+    - service.description: "ML Platform是基于内存的数据挖掘引擎"
+  roles:
+    - name: DISCOVER_IDE
+      friendlyName: "ML Platform IDE"
+    - name: DISCOVER_NOTEBOOK
+      friendlyName: "ML Platform Notebook"
+    - name: DISCOVER_LOCAL-CRAN
+      friendlyName: "ML Platform Local-Cran"
+- name: STELLARDB
+  namePrefix: GRDB
+  friendlyName: "GRDB"
+  i18n:
+    service_en_US.properties:
+    - service.description: "GRDB is a real-time graph database"
+    service_zh_CN.properties:
+    - service.description: "GRDB是一款实时的图数据库"
+  roles:
+    - name: STELLARDB_MASTER
+      friendlyName: "GRDB Master"
+    - name: STELLARDB_WORKER
+      friendlyName: "GRDB Worker"
+- name: SOPHON
+  namePrefix: "AI-Space"
+  friendlyName: "AI Platform"
+  i18n:
+    service_en_US.properties:
+    - service.description: "AI Platform is a deep learning interactive analysis service platform"
+    service_zh_CN.properties:
+    - service.description: "AI Platform是一个深度学习交互式分析服务平台"
+  roles:
+    - name: SOPHON_REDIS
+      friendlyName: "AI Platform Redis"
+    - name: SOPHON_SERVER
+      friendlyName: "AI Platform Server"
+    - name: SOPHON_SCHEDULER
+      friendlyName: "AI Platform Scheduler"
+- name: KUNDB
+  namePrefix: TRDB
+  friendlyName: "TRDB"
+  i18n:
+    service_en_US.properties:
+    - service.description: "TRDB is a transactional distributed database"
+    service_zh_CN.properties:
+    - service.description: "TRDB是一个交易型分布式数据库"
+  roles:
+    - name: KUNCTLD
+      friendlyName: "TCtld"
+    - name: KUNGATE
+      friendlyName: "TGate"
+    - name: COMPUTE_NODE
+      friendlyName: "Compute Node"
+- name: GUARDIAN
+  namePrefix: Guardian
+  friendlyName: "Guardian"
+  i18n:
+    service_en_US.properties:
+    - service.description: "Guardian is a security management component"
+      service.plugin.hdfs.description: "HDFS permission and quota management by Guardian component"
+      service.plugin.yarn.description: "YARN permission and queue quota management by Guardian component"
+      service.plugin.hyperbase.description: "IBase schema, table etc. permission management by Guardian component"
+      service.plugin.inceptor.description: "Tn database, table etc. permission and queue management by Guardian component"
+      service.plugin.slipstream.description: "ILink database, table etc. permission and queue management by Guardian component"
+    service_zh_CN.properties:
+    - service.description: "Guardian是一个安全管理组件"
+      service.plugin.hdfs.description: "通过安全管理组件Guardian来管理HDFS的权限和配额"
+      service.plugin.yarn.description: "通过安全管理组件Guardian来管理YARN的权限和队列配额"
+      service.plugin.hyperbase.description: "通过安全管理组件Guardian来管理IBase中的Schema、表等的权限"
+      service.plugin.inceptor.description: "通过安全管理组件Guardian来管理Tn中的数据库、表等的权限以及队列配额"
+      service.plugin.slipstream.description: "通过安全管理组件Guardian来管理ILink中的数据库、表等的权限以及队列配额"
+  roles:
+    - name: GUARDIAN_TXSQL_SERVER
+      friendlyName: "ISQL Server"
+    - name: GUARDIAN_APACHEDS
+      friendlyName: "Guardian ApacheDS"
+    - name: GUARDIAN_SERVER
+      friendlyName: "Guardian Server"
+    - name: CAS_CONFIG_SERVER
+      friendlyName: "CAS Configuration Server"
+    - name: CAS_SERVER
+      friendlyName: "CAS Server"
+    - name: CAS_ADMIN_SERVER
+      friendlyName: "CAS Admin Server"
+- name: DASHBOARD
+  namePrefix: Dashboard
+  friendlyName: "DASHBOARD"
+  i18n:
+    service_en_US.properties:
+    - service.description: ""
+    service_zh_CN.properties:
+    - service.description: ""
+  roles:
+    - name: DASHBOARD
+      friendlyName: "Dashboard"
+- name: FLANNEL
+  namePrefix: Flannel
+  friendlyName: "FLANNEL"
+  i18n:
+    service_en_US.properties:
+    - service.description: ""
+    service_zh_CN.properties:
+    - service.description: ""
+  roles:
+    - name: FLANNELD
+      friendlyName: "Flanneld"
+    - name: KUBE_DNS
+      friendlyName: "Kube Dns"
+- name: LICENSE_SERVICE
+  namePrefix: LICENSE_SERVICE
+  friendlyName: "LICENSE_SERVICE"
+  i18n:
+    service_en_US.properties:
+    - service.description: ""
+    service_zh_CN.properties:
+    - service.description: ""
+  roles:
+    - name: LICENSE_NODE
+      friendlyName: "License Node"
+- name: MONITOR
+  namePrefix: Monitor
+  friendlyName: "MONITOR"
+  i18n:
+    service_en_US.properties:
+    - service.description: "MONITOR"
+    service_zh_CN.properties:
+    - service.description: "MONITOR"
+  roles:
+    - name: MONITOR_PROMETHEUS
+      friendlyName: "Prometheus"
+    - name: MONITOR_NODEEXPORTER
+      friendlyName: "Nodeexporter"
+    - name: MONITOR_KUBE_METRICS
+      friendlyName: "Kube Status Metrics"
+    - name: MONITOR_GRAFANA
+      friendlyName: "Grafana"
+- name: TOS
+  namePrefix: COS
+  friendlyName: "COS"
+  i18n:
+    service_en_US.properties:
+    - service.description: ""
+    service_zh_CN.properties:
+    - service.description: ""
+  roles:
+    - name: DF_CLIENT
+      friendlyName: "DF Client"
+    - name: DF_MASTER
+      friendlyName: "DF Master"
+    - name: TOS_SLAVE
+      friendlyName: "COS Slave"
+    - name: TOS_REGISTRY
+      friendlyName: "COS Registry"
+    - name: TOS_MASTER
+      friendlyName: "COS Master"
+- name: ARGODB_STORAGE
+  namePrefix: ADBStorage
+  friendlyName: "ADBStorage"
+  i18n:
+    service_en_US.properties:
+    - service.description: "ADB-Storage is the storage unit of the distributed flash database ADB"
+    service_zh_CN.properties:
+    - service.description: "ADB-Storage是分布式闪存数据库ADB的存储单元"
+  roles:
+    - name: INCEPTOR_METASTORE
+      friendlyName: "Tn Metastore"
+    - name: SHIVA_MASTER
+      friendlyName: "PDFS Master"
+    - name: SHIVA_WEBSERVER
+      friendlyName: "PDFS Webserver"
+      linkExpression: null
+    - name: SHIVA_TABLETSERVER
+      friendlyName: "PDFS Tablet Server"
+    - name: LADDER_MASTER
+      friendlyName: "Ladder Master"
+    - name: LADDER_WORKER
+      friendlyName: "Ladder Worker"
+- name: ARGODB_COMPUTING
+  namePrefix: ADBComputing
+  friendlyName: "ADBComputing"
+  i18n:
+    service_en_US.properties:
+    - service.description: "ADB-Computing is ADB's memory-based interactive SQL analysis calculation engine"
+    service_zh_CN.properties:
+    - service.description: "ADB-Computing是ADB的基于内存的交互式SQL分析计算引擎"
+  roles:
+    - name: INCEPTOR_SERVER
+      friendlyName: "Adb Server"
+    - name: INCEPTOR_EXECUTOR
+      friendlyName: "Adb Executor"
+    - name: INCEPTOR_PROFILER
+      friendlyName: "Adb Profiler"
+    - name: INCEPTOR_COMPACTOR
+      friendlyName: "Adb Compactor"
