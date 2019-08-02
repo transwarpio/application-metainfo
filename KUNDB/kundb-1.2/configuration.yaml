@@ -16,7 +16,7 @@
   defaultValue: null
   valueType: ABSOLUTE_PATH
   scope: !<RoleTypes>
-    roleTypes: [ORCHESTRATOR, KUNCTLD, COMPUTE_NODE, KUNTABLET_MASTER, KUNTABLET_REPLICA, KUNTABLET_RDONLY, KUNGATE]
+    roleTypes: [LICENSE_PROXY, ORCHESTRATOR, KUNCTLD, COMPUTE_NODE, KUNTABLET_MASTER, KUNTABLET_REPLICA, KUNTABLET_RDONLY, KUNGATE]
   onDeps: []
   groups: [kundb-env.sh]
   visibility: READ_WRITE
@@ -594,6 +594,16 @@
   groups: []
   visibility: READ_WRITE
 
+- name: licenseproxy.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+
 - name: kunctld.container.requests.memory
   recommendExpression: -1
   defaultValue: null
@@ -650,6 +660,15 @@
   visibility: READ_WRITE
 
 - name: orchestrator.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: licenseproxy.container.limits.memory
   recommendExpression: -1
   defaultValue: null
   valueType: GB
