@@ -225,8 +225,6 @@ roles:
         sleepSec: 2
   - type: Start
     directives:
-    - directive: !<shell>
-        script: "docker run --volume /opt/kubernetes/registry-certs/:/srv/kubernetes/ -e EXTAR_OPTS=DNS:${localhostname}, --net=host transwarp/gencerts:manager-6.0.1907a-rc0 /usr/bin/entry.sh"
     - directive: !<systemctl>
         action: EnableStart
         service: haproxy
@@ -254,8 +252,6 @@ roles:
         sleepSec: 2
   - type: Scaleout
     directives:
-    - directive: !<shell>
-        script: "docker run --volume /opt/kubernetes/registry-certs/:/srv/kubernetes/ -e EXTAR_OPTS=DNS:${localhostname}, --net=host transwarp/gencerts:manager-6.0.1907a-rc0 /usr/bin/entry.sh"
     - directive: !<systemctl>
         action: EnableStart
         service: haproxy
