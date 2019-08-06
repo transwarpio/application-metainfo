@@ -157,6 +157,9 @@ export HADOOP_CONF_DIR=/etc/${dependencies.HDFS.sid}/conf:/etc/${dependencies.YA
 <#if dependencies.HYPERBASE??>
 export HBASE_CONF_DIR=/etc/${dependencies.HYPERBASE.sid}/conf
 </#if>
+<#if dependencies.STELLARDB??>
+export STELLARDB_CONF_DIR=/etc/${dependencies.STELLARDB.sid}/conf
+</#if>
 export HIVE_SERVER2="true"
 
 <#--handle dependent.zookeeper-->
