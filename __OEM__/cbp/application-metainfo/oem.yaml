@@ -2,6 +2,8 @@
 reserveTags:
 - original: manager-6.0.1905a
   replacement: cbp-2.0.0
+- original: guardian-3.1.0
+  replacement: cbp-2.0.0
 - original: transwarp-6.0.2
   replacement: transwarp-6.0.2
 - original: studio-1.1.0

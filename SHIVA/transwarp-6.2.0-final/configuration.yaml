@@ -1,0 +1,710 @@
+---
+# master.conf
+- name: master.log.log_dir
+  recommendExpression: /var/log/${service.sid}
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.log.log_min_log_level
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.log.log_v_level
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.log.log_retain_size_gb
+  recommendExpression: 10
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.master.data_path
+  recommendExpression: |
+    <#function localDir suffix>
+      <#if rcmdMounts?size == 0>
+        <#return suffix>
+      <#else>
+        <#return rcmdMounts?sort?first + suffix>
+      </#if>
+    </#function>
+    ${localDir("/shiva-master/data")}
+  defaultValue: null
+  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
+  isNodeSpecific: true
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.rpc_service.master_service_port
+  recommendExpression: 9630
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.rpc_service.master_service_thread_num
+  recommendExpression: 1
+  defaultValue: 1
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.rpc_service.monitor_service_thread_num
+  recommendExpression: 8
+  defaultValue: 8
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.rpc_service.raft_service_thread_num
+  recommendExpression: 2
+  defaultValue: 2
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.rpc_service.recover_service_thread_num
+  recommendExpression: 1
+  defaultValue: 1
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.rpc_client.rpc_work_thread_num
+  recommendExpression: 8
+  defaultValue: 8
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.rpc_client.rpc_callback_thread_num
+  recommendExpression: 8
+  defaultValue: 8
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.rpc_client.rpc_timeout_ms
+  recommendExpression: 10000
+  defaultValue: 10000
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.recover.recover_rpc_call_timeout_ms
+  recommendExpression: 10000
+  defaultValue: 10000
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.recover.recover_data_buffer_size_mb
+  recommendExpression: 4
+  defaultValue: 4
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.recover.recover_data_max_concurrent
+  recommendExpression: 2
+  defaultValue: 2
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.raft.heartbeat_period_ms
+  recommendExpression: 5000
+  defaultValue: 5000
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.raft.max_batch_size_b
+  recommendExpression: 2097152
+  defaultValue: 2097152
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.raft.election_threshold
+  recommendExpression: 5
+  defaultValue: 5
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.raft.disruption_threshold
+  recommendExpression: 3
+  defaultValue: 3
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.raft.max_replicate_buffer_size_mb
+  recommendExpression: 16
+  defaultValue: 16
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.scheduler.get_server_statistic_period_s
+  recommendExpression: 10
+  defaultValue: 10
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.scheduler.get_all_tablets_period_s
+  recommendExpression: 1800
+  defaultValue: 1800
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.scheduler.dead_server_timeout_s
+  recommendExpression: 60
+  defaultValue: 60
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.scheduler.bulk_gc_period_s
+  recommendExpression: 60
+  defaultValue: 60
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+- name: master.scheduler.bulk_lease_timeout_s
+  recommendExpression: 600
+  defaultValue: 600
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: ["master.conf"]
+  visibility: READ_WRITE
+
+# tabletserver.conf
+- name: tabletserver.log.log_dir
+  recommendExpression: /var/log/${service.sid}
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.log.log_min_log_level
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.log.log_v_level
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.log.log_retain_size_gb
+  recommendExpression: 10
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.tabletserver.topology_conf
+  recommendExpression: /etc/${service.sid}/conf/topology.conf
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.tabletserver.store_conf
+  recommendExpression: /etc/${service.sid}/conf/store.conf
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.tabletserver.max_tablet_reader_queue_size
+  recommendExpression: 3000
+  defaultValue: 3000
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.rpc_service.manage_service_port
+  recommendExpression: 8002
+  defaultValue: 8002
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.rpc_service.manage_service_thread_num
+  recommendExpression: 1
+  defaultValue: 1
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.rpc_service.tablet_service_thread_num
+  recommendExpression: 8
+  defaultValue: 8
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.rpc_service.raft_service_thread_num
+  recommendExpression: 4
+  defaultValue: 4
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.rpc_service.recover_service_thread_num
+  recommendExpression: 4
+  defaultValue: 4
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.rpc_client.rpc_work_thread_num
+  recommendExpression: 4
+  defaultValue: 4
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.rpc_client.rpc_callback_thread_num
+  recommendExpression: 4
+  defaultValue: 4
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.rpc_client.rpc_timeout_ms
+  recommendExpression: 10000
+  defaultValue: 10000
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.recover.recover_rpc_call_timeout_ms
+  recommendExpression: 10000
+  defaultValue: 10000
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.recover.recover_data_buffer_size_mb
+  recommendExpression: 4
+  defaultValue: 4
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.recover.recover_data_max_concurrent
+  recommendExpression: 4
+  defaultValue: 4
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.raft.heartbeat_period_ms
+  recommendExpression: 5000
+  defaultValue: 5000
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.raft.max_batch_size_b
+  recommendExpression: 2097152
+  defaultValue: 2097152
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.raft.election_threshold
+  recommendExpression: 5
+  defaultValue: 5
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.raft.disruption_threshold
+  recommendExpression: 3
+  defaultValue: 3
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.raft.max_replicate_buffer_size_mb
+  recommendExpression: 64
+  defaultValue: 64
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.thread_pool.tablet_reader_thread_num
+  recommendExpression: 8
+  defaultValue: 8
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.store.disk_write_thread_num
+  recommendExpression: 1
+  defaultValue: 1
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+- name: tabletserver.cache.kv_block_cache
+  recommendExpression: 10
+  defaultValue: 10
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["tabletserver.conf"]
+  visibility: READ_WRITE
+
+# topology.conf
+- name: topology.topology.rack
+  recommendExpression: rack1
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["topology.conf"]
+  visibility: READ_WRITE
+
+# store.conf
+- name: tabletserver.store.datadirs
+  recommendExpression: |
+    <#function diskSizeByMntGB mnt>
+      <#list disks?reverse as disk>
+        <#if mnt?contains(disk.mountPoint)>
+          <#return (disk.size / 1024 / 1024 / 1024)?floor>
+        </#if>
+      </#list>
+      <#return 0>
+    </#function>
+    <#function localDir suffix>
+      <#if rcmdMounts?size == 0>
+        <#return suffix>
+      <#else>
+        <#local dirs = []>
+        <#list rcmdMounts?sort as mnt>
+          <#if diskSizeByMntGB(mnt) gt 200>
+            <#local dirs = dirs + [mnt + suffix]>
+          </#if>
+        </#list>
+        <#if dirs?size == 0>
+          <#return suffix>
+        <#else>
+          <#return dirs?join(",")>
+        </#if>
+      </#if>
+    </#function>
+    ${localDir("/shiva-tabletserver/data")}
+  defaultValue: null
+  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
+  isNodeSpecific: true
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["store.conf"]
+  visibility: READ_WRITE
+
+- name: store.capacity
+  recommendExpression: |
+    <#compress>
+    <#function diskSizeByMntGB mnt>
+      <#list disks?reverse as disk>
+        <#if mnt?contains(disk.mountPoint)>
+          <#return (disk.size / 1024 / 1024 / 1024)?floor>
+        </#if>
+      </#list>
+      <#return 0>
+    </#function>
+    <#assign capacity=2048>
+    <#list rcmdMounts as mnt>
+      <#assign curCapacity = diskSizeByMntGB(mnt) / 2>
+      <#if curCapacity gt 100>
+        <#if curCapacity lt capacity>
+          <#assign capacity=curCapacity>
+        </#if>
+      </#if>
+    </#list>
+    ${capacity?floor?c}
+    </#compress>
+  defaultValue: null
+  valueType: STRING
+  isNodeSpecific: true
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: ["store.conf"]
+  visibility: READ_WRITE
+
+- name: http.port
+  recommendExpression: 4567
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: ["shiva-restful.sh"]
+  visibility: READ_WRITE
+
+
+- name: master.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: master.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: master.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: master.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: master.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_MASTER]}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tabletserver.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tabletserver.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tabletserver.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tabletserver.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tabletserver.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: webserver.memory
+  recommendExpression: 16
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes> {roleTypes: [SHIVA_WEBSERVER]}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: webserver.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_WEBSERVER]}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: webserver.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_WEBSERVER]}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: webserver.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_WEBSERVER]}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: webserver.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_WEBSERVER]}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: webserver.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes> {roleTypes: [SHIVA_TABLETSERVER]}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

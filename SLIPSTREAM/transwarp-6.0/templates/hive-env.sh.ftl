@@ -131,6 +131,8 @@ export INCEPTOR_EXECUTOR_COUNT=${inceptorExecutorCount}
 export METASTORE_PORT=${dependencies.SLIPSTREAM['hive.metastore.port']}
 <#elseif dependencies.INCEPTOR??>
 export METASTORE_PORT=${dependencies.INCEPTOR['hive.metastore.port']}
+<#elseif dependencies.ARGODB_STORAGE??>
+export METASTORE_PORT=${dependencies.ARGODB_STORAGE['hive.metastore.port']}
 <#else>
 export METASTORE_PORT=${service['hive.metastore.port']}
 </#if>
@@ -154,6 +156,8 @@ export JAVAX_JDO_OPTION_CONNECTION_PASSWORD=${service['javax.jdo.option.Connecti
 export HIVE_METASTORE_SERVER=${dependencies.SLIPSTREAM.roles.INCEPTOR_METASTORE[0]['hostname']}
 <#elseif dependencies.INCEPTOR??>
 export HIVE_METASTORE_SERVER=${dependencies.INCEPTOR.roles.INCEPTOR_METASTORE[0]['hostname']}
+<#elseif dependencies.ARGODB_STORAGE??>
+export HIVE_METASTORE_SERVER=${dependencies.ARGODB_STORAGE.roles.INCEPTOR_METASTORE[0]['hostname']}
 <#else>
 export HIVE_METASTORE_SERVER=${service.roles.INCEPTOR_METASTORE[0]['hostname']}
 </#if>

@@ -42,6 +42,39 @@ roles:
   validation:
   - criteria: !<Range> {"min": 0}
   operations: []
+- name: LICENSE_PROXY
+  friendlyName: "LicenseProxy"
+  labelPrefix: "licenseproxy"
+  dockerImage: "transwarp/kundb-license-proxy:kundb-1.2"
+  linkExpression: ""
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - |
+        curl --connect-timeout 10 --max-time 20 "http://`hostname`:51000/license/healthCheck" | tee /tmp/check-license-proxy
+        grep '"OK"' /tmp/check-license-proxy
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env: []
+  mountPaths: []
+  resources:
+    limitsMemoryKey: licenseproxy.container.limits.memory
+    requestsMemoryKey: licenseproxy.container.requests.memory
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations: []
 - name: KUNCTLD 
   friendlyName: "KunCtld"
   labelPrefix: "kunctld"
@@ -447,6 +480,11 @@ stages:
       roleType: "ORCHESTRATOR"
       operation: Start
       summaryPolicy: ALL 
+      timeoutMinutes: 3
+    - !<Role>
+      roleType: "LICENSE_PROXY"
+      operation: Start
+      summaryPolicy: ALL
       timeoutMinutes: 3   
     - !<Role>
       roleType: "KUNTABLET_RDONLY"
@@ -533,6 +571,8 @@ firstWizardConfigs:
 - fedx_valid_index_cardinality_minvalue
 - orchestrator.container.limits.memory
 - orchestrator.container.requests.memory
+- licenseproxy.container.limits.memory
+- licenseproxy.container.limits.memory
 - kunctld.container.limits.memory
 - kunctld.container.requests.memory
 - computenode.container.limits.memory
@@ -567,6 +607,8 @@ healthChecks:
   method: !<Probe>
     roles:
     - roleType: KUNCTLD 
+      from: !<readiness> {}
+    - roleType: LICENSE_PROXY
       from: !<readiness> {}
     - roleType: KUNTABLET_RDONLY
       from: !<readiness> {}

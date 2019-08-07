@@ -39,6 +39,7 @@ keyspace=${KEYSPACE:-'kundb1'}
 port_base=$[$PORT_BASE + $uid_base]
 grpc_port_base=$[$GRPC_PORT_BASE + $uid_base]
 mysql_port_base=$[$MYSQL_PORT_BASE + $uid_base]
+vtctld_web_port=$CTLD_WEB_PORT
 default_dbname=${DEFAULT_DBNAME:-'vt_$keyspace'}
 logDir=$KUNDB_LOG_DIR
 shardLogDir=${SHARD_NAME}
@@ -61,6 +62,15 @@ printf -v tablet_dir 'vt_%010d' $uid
 if [ $1 == "master" ]; then
    tablet_type=replica
 fi
+
+if [ $1 == "master" ]; then
+   mysqlDir="masterInfo"
+elif [ $1 == "replica" ]; then
+   mysqlDir="replicaInfo"
+else
+   mysqlDir="rdonlyInfo"
+fi
+
 
 dbconfig_dba_flags="\
     -db-config-dba-uname vt_app \
@@ -204,6 +214,14 @@ $VTROOT/bin/vttablet \
 
 echo "Access tablet $alias at http://$local_host:$port/debug/status"
 sleep 4
+
+if [ -f "$ROLE_CONF_DIR/$mysqlDir" ]; then
+   touch $ROLE_CONF_DIR/$mysqlDir
+fi
+echo $mysql_jdbc_url_prefix$mysql_port/$DEFAULT_DBNAME > $ROLE_CONF_DIR/$mysqlDir
+echo $mysql_user >> $ROLE_CONF_DIR/$mysqlDir
+echo $mysql_password >> $ROLE_CONF_DIR/$mysqlDir
+echo  $DEFAULT_DBNAME >> $ROLE_CONF_DIR/$mysqlDir
 
 if [ $1 == "master" ]; then
  

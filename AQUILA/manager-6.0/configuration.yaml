@@ -1,5 +1,5 @@
 ## AQUILA_TXSQL_SERVER
-- name: txsql.data.dir
+- name: data.dir
   recommendExpression: "/${service.sid}/txsql/data/"
   defaultValue: null
   valueType: ABSOLUTE_PATH
@@ -9,7 +9,7 @@
   groups: []
   visibility: READ_WRITE
 
-- name: txsql.mysql.rw.port
+- name: mysql.rw.port
   recommendExpression: 8680
   defaultValue: null
   valueType: PORT
@@ -19,7 +19,7 @@
   groups: []
   visibility: READ_WRITE
 
-- name: txsql.binlog.port
+- name: binlog.port
   recommendExpression: 8681
   defaultValue: null
   valueType: PORT
@@ -29,7 +29,7 @@
   groups: []
   visibility: READ_WRITE
 
-- name: txsql.mysql.local.port
+- name: mysql.local.port
   recommendExpression: 8683
   defaultValue: null
   valueType: PORT
@@ -39,7 +39,7 @@
   groups: []
   visibility: READ_WRITE
 
-- name: txsql.binlogsvr.rpc.port
+- name: binlogsvr.rpc.port
   recommendExpression: 8684
   defaultValue: null
   valueType: PORT
@@ -49,7 +49,7 @@
   groups: []
   visibility: READ_WRITE
 
-- name: txsql.paxos.port
+- name: paxos.port
   recommendExpression: 8685
   defaultValue: null
   valueType: PORT
@@ -109,8 +109,8 @@
   groups: []
   visibility: READ_WRITE
 
-- name: txsql.root.password
-  recommendExpression: ${(service['txsql.root.password']??)?then(service['txsql.root.password'],((.now?long * .now?long)%987654321)?c)}
+- name: root.password
+  recommendExpression: ${(service['root.password']??)?then(service['root.password'],((.now?long * .now?long)%987654321)?c)}
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
@@ -500,6 +500,33 @@
   groups: []
   visibility: READ_WRITE
 
+- name: prometheus.storage.retention.time.days
+  recommendExpression: 15
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.min-block-duration.hours
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.max-block-duration.hours
+  recommendExpression: 26
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 # AQUILA_ALERTMANAGER
 
 - name: alertmanager.web.port
@@ -521,5 +548,3 @@
   onDeps: []
   groups: []
   visibility: READ_WRITE
-
-

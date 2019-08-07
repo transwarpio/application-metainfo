@@ -8,4 +8,4 @@ export LOCAL_IP=${r.ip}
         <#break>
     </#if>
 </#list>
-export SQL_RW_PORT=${service['txsql.mysql.rw.port']}
+export SQL_RW_PORT=${service['mysql.rw.port']}

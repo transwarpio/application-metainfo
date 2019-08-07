@@ -19,8 +19,7 @@ export SHARD_NUM=${shardNum}
         <#list masternode as mnode>
           <#if mnode.hostname == .data_model["localhostname"]> 
             <#if groupIds[shardIndex] == .data_model["role.groupId"]>
-            <#assign mysqlPort =(service["master.debug.port"]?number) connectionURL="jdbc:mysql://" + mnode.hostname +":" + (mysqlPort-1000) + "/" > 
-export mysql_port=${mysqlPort-1000}
+            <#assign connectionURLPrefix="jdbc:mysql://" + mnode.hostname +":"> 
 export KEYSPACE=${service['kundb.keyspace']}
 export DEFAULT_DBNAME=vt_$KEYSPACE
 export SHARD_NAME=${roleGroupName}
@@ -31,7 +30,7 @@ export LOCAL_SHARD_ID=${localShardId}
 export PORT_BASE=${service['master.port_base']}
 export GRPC_PORT_BASE=${service['master.grpc.port_base']}
 export MYSQL_PORT_BASE=${service['master.mysql.port_base']}
-export msyql_jdbc_url=${connectionURL}
+export mysql_jdbc_url_prefix=${connectionURLPrefix}
             </#if>
           <#assign localShardId += 1>
           </#if>

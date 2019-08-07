@@ -1,0 +1,6 @@
+- scope:
+    scopeType: ROLE # 角色级别的 metric 模板文件
+    roleType: KAFKA_SERVER
+  configFile: "kafka-server-jmx.yml.ftl"
+  scrape:
+    exporterType: TDH_EXPORTER
