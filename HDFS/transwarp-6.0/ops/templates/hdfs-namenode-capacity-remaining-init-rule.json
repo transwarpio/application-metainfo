@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "title": "HDFS剩余容量",
+  "description": "当HDFS剩余容量低于设定阈值时会触发警报",
+  "clauses": {
+    "type": "METRICS",
+    "expr": "name_node_capacity_remaining_percent and name_node_is_active_or_not > 0",
+    "warningEnabled": true,
+    "warningPredicate": "< 20",
+    "criticalEnabled": true,
+    "criticalPredicate": "< 10",
+    "holdEnabled": true,
+    "holdFor": "2",
+    "holdUnit": "m"
+  },
+  "keyLabels": [
+    "serviceId"
+  ],
+  "needManuallyClear": false,
+  "summaryTemplate": "HDFS剩余容量过低",
+  "descriptionTemplate": "HDFS {{ $labels.serviceName }} 当前剩余容量为 {{ $value }}"
+}

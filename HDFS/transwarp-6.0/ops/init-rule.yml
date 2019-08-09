@@ -1,0 +1,10 @@
+groups:
+  - groupName: HDFS
+    description: HDFS 的告警规则
+    rules:
+      - title: "NameNode 故障切换"
+        ruleJson: "hdfs-namenode-switch-error-init-rule.json"
+      - title: "NameNode 堆内存使用率"
+        ruleJson: "hdfs-namenode-heap-usage-init-rule.json"
+      - title: "HDFS 剩余容量"
+        ruleJson: "hdfs-namenode-capacity-remaining-init-rule.json"
