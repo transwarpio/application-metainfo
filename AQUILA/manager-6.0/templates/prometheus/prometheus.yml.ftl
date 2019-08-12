@@ -9,6 +9,16 @@
         rackId: ${role.rackId}
   </#list>
 </#macro>
+<#function extractHostPort url>
+  <#assign result = url>
+  <#if result?contains("://")>
+    <#assign result = result?keep_after("://")>
+  </#if>
+  <#if result?contains("/")>
+    <#assign result = result?keep_before("/")>
+  </#if>
+  <#return result>
+</#function>
 <#assign tdh_exporter_addr=[]>
 <#list service.roles['AQUILA_TDH_EXPORTER'] as role>
   <#assign tdh_exporter_addr += ["\'" + role.hostname + ":" + service['tdh.exporter.web.port'] + "\'"]>
@@ -37,6 +47,15 @@ scrape_configs:
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
   # metrics_path defaults to '/metrics'
   # scheme defaults to 'http'.
+  - job_name: 'manager'
+    scrape_interval: ${service['prometheus.manager.scrape_interval'] + "s"}
+    scrape_timeout: ${service['prometheus.manager.scrape_timeout'] + "s"}
+    static_configs:
+    - targets:
+<#list managerEndPoints as endpoint>
+      - ${extractHostPort(endpoint)}
+</#list>
+
   - job_name: 'tdh-exporter'
     scrape_interval: ${service['prometheus.tdh.exporter.scrape_interval'] + "s"}
     scrape_timeout: ${service['prometheus.tdh.exporter.scrape_timeout'] + "s"}

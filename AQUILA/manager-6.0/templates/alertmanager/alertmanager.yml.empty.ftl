@@ -3,14 +3,11 @@ global:
 
 route:
   group_by: ['alertname']
-  group_wait: 10s
-  group_interval: 10s
-  repeat_interval: 1h
-  receiver: 'web.hook'
+  receiver: 'alert.history.web.hook'
 receivers:
-- name: 'web.hook'
+- name: 'alert.history.web.hook'
   webhook_configs:
-  - url: 'http://172.16.1.104:9000/webhook'
+  - url: 'http://${service.roles['AQUILA_SERVER'][0].hostname}:${service['server.web.port']}/api/alert/history/fromAlertManager'
 
 inhibit_rules:
   - source_match:
