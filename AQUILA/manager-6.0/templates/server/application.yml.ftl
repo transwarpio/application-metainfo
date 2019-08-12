@@ -87,6 +87,11 @@ alert:
     alert-manager:
       query-url: ${alertmanagerEndpoint}/api/v1/alerts
     filter-keys: [ "clusterId", "nodeId", "serviceId" ]
+    limit: ${service['server.alert.query.limit']}
+  history:
+    queue:
+      data-dir: ${service['server.alert.history.queue.data.dir']}
+      tail-delay-ms: 1000
 manager-proxy:
   endpoints:
 <#list managerEndPoints as endpoint>

@@ -279,6 +279,26 @@
   groups: []
   visibility: READ_WRITE
 
+- name: server.alert.history.queue.data.dir
+  recommendExpression: "/${service.sid}/alert-history-queue"
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.alert.query.limit
+  recommendExpression: 1000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 # AQUILA_AGENT
 
 - name: agent.web.port

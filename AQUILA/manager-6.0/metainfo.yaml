@@ -105,7 +105,8 @@ roles:
     limitsCpuKey: server.container.limits.cpu
     requestsMemoryKey: server.container.requests.memory
     requestsCpuKey: server.container.requests.cpu
-  nodeSpecificMounts: []
+  nodeSpecificMounts:
+    - configKey: server.alert.history.queue.data.dir
   summaryPolicy: SOME
   autoAssign:
   - advice: !<NumSeq>
