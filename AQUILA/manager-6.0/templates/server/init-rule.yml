@@ -1,0 +1,10 @@
+rule-init:
+  groups:
+    - groupName: 节点
+      description: 节点级别的告警规则
+      rules:
+        - title: "node_lost"
+          ruleJson: "alert/templates/node-lost-init-rule.json"
+
+        - title: "node_partition_left"
+          ruleJson: "alert/templates/node-partition-left-init-rule.json"
