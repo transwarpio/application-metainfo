@@ -7,7 +7,10 @@ friendlyName: "InceptorGateway"
 dockerImage: "transwarp/inceptor-gateway:transwarp-6.2"
 user: hive
 validateConfig: true
-dependencies: []
+dependencies:
+- name: GUARDIAN
+  minVersion: transwarp-6.0.1-final
+  optional: true
 plugins: []
 roles:
 - name: INCEPTOR_GATEWAY
@@ -61,6 +64,8 @@ roles:
     value: ${service['inceptor.gateway.used.slipstream']}
   - name: GATEWAY_AUDIT_MAX_SQL_LENGTH
     value: ${service['inceptor.gateway.audit.max.sql.length']}
+  - name: EXTRA_GATEWAY_OPTS
+    value: ${service['EXTRA_GATEWAY_OPTS']}
 
   mountPaths: []
   summaryPolicy: SOME
@@ -112,6 +117,11 @@ firstWizardConfigs:
 pages:
 - roles
 - configuration
+- security
+
+principals:
+- hive
+- HTTP
 
 healthChecks:
 - category: DAEMON_CHECK
