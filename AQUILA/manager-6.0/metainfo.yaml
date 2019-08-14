@@ -148,6 +148,11 @@ roles:
         templatePath: "server/init-dashboard.yml"
         targetPath: "/etc/${service.sid}/conf/server/init-dashboard.yml"
         mode: "700"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "server/init-rule.yml"
+        targetPath: "/etc/${service.sid}/conf/server/init-rule.yml"
+        mode: "700"
 
 - name: AQUILA_AGENT
   friendlyName: "Aquila Agent"

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "title": "NameNode故障切换",
+  "description": "当NameNode发生故障切换时发送警报",
+  "clauses": {
+    "type": "METRICS",
+    "expr": "idelta(name_node_is_active_or_not[3m])",
+    "warningEnabled": true,
+    "warningPredicate": "< 0",
+    "criticalEnabled": false,
+    "criticalPredicate": null,
+    "holdEnabled": false,
+    "holdFor": null,
+    "holdUnit": "m"
+  },
+  "keyLabels": [
+    "roleId"
+  ],
+  "needManuallyClear": true,
+  "summaryTemplate": "{{ $labels.serviceName }}的NameNode发生故障切换",
+  "descriptionTemplate": "服务{{ $labels.serviceName }}的NameNode（{{ $labels.hostname }}）失去Active资格"
+}

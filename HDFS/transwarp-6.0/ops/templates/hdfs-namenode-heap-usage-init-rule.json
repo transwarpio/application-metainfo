@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "title": "NameNode堆内存使用率",
+  "description": "当NameNode堆内存使用百分比高于设定阈值时发送警报",
+  "clauses": {
+    "type": "METRICS",
+    "expr": "name_node_heap_memory_usage * 100",
+    "warningEnabled": true,
+    "warningPredicate": "> 80",
+    "criticalEnabled": true,
+    "criticalPredicate": "> 90",
+    "holdEnabled": true,
+    "holdFor": "2",
+    "holdUnit": "m"
+  },
+  "keyLabels": [
+    "roleId"
+  ],
+  "needManuallyClear": false,
+  "summaryTemplate": "NameNode堆内存使用率过高",
+  "descriptionTemplate": "NameNode（{{ $labels.serviceName }}, {{ $labels.hostname }}）当前堆内存使用率为 {{ $value }}%"
+}
