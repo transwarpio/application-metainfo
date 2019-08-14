@@ -83,6 +83,7 @@ alert:
   gateway:
     alert-manager:
       push-url: ${alertmanagerEndpoint}/api/v1/alerts
+    filter-keys: [ "clusterId", "nodeId", "serviceId" ]
   query:
     alert-manager:
       query-url: ${alertmanagerEndpoint}/api/v1/alerts
