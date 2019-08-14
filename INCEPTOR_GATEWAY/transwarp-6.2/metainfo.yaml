@@ -6,7 +6,7 @@ namePrefix: InceptorGateway
 friendlyName: "InceptorGateway"
 dockerImage: "transwarp/inceptor-gateway:transwarp-6.2"
 user: hive
-validateConfig: true
+#validateConfig: true
 dependencies:
 - name: GUARDIAN
   minVersion: transwarp-6.0.1-final
