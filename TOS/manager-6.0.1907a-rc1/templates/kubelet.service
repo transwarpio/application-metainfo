@@ -1,0 +1,49 @@
+<#assign master="false">
+<#assign hosts=service['roles']['TOS_MASTER']>
+<#list hosts as host>
+  <#if host.hostname == localhostname>
+    <#assign master="true">
+  </#if>
+</#list>
+[Unit]
+Description=Kubernetes Kubelet
+After=docker.service docker.socket
+Wants=docker.socket
+
+[Service]
+ExecStart=/opt/kubernetes/bin/hyperkube kubelet \
+    --logtostderr=true \
+    --v=6 \
+    --address=0.0.0.0 \
+    --cluster_dns=${service['cluster.dns.ip']} \
+    --cluster_domain=transwarp.local \
+    --port=${service['tos.slave.kubelet.port']} \
+    --hostname_override=${localhostname} \
+    --log_dir=/var/log/kubernetes \
+    --pod-manifest-path=/opt/kubernetes/manifests-multi \
+    --pod-infra-container-image=transwarp/pause:manager-6.0.1907a-rc1 \
+    --network-plugin=cni \
+    --resolv-conf=/dev/null \
+    --max-pods=200 \
+    --volume-stats-agg-period=0 \
+    --node-labels=<#if master == "true">master=true,</#if>worker=true \
+    --fail-swap-on=false \
+    --runtime-cgroups=/systemd/system.slice \
+    --kubelet-cgroups=/systemd/system.slice \
+<#if master == "true">
+    --kubeconfig=/srv/kubernetes/kubeconfig \
+    --feature-gates=BlockVolume=true,MountPropagation=true,PersistentLocalVolumes=true,VolumeScheduling=true,LocalStorageCapacityIsolation=true,PodPriority=true,DevicePlugins=true \
+<#else>
+    --require-kubeconfig \
+    --bootstrap-kubeconfig=/srv/kubernetes/bootstrap.kubeconfig \
+    --feature-gates=RotateKubeletClientCertificate=true,RotateKubeletServerCertificate=true,BlockVolume=true,MountPropagation=true,PersistentLocalVolumes=true,VolumeScheduling=true,LocalStorageCapacityIsolation=true,PodPriority=true,DevicePlugins=true \
+</#if>
+    --allow_privileged=true \
+    --eviction-hard=
+
+KillMode=process
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target
