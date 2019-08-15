@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    transwarp.name: kube-dns-${service.sid}
+  name: kube-dns-${service.sid}
+  namespace: kube-system
+spec:
+  clusterIP: ${dependencies.TOS['cluster.dns.ip']}
+  externalTrafficPolicy: Cluster
+  ports:
+  - name: dns
+    port: ${service['kube.dns.dnsmasq.port']}
+    protocol: UDP
+    targetPort: ${service['kube.dns.dnsmasq.port']}
+  - name: dns-tcp
+    port: ${service['kube.dns.dnsmasq.port']}
+    protocol: TCP
+    targetPort: ${service['kube.dns.dnsmasq.port']}
+  selector:
+    transwarp.name: kube-dns-${service.sid}
+  sessionAffinity: None
+  type: NodePort
+status:
+  loadBalancer: {}
