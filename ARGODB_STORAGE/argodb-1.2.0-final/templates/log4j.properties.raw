@@ -1,0 +1,27 @@
+inceptor.root.logger=INFO,RFA
+inceptor.log.dir=/usr/lib/ngmr/logs
+inceptor.log.file=spark.log
+
+# Define the root logger to the system property "hadoop.root.logger".
+log4j.rootLogger=${inceptor.root.logger}
+
+# Set everything to be logged to the console
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.target=System.err
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%d{yy/MM/dd HH:mm:ss} %p %c: %m%n
+
+
+# output to file
+log4j.appender.RFA=org.apache.log4j.RollingFileAppender
+log4j.appender.RFA.File=${inceptor.log.dir}/${inceptor.log.file}
+# The MaxFileSize can be 512KB
+log4j.appender.RFA.MaxFileSize=10MB
+# Keep three backup files.
+log4j.appender.RFA.MaxBackupIndex=1024
+# Pattern to output: date priority [category] - message
+log4j.appender.RFA.layout=org.apache.log4j.PatternLayout
+log4j.appender.RFA.layout.ConversionPattern=%d{yy/MM/dd HH:mm:ss} %p %c: %m%n
+
+# Ignore messages below warning level from Jetty, because it's a bit verbose
+log4j.logger.org.eclipse.jetty=WARN
