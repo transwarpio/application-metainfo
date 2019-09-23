@@ -1,0 +1,16 @@
+dashboard-init:
+  folders:
+    - folderName: "CLUSTER"
+      dashboards:
+        - title: "System Overview ( Cluster-Level )"
+          dashboardJson: "dashboard/templates/cluster-level-overview-init-dashboard.json"
+        - title: "System Overview ( Node-Level )"
+          dashboardJson: "dashboard/templates/node-level-overview-init-dashboard.json"
+        - title: "CPUs"
+          dashboardJson: "dashboard/templates/cpus-init-dashboard.json"
+        - title: "Memory"
+          dashboardJson: "dashboard/templates/memory-init-dashboard.json"
+        - title: "Disk"
+          dashboardJson: "dashboard/templates/disk-init-dashboard.json"
+        - title: "Network"
+          dashboardJson: "dashboard/templates/network-init-dashboard.json"

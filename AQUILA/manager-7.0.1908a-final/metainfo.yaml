@@ -1,0 +1,458 @@
+---
+name: AQUILA
+version: manager-7.0.1908a-final
+global: true
+namePrefix: Aquila
+friendlyName: "Aquila"
+dependencies: []
+user: root
+# TODO need generate manager password
+
+roles:
+- name: AQUILA_TXSQL_SERVER
+  friendlyName: "TxSQL Server"
+  labelPrefix: "txsql-server"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Move"]
+  deleteOpCondition:
+    deletable:
+      number: 3
+    reject:
+      number: 2
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: data.dir
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - "MYSQL_PWD=$(grep db.password /etc/${service.sid}/conf/db.properties | cut -d'=' -f2) mysql -h`hostname` -P${service['mysql.rw.port']} -uroot -e'select 1 from dual'"
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  env:
+  - name: CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: txsql.container.limits.memory
+    limitsCpuKey: txsql.container.limits.cpu
+    requestsMemoryKey: txsql.container.requests.memory
+    requestsCpuKey: txsql.container.requests.cpu
+  nodeSpecificMounts:
+    - configKey: data.dir
+  summaryPolicy: MAJOR
+  dockerImage: "transwarp/txsql:transwarp-6.2.0-final"
+  autoAssign:
+    - advice: !<NumSeq> {"numSeq": [5, 3, 1]}
+  suggestion:
+    - criteria: !<Range> {"min": 3, "oddity": true}
+  validation:
+    - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "txsql-db.properties"
+        targetPath: "/etc/${service.sid}/conf/db.properties"
+        mode: "600"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "txsql-install_conf.sh"
+        targetPath: "/etc/${service.sid}/conf/install_conf.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "txsql-txsql-env.sh"
+        targetPath: "/etc/${service.sid}/conf/txsql-env.sh"
+        mode: "755"
+
+- name: AQUILA_SERVER
+  friendlyName: "Aquila Server"
+  labelPrefix: "aquila-server"
+  dockerImage: "transwarp/aquila:manager-7.0.1908a-final"
+  linkExpression: "http://${localhostname}:${service['server.web.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop"]
+  readinessProbe:
+    probe: !<exec>
+      command:
+        - /bin/bash
+        - -c
+        - |
+          curl --connect-timeout 15 --max-time 15 "http://`hostname`:${service['server.web.port']}/actuator/health" | tee /tmp/check-aquila-server
+          grep '"UP"' /tmp/check-aquila-server
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  env:
+  - name: SERVER_CONF_DIR
+    value: /etc/${service.sid}/conf/server
+  - name: SERVER_LOG_DIR
+    value: /var/log/${service.sid}/server
+  mountPaths:
+  - mountPath: /tmp
+    hostPath: /tmp
+    name: temp
+  - mountPath: /var/lib/transwarp-manager/master/scripts
+    hostPath: /var/lib/transwarp-manager/master/scripts
+    name: scripts
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  nodeSpecificMounts:
+    - configKey: server.alert.history.queue.data.dir
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq>
+      numSeq: [1]
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/log/${service.sid}/server"]
+        mode: "750"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "server/env.sh.ftl"
+        targetPath: "/etc/${service.sid}/conf/server/env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "server/application.yml.ftl"
+        targetPath: "/etc/${service.sid}/conf/server/application.yml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "server/shadow.yml"
+        targetPath: "/etc/${service.sid}/conf/server/shadow.yml"
+        mode: "700"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "server/log4j2.xml.ftl"
+        targetPath: "/etc/${service.sid}/conf/server/log4j2.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "server/init-dashboard.yml"
+        targetPath: "/etc/${service.sid}/conf/server/init-dashboard.yml"
+        mode: "700"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "server/init-rule.yml"
+        targetPath: "/etc/${service.sid}/conf/server/init-rule.yml"
+        mode: "700"
+
+- name: AQUILA_AGENT
+  friendlyName: "Aquila Agent"
+  labelPrefix: "aquila-agent"
+  dockerImage: "transwarp/aquila:manager-7.0.1908a-final"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<tcpSocket>
+      port: ${service['agent.web.port']}
+    failureThreshold: 3
+    initialDelaySeconds: 3
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 15
+  env:
+  - name: AGENT_CONF_DIR
+    value: /etc/${service.sid}/conf/agent
+  - name: AGENT_LOG_DIR
+    value: /var/log/${service.sid}/agent
+  mountPaths:
+  - mountPath: /tmp
+    hostPath: /tmp
+    name: temp
+  resources:
+    limitsMemoryKey: agent.container.limits.memory
+    limitsCpuKey: agent.container.limits.cpu
+    requestsMemoryKey: agent.container.requests.memory
+    requestsCpuKey: agent.container.requests.cpu
+  nodeSpecificMounts: []
+  summaryPolicy: SOME
+  autoAssign:
+    - advice: !<EachNode> {}
+  suggestion:
+    - criteria: !<EachNode> {}
+  validation:
+    - criteria: !<EachNode> {}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+       paths: ["/var/log/${service.sid}/agent"]
+       mode: "750"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "agent/env.sh.ftl"
+        targetPath: "/etc/${service.sid}/conf/agent/env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "agent/application.yml.ftl"
+        targetPath: "/etc/${service.sid}/conf/agent/application.yml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "agent/log4j2.xml.ftl"
+        targetPath: "/etc/${service.sid}/conf/agent/log4j2.xml"
+        mode: "755"
+
+- name: AQUILA_NODE_EXPORTER
+  friendlyName: "Node Exporter"
+  labelPrefix: "node-exporter"
+  dockerImage: "transwarp/node-exporter:manager-7.0.1908a-final"
+  linkExpression: "http://${localhostname}:${service['node.exporter.web.port']}"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /metrics
+      port: ${service['node.exporter.web.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  hostPID: true
+  env:
+  - name: NODE_EXPORTER_CONF_DIR
+    value: /etc/${service.sid}/conf/node-exporter
+  mountPaths:
+  - mountPath: /host
+    mountParams: {mountPropagation: "HostToContainer", readOnly: true}
+    hostPath: /
+    name: host-mount
+  nodeSpecificMounts: []
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<EachNode> {}
+  suggestion:
+  - criteria: !<EachNode> {}
+  validation:
+  - criteria: !<EachNode> {}
+  operations:
+    - type: Config
+      directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "node-exporter/env.sh.ftl"
+            targetPath: "/etc/${service.sid}/conf/node-exporter/env.sh"
+            mode: "755"
+
+- name: AQUILA_TDH_EXPORTER
+  friendlyName: "TDH Exporter"
+  labelPrefix: "tdh-exporter"
+  dockerImage: "transwarp/tdh-exporter:manager-7.0.1908a-final"
+  linkExpression: "http://${localhostname}:${service['tdh.exporter.web.port']}/metrics"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /metrics
+      port: ${service['tdh.exporter.web.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  env:
+    - name: TDH_EXPORTER_CONF_DIR
+      value: /etc/${service.sid}/conf/tdh-exporter
+    - name: TDH_EXPORTER_LOG_DIR
+      value: /var/log/${service.sid}/tdh-exporter
+  mountPaths:
+    - mountPath: ${service['tdh.exporter.metric.config.dir']}
+      hostPath: ${service['tdh.exporter.metric.config.dir']}
+      name: config-mount
+  nodeSpecificMounts: []
+  summaryPolicy: SOME
+  autoAssign:
+    - advice: !<EachNode> {}
+  suggestion:
+    - criteria: !<EachNode> {}
+  validation:
+    - criteria: !<EachNode> {}
+  operations:
+    - type: Install
+      directives:
+        - directive: !<mkdirs>
+            paths: ["/var/log/${service.sid}/tdh-exporter"]
+            mode: "750"
+    - type: Config
+      directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "tdh-exporter/global-config.yml.ftl"
+            targetPath: "/etc/${service.sid}/conf/tdh-exporter/global-config.yml"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "tdh-exporter/env.sh.ftl"
+            targetPath: "/etc/${service.sid}/conf/tdh-exporter/env.sh"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "tdh-exporter/log4j2.xml.ftl"
+            targetPath: "/etc/${service.sid}/conf/tdh-exporter/log4j2.xml"
+            mode: "755"
+
+- name: AQUILA_PROMETHEUS
+  friendlyName: "Prometheus"
+  labelPrefix: "prometheus"
+  dockerImage: "transwarp/prometheus:manager-7.0.1908a-final"
+  linkExpression: "http://${localhostname}:${service['prometheus.web.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout", "Move"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /-/healthy
+      port: ${service['prometheus.web.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  hostPID: true
+  env:
+    - name: PROMETHEUS_CON_DIR
+      value: /etc/${service.sid}/conf/prometheus
+  mountPaths: []
+  nodeSpecificMounts:
+    - configKey: prometheus.data.dir
+  summaryPolicy: SOME
+  autoAssign:
+    - advice: !<NumSeq>
+        numSeq: [1]
+  suggestion:
+    - criteria: !<Range> {"min": 1, "max": 1}
+  validation:
+    - criteria: !<Range> {"min": 1, "max": 1}
+  operations:
+    - type: Config
+      directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "prometheus/prometheus.yml.ftl"
+            targetPath: "/etc/${service.sid}/conf/prometheus/prometheus.yml"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "prometheus/prometheus-env.sh.ftl"
+            targetPath: "/etc/${service.sid}/conf/prometheus/prometheus-env.sh"
+            mode: "755"
+
+- name: AQUILA_ALERTMANAGER
+  friendlyName: "Alertmanager"
+  labelPrefix: "alertmanager"
+  dockerImage: "transwarp/alertmanager:manager-7.0.1908a-final"
+  linkExpression: "http://${localhostname}:${service['alertmanager.web.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout", "Move"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /-/healthy
+      port: ${service['alertmanager.web.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  hostPID: true
+  env:
+    - name: ALERTMANAGER_CON_DIR
+      value: /etc/${service.sid}/conf/alertmanager
+  mountPaths: []
+  nodeSpecificMounts: []
+  summaryPolicy: SOME
+  autoAssign:
+    - advice: !<NumSeq>
+        numSeq: [1]
+  suggestion:
+    - criteria: !<Range> {"min": 1, "max": 1}
+  validation:
+    - criteria: !<Range> {"min": 1, "max": 1}
+  operations:
+    - type: Config
+      directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "alertmanager/alertmanager.yml.empty.ftl"
+            targetPath: "/etc/${service.sid}/conf/alertmanager/alertmanager.yml.empty"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "alertmanager/alertmanager-env.sh.ftl"
+            targetPath: "/etc/${service.sid}/conf/alertmanager/alertmanager-env.sh"
+            mode: "755"
+
+firstWizardConfigs:
+- prometheus.web.port
+- prometheus.data.dir
+- alertmanager.web.port
+- tdh.exporter.web.port
+- node.exporter.web.port
+- server.web.port
+- agent.web.port
+- data.dir
+- mysql.rw.port
+- binlog.port
+- mysql.local.port
+- binlogsvr.rpc.port
+- paxos.port
+- txsql.container.limits.memory
+- txsql.container.limits.cpu
+- txsql.container.requests.memory
+- txsql.container.requests.cpu
+- txsql.memory.ratio
+
+pages:
+- roles
+- configuration
+- operation
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 10
+  method: !<Probe>
+    roles:
+      - roleType: AQUILA_TXSQL_SERVER
+        from: !<readiness> {}
+      - roleType: AQUILA_SERVER
+        from: !<readiness> {}
+      - roleType: AQUILA_AGENT
+        from: !<readiness> {}
+      - roleType: AQUILA_NODE_EXPORTER
+        from: !<readiness> {}
+      - roleType: AQUILA_TDH_EXPORTER
+        from: !<readiness> {}
+      - roleType: AQUILA_PROMETHEUS
+        from: !<readiness> {}
+      - roleType: AQUILA_ALERTMANAGER
+        from: !<readiness> {}
