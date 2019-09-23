@@ -87,11 +87,11 @@ alert:
       upload-trigger: ${prometheusEndpoint}/-/reload
   gateway:
     alert-manager:
-      push-url: ${alertmanagerEndpoint}/api/v1/alerts?inhibited=false
+      push-url: ${alertmanagerEndpoint}/api/v1/alerts
     filter-keys: [ "clusterId", "nodeId", "serviceId" ]
   query:
     alert-manager:
-      query-url: ${alertmanagerEndpoint}/api/v1/alerts
+      query-url: ${alertmanagerEndpoint}/api/v1/alerts?inhibited=false
     filter-keys: [ "clusterId", "nodeId", "serviceId" ]
     limit: ${service['server.alert.query.limit']}
   history:
