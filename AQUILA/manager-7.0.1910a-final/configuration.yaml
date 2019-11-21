@@ -1,0 +1,642 @@
+## AQUILA_TXSQL_SERVER
+- name: data.dir
+  recommendExpression: "/${service.sid}/txsql/data/"
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: mysql.rw.port
+  recommendExpression: 8680
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: binlog.port
+  recommendExpression: 8681
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: mysql.local.port
+  recommendExpression: 8683
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: binlogsvr.rpc.port
+  recommendExpression: 8684
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: paxos.port
+  recommendExpression: 8685
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: txsql.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: txsql.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: txsql.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: txsql.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: txsql.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: root.password
+  recommendExpression: ${(service['root.password']??)?then(service['root.password'],((.now?long * .now?long)%987654321)?c)}
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: HIDDEN
+
+## AQUILA_SERVER
+
+- name: server.web.port
+  recommendExpression: 8666
+  defaultValue: 8080
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.api.swagger.enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.log.app.level
+  recommendExpression: INFO
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.memory
+  recommendExpression: 2048
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.limits.cpu
+  recommendExpression: 4
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.requests.memory
+  recommendExpression: 1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.requests.cpu
+  recommendExpression: 0.5
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.jdbc.connctor.timezone
+  recommendExpression: Asia/Shanghai
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: http-client.connect.timeout
+  recommendExpression: 30000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: http-client.connection-request.timeout
+  recommendExpression: 30000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: http-client.socket.timeout
+  recommendExpression: 30000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.rememberme.max-age
+  recommendExpression: 1209600
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.internal.admin.user
+  recommendExpression: <@randomstring len=10/>
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: WRITE_ONLY
+
+- name: server.internal.admin.password
+  recommendExpression: <@randomstring len=10/>
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: WRITE_ONLY
+
+- name: server.authz.anonymous.admin
+  recommendExpression: false
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.authz.cache.expire.sec
+  recommendExpression: 1200
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.alert.history.queue.data.dir
+  recommendExpression: "/${service.sid}/alert-history-queue"
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.alert.query.limit
+  recommendExpression: 1000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# AQUILA_AGENT
+
+- name: agent.web.port
+  recommendExpression: 8668
+  defaultValue: 8080
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: agent.log.app.level
+  recommendExpression: INFO
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: agent.memory
+  recommendExpression: 2048
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: agent.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: agent.container.limits.cpu
+  recommendExpression: 4
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: agent.container.requests.memory
+  recommendExpression: 1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: agent.container.requests.cpu
+  recommendExpression: 0.5
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# AQUILA_KUBE_STATE_METRICS
+- name: kube.state.metrics.web.port
+  recommendExpression: 8675
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_KUBE_STATE_METRICS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kube.state.metrics.telemetry.port
+  recommendExpression: 8676
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_KUBE_STATE_METRICS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# AQUILA_NODE_EXPORTER
+
+- name: node.exporter.web.port
+  recommendExpression: 8670
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_NODE_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: node.exporter.collector.filesystem.ignored-mount-points
+  recommendExpression: ^/(dev|proc|sys|var/lib/docker.+|hadoop/drbd|mnt/ramdisk/ngmr|transwarp/mounts)($|/)
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_NODE_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: node.exporter.collector.filesystem.ignored-fs-types
+  recommendExpression: ^(afs|anon_inodefs|aufs|autofs|bdev|bind|binfmt_.*|cgroup|cifs|coda|configfs|cpuset|debugfs|devfs|devpts|devtmpfs|ecryptfs|fd|ftpfs|fuse.*|gfs|gvfs.*|hugetlbfs|inotifyfs|iso9660|lustre.*|mfs|mqueue|ncpfs|NFS|nfs.*|none|overlay|pipefs|proc|procfs|pstore|ramfs|rootfs|rpc_.*|securityfs|shfs|shm|smbfs|sockfs|sysfs|tmpfs|tracefs|udev|udf|unionfs|usbfs)$
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_NODE_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+
+# AQUILA_TDH_EXPORTER
+
+- name: tdh.exporter.web.port
+  recommendExpression: 8692
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TDH_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tdh.exporter.metric.config.dir
+  recommendExpression: /etc/tdh-exporter
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TDH_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: HIDDEN
+
+- name: tdh.exporter.memory
+  recommendExpression: 2048
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TDH_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# AQUILA_PROMETHEUS
+
+- name: prometheus.web.port
+  recommendExpression: 8690
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_PROMETHEUS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.data.dir
+  recommendExpression: "/${service.sid}/prometheus/data"
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_PROMETHEUS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.web.enable-admin-api
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.web.enable-lifecycle
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.global.evaluation_interval
+  recommendExpression: 37
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.manager.scrape_interval
+  recommendExpression: 60
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.manager.scrape_timeout
+  recommendExpression: 15
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.tdh.exporter.scrape_interval
+  recommendExpression: 60
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.tdh.exporter.scrape_timeout
+  recommendExpression: 10
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.node.exporter.scrape_interval
+  recommendExpression: 15
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.node.exporter.scrape_timeout
+  recommendExpression: 10
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.kube.state.metrics.scrape_interval
+  recommendExpression: 15
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.kube.state.metrics.scrape_timeout
+  recommendExpression: 10
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.storage.retention.time.days
+  recommendExpression: 15
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.min-block-duration.hours
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.max-block-duration.hours
+  recommendExpression: 26
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# AQUILA_ALERTMANAGER
+
+- name: alertmanager.web.port
+  recommendExpression: 8693
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_ALERTMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: alertmanager.global.resolve.timeout
+  recommendExpression: 5m
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_ALERTMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

@@ -1,0 +1,318 @@
+---
+name: MANAGER
+version: manager-7.0.1910a-final
+global: true
+namePrefix: Manager
+friendlyName: "Manager"
+validateConfig: true
+dependencies: []
+user: root
+roles:
+- name: MANAGER_ZOOKEEPER_SERVER
+  friendlyName: "Zookeeper Server"
+  labelPrefix: "zookeeper-server"
+  dockerImage: "transwarp/zookeeper:transwarp-6.2.0-final"
+  category: MASTER
+  frontendOperations: ["Start"]
+  deleteOpCondition:
+    reject:
+      number: 3
+  deleteOpCleanDirs:
+    fromPath:
+    - key: /var/${service.sid}/zookeeper
+      featureFile: myid
+  env: []
+  mountPaths: []
+  summaryPolicy: MAJOR
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [3, 1]}
+  suggestion:
+  - criteria: !<Range> {"min": 3, "oddity": true}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/${service.sid}/zookeeper", "/var/log/${service.sid}/zookeeper"]
+        mode: "755"
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}", "/etc/${service.sid}/conf"]
+        mode: "755"
+    - directive: !<shell>
+        script: |
+          docker pull transwarp/zookeeper:transwarp-6.2.0-final
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "zookeeper-myid"
+        targetPath: "/var/${service.sid}/zookeeper/myid"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "zookeeper-zoo.cfg"
+        targetPath: "/etc/${service.sid}/conf/zoo.cfg"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "zookeeper-zookeeper-env.sh"
+        targetPath: "/etc/${service.sid}/conf/zookeeper-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: Raw
+        templatePath: "zookeeper-log4j.properties"
+        targetPath: "/etc/${service.sid}/conf/log4j.properties"
+        mode: "755"
+  # Here we use 'docker run' to start zookeeper and txsql instead of using k8s.
+  # Because if k8s crashed, zookeeper and txsql will be down.
+  # Therefore, we can not login 8180 any more.
+  - type: Start
+    directives:
+    - directive: !<shell>
+        script: |
+          <#assign
+            cmd="docker run --restart on-failure:5 --privileged=true --detach --env ZOOKEEPER_CONF_DIR=/etc/${service.sid}/conf --volume /etc/${service.sid}/conf:/etc/${service.sid}/conf --volume /var/${service.sid}/zookeeper:/var/${service.sid}/zookeeper --volume /var/log/${service.sid}/zookeeper:/var/log/${service.sid}/zookeeper --volume /etc/transwarp/conf:/etc/transwarp/conf --net=host --name=Manager-Zookeeper transwarp/zookeeper:transwarp-6.2.0-final /bin/boot.sh"
+          >
+          if docker ps -a | grep Manager-Zookeeper; then
+            if docker ps -a | grep Manager-Zookeeper | grep Exited; then
+              docker rm -vf Manager-Zookeeper
+              ${cmd}
+            fi
+          else
+            ${cmd}
+          fi
+  - type: Stop
+    directives:
+    - directive: !<shell>
+        script: |
+          if docker ps -a | grep Manager-Zookeeper; then
+            docker rm -vf Manager-Zookeeper
+          fi
+
+- name: MANAGER_TXSQL_SERVER
+  friendlyName: "TxSQL Server"
+  labelPrefix: "txsql-server"
+  dockerImage: "transwarp/txsql:transwarp-6.2.0-final"
+  category: MASTER
+  frontendOperations: ["Start", "Move"]
+  deleteOpCondition:
+    reject:
+      number: 3
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: data.dir
+      featureFile: node_init.log
+  env: []
+  mountPaths: []
+  summaryPolicy: MAJOR
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [3, 1]}
+  suggestion:
+  - criteria: !<Range> {"min": 3, "oddity": true}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/${service.sid}/txsql", "/var/run/${service.sid}", "/var/log/${service.sid}/txsql", "${service['data.dir']}"]
+        mode: "755"
+    - directive: !<shell>
+        script: |
+          docker pull transwarp/txsql:transwarp-6.2.0-final
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "txsql-db.properties"
+        targetPath: "/etc/${service.sid}/conf/db.properties"
+        mode: "600"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "txsql-install_conf.sh"
+        targetPath: "/etc/${service.sid}/conf/install_conf.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "txsql-txsql-env.sh"
+        targetPath: "/etc/${service.sid}/conf/txsql-env.sh"
+        mode: "755"
+  - type: Start
+    directives:
+    - directive: !<shell>
+        script: |
+          <#assign
+            cmd="docker run --restart on-failure:5 --privileged=true --detach --env CONF_DIR=/etc/${service.sid}/conf --volume /etc/${service.sid}/conf:/etc/${service.sid}/conf --volume ${service['data.dir']}:${service['data.dir']}  --volume /var/log/${service.sid}/txsql:/var/log/${service.sid}/txsql --volume /etc/transwarp/conf:/etc/transwarp/conf --net=host --name=Manager-TxSQL transwarp/txsql:transwarp-6.2.0-final /bin/boot.sh"
+          >
+          if docker ps -a | grep Manager-TxSQL; then
+            if docker ps -a | grep Manager-TxSQL | grep Exited; then
+              docker rm -vf Manager-TxSQL
+              ${cmd}
+            fi
+          else
+            ${cmd}
+          fi
+  - type: Stop
+    directives:
+    - directive: !<shell>
+        script: |
+          if docker ps -a | grep Manager-TxSQL; then
+            docker rm -vf Manager-TxSQL
+          fi
+
+- name: MANAGER_SERVER
+  friendlyName: "Manager Server"
+  labelPrefix: "manager-server"
+  category: MASTER
+  frontendOperations: ["Start", "Move"]
+  deleteOpCondition:
+    reject:
+      number: 2
+  env: []
+  mountPaths: []
+  summaryPolicy: MAJOR
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [2, 1]}
+  suggestion:
+  - criteria: !<Range> {"min": 2, "oddity": false}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/${service.sid}", "/var/lib/transwarp-manager/master/pub/transwarp"]
+        mode: "755"
+    - directive: !<package>
+        action: Install
+        name: transwarp-manager
+    - directive: !<package>
+        action: Install
+        name: git-core
+    - directive: !<package>
+        action: Install
+        name: createrepo
+    # mariadb-server for RHEL, mariadb for SLES
+    - necessary: false
+      directive: !<package>
+        action: Install
+        name: mariadb
+    - necessary: false
+      directive: !<package>
+        action: Install
+        name: mariadb-server
+  - type: Config
+    directives:
+    - directive: !<shell>
+        script: |
+          <#list service.roles.MANAGER_SERVER as role>
+          <#if role.hostname == .data_model["localhostname"]>
+          <#assign localIp=role.ip>
+          </#if>
+          </#list>
+          sed -i 's/hostname.*/hostname = ${localIp}/g' /etc/transwarp-manager/master/application.conf
+    - directive: !<shell>
+        script: "sed -i 's/ha.enabled.*/ha.enabled = true/g' /etc/transwarp-manager/master/application.conf"
+    - directive: !<shell>
+        script: |
+          <#assign quorums=[]>
+          <#list service.roles.MANAGER_ZOOKEEPER_SERVER as role>
+            <#assign quorums += [role.hostname + ":" + service["zookeeper.client.port"]]>
+          </#list>
+          <#assign quorum = quorums?join(",")>
+          sed -i 's/ha.zk.quorums.*/ha.zk.quorums = "${quorum}"/g' /etc/transwarp-manager/master/application.conf
+    - directive: !<shell>
+        script: |
+          <#assign managers=[]>
+          <#list service.roles.MANAGER_SERVER as role>
+            <#assign managers += [role.hostname]>
+          </#list>
+          <#assign manager = managers?join(",")>
+          sed -i 's/ha.servers.*/ha.servers = "${manager}"/g' /etc/transwarp-manager/master/application.conf
+    - directive: !<shell>
+        script: "systemctl daemon-reload && systemctl enable transwarp-manager"
+    - directive: !<shell>
+        script: |
+          <#assign txsqlHostPorts = []/>
+          <#list service.roles['MANAGER_TXSQL_SERVER'] as role>
+              <#assign txsqlHostPorts = txsqlHostPorts + [role.hostname + ':' + service['mysql.rw.port']]>
+          </#list>
+          <#assign txsqlHostPorts = txsqlHostPorts?sort
+                   i = txsqlHostPorts?seq_index_of(localhostname + ':' + service['mysql.rw.port'])>
+          <#if i lt 0>
+              <#assign i = .now?long % service.roles['MANAGER_TXSQL_SERVER']?size>
+          </#if>
+          <#if i gt 0>
+              <#assign txsqlHostPorts = txsqlHostPorts[i..] + txsqlHostPorts[0..i-1]>
+          </#if>
+          <#assign txsqlHostPort = txsqlHostPorts?join(",")>
+          sed -i 's/io.transwarp.manager.db.url.*/io.transwarp.manager.db.url=jdbc:mysql:\/\/${txsqlHostPort}\/transwarp_manager?autoReconnect=true\&createDatabaseIfNotExist=false\&characterEncoding=UTF-8\&failOverReadOnly=false\&connectTimeout=10000\&retriesAllDown=0\&secondsBeforeRetryMaster=0\&queriesBeforeRetryMaster=0/g' /etc/transwarp-manager/master/db.properties
+  - type: Start
+    directives:
+    - directive: !<shell>
+        script: "/etc/init.d/transwarp-manager start"
+  - type: Stop
+    directives:
+    - directive: !<shell>
+        script: "/etc/init.d/transwarp-manager stop"
+
+jobs:
+  - type: MoveManagerRole
+    stages:
+    - Install
+    - SyncDir
+    - ConfigAgentRepo
+    - ConfigManagerRole
+    - StartManagerRole
+  - type: MoveManagerZookeeperRole
+    stages:
+    - Install
+    - ConfigManagerZookeeperRole
+    - StartManagerZookeeperRole
+    - RollingStartManagerZookeeperRole
+    - ConfigManagerRole
+    - RestartManagerRole
+  - type: MoveManagerTxSQLRole
+    stages:
+    - Install
+    - ConfigManagerTxSQLRole
+    - StartManagerTxSQLRole
+    - RollingStartManagerTxSQLRole
+    - ConfigManagerRole
+    - RestartManagerRole
+
+firstWizardConfigs:
+- tickTime
+- initLimit
+- syncLimit
+- zookeeper.client.port
+- zookeeper.peer.communicate.port
+- zookeeper.leader.elect.port
+- zookeeper.server.memory
+- data.dir
+- mysql.rw.port
+- binlog.port
+- mysql.local.port
+- binlogsvr.rpc.port
+- paxos.port
+
+pages:
+- roles
+- configuration
+- operation
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 10
+  method: !<DockerPsAndSystemctl>
+    imageMap:
+      MANAGER_ZOOKEEPER_SERVER:
+        DockerPs: ["Manager-Zookeeper"]
+      MANAGER_TXSQL_SERVER:
+        DockerPs: ["Manager-TxSQL"]
+      MANAGER_SERVER:
+        Initd: ["transwarp-manager"]
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 15
+  method: !<Builtin> {}
