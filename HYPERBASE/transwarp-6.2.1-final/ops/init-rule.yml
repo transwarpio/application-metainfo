@@ -1,0 +1,8 @@
+groups:
+  - groupName: Hyperbase
+    description: Hyperbase 的告警规则
+    rules:
+      - title: "Hyperbase Master不健康"
+        ruleJson: "hyperbase-master-unhealthy-init-rule.json"
+      - title: "Hyperbase Region Server 不健康"
+        ruleJson: "hyperbase-region-server-unhealthy-init-rule.json"

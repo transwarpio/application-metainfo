@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "title": "txsql_master_alive",
+  "description": "当 TxSQL 进入无主状态时会触发告警",
+  "clauses": {
+    "type": "METRICS",
+    "expr": "(1- txsql_master_alive) and service_monitored > 0",
+    "warningEnabled": false,
+    "warningPredicate": null,
+    "criticalEnabled": true,
+    "criticalPredicate": "> 0",
+    "holdEnabled": true,
+    "holdFor": "1",
+    "holdUnit": "m"
+  },
+  "keyLabels": [
+    "roleId"
+  ],
+  "needManuallyClear": false,
+  "summaryTemplate": "{{$labels.serviceName}} 进入无主状态",
+  "descriptionTemplate": "{{$labels.serviceName}} 进入无主状态"
+}

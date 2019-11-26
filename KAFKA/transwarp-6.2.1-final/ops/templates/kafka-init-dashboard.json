@@ -1,0 +1,576 @@
+{
+  "schemaVersion": 2,
+  "id": null,
+  "folderId": null,
+  "starred": false,
+  "title": "KAFKA",
+  "tags": [],
+  "timezone": null,
+  "editable": null,
+  "graphToolTip": null,
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "type": "query",
+        "name": "serviceId",
+        "label": "Service",
+        "hide": "NONE",
+        "multi": false,
+        "includeAll": false,
+        "options": [
+          {
+            "text": "kafka1",
+            "value": 11,
+            "selected": true
+          }
+        ],
+        "tags": null,
+        "current": null,
+        "dataSourceId": 3,
+        "refresh": "ON_LOAD",
+        "query": "SELECT * FROM service where type = 'KAFKA'",
+        "valueColumn": "id",
+        "textColumn": "sid",
+        "regex": null,
+        "sort": "NONE",
+        "useTags": false,
+        "tagQuery": null,
+        "tagQueryValueColumn": null,
+        "tagQueryTextColumn": null,
+        "tagValuesQuery": null
+      }
+    ]
+  },
+  "refresh": "1m",
+  "links": null,
+  "panels": [
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 8,
+      "cols": 12,
+      "x": 12,
+      "y": 0,
+      "title": "AllTopicsBytesOutPerSec",
+      "description": "Aggregate outgoing byte rate",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "kafka_server_topics_bytes_out_per_sec{serviceId=\"${serviceId}\"}",
+          "legendFormat": "{{hostname}}_all_topics_bytes_out_per_sec"
+        }
+      ],
+      "colors": {
+        "tw-node1220_all_topics_bytes_out_per_sec": "#E29A47"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "Bps",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 2,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 2,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 6,
+      "cols": 6,
+      "x": 6,
+      "y": 8,
+      "title": "Dead Brokers",
+      "description": "Number of dead brokers",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "count(kafka_server_brokers_status{serviceId=\"${serviceId}\"}!=3) or (1-absent(kafka_server_brokers_status{serviceId=\"${serviceId}\"}!=3))",
+          "legendFormat": "dead_brokers"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#CC4F4F",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 8,
+      "cols": 12,
+      "x": 0,
+      "y": 0,
+      "title": "AllTopicsBytesInPerSec",
+      "description": "Aggregate incoming byte rate",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "kafka_server_topics_bytes_in_per_sec{serviceId=\"${serviceId}\"}",
+          "legendFormat": "{{hostname}}_all_topics_bytes_in_per_sec"
+        }
+      ],
+      "colors": {
+        "tw-node1219_all_topics_bytes_in_per_sec": "#5A88C5",
+        "tw-node1220_all_topics_bytes_in_per_sec": "#E29A47",
+        "tw-node1221_all_topics_bytes_in_per_sec": "#4BAA7B"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "Bps",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 2,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 2,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 6,
+      "cols": 6,
+      "x": 0,
+      "y": 8,
+      "title": "Live Brokers",
+      "description": "Number of live brokers",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "count(kafka_server_brokers_status{serviceId=\"${serviceId}\"}==3)",
+          "legendFormat": "live_brokers"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#6f9ad2",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 6,
+      "cols": 6,
+      "x": 12,
+      "y": 8,
+      "title": "Leader Election Rate",
+      "description": "Leader election rate and latency",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "sum(kafka_server_leader_election_rate{serviceId=\"${serviceId}\"})",
+          "legendFormat": "leader_election_rate"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#4BAA7B",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 8,
+      "cols": 12,
+      "x": 0,
+      "y": 14,
+      "title": "Broker (Failed Fetch Rate)",
+      "description": "Failed fetch requests (per second) from consumers",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "kafka_server_topics_failed_fetch_request_per_sec{serviceId=\"${serviceId}\"}",
+          "legendFormat": "{{hostname}}"
+        }
+      ],
+      "colors": {
+        "tw-node1219": "#5A88C5",
+        "tw-node1220": "#E29A47",
+        "tw-node1221": "#4BAA7B"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "none",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 1,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 1,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 6,
+      "cols": 6,
+      "x": 18,
+      "y": 8,
+      "title": "Under Replica Partitions",
+      "description": "Number of under replicated partitions",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "sum(kafka_server_under_replicated_partition{serviceId=\"${serviceId}\"})",
+          "legendFormat": "under_replicated_partition"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#7770BE",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 8,
+      "cols": 12,
+      "x": 12,
+      "y": 14,
+      "title": "Partition Count",
+      "description": "Total partition counts of a single broker",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "kafka_server_partition_count{serviceId=\"${serviceId}\"}",
+          "legendFormat": "{{hostname}}_partition_count"
+        }
+      ],
+      "colors": {
+        "tw-node1220_partition_count": "#E29A47"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "none",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 1,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": false,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 1,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    }
+  ]
+}

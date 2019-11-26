@@ -1,0 +1,586 @@
+{
+  "schemaVersion": 2,
+  "id": null,
+  "folderId": null,
+  "starred": false,
+  "title": "HYPERBASE",
+  "tags": [],
+  "timezone": null,
+  "editable": null,
+  "graphToolTip": null,
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "type": "query",
+        "name": "serviceId",
+        "label": "Service",
+        "hide": "NONE",
+        "multi": false,
+        "includeAll": false,
+        "options": [
+          {
+            "text": "hyperbase1",
+            "value": 20,
+            "selected": true
+          }
+        ],
+        "tags": null,
+        "current": null,
+        "dataSourceId": 3,
+        "refresh": "ON_LOAD",
+        "query": "SELECT * FROM service where type = 'HYPERBASE'",
+        "valueColumn": "id",
+        "textColumn": "sid",
+        "regex": null,
+        "sort": "NONE",
+        "useTags": false,
+        "tagQuery": null,
+        "tagQueryValueColumn": null,
+        "tagQueryTextColumn": null,
+        "tagValuesQuery": null
+      }
+    ]
+  },
+  "refresh": "1m",
+  "links": null,
+  "panels": [
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 9,
+      "cols": 12,
+      "x": 0,
+      "y": 0,
+      "title": "Read/Write Request Rate",
+      "description": "Number of read/write requests received per second",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "sum(region_server_read_request_rate{serviceId=\"${serviceId}\"})",
+          "legendFormat": "read_request_rate"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "B",
+          "format": "TIME_SERIES",
+          "expr": "sum(region_server_write_request_rate{serviceId=\"${serviceId}\"})",
+          "legendFormat": "write_request_rate"
+        }
+      ],
+      "colors": {
+        "write_request_rate": "#DB6767"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "none",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 2,
+          "label": "requests/s"
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": true,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 2,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0.1,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 5,
+      "cols": 8,
+      "x": 0,
+      "y": 9,
+      "title": "Live Region Servers",
+      "description": "Number of live RegionServers",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "sum(hyperbase_master_num_live_region_servers{serviceId=\"${serviceId}\"})",
+          "legendFormat": "live_region_servers"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#4BAA7B",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "Graph",
+      "id": -1,
+      "rows": 9,
+      "cols": 12,
+      "x": 12,
+      "y": 0,
+      "title": "Active/Backup Master",
+      "description": "Hyperbase Master is active master(1.0) or backup master(0.0)",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "hyperbase_master_is_active_master_or_not{serviceId=\"${serviceId}\"} > 0",
+          "legendFormat": "Active Master {{hostname}}"
+        },
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "B",
+          "format": "TIME_SERIES",
+          "expr": "hyperbase_master_is_active_master_or_not{serviceId=\"${serviceId}\"} == 0",
+          "legendFormat": "Backup Master {{hostname}}"
+        }
+      ],
+      "colors": {
+        "Active Master tw-node1220": "#77B8D1",
+        "Backup Master tw-node1219": "#E29A47",
+        "Backup Master tw-node1221": "#857DD5"
+      },
+      "yaxis": {
+        "left": {
+          "show": true,
+          "format": "none",
+          "logBase": 0,
+          "min": null,
+          "max": null,
+          "decimal": 1,
+          "label": null
+        }
+      },
+      "xaxis": {
+        "show": true
+      },
+      "legend": {
+        "show": true,
+        "alignAsTable": false,
+        "position": "BOTTOM",
+        "sideWidth": null,
+        "decimals": 1,
+        "min": false,
+        "max": false,
+        "avg": false,
+        "current": false,
+        "total": false,
+        "hideNull": false,
+        "hideZero": false
+      },
+      "lines": true,
+      "stack": false,
+      "nullPointMode": "DISCONNECTED",
+      "fill": 0,
+      "lineWidth": 1,
+      "steppedLine": false,
+      "points": false,
+      "pointRadius": 5,
+      "tooltip": {
+        "showAllSeries": true,
+        "sort": "NONE",
+        "stackValueType": "INDIVIDUAL"
+      }
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 5,
+      "cols": 8,
+      "x": 16,
+      "y": 9,
+      "title": "Regions Hosted by Region Server",
+      "description": "Number of regions hosted by the RegionServer",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "sum(region_server_total_regions{serviceId=\"${serviceId}\"})",
+          "legendFormat": "total_regions"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#5890da",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 5,
+      "cols": 8,
+      "x": 16,
+      "y": 14,
+      "title": "Compaction Queue Length",
+      "description": "Current depth of the compaction request queue",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "sum(region_server_compaction_queue_length{serviceId=\"${serviceId}\"})",
+          "legendFormat": "compaction_queue_length"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#857DD5",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 5,
+      "cols": 8,
+      "x": 8,
+      "y": 9,
+      "title": "Dead Region Servers",
+      "description": "Number of dead RegionServers",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "sum(hyperbase_master_num_dead_region_servers{serviceId=\"${serviceId}\"})",
+          "legendFormat": "dead_region_servers"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#A18E80",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 5,
+      "cols": 8,
+      "x": 0,
+      "y": 14,
+      "title": "Average Load",
+      "description": "Average load on the Hyperbase server",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "sum(hyperbase_master_average_load{serviceId=\"${serviceId}\"})",
+          "legendFormat": "average_load"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#E29A47",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    },
+    {
+      "type": "SingleStat",
+      "id": -1,
+      "rows": 5,
+      "cols": 8,
+      "x": 8,
+      "y": 14,
+      "title": "Flush Queue Length",
+      "description": "Current depth of the memstore flush queue",
+      "transparent": false,
+      "dataSourceId": 1,
+      "queries": [
+        {
+          "pointsPerSeries": 100,
+          "dataSourceId": 1,
+          "refId": "A",
+          "format": "TIME_SERIES",
+          "expr": "sum(region_server_flush_queue_length{serviceId=\"${serviceId}\"})",
+          "legendFormat": "flush_queue_length"
+        }
+      ],
+      "threshold": {
+        "colorLow": "#44C498",
+        "thresholdLow": 50,
+        "colorMedium": "#E59435",
+        "thresholdHigh": 80,
+        "colorHigh": "#D66868"
+      },
+      "statText": {
+        "statName": "CURRENT",
+        "statFontSize": "200%",
+        "format": "none",
+        "formatPosition": "RIGHT",
+        "decimals": 0,
+        "colorStat": false,
+        "prefix": null,
+        "prefixFontSize": "50%",
+        "prefixPosition": "LEFT",
+        "colorPrefix": false,
+        "suffix": null,
+        "suffixFontSize": "50%",
+        "suffixPosition": "RIGHT",
+        "colorSuffix": false,
+        "nullToText": "N/A",
+        "valueMappings": [],
+        "rangeMappings": []
+      },
+      "gauge": {
+        "show": false,
+        "minValue": 0,
+        "maxValue": 1,
+        "bandWidthRatio": 0.1,
+        "thresholdLabels": false,
+        "thresholdMarker": true,
+        "pointer": false
+      },
+      "sparkline": {
+        "show": true,
+        "lineColor": "#4ebbc2",
+        "fill": 0.1,
+        "heightRatio": 0.3
+      },
+      "colorBackground": false
+    }
+  ]
+}

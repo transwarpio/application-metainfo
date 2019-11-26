@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "title": "MetaStore不健康",
+  "description": "当不健康的MetaStore百分比超过设定的阈值时发送警报",
+  "clauses": {
+    "type": "METRICS",
+    "expr": "100 - \n(\n  sum(service_role_healthy{roleType=\"INCEPTOR_METASTORE\"}  and service_role_present) by (serviceId, serviceName) / on(serviceId, serviceName) (service_role_number{roleType=\"INCEPTOR_METASTORE\"} )\n    + on(serviceId) group_left() \n  (1-service_monitored)\n) * 100",
+    "warningEnabled": true,
+    "warningPredicate": "> 0.1",
+    "criticalEnabled": true,
+    "criticalPredicate": "> 49.9",
+    "holdEnabled": true,
+    "holdFor": "1",
+    "holdUnit": "m"
+  },
+  "keyLabels": [
+    "serviceId"
+  ],
+  "needManuallyClear": false,
+  "summaryTemplate": "{{ $labels.serviceName }}的MetaStore不健康",
+  "descriptionTemplate": "服务 {{ $labels.serviceName }} 中不健康的MetaStore的百分比达到 {{ printf \"%.2f\"  $value }}%"
+}

@@ -1,0 +1,12 @@
+groups:
+  - groupName: Inceptor
+    description: Inceptor 的告警规则
+    rules:
+      - title: "MetaStore不健康"
+        ruleJson: "inceptor-metastore-unhealthy-init-rule.json"
+      - title: "Inceptor Server不健康"
+        ruleJson: "inceptor-server-unhealthy-init-rule.json"
+      - title: "Inceptor Executor不健康"
+        ruleJson: "inceptor-executor-unhealthy-init-rule.json"
+      - title: "本地目录可用性"
+        ruleJson: "inceptor-local-directory-available-init-rule.json"

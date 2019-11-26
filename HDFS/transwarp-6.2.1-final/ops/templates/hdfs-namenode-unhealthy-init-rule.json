@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "title": "Name Node不健康",
+  "description": "当Name Node不健康时发送警报",
+  "clauses": {
+    "type": "METRICS",
+    "expr": "(service_role_healthy{roleType=\"HDFS_NAMENODE\"} and service_role_present) + on(serviceId) group_left() (1-service_monitored)",
+    "warningEnabled": false,
+    "warningPredicate": "",
+    "criticalEnabled": true,
+    "criticalPredicate": "< 1",
+    "holdEnabled": true,
+    "holdFor": "1",
+    "holdUnit": "m"
+  },
+  "keyLabels": [
+    "roleId"
+  ],
+  "needManuallyClear": false,
+  "summaryTemplate": "{{ $labels.serviceName }} Name Node {{ $labels.hostname }} 不健康",
+  "descriptionTemplate": "{{ $labels.serviceName }} Name Node {{ $labels.hostname }} 不健康"
+}

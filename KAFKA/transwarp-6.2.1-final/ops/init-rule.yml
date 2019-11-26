@@ -1,0 +1,9 @@
+groups:
+  - groupName: Kafka
+    description: Kafka 的告警规则
+    rules:
+      - title: "Kafka Server不健康"
+        ruleJson: "kafka-server-unhealthy-init-rule.json"
+      - title: "日志目录可用性"
+        ruleJson: "kafka-log-directory-available-init-rule.json"
+

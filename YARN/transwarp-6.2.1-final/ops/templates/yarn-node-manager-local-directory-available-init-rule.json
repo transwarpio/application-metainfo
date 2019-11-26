@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "title": "YARN NODEMANAGE的本地目录不可用",
+  "description": "YARN NODEMANAGE的本地目录不可用时会触发警报",
+  "clauses": {
+    "type": "METRICS",
+    "expr": "service_role_dir_available{roleType='YARN_NODEMANAGER',configKey='yarn.nodemanager.local-dirs'}",
+    "warningEnabled": true,
+    "warningPredicate": "< 1",
+    "criticalEnabled": false,
+    "criticalPredicate": "",
+    "holdEnabled": false,
+    "holdFor": "1",
+    "holdUnit": "m"
+  },
+  "keyLabels": [
+    "nodeId","path"
+  ],
+  "needManuallyClear": false,
+  "summaryTemplate": "节点 {{ $labels.hostname }} 的目录 {{ $labels.path }} 不可用",
+  "descriptionTemplate": "节点 {{ $labels.hostname }} 的目录 {{ $labels.path }} 不可用"
+}

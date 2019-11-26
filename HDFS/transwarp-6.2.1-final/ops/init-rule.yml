@@ -1,0 +1,18 @@
+groups:
+  - groupName: HDFS
+    description: HDFS 的告警规则
+    rules:
+      - title: "Journal Node不健康"
+        ruleJson: "hdfs-journalnode-unhealthy-init-rule.json"
+      - title: "Name Node不健康"
+        ruleJson: "hdfs-namenode-unhealthy-init-rule.json"
+      - title: "Data Node不健康"
+        ruleJson: "hdfs-datanode-unhealthy-init-rule.json"
+      - title: "NameNode 故障切换"
+        ruleJson: "hdfs-namenode-switch-error-init-rule.json"
+      - title: "NameNode 堆内存使用率"
+        ruleJson: "hdfs-namenode-heap-usage-init-rule.json"
+      - title: "HDFS 剩余容量"
+        ruleJson: "hdfs-namenode-capacity-remaining-init-rule.json"
+      - title: "NameNode 名字目录可用性"
+        ruleJson: "hdfs-namenode-directory-available-init-rule.json"

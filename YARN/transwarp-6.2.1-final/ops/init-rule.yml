@@ -1,0 +1,12 @@
+groups:
+  - groupName: YARN
+    description: YARN 的告警规则
+    rules:
+      - title: "Resource Manager不健康"
+        ruleJson: "yarn-resource-manager-unhealthy-init-rule.json"
+      - title: "Node Manager不健康"
+        ruleJson: "yarn-node-manager-unhealthy-init-rule.json"
+      - title: "NodeManager本地目录可用性"
+        ruleJson: "yarn-node-manager-local-directory-available-init-rule.json"
+      - title: "NodeManager日志目录可用性"
+        ruleJson: "yarn-node-manager-log-directory-available-init-rule.json"

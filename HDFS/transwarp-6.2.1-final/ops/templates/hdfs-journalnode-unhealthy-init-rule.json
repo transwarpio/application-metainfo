@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 2,
+  "title": "Journal Node不健康",
+  "description": "当不健康的Journal Node百分比超过设定的阈值时发送警报",
+  "clauses": {
+    "type": "METRICS",
+    "expr": "100 -\n(\n  sum(service_role_healthy{roleType=\"HDFS_JOURNALNODE\"} and service_role_present) by (serviceId,serviceName,roleGroupId,roleGroupName) / on (serviceId,serviceName,roleGroupId,roleGroupName) (service_role_number{roleType=\"HDFS_JOURNALNODE\"})\n  + on(serviceId) group_left()\n  (1-service_monitored)\n) * 100",
+    "warningEnabled": true,
+    "warningPredicate": "> 0.1",
+    "criticalEnabled": true,
+    "criticalPredicate": "> 49.9",
+    "holdEnabled": true,
+    "holdFor": "1",
+    "holdUnit": "m"
+  },
+  "keyLabels": [
+    "serviceId",
+    "roleGroupId"
+  ],
+  "needManuallyClear": false,
+  "summaryTemplate": "{{ $labels.serviceName }} {{ $labels.roleGroupName }}的Journal Node不健康",
+  "descriptionTemplate": "服务 {{ $labels.serviceName }} Name Service {{ $labels.roleGroupName }} 中不健康的Journal Node的百分比达到 {{ printf \"%.2f\"  $value }}%"
+}

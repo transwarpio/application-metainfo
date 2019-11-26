@@ -1,0 +1,6 @@
+groups:
+  - groupName: SEARCH
+    description: SEARCH 的告警规则
+    rules:
+      - title: "数据目录可用性"
+        ruleJson: "search-data-directory-available-init-rule.json"

@@ -1,0 +1,8 @@
+groups:
+  - groupName: TXSQL
+    description: TXSQL 的告警规则
+    rules:
+      - title: "txsql_binlog_stopped"
+        ruleJson: "txsql-binlog-stopped-init-rule.json"
+      - title: "txsql_master_alive"
+        ruleJson: "txsql-master-alive-init-rule.json"

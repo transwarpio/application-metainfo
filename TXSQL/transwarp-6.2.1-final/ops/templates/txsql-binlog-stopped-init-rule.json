@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "title": "txsql_binlog_stopped",
+  "description": "当 TxSQL Server 流水停滞时触发告警",
+  "clauses": {
+    "type": "METRICS",
+    "expr": "txsql_binlog_stopped and service_role_present > 0",
+    "warningEnabled": false,
+    "warningPredicate": null,
+    "criticalEnabled": true,
+    "criticalPredicate": "> 0",
+    "holdEnabled": true,
+    "holdFor": "1",
+    "holdUnit": "m"
+  },
+  "keyLabels": [
+    "serviceId"
+  ],
+  "needManuallyClear": false,
+  "summaryTemplate": "{{ $labels.serviceName }} 在节点 {{ $labels.hostname }} 上的 {{ $labels.roleTypeFriendlyName }} binlog 停止同步",
+  "descriptionTemplate": "{{ $labels.serviceName }} 在节点 {{ $labels.hostname }} 上的 {{ $labels.roleTypeFriendlyName }} binlog 停止同步"
+}

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "title": "KAFKA日志目录不可用",
+  "description": "当KAFKA的日志目录不可用时会触发警报",
+  "clauses": {
+    "type": "METRICS",
+    "expr": "service_role_dir_available{roleType='KAFKA_SERVER',configKey='kmq.log.dirs'}",
+    "warningEnabled": true,
+    "warningPredicate": "< 1",
+    "criticalEnabled": false,
+    "criticalPredicate": "",
+    "holdEnabled": false,
+    "holdFor": "1",
+    "holdUnit": "m"
+  },
+  "keyLabels": [
+    "nodeId","path"
+  ],
+  "needManuallyClear": false,
+  "summaryTemplate": "节点 {{ $labels.hostname }} 的目录 {{ $labels.path }} 不可用",
+  "descriptionTemplate": "节点 {{ $labels.hostname }} 的目录 {{ $labels.path }} 不可用"
+}

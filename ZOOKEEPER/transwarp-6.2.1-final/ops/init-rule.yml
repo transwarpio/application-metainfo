@@ -1,0 +1,7 @@
+groups:
+  - groupName: ZooKeeper
+    description: ZooKeeper 的告警规则
+    rules:
+      - title: "Zookeeper Server不健康"
+        ruleJson: "zookeeper-server-unhealthy-init-rule.json"
+
