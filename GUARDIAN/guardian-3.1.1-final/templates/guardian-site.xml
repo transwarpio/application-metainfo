@@ -1,0 +1,62 @@
+<#--Simple macro definition-->
+<#macro property key value>
+<property>
+    <name>${key}</name>
+    <value>${value}</value>
+</property>
+</#macro>
+<#assign guardian=pluginProvider.service guardian_servers=[]>
+<#list guardian.roles["GUARDIAN_SERVER"] as role>
+    <#assign guardian_servers += [(role.hostname + ":" + guardian["guardian.server.port"])]>
+</#list>
+<#assign guardian_address = guardian_servers?join(";")>
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <@property "guardian.server.address" "${guardian_address}"/>
+    <@property "guardian.connection.client.impl" "REST"/>
+    <@property "guardian.client.cache.enabled" "${guardian['guardian.client.cache.enabled']}"/>
+    <@property "guardian.client.cache.expired.time" "${guardian['guardian.client.cache.expired.time']}"/>
+    <@property "guardian.client.cache.size" "${guardian['guardian.client.cache.size']}"/>
+    <@property "guardian.client.cache.update.period" "${guardian['guardian.client.cache.update.period']}"/>
+    <@property "guardian.server.tls.enabled" "${guardian['guardian.server.tls.enabled']}"/>
+    <@property "guardian.client.auth.mode" "SPNEGO"/>
+    <@property "guardian.permission.component" "${pluginUser.service.sid}"/>
+    <@property "guardian.client.principal" "${pluginUser.service.masterPrincipal}/${hostname}"/>
+    <@property "guardian.client.keytab" "${pluginUser.service.keytab}"/>
+    <@property "guardian.client.http.principal" "guardian/guardian"/>
+    <@property "guardian.connection.client.impl" "REST"/>
+    <@property "guardian.connection.client.impl" "REST"/>
+
+<!-- CAS Authentication -->
+<#if guardian.roles["CAS_SERVER"]??>
+    <#assign casServerSslPort=guardian['cas.server.ssl.port']>
+    <#if guardian['guardian.server.cas.server.host']?matches("^\\s*$")>
+        <#assign casServerName="https://${guardian.roles.CAS_SERVER[0]['ip']}:${casServerSslPort}">
+    <#else>
+        <#assign casServerName="https://${guardian['guardian.server.cas.server.host']}:${casServerSslPort}">
+    </#if>
+    <#assign casServerPrefix="${casServerName}${guardian['cas.server.context.path']}">
+    <@property "guardian.server.cas.authentication.enabled" "${guardian['guardian.server.cas.authentication.enabled']}"/>
+    <@property "guardian.server.cas.server.url.prefix" "${casServerPrefix}"/>
+    <@property "guardian.server.cas.server.login.url" "${casServerPrefix}/login"/>
+<#else>
+    <@property "guardian.server.cas.authentication.enabled" "false"/>
+</#if>
+
+    <!-- Access Token Authentication -->
+    <@property "guardian.server.access.token.authentication.enabled" "${guardian['guardian.server.access.token.authentication.enabled']}"/>
+    <@property "guardian.server.access.token.server.address" "${guardian_address}"/>
+    <@property "guardian.server.access.token.server.tls.enabled" "${guardian['guardian.server.tls.enabled']}"/>
+
+    <!-- ABAC Authorization -->
+    <@property "guardian.abac.authorization.enabled" "${guardian['guardian.abac.authorization.enabled']}"/>
+
+<#--Take properties from the context-->
+<#if guardian['guardian-site-client.xml']??>
+    <#list guardian['guardian-site-client.xml'] as key, value>
+        <@property key value/>
+    </#list>
+</#if>
+
+</configuration>

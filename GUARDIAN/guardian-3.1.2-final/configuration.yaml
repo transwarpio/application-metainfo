@@ -1,0 +1,917 @@
+---
+# txsql
+- name: data.dir
+  recommendExpression: "/${service.sid}/txsql/data/"
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: mysql.rw.port
+  recommendExpression: 8320
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: binlog.port
+  recommendExpression: 8321
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: mysql.local.port
+  recommendExpression: 8323
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: binlogsvr.rpc.port
+  recommendExpression: 8324
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: paxos.port
+  recommendExpression: 8325
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: txsql.container.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: txsql.container.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: txsql.container.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: txsql.container.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: txsql.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: root.password
+  recommendExpression: ${(service['root.password']??)?then(service['root.password'],((.now?long * .now?long)%987654321)?c)}
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: HIDDEN
+# service level
+- name: guardian.database.driver
+  recommendExpression: com.mysql.jdbc.Driver
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+# federation
+- name: federation.server.port
+  recommendExpression: 8383
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.service.session.timeout
+  recommendExpression: 8h
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.service.session.enableSharing
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.service.session.expireMode
+  recommendExpression: RESET
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.service.session.maxInactiveInterval
+  recommendExpression: PT1H
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.service.session.expiredSessionEvictionStartDelay
+  recommendExpression: PT1H
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.service.session.expiredSessionEvictionInterval
+  recommendExpression: PT1H
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.service.session.sessionCacheEvictionInterval
+  recommendExpression: PT1H
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.service.resetPasswordAllowed
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.service.user.admin.password
+  recommendExpression: Transwarp!
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: WRITE_ONLY
+
+- name: federation.service.user.admin.usePlainPassword
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.service.user.auth.cache.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.service.user.auth.cache.maximumSize
+  recommendExpression: 300
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.service.user.auth.cache.expireAfterAccess
+  recommendExpression: 30
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.service.user.auth.cache.expireAfterWrite
+  recommendExpression: 60
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.oauth2.client.accessTokenValiditySeconds
+  recommendExpression: 86400
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.oauth2.client.refreshTokenValiditySeconds
+  recommendExpression: 2592000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.oauth2.client.auth.cache.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.oauth2.client.auth.cache.maximumSize
+  recommendExpression: 300
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.oauth2.client.auth.cache.expireAfterAccess
+  recommendExpression: 30
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.oauth2.client.auth.cache.expireAfterWrite
+  recommendExpression: 60
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.oauth2.logout.followClientRedirect
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.oauth2.logout.validateBeforeRedirect
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.oauth2.tokenEviction.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.oauth2.tokenEviction.startDelay
+  recommendExpression: PT6H
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.oauth2.tokenEviction.repeatInterval
+  recommendExpression: PT6H
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.oauth2.tokenRefresh.startDelay
+  recommendExpression: PT3M
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.oauth2.tokenRefresh.repeatInterval
+  recommendExpression: PT3M
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.oauth2.login.tenantNameAutoFilled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ha.leader-election.nodeStatusUpdate.initialDelay
+  recommendExpression: 60000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ha.leader-election.nodeStatusUpdate.interval
+  recommendExpression: 60000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: ha.leader-election.timeToOverthrowDormantLeader
+  recommendExpression: 180000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.service.captcha.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.service.captcha.cookie.httpOnly
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.service.captcha.cookie.maxAge
+  recommendExpression: 60
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.service.captcha.cookie.checkExpiry
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: federation.service.log.level
+  recommendExpression: info
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_FEDERATION]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+# apacheds
+- name: guardian.apacheds.data.dir
+  recommendExpression: "/${service.sid}/data/"
+  defaultValue: null
+  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_APACHEDS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.apacheds.ldap.port
+  recommendExpression: 10389
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_APACHEDS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.apacheds.kdc.port
+  recommendExpression: 1088
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_APACHEDS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.ds.kdc.clock.skew
+  recommendExpression: 300000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_APACHEDS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.ds.kdc.ticket.lifetime
+  recommendExpression: 86400000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_APACHEDS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.ds.kdc.renew.lifetime
+  recommendExpression: 604800000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_APACHEDS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.ds.krb.keyring.enable
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_APACHEDS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# guardian-server
+- name: guardian.server.port
+  recommendExpression: 8380
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.server.tls.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.admin.username
+  recommendExpression: admin
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: WRITE_ONLY
+
+- name: guardian.admin.password
+  recommendExpression: 123
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: WRITE_ONLY #TODO PASSWORD
+
+- name: guardian.ds.root.password
+  recommendExpression: Transwarp!
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: WRITE_ONLY
+
+- name: guardian.ds.domain
+  recommendExpression: dc=tdh
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.ds.realm
+  recommendExpression: TDH
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.ds.ldap.tls.enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.server.kerberos.password
+  recommendExpression: <@randomstring len=20/>
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: WRITE_ONLY
+
+- name: guardian.cache.repli.bind.port
+  recommendExpression: 7800
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.client.cache.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.client.cache.expired.time
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.client.cache.size
+  recommendExpression: 150000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.client.cache.update.period
+  recommendExpression: 30000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.server.cache.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.server.cache.expired.time
+  recommendExpression: 3600000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.server.audit.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.server.audit.level
+  recommendExpression: ADD,UPDATE,DELETE,LOGIN
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.server.audit.dao.impl
+  recommendExpression: io.transwarp.guardian.persistence.dao.impl.AuditRecordDaoFileImpl
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.server.cookie.expired.time
+  recommendExpression: 1h
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.allow.read.everything
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.skip.check.access.with.service
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.server.authentication.oauth2.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.server.authentication.oauth2.server.baseUrls.external
+  recommendExpression: ""
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.server.cas.authentication.enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.server.cas.server.host
+  recommendExpression: ""
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.server.access.token.authentication.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [GUARDIAN_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# cas config server
+- name: cas.config.server.port
+  recommendExpression: 8310
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [CAS_CONFIG_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: cas.config.server.username
+  recommendExpression: config-user
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [CAS_CONFIG_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: cas.config.server.password
+  recommendExpression: Transwarp!
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [CAS_CONFIG_SERVER]
+  onDeps: []
+  groups: []
+  visibility: WRITE_ONLY
+
+- name: cas.server.ssl.port
+  recommendExpression: 8393
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [CAS_CONFIG_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: cas.server.http.port
+  recommendExpression: 8390
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [CAS_CONFIG_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: cas.server.http.enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [CAS_CONFIG_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: cas.server.context.path
+  recommendExpression: /cas
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [CAS_CONFIG_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: cas.mgmt.server.port
+  recommendExpression: 8373
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [CAS_CONFIG_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: guardian.abac.authorization.enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
