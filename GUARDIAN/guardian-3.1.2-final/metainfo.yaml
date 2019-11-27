@@ -1,0 +1,504 @@
+---
+name: GUARDIAN
+version: guardian-3.1.2-final
+global: true
+namePrefix: Guardian
+friendlyName: Guardian
+validateConfig: true
+dependencies: []
+isSupportOAuth2: true
+roles:
+- name: GUARDIAN_TXSQL_SERVER
+  friendlyName: "TxSQL Server"
+  labelPrefix: "txsql-server"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 3
+    reject:
+      number: 2
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: data.dir
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - mysql -h `hostname` -uroot -P${service['mysql.rw.port']} -p"${service['root.password']}" -e "select 1 from dual"  > /dev/null && echo ok
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  env:
+  - name: CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: txsql.container.limits.memory
+    limitsCpuKey: txsql.container.limits.cpu
+    requestsMemoryKey: txsql.container.requests.memory
+    requestsCpuKey: txsql.container.requests.cpu
+  nodeSpecificMounts:
+    - configKey: data.dir
+  summaryPolicy: MAJOR
+  dockerImage: "transwarp/txsql:guardian-3.1.2-final"
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [5, 3, 1]}
+  suggestion:
+  - criteria: !<Range> {"min": 3, "oddity": true}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "txsql-db.properties"
+        targetPath: "/etc/${service.sid}/conf/db.properties"
+        mode: "600"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "txsql-install_conf.sh"
+        targetPath: "/etc/${service.sid}/conf/install_conf.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "txsql-txsql-env.sh"
+        targetPath: "/etc/${service.sid}/conf/txsql-env.sh"
+        mode: "755"
+- name: GUARDIAN_FEDERATION
+  friendlyName: "Guardian Federation Service"
+  labelPrefix: "guardian-federation"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    movable:
+      number: 1
+  linkExpression: https://${localhostname}:${service['federation.server.port']}/federation-server
+  summaryPolicy: SOME
+  dockerImage: "transwarp/guardian-federation:guardian-3.1.2-final"
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [2, 1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - netstat -an | grep ${service['federation.server.port']} | grep LISTEN > /dev/null
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 15
+  env:
+  - name: FEDERATION_CONFIG_DIR
+    value: /etc/federation/conf
+  - name: FEDERATION_LOG_DIR
+    value: /var/log/federation
+  mountPaths:
+  - mountPath: /srv/federation
+    hostPath: /srv/federation
+    name: srv
+  - mountPath: /etc/federation/conf
+    hostPath: /etc/federation/conf
+    name: federation-conf
+  - mountPath: /var/log/federation
+    hostPath: /var/log/federation
+    name: federation-log
+  operations:
+  - type: Install
+    directives:
+    - directive: !<shell>
+        script: "docker run -v /srv/federation:/srv/guardian --net=host ${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/guardian-gencerts:guardian-3.1.2-final entry.sh"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "federation-env.sh"
+        targetPath: "/etc/federation/conf/federation-env.sh"
+        mode: "600"
+- name: GUARDIAN_APACHEDS
+  friendlyName: "Guardian ApacheDS"
+  labelPrefix: "guardian-apacheds"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
+  deleteOpCondition:
+    movable:
+      number: 2
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: guardian.apacheds.data.dir
+      featureFile: partitions
+  summaryPolicy: SOME
+  dockerImage: "transwarp/apacheds:guardian-3.1.2-final"
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [2, 1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - netstat -an | grep ${service['guardian.apacheds.ldap.port']} | grep LISTEN > /dev/null
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 15
+  env:
+  - name: GUARDIAN_CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: GUARDIAN_LOG_FILE
+    value: guardian-apacheds.log
+  mountPaths:
+  - mountPath: ${service['guardian.apacheds.data.dir']}
+    hostPath: ${service['guardian.apacheds.data.dir']}
+    name: srv
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["${service['guardian.apacheds.data.dir']}"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "guardian-ds.properties"
+        targetPath: "/etc/${service.sid}/conf/guardian-ds.properties"
+        mode: "600"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "guardian-env.sh"
+        targetPath: "/etc/${service.sid}/conf/guardian-env.sh"
+        mode: "600"
+- name: GUARDIAN_SERVER
+  friendlyName: "Guardian Server"
+  labelPrefix: "guardian-server"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    movable:
+      number: 1
+  linkExpression: <#if service['guardian.server.tls.enabled'] = "true">https<#else>http</#if>://${localhostname}:${service['guardian.server.port']}
+  summaryPolicy: SOME
+  dockerImage: "transwarp/guardian:guardian-3.1.2-final"
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [2, 1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - netstat -an | grep ${service['guardian.server.port']} | grep LISTEN > /dev/null
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 15
+  env:
+  - name: GUARDIAN_CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: GUARDIAN_LOG_FILE
+    value: guardian-server.log
+  mountPaths:
+  - mountPath: /srv/guardian
+    hostPath: /srv/guardian
+    name: srv
+  operations:
+  - type: Install
+    directives:
+    - directive: !<shell>
+        script: "docker run -v /srv/guardian:/srv/guardian --net=host ${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/guardian-gencerts:guardian-3.1.2-final entry.sh"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "fortress.properties"
+        targetPath: "/etc/${service.sid}/conf/fortress.properties"
+        mode: "600"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "guardian-site-server.xml"
+        targetPath: "/etc/${service.sid}/conf/guardian-site.xml"
+        mode: "600"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "guardian-env.sh"
+        targetPath: "/etc/${service.sid}/conf/guardian-env.sh"
+        mode: "600"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "application.properties"
+        targetPath: "/etc/${service.sid}/conf/application.properties"
+        mode: "600"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "oauth2-configuration.yml"
+        targetPath: "/etc/${service.sid}/conf/oauth2-configuration.yml"
+        mode: "600"
+- name: CAS_CONFIG_SERVER
+  friendlyName: "CAS Configuration Server"
+  labelPrefix: "cas-config-server"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Move", "Scaleout"]
+  deleteOpCondition:
+    movable:
+      number: 1
+  summaryPolicy: SOME
+  dockerImage: "transwarp/cas-config-server:guardian-3.1.2-final"
+  autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+    - criteria: !<Range> {"min": 1}
+  validation:
+    - criteria: !<Range> {"min": 1}
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - netstat -an | grep ${service['cas.config.server.port']} | grep LISTEN > /dev/null
+    failureThreshold: 3
+    initialDelaySeconds: 20
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 15
+  env:
+    - name: GUARDIAN_CONF_DIR
+      value: /etc/${service.sid}/conf
+  mountPaths:
+  - mountPath: /var/lib/configuration-server
+    hostPath: /var/lib/cas-configuration-server
+    name: config-server
+  operations:
+    - type: Config
+      directives:
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "cas-configuration-server-env.sh"
+          targetPath: "/etc/${service.sid}/conf/cas-configuration-server-env.sh"
+          mode: "600"
+- name: CAS_SERVER
+  friendlyName: "CAS Server"
+  labelPrefix: "cas-server"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Move", "Scaleout"]
+  deleteOpCondition:
+    movable:
+      number: 1
+  linkExpression: https://${localhostname}:${service['cas.server.ssl.port']}/cas
+  summaryPolicy: SOME
+  dockerImage: "transwarp/cas-server:guardian-3.1.2-final"
+  autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+    - criteria: !<Range> {"min": 1}
+  validation:
+    - criteria: !<Range> {"min": 1}
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - netstat -an | grep ${service['cas.server.ssl.port']} | grep LISTEN > /dev/null
+    failureThreshold: 3
+    initialDelaySeconds: 20
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 15
+  env:
+    - name: GUARDIAN_CONF_DIR
+      value: /etc/${service.sid}/conf
+  mountPaths:
+    - mountPath: /srv/cas-server
+      hostPath: /srv/cas-server
+      name: srv
+    - mountPath: /var/log/cas-server
+      hostPath: /var/log/cas-server
+      name: cas-log
+  operations:
+    - type: Install
+      directives:
+      - directive: !<shell>
+          script: "docker run -v /srv/cas-server:/srv/guardian --net=host ${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/guardian-gencerts:guardian-3.1.2-final entry.sh"
+    - type: Config
+      directives:
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "cas-server-env.sh"
+          targetPath: "/etc/${service.sid}/conf/cas-server-env.sh"
+          mode: "600"
+- name: CAS_ADMIN_SERVER
+  friendlyName: "CAS Admin Server"
+  labelPrefix: "cas-admin-server"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Move", "Scaleout"]
+  deleteOpCondition:
+    movable:
+      number: 1
+  linkExpression: https://${localhostname}:${service['cas.mgmt.server.port']}/cas-management
+  summaryPolicy: SOME
+  dockerImage: "transwarp/cas-admin-server:guardian-3.1.2-final"
+  autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+    - criteria: !<Range> {"min": 1}
+  validation:
+    - criteria: !<Range> {"min": 1}
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - netstat -an | grep ${service['cas.mgmt.server.port']} | grep LISTEN > /dev/null
+    failureThreshold: 3
+    initialDelaySeconds: 20
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 15
+  env:
+    - name: GUARDIAN_CONF_DIR
+      value: /etc/${service.sid}/conf
+  mountPaths:
+    - mountPath: /srv/cas-admin-server
+      hostPath: /srv/cas-admin-server
+      name: srv
+  operations:
+    - type: Install
+      directives:
+      - directive: !<shell>
+          script: "docker run -v /srv/cas-admin-server:/srv/guardian --net=host ${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/guardian-gencerts:guardian-3.1.2-final entry.sh"
+    - type: Config
+      directives:
+      - directive: !<resource>
+          templateType: FreeMarker
+          templatePath: "cas-server-env.sh"
+          targetPath: "/etc/${service.sid}/conf/cas-server-env.sh"
+          mode: "600"
+
+jobs:
+  - type: Init
+    stages:
+    - Install
+    - GenKeystore
+    - GenCredential
+    - Config
+    - Bootstrap
+    - Start
+    - GenKeytab
+    - SetupTenant
+  - type: Start
+    stages:
+    - Start
+    - GenKeytab
+  - type: Config
+    stages:
+    - GenKeystore
+    - Config
+stages:
+  - type: Bootstrap
+    taskGroups:
+    - !<Change-Password>
+      summaryPolicy: ALL
+      timeoutMinutes: 2
+  - type: PreUpgrade
+    taskGroups:
+    - !<DockerRunPreUpgrade>
+      summaryPolicy: ALL 
+      timeoutMinutes: 10
+      roleType: GUARDIAN_APACHEDS
+      node: Each
+    - !<DockerRunPreUpgrade>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      roleType: GUARDIAN_TXSQL_SERVER
+      node: Each
+  - type: PreRollback
+    taskGroups:
+    - !<DockerRunPreRollback>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      roleType: GUARDIAN_APACHEDS
+      node: Each
+    - !<DockerRunPreRollback>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      roleType: GUARDIAN_TXSQL_SERVER
+      node: Each
+
+firstWizardConfigs:
+- federation.server.port
+- guardian.server.port
+- guardian.apacheds.ldap.port
+- guardian.apacheds.kdc.port
+- guardian.ds.kdc.ticket.lifetime
+- guardian.ds.kdc.renew.lifetime
+- guardian.apacheds.data.dir
+- guardian.client.cache.enabled
+- guardian.ds.realm
+- guardian.ds.domain
+- guardian.server.authentication.oauth2.enabled
+- guardian.server.authentication.oauth2.server.baseUrls.external
+- guardian.server.cas.authentication.enabled
+- guardian.server.cas.server.host
+- guardian.server.access.token.authentication.enabled
+- cas.config.server.port
+- cas.server.ssl.port
+- cas.server.http.port
+- cas.mgmt.server.port
+- data.dir
+- mysql.rw.port
+- binlog.port
+- mysql.local.port
+- binlogsvr.rpc.port
+- paxos.port
+- txsql.container.limits.memory
+- txsql.container.limits.cpu
+- txsql.container.requests.memory
+- txsql.container.requests.cpu
+- txsql.memory.ratio
+
+principals:
+- guardian/guardian
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 15
+  method: !<K8sPod> {}
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 15
+  method: !<Probe>
+    roles:
+    - roleType: GUARDIAN_TXSQL_SERVER
+      from: !<readiness> {}
+    - roleType: GUARDIAN_FEDERATION
+      from: !<readiness> {}
+    - roleType: GUARDIAN_APACHEDS
+      from: !<readiness> {}
+    - roleType: GUARDIAN_SERVER
+      from: !<readiness> {}
+    - roleType: CAS_CONFIG_SERVER
+      from: !<readiness> {}
+    - roleType: CAS_SERVER
+      from: !<readiness> {}
+    - roleType: CAS_ADMIN_SERVER
+      from: !<readiness> {}
