@@ -1,0 +1,266 @@
+---
+name: CATALOG
+version: studio-1.2.0-final
+global: false
+namePrefix: Catalog
+friendlyName: Catalog
+dependencies:
+  - name: HYPERBASE
+    minVersion: transwarp-6.0
+    optional: false
+  - name: SEARCH
+    minVersion: transwarp-6.0
+    optional: false
+  - name: KAFKA
+    minVersion: transwarp-6.0
+    optional: false
+  - name: ZOOKEEPER
+    minVersion: transwarp-6.0
+    optional: false
+  - name: HDFS
+    minVersion: transwarp-6.0
+    optional: false
+  - name: TXSQL
+    minVersion: transwarp-6.0
+    optional: false
+user: catalog
+
+roles:
+- name: CATALOG_WEB
+  friendlyName: "Catalog Web"
+  labelPrefix: "catalog-web"
+  dockerImage: "transwarp/catalog-web:studio-1.2.0-final"
+  linkExpression: "https://${localhostname}:${service['catalog.web.http.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  readinessProbe:
+    probe: !<httpGet>
+      path: /catalog/api/v1/system/health
+      port: ${service['catalog.web.http.port']}
+      scheme: HTTPS
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 60
+    successThreshold: 1
+    timeoutSeconds: 60
+  env:
+  - name: CATALOG_CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: KRB_ENABLE
+    value: <#if service.auth = "kerberos">true<#else>false</#if>
+  mountPaths:
+  - mountPath: /var/log/catalog-web
+    hostPath: /var/log/${service.sid}/catalog-web
+    name: catalog-web-log
+  resources:
+    limitsMemoryKey: catalog.web.limits.memory
+    limitsCpuKey: catalog.web.limits.cpu
+    requestsMemoryKey: catalog.web.requests.memory
+    requestsCpuKey: catalog.web.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Config
+    directives: 
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
+        to: "/etc/${service.sid}/conf/hdfs-site.xml"
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
+        to: "/etc/${service.sid}/conf/core-site.xml"
+- name: CATALOG_PLATFORM
+  friendlyName: "Catalog Platform"
+  labelPrefix: "catalog-platform"
+  dockerImage: "transwarp/catalog-platform:studio-1.2.0-final"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  readinessProbe:
+    probe: !<httpGet>
+      path: /api/atlas/healthCheck
+      port: ${service['catalog.platform.http.port']}
+      scheme: HTTPS
+    failureThreshold: 3
+    initialDelaySeconds: 90
+    periodSeconds: 120
+    successThreshold: 1
+    timeoutSeconds: 60
+  env:
+  - name: CATALOG_CONF_DIR
+    value: /etc/${service.sid}/conf
+  - name: KRB_ENABLE
+    value: <#if service.auth = "kerberos">true<#else>false</#if>
+  - name: WEB_SERVER_ADDRESS
+    value: https://${service.roles["CATALOG_WEB"][0].hostname}:${service['catalog.web.http.port']}
+  mountPaths:
+  - mountPath: /var/log/catalog-platform
+    hostPath: /var/log/${service.sid}/catalog-platform
+    name: catalog-platform-log
+  resources:
+    limitsMemoryKey: catalog.platform.limits.memory
+    limitsCpuKey: catalog.platform.limits.cpu
+    requestsMemoryKey: catalog.platform.requests.memory
+    requestsCpuKey: catalog.platform.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Config
+    directives: 
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HYPERBASE.sid}/conf/hbase-site.xml"
+        to: "/etc/${service.sid}/conf/hbase-site.xml"
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
+        to: "/etc/${service.sid}/conf/hdfs-site.xml"
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
+        to: "/etc/${service.sid}/conf/core-site.xml"
+- name: CATALOG_AGENT
+  friendlyName: "Catalog Agent"
+  labelPrefix: "catalog-agent"
+  dockerImage: "transwarp/catalog-agent:studio-1.2.0-final"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  readinessProbe:
+    probe: !<httpGet>
+      path: /catalog/api/v1/health
+      port: ${service['catalog.agent.http.port']}
+      scheme: HTTPS
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 60
+    successThreshold: 1
+    timeoutSeconds: 60
+  env:
+    - name: CATALOG_CONF_DIR
+      value: /etc/${service.sid}/conf
+    - name: KRB_ENABLE
+      value: <#if service.auth = "kerberos">true<#else>false</#if>
+  mountPaths:
+    - mountPath: /var/log/catalog-agent
+      hostPath: /var/log/${service.sid}/catalog-agent
+      name: catalog-agent-log
+  resources:
+    limitsMemoryKey: catalog.agent.limits.memory
+    limitsCpuKey: catalog.agent.limits.cpu
+    requestsMemoryKey: catalog.agent.requests.memory
+    requestsCpuKey: catalog.agent.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations: []
+
+stages:
+  - type: Config
+    taskGroups:
+    - !<Create-Database>
+      dbPrefix: catalog
+      dbUserConfig: javax.jdo.option.ConnectionUserName
+      dbPasswordConfig: javax.jdo.option.ConnectionPassword
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Role>
+      roleType: "CATALOG_WEB"
+      operation: Config
+      summaryPolicy: ALL
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "CATALOG_PLATFORM"
+      operation: Config
+      summaryPolicy: ALL
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "CATALOG_AGENT"
+      operation: Config
+      summaryPolicy: ALL
+      timeoutMinutes: 1
+  - type: PreDeleteAfterStop
+    taskGroups:
+    - !<DockerRunPreDelete>
+      summaryPolicy: NONE
+      timeoutMinutes: 10
+      roleType: CATALOG_PLATFORM
+      node: Any
+
+firstWizardConfigs:
+- catalog.web.http.port
+- catalog.platform.http.port
+- catalog.agent.http.port
+- cas.enable
+- kafka.topic.catalog.hook 
+- kafka.topic.catalog.entities
+- javax.jdo.option.ConnectionUserName
+- javax.jdo.option.ConnectionPassword
+- default.tenant
+- catalog.web.limits.memory
+- catalog.web.limits.cpu
+- catalog.web.requests.memory
+- catalog.web.requests.cpu
+- catalog.platform.limits.memory
+- catalog.platform.limits.cpu
+- catalog.platform.requests.memory
+- catalog.platform.requests.cpu
+- catalog.web.memory.ratio
+- catalog.platform.memory.ratio
+
+pages:
+- summary
+- roles
+- configuration
+- operation
+- security
+
+principals:
+- hive
+- kafka
+- hdfs
+- hbase
+- zookeeper
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 10
+  method: !<Probe>
+    roles:
+      - roleType: CATALOG_WEB
+        from: !<readiness> {}
+      - roleType: CATALOG_PLATFORM
+        from: !<readiness> {}
+      - roleType: CATALOG_AGENT
+        from: !<readiness> {}
