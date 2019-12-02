@@ -1,0 +1,264 @@
+- name: catalog.web.http.port
+  recommendExpression: 28080
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog.platform.http.port
+  recommendExpression: 28081
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog.agent.http.port
+  recommendExpression: 28090
+  defaultValue: null
+  valueType: PORT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: cas.enable
+  recommendExpression: true
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [CATALOG_WEB]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.topic.catalog.hook
+  recommendExpression: CATALOG_HOOK
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [CATALOG_PLATFORM]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  
+- name: kafka.topic.catalog.entities
+  recommendExpression: CATALOG_ENTITIES
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [CATALOG_PLATFORM]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: default.tenant
+  recommendExpression: TDH
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [CATALOG_WEB]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: sample.max.length
+  recommendExpression: 100
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [CATALOG_WEB]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: record.store.size
+  recommendExpression: 10000000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [CATALOG_WEB]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: record.store.days
+  recommendExpression: 3650
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [CATALOG_WEB]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logger.level
+  recommendExpression: INFO
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [CATALOG_WEB]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: javax.jdo.option.ConnectionUserName
+  recommendExpression: catalog
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: javax.jdo.option.ConnectionPassword
+  recommendExpression: password
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: PASSWORD
+
+- name: catalog.web.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [CATALOG_WEB]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog.web.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [CATALOG_WEB]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog.web.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [CATALOG_WEB]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog.web.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [CATALOG_WEB]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog.web.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [CATALOG_WEB]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog.platform.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [CATALOG_PLATFORM]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog.platform.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [CATALOG_PLATFORM]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog.platform.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [CATALOG_PLATFORM]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog.platform.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [CATALOG_PLATFORM]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog.platform.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [CATALOG_PLATFORM]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog.agent.limits.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [CATALOG_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog.agent.limits.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [CATALOG_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog.agent.requests.memory
+  recommendExpression: -1
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [CATALOG_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: catalog.agent.requests.cpu
+  recommendExpression: -1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [CATALOG_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
