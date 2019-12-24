@@ -1,0 +1,314 @@
+---
+name: TRANSPORTER
+version: studio-1.3.0-final
+global: false
+namePrefix: Transporter
+friendlyName: Transwarp Data Transporter
+dependencies:
+  - name: TXSQL
+    minVersion: transwarp-5.2
+    optional: false
+  - name: HDFS
+    minVersion: transwarp-5.2
+    optional: true
+  - name: INCEPTOR
+    minVersion: transwarp-5.2
+    optional: true
+  - name: ZOOKEEPER
+    minVersion: transwarp-5.2
+    optional: true
+roles:
+- name: TDT_SERVER
+  friendlyName: "Transporter Server"
+  labelPrefix: "transporter-server"
+  dockerImage: "transwarp/tdt:studio-1.3.0-final"
+  linkExpression: "https://${localhostname}:${service['tdt.server.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+  - name: TDT_CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths:
+  - mountPath: /srv/${service.sid}
+    hostPath: /srv/${service.sid}
+    name: srv
+  resources:
+    limitsMemoryKey: tdt.container.limits.memory
+    limitsCpuKey: tdt.container.limits.cpu
+    requestsMemoryKey: tdt.container.requests.memory
+    requestsCpuKey: tdt.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf/hadoop","/srv/${service.sid}"]
+        mode: "755"
+    - directive: !<shell>
+        script: "docker run -v /srv/${service.sid}:/srv/guardian --net=host ${dependencies.TOS.roles['TOS_REGISTRY'][0].hostname}:${dependencies.TOS['tos.registry.port']}/transwarp/guardian-gencerts:guardian-3.1.1-final entry.sh"
+  - type: Config
+    directives:
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/hdfs-site.xml"
+        to: "/etc/${service.sid}/conf/hadoop/hdfs-site.xml"
+      necessary: false
+    - directive: !<link>
+        action: Link
+        from: "/etc/${dependencies.HDFS.sid}/conf/core-site.xml"
+        to: "/etc/${service.sid}/conf/hadoop/core-site.xml"
+      necessary: false
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "db.properties"
+        targetPath: "/etc/${service.sid}/conf/db.properties"
+        mode: "600"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "zookeeper-jaas.conf.ftl"
+        targetPath: "/etc/${service.sid}/conf/hadoop/zookeeper-jaas.conf"
+        mode: "755"
+
+- name: CANAL_SERVER
+  friendlyName: "Canal Server"
+  labelPrefix: "canal-server"
+  dockerImage: "transwarp/canal-server:studio-1.3.0-final"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  env:
+  - name: CANAL_SERVER_CONF_DIR
+    value: /etc/${service.sid}/conf/canal-server
+  mountPaths: []
+  resources:
+    limitsMemoryKey: canal-server.container.limits.memory
+    limitsCpuKey: canal-server.container.limits.cpu
+    requestsMemoryKey: canal-server.container.requests.memory
+    requestsCpuKey: canal-server.container.requests.cpu
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [0]}
+  suggestion:
+  - criteria: !<Range> {"min": 0}
+  validation:
+  - criteria: !<Range> {"min": 0}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf/canal-server"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "db.properties"
+        targetPath: "/etc/${service.sid}/conf/canal-server/db.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "canal-server/canal-server-site.xml.ftl"
+        targetPath: "/etc/${service.sid}/conf/canal-server/canal-server-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "canal-server/canal-server-env.sh.ftl"
+        targetPath: "/etc/${service.sid}/conf/canal-server/canal-server-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "canal-server/logback-server.xml.ftl"
+        targetPath: "/etc/${service.sid}/conf/canal-server/logback.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "zookeeper-jaas.conf.ftl"
+        targetPath: "/etc/${service.sid}/conf/canal-server/zookeeper-jaas.conf"
+        mode: "755"
+
+- name: CANAL_CLIENT
+  friendlyName: "Canal Client"
+  labelPrefix: "canal-client"
+  dockerImage: "transwarp/canal-client:studio-1.3.0-final"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  env:
+  - name: CANAL_CLIENT_CONF_DIR
+    value: /etc/${service.sid}/conf/canal-client
+  mountPaths: []
+  resources:
+    limitsMemoryKey: canal-client.container.limits.memory
+    limitsCpuKey: canal-client.container.limits.cpu
+    requestsMemoryKey: canal-client.container.requests.memory
+    requestsCpuKey: canal-client.container.requests.cpu
+  nodeSpecificMounts:
+    - type: DIR_CONF
+      configKey: canal.client.local.data.store
+  summaryPolicy: ALL
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [0]}
+  suggestion:
+  - criteria: !<Range> {"min": 0}
+  validation:
+  - criteria: !<Range> {"min": 0}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/etc/${service.sid}/conf/canal-client"]
+        mode: "755"
+  - type: Config
+    directives:
+    - directive: !<link>
+        action: Link
+        from: "/etc/${service.sid}/conf/guardian-site.xml"
+        to: "/etc/${service.sid}/conf/canal-client/guardian-site.xml"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "db.properties"
+        targetPath: "/etc/${service.sid}/conf/canal-client/db.properties"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "canal-client/canal-client-site.xml.ftl"
+        targetPath: "/etc/${service.sid}/conf/canal-client/canal-client-site.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "canal-client/canal-client-env.sh.ftl"
+        targetPath: "/etc/${service.sid}/conf/canal-client/canal-client-env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "canal-client/logback-client.xml.ftl"
+        targetPath: "/etc/${service.sid}/conf/canal-client/logback.xml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "zookeeper-jaas.conf.ftl"
+        targetPath: "/etc/${service.sid}/conf/canal-client/zookeeper-jaas.conf"
+        mode: "755"
+
+stages:
+  - type: Config
+    taskGroups:
+    - !<Create-Database>
+      dbPrefix: tdt
+      dbUserConfig: tdt.persistence.user.name
+      dbPasswordConfig: tdt.persistence.password
+      timeoutMinutes: 5
+      summaryPolicy: SOME
+    - !<Role>
+      roleType: "TDT_SERVER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "CANAL_SERVER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+    - !<Role>
+      roleType: "CANAL_CLIENT"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+  - type: PreUpgrade
+    taskGroups:
+    - !<DockerRunPreUpgrade>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      roleType: TDT_SERVER
+      node: Any
+  - type: PreRollback
+    taskGroups:
+    - !<DockerRunPreRollback>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      roleType: TDT_SERVER
+      node: Any
+
+
+firstWizardConfigs:
+- tdt.server.port
+- tdt.persistence.user.name
+- tdt.persistence.password
+- tdt.job.cleaning
+- tdt.job.remover.check.period
+- tdt.job.max.accept.size
+- tdt.job.max.concurrent.size
+- tdt.thread.max.concurrent.size
+- tdt.container.limits.memory
+- tdt.container.limits.cpu
+- tdt.container.requests.memory
+- tdt.container.requests.cpu
+- tdt.memory.ratio
+- canal.server.port
+- canal.instance.memory.batch.mode
+- canal.instance.memory.buffer.size
+- canal.instance.memory.buffer.memunit
+- canal.instance.transaction.size
+- canal.instance.fallbackIntervalInSeconds
+- canal.instance.detecting.sql
+- canal.instance.detecting.interval.time
+- canal.instance.detecting.retry.threshold
+- canal.instance.detecting.heartbeatHaEnable
+- canal.instance.network.sendBufferSize
+- canal.instance.network.receiveBufferSize
+- canal.instance.network.soTimeout
+- canal.instance.filter.druid.ddl
+- canal.instance.filter.query.dcl
+- canal.instance.filter.query.dml
+- canal.instance.filter.query.ddl
+- canal.instance.filter.table.error
+- canal.instance.filter.rows
+- canal.instance.filter.transaction.entry
+- canal.instance.binlog.format
+- canal.instance.binlog.image
+- canal.instance.parser.parallel
+- canal.instance.parser.parallelBufferSize
+- canal.instance.tsdb.enable
+- canal-server.container.limits.memory
+- canal-server.container.limits.cpu
+- canal-server.container.requests.memory
+- canal-server.container.requests.cpu
+- canal-server.memory.ratio
+- canal.client.batchSize
+- canal.client.syncBatchSize
+- canal.client.retry.times
+- canal.client.timeout
+- canal.client.local.data.store
+- canal-client.container.limits.memory
+- canal-client.container.limits.cpu
+- canal-client.container.requests.memory
+- canal-client.container.requests.cpu
+- canal-client.memory.ratio
+
+principals:
+- tdt
+- hive
+- hdfs
+
+pages:
+- roles
+- configuration
+- operation
+- security
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 10
+  method: !<K8sPod> {}
+
+customConfigFiles:
+- tdt-site.xml
