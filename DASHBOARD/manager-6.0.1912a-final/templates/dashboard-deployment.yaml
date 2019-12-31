@@ -1,0 +1,75 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  labels:
+    name: kubernetes-dashboard
+  name: kubernetes-dashboard
+  namespace: kube-system
+spec:
+  replicas: ${service.roles.DASHBOARD?size}
+  revisionHistoryLimit: 10
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        name: kubernetes-dashboard
+    spec:
+      serviceAccount: kubernetes-dashboard
+      serviceAccountName: kubernetes-dashboard
+      hostNetwork: true
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes-dashboard
+                operator: Exists
+      containers:
+      - name: kubernetes-dashboard
+        image: transwarp/dashboard:manager-6.0.1912a-final
+        imagePullPolicy: Always
+        args:
+          # Uncomment the following line to manually specify Kubernetes API server Host
+          # If not specified, Dashboard will attempt to auto discover the API server and connect
+          # to it. Uncomment only if the default does not work.
+        - --auto-generate-certificates
+        - --port=${service['dashboard.ssl.container.port']}
+        livenessProbe:
+          httpGet:
+            scheme: HTTPS
+            path: /
+            port: ${service['dashboard.ssl.container.port']}
+          initialDelaySeconds: 30
+          timeoutSeconds: 30
+        resources:
+          limits:
+            cpu: 300m
+            memory: 200Mi
+          requests:
+            cpu: 300m
+            memory: 200Mi
+        volumeMounts:
+        - mountPath: /certs
+          name: kubernetes-dashboard-certs
+        - mountPath: /tmp
+          name: tmp-volume
+      tolerations:
+      - effect: NoExecute
+        key: node.kubernetes.io/not-ready
+        operator: Exists
+        tolerationSeconds: 300
+      - effect: NoExecute
+        key: node.kubernetes.io/unreachable
+        operator: Exists
+        tolerationSeconds: 300
+      volumes:
+      - name: kubernetes-dashboard-certs
+        secret:
+          defaultMode: 420
+          secretName: kubernetes-dashboard
+      - emptyDir: {}
+        name: tmp-volume
