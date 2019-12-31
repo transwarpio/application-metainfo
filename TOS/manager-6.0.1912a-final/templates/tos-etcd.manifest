@@ -1,0 +1,65 @@
+<#assign etcd_initial_servers=[]>
+<#list service.roles.TOS_MASTER as tos_master>
+<#assign etcd_initial_servers+=["ETCD"+ tos_master.id + "=https://" + tos_master.hostname + ":" + service['tos.master.leader.elect.port']]>
+</#list>
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tos-etcd-${service.sid}
+  namespace: kube-system
+  labels:
+    k8s-app: etcd-server
+spec:
+  priorityClassName: high-priority
+  hostNetwork: true
+  containers:
+  - name: tos-etcd-${service.sid}
+    image: transwarp/etcd:manager-6.0.1912a-final
+    imagePullPolicy: IfNotPresent
+    command:
+    - etcd
+    - --data-dir=/var/etcd/data
+    - --name=ETCD${.data_model['role.id']}
+    - --initial-cluster=${etcd_initial_servers?join(",")}
+    - --initial-cluster-token=etcd-k8s-cluster
+    - --initial-cluster-state=${service[.data_model["localhostname"]]['tos.master.etcd.initial.cluster.state']}
+    - --initial-advertise-peer-urls=https://${localhostname}:${service['tos.master.leader.elect.port']}
+    - --listen-client-urls=https://0.0.0.0:${service['tos.master.etcd.port']}
+    - --advertise-client-urls=https://${localhostname}:${service['tos.master.etcd.port']}
+    - --listen-peer-urls=https://0.0.0.0:${service['tos.master.leader.elect.port']}
+    - --heartbeat-interval=500
+    - --election-timeout=3000
+    - --client-cert-auth=true
+    - --auto-compaction-retention=12
+    - --trusted-ca-file=/etc/ssl/etcd-ca.pem
+    - --cert-file=/etc/ssl/etcd.pem
+    - --key-file=/etc/ssl/etcd-key.pem
+    - --peer-client-cert-auth=true
+    - --peer-trusted-ca-file=/etc/ssl/etcd-ca.pem
+    - --peer-cert-file=/etc/ssl/etcd.pem
+    - --peer-key-file=/etc/ssl/etcd-key.pem
+    env:
+    - name: TZ
+      value: "Asia/Shanghai"
+    - name: ETCDCTL_API
+      value: "3"
+    - name: ETCDCTL_CACERT
+      value: /etc/ssl/ca.pem
+    - name: ETCDCTL_CERT
+      value: /etc/ssl/etcd.pem
+    - name: ETCDCTL_KEY
+      value: /etc/ssl/etcd-key.pem
+    volumeMounts:
+    - name: varetcd
+      mountPath: /var/etcd/data
+      readOnly: false
+    - name: ssletcd
+      mountPath: /etc/ssl
+      readOnly: false
+  volumes:
+  - name: varetcd
+    hostPath:
+      path: /var/etcd/data
+  - name: ssletcd
+    hostPath:
+      path: /srv/kubernetes/
