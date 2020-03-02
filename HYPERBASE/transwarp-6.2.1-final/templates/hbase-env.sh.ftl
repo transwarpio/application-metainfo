@@ -178,5 +178,4 @@ else
 export HBASE_CLASSPATH=$f
 fi
 done
-export EXTRA_JAVA_OPTS="$EXTRA_JAVA_OPTS -Djava.security.auth.login.config=/etc/${service.sid}/conf/kafka_client_jaas.conf"
 </#if>
