@@ -1,0 +1,164 @@
+{
+  "template": "*logs-*",
+  "mappings": {
+    "logs": {
+      "_all": {
+        "enabled": false
+      },
+      "properties": {
+        "kubernetes": {
+          "type": "nested",
+          "properties": {
+            "pod" : {
+              "type": "nested",
+              "properties": {
+                "name" : {"type":"string", "index":"not_analyzed"}
+              }
+            },
+            "container" : {
+              "type": "nested",
+              "properties": {
+                "name" : {"type":"string", "index":"not_analyzed"}
+              }
+            },
+            "namespace" : {"type":"string", "index":"not_analyzed"}
+          }
+        },
+<#if service.modules.LOG?? && service.modules.LOG == "LIGHT">
+        "message": {
+          "type": "string",
+          "index": "no",
+          "doc_values": false
+        },
+</#if>
+        "beat" : {
+          "type" : "nested",
+          "properties" : {
+             "hostname" : {"type":"string", "index":"not_analyzed"},
+             "name" : {"type":"string", "index":"not_analyzed"}
+          }
+        },
+        "namespace": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "pod": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "container": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "session_handle": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "session_id": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "executor_id": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "service": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "service_instance_name": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "source": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "Cost": {
+          "index": "not_analyzed",
+          "type": "float"
+        },
+        "role": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "host": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "failed_stage_id": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "method": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "stage_id": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "spark_job_groupid": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "task_id": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "trace_id": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "span_id": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "parent_span_id": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "type": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "field": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "level": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "user": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "request_class": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "server_ip": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "client_ip": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "datetime": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "role_name": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "role_group_name": {
+          "type": "string",
+          "index": "not_analyzed"
+        }
+      }
+    }
+  }
+}

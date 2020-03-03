@@ -1,5 +1,9 @@
 AQUILA,manager-6.0,1566286264
+<<<<<<< HEAD
 AQUILA,manager-7.0,1574132309
+=======
+AQUILA,manager-7.0,1583235050
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 AQUILA,manager-7.0.1908a-final,1569225957
 AQUILA,manager-7.0.1908a-rc0,1566294892
 AQUILA,manager-7.0.1908a-rc1,1567758324
@@ -9,6 +13,12 @@ AQUILA,manager-7.0.1910a-rc1,1571377679
 AQUILA,manager-7.0.1910a-rc2,1572435079
 AQUILA,manager-7.0.1910a-rc3,1573442182
 AQUILA,manager-7.0.1910a-rc4,1574151636
+<<<<<<< HEAD
+=======
+AQUILA,manager-7.0.1912b-rc0,1582877002
+AQUILA,manager-7.0.2002a-rc0,1582281653
+AQUILA,manager-7.0.2002a-rc1,1582808374
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 ARGODB_COMPUTING,argodb-1.0,1549010499
 ARGODB_COMPUTING,argodb-1.0.0-final,1549010499
 ARGODB_COMPUTING,argodb-1.0.0-rc0,1536049838
@@ -151,6 +161,12 @@ DASHBOARD,manager-7.0.1910a-rc1,1571377679
 DASHBOARD,manager-7.0.1910a-rc2,1572435079
 DASHBOARD,manager-7.0.1910a-rc3,1573442182
 DASHBOARD,manager-7.0.1910a-rc4,1574064030
+<<<<<<< HEAD
+=======
+DASHBOARD,manager-7.0.1912b-rc0,1577785362
+DASHBOARD,manager-7.0.2002a-rc0,1582105254
+DASHBOARD,manager-7.0.2002a-rc1,1582808374
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 DASHBOARD,transwarp-5.0,1506700800
 DASHBOARD,transwarp-5.0.0-final,1504751880
 DASHBOARD,transwarp-5.0.0-rc5,1502528100
@@ -359,6 +375,12 @@ FLANNEL,manager-7.0.1910a-rc1,1571377679
 FLANNEL,manager-7.0.1910a-rc2,1572435079
 FLANNEL,manager-7.0.1910a-rc3,1573442182
 FLANNEL,manager-7.0.1910a-rc4,1574064030
+<<<<<<< HEAD
+=======
+FLANNEL,manager-7.0.1912b-rc0,1577785362
+FLANNEL,manager-7.0.2002a-rc0,1582105254
+FLANNEL,manager-7.0.2002a-rc1,1582808374
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 FLANNEL,transwarp-5.2,1553225275
 FLANNEL,transwarp-5.2.1-final,1532934991
 FLANNEL,transwarp-5.2.1-rc0,1531212803
@@ -649,7 +671,11 @@ HDFS,transwarp-5.2.4-final,1554787527
 HDFS,transwarp-5.2.4-rc0,1553225275
 HDFS,transwarp-5.2.4-rc1,1553711237
 HDFS,transwarp-5.2.4-rc2,1554206550
+<<<<<<< HEAD
 HDFS,transwarp-6.0,1567418706
+=======
+HDFS,transwarp-6.0,1582711709
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 HDFS,transwarp-6.0.0-final,1536288970
 HDFS,transwarp-6.0.0-rc0,1534497653
 HDFS,transwarp-6.0.0-rc1,1534993611
@@ -663,7 +689,11 @@ HDFS,transwarp-6.0.1-rc3,1546575291
 HDFS,transwarp-6.0.1-rc4,1547542607
 HDFS,transwarp-6.0.2-final,1560742937
 HDFS,transwarp-6.0.2-rc0,1552493437
+<<<<<<< HEAD
 HDFS,transwarp-6.2,1573547390
+=======
+HDFS,transwarp-6.2,1582711709
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 HDFS,transwarp-6.2.0-final,1564732398
 HDFS,transwarp-6.2.0-rc0,1561042464
 HDFS,transwarp-6.2.0-rc1,1562356225
@@ -740,7 +770,11 @@ HYPERBASE,transwarp-5.2.4-final,1554787527
 HYPERBASE,transwarp-5.2.4-rc0,1552737709
 HYPERBASE,transwarp-5.2.4-rc1,1553711237
 HYPERBASE,transwarp-5.2.4-rc2,1554206550
+<<<<<<< HEAD
 HYPERBASE,transwarp-6.0,1567418706
+=======
+HYPERBASE,transwarp-6.0,1582711709
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 HYPERBASE,transwarp-6.0.0-final,1536844323
 HYPERBASE,transwarp-6.0.0-rc0,1534497653
 HYPERBASE,transwarp-6.0.0-rc1,1535283675
@@ -754,8 +788,13 @@ HYPERBASE,transwarp-6.0.1-rc3,1546575291
 HYPERBASE,transwarp-6.0.1-rc4,1547542607
 HYPERBASE,transwarp-6.0.2-final,1553154285
 HYPERBASE,transwarp-6.0.2-rc0,1552493437
+<<<<<<< HEAD
 HYPERBASE,transwarp-6.2,1574411786
 HYPERBASE,transwarp-6.2.0-final,1564732398
+=======
+HYPERBASE,transwarp-6.2,1582711709
+HYPERBASE,transwarp-6.2.0-final,1579153452
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 HYPERBASE,transwarp-6.2.0-rc0,1561042464
 HYPERBASE,transwarp-6.2.0-rc1,1562740713
 HYPERBASE,transwarp-6.2.0-rc2,1563505658
@@ -822,7 +861,11 @@ INCEPTOR,transwarp-5.2.4-final,1554787527
 INCEPTOR,transwarp-5.2.4-rc0,1552737709
 INCEPTOR,transwarp-5.2.4-rc1,1553711237
 INCEPTOR,transwarp-5.2.4-rc2,1554206550
+<<<<<<< HEAD
 INCEPTOR,transwarp-6.0,1573441613
+=======
+INCEPTOR,transwarp-6.0,1582711709
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 INCEPTOR,transwarp-6.0.0-final,1536288970
 INCEPTOR,transwarp-6.0.0-rc0,1534610494
 INCEPTOR,transwarp-6.0.0-rc1,1535283675
@@ -836,7 +879,11 @@ INCEPTOR,transwarp-6.0.1-rc3,1546575291
 INCEPTOR,transwarp-6.0.1-rc4,1547542607
 INCEPTOR,transwarp-6.0.2-final,1561029649
 INCEPTOR,transwarp-6.0.2-rc0,1552493437
+<<<<<<< HEAD
 INCEPTOR,transwarp-6.2,1573547390
+=======
+INCEPTOR,transwarp-6.2,1582711709
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 INCEPTOR,transwarp-6.2.0-final,1564732398
 INCEPTOR,transwarp-6.2.0-rc0,1561629617
 INCEPTOR,transwarp-6.2.0-rc1,1563355823
@@ -949,7 +996,11 @@ KAFKA,transwarp-5.2.4-final,1554787527
 KAFKA,transwarp-5.2.4-rc0,1553225275
 KAFKA,transwarp-5.2.4-rc1,1553711237
 KAFKA,transwarp-5.2.4-rc2,1554206550
+<<<<<<< HEAD
 KAFKA,transwarp-6.0,1570787738
+=======
+KAFKA,transwarp-6.0,1582711709
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 KAFKA,transwarp-6.0.0-final,1536288970
 KAFKA,transwarp-6.0.0-rc0,1534497354
 KAFKA,transwarp-6.0.0-rc1,1534993611
@@ -963,7 +1014,11 @@ KAFKA,transwarp-6.0.1-rc3,1546575291
 KAFKA,transwarp-6.0.1-rc4,1547542607
 KAFKA,transwarp-6.0.2-final,1553154285
 KAFKA,transwarp-6.0.2-rc0,1552493437
+<<<<<<< HEAD
 KAFKA,transwarp-6.2,1573547390
+=======
+KAFKA,transwarp-6.2,1582711709
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 KAFKA,transwarp-6.2.0-final,1564732398
 KAFKA,transwarp-6.2.0-rc0,1561439650
 KAFKA,transwarp-6.2.0-rc1,1562356225
@@ -1046,6 +1101,13 @@ KUNDB,kundb-1.2,1572927193
 KUNDB,kundb-1.2.0-final,1573186592
 KUNDB,kundb-1.2.0-rc0,1570624722
 KUNDB,kundb-1.2.0-rc1,1572927193
+<<<<<<< HEAD
+=======
+KUNDB,kundb-1.2.1,1575982027
+KUNDB,kundb-1.2.2,1576067670
+KUNDB,kundb-1.3,1582888402
+KUNDB,kundb-1.3.0-rc0,1582711709
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 LADDER,argodb-1.1,1552879110
 LADDER,argodb-1.1.0-final,1553850858
 LADDER,argodb-1.1.0-rc2,1552879110
@@ -1092,6 +1154,12 @@ LICENSE_SERVICE,manager-7.0.1910a-rc1,1571377679
 LICENSE_SERVICE,manager-7.0.1910a-rc2,1572435079
 LICENSE_SERVICE,manager-7.0.1910a-rc3,1573442182
 LICENSE_SERVICE,manager-7.0.1910a-rc4,1574151636
+<<<<<<< HEAD
+=======
+LICENSE_SERVICE,manager-7.0.1912b-rc0,1577785362
+LICENSE_SERVICE,manager-7.0.2002a-rc0,1582105254
+LICENSE_SERVICE,manager-7.0.2002a-rc1,1582808374
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 LICENSE_SERVICE,transwarp-5.0,1510568927
 LICENSE_SERVICE,transwarp-5.0.0-final,1504751880
 LICENSE_SERVICE,transwarp-5.0.0-rc5,1502528100
@@ -1184,6 +1252,12 @@ MANAGER,manager-7.0.1910a-rc1,1571377679
 MANAGER,manager-7.0.1910a-rc2,1572435079
 MANAGER,manager-7.0.1910a-rc3,1573442182
 MANAGER,manager-7.0.1910a-rc4,1574151636
+<<<<<<< HEAD
+=======
+MANAGER,manager-7.0.1912b-rc0,1577785362
+MANAGER,manager-7.0.2002a-rc0,1582105254
+MANAGER,manager-7.0.2002a-rc1,1582808374
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 MANAGER,transwarp-5.2,1553225275
 MANAGER,transwarp-5.2.0-final,1528461601
 MANAGER,transwarp-5.2.0-rc0,1521610840
@@ -1642,7 +1716,11 @@ SEARCH,transwarp-5.2.4-final,1554787527
 SEARCH,transwarp-5.2.4-rc0,1552737709
 SEARCH,transwarp-5.2.4-rc1,1553711237
 SEARCH,transwarp-5.2.4-rc2,1554206550
+<<<<<<< HEAD
 SEARCH,transwarp-6.0,1566183870
+=======
+SEARCH,transwarp-6.0,1582711709
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 SEARCH,transwarp-6.0.0-final,1536809051
 SEARCH,transwarp-6.0.0-rc0,1534497653
 SEARCH,transwarp-6.0.0-rc1,1535283675
@@ -1656,7 +1734,11 @@ SEARCH,transwarp-6.0.1-rc3,1546575291
 SEARCH,transwarp-6.0.1-rc4,1547542607
 SEARCH,transwarp-6.0.2-final,1552924260
 SEARCH,transwarp-6.0.2-rc0,1552381789
+<<<<<<< HEAD
 SEARCH,transwarp-6.2,1574322834
+=======
+SEARCH,transwarp-6.2,1582711709
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 SEARCH,transwarp-6.2.0-final,1564732398
 SEARCH,transwarp-6.2.0-rc0,1561042464
 SEARCH,transwarp-6.2.0-rc1,1562356225
@@ -1970,6 +2052,12 @@ TOS,manager-7.0.1910a-rc1,1571377679
 TOS,manager-7.0.1910a-rc2,1572435079
 TOS,manager-7.0.1910a-rc3,1573442182
 TOS,manager-7.0.1910a-rc4,1574064030
+<<<<<<< HEAD
+=======
+TOS,manager-7.0.1912b-rc0,1582095558
+TOS,manager-7.0.2002a-rc0,1582105254
+TOS,manager-7.0.2002a-rc1,1582808374
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 TOS,transwarp-5.0,1506700800
 TOS,transwarp-5.0.0-final,1504751880
 TOS,transwarp-5.0.0-rc5,1502528100
@@ -2354,7 +2442,11 @@ YARN,transwarp-5.2.4-final,1554787527
 YARN,transwarp-5.2.4-rc0,1552737709
 YARN,transwarp-5.2.4-rc1,1553711237
 YARN,transwarp-5.2.4-rc2,1554206550
+<<<<<<< HEAD
 YARN,transwarp-6.0,1566183870
+=======
+YARN,transwarp-6.0,1582711709
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 YARN,transwarp-6.0.0-final,1536288970
 YARN,transwarp-6.0.0-rc0,1534497653
 YARN,transwarp-6.0.0-rc1,1534993611
@@ -2368,7 +2460,11 @@ YARN,transwarp-6.0.1-rc3,1546575291
 YARN,transwarp-6.0.1-rc4,1547542607
 YARN,transwarp-6.0.2-final,1553154285
 YARN,transwarp-6.0.2-rc0,1552493437
+<<<<<<< HEAD
 YARN,transwarp-6.2,1573547390
+=======
+YARN,transwarp-6.2,1582711709
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 YARN,transwarp-6.2.0-final,1564732398
 YARN,transwarp-6.2.0-rc0,1561042464
 YARN,transwarp-6.2.0-rc1,1562356225
@@ -2436,7 +2532,11 @@ ZOOKEEPER,transwarp-5.2.4-final,1554787527
 ZOOKEEPER,transwarp-5.2.4-rc0,1552737709
 ZOOKEEPER,transwarp-5.2.4-rc1,1553711237
 ZOOKEEPER,transwarp-5.2.4-rc2,1554206550
+<<<<<<< HEAD
 ZOOKEEPER,transwarp-6.0,1566157089
+=======
+ZOOKEEPER,transwarp-6.0,1582711709
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 ZOOKEEPER,transwarp-6.0.0-final,1536288970
 ZOOKEEPER,transwarp-6.0.0-rc0,1534497354
 ZOOKEEPER,transwarp-6.0.0-rc1,1534993611
@@ -2450,7 +2550,11 @@ ZOOKEEPER,transwarp-6.0.1-rc3,1546575291
 ZOOKEEPER,transwarp-6.0.1-rc4,1547542607
 ZOOKEEPER,transwarp-6.0.2-final,1553154285
 ZOOKEEPER,transwarp-6.0.2-rc0,1552493437
+<<<<<<< HEAD
 ZOOKEEPER,transwarp-6.2,1573547390
+=======
+ZOOKEEPER,transwarp-6.2,1582776072
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 ZOOKEEPER,transwarp-6.2.0-final,1564732398
 ZOOKEEPER,transwarp-6.2.0-rc0,1561551157
 ZOOKEEPER,transwarp-6.2.0-rc1,1562356225
