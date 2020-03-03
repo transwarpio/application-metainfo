@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
 MANAGER_PROGRESS_VERSION=manager-7.0
+<<<<<<< HEAD
 MANAGER_TAG_VERSION=manager-7.0.1910a-final
+=======
+MANAGER_TAG_VERSION=manager-7.0.2002a-final
+>>>>>>> bf53d3e... WARP-42468-DeployManager-7.0.2002a-final: add metainfo for Manager-7.0.2002a-final
 GUARDIAN_PROGRESS_VERSION=guardian-3.1
 GUARDIAN_TAG_VERSION=guardian-3.1.2-final
 LAST_STABLE_VERSION=transwarp-6.2.0-final

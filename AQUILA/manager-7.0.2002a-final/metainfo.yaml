@@ -1,0 +1,1191 @@
+---
+name: AQUILA
+version: manager-7.0.2002a-final
+global: true
+namePrefix: Aquila
+friendlyName: "Aquila"
+dependencies: []
+user: root
+# TODO need generate manager password
+
+modules:
+  - name: LOG
+    editions:
+      - name: HEAVY
+        excludedRoles: []
+      - name: LIGHT
+        excludedRoles: ["AQUILA_HEIMDAL"]
+      - name: NONE
+        excludedRoles: ["SEARCH_HEAD", "SEARCH_SERVER", "ZOOKEEPER", "KAFKA_SERVER", "FILEBEAT", "LOGSTASH", "AQUILA_HEIMDAL"]
+
+roles:
+- name: AQUILA_TXSQL_SERVER
+  friendlyName: "TxSQL Server"
+  labelPrefix: "txsql-server"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Move"]
+  deleteOpCondition:
+    deletable:
+      number: 3
+    movable:
+      number: 3
+    reject:
+      number: 2
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: data.dir
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - "MYSQL_PWD=$(grep db.password /etc/${service.sid}/conf/db.properties | cut -d'=' -f2) mysql -h`hostname` -P${service['mysql.rw.port']} -uroot -e'select 1 from dual'"
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  env:
+  - name: CONF_DIR
+    value: /etc/${service.sid}/conf
+  mountPaths: []
+  resources:
+    limitsMemoryKey: txsql.container.limits.memory
+    limitsCpuKey: txsql.container.limits.cpu
+    requestsMemoryKey: txsql.container.requests.memory
+    requestsCpuKey: txsql.container.requests.cpu
+  nodeSpecificMounts:
+    - configKey: data.dir
+  summaryPolicy: MAJOR
+  dockerImage: "transwarp/txsql:transwarp-6.0.2-final"
+  autoAssign:
+    - advice: !<NumSeq> {"numSeq": [5, 3, 1]}
+  suggestion:
+    - criteria: !<Range> {"min": 3, "oddity": true}
+  validation:
+    - criteria: !<Range> {"min": 1}
+  operations:
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "txsql-db.properties"
+        targetPath: "/etc/${service.sid}/conf/db.properties"
+        mode: "600"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "txsql-install_conf.sh"
+        targetPath: "/etc/${service.sid}/conf/install_conf.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "txsql-txsql-env.sh"
+        targetPath: "/etc/${service.sid}/conf/txsql-env.sh"
+        mode: "755"
+
+- name: AQUILA_AGENT
+  friendlyName: "Aquila Agent"
+  labelPrefix: "aquila-agent"
+  dockerImage: "transwarp/aquila:manager-7.0.2002a-final"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<exec>
+      command:
+        - /bin/bash
+        - -c
+        - |
+          curl --connect-timeout 15 --max-time 15 "http://`hostname`:${service['agent.web.port']}/actuator/health" | tee /tmp/check-aquila-agent
+          grep '"UP"' /tmp/check-aquila-agent
+    failureThreshold: 3
+    initialDelaySeconds: 3
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 15
+  env:
+  - name: AGENT_CONF_DIR
+    value: /etc/${service.sid}/conf/agent
+  - name: AGENT_LOG_DIR
+    value: /var/log/${service.sid}/agent
+  mountPaths:
+  - mountPath: /tmp
+    hostPath: /tmp
+    name: temp
+  resources:
+    limitsMemoryKey: agent.container.limits.memory
+    limitsCpuKey: agent.container.limits.cpu
+    requestsMemoryKey: agent.container.requests.memory
+    requestsCpuKey: agent.container.requests.cpu
+  nodeSpecificMounts: []
+  summaryPolicy: SOME
+  autoAssign:
+    - advice: !<EachNode> {}
+  suggestion:
+    - criteria: !<EachNode> {}
+  validation:
+    - criteria: !<EachNode> {}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+       paths: ["/var/log/${service.sid}/agent"]
+       mode: "750"
+  - type: Config
+    directives:
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "agent/env.sh.ftl"
+        targetPath: "/etc/${service.sid}/conf/agent/env.sh"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "agent/application.yml.ftl"
+        targetPath: "/etc/${service.sid}/conf/agent/application.yml"
+        mode: "755"
+    - directive: !<resource>
+        templateType: FreeMarker
+        templatePath: "agent/log4j2.xml.ftl"
+        targetPath: "/etc/${service.sid}/conf/agent/log4j2.xml"
+        mode: "755"
+
+- name: AQUILA_KUBE_STATE_METRICS
+  friendlyName: "Kube State Metrics"
+  labelPrefix: "kube-state-metrics"
+  dockerImage: "transwarp/kube-state-metrics:manager-7.0.2002a-final"
+  linkExpression: "http://${localhostname}:${service['kube.state.metrics.web.port']}"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /healthz
+      port: ${service['kube.state.metrics.web.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  hostPID: true
+  env:
+  - name: KUBE_STATE_METRICS_CON_DIR
+    value: /etc/${service.sid}/conf/kube-state-metrics
+  mountPaths:
+    - mountPath: /srv/kubernetes/
+      hostPath: /srv/kubernetes/
+      name: srvkube
+  resources:
+    limitsMemoryKey: kube.state.metrics.container.limits.memory
+    limitsCpuKey: kube.state.metrics.container.limits.cpu
+    requestsMemoryKey: kube.state.metrics.container.requests.memory
+    requestsCpuKey: kube.state.metrics.container.requests.cpu
+  nodeSpecificMounts: []
+  summaryPolicy: SOME
+  autoAssign:
+    - advice: !<NumSeq>
+        numSeq: [1]
+  suggestion:
+    - criteria: !<Range> {"min": 1, "max": 1}
+  validation:
+    - criteria: !<Range> {"min": 1, "max": 1}
+  operations:
+    - type: Config
+      directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "kube-state-metrics/env.sh.ftl"
+            targetPath: "/etc/${service.sid}/conf/kube-state-metrics/env.sh"
+            mode: "755"
+
+- name: AQUILA_NODE_EXPORTER
+  friendlyName: "Node Exporter"
+  labelPrefix: "node-exporter"
+  dockerImage: "transwarp/node-exporter:manager-7.0.2002a-final"
+  linkExpression: "http://${localhostname}:${service['node.exporter.web.port']}"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /metrics
+      port: ${service['node.exporter.web.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  hostPID: true
+  env:
+  - name: NODE_EXPORTER_CONF_DIR
+    value: /etc/${service.sid}/conf/node-exporter
+  mountPaths:
+  - mountPath: /host
+    mountParams: {mountPropagation: "HostToContainer", readOnly: true}
+    hostPath: /
+    name: host-mount
+  resources:
+    limitsMemoryKey: node.exporter.container.limits.memory
+    limitsCpuKey: node.exporter.container.limits.cpu
+    requestsMemoryKey: node.exporter.container.requests.memory
+    requestsCpuKey: node.exporter.container.requests.cpu
+  nodeSpecificMounts: []
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<EachNode> {}
+  suggestion:
+  - criteria: !<EachNode> {}
+  validation:
+  - criteria: !<EachNode> {}
+  operations:
+    - type: Config
+      directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "node-exporter/env.sh.ftl"
+            targetPath: "/etc/${service.sid}/conf/node-exporter/env.sh"
+            mode: "755"
+
+- name: AQUILA_TDH_EXPORTER
+  friendlyName: "TDH Exporter"
+  labelPrefix: "tdh-exporter"
+  dockerImage: "transwarp/tdh-exporter:manager-7.0.2002a-final"
+  linkExpression: "http://${localhostname}:${service['tdh.exporter.web.port']}/metrics"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /metrics
+      port: ${service['tdh.exporter.web.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  env:
+    - name: TDH_EXPORTER_CONF_DIR
+      value: /etc/${service.sid}/conf/tdh-exporter
+    - name: TDH_EXPORTER_LOG_DIR
+      value: /var/log/${service.sid}/tdh-exporter
+  mountPaths:
+    - mountPath: ${service['tdh.exporter.metric.config.dir']}
+      hostPath: ${service['tdh.exporter.metric.config.dir']}
+      name: config-mount
+  resources:
+    limitsMemoryKey: tdh.exporter.container.limits.memory
+    limitsCpuKey: tdh.exporter.container.limits.cpu
+    requestsMemoryKey: tdh.exporter.container.requests.memory
+    requestsCpuKey: tdh.exporter.container.requests.cpu
+  nodeSpecificMounts: []
+  summaryPolicy: SOME
+  autoAssign:
+    - advice: !<EachNode> {}
+  suggestion:
+    - criteria: !<EachNode> {}
+  validation:
+    - criteria: !<EachNode> {}
+  operations:
+    - type: Install
+      directives:
+        - directive: !<mkdirs>
+            paths: ["/var/log/${service.sid}/tdh-exporter"]
+            mode: "750"
+    - type: Config
+      directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "tdh-exporter/global-config.yml.ftl"
+            targetPath: "/etc/${service.sid}/conf/tdh-exporter/global-config.yml"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "tdh-exporter/env.sh.ftl"
+            targetPath: "/etc/${service.sid}/conf/tdh-exporter/env.sh"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "tdh-exporter/log4j2.xml.ftl"
+            targetPath: "/etc/${service.sid}/conf/tdh-exporter/log4j2.xml"
+            mode: "755"
+
+- name: AQUILA_PROMETHEUS
+  friendlyName: "Prometheus"
+  labelPrefix: "prometheus"
+  dockerImage: "transwarp/prometheus:manager-7.0.2002a-final"
+  linkExpression: "http://${localhostname}:${service['prometheus.web.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout", "Move"]
+  deleteOpCondition:
+    movable:
+      number: 1
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: prometheus.data.dir
+  readinessProbe:
+    probe: !<httpGet>
+      path: /-/healthy
+      port: ${service['prometheus.web.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  hostPID: true
+  env:
+    - name: PROMETHEUS_CON_DIR
+      value: /etc/${service.sid}/conf/prometheus
+  mountPaths:
+    - mountPath: /srv/kubernetes/
+      hostPath: /srv/kubernetes/
+      name: srvkube
+  resources:
+    limitsMemoryKey: prometheus.container.limits.memory
+    limitsCpuKey: prometheus.container.limits.cpu
+    requestsMemoryKey: prometheus.container.requests.memory
+    requestsCpuKey: prometheus.container.requests.cpu
+  nodeSpecificMounts:
+    - configKey: prometheus.data.dir
+  summaryPolicy: SOME
+  autoAssign:
+    - advice: !<NumSeq>
+        numSeq: [1]
+  suggestion:
+    - criteria: !<Range> {"min": 1, "max": 1}
+  validation:
+    - criteria: !<Range> {"min": 1, "max": 1}
+  operations:
+    - type: Config
+      directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "prometheus/prometheus.yml.ftl"
+            targetPath: "/etc/${service.sid}/conf/prometheus/prometheus.yml"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "prometheus/prometheus-env.sh.ftl"
+            targetPath: "/etc/${service.sid}/conf/prometheus/prometheus-env.sh"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "prometheus/kubernetes_rules.yml"
+            targetPath: "/etc/${service.sid}/conf/prometheus/rules.d/kubernetes_rules.yml"
+            mode: "755"
+
+- name: AQUILA_ALERTMANAGER
+  friendlyName: "Alertmanager"
+  labelPrefix: "alertmanager"
+  dockerImage: "transwarp/alertmanager:manager-7.0.2002a-final"
+  linkExpression: "http://${localhostname}:${service['alertmanager.web.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout", "Move"]
+  deleteOpCondition:
+    movable:
+      number: 1
+  readinessProbe:
+    probe: !<httpGet>
+      path: /-/healthy
+      port: ${service['alertmanager.web.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  hostPID: true
+  env:
+    - name: ALERTMANAGER_CON_DIR
+      value: /etc/${service.sid}/conf/alertmanager
+  mountPaths: []
+  resources:
+    limitsMemoryKey: alertmanager.container.limits.memory
+    limitsCpuKey: alertmanager.container.limits.cpu
+    requestsMemoryKey: alertmanager.container.requests.memory
+    requestsCpuKey: alertmanager.container.requests.cpu
+  nodeSpecificMounts: []
+  summaryPolicy: SOME
+  autoAssign:
+    - advice: !<NumSeq>
+        numSeq: [1]
+  suggestion:
+    - criteria: !<Range> {"min": 1, "max": 1}
+  validation:
+    - criteria: !<Range> {"min": 1, "max": 1}
+  operations:
+    - type: Config
+      directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "alertmanager/alertmanager.yml.empty.ftl"
+            targetPath: "/etc/${service.sid}/conf/alertmanager/alertmanager.yml.empty"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "alertmanager/alertmanager-env.sh.ftl"
+            targetPath: "/etc/${service.sid}/conf/alertmanager/alertmanager-env.sh"
+            mode: "755"
+
+- name: SEARCH_HEAD
+  friendlyName: "Search Head"
+  labelPrefix: "search-head"
+  dockerImage: "transwarp/search-head:transwarp-6.0.2-final"
+  linkExpression: "http://${localhostname}:${service['search.head.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<httpGet>
+      path: /
+      port: ${service['search.head.port']}
+      scheme: HTTP
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  env:
+    - name: HEAD_PORT
+      value: ${service['search.head.port']}
+    - name: HEAD_TARGET_HOST
+      value: ${service.roles.SEARCH_SERVER[0].hostname}:${service[service.roles.SEARCH_SERVER[0].id?c]['search.http.port']}
+    - name: HEAD_LOG_DIR
+      value: /var/log/head
+  summaryPolicy: NONE
+  mountPaths: []
+  resources:
+    limitsMemoryKey: search.head.container.limits.memory
+    limitsCpuKey: search.head.container.limits.cpu
+    requestsMemoryKey: search.head.container.requests.memory
+    requestsCpuKey: search.head.container.requests.cpu
+  autoAssign:
+    - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+    - criteria: !<Range> {"min": 1, "max": 1}
+  validation:
+    - criteria: !<Range> {"min": 1}
+  operations: []
+
+- name: ZOOKEEPER
+  friendlyName: "ZooKeeper Server"
+  labelPrefix: "zookeeper-server"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Move", "Scaleout"]
+  dockerImage: "transwarp/zookeeper:transwarp-6.2.1-final"
+  deleteOpCondition:
+    deletable:
+      number: 4
+    movable:
+      number: 3
+    reject:
+      number: 2
+  readinessProbe:
+    probe: !<exec>
+      command:
+        - /bin/bash
+        - -c
+        - "echo twzkstat | nc localhost ${service['zookeeper.client.port']} > /tmp/staty; cat /tmp/staty; grep -qE 'Mode: (follower|leader|standalone)' /tmp/staty"
+    failureThreshold: 3
+    initialDelaySeconds: 3
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 15
+  env:
+    - name: ZOOKEEPER_CONF_DIR
+      value: /etc/${service.sid}/conf/zookeeper
+  mountPaths:
+    - mountPath: /var/${service.sid}
+      hostPath: /var/${service.sid}
+      name: data
+  resources:
+    limitsMemoryKey: zookeeper.container.limits.memory
+    limitsCpuKey: zookeeper.container.limits.cpu
+    requestsMemoryKey: zookeeper.container.requests.memory
+    requestsCpuKey: zookeeper.container.requests.cpu
+  summaryPolicy: MAJOR
+  autoAssign:
+    - advice: !<NumSeq> {"numSeq": [5, 3, 1]}
+  suggestion:
+    - criteria: !<Range> {"min": 3, "oddity": true}
+  validation:
+    - criteria: !<Range> {"min": 1}
+  operations:
+    - type: Install
+      directives:
+        - directive: !<mkdirs>
+            paths: ["/var/${service.sid}"]
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "zookeeper/zookeeper-server.ftlsh"
+            targetPath: "/etc/init.d/zookeeper-server-${service.sid}"
+            mode: "755"
+            owner: "root"
+            group: "root"
+    - type: Config
+      directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "zookeeper/myid"
+            targetPath: "/var/${service.sid}/myid"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "zookeeper/jaas.conf.ftl"
+            targetPath: "/etc/${service.sid}/conf/zookeeper/jaas.conf"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "zookeeper/java.env.ftl"
+            targetPath: "/etc/${service.sid}/conf/zookeeper/java.env"
+            mode: "755"
+        - directive: !<resource>
+            templateType: Raw
+            templatePath: "zookeeper/log4j.properties.raw"
+            targetPath: "/etc/${service.sid}/conf/zookeeper/log4j.properties"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "zookeeper/oauth2-configuration.yml.ftl"
+            targetPath: "/etc/${service.sid}/conf/zookeeper/oauth2-configuration.yml"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "zookeeper/zoo.cfg.ftl"
+            targetPath: "/etc/${service.sid}/conf/zookeeper/zoo.cfg"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "zookeeper/zoo-env.sh.ftl"
+            targetPath: "/etc/${service.sid}/conf/zookeeper/zoo-env.sh"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "zookeeper/zookeeper-env.sh.ftl"
+            targetPath: "/etc/${service.sid}/conf/zookeeper/zookeeper-env.sh"
+            mode: "755"
+
+- name: KAFKA_SERVER
+  friendlyName: "Kafka Server"
+  labelPrefix: "kafka-server"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  dockerImage: "transwarp/kafka:transwarp-6.0.2-final"
+  deleteOpCondition:
+    deletable:
+      number: 2
+    reject:
+      number: 1
+  env:
+    - name: TRANSWARP_ZOOKEEPER_QUORUM
+      value: |
+        <#assign zookeepers=[]>
+        <#list service.roles["ZOOKEEPER"] as zookeeper>
+            <#assign zookeepers += [zookeeper.hostname]>
+        </#list>
+        ${zookeepers?join(",")}
+    - name: KAFKA_CONF_DIR
+      value: /etc/${service.sid}/conf/kafka
+  mountPaths: []
+  resources:
+    limitsMemoryKey: kafka.container.limits.memory
+    limitsCpuKey: kafka.container.limits.cpu
+    requestsMemoryKey: kafka.container.requests.memory
+    requestsCpuKey: kafka.container.requests.cpu
+  nodeSpecificMounts:
+    - configKey: kafka.kmq.log.dirs
+  summaryPolicy: SOME
+  autoAssign:
+    - advice: !<EachNode> {}
+  suggestion:
+    - criteria: !<EachNode> {}
+  validation:
+    - criteria: !<Range> {"min": 1}
+  operations:
+    - type: Config
+      directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "kafka/jaas.conf.ftl"
+            targetPath: "/etc/${service.sid}/conf/kafka/jaas.conf"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "kafka/kafka-env.sh.ftl"
+            targetPath: "/etc/${service.sid}/conf/kafka/kafka-env.sh"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "kafka/oauth2-configuration.yml.ftl"
+            targetPath: "/etc/${service.sid}/conf/kafka/oauth2-configuration.yml"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "kafka/server.properties.ftl"
+            targetPath: "/etc/${service.sid}/conf/kafka/server.properties"
+            mode: "755"
+
+- name: FILEBEAT
+  friendlyName: "Filebeat"
+  labelPrefix: "filebeat"
+  dockerImage: "transwarp/filebeat:transwarp-6.0.2-final"
+  linkExpression: "http://${localhostname}:${service['filebeat.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<tcpSocket>
+      port: ${service['filebeat.port']}
+    failureThreshold: 3
+    initialDelaySeconds: 3
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 15
+  env:
+    - name: FILEBEAT_CONF_DIR
+      value: /etc/${service.sid}/conf/filebeat
+  resources:
+    limitsMemoryKey: filebeat.container.limits.memory
+    limitsCpuKey: filebeat.container.limits.cpu
+    requestsMemoryKey: filebeat.container.requests.memory
+    requestsCpuKey: filebeat.container.requests.cpu
+  summaryPolicy: SOME
+  mountPaths:
+    - mountPath: /var/log
+      hostPath: /var/log
+      name: cntr-log-path
+    - mountPath: /var/run/${service.sid}/filebeat
+      hostPath: /hadoop/milano/${service.sid}/filebeat
+      name: cntr-run-path
+  autoAssign:
+    - advice: !<EachNode> {}
+  suggestion:
+    - criteria: !<Range> {"min": 1}
+  validation:
+    - criteria: !<Range> {"min": 1}
+  operations:
+    - type: Install
+      directives:
+        - directive: !<mkdirs>
+            paths: ["/hadoop/milano/${service.sid}/filebeat","/etc/${service.sid}/conf"]
+            mode: "755"
+    - type: Config
+      directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "filebeat/filebeat.yml.ftl"
+            targetPath: "/etc/${service.sid}/conf/filebeat/filebeat.yml"
+            mode: "655"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "filebeat/filebeat-env.sh.ftl"
+            targetPath: "/etc/${service.sid}/conf/filebeat/filebeat-env.sh"
+            mode: "655"
+
+- name: LOGSTASH
+  friendlyName: "Logstash"
+  labelPrefix: "logstash"
+  dockerImage: "transwarp/logstash:transwarp-6.0.2-final"
+  linkExpression: "http://${localhostname}:${service['logstash.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<tcpSocket>
+      port: ${service['logstash.port']}
+    failureThreshold: 3
+    initialDelaySeconds: 3
+    periodSeconds: 10
+    successThreshold: 1
+  env:
+    - name: LOGSTASH_CONF_DIR
+      value: /etc/${service.sid}/conf/logstash
+  mountPaths:
+    - mountPath: /var/run/${service.sid}/logstash
+      hostPath: /hadoop/milano/${service.sid}/logstash
+      name: cntr-run-path
+  resources:
+    limitsMemoryKey: logstash.container.limits.memory
+    limitsCpuKey: logstash.container.limits.cpu
+    requestsMemoryKey: logstash.container.requests.memory
+    requestsCpuKey: logstash.container.requests.cpu
+  summaryPolicy: SOME
+  autoAssign:
+    - advice: !<NumSeq> {"numSeq": [3, 2]}
+  suggestion:
+    - criteria: !<Range> {"min": 1}
+  validation:
+    - criteria: !<Range> {"min": 1}
+  operations:
+    - type: Install
+      directives:
+        - directive: !<mkdirs>
+            paths: ["/etc/${service.sid}/conf/config","/etc/${service.sid}/conf/settings","/etc/${service.sid}/conf/patterns","/etc/${service.sid}/conf/setting","/etc/${service.sid}/conf/temp","/hadoop/milano/${service.sid}/logstash"]
+            mode: "755"
+    - type: Config
+      directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "logstash/logstash-jaas.conf.ftl"
+            targetPath: "/etc/${service.sid}/conf/logstash/logstash-jaas.conf"
+            mode: "666"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "logstash/b-filter.conf.ftl"
+            targetPath: "/etc/${service.sid}/conf/logstash/config/b-filter.conf"
+            mode: "666"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "logstash/b-output.conf.ftl"
+            targetPath: "/etc/${service.sid}/conf/logstash/config/b-output.conf"
+            mode: "666"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "logstash/b-input.conf.ftl"
+            targetPath: "/etc/${service.sid}/conf/logstash/config/b-input.conf"
+            mode: "666"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "logstash/grok_patterns"
+            targetPath: "/etc/${service.sid}/conf/logstash/patterns/grok_patterns"
+            mode: "666"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "logstash/tdh_patterns"
+            targetPath: "/etc/${service.sid}/conf/logstash/patterns/tdh_patterns"
+            mode: "666"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "logstash/mappings.txt"
+            targetPath: "/etc/${service.sid}/conf/temp/mappings.txt"
+            mode: "666"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "logstash/logstash.yml.ftl"
+            targetPath: "/etc/${service.sid}/conf/logstash/settings/logstash.yml"
+            mode: "666"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "logstash/logstash-env.sh.ftl"
+            targetPath: "/etc/${service.sid}/conf/logstash/logstash-env.sh"
+            mode: "666"
+
+- name: AQUILA_SERVER
+  friendlyName: "Aquila Server"
+  labelPrefix: "aquila-server"
+  dockerImage: "transwarp/aquila:manager-7.0.2002a-final"
+  linkExpression: "http://${localhostname}:${service['server.web.port']}"
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout", "Move"]
+  deleteOpCondition:
+    movable:
+      number: 1
+  deleteOpCleanDirs:
+    fromConfig:
+    - key: server.alert.history.queue.data.dir
+  readinessProbe:
+    probe: !<exec>
+      command:
+        - /bin/bash
+        - -c
+        - |
+          curl --connect-timeout 15 --max-time 15 "http://`hostname`:${service['server.web.port']}/actuator/health" | tee /tmp/check-aquila-server
+          grep '"UP"' /tmp/check-aquila-server
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  env:
+    - name: SERVER_CONF_DIR
+      value: /etc/${service.sid}/conf/server
+    - name: SERVER_LOG_DIR
+      value: /var/log/${service.sid}/server
+  mountPaths:
+    - mountPath: /tmp
+      hostPath: /tmp
+      name: temp
+    - mountPath: /var/lib/transwarp-manager/master/scripts
+      hostPath: /var/lib/transwarp-manager/master/scripts
+      name: scripts
+  resources:
+    limitsMemoryKey: server.container.limits.memory
+    limitsCpuKey: server.container.limits.cpu
+    requestsMemoryKey: server.container.requests.memory
+    requestsCpuKey: server.container.requests.cpu
+  nodeSpecificMounts:
+    - configKey: server.alert.history.queue.data.dir
+  summaryPolicy: SOME
+  autoAssign:
+    - advice: !<NumSeq>
+        numSeq: [1]
+  suggestion:
+    - criteria: !<Range> {"min": 1}
+  validation:
+    - criteria: !<Range> {"min": 1}
+  operations:
+    - type: Install
+      directives:
+        - directive: !<mkdirs>
+            paths: ["/var/log/${service.sid}/server"]
+            mode: "750"
+    - type: Config
+      directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "server/env.sh.ftl"
+            targetPath: "/etc/${service.sid}/conf/server/env.sh"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "server/application.yml.ftl"
+            targetPath: "/etc/${service.sid}/conf/server/application.yml"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "server/shadow.yml"
+            targetPath: "/etc/${service.sid}/conf/server/shadow.yml"
+            mode: "700"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "server/log4j2.xml.ftl"
+            targetPath: "/etc/${service.sid}/conf/server/log4j2.xml"
+            mode: "755"
+
+- name: AQUILA_HEIMDAL
+  friendlyName: "Aquila Heimdal"
+  labelPrefix: "aquila-heimdal"
+  dockerImage: "transwarp/aquila:manager-7.0.2002a-final"
+  category: SLAVE
+  frontendOperations: ["Start", "Stop", "Delete", "Move"]
+  readinessProbe:
+    probe: !<exec>
+      command:
+        - /bin/bash
+        - -c
+        - |
+          curl --connect-timeout 15 --max-time 15 "http://`hostname`:${service['heimdal.web.port']}/actuator/health" | tee /tmp/check-aquila-heimdal
+          grep '"UP"' /tmp/check-aquila-heimdal
+    failureThreshold: 3
+    initialDelaySeconds: 3
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 15
+  env:
+    - name: HEIMDAL_CONF_DIR
+      value: /etc/${service.sid}/conf/heimdal
+    - name: HEIMDAL_LOG_DIR
+      value: /var/log/${service.sid}/heimdal
+  mountPaths:
+    - mountPath: /tmp
+      hostPath: /tmp
+      name: temp
+  resources:
+    limitsMemoryKey: heimdal.container.limits.memory
+    limitsCpuKey: heimdal.container.limits.cpu
+    requestsMemoryKey: heimdal.container.requests.memory
+    requestsCpuKey: heimdal.container.requests.cpu
+  nodeSpecificMounts: []
+  summaryPolicy: SOME
+  autoAssign:
+    - advice: !<NumSeq>
+        numSeq: [1]
+  suggestion:
+    - criteria: !<Range> {"min": 1, "max": 1}
+  validation:
+    - criteria: !<Range> {"min": 1, "max": 1}
+  operations:
+    - type: Install
+      directives:
+        - directive: !<mkdirs>
+            paths: ["/var/log/${service.sid}/heimdal"]
+            mode: "750"
+    - type: Config
+      directives:
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "heimdal/env.sh.ftl"
+            targetPath: "/etc/${service.sid}/conf/heimdal/env.sh"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "heimdal/application.yml.ftl"
+            targetPath: "/etc/${service.sid}/conf/heimdal/application.yml"
+            mode: "755"
+        - directive: !<resource>
+            templateType: FreeMarker
+            templatePath: "heimdal/log4j2.xml.ftl"
+            targetPath: "/etc/${service.sid}/conf/heimdal/log4j2.xml"
+            mode: "755"
+
+roleGroups:
+  - fieldName: instancegroups
+    namePrefix: instancegroup
+    friendlyName: "Instance Group"
+    autoAssign:
+      - advice: !<NumSeq> {"numSeq": [1]}
+    suggestion:
+      - criteria: !<Range> {"min": 1}
+    validation:
+      - criteria: !<Range> {"min": 1}
+    roles:
+      - name: SEARCH_SERVER
+        supportMultiInstances: true
+        friendlyName: "Search Server"
+        labelPrefix: "search-server"
+        dockerImage: "transwarp/search:transwarp-6.0.2-final"
+        linkExpression: "http://${localhostname}:${service['search.http.port']}/_cluster/health?pretty=true"
+        category: MASTER
+        frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+        readinessProbe:
+          probe: !<exec>
+            command:
+              - /bin/bash
+              - -c
+              - |
+                export PORT=`grep "http.port:" /etc/${service.sid}/${roleGroupName}/conf/search/elasticsearch.yml |awk '{printf $2}'`
+                curl --connect-timeout 15 --max-time 15 "http://`hostname`:$PORT/_cluster/health?pretty=true" | tee /tmp/check-search-server
+                grep "green" /tmp/check-search-server
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        deleteOpCondition:
+          deletable:
+            minMaster: false
+            health: ["yellow", "green"]
+          reject:
+            number: 2
+        deleteOpCleanDirs:
+          fromConfig:
+          - key: search.path.data
+        env:
+          - name: LOG_DIR
+            value: /var/log/${service.sid}/${roleGroupName}/search
+          - name: CONF_DIR
+            value: /etc/${service.sid}/${roleGroupName}/conf/search/
+        summaryPolicy: MAJOR
+        mountPaths: []
+        resources:
+          limitsMemoryKey: search.container.limits.memory
+          limitsCpuKey: search.container.limits.cpu
+          requestsMemoryKey: search.container.requests.memory
+          requestsCpuKey: search.container.requests.cpu
+        nodeSpecificMounts:
+          - configKey: search.path.data
+        autoAssign:
+          - advice: !<EachNode> {}
+        suggestion:
+          - criteria: !<EachNode> {}
+        validation:
+          - criteria: !<Range> {"min": 1}
+        operations:
+          - type: Config
+            directives:
+              - directive: !<resource>
+                  templateType: FreeMarker
+                  templatePath: "search/jvm.options"
+                  targetPath: "/etc/${service.sid}/${roleGroupName}/conf/search/jvm.options"
+                  mode: "600"
+              - directive: !<resource>
+                  templateType: FreeMarker
+                  templatePath: "search/elasticsearch-env"
+                  targetPath: "/etc/${service.sid}/${roleGroupName}/conf/search/elasticsearch-env"
+                  mode: "600"
+              - directive: !<resource>
+                  templateType: FreeMarker
+                  templatePath: "search/elasticsearch.yml"
+                  targetPath: "/etc/${service.sid}/${roleGroupName}/conf/search/elasticsearch.yml"
+                  mode: "600"
+              - directive: !<resource>
+                  templateType: Raw
+                  templatePath: "search/log4j2.properties.raw"
+                  targetPath: "/etc/${service.sid}/${roleGroupName}/conf/search/log4j2.properties"
+                  mode: "600"
+
+firstWizardConfigs:
+- data.dir
+- mysql.rw.port
+- binlog.port
+- mysql.local.port
+- binlogsvr.rpc.port
+- paxos.port
+- txsql.memory.ratio
+- txsql.container.limits.memory
+- txsql.container.limits.cpu
+- txsql.container.requests.memory
+- txsql.container.requests.cpu
+- agent.web.port
+- agent.container.requests.memory
+- agent.container.limits.memory
+- agent.container.requests.cpu
+- agent.container.limits.cpu
+- kube.state.metrics.web.port
+- kube.state.metrics.container.limits.memory
+- kube.state.metrics.container.limits.cpu
+- kube.state.metrics.container.requests.memory
+- kube.state.metrics.container.requests.cpu
+- node.exporter.web.port
+- node.exporter.container.limits.memory
+- node.exporter.container.limits.cpu
+- node.exporter.container.requests.memory
+- node.exporter.container.requests.cpu
+- tdh.exporter.web.port
+- tdh.exporter.container.limits.memory
+- tdh.exporter.container.limits.cpu
+- tdh.exporter.container.requests.memory
+- tdh.exporter.container.requests.cpu
+- prometheus.web.port
+- prometheus.data.dir
+- prometheus.container.limits.memory
+- prometheus.container.limits.cpu
+- prometheus.container.requests.memory
+- prometheus.container.requests.cpu
+- alertmanager.web.port
+- alertmanager.container.limits.memory
+- alertmanager.container.limits.cpu
+- alertmanager.container.requests.memory
+- alertmanager.container.requests.cpu
+- search.head.port
+- search.head.container.limits.memory
+- search.head.container.limits.cpu
+- search.head.container.requests.memory
+- search.head.container.requests.cpu
+- tickTime
+- initLimit
+- syncLimit
+- zookeeper.client.port
+- zookeeper.peer.communicate.port
+- zookeeper.leader.elect.port
+- zookeeper.server.memory
+- zookeeper.container.limits.memory
+- zookeeper.container.limits.cpu
+- zookeeper.container.requests.memory
+- zookeeper.container.requests.cpu
+- zookeeper.memory.ratio
+- kafka.listeners
+- kafka.advertised.listeners
+- kafka.delete.topic.enable
+- kafka.kmq.log.dirs
+- kafka.zookeeper.connection.timeout.ms
+- kafka.zookeeper.connection.timeout.ms
+- kafka.broker.memory
+- kafka.container.limits.memory
+- kafka.container.limits.cpu
+- kafka.container.requests.memory
+- kafka.container.requests.cpu
+- kafka.memory.ratio
+- filebeat.port
+- filebeat.container.limits.memory
+- filebeat.container.limits.cpu
+- filebeat.container.requests.memory
+- filebeat.container.requests.cpu
+- filebeat.memory.ratio
+- logstash.port
+- logstash.full_message
+- logstash.worker_num
+- logstash.index_pattern
+- logstash.container.limits.memory
+- logstash.container.limits.cpu
+- logstash.container.requests.memory
+- logstash.container.requests.cpu
+- logstash.memory.ratio
+- server.web.port
+- server.memory
+- server.container.limits.memory
+- server.container.limits.cpu
+- server.container.requests.memory
+- server.container.requests.cpu
+- heimdal.web.port
+- heimdal.container.limits.memory
+- heimdal.container.limits.cpu
+- heimdal.container.requests.memory
+- heimdal.container.requests.cpu
+- search.cluster.name
+- search.path.data
+- search.node.master
+- search.node.data
+- search.http.port
+- search.transport.tcp.port
+- search.network.bind_host
+- search.network.publish_host
+- search.container.limits.memory
+- search.container.limits.cpu
+- search.container.requests.memory
+- search.container.requests.cpu
+- search.memory.ratio
+
+pages:
+- roles
+- configuration
+- operation
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
+- category: VITAL_SIGN_CHECK
+  intervalSeconds: 10
+  method: !<Probe>
+    roles:
+      - roleType: AQUILA_TXSQL_SERVER
+        from: !<readiness> {}
+      - roleType: AQUILA_SERVER
+        from: !<readiness> {}
+      - roleType: AQUILA_AGENT
+        from: !<readiness> {}
+      - roleType: AQUILA_HEIMDAL
+        from: !<readiness> {}
+      - roleType: AQUILA_KUBE_STATE_METRICS
+        from: !<readiness> {}
+      - roleType: AQUILA_NODE_EXPORTER
+        from: !<readiness> {}
+      - roleType: AQUILA_TDH_EXPORTER
+        from: !<readiness> {}
+      - roleType: AQUILA_PROMETHEUS
+        from: !<readiness> {}
+      - roleType: AQUILA_ALERTMANAGER
+        from: !<readiness> {}
+      - roleType: ZOOKEEPER
+        from: !<readiness> {}
+      - roleType: KAFKA_SERVER
+        from: !<master>
+          roleType: ZOOKEEPER
+          execOn: Each
+          aggregate: Union
+          command: |
+            <#assign zkPort = service["zookeeper.client.port"]>
+            export JVMFLAGS="$JVMFLAGS -Djava.security.auth.login.config=/etc/${service.sid}/conf/zookeeper/jaas.conf"
+            python -c "import os; import subprocess; import socket; import json
+            FNULL = open(os.devnull, 'w')
+
+            lsout = subprocess.check_output(['/usr/lib/zookeeper/bin/zkCli.sh', '-server', socket.gethostname() + ':${zkPort}', 'ls', '/brokers/ids'])
+            for line in lsout.splitlines():
+              try:
+                ids = json.loads(line)
+                break
+              except:
+                pass
+
+            for id in ids:
+              brokerout = subprocess.check_output(['/usr/lib/zookeeper/bin/zkCli.sh', '-server', socket.gethostname() + ':${zkPort}', 'get', '/brokers/ids/'+str(id)], stderr=FNULL)
+              for line in brokerout.splitlines():
+                try:
+                  broker = json.loads(line)
+                  for endpoint in broker[u'endpoints']:
+                    print endpoint[endpoint.find(':')+3: endpoint.rfind(':')], 'SUCCESSFUL'
+                except:
+                  pass
+            "
+      - roleType: FILEBEAT
+        from: !<readiness> {}
+      - roleType: LOGSTASH
+        from: !<readiness> {}
+      - roleType: SEARCH_HEAD
+        from: !<readiness> {}
+      - roleType: SEARCH_SERVER
+        from: !<readiness> {}
+
+
+customConfigFiles:
+  - server.properties
+  - kafka-rest.properties
+  - b-index-prefix.conf
+  - zoo_cfg
