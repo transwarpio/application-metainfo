@@ -84,7 +84,6 @@ else
 export HIVE_AUX_JARS_PATH=$f
 fi
 done
-export EXTRA_JAVA_OPTS="-Djava.security.auth.login.config=/etc/${service.sid}/conf/kafka_client_jaas.conf"
 </#if>
 
 # TODO get executor memory from resource configuration
