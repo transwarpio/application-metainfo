@@ -1,0 +1,107 @@
+---
+name: DBA_SERVICE
+version: argodb-1.3.1-final
+global: false
+namePrefix: DBAService
+friendlyName: "DBA Service"
+dockerImage: "transwarp/argodb-dbaservice:argodb-1.3.1-final"
+dependencies:
+  - name: GUARDIAN
+    minVersion: transwarp-6.0
+    optional: true
+
+roles:
+- name: DBA_SERVICE_SERVER
+  friendlyName: "DBA Service Server"
+  labelPrefix: "dbaservice-server"
+  linkExpression: <#if (service['dbaservice.server.tls.enabled']!"false")="true">https<#else>http</#if>://${localhostname}:${service['dbaservice.ui.port']}/
+  category: MASTER
+  frontendOperations: ["Start", "Stop", "Delete", "Scaleout"]
+  readinessProbe:
+    probe: !<exec>
+      command:
+      - /bin/bash
+      - -c
+      - ps -aux | grep watchman.jar | grep -v "grep" > /dev/null
+  env:
+  - name: WATCHMAN_CONF
+    value: /etc/${service.sid}/conf/application.yml
+  - name: AIOPS_CONF
+    value: /etc/${service.sid}/conf/aiops.yml
+  - name: EXTRA_DBASERVICE_OPTS
+    value: ${service['EXTRA_DBASERVICE_OPTS']}
+  - name: EXTRA_AIOPS_OPTS
+    value: ${service['EXTRA_AIOPS_OPTS']}
+  deleteOpCleanDirs:
+    fromPath:
+    - key: /etc/${service.sid}/conf
+      featureFile: application.yml
+    fromConfig:
+    - key: dbaservice.persistence.datadir
+  mountPaths: []
+  resources:
+    limitsMemoryKey: dbaservice.container.limits.memory
+    limitsCpuKey: dbaservice.container.limits.cpu
+    requestsMemoryKey: dbaservice.container.requests.memory
+    requestsCpuKey: dbaservice.container.requests.cpu
+  nodeSpecificMounts:
+  - configKey: dbaservice.persistence.datadir
+  summaryPolicy: SOME
+  autoAssign:
+  - advice: !<NumSeq> {"numSeq": [1]}
+  suggestion:
+  - criteria: !<Range> {"min": 1}
+  validation:
+  - criteria: !<Range> {"min": 0}
+  operations:
+  - type: Install
+    directives:
+    - directive: !<mkdirs>
+        paths: ["/var/run/${service.sid}"]
+        mode: "755"
+
+stages:
+  - type: Config
+    taskGroups:
+    - !<Role>
+      roleType: "DBA_SERVICE_SERVER"
+      operation: Config
+      summaryPolicy: SOME
+      timeoutMinutes: 1
+
+firstWizardConfigs:
+- dbaservice.container.limits.cpu
+- dbaservice.container.limits.memory
+- dbaservice.container.requests.cpu
+- dbaservice.container.requests.memory
+- dbaservice.ui.port
+- dbaservice.message.port
+- dbaservice.request.port
+- dbaservice.aiops.ui.port
+- dbaservice.server.tls.enabled
+- dbaservice.persistence.enabled
+- dbaservice.persistence.datadir
+- dbaservice.persistence.db.max.filesize
+- dbaservice.persistence.db.username
+- dbaservice.persistence.db.password
+
+dashboardMetrics: []
+
+pages:
+- summary
+- roles
+- configuration
+- operation
+- resource_allocation
+- security
+- plugin
+
+principals:
+- hive
+- HTTP
+- kafka
+
+healthChecks:
+- category: DAEMON_CHECK
+  intervalSeconds: 5
+  method: !<K8sPod> {}
