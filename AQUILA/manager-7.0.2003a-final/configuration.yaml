@@ -1,0 +1,2397 @@
+## AQUILA_TXSQL_SERVER
+- name: data.dir
+  recommendExpression: "/${service.sid}/txsql/data/"
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: mysql.rw.port
+  recommendExpression: 8680
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: binlog.port
+  recommendExpression: 8681
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: mysql.local.port
+  recommendExpression: 8683
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: binlogsvr.rpc.port
+  recommendExpression: 8684
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: paxos.port
+  recommendExpression: 8685
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: txsql.container.limits.memory
+  recommendExpression: 3
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: txsql.container.limits.cpu
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: txsql.container.requests.memory
+  recommendExpression: 1.5
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: txsql.container.requests.cpu
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: txsql.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TXSQL_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: root.password
+  recommendExpression: ${(service['root.password']??)?then(service['root.password'],((.now?long * .now?long)%987654321)?c)}
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: HIDDEN
+
+## AQUILA_SERVER
+
+- name: server.web.port
+  recommendExpression: 8666
+  defaultValue: 8080
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.api.swagger.enabled
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.log.app.level
+  recommendExpression: INFO
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.memory
+  recommendExpression: 2048
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.limits.memory
+  recommendExpression: 4
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.limits.cpu
+  recommendExpression: 1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.requests.memory
+  recommendExpression: 1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.container.requests.cpu
+  recommendExpression: 0.1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.jdbc.connctor.timezone
+  recommendExpression: Asia/Shanghai
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: http-client.connect.timeout
+  recommendExpression: 30000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: http-client.connection-request.timeout
+  recommendExpression: 30000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: http-client.socket.timeout
+  recommendExpression: 30000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.rememberme.max-age
+  recommendExpression: 1209600
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.internal.admin.user
+  recommendExpression: <@randomstring len=10/>
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: WRITE_ONLY
+
+- name: server.internal.admin.password
+  recommendExpression: <@randomstring len=10/>
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: WRITE_ONLY
+
+- name: server.authz.anonymous.admin
+  recommendExpression: false
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.authz.cache.expire.sec
+  recommendExpression: 1200
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.alert.history.queue.data.dir
+  recommendExpression: "/${service.sid}/alert-history-queue"
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: server.alert.query.limit
+  recommendExpression: 1000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# AQUILA_AGENT
+
+- name: agent.web.port
+  recommendExpression: 8668
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: agent.log.app.level
+  recommendExpression: INFO
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: agent.memory
+  recommendExpression: 1024
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: agent.container.limits.memory
+  recommendExpression: 2
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: agent.container.limits.cpu
+  recommendExpression: 1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: agent.container.requests.memory
+  recommendExpression: 1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: agent.container.requests.cpu
+  recommendExpression: 0.01
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_AGENT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# AQUILA_HEIMDAL
+
+- name: heimdal.web.port
+  recommendExpression: 8766
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_HEIMDAL]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: heimdal.log.alert.interval
+  recommendExpression: 10000
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_HEIMDAL]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: heimdal.log.app.level
+  recommendExpression: INFO
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_HEIMDAL]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: heimdal.memory
+  recommendExpression: 600
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_HEIMDAL]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: heimdal.container.limits.memory
+  recommendExpression: 2
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_HEIMDAL]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: heimdal.container.limits.cpu
+  recommendExpression: 1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_HEIMDAL]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: heimdal.container.requests.memory
+  recommendExpression: 1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_HEIMDAL]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: heimdal.container.requests.cpu
+  recommendExpression: 0.01
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_HEIMDAL]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# AQUILA_KUBE_STATE_METRICS
+- name: kube.state.metrics.web.port
+  recommendExpression: 8675
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_KUBE_STATE_METRICS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kube.state.metrics.telemetry.port
+  recommendExpression: 8676
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_KUBE_STATE_METRICS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kube.state.metrics.container.limits.memory
+  recommendExpression: 0.1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_KUBE_STATE_METRICS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kube.state.metrics.container.limits.cpu
+  recommendExpression: 0.1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_KUBE_STATE_METRICS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kube.state.metrics.container.requests.memory
+  recommendExpression: 0.05
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_KUBE_STATE_METRICS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kube.state.metrics.container.requests.cpu
+  recommendExpression: 0.01
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_KUBE_STATE_METRICS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# AQUILA_NODE_EXPORTER
+
+- name: node.exporter.web.port
+  recommendExpression: 8670
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_NODE_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: node.exporter.collector.filesystem.ignored-mount-points
+  recommendExpression: ^/(dev|proc|sys|var/lib/docker.+|hadoop/drbd|mnt/ramdisk/ngmr|transwarp/mounts)($|/)
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_NODE_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: node.exporter.collector.filesystem.ignored-fs-types
+  recommendExpression: ^(afs|anon_inodefs|aufs|autofs|bdev|bind|binfmt_.*|cgroup|cifs|coda|configfs|cpuset|debugfs|devfs|devpts|devtmpfs|ecryptfs|fd|ftpfs|fuse.*|gfs|gvfs.*|hugetlbfs|inotifyfs|iso9660|lustre.*|mfs|mqueue|ncpfs|NFS|nfs.*|none|overlay|pipefs|proc|procfs|pstore|ramfs|rootfs|rpc_.*|securityfs|shfs|shm|smbfs|sockfs|sysfs|tmpfs|tracefs|udev|udf|unionfs|usbfs)$
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_NODE_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: node.exporter.container.limits.memory
+  recommendExpression: 0.1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_NODE_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: node.exporter.container.limits.cpu
+  recommendExpression: 0.1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_NODE_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: node.exporter.container.requests.memory
+  recommendExpression: 0.05
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_NODE_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: node.exporter.container.requests.cpu
+  recommendExpression: 0.01
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_NODE_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# AQUILA_TDH_EXPORTER
+
+- name: tdh.exporter.web.port
+  recommendExpression: 8692
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TDH_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tdh.exporter.metric.config.dir
+  recommendExpression: /etc/tdh-exporter
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TDH_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: HIDDEN
+
+- name: tdh.exporter.memory
+  recommendExpression: 1024
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TDH_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tdh.exporter.container.limits.memory
+  recommendExpression: 2
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TDH_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tdh.exporter.container.limits.cpu
+  recommendExpression: 0.1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TDH_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tdh.exporter.container.requests.memory
+  recommendExpression: 1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TDH_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tdh.exporter.container.requests.cpu
+  recommendExpression: 0.01
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_TDH_EXPORTER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# AQUILA_PROMETHEUS
+
+- name: prometheus.web.port
+  recommendExpression: 8690
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_PROMETHEUS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.data.dir
+  recommendExpression: "/${service.sid}/prometheus/data"
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_PROMETHEUS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.web.enable-admin-api
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.web.enable-lifecycle
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.global.evaluation_interval
+  recommendExpression: 37
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.manager.scrape_interval
+  recommendExpression: 60
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.manager.scrape_timeout
+  recommendExpression: 15
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.tdh.exporter.scrape_interval
+  recommendExpression: 15
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.tdh.exporter.scrape_timeout
+  recommendExpression: 10
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.node.exporter.scrape_interval
+  recommendExpression: 15
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.node.exporter.scrape_timeout
+  recommendExpression: 10
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.kube.state.metrics.scrape_interval
+  recommendExpression: 15
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.kube.state.metrics.scrape_timeout
+  recommendExpression: 10
+  defaultValue: null
+  valueType: SECONDS
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.storage.retention.time.days
+  recommendExpression: 15
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.min-block-duration.hours
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.max-block-duration.hours
+  recommendExpression: 26
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.container.limits.memory
+  recommendExpression: 4
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_PROMETHEUS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.container.limits.cpu
+  recommendExpression: 1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_PROMETHEUS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.container.requests.memory
+  recommendExpression: 1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_PROMETHEUS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: prometheus.container.requests.cpu
+  recommendExpression: 0.01
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_PROMETHEUS]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# AQUILA_ALERTMANAGER
+
+- name: alertmanager.web.port
+  recommendExpression: 8693
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_ALERTMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: alertmanager.global.resolve.timeout
+  recommendExpression: 5m
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_ALERTMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: alertmanager.container.limits.memory
+  recommendExpression: 0.1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_ALERTMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: alertmanager.container.limits.cpu
+  recommendExpression: 0.1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_ALERTMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: alertmanager.container.requests.memory
+  recommendExpression: 0.05
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_ALERTMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: alertmanager.container.requests.cpu
+  recommendExpression: 0.01
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [AQUILA_ALERTMANAGER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# FILEBEAT
+- name: filebeat.host
+  recommendExpression: "0.0.0.0"
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [FILEBEAT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: filebeat.port
+  recommendExpression: 9600
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [FILEBEAT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: filebeat.container.limits.memory
+  recommendExpression: |
+    <#compress>
+      <#if service.modules.LOG??>
+        <#assign edition = service.modules.LOG>
+        <#if edition == "HEAVY">
+            2
+        <#else>
+            1
+        </#if>
+      </#if>
+    </#compress>
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [FILEBEAT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: filebeat.container.limits.cpu
+  recommendExpression: |
+    <#compress>
+      <#if service.modules.LOG??>
+        <#assign edition = service.modules.LOG>
+        <#if edition == "HEAVY">
+            2
+        <#else>
+            1
+        </#if>
+      </#if>
+    </#compress>
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [FILEBEAT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: filebeat.container.requests.memory
+  recommendExpression: |
+    <#compress>
+      <#if service.modules.LOG??>
+        <#assign edition = service.modules.LOG>
+        <#if edition == "HEAVY">
+            0.5
+        <#else>
+            0.5
+        </#if>
+      </#if>
+    </#compress>
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [FILEBEAT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: filebeat.container.requests.cpu
+  recommendExpression: |
+    <#compress>
+      <#if service.modules.LOG??>
+        <#assign edition = service.modules.LOG>
+        <#if edition == "HEAVY">
+            0.1
+        <#else>
+            0.1
+        </#if>
+      </#if>
+    </#compress>
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [FILEBEAT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: filebeat.memory.ratio
+  recommendExpression: 0.8
+  defaultValue: 0.8
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [FILEBEAT]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# LOGSTASH
+- name: logstash.host
+  recommendExpression: "0.0.0.0"
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [LOGSTASH]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logstash.port
+  recommendExpression: 9601
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [LOGSTASH]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logstash.full_message
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [LOGSTASH]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logstash.worker_num
+  recommendExpression: "6"
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [LOGSTASH]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logstash.index_pattern
+  recommendExpression: "logs-%{+YYYY-MM-dd}"
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [LOGSTASH]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logstash.container.limits.memory
+  recommendExpression: |
+    <#compress>
+      <#if service.modules.LOG??>
+        <#assign edition = service.modules.LOG>
+        <#if edition == "HEAVY">
+            4
+        <#else>
+            2
+        </#if>
+      </#if>
+    </#compress>
+  defaultValue: null
+  valueType: GB
+  scope: !<RoleTypes>
+    roleTypes: [LOGSTASH]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logstash.container.limits.cpu
+  recommendExpression: |
+    <#compress>
+      <#if service.modules.LOG??>
+        <#assign edition = service.modules.LOG>
+        <#if edition == "HEAVY">
+            2
+        <#else>
+            1
+        </#if>
+      </#if>
+    </#compress>
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [LOGSTASH]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logstash.container.requests.memory
+  recommendExpression: |
+    <#compress>
+      <#if service.modules.LOG??>
+        <#assign edition = service.modules.LOG>
+        <#if edition == "HEAVY">
+            1
+        <#else>
+            1
+        </#if>
+      </#if>
+    </#compress>
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [LOGSTASH]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logstash.container.requests.cpu
+  recommendExpression: |
+    <#compress>
+      <#if service.modules.LOG??>
+        <#assign edition = service.modules.LOG>
+        <#if edition == "HEAVY">
+            0.1
+        <#else>
+            0.1
+        </#if>
+      </#if>
+    </#compress>
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [LOGSTASH]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logstash.memory.ratio
+  recommendExpression: 0.8
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [LOGSTASH]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# KAFKA
+- name: kafka.delete.topic.enable
+  recommendExpression: false
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+# Socket Server Settings
+- name: kafka.listeners
+  recommendExpression: PLAINTEXT://${localhostname}:19092
+  defaultValue: null
+  valueType: STRING
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.advertised.listeners
+  recommendExpression: PLAINTEXT://${localhostname}:19092
+  defaultValue: null
+  valueType: STRING
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.num.network.threads
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.num.io.threads
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.socket.send.buffer.bytes
+  recommendExpression: 1048576
+  defaultValue: null
+  valueType: BYTES
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.socket.receive.buffer.bytes
+  recommendExpression: 1048576
+  defaultValue: null
+  valueType: BYTES
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.socket.request.max.bytes
+  recommendExpression: 104857600
+  defaultValue: null
+  valueType: BYTES
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+#Log Basics
+- name: kafka.kmq.log.dirs
+  recommendExpression: |
+    <#function localDir suffix>
+      <#if rcmdMounts?size == 0>
+        <#return suffix>
+      <#else>
+        <#local dirs = []>
+        <#list rcmdMounts?sort as mnt>
+         <#local dirs = dirs + [mnt + suffix]>
+        </#list>
+        <#return dirs?join(",")>
+      </#if>
+    </#function>
+    ${localDir("/hadoop/${service.sid}/kmq")}
+  defaultValue: null
+  valueType: ABSOLUTE_PATH
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  isNodeSpecific: true
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.num.partitions
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.num.recovery.threads.per.data.dir
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+#Log Flush Policy
+- name: kafka.log.flush.interval.messages
+  recommendExpression: 10000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.log.flush.interval.ms
+  recommendExpression: 1000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.log.flush.scheduler.interval.ms
+  recommendExpression: 3000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.log.flush.intervals.ms.per.topic
+  recommendExpression: 1000000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+#Log Retention Policy
+- name: kafka.log.retention.hours
+  recommendExpression: 168
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.log.retention.bytes
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.log.segment.bytes
+  recommendExpression: 536870912
+  defaultValue: null
+  valueType: BYTES
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.log.retention.check.interval.ms
+  recommendExpression: 300000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.log.roll.hours
+  recommendExpression: 168
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.log.index.size.max.bytes
+  recommendExpression: 10485760
+  defaultValue: null
+  valueType: BYTES
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.log.index.interval.bytes
+  recommendExpression: 4096
+  defaultValue: null
+  valueType: BYTES
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+# Zookeeper
+- name: kafka.zookeeper.connection.timeout.ms
+  recommendExpression: 6000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.zookeeper.session.timeout.ms
+  recommendExpression: 6000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.zookeeper.sync.time.ms
+  recommendExpression: 2000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+#Others
+- name: kafka.queued.max.requests
+  recommendExpression: 500
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: kafka.log.segment.bytes.per.topic
+  recommendExpression: 100000
+  defaultValue: null
+  valueType: BYTES
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: kafka.log.roll.hours.per.topic
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: kafka.log.flush.interval.ms.per.topic
+  recommendExpression: 300000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: kafka.auto.create.topics.enable
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: kafka.controller.socket.timeout.ms
+  recommendExpression: 30000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: kafka.controller.message.queue.size
+  recommendExpression: 10
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: kafka.default.replication.factor
+  recommendExpression: 2
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: kafka.replica.lag.time.max.ms
+  recommendExpression: 10000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: kafka.replica.socket.timeout.ms
+  recommendExpression: 30000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: kafka.replica.socket.receive.buffer.bytes
+  recommendExpression: 65536
+  defaultValue: null
+  valueType: BYTES
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: kafka.replica.fetch.max.bytes
+  recommendExpression: 1000000
+  defaultValue: null
+  valueType: BYTES
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: kafka.replica.fetch.wait.max.ms
+  recommendExpression: 500
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: kafka.replica.fetch.min.bytes
+  recommendExpression: 500
+  defaultValue: null
+  valueType: BYTES
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: kafka.num.replica.fetchers
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: kafka.replica.high.watermark.checkpoint.interval.ms
+  recommendExpression: 5000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: kafka.fetch.purgatory.purge.interval.requests
+  recommendExpression: 10000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: kafka.producer.purgatory.purge.interval.requests
+  recommendExpression: 10000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: kafka.controlled.shutdown.enable
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: kafka.controlled.shutdown.max.retries
+  recommendExpression: 3
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: kafka.controlled.shutdown.retry.backoff.ms
+  recommendExpression: 5000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+
+- name: kafka.message.max.bytes
+  recommendExpression: 1000000
+  defaultValue: null
+  valueType: BYTES
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: ['server.properties']
+  visibility: READ_WRITE
+# kafka-env.sh
+- name: kafka.brokerid.equalsto.dndid
+  recommendExpression: false
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.jmx.remote.port
+  recommendExpression: 19997
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.broker.memory
+  recommendExpression: 1
+  defaultValue: null
+  valueType: GB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.container.limits.memory
+  recommendExpression: |
+    <#compress>
+      <#if service.modules.LOG??>
+        <#assign edition = service.modules.LOG>
+        <#if edition == "HEAVY">
+            4
+        <#else>
+            2
+        </#if>
+      </#if>
+    </#compress>
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.container.limits.cpu
+  recommendExpression: |
+    <#compress>
+      <#if service.modules.LOG??>
+        <#assign edition = service.modules.LOG>
+        <#if edition == "HEAVY">
+            2
+        <#else>
+            1
+        </#if>
+      </#if>
+    </#compress>
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.container.requests.memory
+  recommendExpression: |
+    <#compress>
+      <#if service.modules.LOG??>
+        <#assign edition = service.modules.LOG>
+        <#if edition == "HEAVY">
+            1
+        <#else>
+            1
+        </#if>
+      </#if>
+    </#compress>
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.container.requests.cpu
+  recommendExpression: |
+    <#compress>
+      <#if service.modules.LOG??>
+        <#assign edition = service.modules.LOG>
+        <#if edition == "HEAVY">
+            0.1
+        <#else>
+            0.1
+        </#if>
+      </#if>
+    </#compress>
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: kafka.memory.ratio
+  recommendExpression: -1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [KAFKA_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# ZOOKEEPER
+- name: zookeeper.client.port
+  recommendExpression: 12183
+  defaultValue: null
+  valueType: PORT
+  #  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.peer.communicate.port
+  recommendExpression: 12889
+  defaultValue: null
+  valueType: PORT
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.leader.elect.port
+  recommendExpression: 13889
+  defaultValue: null
+  valueType: PORT
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.jmxremote.port
+  recommendExpression: 19912
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: tickTime
+  recommendExpression: 9000
+  defaultValue: null
+  valueType: MILLISECONDS
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: [zoo_cfg]
+  visibility: READ_WRITE
+
+- name: initLimit
+  recommendExpression: 10
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: [zoo_cfg]
+  visibility: READ_WRITE
+
+- name: syncLimit
+  recommendExpression: 5
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: [zoo_cfg]
+  visibility: READ_WRITE
+
+- name: maxClientCnxns
+  recommendExpression: 0
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: [zoo_cfg]
+  visibility: READ_WRITE
+
+- name: zookeeper.server.memory
+  recommendExpression: 1024
+  defaultValue: null
+  valueType: MB
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.container.limits.memory
+  recommendExpression: 1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.container.limits.cpu
+  recommendExpression: 1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.container.requests.memory
+  recommendExpression: 0.1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.container.requests.cpu
+  recommendExpression: 0.01
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.memory.ratio
+  recommendExpression: 0.8
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: zookeeper.sasl.oauth2.enabled
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [ZOOKEEPER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# ELASTICSEARCH
+- name: search.cluster.name
+  recommendExpression: cluster
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.node.master
+  recommendExpression: |
+    <#compress>
+    <#assign servers=service.roles.SEARCH_SERVER?sort_by("id") roleIds=[]>
+    <#list servers as server>
+      <#assign roleIds+=[(server.id)]>
+    </#list>
+    <#if (roleIds?seq_index_of(.data_model['role.id'])<3)>true<#else>false</#if>
+    </#compress>
+  defaultValue: null
+  valueType: BOOL
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+
+- name: search.node.data
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+
+- name: search.path.data
+  recommendExpression: |
+    <#function localDir suffix>
+      <#if rcmdMounts?size == 0>
+        <#return suffix>
+      <#else>
+        <#local dirs = []>
+        <#list rcmdMounts?sort as mnt>
+         <#local dirs = dirs + [mnt + suffix]>
+        </#list>
+        <#return dirs?join(",")>
+      </#if>
+    </#function>
+    ${localDir("/${service.sid}/search/${roleGroupName}/data")}
+  defaultValue: null
+  valueType: COMMA_SEPARATED_ABSOLUTE_PATH
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+
+- name: search.path.logs
+  recommendExpression: /var/log/${service.sid}/search/${roleGroupName}
+  defaultValue: null
+  valueType: STRING
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: HIDDEN
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+
+- name: search.network.bind_host
+  recommendExpression: "0.0.0.0"
+  defaultValue: null
+  isNodeSpecific: true
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+
+- name: search.network.publish_host
+  recommendExpression: ${localhostname}
+  defaultValue: null
+  isNodeSpecific: true
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+
+- name: search.gateway.recover_after_time
+  recommendExpression: 5m
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.discovery.zen.minimum_master_nodes
+  recommendExpression: 1
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.index.translog.durability
+  recommendExpression: async
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.index.store.type
+  recommendExpression: niofs
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.indices.fielddata.cache.size
+  recommendExpression: 50%
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+# elasticsearch-env
+# min(30720m, total_memory_size / 3)
+- name: es.heap.size
+  recommendExpression: |
+    <#compress>
+      <#if service.modules.LOG??>
+        <#assign edition = service.modules.LOG>
+        <#if edition == "HEAVY">
+          <#assign  thirdMemMB = (memBytes/1048576/3)?int>
+          <#if thirdMemMB <= 30720>
+            ${thirdMemMB?int}
+          <#else>
+            30720
+          </#if>
+        <#else>
+            3000
+        </#if>
+      </#if>
+    </#compress>
+  defaultValue: null
+  valueType: MB
+  isNodeSpecific: true
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+
+- name: search.container.limits.memory
+  recommendExpression: |
+    <#compress>
+      <#if service.modules.LOG??>
+        <#assign edition = service.modules.LOG>
+        <#if edition == "HEAVY">
+            12
+        <#else>
+            4
+        </#if>
+      </#if>
+    </#compress>
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.container.limits.cpu
+  recommendExpression: |
+    <#compress>
+      <#if service.modules.LOG??>
+        <#assign edition = service.modules.LOG>
+        <#if edition == "HEAVY">
+            6
+        <#else>
+            4
+        </#if>
+      </#if>
+    </#compress>
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.container.requests.memory
+  recommendExpression: |
+    <#compress>
+      <#if service.modules.LOG??>
+        <#assign edition = service.modules.LOG>
+        <#if edition == "HEAVY">
+            12
+        <#else>
+            4
+        </#if>
+      </#if>
+    </#compress>
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.container.requests.cpu
+  recommendExpression: |
+    <#compress>
+      <#if service.modules.LOG??>
+        <#assign edition = service.modules.LOG>
+        <#if edition == "HEAVY">
+            1
+        <#else>
+            1
+        </#if>
+      </#if>
+    </#compress>
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.head.container.limits.memory
+  recommendExpression: 0.2
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_HEAD]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.head.container.limits.cpu
+  recommendExpression: 0.1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_HEAD]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.head.container.requests.memory
+  recommendExpression: 0.1
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_HEAD]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.head.container.requests.cpu
+  recommendExpression: 0.01
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_HEAD]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.memory.ratio
+  recommendExpression: 0.819
+  defaultValue: null
+  valueType: FLOAT
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.http.port
+  recommendExpression: ${19201 + currentRoleGroupsCount - 1}
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+
+- name: search.transport.tcp.port
+  recommendExpression: ${19301 + currentRoleGroupsCount - 1}
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+  isSupportMultiInstances: true
+  domain: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+
+- name: search.index.shard.path.selector
+  recommendExpression: tiered
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.thread_pool.bulk.queue_size
+  recommendExpression: 5000
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.head.port
+  recommendExpression: 19101
+  defaultValue: null
+  valueType: PORT
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_HEAD]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.discovery.zen.fd.ping_timeout
+  recommendExpression: 120s
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.discovery.zen.fd.ping_retries
+  recommendExpression: 6
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.discovery.zen.fd.ping_interval
+  recommendExpression: 30s
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.discovery.zen.ping_timeout
+  recommendExpression: 100s
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.cluster.routing.allocation.balance.shard
+  recommendExpression: 0.001
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.cluster.routing.allocation.balance.index
+  recommendExpression: 0.999
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.index.unassigned.node_left.delayed_timeout
+  recommendExpression: 10m
+  defaultValue: null
+  valueType: STRING
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: search.cluster.routing.allocation.same_shard.host
+  recommendExpression: true
+  defaultValue: null
+  valueType: BOOL
+  scope: !<RoleTypes>
+    roleTypes: [SEARCH_SERVER]
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE

@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tos-proxy-${service.sid}
+  namespace: kube-system
+  labels:
+    transwarp.name: k8s-proxy
+  annotations:
+    scheduler.alpha.kubernetes.io/critical-pod: ""
+spec:
+  tolerations:
+  - key: "master"
+    operator: "Exists"
+    effect: "NoSchedule"
+  priorityClassName: system-node-critical
+  hostNetwork: true
+  containers:
+    - name: tos-proxy-${service.sid}
+      image: transwarp/alpine:manager-7.0.2003a-final
+      imagePullPolicy: IfNotPresent
+      command:
+      - kube-proxy
+      - --kubeconfig=/srv/kubernetes/kubeconfig
+      - --v=2
+      - --masquerade-all
+      - --feature-gates=SupportIPVSProxyMode=true
+      - --proxy-mode=ipvs
+      - --cluster-cidr=${service['service.cluster.ip.range']}
+      env:
+        - name: TZ
+          value: "Asia/Shanghai"
+      securityContext:
+        privileged: true
+      volumeMounts:
+      - name: proxylog
+        mountPath: /var/log/tos/proxy/
+        readOnly: false
+      - name: proxykubelog
+        mountPath: /var/log/kubernetes/
+        readOnly: false
+      - name: srvkube
+        mountPath: /srv/kubernetes/
+        readOnly: true
+      - name: libmod
+        mountPath: /lib/modules
+        readOnly: true
+      - name: binkube
+        mountPath: /usr/local/bin
+        readOnly: false
+  volumes:
+    - name: proxylog
+      hostPath:
+        path: /var/log/${service.sid}/proxy
+    - name: proxykubelog
+      hostPath:
+        path: /var/log/kubernetes/proxy
+    - name: srvkube
+      hostPath:
+        path: /srv/kubernetes/
+    - name: libmod
+      hostPath:
+        path: /lib/modules
+    - name: binkube
+      hostPath:
+        path: /opt/kubernetes/bin
