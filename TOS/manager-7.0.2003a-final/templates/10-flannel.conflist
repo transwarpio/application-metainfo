@@ -1,0 +1,21 @@
+{
+  "name": "vxlan0",
+  "cniVersion": "0.3.1",
+  "plugins": [
+    {
+      "type": "tos",
+      "kubeconfig": "/srv/kubernetes/kubeconfig-proxy",
+      "defaultNetwork": "overlay",
+      "delegate": {
+        "hairpinMode": true,
+        "isDefaultGateway": true
+      }
+    },
+    {
+      "type": "portmap",
+      "capabilities": {
+        "portMappings": true
+      }
+    }
+  ]
+}

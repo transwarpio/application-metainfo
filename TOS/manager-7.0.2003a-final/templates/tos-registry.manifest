@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tos-registry-${service.sid}
+  namespace: kube-system
+  labels:
+    k8s-app: registry
+spec:
+  priorityClassName: system-node-critical
+  hostNetwork: true
+  containers:
+  - name: registry
+    image: transwarp/registry:manager-7.0.2003a-final
+    imagePullPolicy: IfNotPresent
+    env:
+    - name: TZ
+      value: "Asia/Shanghai"
+    - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
+      value: /var/lib/registry
+    - name: REGISTRY_HTTP_TLS_CERTIFICATE
+      value: /certs/server.pem
+    - name: REGISTRY_HTTP_TLS_KEY
+      value: /certs/server-key.pem
+    volumeMounts:
+    - name: certs
+      mountPath: /certs
+      readOnly: true
+    - name: data
+      mountPath: /var/lib/registry
+      readOnly: false
+  volumes:
+    - name: certs
+      hostPath:
+        path: /srv/kubernetes
+    - name: data
+      hostPath:
+        path: /var/lib/registry_data

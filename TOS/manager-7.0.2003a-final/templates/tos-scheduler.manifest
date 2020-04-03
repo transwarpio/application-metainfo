@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tos-scheduler-${service.sid}
+  namespace: kube-system
+  labels:
+    k8s-app: kube-scheduler
+  annotations:
+    scheduler.alpha.kubernetes.io/critical-pod: ""
+spec:
+  tolerations:
+  - key: "master"
+    operator: "Exists"
+    effect: "NoSchedule"
+  priorityClassName: system-node-critical
+  hostNetwork: true
+  containers:
+    - name: tos-scheduler-${service.sid}
+      image: transwarp/alpine:manager-7.0.2003a-final
+      imagePullPolicy: IfNotPresent
+      command:
+        - kube-scheduler
+        - --v=4
+        - --kubeconfig=/srv/kubernetes/kubeconfig
+        - --leader-elect
+        - --profiling
+        - --logtostderr=true
+        - --log-dir=/var/log/kubernetes/
+      env:
+      - name: TZ
+        value: "Asia/Shanghai"
+      livenessProbe:
+        httpGet:
+          host: 127.0.0.1
+          port: ${service['tos.master.scheduler.port']}
+          path: /healthz
+      volumeMounts:
+      - name: schlog
+        mountPath: /var/log/tos/scheduler/
+        readOnly: false
+      - name: schkubelog
+        mountPath: /var/log/kubernetes/
+        readOnly: false
+      - name: kubernetes
+        mountPath: /var/run/kubernetes/
+        readOnly: false
+      - name: srvkube
+        mountPath: /srv/kubernetes/
+        readOnly: true
+      - name: binkube
+        mountPath: /usr/local/bin
+        readOnly: false
+  volumes:
+    - name: schlog
+      hostPath:
+        path: /var/log/${service.sid}/scheduler
+    - name: schkubelog
+      hostPath:
+        path: /var/log/kubernetes/scheduler
+    - name: kubernetes
+      hostPath:
+        path: /var/run/${service.sid}
+    - name: srvkube
+      hostPath:
+        path: /srv/kubernetes/
+    - name: binkube
+      hostPath:
+        path: /opt/kubernetes/bin

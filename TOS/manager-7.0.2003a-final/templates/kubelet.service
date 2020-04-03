@@ -1,0 +1,44 @@
+<#assign master="false">
+<#assign hosts=service['roles']['TOS_MASTER']>
+<#list hosts as host>
+  <#if host.hostname == localhostname>
+    <#assign master="true">
+  </#if>
+</#list>
+<#list service['roles']['TOS_SLAVE'] as role>
+  <#if role.hostname == localhostname>
+    <#assign localIp=role.ip>
+  </#if>
+</#list>
+[Unit]
+Description=Kubernetes Kubelet
+After=docker.service docker.socket
+Wants=docker.socket
+
+[Service]
+ExecStart=/opt/kubernetes/bin/kubelet \
+    --v=6 \
+    --hostname-override=${localhostname} \
+    --log-dir=/var/log/kubernetes \
+    --node-labels=<#if master == "true">master=true,</#if>worker=true \
+    --node-ip=${localIp} \
+    --pod-infra-container-image=transwarp/pause:manager-7.0.2003a-final \
+    --network-plugin=cni \
+    --eviction-hard= \
+    --bootstrap-kubeconfig=/srv/kubernetes/bootstrap.kubeconfig \
+    --feature-gates=SupportPodPidsLimit=false,SupportNodePidsLimit=false \
+<#if master == "true">
+    --kubeconfig=/srv/kubernetes/kubeconfig \
+<#else>
+    --rotate-certificates \
+    --kubeconfig=/var/lib/kubelet/kubeconfig \
+</#if>
+    --config=/opt/kubernetes/kubelet-config.yaml
+
+
+KillMode=process
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target

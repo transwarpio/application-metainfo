@@ -1,0 +1,108 @@
+<#assign etcd_servers=[]>
+<#list service.roles.TOS_MASTER as tos_master>
+<#assign etcd_servers+=["https://" + tos_master.hostname + ":" + service['tos.master.etcd.port']]>
+<#if tos_master.hostname == .data_model["localhostname"]>
+<#assign localIp=tos_master.ip>
+</#if>
+</#list>
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tos-apiserver-${service.sid}
+  namespace: kube-system
+  labels:
+    component: apiserver
+    provider: kubernetes
+  annotations:
+    scheduler.alpha.kubernetes.io/critical-pod: ""
+spec:
+  tolerations:
+  - key: "master"
+    operator: "Exists"
+    effect: "NoSchedule"
+  priorityClassName: system-cluster-critical
+  hostNetwork: true
+  containers:
+    - name: tos-apiserver-${service.sid}
+      image: transwarp/alpine:manager-7.0.2003a-final
+      imagePullPolicy: IfNotPresent
+      command:
+      - kube-apiserver
+      - --v=6
+      - --etcd-servers=${etcd_servers?join(',')}
+      - --etcd-cafile=/etc/kubernetes/ssl/etcd-ca.pem
+      - --etcd-certfile=/etc/kubernetes/ssl/etcd.pem
+      - --etcd-keyfile=/etc/kubernetes/ssl/etcd-key.pem
+      - --apiserver-count=${service.roles.TOS_MASTER?size}
+      - --insecure-bind-address=127.0.0.1
+      - --insecure-port=${service['tos.master.apiserver.port']}
+      - --bind-address=${localIp}
+      - --secure-port=${service['tos.master.apiserver.secure.port']}
+      - --runtime-config=extensions/v1beta1/daemonsets=true,extensions/v1beta1/deployments=true,extensions/v1beta1/replicasets=true,extensions/v1beta1/networkpolicies=true,extensions/v1beta1/podsecuritypolicies=true,apps/v1beta1=true,apps/v1beta2=true
+      - --enable-admission-plugins=NamespaceExists,PersistentVolumeLabel,PodPreset,NodeRestriction
+      - --kubelet-https=true
+      - --authorization-mode=RBAC
+      - --token-auth-file=/etc/kubernetes/ssl/token.csv
+      - --service-account-key-file=/etc/kubernetes/ssl/service-account.pem
+      - --service-cluster-ip-range=${service['service.cluster.ip.range']}
+      - --client-ca-file=/etc/kubernetes/ssl/ca.pem
+      - --tls-cert-file=/etc/kubernetes/ssl/kubernetes.pem
+      - --tls-private-key-file=/etc/kubernetes/ssl/kubernetes-key.pem
+      - --kubelet-client-certificate=/etc/kubernetes/ssl/admin.pem
+      - --kubelet-client-key=/etc/kubernetes/ssl/admin-key.pem
+      - --requestheader-client-ca-file=/etc/kubernetes/ssl/ca.pem
+      - --requestheader-allowed-names=aggregator,kubernetes,front-proxy-client
+      - --requestheader-extra-headers-prefix="X-Remote-Extra-"
+      - --requestheader-group-headers=X-Remote-Group
+      - --requestheader-username-headers=X-Remote-User
+      - --enable-swagger-ui=true
+      - --allow-privileged=true
+      - --audit-policy-file=/etc/kubernetes/ssl/audit-policy.yaml
+      - --audit-log-maxage=30
+      - --audit-log-maxbackup=3
+      - --audit-log-maxsize=100
+      - --audit-log-path=/var/log/kubernetes/audit.log
+      - --event-ttl=12h
+      - --licence-enable=false
+      env:
+      - name: TZ
+        value: "Asia/Shanghai"
+      livenessProbe:
+        httpGet:
+          host: 127.0.0.1
+          port: ${service['tos.master.apiserver.port']}
+          path: /healthz
+        initialDelaySeconds: 60
+        timeoutSeconds: 60
+      volumeMounts:
+      - name: apilog
+        mountPath: /var/log/tos/apiserver
+        readOnly: false
+      - name: apikubelog
+        mountPath: /var/log/kubernetes/
+        readOnly: false
+      - name: kubernetes
+        mountPath: /var/run/kubernetes/
+        readOnly: false
+      - name: srvkube
+        mountPath: /etc/kubernetes/ssl
+        readOnly: true
+      - name: binkube
+        mountPath: /usr/local/bin
+        readOnly: false
+  volumes:
+    - name: apilog
+      hostPath:
+        path: /var/log/${service.sid}/apiserver
+    - name: apikubelog
+      hostPath:
+        path: /var/log/kubernetes/apiserver
+    - name: kubernetes
+      hostPath:
+        path: /var/run/${service.sid}/
+    - name: srvkube
+      hostPath:
+        path: /srv/kubernetes/
+    - name: binkube
+      hostPath:
+        path: /opt/kubernetes/bin
