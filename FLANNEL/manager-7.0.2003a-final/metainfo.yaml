@@ -165,7 +165,7 @@ stages:
       action: Start
       file: "coredns-service.yaml"
     - !<Wait-Healthy>
-      summaryPolicy: ALL
+      summaryPolicy: NONE
       timeoutMinutes: 5
   - type: Stop
     taskGroups:
@@ -230,7 +230,7 @@ stages:
       labelPrefix: "kube-dns"
       labelValue: "true"
     - !<Wait-Healthy>
-      summaryPolicy: ALL
+      summaryPolicy: NONE
       timeoutMinutes: 5
   - type: MoveRole
     taskGroups:
@@ -249,7 +249,7 @@ stages:
       labelPrefix: "kube-dns"
       labelValue: "true"
     - !<Wait-Healthy>
-      summaryPolicy: ALL
+      summaryPolicy: NONE
       timeoutMinutes: 5
 
 
