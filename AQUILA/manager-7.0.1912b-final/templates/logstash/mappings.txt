@@ -1,0 +1,213 @@
+{
+  "template": "*logs-*",
+  "mappings": {
+    "logs": {
+      "_all": {
+        "enabled": false
+      },
+      "properties": {
+        "kubernetes": {
+          "type": "nested",
+          "properties": {
+            "pod" : {
+              "type": "nested",
+              "properties": {
+                "name" : {"type":"string", "index":"not_analyzed"}
+              }
+            },
+            "container" : {
+              "type": "nested",
+              "properties": {
+                "name" : {"type":"string", "index":"not_analyzed"}
+              }
+            },
+            "namespace" : {"type":"string", "index":"not_analyzed"}
+          }
+        },
+        "beat" : {
+          "type" : "nested",
+          "properties" : {
+             "hostname" : {"type":"string", "index":"not_analyzed"},
+             "name" : {"type":"string", "index":"not_analyzed"}
+          }
+        },
+        "namespace": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "pod": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "container": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "session_handle": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "session_id": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "executor_id": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "service": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "service_instance_name": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "source": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "role": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "host": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "failed_stage_id": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "method": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "stage_id": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "spark_job_groupid": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "task_id": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "trace_id": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "span_id": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "parent_span_id": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "type": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "field": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "level": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "user": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "request_class": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "server_ip": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "Cost": {
+          "index": "not_analyzed",
+          "type": "float"
+        },
+        "client_ip": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "datetime": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "SQL": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "SQLType": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "AuthResult": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "AuthResult": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "RemoteAddr": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "User": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "Database": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "Session": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "ConnectionID": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "Action": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "ConfigValue": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "ConfigItem": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "Ip": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "OldVersion": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "SQLExecResult": {
+          "type": "string",
+          "index": "not_analyzed"
+        },
+        "Version": {
+          "type": "string",
+          "index": "not_analyzed"
+        }
+      }
+    }
+  }
+}
