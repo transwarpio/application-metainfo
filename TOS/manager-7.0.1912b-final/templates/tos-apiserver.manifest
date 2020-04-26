@@ -1,0 +1,89 @@
+<#assign etcd_servers=[]>
+<#list service.roles.TOS_MASTER as tos_master>
+<#assign etcd_servers+=["https://" + tos_master.hostname + ":" + service['tos.master.etcd.port']]>
+<#if tos_master.hostname == .data_model["localhostname"]>
+<#assign localIp=tos_master.ip>
+</#if>
+</#list>
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tos-apiserver-${service.sid}
+  namespace: kube-system
+spec:
+  hostNetwork: true
+  containers:
+  - name: tos-apiserver-${service.sid}
+    image: transwarp/hyperkube:manager-7.0.1912b-final
+    imagePullPolicy: IfNotPresent
+    command:
+    - hyperkube
+    - apiserver
+    - --v=6
+    - --etcd_servers=${etcd_servers?join(',')}
+    - --etcd-cafile=/etc/kubernetes/ssl/etcd-ca.pem
+    - --etcd-certfile=/etc/kubernetes/ssl/etcd.pem
+    - --etcd-keyfile=/etc/kubernetes/ssl/etcd-key.pem
+    - --apiserver-count=${service.roles.TOS_MASTER?size}
+    - --insecure-bind-address=127.0.0.1
+    - --insecure-port=${service['tos.master.apiserver.port']}
+    - --bind-address=${localIp}
+    - --secure-port=${service['tos.master.apiserver.secure.port']}
+    - --runtime_config=api/all
+    - --runtime_config=admissionregistration.k8s.io/v1alpha1
+    - --runtime_config=settings.k8s.io/v1alpha1
+    - --runtime-config=scheduling.k8s.io/v1alpha1=true
+    - --kubelet-https=true
+    - --admission_control=NamespaceLifecycle,NamespaceExists,LimitRanger,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,ResourceQuota,NodeRestriction,ServiceAccount,Initializers,PodPreset,Priority,PersistentVolumeClaimResize
+    - --authorization-mode=Node,RBAC
+    - --token-auth-file=/etc/kubernetes/ssl/token.csv
+    - --service-account-key-file=/etc/kubernetes/ssl/service-account.pem
+    - --service-cluster-ip-range=${service['service.cluster.ip.range']}
+    - --client_ca_file=/etc/kubernetes/ssl/ca.pem
+    - --tls_cert_file=/etc/kubernetes/ssl/kubernetes.pem
+    - --tls_private_key_file=/etc/kubernetes/ssl/kubernetes-key.pem
+    - --requestheader-client-ca-file=/etc/kubernetes/ssl/ca.pem
+    - --requestheader-allowed-names=aggregator,kubernetes
+    - --requestheader-extra-headers-prefix="X-Remote-Extra-"
+    - --requestheader-group-headers=X-Remote-Group
+    - --requestheader-username-headers=X-Remote-User
+    - --enable-swagger-ui=true
+    - --allow_privileged=true
+    - --feature-gates=AdvancedAuditing=true,MountPropagation=true,PersistentLocalVolumes=true,SupportIPVSProxyMode=true,BlockVolume=true,PodPriority=true,ExpandPersistentVolumes=true
+    - --audit-policy-file=/etc/kubernetes/ssl/audit-policy.yaml
+    - --audit-log-maxage=30
+    - --audit-log-maxbackup=3
+    - --audit-log-maxsize=100
+    - --audit-log-path=/var/log/kubernetes/audit.log
+    - --event-ttl=12h
+    - --licence-enable=false
+    env:
+    - name: TZ
+      value: "Asia/Shanghai"
+    livenessProbe:
+      httpGet:
+        host: 127.0.0.1
+        port: 8080
+        path: /healthz
+      initialDelaySeconds: 60
+      timeoutSeconds: 60
+    volumeMounts:
+    - name: apikubelog
+      mountPath: /var/log/kubernetes/
+      readOnly: false
+    - name: kubernetes
+      mountPath: /var/run/kubernetes/
+      readOnly: false
+    - name: srvkube
+      mountPath: /etc/kubernetes/ssl
+      readOnly: true
+  volumes:
+  - name: apikubelog
+    hostPath:
+      path: /var/log/kubernetes/
+  - name: kubernetes
+    hostPath:
+      path: /var/run/${service.sid}
+  - name: srvkube
+    hostPath:
+      path: /srv/kubernetes/
