@@ -1,0 +1,57 @@
+<#assign mysqlHostPorts = []/>
+<#list dependencies.TXSQL.roles['TXSQL_SERVER'] as role>
+  <#assign mysqlHostPorts = mysqlHostPorts + [role.hostname + ':' + dependencies.TXSQL['mysql.rw.port']]>
+</#list>
+<#assign mysqlHostPort = mysqlHostPorts?join(",")>
+
+server:
+  port: ${service['catalog.diocles.http.port']}
+  servlet:
+    session:
+      cookie:
+        name: DIOCLESSESSIONID
+        max-age: 86400
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://${mysqlHostPort}/diocles_${service.sid}?useUnicode=true&characterEncoding=UTF8&autoReconnect=true&useSSL=false&allowMultiQueries=true&failOverReadOnly=false&connectTimeout=10000&retriesAllDown=0&secondsBeforeRetryMaster=0&queriesBeforeRetryMaster=0&serverTimezone=Asia/Shanghai
+    username: ${service['javax.jdo.option.ConnectionUserName']}
+    password: ${service['javax.jdo.option.ConnectionPassword']}
+    tomcat:
+      test-on-borrow: true
+      validation-query: SELECT 1
+      log-validation-errors: true
+
+spring.flyway:
+  locations: classpath:db/migration
+  baseline-on-migrate: true
+
+mybatis:
+  type-aliases-package: io.transwarp.tdc.diocles
+  mapper-locations: classpath:config/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+mapper:
+  wrapKeyword: "`{0}`"
+  enableMethodAnnotation: true
+
+debug: false
+
+swagger:
+  enable: true
+
+diocles:
+  root:
+    mount: ${service[.data_model["localhostname"]]['catalog.diocles.data.dir']}
+  ingress:
+    path: /tdc/diocles
+  datasource:
+    createDB: false
+
+cas:
+  enable: false
+  server.address: ""
+
+socket.timeout: 10000
