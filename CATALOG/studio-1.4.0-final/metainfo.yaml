@@ -384,12 +384,12 @@ stages:
       summaryPolicy: ALL
       timeoutMinutes: 1
   - type: PreUpgrade
-      taskGroups:
-      - !<DockerRunPreUpgrade>
-          summaryPolicy: ALL
-          timeoutMinutes: 10
-          roleType: CATALOG_WEB
-          node: Any
+    taskGroups:
+    - !<DockerRunPreUpgrade>
+      summaryPolicy: ALL
+      timeoutMinutes: 10
+      roleType: CATALOG_WEB
+      node: Any
   - type: PreDeleteAfterStop
     taskGroups:
     - !<DockerRunPreDelete>
