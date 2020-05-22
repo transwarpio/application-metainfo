@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 2,
+  "id": null,
+  "groupId": null,
+  "type": "LOG",
+  "title": "Argodb 删库行为",
+  "description": "Argodb 删除数据库",
+  "clauses": {
+    "type": "LOG",
+    "queryString": "service:argodb_audit  AND \"drop database\"",
+    "filterMetas": null,
+    "slideWindowSize": "10",
+    "slideWindowUnit": "m",
+    "warningEnabled": true,
+    "criticalEnabled": true,
+    "aggType": "VALUE_COUNT",
+    "aggFields": {
+      "CRITICAL": [],
+      "WARNING": [
+        {
+          "aggType": "VALUE_COUNT",
+          "aggType": "VALUE_COUNT",
+          "negate": false,
+          "fieldKey": "service",
+          "fieldValue": "argodb_audit",
+          "from": "1",
+          "to": null
+        }
+      ]
+    }
+  },
+  "keyLabels": [],
+  "needManuallyClear": true,
+  "summaryTemplate": "Argodb 发生删库行为 - 安全侵害嫌疑",
+  "descriptionTemplate": "Argodb 发生删库行为 - 安全侵害嫌疑"
+}

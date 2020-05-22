@@ -1,0 +1,10 @@
+groups:
+  - groupName: Argodb
+    description: Argodb告警
+    rules:
+      - title: "Argodb 删库行为"
+        ruleJson: "alert/argodb_drop_database_action.json"
+      - title: "Argodb 认证失败"
+        ruleJson: "alert/argodb_login_auth_fail.json"
+      - title: "Argodb 越权行为"
+        ruleJson: "alert/argodb_curd_auth_fail.json"

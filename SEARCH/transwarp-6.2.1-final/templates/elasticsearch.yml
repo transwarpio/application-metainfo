@@ -194,15 +194,6 @@ transport.type: ${transportType}
 http.type: ${httpType}
 
 <#assign storeType=service['index.store.type']>
-<#if dependencies.KMS??>
-encryption.enable: true
-  <#assign provider_paths = []/>
-  <#list dependencies.KMS.roles["KMS_SERVER"] as role>
-    <#assign provider_paths += [("kms://http@" + role.hostname + ":" + dependencies.KMS['kms.http.port'] + "/kms")]/>
-  </#list>
-hadoop.security.key.provider.path: ${provider_paths?join(",")}
-<#assign storeType="nioxtsfs">
-</#if>
 
 index.store.type: ${storeType}
 
