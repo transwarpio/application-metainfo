@@ -1,0 +1,30 @@
+{
+  "summary": [
+    {
+      "tabTitle": "Basic",
+      "tabType": "SIMPLE",
+      "charts": [
+        {
+          "metrics": [{"name": "InceptorSqlActiveTasks", "title": "Active Tasks"}],
+          "metricUnit": "Num"
+        }
+      ],
+      "metrics": [
+        {"name": "InceptorSqlServer", "title":"Server"},
+        {"name": "InceptorSqlExecutors", "title":"Executors"},
+        {"name": "InceptorSqlCompletedTasks", "title":"Completed Tasks"},
+        {"name": "InceptorSqlFailedTasks", "title":"Failed Tasks"}
+      ]
+    }],
+  "heatMap":{
+    "roleType": "INCEPTOR_WORKER",
+    "metricName": "cpu_used",
+    "title": "CPU",
+    "metricUnit": "%"
+  },
+  "statistics":[
+    {"metricName": "InceptorSqlShuffleRead", "title": "Shuffle Read"},
+    {"metricName": "InceptorSqlShuffleWrite", "title": "Shuffle Write"},
+    {"metricName": "InceptorSqlFailedTaskPercent", "title": "Failed/Total Task"}
+  ]
+}

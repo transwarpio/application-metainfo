@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 2,
+  "id": null,
+  "groupId": null,
+  "type": "LOG",
+  "title": "Argodb 认证失败",
+  "description": "Argodb 认证失败",
+  "clauses": {
+    "type": "LOG",
+    "queryString": "service:argodb_server  AND \"Error validating the login\"",
+    "filterMetas": null,
+    "slideWindowSize": "10",
+    "slideWindowUnit": "m",
+    "warningEnabled": true,
+    "criticalEnabled": false,
+    "aggType": "VALUE_COUNT",
+    "aggFields": {
+      "CRITICAL": [],
+      "WARNING": [
+        {
+          "aggType": "VALUE_COUNT",
+          "aggType": "VALUE_COUNT",
+          "negate": false,
+          "fieldKey": "service",
+          "fieldValue": "argodb_server",
+          "from": "1",
+          "to": null
+        }
+      ]
+    }
+  },
+  "keyLabels": [],
+  "needManuallyClear": true,
+  "summaryTemplate": "Argodb 10分钟内发生认证失败次数大于1次-- - 安全侵害嫌疑",
+  "descriptionTemplate": "Argodb 10分钟内发生认证失败次数大于1次 - 安全侵害嫌疑"
+}

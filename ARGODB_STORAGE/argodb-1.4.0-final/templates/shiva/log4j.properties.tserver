@@ -1,0 +1,45 @@
+# Root logger option
+log4j.rootLogger=INFO, INFO, WARN, ERROR, FATAL
+# Direct log messages to stderr
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.Target=System.err
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=[%p] [%t] %d{yyyy-MM-dd HH:mm:ss} (%c:%L): %m%n
+
+# Logging Threshold
+log4j.threshold=ALL
+
+# Null Appender
+log4j.appender.NullAppender=org.apache.log4j.varia.NullAppender
+
+log4j.appender.INFO=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.INFO.layout=org.apache.log4j.PatternLayout
+log4j.appender.INFO.layout.ConversionPattern=[%p] [%t] %d{yyyy-MM-dd HH:mm:ss} (%c:%L): %m%n
+log4j.appender.INFO.datePattern='.'yyyy-MM-dd
+log4j.appender.INFO.Threshold=INFO
+log4j.appender.INFO.append=true
+log4j.appender.INFO.File=${service['shiva.tabletserver.log.log_dir']}/tablet_server.log
+
+log4j.appender.WARN=org.apache.log4j.RollingFileAppender
+log4j.appender.WARN.layout=org.apache.log4j.PatternLayout
+log4j.appender.WARN.layout.ConversionPattern=[%p] [%t] %d{yyyy-MM-dd HH:mm:ss} (%c:%L): %m%n
+log4j.appender.WARN.Threshold=WARN
+log4j.appender.WARN.MaxFileSize=128MB
+log4j.appender.WARN.MaxBackupIndex=16
+log4j.appender.WARN.File=${service['shiva.tabletserver.log.log_dir']}/tablet_server.log.WARN
+
+log4j.appender.ERROR=org.apache.log4j.RollingFileAppender
+log4j.appender.ERROR.layout=org.apache.log4j.PatternLayout
+log4j.appender.ERROR.layout.ConversionPattern=[%p] [%t] %d{yyyy-MM-dd HH:mm:ss} (%c:%L): %m%n
+log4j.appender.ERROR.Threshold=ERROR
+log4j.appender.ERROR.MaxFileSize=64MB
+log4j.appender.ERROR.MaxBackupIndex=16
+log4j.appender.ERROR.File=${service['shiva.tabletserver.log.log_dir']}/tablet_server.log.ERROR
+
+log4j.appender.FATAL=org.apache.log4j.RollingFileAppender
+log4j.appender.FATAL.layout=org.apache.log4j.PatternLayout
+log4j.appender.FATAL.layout.ConversionPattern=[%p] [%t] %d{yyyy-MM-dd HH:mm:ss} (%c:%L): %m%n
+log4j.appender.FATAL.Threshold=FATAL
+log4j.appender.FATAL.MaxFileSize=64MB
+log4j.appender.FATAL.MaxBackupIndex=16
+log4j.appender.FATAL.File=${service['shiva.tabletserver.log.log_dir']}/tablet_server.log.FATAL

@@ -1,0 +1,141 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Define some default values that can be overridden by system properties
+hive.root.logger=INFO,DRFA
+hive.log.dir=/tmp/${user.name}
+hive.log.file=hive.log
+
+# Define the root logger to the system property "hadoop.root.logger".
+log4j.rootLogger=${hive.root.logger}, EventCounter
+
+# Logging Threshold
+log4j.threshhold=INFO
+
+log4j.logger.org.apache.hadoop.hbase.client=INFO
+log4j.logger.org.apache.hadoop.hive.ql.pl.blk=ERROR
+#
+# Daily Rolling File Appender
+#
+# Use the PidDailyerRollingFileAppend class instead if you want to use separate log files
+# for different CLI session.
+#
+# log4j.appender.DRFA=org.apache.hadoop.hive.ql.log.PidDailyRollingFileAppender
+
+#log4j.appender.DRFA=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.DRFA=org.apache.log4j.RollingFileAppender
+
+log4j.appender.DRFA.File=${hive.log.dir}/${hive.log.file}
+
+# Rollver at midnight
+#log4j.appender.DRFA.DatePattern=.yyyy-MM-dd
+
+# 30-day backup
+#log4j.appender.DRFA.MaxBackupIndex=30
+log4j.appender.DRFA.MaxFileSize=64MB
+log4j.appender.DRFA.MaxBackupIndex=128
+log4j.appender.DRFA.layout=org.apache.log4j.PatternLayout
+
+# Pattern format: Date LogLevel LoggerName LogMessage
+#log4j.appender.DRFA.layout.ConversionPattern=%d{ISO8601} %p %c: %m%n
+# Debugging Pattern format
+log4j.appender.DRFA.layout.ConversionPattern=%d{ISO8601} %-5p %c{2}: (%F:%M(%L)) [%t(%x)] - %m%n
+
+
+#
+# console
+# Add "console" to rootlogger above if you want to use this
+#
+
+log4j.appender.console=org.apache.log4j.ConsoleAppender
+log4j.appender.console.target=System.err
+log4j.appender.console.layout=org.apache.log4j.PatternLayout
+log4j.appender.console.layout.ConversionPattern=%d %p %c{2}: %m%n
+log4j.appender.console.encoding=UTF-8
+
+
+#
+# Hive Server2 Audit Logging
+#
+hive.server2.audit.logger=INFO,RFAAUDIT
+log4j.logger.org.apache.hive.service.cli.thrift.ThriftCLIService.audit=${hive.server2.audit.logger}
+log4j.additivity.org.apache.hive.service.cli.thrift.ThriftCLIService.audit=false
+log4j.appender.RFAAUDIT=org.apache.log4j.RollingFileAppender
+log4j.appender.RFAAUDIT.File=${hive.log.dir}/hive-server2.audit
+log4j.appender.RFAAUDIT.layout=org.apache.log4j.PatternLayout
+log4j.appender.RFAAUDIT.layout.ConversionPattern=%d{ISO8601} %p %c{2}: %m%n
+log4j.appender.RFAAUDIT.MaxFileSize=64MB
+log4j.appender.RFAAUDIT.MaxBackupIndex=16
+
+#
+# Hive Server2 db Audit Logging
+#
+hive.server2.audit.logger=INFO,RFAAUDIT
+log4j.logger.org.apache.hive.service.cli.thrift.ThriftCLIServiceDb.audit=${hive.server2.audit.logger}
+log4j.additivity.org.apache.hive.service.cli.thrift.ThriftCLIServiceDb.audit=false
+log4j.appender.RFAAUDIT=org.apache.log4j.RollingFileAppender
+log4j.appender.RFAAUDIT.File=${hive.log.dir}/argodb-server2.audit
+log4j.appender.RFAAUDIT.layout=org.apache.log4j.PatternLayout
+log4j.appender.RFAAUDIT.layout.ConversionPattern=%d{ISO8601} %p %c{2}: %m%n
+log4j.appender.RFAAUDIT.MaxFileSize=64MB
+log4j.appender.RFAAUDIT.MaxBackupIndex=16
+
+#
+# Inceptor Profiler Logging
+#
+io.transwarp.inceptor.profiler.logger=INFO,RFAPROFILER
+log4j.logger.io.transwarp.inceptor.profiler=${io.transwarp.inceptor.profiler.logger}
+log4j.additivity.io.transwarp.inceptor.profiler=false
+log4j.appender.RFAPROFILER=org.apache.log4j.RollingFileAppender
+log4j.appender.RFAPROFILER.File=${hive.log.dir}/inceptor-profiler.log
+log4j.appender.RFAPROFILER.layout=org.apache.log4j.PatternLayout
+log4j.appender.RFAPROFILER.layout.ConversionPattern=%d{ISO8601} %p %c{2}: %m%n
+log4j.appender.RFAPROFILER.MaxFileSize=64MB
+log4j.appender.RFAPROFILER.MaxBackupIndex=16
+
+#
+# Inceptor Compactor Logging
+#
+io.transwarp.inceptor.compactor.logger=INFO,RFACOMPACTOR
+log4j.logger.io.transwarp.inceptor.compactor=${io.transwarp.inceptor.compactor.logger}
+log4j.additivity.io.transwarp.inceptor.compactor=false
+log4j.appender.RFACOMPACTOR=org.apache.log4j.RollingFileAppender
+log4j.appender.RFACOMPACTOR.File=${hive.log.dir}/inceptor-compactor.log
+log4j.appender.RFACOMPACTOR.layout=org.apache.log4j.PatternLayout
+log4j.appender.RFACOMPACTOR.layout.ConversionPattern=%d{ISO8601} %p %c{2}: %m%n
+log4j.appender.RFACOMPACTOR.MaxFileSize=64MB
+log4j.appender.RFACOMPACTOR.MaxBackupIndex=16
+
+#custom logging levels
+#log4j.logger.xxx=DEBUG
+
+#
+# Event Counter Appender
+# Sends counts of logging messages at different severity levels to Hadoop Metrics.
+#
+log4j.appender.EventCounter=org.apache.hadoop.log.metrics.EventCounter
+
+
+log4j.category.DataNucleus=ERROR,DRFA
+log4j.category.Datastore=ERROR,DRFA
+log4j.category.Datastore.Schema=ERROR,DRFA
+log4j.category.JPOX.Datastore=ERROR,DRFA
+log4j.category.JPOX.Plugin=ERROR,DRFA
+log4j.category.JPOX.MetaData=ERROR,DRFA
+log4j.category.JPOX.Query=ERROR,DRFA
+log4j.category.JPOX.General=ERROR,DRFA
+log4j.category.JPOX.Enhancer=ERROR,DRFA
+
