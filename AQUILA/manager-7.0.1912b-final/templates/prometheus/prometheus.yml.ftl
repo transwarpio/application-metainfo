@@ -23,6 +23,12 @@
 <#list service.roles['AQUILA_TDH_EXPORTER'] as role>
   <#assign tdh_exporter_addr += ["\'" + role.hostname + ":" + service['tdh.exporter.web.port'] + "\'"]>
 </#list>
+<#if service.roles["FILEBEAT"]??>
+<#assign filebeat_addr=[]>
+<#list service.roles['FILEBEAT'] as role>
+    <#assign filebeat_addr += ["\'" + role.hostname + ":" + service['filebeat.port'] + "\'"]>
+</#list>
+</#if>
 <#assign kube_state_metrics_addr=[]>
 <#list service.roles['AQUILA_KUBE_STATE_METRICS'] as role>
   <#assign kube_state_metrics_addr += ["\'" + role.hostname + ":" + service['kube.state.metrics.web.port'] + "\'"]>
@@ -156,3 +162,13 @@ scrape_configs:
     scheme: http
     file_sd_configs:
     - files: ['staticFiles.d/KUNDB/*.yml']
+
+<#if service.roles["FILEBEAT"]??>
+  - job_name: 'filebeat'
+    metrics_path: /stats/prometheus
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    scheme: http
+    static_configs:
+    - targets: [${filebeat_addr?join(",")}]
+</#if>
