@@ -775,6 +775,15 @@
   groups: []
   visibility: READ_WRITE
 
+- name: filebeat.ignore_older
+  recommendExpression: "10m"
+  defaultValue: null
+  valueType: STRING
+  scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
 - name: filebeat.port
   recommendExpression: 9600
   defaultValue: null
@@ -840,6 +849,16 @@
   defaultValue: null
   valueType: STRING
   scope: !<ServiceLevel> {}
+  onDeps: []
+  groups: []
+  visibility: READ_WRITE
+
+- name: logstash.consumer_threads
+  recommendExpression: "1"
+  defaultValue: null
+  valueType: NON_NEG_INT
+  scope: !<RoleTypes>
+    roleTypes: [LOGSTASH]
   onDeps: []
   groups: []
   visibility: READ_WRITE
@@ -1192,7 +1211,7 @@
   groups: []
   visibility: READ_WRITE
 #Others
-- name: kafka.queued.max.requests
+- name: queued.max.requests
   recommendExpression: 500
   defaultValue: null
   valueType: NON_NEG_INT
@@ -1201,7 +1220,7 @@
   groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kafka.log.segment.bytes.per.topic
+- name: log.segment.bytes.per.topic
   recommendExpression: 100000
   defaultValue: null
   valueType: BYTES
@@ -1210,7 +1229,7 @@
   groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kafka.log.roll.hours.per.topic
+- name: log.roll.hours.per.topic
   recommendExpression: 1
   defaultValue: null
   valueType: NON_NEG_INT
@@ -1219,7 +1238,7 @@
   groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kafka.log.flush.interval.ms.per.topic
+- name: log.flush.interval.ms.per.topic
   recommendExpression: 300000
   defaultValue: null
   valueType: MILLISECONDS
@@ -1228,7 +1247,7 @@
   groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kafka.auto.create.topics.enable
+- name: auto.create.topics.enable
   recommendExpression: true
   defaultValue: null
   valueType: BOOL
@@ -1237,7 +1256,7 @@
   groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kafka.controller.socket.timeout.ms
+- name: controller.socket.timeout.ms
   recommendExpression: 30000
   defaultValue: null
   valueType: MILLISECONDS
@@ -1246,7 +1265,7 @@
   groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kafka.controller.message.queue.size
+- name: controller.message.queue.size
   recommendExpression: 10
   defaultValue: null
   valueType: NON_NEG_INT
@@ -1255,7 +1274,7 @@
   groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kafka.default.replication.factor
+- name: default.replication.factor
   recommendExpression: 2
   defaultValue: null
   valueType: NON_NEG_INT
@@ -1264,7 +1283,7 @@
   groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kafka.replica.lag.time.max.ms
+- name: replica.lag.time.max.ms
   recommendExpression: 10000
   defaultValue: null
   valueType: MILLISECONDS
@@ -1273,7 +1292,7 @@
   groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kafka.replica.socket.timeout.ms
+- name: replica.socket.timeout.ms
   recommendExpression: 30000
   defaultValue: null
   valueType: MILLISECONDS
@@ -1282,7 +1301,7 @@
   groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kafka.replica.socket.receive.buffer.bytes
+- name: replica.socket.receive.buffer.bytes
   recommendExpression: 65536
   defaultValue: null
   valueType: BYTES
@@ -1291,7 +1310,7 @@
   groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kafka.replica.fetch.max.bytes
+- name: replica.fetch.max.bytes
   recommendExpression: 1000000
   defaultValue: null
   valueType: BYTES
@@ -1300,7 +1319,7 @@
   groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kafka.replica.fetch.wait.max.ms
+- name: replica.fetch.wait.max.ms
   recommendExpression: 500
   defaultValue: null
   valueType: MILLISECONDS
@@ -1309,7 +1328,7 @@
   groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kafka.replica.fetch.min.bytes
+- name: replica.fetch.min.bytes
   recommendExpression: 500
   defaultValue: null
   valueType: BYTES
@@ -1318,7 +1337,7 @@
   groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kafka.num.replica.fetchers
+- name: num.replica.fetchers
   recommendExpression: 1
   defaultValue: null
   valueType: NON_NEG_INT
@@ -1327,7 +1346,7 @@
   groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kafka.replica.high.watermark.checkpoint.interval.ms
+- name: replica.high.watermark.checkpoint.interval.ms
   recommendExpression: 5000
   defaultValue: null
   valueType: MILLISECONDS
@@ -1336,7 +1355,7 @@
   groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kafka.fetch.purgatory.purge.interval.requests
+- name: fetch.purgatory.purge.interval.requests
   recommendExpression: 10000
   defaultValue: null
   valueType: NON_NEG_INT
@@ -1345,7 +1364,7 @@
   groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kafka.producer.purgatory.purge.interval.requests
+- name: producer.purgatory.purge.interval.requests
   recommendExpression: 10000
   defaultValue: null
   valueType: NON_NEG_INT
@@ -1354,7 +1373,7 @@
   groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kafka.controlled.shutdown.enable
+- name: controlled.shutdown.enable
   recommendExpression: false
   defaultValue: null
   valueType: BOOL
@@ -1363,7 +1382,7 @@
   groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kafka.controlled.shutdown.max.retries
+- name: controlled.shutdown.max.retries
   recommendExpression: 3
   defaultValue: null
   valueType: NON_NEG_INT
@@ -1372,7 +1391,7 @@
   groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kafka.controlled.shutdown.retry.backoff.ms
+- name: controlled.shutdown.retry.backoff.ms
   recommendExpression: 5000
   defaultValue: null
   valueType: MILLISECONDS
@@ -1381,7 +1400,7 @@
   groups: ['server.properties']
   visibility: READ_WRITE
 
-- name: kafka.message.max.bytes
+- name: message.max.bytes
   recommendExpression: 1000000
   defaultValue: null
   valueType: BYTES

@@ -12,312 +12,13 @@ filebeat.config.prospectors:
 filebeat.prospectors:
 - type: log
   paths:
-    - /var/log/inceptor*/*hive-server*.log
-  fields:
-    service: inceptor
-  fields_under_root: true
-  multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
-  multiline.negate: true
-  multiline.match: after
-  scan_frequency: 3s
-  close_eof: false
-  harvester_buffer_size: 1048576
-  exclude_lines: ['^DBG']
-  exclude_files: ['.gz$']
-
-- type: log
-  paths:
-    - /var/log/inceptor*/*hive-metastore*.log
-  fields:
-    service: metastore
-  fields_under_root: true
-  multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
-  multiline.negate: true
-  multiline.match: after
-  scan_frequency: 3s
-  close_eof: false
-  harvester_buffer_size: 1048576
-  exclude_lines: ['^DBG']
-  exclude_files: ['.gz$']
-
-- type: log
-  paths:
-    - /var/log/inceptor*/*executor*.log
-  fields:
-    service: sparkexecutor
-  fields_under_root: true
-  multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
-  multiline.negate: true
-  multiline.match: after
-  scan_frequency: 3s
-  close_eof: false
-  harvester_buffer_size: 1048576
-  exclude_lines: ['^DBG']
-  exclude_files: ['.gz$']
-
-- type: log
-  paths:
-    - /var/log/inceptor*/*application*.log
-  fields:
-    service: sparkapplication
-  fields_under_root: true
-  multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
-  multiline.negate: true
-  multiline.match: after
-  scan_frequency: 3s
-  close_eof: false
-  harvester_buffer_size: 1048576
-  exclude_lines: ['^DBG']
-  exclude_files: ['.gz$']
-
-- type: log
-  paths:
-    - /var/log/hdfs*/*hdfs-namenode*.log
-  fields:
-    service: hdfsnamenode
-  fields_under_root: true
-  multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
-  multiline.negate: true
-  multiline.match: after
-  scan_frequency: 3s
-  close_eof: false
-  harvester_buffer_size: 1048576
-  exclude_lines: ['^DBG']
-  exclude_files: ['.gz$']
-
-- type: log
-  paths:
-    - /var/log/hdfs*/*hdfs-datanode*.log
-  fields:
-    service: hdfsdatanode
-  fields_under_root: true
-  multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
-  multiline.negate: true
-  multiline.match: after
-  scan_frequency: 3s
-  close_eof: false
-  harvester_buffer_size: 1048576
-  exclude_lines: ['^DBG']
-  exclude_files: ['.gz$']
-
-- type: log
-  paths:
-    - /var/log/hdfs*/*hdfs-journalnode*.log
-  fields:
-    service: hdfsjournalnode
-  fields_under_root: true
-  multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
-  multiline.negate: true
-  multiline.match: after
-  scan_frequency: 3s
-  close_eof: false
-  harvester_buffer_size: 1048576
-  exclude_lines: ['^DBG']
-  exclude_files: ['.gz$']
-
-- type: log
-  paths:
-    - /var/log/hdfs*/*hdfs-zkfc*.log
-  fields:
-    service: hdfszkfc
-  fields_under_root: true
-  multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
-  multiline.negate: true
-  multiline.match: after
-  scan_frequency: 3s
-  close_eof: false
-  harvester_buffer_size: 1048576
-  exclude_lines: ['^DBG']
-  exclude_files: ['.gz$']
-
-- type: log
-  paths:
-    - /var/log/zookeeper*/*zookeeper*.log
-  fields:
-    service: zookeeper
-  fields_under_root: true
-  multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
-  multiline.negate: true
-  multiline.match: after
-  scan_frequency: 3s
-  close_eof: false
-  harvester_buffer_size: 1048576
-  exclude_lines: ['^DBG']
-  exclude_files: ['.gz$']
-
-- type: log
-  paths:
-    - /var/log/hyperbase*/*hbase-master*.log
-  fields:
-    service: hbasemaster
-  fields_under_root: true
-  multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
-  multiline.negate: true
-  multiline.match: after
-  scan_frequency: 3s
-  close_eof: false
-  harvester_buffer_size: 1048576
-  exclude_lines: ['^DBG']
-  exclude_files: ['.gz$']
-
-- type: log
-  paths:
-    - /var/log/hyperbase*/*hbase-regionserver*.log
-    - /var/log/hyperbase*/*hbase-regionserver*.out
-  fields:
-    service: hbaseregionserver
-  fields_under_root: true
-  multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
-  multiline.negate: true
-  multiline.match: after
-  scan_frequency: 3s
-  close_eof: false
-  harvester_buffer_size: 1048576
-  exclude_lines: ['^DBG']
-  exclude_files: ['.gz$']
-
-- type: log
-  paths:
-    - /var/log/yarn*/*yarn-nodemanager*.log
-  fields:
-    service: yarnnodemanager
-  fields_under_root: true
-  multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
-  multiline.negate: true
-  multiline.match: after
-  scan_frequency: 3s
-  close_eof: false
-  harvester_buffer_size: 1048576
-  exclude_lines: ['^DBG']
-  exclude_files: ['.gz$']
-
-- type: log
-  paths:
-    - /var/log/yarn*/*yarn-resourcemanager*.log
-  fields:
-    service: yarnresourcemanager
-  fields_under_root: true
-  multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
-  multiline.negate: true
-  multiline.match: after
-  scan_frequency: 3s
-  close_eof: false
-  harvester_buffer_size: 1048576
-  exclude_lines: ['^DBG']
-  exclude_files: ['.gz$']
-
-- type: log
-  paths:
-    - /var/log/elasticsearch*/*elasticsearch*.log
-    - /var/log/elasticsearch*/*es*.log
-  fields:
-    service: elasticsearch
-  fields_under_root: true
-  multiline.pattern: '^\[[0-9]{4}-[0-9]{2}-[0-9]{2}'
-  multiline.negate: true
-  multiline.match: after
-  scan_frequency: 3s
-  close_eof: false
-  harvester_buffer_size: 1048576
-  exclude_lines: ['^DBG']
-  exclude_files: ['.gz$']
-
-- type: log
-  paths:
-    - /var/log/search*/*.log
-  fields:
-    service: search
-  fields_under_root: true
-  multiline.pattern: '^\[[0-9]{4}-[0-9]{2}-[0-9]{2}'
-  multiline.negate: true
-  multiline.match: after
-  scan_frequency: 3s
-  close_eof: false
-  harvester_buffer_size: 1048576
-  exclude_lines: ['^DBG']
-  exclude_files: ['.gz$']
-
-- type: log
-  paths:
-    - /var/log/kafka*/**/*.log
-  fields:
-    service: kafka
-  fields_under_root: true
-  multiline.pattern: '^\[[0-9]{4}-[0-9]{2}-[0-9]{2}'
-  multiline.negate: true
-  multiline.match: after
-  scan_frequency: 3s
-  close_eof: false
-  harvester_buffer_size: 1048576
-  exclude_lines: ['^DBG']
-  exclude_files: ['.gz$']
-
-- type: log
-  paths:
-    - /var/log/streamsql*/*.log
-  fields:
-    service: streamsql
-  fields_under_root: true
-  multiline.pattern: '^\[[0-9]{4}-[0-9]{2}-[0-9]{2}'
-  multiline.negate: true
-  multiline.match: after
-  scan_frequency: 3s
-  close_eof: false
-  harvester_buffer_size: 1048576
-  exclude_lines: ['^DBG']
-  exclude_files: ['.gz$']
-
-- type: log
-  paths:
-    - /var/log/shiva*/*.log
-  fields:
-    service: shiva
-  fields_under_root: true
-  multiline.pattern: '^\[[0-9]{4}-[0-9]{2}-[0-9]{2}'
-  multiline.negate: true
-  multiline.match: after
-  scan_frequency: 3s
-  close_eof: false
-  harvester_buffer_size: 1048576
-  exclude_lines: ['^DBG']
-  exclude_files: ['.gz$']
-
-- type: log
-  paths:
-    - /var/log/guardian*/*guardian*.log
-    - /var/log/guardian*/*guardian*.audit
-  fields:
-    service: guardian
-  fields_under_root: true
-  multiline.pattern: '^\[[0-9]{4}-[0-9]{2}-[0-9]{2}'
-  multiline.negate: true
-  multiline.match: after
-  scan_frequency: 3s
-  close_eof: false
-  harvester_buffer_size: 1048576
-  exclude_lines: ['^DBG']
-  exclude_files: ['.gz$']
-
-- type: log
-  paths:
-    -  /hadoop/txsql/log/*.log
-  fields:
-    service: txsql
-  fields_under_root: true
-  scan_frequency: 3s
-  close_eof: false
-  harvester_buffer_size: 1048576
-  exclude_lines: ['^DBG']
-  exclude_files: ['.gz$']
-
-- type: log
-  paths:
     - /var/log/kundb*/kungate/public/**/*.audit*
   fields:
     service: kundb
     is_audit: true
   fields_under_root: true
   scan_frequency: 3s
+  ignore_older: ${service['filebeat.ignore_older']}
   close_eof: false
   harvester_buffer_size: 1048576
   exclude_lines: ['^DBG']
@@ -332,23 +33,8 @@ filebeat.prospectors:
   fields:
     service: kundb
   fields_under_root: true
+  ignore_older: ${service['filebeat.ignore_older']}
   multiline.pattern: '^[IWEF][0-9]{4}'
-  multiline.negate: true
-  multiline.match: after
-  scan_frequency: 3s
-  close_eof: false
-  harvester_buffer_size: 1048576
-  exclude_lines: ['^DBG']
-  exclude_files: ['.swp$']
-
-- type: log
-  paths:
-    - /var/log/transwarp-manager/master/transwarp-manager.log
-    - /var/log/transwarp-manager/master/transwarp-manager.log.*
-  fields:
-    service: manager_master
-  fields_under_root: true
-  multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
   multiline.negate: true
   multiline.match: after
   scan_frequency: 3s
@@ -365,6 +51,7 @@ filebeat.prospectors:
     service: manager_master
     is_audit: true
   fields_under_root: true
+  ignore_older: ${service['filebeat.ignore_older']}
   multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
   multiline.negate: true
   multiline.match: after
@@ -382,6 +69,7 @@ filebeat.prospectors:
     service: manager_operation
     is_audit: true
   fields_under_root: true
+  ignore_older: ${service['filebeat.ignore_older']}
   multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
   multiline.negate: true
   multiline.match: after
@@ -422,7 +110,7 @@ output.kafka:
   enabled: true
   hosts: ${kafkas?join(",")}
   topic: logs
-  worker: 2
+  worker: 6
   max_retries: 3
   required_acks: 1
   max_message_bytes: 1000000
